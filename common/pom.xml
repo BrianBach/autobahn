@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 
+	<parent>
+		<artifactId>${artifact_id}</artifactId>
+		<groupId>${group_id}</groupId>
+		<version>${project_version}</version>
+	</parent>
+	
+	<modelVersion>4.0.0</modelVersion>
+    <groupId>${group_id}</groupId>
+    <artifactId>${artifact_id}-common</artifactId>
+    <version>${project_version}</version>
+    <name>Common module</name>
+    <packaging>jar</packaging>
+
+	<build>
+		<sourceDirectory>src/main/java</sourceDirectory>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
+		<finalName>autobahn-common</finalName>
+		<resources>
+			<resource>
+				<directory>./src/main/java/</directory>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+			</resource>
+		</resources>
+					
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.0-beta-3</version>
+				<executions>
+					<execution>
+						<phase>release</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<doCheck>false</doCheck>
+					<doUpdate>false</doUpdate>
+				</configuration>
+			</plugin>			
+		</plugins>
+	</build>
+	
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>${group_id}</groupId>
+			<artifactId>dom4j</artifactId>
+			<version>1.6.1</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>${group_id}</groupId>
+			<artifactId>hibernate3</artifactId>
+			<version>1.0</version>
+			<type>jar</type>			
+		</dependency>
+		<dependency>
+			<groupId>${group_id}</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.0</version>
+			<type>jar</type>			
+		</dependency>		
+		<dependency>
+			<groupId>${group_id}</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.14</version>
+		</dependency>
+		<dependency>
+			<groupId>${group_id}</groupId>
+			<artifactId>xfire-jsr181-api</artifactId>
+			<version>1.0-M1</version>
+		</dependency>
+		<dependency>
+			<groupId>${group_id}</groupId>
+			<artifactId>jacc</artifactId>
+			<version>1.0</version>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
+</project>

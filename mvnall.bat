@@ -1,0 +1,1 @@
+mvn clean install eclipse:clean eclipse:eclipse process-sources -Dmaven.test.skip=true %*

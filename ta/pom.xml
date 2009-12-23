@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 
+	<parent>
+		<artifactId>${artifact_id}</artifactId>
+		<groupId>${group_id}</groupId>
+		<version>${project_version}</version>
+	</parent>
+	
+	<modelVersion>4.0.0</modelVersion>
+    <groupId>${group_id}</groupId>
+    <artifactId>${artifact_id}-ta</artifactId>
+    <version>${project_version}</version>
+    <name>Topology Abstraction Module</name>
+    <packaging>jar</packaging>
+
+	<build>
+		<sourceDirectory>src/main/java</sourceDirectory>
+        <testSourceDirectory>src/test/java</testSourceDirectory>		
+		<finalName>autobahn-ta</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.0-beta-3</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<doCheck>false</doCheck>
+					<doUpdate>false</doUpdate>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	    
+	<dependencies>
+		<dependency>
+			<groupId>${group_id}</groupId>
+			<artifactId>${artifact_id}-common</artifactId>
+			<version>${project_version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${group_id}</groupId>
+			<artifactId>${artifact_id}-dm</artifactId>
+			<version>${project_version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${group_id}</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.14</version>
+		</dependency>
+		<dependency>
+			<groupId>${group_id}</groupId>
+			<artifactId>xfire-jsr181-api</artifactId>
+			<version>1.0-M1</version>
+		</dependency>	
+    </dependencies>
+</project>
