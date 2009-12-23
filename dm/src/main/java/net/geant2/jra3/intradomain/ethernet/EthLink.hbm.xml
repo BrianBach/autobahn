@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="net.geant2.jra3.intradomain.ethernet">
+    <class name="EthLink" table="eth_link" schema="public">
+        <composite-id>
+            <key-many-to-one name="genericLink" column="link_id" class="net.geant2.jra3.intradomain.common.GenericLink">
+            </key-many-to-one>
+        </composite-id>
+        <property name="discoveryProtocol" type="string">
+            <column name="discovery_protocol" />
+        </property>
+        <property name="isTrunk" type="boolean">
+            <column name="is_trunk" />
+        </property>
+        <property name="isL2Bndry" type="boolean">
+            <column name="is_l2_bndry" />
+        </property>
+        <property name="nativeVlan" type="long">
+            <column name="native_vlan" />
+        </property>
+    </class>
+</hibernate-mapping>
