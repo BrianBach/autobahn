@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	  http://www.springframework.org/schema/context 
+  http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+
+	<bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+        <property name="definitions">
+            <list>
+                <value>/WEB-INF/tiles/templates.xml</value>
+               </list>
+        </property>
+		<property name="preparerFactoryClass" value="org.springframework.web.servlet.view.tiles2.SpringBeanPreparerFactory" />
+    </bean>
+
+	<context:component-scan base-package="net.geant2.jra3.autoBahnGUI.web"/>
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+	</bean>
+    
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+    </bean>	
+	
+	<bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter">
+	</bean>
+	
+		
+  	<bean id="loginController" class="net.geant2.jra3.autoBahnGUI.web.LoginController">
+    	<property name="formView"><value>loginView</value></property> 
+    	<property name="authenticators">
+    		<map>
+    			<entry key="SWITCH (stable)"><value>https://edugain-login.switch.ch/ShiBE-H/WebSSORequestListener</value></entry> 
+				<entry key="SWITCH(testing)"><value> https://tengger.switch.ch/ShiBE-H/WebSSORequestListener</value></entry>
+				<entry key="SWITCH(development)"><value>https://maclh.switch.ch/ShiBE-H/WebSSORequestListener</value></entry>
+				<entry key="RedIRIS(stable)"><value>http://serrano.rediris.es:8080/PAPIWebSSORequestListener/request</value></entry>
+				<entry key="RedIRISTest(guagua)"><value>http://guagua.rediris.es:8080/PAPI-BE/PAPIWebSSORequestListener/request</value></entry>
+				<entry key="requestRedIRISTest(badulaque)"><value>http://badulaque.rediris.es:8080/PAPIWebSSORequestListener/</value></entry>
+				<entry key="SSOService.phpFEIDE(Andreasmacbookexperimenta)"><value>http://dev3.andreas.feide.no/simplesaml/shib13/idp/</value></entry>
+				<entry key="WebSSORequestListenerDFN"><value>https://thor.aai.dfn.de/ShiBE-H/</value></entry>
+				<entry key="WebSSORequestListenerGEANTIdP"><value>https://srv2.ams.nl.geant2.net/ShiBE-H/</value></entry>
+				<entry key="SSOService.phpGIdP_prod"><value>http://gidp.geant2.net/simplesaml/shib13/idp/</value></entry>
+				<entry key="SSOService.phpFeide"><value>https://hbe.edugain.bridge.feide.no/simplesaml/shib13/idp/</value></entry>
+				<entry key="SSOService.phpSURFfederatie(Netherlands)"><value>https://edugain.showcase.surfnet.nl/bridge/shib13/idp/</value></entry>
+				<entry key="WebSSORequestListenerHungarnet(testing)"><value>https://be.aai.niif.hu/ShiBE-H/</value></entry>
+				<entry key="SSOService.phpFresco-AAI"><value>https://clueless.restena.lu/simplesamlphp/shib13/idp/</value></entry>
+				<entry key="SSOService.phpAAI@EduHr"><value>https://login.aaiedu.hr/simplesamlphp/shib13/idp/</value></entry>					
+				<entry key="SSOShib2@brown.edu(Testing)"><value>https://stc-test8.cis.brown.edu/idp/profile/Shibboleth/</value></entry>	
+    		</map>
+    	</property>
+  	</bean>
+  	<bean id="xmlViewResolver" class="org.springframework.web.servlet.view.XmlViewResolver">
+  		<property name="order" value="1"/>
+  		<property name="location" value="/WEB-INF/views.xml"/>
+	</bean>
+  	
+  	<bean id="viewResolver" 
+		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+			<property name="requestContextAttribute" value="requestContext" />
+			<property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView"/>
+			<property name="order" value="2"/>		
+	</bean>  	
+
+</beans>

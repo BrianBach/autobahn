@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+         
+	<on-start>
+		<evaluate expression="manager.getAllInterdomainManagers()" result="flowScope.idms" />
+		<evaluate expression="manager.getTimezone()" result="flowScope.appTimezone" />
+		<evaluate expression="manager.getServiceRequestTemplate()" result="flowScope.service" />
+	</on-start>
+	<decision-state id="moreAnswersNeeded">
+    	<if test="flowScope.idms== null ||flowScope.idms.isEmpty()" then="no-idm-regitered" else="request-service" />
+	</decision-state>
+	
+	<view-state id="request-service" view="secure/request-service" model="service">
+		 <binder>
+		 	<binding property="userHomeDomain" required="true"/>
+            <binding property="justification" required="true"/>    
+    	</binder>
+		<transition on="cancel" to="services" bind="false" />
+		
+		<transition on="submit" to="request-service-success" bind="true">
+			<evaluate expression="manager.demapPortsForsServiceRequest(service)"/>
+			<evaluate expression="manager.submitServiceAtInterDomainManager(service.userHomeDomain, service)" result="flowScope.serviceId"/>
+			<evaluate expression="manager.getServiceRequestTemplate()"></evaluate>		
+		</transition>
+		<transition on="add" to="add-reservation" bind="true">
+			<set name="flowScope.home" value="service.userHomeDomain" type="string"/>
+			<evaluate expression="manager.getMappedInterDomainManagerPorts(service.userHomeDomain)" result="flowScope.ports_domain"/>
+			<evaluate expression="manager.getMappedAllPorts()" result="flowScope.ports_all"/>
+			<evaluate expression="manager.getReservationRequestTemplate()" result="flowScope.reservation"/>
+			<evaluate expression="manager.getReservationPriorities()" result="flowScope.priorities"/>
+			<evaluate expression="manager.getReservationResiliencies()" result="flowScope.resiliences"/>
+			<evaluate expression="manager.getTimezones()" result="flowScope.timezones"/>
+		</transition>
+		<transition on-exception="net.geant2.jra3.autoBahnGUI.manager.ManagerException"  to="request-service"> 
+			<evaluate expression="exceptionTranslator.translateException(flowRequestContext, flowExecutionException)"/>
+		</transition>	
+		<transition on="remove" to="request-service">
+			<set name="requestScope.id" value="requestParameters.id" type="int"/>
+			<evaluate expression="service.getReservations().remove(id)"/>
+		</transition>
+	</view-state>
+	
+	<view-state id="request-service-success" view="secure/request-reservation">
+	</view-state>
+	
+	<view-state id="add-reservation" view="secure/request-reservation" model="reservation">
+		<binder>
+			<binding property="timezone" required="true"/>
+			<binding property="request.startPort" required="true" />
+			<binding property="request.endPort" required="true"/>
+			<binding property="request.startTime" converter="calendar" required="true"/>
+			<binding property="request.endTime" converter="calendar" required="true"/>
+			<binding property="request.delay"  required="true"/>
+			<binding property="request.capacity"  required="true"/>
+			<binding property="request.processNow"/>
+			<binding property="request.resiliency" converter="reservation-resiliency" required="true"/>
+			<binding property="request.priority" converter="reservation-priority" required="true"/>
+			<binding property="request.desctription" required="true"/>
+		</binder>
+		<transition on="submit" to="request-service" bind="true">
+			<evaluate expression="manager.convertTimeToApplicationTimezone(reservation.timezone,reservation.request)"/>
+			<evaluate expression="service.getReservations().add(reservation.request)"/>
+		</transition>
+		
+		<transition on="cancel" to="request-service"/>
+		
+		<transition on="test" to="add-reservation" bind="true">
+			<evaluate expression="manager.convertTimeToApplicationTimezone(reservation.timezone,reservation.request)"/>
+			<evaluate expression="manager.demapPortsForReservationRequest(reservation.request)"/>
+			<evaluate expression="manager.convertTimeToTimezone(reservation.timezone,reservation.request)"/>
+			<evaluate expression="manager.checkReservationPossibility(flowScope.home,reservation.request)" result="flashScope.test"/>		
+			<evaluate expression="manager.mapPortsForReservationRequest(reservation.request)"/>
+		</transition>
+	</view-state> 
+	
+	<end-state id="no-idm-regitered" view="secure/noJRA3IDMRegistered"/>
+	 <end-state id="services" 
+         view="externalRedirect:contextRelative:/portal/secure/reservations.htm">
+      </end-state>  
+</flow>
