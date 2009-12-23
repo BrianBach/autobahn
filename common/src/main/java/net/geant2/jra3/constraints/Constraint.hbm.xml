@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="net.geant2.jra3.constraints">
+	
+	<class name="Constraint" table="NETWORK_CONSTRAINT">
+		<id name="constraintID" column="con_id" type="long">
+			<generator class="native" />
+		</id>
+	
+		<joined-subclass name="AdditiveConstraint" table="ADDITIVE_CONSTRAINT">
+			<key column="con_id" />
+		
+			<property name="value" type="double" />
+		</joined-subclass>
+	
+		<joined-subclass name="BooleanConstraint" table="BOOLEAN_CONSTRAINT">
+			<key column="con_id" />
+			
+			<property name="value" type="boolean" />
+		</joined-subclass>
+
+		<joined-subclass name="MinValueConstraint" table="MINVAL_CONSTRAINT">
+			<key column="con_id" />
+			
+			<property name="value" type="double" />
+		</joined-subclass>
+	
+		<joined-subclass name="RangeConstraint" table="RANGE_CONSTRAINT">
+			<key column="con_id" />
+			
+			<list name="ranges" cascade="all">
+				<key column="con_id" not-null="true" />
+				<list-index column="link_order" />
+				<one-to-many class="Range" />
+			</list>
+		</joined-subclass>
+	</class>
+	
+</hibernate-mapping>

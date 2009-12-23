@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="net.geant2.jra3.network">
+	
+	<class name="LinkType" table="Link_type" lazy="false">
+		<id name="type" column="Link_type_enum" type="int" />
+	</class>
+	
+</hibernate-mapping>

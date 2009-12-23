@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="net.geant2.jra3.network" auto-import="false">
+	
+	<class name="Node" table="interdomain_node" lazy="false">
+		<id name="bodID" column="node_id" type="string" />
+		
+		<property name="type" type="string" />
+		
+		<property name="address" type="string" />
+
+	<property name="name" type="string" />
+
+		<property name="country" type="string" />
+
+		<property name="city" type="string" />
+
+		<property name="institution" type="string" />
+
+		<property name="longitude" type="string" />
+
+		<property name="latitude" type="string" />
+		
+		<many-to-one name="provisioningDomain" class="ProvisioningDomain" not-null="true" 
+			cascade="save-update" />
+	</class>
+	
+</hibernate-mapping>

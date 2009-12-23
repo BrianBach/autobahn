@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="net.geant2.jra3.constraints">
+	
+	<class name="GlobalConstraints" table="GLOBAL_CONSTRAINTS">
+		<id name="constraintID" column="gcon_id" type="long">
+			<generator class="native" />
+		</id>
+		
+		<list name="domainConstraints" cascade="all,delete-orphan">
+			<key column="gcon_id" />
+			<list-index column="domain_order" />
+			<one-to-many class="DomainConstraints" />
+		</list>
+
+		<list name="domainsIds" cascade="all,delete-orphan">
+			<key column="gcon_id" />
+			<list-index column="domain_order" />
+			<element type="string" column="domain_id" />
+		</list>
+		
+	</class>
+	
+</hibernate-mapping>
