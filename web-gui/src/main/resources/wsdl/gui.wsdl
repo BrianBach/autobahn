@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="GuiService" targetNamespace="http://gui.jra3.geant2.net/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://gui.jra3.geant2.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://administration.jra3.geant2.net/" xmlns:ns2="network.jra3.geant2.net" xmlns:ns3="constraints.jra3.geant2.net" xmlns:tns="reservation.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="reservation.jra3.geant2.net">
+<xs:import namespace="http://administration.jra3.geant2.net/"/>
+<xs:import namespace="network.jra3.geant2.net"/>
+<xs:import namespace="constraints.jra3.geant2.net"/>
+<xs:complexType name="Service">
+<xs:sequence>
+<xs:element minOccurs="0" name="state" type="ns1:state"/>
+<xs:element minOccurs="0" name="bodID" type="xs:string"/>
+<xs:element minOccurs="0" name="justification" type="xs:string"/>
+<xs:element name="priority" type="xs:int"/>
+<xs:element minOccurs="0" name="user" type="tns:User"/>
+<xs:element maxOccurs="unbounded" name="reservations" nillable="true" type="tns:Reservation"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="User">
+<xs:sequence>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element minOccurs="0" name="homeDomain" type="ns2:AdminDomain"/>
+<xs:element minOccurs="0" name="email" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="Reservation">
+<xs:sequence>
+<xs:element minOccurs="0" name="bodID" type="xs:string"/>
+<xs:element minOccurs="0" name="startPort" type="ns2:Port"/>
+<xs:element minOccurs="0" name="endPort" type="ns2:Port"/>
+<xs:element minOccurs="0" name="startTime" type="xs:anySimpleType"/>
+<xs:element minOccurs="0" name="endTime" type="xs:anySimpleType"/>
+<xs:element name="priority" type="xs:int"/>
+<xs:element minOccurs="0" name="description" type="xs:string"/>
+<xs:element name="capacity" type="xs:long"/>
+<xs:element name="maxDelay" type="xs:int"/>
+<xs:element minOccurs="0" name="resiliency" type="xs:string"/>
+<xs:element name="bidirectional" type="xs:boolean"/>
+<xs:element minOccurs="0" name="globalConstraints" type="ns3:GlobalConstraints"/>
+<xs:element minOccurs="0" name="path" type="ns2:Path"/>
+<xs:element name="intState" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="network.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="network.jra3.geant2.net">
+<xs:complexType name="Link">
+<xs:sequence>
+<xs:element minOccurs="0" name="bodID" type="xs:string"/>
+<xs:element name="kind" type="xs:int"/>
+<xs:element minOccurs="0" name="startPort" type="tns:Port"/>
+<xs:element minOccurs="0" name="endPort" type="tns:Port"/>
+<xs:element name="bidirectional" type="xs:boolean"/>
+<xs:element name="delay" type="xs:int"/>
+<xs:element name="manualCost" type="xs:double"/>
+<xs:element name="monetaryCost" type="xs:double"/>
+<xs:element name="granularity" type="xs:long"/>
+<xs:element name="minResCapacity" type="xs:long"/>
+<xs:element name="maxResCapacity" type="xs:long"/>
+<xs:element name="capacity" type="xs:long"/>
+<xs:element minOccurs="0" name="resilience" type="xs:string"/>
+<xs:element minOccurs="0" name="timestamp" type="xs:anySimpleType"/>
+<xs:element minOccurs="0" name="localName" type="xs:string"/>
+<xs:element minOccurs="0" name="type" type="tns:LinkType"/>
+<xs:element minOccurs="0" name="operationalState" type="tns:StateOper"/>
+<xs:element minOccurs="0" name="administrativeState" type="tns:StateAdmin"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="Port">
+<xs:sequence>
+<xs:element minOccurs="0" name="bodID" type="xs:string"/>
+<xs:element minOccurs="0" name="address" type="xs:string"/>
+<xs:element minOccurs="0" name="technology" type="xs:string"/>
+<xs:element name="bundled" type="xs:boolean"/>
+<xs:element minOccurs="0" name="node" type="tns:Node"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="Node">
+<xs:sequence>
+<xs:element minOccurs="0" name="bodID" type="xs:string"/>
+<xs:element minOccurs="0" name="type" type="xs:string"/>
+<xs:element minOccurs="0" name="address" type="xs:string"/>
+<xs:element minOccurs="0" name="provisioningDomain" type="tns:ProvisioningDomain"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element minOccurs="0" name="country" type="xs:string"/>
+<xs:element minOccurs="0" name="city" type="xs:string"/>
+<xs:element minOccurs="0" name="institution" type="xs:string"/>
+<xs:element minOccurs="0" name="longitude" type="xs:string"/>
+<xs:element minOccurs="0" name="latitude" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="ProvisioningDomain">
+<xs:sequence>
+<xs:element minOccurs="0" name="bodID" type="xs:string"/>
+<xs:element minOccurs="0" name="provType" type="xs:string"/>
+<xs:element minOccurs="0" name="adminDomain" type="tns:AdminDomain"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="AdminDomain">
+<xs:sequence>
+<xs:element minOccurs="0" name="bodID" type="xs:string"/>
+<xs:element minOccurs="0" name="ASID" type="xs:string"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element name="clientDomain" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="LinkType">
+<xs:sequence>
+<xs:element name="type" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="StateOper">
+<xs:sequence>
+<xs:element name="state" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="StateAdmin">
+<xs:sequence>
+<xs:element name="state" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="Path">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" name="links" nillable="true" type="tns:Link"/>
+<xs:element name="monetary_cost" type="xs:double"/>
+<xs:element name="manual_cost" type="xs:double"/>
+<xs:element name="capacity" type="xs:long"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="administration.jra3.geant2.net" xmlns:tns="http://gui.jra3.geant2.net/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://gui.jra3.geant2.net/">
+<xs:import namespace="administration.jra3.geant2.net"/>
+<xs:element name="reservationChanged" nillable="true" type="tns:reservationChanged"/>
+<xs:element name="reservationChangedResponse" nillable="true" type="tns:reservationChangedResponse"/>
+<xs:element name="statusUpdated" nillable="true" type="tns:statusUpdated"/>
+<xs:element name="statusUpdatedResponse" nillable="true" type="tns:statusUpdatedResponse"/>
+<xs:element name="update" nillable="true" type="tns:update"/>
+<xs:element name="updateResponse" nillable="true" type="tns:updateResponse"/>
+<xs:complexType name="update">
+<xs:sequence>
+<xs:element minOccurs="0" name="idm" type="xs:string"/>
+<xs:element minOccurs="0" name="event" type="tns:eventType"/>
+<xs:element maxOccurs="unbounded" name="properties" type="ns1:KeyValue"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="reservationChangedResponse"/>
+<xs:complexType name="statusUpdated">
+<xs:sequence>
+<xs:element minOccurs="0" name="idm" type="xs:string"/>
+<xs:element minOccurs="0" name="status" type="ns1:Status"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="statusUpdatedResponse"/>
+<xs:complexType name="reservationChanged">
+<xs:sequence>
+<xs:element minOccurs="0" name="idm" type="xs:string"/>
+<xs:element minOccurs="0" name="serviceId" type="xs:string"/>
+<xs:element minOccurs="0" name="resID" type="xs:string"/>
+<xs:element minOccurs="0" name="state" type="tns:reservationChangedType"/>
+<xs:element minOccurs="0" name="message" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="updateResponse"/>
+<xs:simpleType name="eventType">
+<xs:restriction base="xs:string">
+<xs:enumeration value="TOPOLOGY_CHANGED"/>
+<xs:enumeration value="STATUS"/>
+<xs:enumeration value="RESERVATION_CHANGED"/>
+</xs:restriction>
+</xs:simpleType>
+<xs:simpleType name="reservationChangedType">
+<xs:restriction base="xs:string">
+<xs:enumeration value="SCHEDULED"/>
+<xs:enumeration value="FINISHED"/>
+<xs:enumeration value="FAILED"/>
+<xs:enumeration value="CANCELLED"/>
+<xs:enumeration value="ACTIVE"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="network.jra3.geant2.net" xmlns:ns2="reservation.jra3.geant2.net" xmlns:ns3="administration.jra3.geant2.net" xmlns:tns="http://administration.jra3.geant2.net/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://administration.jra3.geant2.net/">
+<xs:import namespace="network.jra3.geant2.net"/>
+<xs:import namespace="reservation.jra3.geant2.net"/>
+<xs:import namespace="administration.jra3.geant2.net"/>
+<xs:element name="getLog" nillable="true" type="tns:getLog"/>
+<xs:element name="getLogResponse" nillable="true" type="tns:getLogResponse"/>
+<xs:element name="getProperties" nillable="true" type="tns:getProperties"/>
+<xs:element name="getPropertiesResponse" nillable="true" type="tns:getPropertiesResponse"/>
+<xs:element name="getReservation" nillable="true" type="tns:getReservation"/>
+<xs:element name="getReservationResponse" nillable="true" type="tns:getReservationResponse"/>
+<xs:element name="getService" nillable="true" type="tns:getService"/>
+<xs:element name="getServiceResponse" nillable="true" type="tns:getServiceResponse"/>
+<xs:element name="getServices" nillable="true" type="tns:getServices"/>
+<xs:element name="getServicesResponse" nillable="true" type="tns:getServicesResponse"/>
+<xs:element name="getStatus" nillable="true" type="tns:getStatus"/>
+<xs:element name="getStatusResponse" nillable="true" type="tns:getStatusResponse"/>
+<xs:element name="getTopology" nillable="true" type="tns:getTopology"/>
+<xs:element name="getTopologyResponse" nillable="true" type="tns:getTopologyResponse"/>
+<xs:element name="setProperties" nillable="true" type="tns:setProperties"/>
+<xs:element name="setPropertiesResponse" nillable="true" type="tns:setPropertiesResponse"/>
+<xs:complexType name="getTopologyResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" name="links" type="ns1:Link"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getLogResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="log" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getServicesResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" name="serivces" type="ns2:Service"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getServices"/>
+<xs:complexType name="getStatus"/>
+<xs:complexType name="setProperties">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" name="properties" type="ns3:KeyValue"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getServiceResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="service" type="ns2:Service"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getReservationResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="Reservation" type="ns2:Reservation"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getTopology"/>
+<xs:complexType name="getReservation">
+<xs:sequence>
+<xs:element minOccurs="0" name="resID" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="setPropertiesResponse"/>
+<xs:complexType name="getPropertiesResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" name="Properties" type="ns3:KeyValue"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getLog">
+<xs:sequence>
+<xs:element name="all" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getService">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getStatusResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="status" type="ns3:Status"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getProperties"/>
+<xs:simpleType name="state">
+<xs:restriction base="xs:string">
+<xs:enumeration value="SCHEDULING"/>
+<xs:enumeration value="SCHEDULED"/>
+<xs:enumeration value="FAILED"/>
+<xs:enumeration value="CANCELLING"/>
+<xs:enumeration value="CANCELLED"/>
+</xs:restriction>
+</xs:simpleType>
+<xs:simpleType name="constraintsNames">
+<xs:restriction base="xs:string">
+<xs:enumeration value="VLANS"/>
+<xs:enumeration value="TIMESLOTS"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://administration.jra3.geant2.net/" xmlns:tns="constraints.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="constraints.jra3.geant2.net">
+<xs:import namespace="http://administration.jra3.geant2.net/"/>
+<xs:complexType name="GlobalConstraints">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" name="domainsIds" nillable="true" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="domainConstraints" nillable="true" type="tns:DomainConstraints"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="DomainConstraints">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" name="pathConstraints" nillable="true" type="tns:PathConstraints"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="PathConstraints">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" name="addNames" nillable="true" type="ns1:constraintsNames"/>
+<xs:element maxOccurs="unbounded" name="addConstraints" nillable="true" type="tns:AdditiveConstraint"/>
+<xs:element maxOccurs="unbounded" name="boolNames" nillable="true" type="ns1:constraintsNames"/>
+<xs:element maxOccurs="unbounded" name="boolConstraints" nillable="true" type="tns:BooleanConstraint"/>
+<xs:element maxOccurs="unbounded" name="rangeNames" nillable="true" type="ns1:constraintsNames"/>
+<xs:element maxOccurs="unbounded" name="rangeConstraints" nillable="true" type="tns:RangeConstraint"/>
+<xs:element maxOccurs="unbounded" name="minValNames" nillable="true" type="ns1:constraintsNames"/>
+<xs:element maxOccurs="unbounded" name="minValConstraints" nillable="true" type="tns:MinValueConstraint"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="AdditiveConstraint">
+<xs:complexContent>
+<xs:extension base="tns:Constraint">
+<xs:sequence>
+<xs:element minOccurs="0" name="value" type="xs:double"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType abstract="true" name="Constraint"/>
+<xs:complexType name="BooleanConstraint">
+<xs:complexContent>
+<xs:extension base="tns:Constraint">
+<xs:sequence>
+<xs:element minOccurs="0" name="value" type="xs:boolean"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="RangeConstraint">
+<xs:complexContent>
+<xs:extension base="tns:Constraint">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" name="ranges" nillable="true" type="tns:Range"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="Range">
+<xs:sequence>
+<xs:element minOccurs="0" name="min" type="xs:int"/>
+<xs:element minOccurs="0" name="max" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="MinValueConstraint">
+<xs:complexContent>
+<xs:extension base="tns:Constraint">
+<xs:sequence>
+<xs:element minOccurs="0" name="value" type="xs:double"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="network.jra3.geant2.net" xmlns:tns="administration.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="administration.jra3.geant2.net">
+<xs:import namespace="network.jra3.geant2.net"/>
+<xs:complexType name="KeyValue">
+<xs:sequence>
+<xs:element minOccurs="0" name="key" type="xs:string"/>
+<xs:element minOccurs="0" name="value" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="Status">
+<xs:sequence>
+<xs:element minOccurs="0" name="domain" type="xs:string"/>
+<xs:element name="longitude" type="xs:float"/>
+<xs:element name="latitude" type="xs:float"/>
+<xs:element maxOccurs="unbounded" name="neighbors" nillable="true" type="tns:Neighbor"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="Neighbor">
+<xs:sequence>
+<xs:element minOccurs="0" name="domain" type="xs:string"/>
+<xs:element minOccurs="0" name="link" type="ns1:Link"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="updateResponse">
+    <wsdl:part name="parameters" element="tns:updateResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="statusUpdated">
+    <wsdl:part name="parameters" element="tns:statusUpdated">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="update">
+    <wsdl:part name="parameters" element="tns:update">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reservationChangedResponse">
+    <wsdl:part name="parameters" element="tns:reservationChangedResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reservationChanged">
+    <wsdl:part name="parameters" element="tns:reservationChanged">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="statusUpdatedResponse">
+    <wsdl:part name="parameters" element="tns:statusUpdatedResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="Gui">
+    <wsdl:operation name="reservationChanged">
+      <wsdl:input name="reservationChanged" message="tns:reservationChanged">
+    </wsdl:input>
+      <wsdl:output name="reservationChangedResponse" message="tns:reservationChangedResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="statusUpdated">
+      <wsdl:input name="statusUpdated" message="tns:statusUpdated">
+    </wsdl:input>
+      <wsdl:output name="statusUpdatedResponse" message="tns:statusUpdatedResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="update">
+      <wsdl:input name="update" message="tns:update">
+    </wsdl:input>
+      <wsdl:output name="updateResponse" message="tns:updateResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="GuiServiceSoapBinding" type="tns:Gui">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="reservationChanged">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="reservationChanged">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="reservationChangedResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="statusUpdated">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="statusUpdated">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="statusUpdatedResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="update">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="update">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="updateResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="GuiService">
+    <wsdl:port name="GuiPort" binding="tns:GuiServiceSoapBinding">
+      <soap:address location="http://localhost:9090/hello"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
