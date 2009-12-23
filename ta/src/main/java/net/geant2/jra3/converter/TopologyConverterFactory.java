@@ -30,15 +30,17 @@ public class TopologyConverterFactory {
         String prange = properties.getProperty("id.ports");
         String lrange = properties.getProperty("id.links");
         
+        String lookuphost = properties.getProperty("lookuphost");
+        
         InternalIdentifiersSource internal = new InternalIdentifiersSource(
         		nrange, prange, lrange);
         PublicIdentifiersMapping mapping = new PublicIdentifiersMapping(
         		properties.getProperty("public.ids.file"));
         
         if (topology.isEthernet())
-            return new EthernetTopologyConverter(topology, pathfinder, internal, mapping);
+            return new EthernetTopologyConverter(topology, pathfinder, internal, mapping, lookuphost);
         else if (topology.isSDH())
-            return new SdhTopologyConverter(topology, pathfinder, internal, mapping);
+            return new SdhTopologyConverter(topology, pathfinder, internal, mapping, lookuphost);
         else
         	throw new IllegalArgumentException(
 				"Topology converter for topology type cannot be found!");

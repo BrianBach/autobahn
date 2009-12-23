@@ -57,6 +57,8 @@ import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import net.geant2.jra3.lookup.*;
+
 /**
  * This class is responsible for creating and managing the BoD system.
  * Its main tasks are:
@@ -84,6 +86,7 @@ public final class AccessPoint implements UserAccessPoint,
     private int logPosition;
     private Properties properties;
     private String domain;
+    private String domainName;
     private List<AdminDomain> neighbors;
     
     private ProxyReceiver proxy = null;
@@ -161,6 +164,7 @@ public final class AccessPoint implements UserAccessPoint,
         long stime = System.currentTimeMillis();
         
 		domain = properties.getProperty("domain");
+		domainName = properties.getProperty("domainName");
 
 		try {
 	        IdmHibernateUtil.configure(properties.getProperty("db.host"), 
@@ -179,6 +183,17 @@ public final class AccessPoint implements UserAccessPoint,
 	        
 	        // init neighbors
 	        AdminDomain admin = daos.getAdminDomainDAO().getByBodID(domain);
+	        
+	        //Register to Lookup
+	        String host = properties.getProperty("lookuphost");
+	        LookupService lookup = new LookupService(host);
+	        try {
+                lookup.RegisterIdm(domainName, domain);
+            } catch (LookupServiceException lse) {
+                log.info("IDM could not register itself to the LS");
+                lse.printStackTrace();
+            }
+	        
 	        neighbors = pathFinder.getNeighbours(admin); 
 	        
 	        IdmHibernateUtil.getInstance().closeSession();
@@ -235,6 +250,17 @@ public final class AccessPoint implements UserAccessPoint,
      * Properties are not cleared so init can reuse them
      */
 	public void dispose() {
+		String domainName = properties.getProperty("domainName");
+		
+		// Remove idm from LS
+		String host = properties.getProperty("lookuphost");
+        LookupService lookup = new LookupService(host);
+        try {
+			lookup.RemoveIdm(domainName);
+		} catch (LookupServiceException e) {
+			e.printStackTrace();
+			log.info("IDM could not remove itself from LS");
+		}
 		
         log.info("===== Disposing =====");
         topology.close();

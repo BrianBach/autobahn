@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import net.geant2.jra3.intradomain.IntradomainPath;
@@ -12,6 +13,8 @@ import net.geant2.jra3.intradomain.common.GenericInterface;
 import net.geant2.jra3.intradomain.common.GenericLink;
 import net.geant2.jra3.intradomain.common.Node;
 import net.geant2.jra3.intradomain.pathfinder.IntradomainPathfinder;
+import net.geant2.jra3.lookup.LookupService;
+import net.geant2.jra3.lookup.LookupServiceException;
 import net.geant2.jra3.network.AdminDomain;
 import net.geant2.jra3.network.Link;
 import net.geant2.jra3.network.LinkIdentifiers;
@@ -71,6 +74,9 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
     
     // Textual info about network devices mapping
     private List<String> info = new ArrayList<String>();
+    
+    // Location of Lookup Server
+    private String lookuphost;
 
     private boolean internalCalculationEnded = false;
 
@@ -82,10 +88,11 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
      * @param mapping Mapping between edge ports real names and public names
      */
 	public GenericTopologyConverter(IntradomainPathfinder pathfinder, 
-			InternalIdentifiersSource internal, PublicIdentifiersMapping mapping) {
+			InternalIdentifiersSource internal, PublicIdentifiersMapping mapping, String lookuphost) {
 		this.pathFinder = pathfinder;
 		this.internalIds = internal;
 		this.idMappings = mapping;
+		this.lookuphost = lookuphost;
 	}
 
 	/* (non-Javadoc)
@@ -140,9 +147,22 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
 		
 		for(GenericLink glink : eLinks) {
 			// Skip client devices
-    		if(glink.getEndInterface().isClientPort())
+    		if(glink.getEndInterface().isClientPort()) {
+    		    
+    		    // Register end port to LS
+    		    String friendlyName = glink.getEndInterface().getName();
+    		    String domain = glink.getEndInterface().getDomainId();
+    		    String portIdentifier = glink.getEndInterface().getDescription();
+    		    LookupService lookup = new LookupService(lookuphost);
+    		    try {
+                    lookup.RegisterEndPort(friendlyName, portIdentifier, domain);
+                } catch (LookupServiceException lse) {
+                    lse.printStackTrace();
+                    log.info("End port " + portIdentifier + " with friendly name " 
+                            + friendlyName + " could not be registered to LS");
+                }
     			continue;
-			
+    		}
 			refreshInterdomainLink(glink);
 		}
 		
@@ -264,13 +284,52 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
     }
     
     private boolean refreshInterdomainLink(GenericLink gl) {
-    	
-    	String sportname = gl.getStartInterface().getName();
-		String dportname = gl.getEndInterface().getName();
-
-		
+        
+        LookupService lookup = new LookupService(lookuphost);
+    	String homeDomain = gl.getStartInterface().getDomainId();
 		String externalDomain = gl.getEndInterface().getDomainId();
+
+        String sportname = gl.getStartInterface().getName();
+        // Register the local (start) port of the interdomain link at the LS
+        try {
+            lookup.RegisterEdgePort(homeDomain, externalDomain, sportname);
+        } catch (LookupServiceException lse) {
+            log.error("Edge port to domain " + externalDomain + " could not be registered to LS");
+            lse.printStackTrace();
+        }
 		
+        String dportname = gl.getEndInterface().getName();
+        // If Database did not contain the remote (end) port of the 
+        // interdomain link port name, try to query it from the LS
+        if (dportname == null) {
+            ArrayList<String> edgePortIds;
+            try {
+                edgePortIds = lookup.QueryEdgePort(externalDomain);
+            } catch (LookupServiceException e) {
+                // Can't get identifier for remote edge port (LS is not working)
+                log.info("Add to waiting remote edge port of link: " + gl);
+                AwaitingIdentifiers wait = getWaiting(gl.getEndInterface().getDomainId());
+                wait.addLink(gl);
+                return false;
+            }
+
+            if (edgePortIds == null || edgePortIds.size() ==0) {
+                // Can't get identifier for remote edge port
+                log.info("Add to waiting remote edge port of link: " + gl);
+                AwaitingIdentifiers wait = getWaiting(gl.getEndInterface().getDomainId());
+                wait.addLink(gl);
+                return false;
+            } else if (edgePortIds.size() > 1) {
+                // Multi-homed connection, we have no way to identify edge port name
+                log.error("Multi-homed connection to domain " + externalDomain + ", please add information manually in the Database");
+                
+                // This is a fatal error
+                return false;
+            } else {
+                dportname = edgePortIds.get(0);
+            }
+        }
+
 		Link l = absLinks.get(sportname);
 		
 		if (l != null) {

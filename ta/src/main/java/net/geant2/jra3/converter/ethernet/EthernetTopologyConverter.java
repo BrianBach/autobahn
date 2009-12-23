@@ -30,8 +30,8 @@ public class EthernetTopologyConverter extends GenericTopologyConverter {
 	 * @param mapping Public ports names mapping
 	 */
 	public EthernetTopologyConverter(IntradomainPathfinder pathfinder, 
-			InternalIdentifiersSource internal,	PublicIdentifiersMapping mapping) {
-		super(pathfinder, internal, mapping);
+			InternalIdentifiersSource internal,	PublicIdentifiersMapping mapping, String lookuphost) {
+		super(pathfinder, internal, mapping, lookuphost);
 	}
 
 	/**
@@ -43,8 +43,8 @@ public class EthernetTopologyConverter extends GenericTopologyConverter {
 	 * @param mapping Public ports names mapping
 	 */
 	public EthernetTopologyConverter(IntradomainTopology topology, IntradomainPathfinder pathfinder, 
-			InternalIdentifiersSource internal, PublicIdentifiersMapping mapping) {
-		super(pathfinder, internal, mapping);
+			InternalIdentifiersSource internal, PublicIdentifiersMapping mapping, String lookuphost) {
+		super(pathfinder, internal, mapping, lookuphost);
 		
 		sptrees = topology.getSpanningTrees();
 

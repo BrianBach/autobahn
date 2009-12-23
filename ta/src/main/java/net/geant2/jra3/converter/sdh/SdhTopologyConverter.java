@@ -23,13 +23,13 @@ import net.geant2.jra3.intradomain.sdh.StmLink;
 public class SdhTopologyConverter extends GenericTopologyConverter {
 
 	public SdhTopologyConverter(IntradomainPathfinder pathfinder, 
-			InternalIdentifiersSource internal, PublicIdentifiersMapping mapping) {
-		super(pathfinder, internal, mapping);
+			InternalIdentifiersSource internal, PublicIdentifiersMapping mapping, String lookuphost) {
+		super(pathfinder, internal, mapping, lookuphost);
 	}
 	
 	public SdhTopologyConverter(IntradomainTopology topology, IntradomainPathfinder pathfinder,
-			InternalIdentifiersSource internal, PublicIdentifiersMapping mapping) {
-		super(pathfinder, internal, mapping);
+			InternalIdentifiersSource internal, PublicIdentifiersMapping mapping, String lookuphost) {
+		super(pathfinder, internal, mapping, lookuphost);
 		
 		genericLinks = new ArrayList<GenericLink>();
 		for(StmLink link : topology.getStmLinks()) {

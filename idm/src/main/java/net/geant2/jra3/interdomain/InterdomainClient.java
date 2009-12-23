@@ -1,6 +1,12 @@
 package net.geant2.jra3.interdomain;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 import net.geant2.jra3.constraints.GlobalConstraints;
+import net.geant2.jra3.lookup.LookupService;
+import net.geant2.jra3.lookup.LookupServiceException;
 import net.geant2.jra3.network.LinkIdentifiers;
 import net.geant2.jra3.reservation.Reservation;
 import net.geant2.jra3.reservation.TimeRange;
@@ -19,8 +25,33 @@ public class InterdomainClient implements Interdomain {
 	private String endPoint;
 	
 	public InterdomainClient(String endPoint) {
-		InterdomainService service = new InterdomainService(endPoint);
-		this.endPoint = endPoint;
+		// Query IDM to Lookup
+		String finalEndPoint = endPoint;
+        Properties properties = new Properties();
+        try {
+            InputStream is = getClass().getClassLoader().getResourceAsStream(
+                        "etc/idm.properties");
+            properties.load(is);
+            is.close();
+            log.debug(properties.size() + " properties loaded");
+        } catch (IOException e) {
+            log.info("Could not load app.properties: " + e.getMessage());
+        }
+		String host = properties.getProperty("lookuphost");
+        LookupService lookup = new LookupService(host);
+        String idmLocation = "";
+        try {
+        	idmLocation = lookup.QueryIdmLocation(endPoint);
+        } catch (LookupServiceException e) {
+        	log.info("IDM module was not found, Please check your syntax");
+        	log.info(e.getMessage());
+        }
+        if (idmLocation != "") {
+        	finalEndPoint = idmLocation;
+        }
+        
+		InterdomainService service = new InterdomainService(finalEndPoint);
+		this.endPoint = finalEndPoint;
 		this.interdomain = service.getInterdomainPort();
 	}
 	
