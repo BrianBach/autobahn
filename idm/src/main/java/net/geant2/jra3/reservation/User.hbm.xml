@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="net.geant2.jra3.reservation">
+	
+	<class name="User" table="BOD_USER">
+		<id name="name" column="name" type="string" />
+		
+		<property name="email" type="string" />
+		
+		<many-to-one name="homeDomain" class="net.geant2.jra3.network.AdminDomain" not-null="true" 
+			cascade="save-update" />
+	</class>
+	
+</hibernate-mapping>

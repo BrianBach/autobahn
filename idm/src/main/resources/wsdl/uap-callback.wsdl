@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="UapCallbackService" targetNamespace="http://callback.useraccesspoint.jra3.geant2.net/" xmlns:tns="http://callback.useraccesspoint.jra3.geant2.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://callback.useraccesspoint.jra3.geant2.net/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://callback.useraccesspoint.jra3.geant2.net/">
+<xs:element name="domainUp" type="tns:domainUp"/>
+<xs:element name="domainUpResponse" type="tns:domainUpResponse"/>
+<xs:element name="reservationActive" type="tns:reservationActive"/>
+<xs:element name="reservationActiveResponse" type="tns:reservationActiveResponse"/>
+<xs:element name="reservationCancelled" type="tns:reservationCancelled"/>
+<xs:element name="reservationCancelledResponse" type="tns:reservationCancelledResponse"/>
+<xs:element name="reservationFinished" type="tns:reservationFinished"/>
+<xs:element name="reservationFinishedResponse" type="tns:reservationFinishedResponse"/>
+<xs:element name="reservationModified" type="tns:reservationModified"/>
+<xs:element name="reservationModifiedResponse" type="tns:reservationModifiedResponse"/>
+<xs:element name="reservationProcessingFailed" type="tns:reservationProcessingFailed"/>
+<xs:element name="reservationProcessingFailedResponse" type="tns:reservationProcessingFailedResponse"/>
+<xs:element name="reservationScheduled" type="tns:reservationScheduled"/>
+<xs:element name="reservationScheduledResponse" type="tns:reservationScheduledResponse"/>
+<xs:complexType name="reservationFinished">
+<xs:sequence>
+<xs:element minOccurs="0" name="resId" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="reservationFinishedResponse">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="reservationCancelled">
+<xs:sequence>
+<xs:element minOccurs="0" name="resId" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="reservationCancelledResponse">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="reservationActive">
+<xs:sequence>
+<xs:element minOccurs="0" name="resId" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="reservationActiveResponse">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="reservationModified">
+<xs:sequence>
+<xs:element minOccurs="0" name="resId" type="xs:string"/>
+<xs:element name="success" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="reservationModifiedResponse">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="reservationScheduled">
+<xs:sequence>
+<xs:element minOccurs="0" name="resId" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="reservationScheduledResponse">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="reservationProcessingFailed">
+<xs:sequence>
+<xs:element minOccurs="0" name="resId" type="xs:string"/>
+<xs:element minOccurs="0" name="cause" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="reservationProcessingFailedResponse">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="domainUp">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="domainUpResponse">
+<xs:sequence/>
+</xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="reservationModified">
+    <wsdl:part name="parameters" element="tns:reservationModified">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reservationActiveResponse">
+    <wsdl:part name="parameters" element="tns:reservationActiveResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reservationCancelledResponse">
+    <wsdl:part name="parameters" element="tns:reservationCancelledResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reservationActive">
+    <wsdl:part name="parameters" element="tns:reservationActive">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reservationProcessingFailedResponse">
+    <wsdl:part name="parameters" element="tns:reservationProcessingFailedResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reservationFinishedResponse">
+    <wsdl:part name="parameters" element="tns:reservationFinishedResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reservationScheduledResponse">
+    <wsdl:part name="parameters" element="tns:reservationScheduledResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="domainUp">
+    <wsdl:part name="parameters" element="tns:domainUp">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reservationFinished">
+    <wsdl:part name="parameters" element="tns:reservationFinished">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reservationProcessingFailed">
+    <wsdl:part name="parameters" element="tns:reservationProcessingFailed">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reservationModifiedResponse">
+    <wsdl:part name="parameters" element="tns:reservationModifiedResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="domainUpResponse">
+    <wsdl:part name="parameters" element="tns:domainUpResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reservationCancelled">
+    <wsdl:part name="parameters" element="tns:reservationCancelled">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reservationScheduled">
+    <wsdl:part name="parameters" element="tns:reservationScheduled">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="UapCallback">
+    <wsdl:operation name="reservationFinished">
+      <wsdl:input name="reservationFinished" message="tns:reservationFinished">
+    </wsdl:input>
+      <wsdl:output name="reservationFinishedResponse" message="tns:reservationFinishedResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="reservationCancelled">
+      <wsdl:input name="reservationCancelled" message="tns:reservationCancelled">
+    </wsdl:input>
+      <wsdl:output name="reservationCancelledResponse" message="tns:reservationCancelledResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="reservationActive">
+      <wsdl:input name="reservationActive" message="tns:reservationActive">
+    </wsdl:input>
+      <wsdl:output name="reservationActiveResponse" message="tns:reservationActiveResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="reservationModified">
+      <wsdl:input name="reservationModified" message="tns:reservationModified">
+    </wsdl:input>
+      <wsdl:output name="reservationModifiedResponse" message="tns:reservationModifiedResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="reservationScheduled">
+      <wsdl:input name="reservationScheduled" message="tns:reservationScheduled">
+    </wsdl:input>
+      <wsdl:output name="reservationScheduledResponse" message="tns:reservationScheduledResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="reservationProcessingFailed">
+      <wsdl:input name="reservationProcessingFailed" message="tns:reservationProcessingFailed">
+    </wsdl:input>
+      <wsdl:output name="reservationProcessingFailedResponse" message="tns:reservationProcessingFailedResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="domainUp">
+      <wsdl:input name="domainUp" message="tns:domainUp">
+    </wsdl:input>
+      <wsdl:output name="domainUpResponse" message="tns:domainUpResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="UapCallbackServiceSoapBinding" type="tns:UapCallback">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="reservationFinished">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="reservationFinished">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="reservationFinishedResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="reservationCancelled">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="reservationCancelled">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="reservationCancelledResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="reservationActive">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="reservationActive">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="reservationActiveResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="reservationModified">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="reservationModified">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="reservationModifiedResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="reservationProcessingFailed">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="reservationProcessingFailed">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="reservationProcessingFailedResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="reservationScheduled">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="reservationScheduled">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="reservationScheduledResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="domainUp">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="domainUp">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="domainUpResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="UapCallbackService">
+    <wsdl:port name="UapCallbackPort" binding="tns:UapCallbackServiceSoapBinding">
+      <soap:address location="http://localhost:9090/UapCallbackPort"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

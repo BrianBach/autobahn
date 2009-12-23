@@ -1,0 +1,31 @@
+<beans xmlns="http://www.springframework.org/schema/beans" 
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+      xmlns:jaxws="http://cxf.apache.org/jaxws" 
+      xsi:schemaLocation=" 
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd 
+http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd"> 
+ 
+  <import resource="classpath:META-INF/cxf/cxf.xml"/> 
+  <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml"/> 
+  <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/> 
+ 
+  <jaxws:endpoint id="uap" 
+                  implementor="net.geant2.jra3.useraccesspoint.UserAccessPointImpl" 
+                  address="/uap" />
+                  
+  <jaxws:endpoint id="administration" 
+                  implementor="net.geant2.jra3.administration.AdministrationImpl" 
+                  address="/administration" /> 
+
+  <jaxws:endpoint id="interdomain" 
+                  implementor="net.geant2.jra3.interdomain.InterdomainImpl" 
+                  address="/interdomain" /> 
+
+  <bean id="dm2idm-impl" class="net.geant2.jra3.dm2idm.Dm2IdmImpl" destroy-method="dispose"/>
+
+
+  <jaxws:endpoint id="dm2idm"
+  				  implementor="#dm2idm-impl" 
+  				  address="/dm2idm" /> 
+                   
+</beans> 

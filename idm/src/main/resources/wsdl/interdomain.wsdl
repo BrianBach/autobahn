@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="InterdomainService" targetNamespace="http://interdomain.jra3.geant2.net/" xmlns:tns="http://interdomain.jra3.geant2.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="reservation.jra3.geant2.net" xmlns:ns2="network.jra3.geant2.net" xmlns:ns3="constraints.jra3.geant2.net" xmlns:tns="http://interdomain.jra3.geant2.net/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://interdomain.jra3.geant2.net/">
+<xs:import namespace="reservation.jra3.geant2.net"/>
+<xs:import namespace="network.jra3.geant2.net"/>
+<xs:import namespace="constraints.jra3.geant2.net"/>
+<xs:element name="cancelReservation" type="tns:cancelReservation"/>
+<xs:element name="cancelReservationResponse" type="tns:cancelReservationResponse"/>
+<xs:element name="getIdentifiers" type="tns:getIdentifiers"/>
+<xs:element name="getIdentifiersResponse" type="tns:getIdentifiersResponse"/>
+<xs:element name="hello" type="tns:hello"/>
+<xs:element name="helloResponse" type="tns:helloResponse"/>
+<xs:element name="modifyReservation" type="tns:modifyReservation"/>
+<xs:element name="modifyReservationResponse" type="tns:modifyReservationResponse"/>
+<xs:element name="reportActive" type="tns:reportActive"/>
+<xs:element name="reportActiveResponse" type="tns:reportActiveResponse"/>
+<xs:element name="reportCancellation" type="tns:reportCancellation"/>
+<xs:element name="reportCancellationResponse" type="tns:reportCancellationResponse"/>
+<xs:element name="reportFinished" type="tns:reportFinished"/>
+<xs:element name="reportFinishedResponse" type="tns:reportFinishedResponse"/>
+<xs:element name="reportModify" type="tns:reportModify"/>
+<xs:element name="reportModifyResponse" type="tns:reportModifyResponse"/>
+<xs:element name="reportSchedule" type="tns:reportSchedule"/>
+<xs:element name="reportScheduleResponse" type="tns:reportScheduleResponse"/>
+<xs:element name="reportWithdraw" type="tns:reportWithdraw"/>
+<xs:element name="reportWithdrawResponse" type="tns:reportWithdrawResponse"/>
+<xs:element name="scheduleReservation" type="tns:scheduleReservation"/>
+<xs:element name="scheduleReservationResponse" type="tns:scheduleReservationResponse"/>
+<xs:element name="withdrawReservation" type="tns:withdrawReservation"/>
+<xs:element name="withdrawReservationResponse" type="tns:withdrawReservationResponse"/>
+<xs:complexType name="modifyReservation">
+<xs:sequence>
+<xs:element minOccurs="0" name="resID" type="xs:string"/>
+<xs:element minOccurs="0" name="time" type="ns1:TimeRange"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="modifyReservationResponse">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="cancelReservation">
+<xs:sequence>
+<xs:element minOccurs="0" name="resID" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="cancelReservationResponse">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="reportWithdraw">
+<xs:sequence>
+<xs:element minOccurs="0" name="resID" type="xs:string"/>
+<xs:element minOccurs="0" name="message" type="xs:string"/>
+<xs:element name="success" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="reportWithdrawResponse">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="getIdentifiers">
+<xs:sequence>
+<xs:element minOccurs="0" name="portName" type="xs:string"/>
+<xs:element minOccurs="0" name="linkBodId" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getIdentifiersResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="bodId" type="ns2:LinkIdentifiers"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="withdrawReservation">
+<xs:sequence>
+<xs:element minOccurs="0" name="resID" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="withdrawReservationResponse">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="reportCancellation">
+<xs:sequence>
+<xs:element minOccurs="0" name="resID" type="xs:string"/>
+<xs:element minOccurs="0" name="message" type="xs:string"/>
+<xs:element name="success" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="reportCancellationResponse">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="reportActive">
+<xs:sequence>
+<xs:element minOccurs="0" name="resID" type="xs:string"/>
+<xs:element minOccurs="0" name="message" type="xs:string"/>
+<xs:element name="success" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="reportActiveResponse">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="reportSchedule">
+<xs:sequence>
+<xs:element minOccurs="0" name="resID" type="xs:string"/>
+<xs:element name="code" type="xs:int"/>
+<xs:element minOccurs="0" name="message" type="xs:string"/>
+<xs:element name="success" type="xs:boolean"/>
+<xs:element minOccurs="0" name="global" type="ns3:GlobalConstraints"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="reportScheduleResponse">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="scheduleReservation">
+<xs:sequence>
+<xs:element minOccurs="0" name="reservation" type="ns1:Reservation"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="scheduleReservationResponse">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="reportModify">
+<xs:sequence>
+<xs:element minOccurs="0" name="resID" type="xs:string"/>
+<xs:element minOccurs="0" name="time" type="ns1:TimeRange"/>
+<xs:element minOccurs="0" name="message" type="xs:string"/>
+<xs:element name="success" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="reportModifyResponse">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="reportFinished">
+<xs:sequence>
+<xs:element minOccurs="0" name="resID" type="xs:string"/>
+<xs:element minOccurs="0" name="message" type="xs:string"/>
+<xs:element name="success" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="reportFinishedResponse">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="hello">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="helloResponse">
+<xs:sequence>
+<xs:element name="True" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+<xs:element name="NoSuchReservationException" type="tns:NoSuchReservationException"/>
+<xs:complexType name="NoSuchReservationException">
+<xs:sequence/>
+</xs:complexType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="reservation.jra3.geant2.net" xmlns:ns1="network.jra3.geant2.net" xmlns:ns2="constraints.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="reservation.jra3.geant2.net">
+<xs:import namespace="network.jra3.geant2.net"/>
+<xs:import namespace="constraints.jra3.geant2.net"/>
+<xs:complexType name="TimeRange">
+<xs:sequence>
+<xs:element minOccurs="0" name="startTime" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="endTime" type="xs:dateTime"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="Reservation">
+<xs:sequence>
+<xs:element minOccurs="0" name="bodID" type="xs:string"/>
+<xs:element minOccurs="0" name="startPort" type="ns1:Port"/>
+<xs:element minOccurs="0" name="endPort" type="ns1:Port"/>
+<xs:element minOccurs="0" name="startTime" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="endTime" type="xs:dateTime"/>
+<xs:element name="priority" type="xs:int"/>
+<xs:element minOccurs="0" name="description" type="xs:string"/>
+<xs:element name="capacity" type="xs:long"/>
+<xs:element name="maxDelay" type="xs:int"/>
+<xs:element minOccurs="0" name="resiliency" type="xs:string"/>
+<xs:element name="bidirectional" type="xs:boolean"/>
+<xs:element minOccurs="0" name="globalConstraints" type="ns2:GlobalConstraints"/>
+<xs:element minOccurs="0" name="path" type="ns1:Path"/>
+<xs:element name="intState" type="xs:int"/>
+<xs:element name="fake" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="constraints.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="constraints.jra3.geant2.net">
+<xs:complexType name="GlobalConstraints">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" name="domainsIds" nillable="true" type="xs:string"/>
+<xs:element maxOccurs="unbounded" name="domainConstraints" nillable="true" type="tns:DomainConstraints"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="DomainConstraints">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" name="pathConstraints" nillable="true" type="tns:PathConstraints"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="PathConstraints">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" name="addNames" nillable="true" type="tns:ConstraintsNames"/>
+<xs:element maxOccurs="unbounded" name="addConstraints" nillable="true" type="tns:AdditiveConstraint"/>
+<xs:element maxOccurs="unbounded" name="boolNames" nillable="true" type="tns:ConstraintsNames"/>
+<xs:element maxOccurs="unbounded" name="boolConstraints" nillable="true" type="tns:BooleanConstraint"/>
+<xs:element maxOccurs="unbounded" name="rangeNames" nillable="true" type="tns:ConstraintsNames"/>
+<xs:element maxOccurs="unbounded" name="rangeConstraints" nillable="true" type="tns:RangeConstraint"/>
+<xs:element maxOccurs="unbounded" name="minValNames" nillable="true" type="tns:ConstraintsNames"/>
+<xs:element maxOccurs="unbounded" name="minValConstraints" nillable="true" type="tns:MinValueConstraint"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="AdditiveConstraint">
+<xs:complexContent>
+<xs:extension base="tns:Constraint">
+<xs:sequence>
+<xs:element minOccurs="0" name="value" type="xs:double"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType abstract="true" name="Constraint">
+<xs:all/>
+</xs:complexType>
+<xs:complexType name="BooleanConstraint">
+<xs:complexContent>
+<xs:extension base="tns:Constraint">
+<xs:sequence>
+<xs:element minOccurs="0" name="value" type="xs:boolean"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="RangeConstraint">
+<xs:complexContent>
+<xs:extension base="tns:Constraint">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" name="ranges" nillable="true" type="tns:Range"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="Range">
+<xs:sequence>
+<xs:element minOccurs="0" name="min" type="xs:int"/>
+<xs:element minOccurs="0" name="max" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="MinValueConstraint">
+<xs:complexContent>
+<xs:extension base="tns:Constraint">
+<xs:sequence>
+<xs:element minOccurs="0" name="value" type="xs:double"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:simpleType name="ConstraintsNames">
+<xs:restriction base="xs:string">
+<xs:enumeration value="VLANS"/>
+<xs:enumeration value="TIMESLOTS"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="network.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="network.jra3.geant2.net">
+<xs:complexType name="LinkIdentifiers">
+<xs:sequence>
+<xs:element minOccurs="0" name="nodeId" type="xs:string"/>
+<xs:element minOccurs="0" name="portId" type="xs:string"/>
+<xs:element minOccurs="0" name="linkId" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="Port">
+<xs:sequence>
+<xs:element minOccurs="0" name="bodID" type="xs:string"/>
+<xs:element minOccurs="0" name="address" type="xs:string"/>
+<xs:element minOccurs="0" name="technology" type="xs:string"/>
+<xs:element name="bundled" type="xs:boolean"/>
+<xs:element minOccurs="0" name="node" type="tns:Node"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="Node">
+<xs:sequence>
+<xs:element minOccurs="0" name="bodID" type="xs:string"/>
+<xs:element minOccurs="0" name="type" type="xs:string"/>
+<xs:element minOccurs="0" name="address" type="xs:string"/>
+<xs:element minOccurs="0" name="provisioningDomain" type="tns:ProvisioningDomain"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element minOccurs="0" name="country" type="xs:string"/>
+<xs:element minOccurs="0" name="city" type="xs:string"/>
+<xs:element minOccurs="0" name="institution" type="xs:string"/>
+<xs:element minOccurs="0" name="longitude" type="xs:string"/>
+<xs:element minOccurs="0" name="latitude" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="ProvisioningDomain">
+<xs:sequence>
+<xs:element minOccurs="0" name="bodID" type="xs:string"/>
+<xs:element minOccurs="0" name="provType" type="xs:string"/>
+<xs:element minOccurs="0" name="adminDomain" type="tns:AdminDomain"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="AdminDomain">
+<xs:sequence>
+<xs:element minOccurs="0" name="bodID" type="xs:string"/>
+<xs:element minOccurs="0" name="ASID" type="xs:string"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element name="clientDomain" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="Path">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" name="links" nillable="true" type="tns:Link"/>
+<xs:element name="monetary_cost" type="xs:double"/>
+<xs:element name="manual_cost" type="xs:double"/>
+<xs:element name="capacity" type="xs:long"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="Link">
+<xs:sequence>
+<xs:element minOccurs="0" name="bodID" type="xs:string"/>
+<xs:element name="kind" type="xs:int"/>
+<xs:element minOccurs="0" name="startPort" type="tns:Port"/>
+<xs:element minOccurs="0" name="endPort" type="tns:Port"/>
+<xs:element name="bidirectional" type="xs:boolean"/>
+<xs:element name="delay" type="xs:int"/>
+<xs:element name="manualCost" type="xs:double"/>
+<xs:element name="monetaryCost" type="xs:double"/>
+<xs:element name="granularity" type="xs:long"/>
+<xs:element name="minResCapacity" type="xs:long"/>
+<xs:element name="maxResCapacity" type="xs:long"/>
+<xs:element name="capacity" type="xs:long"/>
+<xs:element minOccurs="0" name="resilience" type="xs:string"/>
+<xs:element minOccurs="0" name="timestamp" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="localName" type="xs:string"/>
+<xs:element minOccurs="0" name="type" type="tns:LinkType"/>
+<xs:element minOccurs="0" name="operationalState" type="tns:StateOper"/>
+<xs:element minOccurs="0" name="administrativeState" type="tns:StateAdmin"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="LinkType">
+<xs:sequence>
+<xs:element name="type" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="StateOper">
+<xs:sequence>
+<xs:element name="state" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="StateAdmin">
+<xs:sequence>
+<xs:element name="state" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="modifyReservation">
+    <wsdl:part name="parameters" element="tns:modifyReservation">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reportFinishedResponse">
+    <wsdl:part name="parameters" element="tns:reportFinishedResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reportCancellation">
+    <wsdl:part name="parameters" element="tns:reportCancellation">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reportActiveResponse">
+    <wsdl:part name="parameters" element="tns:reportActiveResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="scheduleReservationResponse">
+    <wsdl:part name="parameters" element="tns:scheduleReservationResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="cancelReservation">
+    <wsdl:part name="parameters" element="tns:cancelReservation">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="withdrawReservationResponse">
+    <wsdl:part name="parameters" element="tns:withdrawReservationResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="helloResponse">
+    <wsdl:part name="parameters" element="tns:helloResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="NoSuchReservationException">
+    <wsdl:part name="NoSuchReservationException" element="tns:NoSuchReservationException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="withdrawReservation">
+    <wsdl:part name="parameters" element="tns:withdrawReservation">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="modifyReservationResponse">
+    <wsdl:part name="parameters" element="tns:modifyReservationResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reportFinished">
+    <wsdl:part name="parameters" element="tns:reportFinished">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="hello">
+    <wsdl:part name="parameters" element="tns:hello">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="cancelReservationResponse">
+    <wsdl:part name="parameters" element="tns:cancelReservationResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getIdentifiersResponse">
+    <wsdl:part name="parameters" element="tns:getIdentifiersResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reportCancellationResponse">
+    <wsdl:part name="parameters" element="tns:reportCancellationResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getIdentifiers">
+    <wsdl:part name="parameters" element="tns:getIdentifiers">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reportModifyResponse">
+    <wsdl:part name="parameters" element="tns:reportModifyResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reportModify">
+    <wsdl:part name="parameters" element="tns:reportModify">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reportWithdrawResponse">
+    <wsdl:part name="parameters" element="tns:reportWithdrawResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reportScheduleResponse">
+    <wsdl:part name="parameters" element="tns:reportScheduleResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="scheduleReservation">
+    <wsdl:part name="parameters" element="tns:scheduleReservation">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reportWithdraw">
+    <wsdl:part name="parameters" element="tns:reportWithdraw">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reportActive">
+    <wsdl:part name="parameters" element="tns:reportActive">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reportSchedule">
+    <wsdl:part name="parameters" element="tns:reportSchedule">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="Interdomain">
+    <wsdl:operation name="modifyReservation">
+      <wsdl:input name="modifyReservation" message="tns:modifyReservation">
+    </wsdl:input>
+      <wsdl:output name="modifyReservationResponse" message="tns:modifyReservationResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cancelReservation">
+      <wsdl:input name="cancelReservation" message="tns:cancelReservation">
+    </wsdl:input>
+      <wsdl:output name="cancelReservationResponse" message="tns:cancelReservationResponse">
+    </wsdl:output>
+      <wsdl:fault name="NoSuchReservationException" message="tns:NoSuchReservationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="reportWithdraw">
+      <wsdl:input name="reportWithdraw" message="tns:reportWithdraw">
+    </wsdl:input>
+      <wsdl:output name="reportWithdrawResponse" message="tns:reportWithdrawResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getIdentifiers">
+      <wsdl:input name="getIdentifiers" message="tns:getIdentifiers">
+    </wsdl:input>
+      <wsdl:output name="getIdentifiersResponse" message="tns:getIdentifiersResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="withdrawReservation">
+      <wsdl:input name="withdrawReservation" message="tns:withdrawReservation">
+    </wsdl:input>
+      <wsdl:output name="withdrawReservationResponse" message="tns:withdrawReservationResponse">
+    </wsdl:output>
+      <wsdl:fault name="NoSuchReservationException" message="tns:NoSuchReservationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="reportCancellation">
+      <wsdl:input name="reportCancellation" message="tns:reportCancellation">
+    </wsdl:input>
+      <wsdl:output name="reportCancellationResponse" message="tns:reportCancellationResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="reportActive">
+      <wsdl:input name="reportActive" message="tns:reportActive">
+    </wsdl:input>
+      <wsdl:output name="reportActiveResponse" message="tns:reportActiveResponse">
+    </wsdl:output>
+      <wsdl:fault name="NoSuchReservationException" message="tns:NoSuchReservationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="reportSchedule">
+      <wsdl:input name="reportSchedule" message="tns:reportSchedule">
+    </wsdl:input>
+      <wsdl:output name="reportScheduleResponse" message="tns:reportScheduleResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="scheduleReservation">
+      <wsdl:input name="scheduleReservation" message="tns:scheduleReservation">
+    </wsdl:input>
+      <wsdl:output name="scheduleReservationResponse" message="tns:scheduleReservationResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="reportModify">
+      <wsdl:input name="reportModify" message="tns:reportModify">
+    </wsdl:input>
+      <wsdl:output name="reportModifyResponse" message="tns:reportModifyResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="reportFinished">
+      <wsdl:input name="reportFinished" message="tns:reportFinished">
+    </wsdl:input>
+      <wsdl:output name="reportFinishedResponse" message="tns:reportFinishedResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="hello">
+      <wsdl:input name="hello" message="tns:hello">
+    </wsdl:input>
+      <wsdl:output name="helloResponse" message="tns:helloResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="InterdomainServiceSoapBinding" type="tns:Interdomain">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="modifyReservation">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="modifyReservation">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="modifyReservationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cancelReservation">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="cancelReservation">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="cancelReservationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="NoSuchReservationException">
+        <soap:fault name="NoSuchReservationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="reportWithdraw">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="reportWithdraw">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="reportWithdrawResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getIdentifiers">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getIdentifiers">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getIdentifiersResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="withdrawReservation">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="withdrawReservation">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="withdrawReservationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="NoSuchReservationException">
+        <soap:fault name="NoSuchReservationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="reportCancellation">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="reportCancellation">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="reportCancellationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="reportActive">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="reportActive">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="reportActiveResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="NoSuchReservationException">
+        <soap:fault name="NoSuchReservationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="reportSchedule">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="reportSchedule">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="reportScheduleResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="reportModify">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="reportModify">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="reportModifyResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="scheduleReservation">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="scheduleReservation">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="scheduleReservationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="reportFinished">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="reportFinished">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="reportFinishedResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="hello">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="hello">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="helloResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="InterdomainService">
+    <wsdl:port name="InterdomainPort" binding="tns:InterdomainServiceSoapBinding">
+      <soap:address location="http://localhost:9090/InterdomainPort"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
