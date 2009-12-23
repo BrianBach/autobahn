@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="net.geant2.jra3.intradomain.sdh">
+    <class name="HoVcLink" table="ho_vc_link" schema="public">
+        <id name="hoVcLinkId" type="long">
+            <column name="ho_vc_link_id" />
+            <generator class="increment" />
+        </id>
+        <many-to-one name="hoVcGroup" class="HoVcGroup" fetch="select" cascade="save-update">
+            <column name="ho_vc_group_id" /> 
+        </many-to-one>
+        <many-to-one name="stmLink" class="StmLink" fetch="select" cascade="save-update">
+            <column name="stm_link_id" /> 
+        </many-to-one>
+        <many-to-one name="hoVcType" class="HoVcType" fetch="select" cascade="save-update">
+            <column name="ho_vc_type_id" /> 
+        </many-to-one>
+        <property name="timeSlot" type="long">
+            <column name="time_slot" />
+        </property>
+        <property name="dateModified" type="date">
+            <column name="date_modified" />
+        </property>
+        <property name="groupSequence" type="long">
+            <column name="group_sequence" />
+        </property>
+        <property name="status" type="string">
+            <column name="status" />
+        </property>
+    </class>
+</hibernate-mapping>
