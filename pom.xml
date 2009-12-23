@@ -172,7 +172,7 @@
 		<module>idm</module>
 		<module>ta</module>
 		<module>framework</module>
-		<module>web-gui</module>
+		<!--module>web-gui</module-->
 	</modules>
 	
 	<dependencies>
