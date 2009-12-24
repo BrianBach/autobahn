@@ -33,8 +33,10 @@ public class Dm2IdmClient implements Dm2Idm {
 		if("none".equals(endPoint))
 			return;
 		
-		// Query IDM to Lookup
-		String finalEndPoint = endPoint;
+		log.debug("DM client tries to connect to " + endPoint);
+		
+		// Query IDM location from Lookup Service
+		
 		Properties properties = new Properties();
         try {
             InputStream is = getClass().getClassLoader().getResourceAsStream(
@@ -48,18 +50,30 @@ public class Dm2IdmClient implements Dm2Idm {
 		String host = properties.getProperty("lookuphost");
         
         LookupService lookup = new LookupService(host);
-        String idmLocation = "";
+        String idmLocation = null;
         try {
-        	idmLocation = lookup.QueryIdmLocation(endPoint);
-        } catch(LookupServiceException e) {
-        	log.info("IDM module was not registered, Please restart Autobahn");
+            // The IDM endpoint is the /interdomain interface. Here we need
+            // the /dm2idm interface, so we have to modify the connection URL
+            String interdomainEndpoint = endPoint.replaceFirst("/autobahn/dm2idm", "/autobahn/interdomain");
+        	idmLocation = lookup.QueryIdmLocation(interdomainEndpoint);
+        } catch (LookupServiceException e) {
+        	log.info("No query to the Lookup Service could be performed in order to locate IDM.");
         	log.info(e.getMessage());
         }
-        if(idmLocation != ""){
-        	finalEndPoint = idmLocation;
+        if(idmLocation != null && idmLocation != "") {
+            // It seems we have found the IDM location at the LS,
+            // so use this location as the endPoint
+            // First however change the /interdomain back to /dm2idm
+        	endPoint = idmLocation.replaceFirst("/autobahn/interdomain", "/autobahn/dm2idm");
+        }
+        else {
+            log.info("IDM location could not be found at the Lookup Service.");
+            // However, this is not a fatal error, as the IDM location might be
+            // available through another channel (e.g. in properties files), and
+            // so the provided endPoint parameter might be a valid URL
         }
         
-		Dm2IdmService service = new Dm2IdmService(finalEndPoint);
+		Dm2IdmService service = new Dm2IdmService(endPoint);
 		dm2idm = service.getDm2IdmPort();
 	}
 

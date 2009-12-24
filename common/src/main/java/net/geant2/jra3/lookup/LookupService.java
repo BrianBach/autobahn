@@ -317,7 +317,7 @@ public class LookupService {
         	// Getting data from child nodes of "psservice:datum"
         	NodeList nodes = doc.getElementsByTagName("psservice:datum");
         	for (int i = 0; i < nodes.getLength(); i++) {
-        		Element element = (Element) nodes.item(i);
+                Element element = (Element) nodes.item(i);
         		
         		NodeList name = element.getElementsByTagName("lookup:url");
         		Element line = (Element) name.item(0);
@@ -607,9 +607,13 @@ public class LookupService {
     /**
      * 
      * @param Element - node elements
-     * @return parsed info
+     * @return parsed info or null if element is null
      */
     public static String getCharacterDataFromElement(Element e) {
+        if (e == null) {
+            return null;
+        }
+        
         Node child = e.getFirstChild();
         if (child instanceof CharacterData) {
            CharacterData cd = (CharacterData) child;
