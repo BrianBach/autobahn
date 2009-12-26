@@ -23,6 +23,7 @@
     <dependencySets>
         <dependencySet>
             <outputDirectory>lib</outputDirectory>
+			<outputFileNameMapping>${artifact.artifactId}-${artifact.version}.${artifact.extension}</outputFileNameMapping>
             <excludes>
 				<exclude>antlr:antlr</exclude>
 			</excludes>

@@ -3,7 +3,7 @@
   
 	<properties>
 		<group_id>net.geant.autobahn</group_id>
-		<project_version>1.0.0-SNAPSHOT</project_version>
+		<project_version>2.0.0-SNAPSHOT</project_version>
 		<artifact_id>autobahn</artifact_id>
 	</properties>
 	
@@ -16,9 +16,8 @@
     <packaging>pom</packaging>
  
 	<scm>
-		<connection>scm:svn:http://admin:1234@150.140.141.15/autobahn/tags/</connection>
-        <developerConnection>scm:svn:http://admin:1234@150.140.141.15/autobahn/tags/</developerConnection>
-		<url>http://admin:1234@150.140.141.15/autobahn/tags/autobahn-1.1</url>
+		<connection>scm:svn:svn+ssh://svn@svn.geant2.net/GEANT2/JRA3/AutoBAHN-base/trunk</connection>
+        <developerConnection>scm:svn:svn+ssh://svn@svn.geant2.net/GEANT2/JRA3/AutoBAHN-base/trunk</developerConnection>
     </scm>
 	
 	<repositories>
@@ -107,7 +106,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
                 <configuration>
-                    <tagBase>http://admin:1234@localhost/autobahn/tags</tagBase>
+                    <tagBase>svn+ssh://svn@svn.geant2.net/GEANT2/JRA3/AutoBAHN-base/tags</tagBase>
                 </configuration>
             </plugin>            
 			<plugin>

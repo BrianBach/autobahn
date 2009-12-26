@@ -31,6 +31,8 @@
 					</execution>
 				</executions>
 				<configuration>
+					<appendAssemblyId>false</appendAssemblyId>
+					<finalName>autobahn</finalName>
 					<descriptors>
 						<descriptor>/src/main/assembly/dist-assembly.xml</descriptor>
 					</descriptors>
