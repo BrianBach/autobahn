@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   
-	<properties>
+	<!--properties>
 		<group_id>net.geant.autobahn</group_id>
 		<project_version>2.0.0-SNAPSHOT</project_version>
 		<artifact_id>autobahn</artifact_id>
-	</properties>
+	</properties-->
 	
 	<modelVersion>4.0.0</modelVersion>
-    <groupId>${group_id}</groupId>
-    <artifactId>${artifact_id}</artifactId>
-    <version>${project_version}</version>
+    <groupId>net.geant.autobahn</groupId>
+    <artifactId>autobahn</artifactId>
+    <version>2.0.0</version>
     <name>Autobahn: Automated Bandwith Allocation across Heterogeneous Networks</name>
     <url>http://www.geant.net/server/show/nav.756</url>
     <packaging>pom</packaging>
  
 	<scm>
-		<connection>scm:svn:svn+ssh://svn@svn.geant2.net/GEANT2/JRA3/AutoBAHN-base/trunk</connection>
-        <developerConnection>scm:svn:svn+ssh://svn@svn.geant2.net/GEANT2/JRA3/AutoBAHN-base/trunk</developerConnection>
+		<connection>scm:svn:svn+ssh://svn@svn.geant2.net/GEANT2/JRA3/AutoBAHN-base/tags/autobahn-2.0.0</connection>
+        <developerConnection>scm:svn:svn+ssh://svn@svn.geant2.net/GEANT2/JRA3/AutoBAHN-base/tags/autobahn-2.0.0</developerConnection>
     </scm>
 	
 	<repositories>

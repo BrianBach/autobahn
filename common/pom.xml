@@ -2,15 +2,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 		 
 	<parent>
-		<artifactId>${artifact_id}</artifactId>
-		<groupId>${group_id}</groupId>
-		<version>${project_version}</version>
+		<artifactId>autobahn</artifactId>
+		<groupId>net.geant.autobahn</groupId>
+		<version>2.0.0</version>
 	</parent>
 	
 	<modelVersion>4.0.0</modelVersion>
-    <groupId>${group_id}</groupId>
-    <artifactId>${artifact_id}-common</artifactId>
-    <version>${project_version}</version>
+    <groupId>net.geant.autobahn</groupId>
+    <artifactId>autobahn-common</artifactId>
+    <version>2.0.0</version>
     <name>Common module</name>
     <packaging>jar</packaging>
 
@@ -56,55 +56,55 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>${group_id}</groupId>
+			<groupId>net.geant.autobahn</groupId>
 			<artifactId>dom4j</artifactId>
 			<version>1.6.1</version>
 			<type>jar</type>
 		</dependency>
 		<dependency>
-			<groupId>${group_id}</groupId>
+			<groupId>net.geant.autobahn</groupId>
 			<artifactId>hibernate3</artifactId>
 			<version>1.0</version>
 			<type>jar</type>			
 		</dependency>
 		<dependency>
-			<groupId>${group_id}</groupId>
+			<groupId>net.geant.autobahn</groupId>
 			<artifactId>jaxb-api</artifactId>
 			<version>2.0</version>
 			<type>jar</type>			
 		</dependency>		
 		<dependency>
-			<groupId>${group_id}</groupId>
+			<groupId>net.geant.autobahn</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.14</version>
 		</dependency>
 		<dependency>
-			<groupId>${group_id}</groupId>
+			<groupId>net.geant.autobahn</groupId>
 			<artifactId>commons-logging</artifactId>
 			<version>1.1.1</version>
 		</dependency>
 		<dependency>
-			<groupId>${group_id}</groupId>
+			<groupId>net.geant.autobahn</groupId>
 			<artifactId>httpcore</artifactId>
 			<version>4.0-beta3</version>
 		</dependency>
 		<dependency>
-			<groupId>${group_id}</groupId>
+			<groupId>net.geant.autobahn</groupId>
 			<artifactId>datecalc-common</artifactId>
 			<version>1.0.1</version>
 		</dependency>
 		<dependency>
-			<groupId>${group_id}</groupId>
+			<groupId>net.geant.autobahn</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>4.0</version>
 		</dependency>
 		<dependency>
-			<groupId>${group_id}</groupId>
+			<groupId>net.geant.autobahn</groupId>
 			<artifactId>xfire-jsr181-api</artifactId>
 			<version>1.0-M1</version>
 		</dependency>
 		<dependency>
-			<groupId>${group_id}</groupId>
+			<groupId>net.geant.autobahn</groupId>
 			<artifactId>jacc</artifactId>
 			<version>1.0</version>
 			<scope>compile</scope>
