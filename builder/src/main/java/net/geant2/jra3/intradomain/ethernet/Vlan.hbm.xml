@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="net.geant2.jra3.intradomain.ethernet">
+    <class name="Vlan" table="vlan" schema="public">
+        <id name="vlanId" type="long">
+            <column name="vlan_id" />
+            <generator class="increment" />
+        </id>
+        <many-to-one name="vtpDomain" class="VtpDomain" fetch="select" cascade="save-update">
+            <column name="vtp_domain_id" />
+        </many-to-one>
+        <property name="name" type="string">
+            <column name="name" />
+        </property>
+        <property name="lowNumber" type="long">
+            <column name="low_number" />
+        </property>
+        <property name="highNumber" type="long">
+            <column name="high_number" />
+        </property>
+    </class>
+</hibernate-mapping>

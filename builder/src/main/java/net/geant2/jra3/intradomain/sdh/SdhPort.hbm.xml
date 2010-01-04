@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="net.geant2.jra3.intradomain.sdh">
+    <class name="SdhPort" table="sdh_port" schema="public">
+        <composite-id>
+        	<key-many-to-one name="genericInterface" column="port_id" class="net.geant2.jra3.intradomain.common.GenericInterface">
+            </key-many-to-one>
+        </composite-id>
+        <property name="address" type="string">
+            <column name="address" />
+        </property>
+        <property name="phyPortType" type="string">
+            <column name="phy_port_type" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="net.geant2.jra3.intradomain.sdh">
+    <class name="VlanTag" table="vlan_tag" schema="public">
+        <id name="vlanTagId" type="long">
+            <column name="vlan_tag_id" />
+            <generator class="increment" />
+        </id>
+        <property name="name" type="string">
+            <column name="payload" />
+        </property>
+        <property name="dateModified" type="date">
+            <column name="date_modified" />
+        </property>
+    </class>
+</hibernate-mapping>
