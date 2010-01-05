@@ -20,7 +20,7 @@
 		</fileSet>
 		<fileSet>
 			<directory>../Installer/scripts</directory>
-			<outputDirectory>/scripts</outputDirectory>
+			<outputDirectory>/installer</outputDirectory>
 			<includes>
 				<include>*.*</include>
 			</includes>
