@@ -1,242 +1,262 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="ToolService" targetNamespace="http://tool.jra3.geant2.net/" xmlns:tns="http://tool.jra3.geant2.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions name="Tool" targetNamespace="http://tool.jra3.geant2.net/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://tool.jra3.geant2.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
   <wsdl:types>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="reservation.jra3.geant2.net" xmlns:ns1="constraints.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="reservation.jra3.geant2.net">
-    <xs:import namespace="constraints.jra3.geant2.net"/>
-    <xs:complexType name="ReservationParams">
-        <xs:sequence>
-            <xs:element name="capacity" type="xs:long"/>
-            <xs:element name="maxDelay" type="xs:int"/>
-            <xs:element minOccurs="0" name="resiliency" type="xs:string"/>
-            <xs:element name="bidirectional" type="xs:boolean"/>
-            <xs:element minOccurs="0" name="startTime" type="xs:dateTime"/>
-            <xs:element minOccurs="0" name="endTime" type="xs:dateTime"/>
-            <xs:element minOccurs="0" name="pathConstraints" type="ns1:PathConstraints"/>
-        </xs:sequence>
-    </xs:complexType>
-</xs:schema>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="constraints.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="constraints.jra3.geant2.net">
-    <xs:complexType name="PathConstraints">
-        <xs:sequence>
-            <xs:element maxOccurs="unbounded" name="addNames" nillable="true" type="tns:ConstraintsNames"/>
-            <xs:element maxOccurs="unbounded" name="addConstraints" nillable="true" type="tns:AdditiveConstraint"/>
-            <xs:element maxOccurs="unbounded" name="boolNames" nillable="true" type="tns:ConstraintsNames"/>
-            <xs:element maxOccurs="unbounded" name="boolConstraints" nillable="true" type="tns:BooleanConstraint"/>
-            <xs:element maxOccurs="unbounded" name="rangeNames" nillable="true" type="tns:ConstraintsNames"/>
-            <xs:element maxOccurs="unbounded" name="rangeConstraints" nillable="true" type="tns:RangeConstraint"/>
-            <xs:element maxOccurs="unbounded" name="minValNames" nillable="true" type="tns:ConstraintsNames"/>
-            <xs:element maxOccurs="unbounded" name="minValConstraints" nillable="true" type="tns:MinValueConstraint"/>
-        </xs:sequence>
-    </xs:complexType>
-    <xs:complexType name="AdditiveConstraint">
-        <xs:complexContent>
-            <xs:extension base="tns:Constraint">
-                <xs:sequence>
-                    <xs:element minOccurs="0" name="value" type="xs:double"/>
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType abstract="true" name="Constraint"/>
-    <xs:complexType name="BooleanConstraint">
-        <xs:complexContent>
-            <xs:extension base="tns:Constraint">
-                <xs:sequence>
-                    <xs:element minOccurs="0" name="value" type="xs:boolean"/>
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="RangeConstraint">
-        <xs:complexContent>
-            <xs:extension base="tns:Constraint">
-                <xs:sequence>
-                    <xs:element maxOccurs="unbounded" name="ranges" nillable="true" type="tns:Range"/>
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="Range">
-        <xs:sequence>
-            <xs:element minOccurs="0" name="min" type="xs:int"/>
-            <xs:element minOccurs="0" name="max" type="xs:int"/>
-        </xs:sequence>
-    </xs:complexType>
-    <xs:complexType name="MinValueConstraint">
-        <xs:complexContent>
-            <xs:extension base="tns:Constraint">
-                <xs:sequence>
-                    <xs:element minOccurs="0" name="value" type="xs:double"/>
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    <xs:simpleType name="ConstraintsNames">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="TIMESLOTS"/>
-            <xs:enumeration value="VLANS"/>
-        </xs:restriction>
-    </xs:simpleType>
+<xs:complexType name="PathConstraints">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" name="addNames" nillable="true" type="tns:ConstraintsNames"/>
+<xs:element maxOccurs="unbounded" name="addConstraints" nillable="true" type="tns:AdditiveConstraint"/>
+<xs:element maxOccurs="unbounded" name="boolNames" nillable="true" type="tns:ConstraintsNames"/>
+<xs:element maxOccurs="unbounded" name="boolConstraints" nillable="true" type="tns:BooleanConstraint"/>
+<xs:element maxOccurs="unbounded" name="rangeNames" nillable="true" type="tns:ConstraintsNames"/>
+<xs:element maxOccurs="unbounded" name="rangeConstraints" nillable="true" type="tns:RangeConstraint"/>
+<xs:element maxOccurs="unbounded" name="minValNames" nillable="true" type="tns:ConstraintsNames"/>
+<xs:element maxOccurs="unbounded" name="minValConstraints" nillable="true" type="tns:MinValueConstraint"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="AdditiveConstraint">
+<xs:complexContent>
+<xs:extension base="tns:Constraint">
+<xs:sequence>
+<xs:element minOccurs="0" name="value" type="xs:double"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType abstract="true" name="Constraint">
+<xs:all/>
+</xs:complexType>
+<xs:complexType name="BooleanConstraint">
+<xs:complexContent>
+<xs:extension base="tns:Constraint">
+<xs:sequence>
+<xs:element minOccurs="0" name="value" type="xs:boolean"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="RangeConstraint">
+<xs:complexContent>
+<xs:extension base="tns:Constraint">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" name="ranges" nillable="true" type="tns:Range"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="Range">
+<xs:sequence>
+<xs:element minOccurs="0" name="min" type="xs:int"/>
+<xs:element minOccurs="0" name="max" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="MinValueConstraint">
+<xs:complexContent>
+<xs:extension base="tns:Constraint">
+<xs:sequence>
+<xs:element minOccurs="0" name="value" type="xs:double"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:simpleType name="ConstraintsNames">
+<xs:restriction base="xs:string">
+<xs:enumeration value="VLANS"/>
+<xs:enumeration value="TIMESLOTS"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="common.intradomain.jra3.geant2.net" xmlns:ns2="reservation.jra3.geant2.net" xmlns:tns="http://tool.jra3.geant2.net/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://tool.jra3.geant2.net/">
+<xs:import namespace="common.intradomain.jra3.geant2.net"/>
+<xs:import namespace="reservation.jra3.geant2.net"/>
+<xs:element name="addReservation" type="tns:addReservation"/>
+<xs:element name="addReservationResponse" type="tns:addReservationResponse"/>
+<xs:element name="removeReservation" type="tns:removeReservation"/>
+<xs:element name="removeReservationResponse" type="tns:removeReservationResponse"/>
+<xs:complexType name="removeReservation">
+<xs:sequence>
+<xs:element minOccurs="0" name="resID" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="links" type="ns1:GenericLink"/>
+<xs:element minOccurs="0" name="params" type="ns2:ReservationParams"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="removeReservationResponse">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="addReservation">
+<xs:sequence>
+<xs:element minOccurs="0" name="resID" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="links" type="ns1:GenericLink"/>
+<xs:element minOccurs="0" name="params" type="ns2:ReservationParams"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="addReservationResponse">
+<xs:sequence/>
+</xs:complexType>
+<xs:element name="RequestException" type="tns:RequestException"/>
+<xs:complexType name="RequestException">
+<xs:sequence/>
+</xs:complexType>
+<xs:element name="SystemException" type="tns:SystemException"/>
+<xs:complexType name="SystemException">
+<xs:sequence/>
+</xs:complexType>
+<xs:element name="ReservationNotFoundException" type="tns:ReservationNotFoundException"/>
+<xs:complexType name="ReservationNotFoundException">
+<xs:sequence/>
+</xs:complexType>
+<xs:element name="AAIException" type="tns:AAIException"/>
+<xs:complexType name="AAIException">
+<xs:sequence/>
+</xs:complexType>
+<xs:element name="ResourceNotFoundException" type="tns:ResourceNotFoundException"/>
+<xs:complexType name="ResourceNotFoundException">
+<xs:sequence/>
+</xs:complexType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="reservation.jra3.geant2.net" xmlns:ns1="constraints.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="reservation.jra3.geant2.net">
+<xs:import namespace="constraints.jra3.geant2.net"/>
+<xs:complexType name="ReservationParams">
+<xs:sequence>
+<xs:element name="capacity" type="xs:long"/>
+<xs:element name="maxDelay" type="xs:int"/>
+<xs:element minOccurs="0" name="resiliency" type="xs:string"/>
+<xs:element name="bidirectional" type="xs:boolean"/>
+<xs:element minOccurs="0" name="startTime" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="endTime" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="pathConstraints" type="ns1:PathConstraints"/>
+</xs:sequence>
+</xs:complexType>
 </xs:schema>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="common.intradomain.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="common.intradomain.jra3.geant2.net">
-    <xs:complexType name="VersionInfo">
-        <xs:sequence>
-            <xs:element minOccurs="0" name="startDate" type="xs:dateTime"/>
-            <xs:element minOccurs="0" name="endDate" type="xs:dateTime"/>
-            <xs:element minOccurs="0" name="createdBy" type="xs:string"/>
-            <xs:element minOccurs="0" name="modifiedBy" type="xs:string"/>
-            <xs:element minOccurs="0" name="dateCreated" type="xs:dateTime"/>
-            <xs:element minOccurs="0" name="dateModified" type="xs:dateTime"/>
-        </xs:sequence>
-    </xs:complexType>
-    <xs:complexType name="GenericLink">
-        <xs:sequence>
-            <xs:element minOccurs="0" name="version" type="tns:VersionInfo"/>
-            <xs:element minOccurs="0" name="startInterface" type="tns:GenericInterface"/>
-            <xs:element minOccurs="0" name="endInterface" type="tns:GenericInterface"/>
-            <xs:element minOccurs="0" name="direction" type="xs:string"/>
-            <xs:element name="protection" type="xs:boolean"/>
-            <xs:element name="propDelay" type="xs:double"/>
-        </xs:sequence>
-    </xs:complexType>
-    <xs:complexType name="GenericInterface">
-        <xs:sequence>
-            <xs:element minOccurs="0" name="version" type="tns:VersionInfo"/>
-            <xs:element minOccurs="0" name="interfaceType" type="tns:InterfaceType"/>
-            <xs:element minOccurs="0" name="parentInterface" type="tns:GenericInterface"/>
-            <xs:element minOccurs="0" name="node" type="tns:Node"/>
-            <xs:element minOccurs="0" name="name" type="xs:string"/>
-            <xs:element minOccurs="0" name="description" type="xs:string"/>
-            <xs:element name="bandwidth" type="xs:long"/>
-            <xs:element minOccurs="0" name="status" type="xs:string"/>
-            <xs:element minOccurs="0" name="mtu" type="xs:string"/>
-            <xs:element minOccurs="0" name="domainId" type="xs:string"/>
-        </xs:sequence>
-    </xs:complexType>
-    <xs:complexType name="InterfaceType">
-        <xs:sequence>
-            <xs:element minOccurs="0" name="switchingType" type="xs:string"/>
-            <xs:element minOccurs="0" name="dataEncodingType" type="xs:string"/>
-        </xs:sequence>
-    </xs:complexType>
-    <xs:complexType name="Node">
-        <xs:sequence>
-            <xs:element minOccurs="0" name="version" type="tns:VersionInfo"/>
-            <xs:element minOccurs="0" name="location" type="tns:Location"/>
-            <xs:element minOccurs="0" name="name" type="xs:string"/>
-            <xs:element minOccurs="0" name="description" type="xs:string"/>
-            <xs:element minOccurs="0" name="status" type="xs:string"/>
-            <xs:element minOccurs="0" name="vendor" type="xs:string"/>
-            <xs:element minOccurs="0" name="model" type="xs:string"/>
-            <xs:element minOccurs="0" name="osName" type="xs:string"/>
-            <xs:element minOccurs="0" name="osVersion" type="xs:string"/>
-            <xs:element minOccurs="0" name="ipAddress" type="xs:string"/>
-        </xs:sequence>
-    </xs:complexType>
-    <xs:complexType name="Location">
-        <xs:sequence>
-            <xs:element minOccurs="0" name="name" type="xs:string"/>
-            <xs:element minOccurs="0" name="description" type="xs:string"/>
-            <xs:element minOccurs="0" name="country" type="xs:string"/>
-            <xs:element minOccurs="0" name="institution" type="xs:string"/>
-            <xs:element minOccurs="0" name="street" type="xs:string"/>
-            <xs:element name="floor" type="xs:int"/>
-            <xs:element name="roomSuite" type="xs:int"/>
-            <xs:element name="row_" type="xs:int"/>
-            <xs:element name="cabinet" type="xs:int"/>
-            <xs:element minOccurs="0" name="zipCode" type="xs:string"/>
-            <xs:element minOccurs="0" name="phoneNumber" type="xs:string"/>
-            <xs:element minOccurs="0" name="eMailAddress" type="xs:string"/>
-            <xs:element name="geoLatitude" type="xs:double"/>
-            <xs:element name="geoLongitude" type="xs:double"/>
-            <xs:element minOccurs="0" name="type" type="xs:string"/>
-            <xs:element minOccurs="0" name="zone" type="xs:string"/>
-            <xs:element name="altitude" type="xs:double"/>
-        </xs:sequence>
-    </xs:complexType>
+<xs:complexType name="GenericLink">
+<xs:sequence>
+<xs:element minOccurs="0" name="version" type="tns:VersionInfo"/>
+<xs:element minOccurs="0" name="startInterface" type="tns:GenericInterface"/>
+<xs:element minOccurs="0" name="endInterface" type="tns:GenericInterface"/>
+<xs:element minOccurs="0" name="direction" type="xs:string"/>
+<xs:element name="protection" type="xs:boolean"/>
+<xs:element name="propDelay" type="xs:double"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="VersionInfo">
+<xs:sequence>
+<xs:element minOccurs="0" name="startDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="endDate" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="createdBy" type="xs:string"/>
+<xs:element minOccurs="0" name="modifiedBy" type="xs:string"/>
+<xs:element minOccurs="0" name="dateCreated" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="dateModified" type="xs:dateTime"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="GenericInterface">
+<xs:sequence>
+<xs:element minOccurs="0" name="version" type="tns:VersionInfo"/>
+<xs:element minOccurs="0" name="interfaceType" type="tns:InterfaceType"/>
+<xs:element minOccurs="0" name="parentInterface" type="tns:GenericInterface"/>
+<xs:element minOccurs="0" name="node" type="tns:Node"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element minOccurs="0" name="description" type="xs:string"/>
+<xs:element name="bandwidth" type="xs:long"/>
+<xs:element minOccurs="0" name="status" type="xs:string"/>
+<xs:element minOccurs="0" name="mtu" type="xs:string"/>
+<xs:element minOccurs="0" name="domainId" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="InterfaceType">
+<xs:sequence>
+<xs:element minOccurs="0" name="switchingType" type="xs:string"/>
+<xs:element minOccurs="0" name="dataEncodingType" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="Node">
+<xs:sequence>
+<xs:element minOccurs="0" name="version" type="tns:VersionInfo"/>
+<xs:element minOccurs="0" name="location" type="tns:Location"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element minOccurs="0" name="description" type="xs:string"/>
+<xs:element minOccurs="0" name="status" type="xs:string"/>
+<xs:element minOccurs="0" name="vendor" type="xs:string"/>
+<xs:element minOccurs="0" name="model" type="xs:string"/>
+<xs:element minOccurs="0" name="osName" type="xs:string"/>
+<xs:element minOccurs="0" name="osVersion" type="xs:string"/>
+<xs:element minOccurs="0" name="ipAddress" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="Location">
+<xs:sequence>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element minOccurs="0" name="description" type="xs:string"/>
+<xs:element minOccurs="0" name="country" type="xs:string"/>
+<xs:element minOccurs="0" name="institution" type="xs:string"/>
+<xs:element minOccurs="0" name="street" type="xs:string"/>
+<xs:element name="floor" type="xs:int"/>
+<xs:element name="roomSuite" type="xs:int"/>
+<xs:element name="row_" type="xs:int"/>
+<xs:element name="cabinet" type="xs:int"/>
+<xs:element minOccurs="0" name="zipCode" type="xs:string"/>
+<xs:element minOccurs="0" name="phoneNumber" type="xs:string"/>
+<xs:element minOccurs="0" name="eMailAddress" type="xs:string"/>
+<xs:element name="geoLatitude" type="xs:double"/>
+<xs:element name="geoLongitude" type="xs:double"/>
+<xs:element minOccurs="0" name="type" type="xs:string"/>
+<xs:element minOccurs="0" name="zone" type="xs:string"/>
+<xs:element name="altitude" type="xs:double"/>
+</xs:sequence>
+</xs:complexType>
 </xs:schema>
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns0="common.intradomain.jra3.geant2.net" xmlns:ns1="reservation.jra3.geant2.net" xmlns:tns="http://tool.jra3.geant2.net/" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://tool.jra3.geant2.net/">
-    <xsd:element name="AAIException" type="tns:AAIException"/>
-    <xsd:complexType name="AAIException">
-        <xsd:sequence/>
-    </xsd:complexType>
-    <xsd:element name="SystemException" type="tns:SystemException"/>
-    <xsd:complexType name="SystemException">
-        <xsd:sequence/>
-    </xsd:complexType>
-    <xsd:element name="RequestException" type="tns:RequestException"/>
-    <xsd:complexType name="RequestException">
-        <xsd:sequence/>
-    </xsd:complexType>
-    <xsd:element name="ResourceNotFoundException" type="tns:ResourceNotFoundException"/>
-    <xsd:complexType name="ResourceNotFoundException">
-        <xsd:sequence/>
-    </xsd:complexType>
-    <xsd:element name="ReservationNotFoundException" type="tns:ReservationNotFoundException"/>
-    <xsd:complexType name="ReservationNotFoundException">
-        <xsd:sequence/>
-    </xsd:complexType>
-    <xsd:element name="addReservation" type="tns:addReservation"/>
-    <xsd:complexType name="addReservation">
-        <xsd:sequence>
-            <xsd:element minOccurs="0" name="resID" type="xsd:string"/>
-            <xsd:element maxOccurs="unbounded" minOccurs="0" name="links" type="ns0:GenericLink"/>
-            <xsd:element minOccurs="0" name="params" type="ns1:ReservationParams"/>
-        </xsd:sequence>
-    </xsd:complexType>
-    <xsd:element name="addReservationResponse" type="tns:addReservationResponse"/>
-    <xsd:complexType name="addReservationResponse">
-        <xsd:sequence/>
-    </xsd:complexType>
-    <xsd:element name="removeReservation" type="tns:removeReservation"/>
-    <xsd:complexType name="removeReservation">
-        <xsd:sequence>
-            <xsd:element minOccurs="0" name="resID" type="xsd:string"/>
-        </xsd:sequence>
-    </xsd:complexType>
-    <xsd:element name="removeReservationResponse" type="tns:removeReservationResponse"/>
-    <xsd:complexType name="removeReservationResponse">
-        <xsd:sequence/>
-    </xsd:complexType>
-</xsd:schema>
   </wsdl:types>
-  <wsdl:message name="addReservation">
-    <wsdl:part name="parameters" element="tns:addReservation">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="ReservationNotFoundException">
-    <wsdl:part name="ReservationNotFoundException" element="tns:ReservationNotFoundException">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="AAIException">
-    <wsdl:part name="AAIException" element="tns:AAIException">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="removeReservation">
-    <wsdl:part name="parameters" element="tns:removeReservation">
+  <wsdl:message name="RequestException">
+    <wsdl:part name="RequestException" element="tns:RequestException">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="ResourceNotFoundException">
     <wsdl:part name="ResourceNotFoundException" element="tns:ResourceNotFoundException">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="ReservationNotFoundException">
+    <wsdl:part name="ReservationNotFoundException" element="tns:ReservationNotFoundException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addReservation">
+    <wsdl:part name="parameters" element="tns:addReservation">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="removeReservationResponse">
     <wsdl:part name="parameters" element="tns:removeReservationResponse">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="addReservationResponse">
-    <wsdl:part name="parameters" element="tns:addReservationResponse">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="RequestException">
-    <wsdl:part name="RequestException" element="tns:RequestException">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="SystemException">
     <wsdl:part name="SystemException" element="tns:SystemException">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="removeReservation">
+    <wsdl:part name="parameters" element="tns:removeReservation">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="AAIException">
+    <wsdl:part name="AAIException" element="tns:AAIException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addReservationResponse">
+    <wsdl:part name="parameters" element="tns:addReservationResponse">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:portType name="Tool">
+    <wsdl:operation name="removeReservation">
+      <wsdl:input name="removeReservation" message="tns:removeReservation">
+    </wsdl:input>
+      <wsdl:output name="removeReservationResponse" message="tns:removeReservationResponse">
+    </wsdl:output>
+      <wsdl:fault name="SystemException" message="tns:SystemException">
+    </wsdl:fault>
+      <wsdl:fault name="RequestException" message="tns:RequestException">
+    </wsdl:fault>
+      <wsdl:fault name="ReservationNotFoundException" message="tns:ReservationNotFoundException">
+    </wsdl:fault>
+      <wsdl:fault name="AAIException" message="tns:AAIException">
+    </wsdl:fault>
+    </wsdl:operation>
     <wsdl:operation name="addReservation">
       <wsdl:input name="addReservation" message="tns:addReservation">
     </wsdl:input>
@@ -251,23 +271,30 @@
       <wsdl:fault name="AAIException" message="tns:AAIException">
     </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="removeReservation">
-      <wsdl:input name="removeReservation" message="tns:removeReservation">
-    </wsdl:input>
-      <wsdl:output name="removeReservationResponse" message="tns:removeReservationResponse">
-    </wsdl:output>
-      <wsdl:fault name="SystemException" message="tns:SystemException">
-    </wsdl:fault>
-      <wsdl:fault name="ReservationNotFoundException" message="tns:ReservationNotFoundException">
-    </wsdl:fault>
-      <wsdl:fault name="RequestException" message="tns:RequestException">
-    </wsdl:fault>
-      <wsdl:fault name="AAIException" message="tns:AAIException">
-    </wsdl:fault>
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="ToolServiceSoapBinding" type="tns:Tool">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="removeReservation">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="removeReservation">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="removeReservationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="SystemException">
+        <soap:fault name="SystemException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="RequestException">
+        <soap:fault name="RequestException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ReservationNotFoundException">
+        <soap:fault name="ReservationNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AAIException">
+        <soap:fault name="AAIException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
     <wsdl:operation name="addReservation">
       <soap:operation soapAction="" style="document"/>
       <wsdl:input name="addReservation">
@@ -289,31 +316,10 @@
         <soap:fault name="AAIException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="removeReservation">
-      <soap:operation soapAction="" style="document"/>
-      <wsdl:input name="removeReservation">
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="removeReservationResponse">
-        <soap:body use="literal"/>
-      </wsdl:output>
-      <wsdl:fault name="SystemException">
-        <soap:fault name="SystemException" use="literal"/>
-      </wsdl:fault>
-      <wsdl:fault name="ReservationNotFoundException">
-        <soap:fault name="ReservationNotFoundException" use="literal"/>
-      </wsdl:fault>
-      <wsdl:fault name="RequestException">
-        <soap:fault name="RequestException" use="literal"/>
-      </wsdl:fault>
-      <wsdl:fault name="AAIException">
-        <soap:fault name="AAIException" use="literal"/>
-      </wsdl:fault>
-    </wsdl:operation>
   </wsdl:binding>
-  <wsdl:service name="ToolService">
+  <wsdl:service name="Tool">
     <wsdl:port name="ToolPort" binding="tns:ToolServiceSoapBinding">
-      <soap:address location="http://localhost:9090/hello"/>
+      <soap:address location="http://localhost:9090/ToolPort"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
