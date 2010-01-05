@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mapping>     
+   <class name="net.geant2.jra3.autoBahnGUI.model.googlemaps.Topology">
+   		 <field name="markers" type="net.geant2.jra3.autoBahnGUI.model.googlemaps.MarkersContainer">
+         </field>
+         <field name="lines" type="net.geant2.jra3.autoBahnGUI.model.googlemaps.LinesContainer">
+         </field>
+   </class> 	
+   	<class name="net.geant2.jra3.autoBahnGUI.model.googlemaps.MarkersContainer">
+             <field name="markers" type="net.geant2.jra3.autoBahnGUI.model.googlemaps.Marker" collection="arraylist">
+             	<bind-xml name="marker"/>
+             </field>
+    </class>
+    <class name="net.geant2.jra3.autoBahnGUI.model.googlemaps.LinesContainer">
+             <field name="lines" type="net.geant2.jra3.autoBahnGUI.model.googlemaps.Line" collection="arraylist">
+             	<bind-xml name="line"/>
+             </field>
+    </class>
+    <class name="net.geant2.jra3.autoBahnGUI.model.googlemaps.Line">
+    	<map-to name="line"/> 
+    	<field name="startLattitude" type="java.lang.String">
+              <bind-xml name="start-lat" node="attribute"/>
+        </field>
+    	<field name="startLongitude" type="java.lang.String">
+              <bind-xml name="start-lng" node="attribute"/>
+        </field>
+        <field name="endLattitude" type="java.lang.String">
+              <bind-xml name="end-lat" node="attribute"/>
+        </field>
+    	<field name="endLongitude" type="java.lang.String">
+              <bind-xml name="end-lng" node="attribute"/>
+        </field>
+ 		<field name="color" type="java.lang.String">
+             <bind-xml name="color" node="attribute"/>
+        </field>
+        <field name="tickness" type="java.lang.String">
+             <bind-xml name="tickness" node="attribute"/>
+        </field>
+        <field name="oblique" type="int">
+        	<bind-xml name="oblique" node="attribute"/>
+        </field>
+    </class>
+    
+    <class name="net.geant2.jra3.autoBahnGUI.model.googlemaps.Marker">
+    	<map-to name="marker"/> 
+    	<field name="latitude" type="java.lang.String">
+              <bind-xml name="lat" node="attribute"/>
+        </field>
+    	<field name="longitude" type="java.lang.String">
+              <bind-xml name="lng" node="attribute"/>
+        </field>
+ 		<field name="html" type="java.lang.String">
+              <bind-xml name="html" node="attribute"/>
+        </field>
+        <field name="label" type="java.lang.String">
+              <bind-xml name="label" node="attribute"/>
+        </field>
+        <field name="icon" type="java.lang.String">
+              <bind-xml name="icon" node="attribute"/>
+        </field>
+    </class>
+    
+</mapping>

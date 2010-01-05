@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE tiles-definitions PUBLIC  
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"  
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">  
+<tiles-definitions>
+    
+    <definition name="template.main" template="/WEB-INF/views/jsp/autobahn/model.jsp">  
+        <put-attribute name="nav" value="/WEB-INF/views/jsp/autobahn/nav.jsp"/>  
+        <put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/home.jsp"/>     
+    </definition>
+  	
+  	<definition name="home" extends="template.main">    
+    </definition>  
+  	
+  	<definition name="login" extends="template.main">    
+    	<put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/login.jsp"/>
+    </definition>  
+  	
+  	
+  	<definition name="secure/services-map" template="/WEB-INF/views/jsp/autobahn/modelMap.jsp">  
+        <put-attribute name="nav" value="/WEB-INF/views/jsp/autobahn/nav.jsp"/>  
+        <put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/services-map.jsp"/>     
+    </definition>
+  	
+  	<definition name="secure/tools" extends="template.main">  
+        <put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/tools.jsp"/>  
+    </definition>  
+    
+    <definition name="secure/settings" extends="template.main">  
+        <put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/settings.jsp"/>  
+    </definition>  
+    
+    <definition name="secure/logs" extends="template.main">  
+        <put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/logs.jsp"/>  
+    </definition>  
+    
+    <definition name="secure/noJRA3IDMRegistered" extends="template.main">
+    	<put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/noJRA3IDMRegistered.jsp"/>
+    </definition>
+    
+  	<definition name="secure/request-service" extends="template.main">  
+        <put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/request-service.jsp"/>  
+    </definition>  
+  	
+  	<definition name="secure/request-reservation" extends="template.main">  
+        <put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/request-reservation.jsp"/>  
+    </definition>
+  	
+  	  
+    <definition name="secure/request-service-success" extends="template.main">  
+        <put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/request-service-success.jsp"/>  
+    </definition>
+  	
+  	<definition name="secure/services" extends="template.main">  
+        <put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/services.jsp"/>  
+    </definition>
+	   
+	<definition name="secure/services-list" template="/WEB-INF/views/jsp/autobahn/services-list.jsp">
+	</definition>
+	
+	<definition name="secure/servicesforidm" template="/WEB-INF/views/jsp/autobahn/servicesforidm.jsp">
+	</definition>
+	
+	<definition name="notfound" extends="template.main">
+		<put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/notfound.jsp"/>
+	</definition>
+	
+</tiles-definitions> 

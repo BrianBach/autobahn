@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mapping>     
+   <class name="net.geant2.jra3.autoBahnGUI.model.Service">
+   	<map-to xml="request"/>
+         <field name="jastification" type="java.lang.String">
+              <bind-xml name="jastification" node="element"/>
+          </field>
+         <field name="user" type="net.geant2.jra3.autoBahnGUI.model.UserCredentials">
+          		<bind-xml name="user"/>
+         </field>
+         <field name="reservations" type="net.geant2.jra3.autoBahnGUI.model.ContenerList">
+         </field>
+   	</class>
+   	<class name="net.geant2.jra3.autoBahnGUI.model.ContenerList">
+             <field name="list" type="net.geant2.jra3.autoBahnGUI.model.Reservation" collection="arraylist">
+             	<bind-xml name="reservation"/>
+             </field>
+    </class>
+    <class name="net.geant2.jra3.autoBahnGUI.model.Reservation">
+    	<map-to name="reservation"/> 
+    	<field name="description" type="java.lang.String">
+              <bind-xml name="description" node="element"/>
+        </field>
+    	<field name="priority" type="java.lang.String">
+              <bind-xml name="priority" node="element"/>
+        </field>
+ 		<field name="domain" type="java.lang.String">
+              <bind-xml name="homeDomain" node="element"/>
+        </field>
+        <field name="startPort" type="java.lang.String">
+              <bind-xml name="startPort" node="element"/>
+        </field>
+        <field name="endPort" type="java.lang.String">
+              <bind-xml name="endPort" node="element"/>
+        </field>
+        <field name="startTime" type="java.lang.String">
+              <bind-xml name="startTime" node="element"/>
+        </field>
+        <field name="endTime" type="java.lang.String">
+              <bind-xml name="endTime" node="element"/>
+        </field>
+        <field name="capacity" type="long">
+              <bind-xml name="capacity" node="element"/>
+        </field>
+        <field name="delay" type="int">
+              <bind-xml name="delay" node="element"/>
+        </field>
+        <field name="bidirectional" type="boolean">
+              <bind-xml name="bidirectional" node="element"/>
+        </field>
+        <field name="resilience" type="boolean">
+              <bind-xml name="resilience" node="element"/>
+        </field>
+    </class>
+     <class name="net.geant2.jra3.autoBahnGUI.model.UserCredentials">
+     	<map-to xml="user"/>
+     	     <field name="name" type="java.lang.String">
+              <bind-xml name="name" node="element"/>
+          	 </field>
+          	<field name="email" type="java.lang.String">
+              <bind-xml name="speed" node="element"/>
+          	 </field>
+          	 <field name="domain" type="java.lang.String">
+              <bind-xml name="domain" node="element"/>
+          	 </field>
+     </class>
+</mapping>

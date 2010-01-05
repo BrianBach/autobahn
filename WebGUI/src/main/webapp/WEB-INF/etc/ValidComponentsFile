@@ -1,0 +1,13 @@
+urn:geant:edugain:component:fpp:starfleet
+urn:geant:edugain:component:hls:galaxian
+urn:geant:edugain:component:be:starfleet:enterprise
+urn:geant:edugain:component:sp:startfleet:enterprise:captainlog:http://enterprise.starfleet.sf/logs/captain
+urn:geant:edugain:component:idp:starfleet:enterprise:roll
+urn:geant:edugain:component:mds
+urn:geant:edugain:component:be:rediris:rediris.es
+urn:geant:edugain:mds:ladok:mds.ladok.umu.se
+urn:geant:edugain:component:mds:mds.rediris.es
+urn:geant:edugain:component:be:rediris:betest
+urn:geant:edugain:component:be:rediris:filtertest
+urn:geant:edugain:component:be:gidp:dante.net
+

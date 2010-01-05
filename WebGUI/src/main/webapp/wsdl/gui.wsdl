@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="GuiService" targetNamespace="http://gui.jra3.geant2.net/" xmlns:tns="http://gui.jra3.geant2.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="network.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="network.jra3.geant2.net">
+    <xs:complexType name="LinkType">
+        <xs:sequence>
+            <xs:element name="type" type="xs:int"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="StateAdmin">
+        <xs:sequence>
+            <xs:element name="state" type="xs:int"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Link">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+            <xs:element name="kind" type="xs:int"/>
+            <xs:element minOccurs="0" name="startPort" type="tns:Port"/>
+            <xs:element minOccurs="0" name="endPort" type="tns:Port"/>
+            <xs:element name="bidirectional" type="xs:boolean"/>
+            <xs:element name="delay" type="xs:int"/>
+            <xs:element name="manualCost" type="xs:double"/>
+            <xs:element name="monetaryCost" type="xs:double"/>
+            <xs:element name="granularity" type="xs:long"/>
+            <xs:element name="minResCapacity" type="xs:long"/>
+            <xs:element name="maxResCapacity" type="xs:long"/>
+            <xs:element name="capacity" type="xs:long"/>
+            <xs:element minOccurs="0" name="resilience" type="xs:string"/>
+            <xs:element minOccurs="0" name="timestamp" type="xs:dateTime"/>
+            <xs:element minOccurs="0" name="localName" type="xs:string"/>
+            <xs:element minOccurs="0" name="type" type="tns:LinkType"/>
+            <xs:element minOccurs="0" name="operationalState" type="tns:StateOper"/>
+            <xs:element minOccurs="0" name="administrativeState" type="tns:StateAdmin"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Port">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+            <xs:element minOccurs="0" name="address" type="xs:string"/>
+            <xs:element minOccurs="0" name="technology" type="xs:string"/>
+            <xs:element name="bundled" type="xs:boolean"/>
+            <xs:element minOccurs="0" name="node" type="tns:Node"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Node">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+            <xs:element minOccurs="0" name="type" type="xs:string"/>
+            <xs:element minOccurs="0" name="address" type="xs:string"/>
+            <xs:element minOccurs="0" name="provisioningDomain" type="tns:ProvisioningDomain"/>
+            <xs:element minOccurs="0" name="name" type="xs:string"/>
+            <xs:element minOccurs="0" name="country" type="xs:string"/>
+            <xs:element minOccurs="0" name="city" type="xs:string"/>
+            <xs:element minOccurs="0" name="institution" type="xs:string"/>
+            <xs:element minOccurs="0" name="longitude" type="xs:string"/>
+            <xs:element minOccurs="0" name="latitude" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ProvisioningDomain">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+            <xs:element minOccurs="0" name="provType" type="xs:string"/>
+            <xs:element minOccurs="0" name="adminDomain" type="tns:AdminDomain"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="AdminDomain">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+            <xs:element minOccurs="0" name="ASID" type="xs:string"/>
+            <xs:element minOccurs="0" name="name" type="xs:string"/>
+            <xs:element name="clientDomain" type="xs:boolean"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="StateOper">
+        <xs:sequence>
+            <xs:element name="state" type="xs:int"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://gui.jra3.geant2.net/" xmlns:ns0="administration.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://gui.jra3.geant2.net/">
+    <xs:simpleType name="eventType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="TOPOLOGY_CHANGED"/>
+            <xs:enumeration value="RESERVATION_CHANGED"/>
+            <xs:enumeration value="STATUS"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="reservationChangedType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="SCHEDULED"/>
+            <xs:enumeration value="FAILED"/>
+            <xs:enumeration value="FINISHED"/>
+            <xs:enumeration value="CANCELLED"/>
+            <xs:enumeration value="ACTIVE"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:element name="statusUpdated" type="statusUpdated"/>
+    <xs:complexType name="statusUpdated">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="idm" type="xs:string"/>
+            <xs:element minOccurs="0" name="status" type="ns0:Status"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="statusUpdatedResponse" type="statusUpdatedResponse"/>
+    <xs:complexType name="statusUpdatedResponse">
+        <xs:sequence/>
+    </xs:complexType>
+    <xs:element name="update" type="update"/>
+    <xs:complexType name="update">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="idm" type="xs:string"/>
+            <xs:element minOccurs="0" name="event" type="eventType"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="properties" type="ns0:KeyValue"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="updateResponse" type="updateResponse"/>
+    <xs:complexType name="updateResponse">
+        <xs:sequence/>
+    </xs:complexType>
+    <xs:element name="reservationChanged" type="reservationChanged"/>
+    <xs:complexType name="reservationChanged">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="idm" type="xs:string"/>
+            <xs:element minOccurs="0" name="serviceId" type="xs:string"/>
+            <xs:element minOccurs="0" name="resID" type="xs:string"/>
+            <xs:element minOccurs="0" name="state" type="reservationChangedType"/>
+            <xs:element minOccurs="0" name="message" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="reservationChangedResponse" type="reservationChangedResponse"/>
+    <xs:complexType name="reservationChangedResponse">
+        <xs:sequence/>
+    </xs:complexType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="network.jra3.geant2.net" xmlns:tns="administration.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="administration.jra3.geant2.net">
+    <xs:import namespace="network.jra3.geant2.net"/>
+    <xs:complexType name="KeyValue">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="key" type="xs:string"/>
+            <xs:element minOccurs="0" name="value" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Neighbor">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="domain" type="xs:string"/>
+            <xs:element minOccurs="0" name="link" type="ns1:Link"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Status">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="domain" type="xs:string"/>
+            <xs:element name="longitude" type="xs:float"/>
+            <xs:element name="latitude" type="xs:float"/>
+            <xs:element maxOccurs="unbounded" name="neighbors" nillable="true" type="tns:Neighbor"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="reservationChangedResponse">
+    <wsdl:part name="parameters" element="tns:reservationChangedResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reservationChanged">
+    <wsdl:part name="parameters" element="tns:reservationChanged">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="statusUpdatedResponse">
+    <wsdl:part name="parameters" element="tns:statusUpdatedResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="statusUpdated">
+    <wsdl:part name="parameters" element="tns:statusUpdated">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateResponse">
+    <wsdl:part name="parameters" element="tns:updateResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="update">
+    <wsdl:part name="parameters" element="tns:update">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="Gui">
+    <wsdl:operation name="statusUpdated">
+      <wsdl:input name="statusUpdated" message="tns:statusUpdated">
+    </wsdl:input>
+      <wsdl:output name="statusUpdatedResponse" message="tns:statusUpdatedResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="update">
+      <wsdl:input name="update" message="tns:update">
+    </wsdl:input>
+      <wsdl:output name="updateResponse" message="tns:updateResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="reservationChanged">
+      <wsdl:input name="reservationChanged" message="tns:reservationChanged">
+    </wsdl:input>
+      <wsdl:output name="reservationChangedResponse" message="tns:reservationChangedResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="GuiServiceSoapBinding" type="tns:Gui">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="statusUpdated">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="statusUpdated">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="statusUpdatedResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="update">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="update">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="updateResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="reservationChanged">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="reservationChanged">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="reservationChangedResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="GuiService">
+    <wsdl:port name="GuiPort" binding="tns:GuiServiceSoapBinding">
+      <soap:address location="http://localhost:9090/hello"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
