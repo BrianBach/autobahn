@@ -18,6 +18,13 @@
 				<include>*</include>
 			</includes>
 		</fileSet>
+		<fileSet>
+			<directory>../Installer/scripts</directory>
+			<outputDirectory>/scripts</outputDirectory>
+			<includes>
+				<include>*.*</include>
+			</includes>
+		</fileSet>
 	</fileSets>
  
     <dependencySets>
