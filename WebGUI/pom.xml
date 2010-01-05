@@ -34,9 +34,9 @@
 					<warName>autobahn</warName>
 					<archive>
 						<manifestEntries>
-							<addClasspath>false</addClasspath>
+							<addClasspath>true</addClasspath>
 						</manifestEntries>
-					</archive>
+					</archive>					
 				</configuration>
 			</plugin>
 		</plugins>
