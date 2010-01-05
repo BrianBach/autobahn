@@ -165,13 +165,15 @@
     </build>
 	
 	<modules>
-		<module>common</module>
-		<module>dm</module>
-		<module>calendar</module>
-		<module>idm</module>
-		<module>ta</module>
-		<module>framework</module>
-		<!--module>web-gui</module-->
+		<module>Common</module>
+		<module>DM</module>
+		<module>Calendar</module>
+		<module>IDM</module>
+		<module>TA</module>
+		<module>Framework</module>
+		<module>WebGUI</module>
+		<module>TP-Base</module>
+		<module>IDC-Proxy</module>
 	</modules>
 	
 	<dependencies>
