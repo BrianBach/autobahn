@@ -1,0 +1,199 @@
+<!DOCTYPE page [
+<!ENTITY rampConfig SYSTEM "/home/rembrandt0/wan/tomcat5/shared/classes/repo/rampConfig.xml"> 
+]>
+<!-- NOTE:  path above is changed during deployment -->
+<!-- This file was auto-generated from WSDL -->
+<!-- by the Apache Axis2 version: 1.3  Built on : Aug 10, 2007 (04:45:47 LKT) -->
+<serviceGroup>
+    <service name="OSCARSNotify" scope="application">
+        
+        <messageReceivers>
+            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-only" class="net.geant2.jra3.oscars.notify.OSCARSNotifyMessageReceiverInOnly"/>
+            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="net.geant2.jra3.oscars.notify.OSCARSNotifyMessageReceiverInOut"/>
+        </messageReceivers>
+        <parameter name="ServiceClass">net.geant2.jra3.oscars.notify.OSCARSNotifySkeleton</parameter>
+        <parameter name="useOriginalwsdl">true</parameter>
+        <parameter name="modifyUserWSDLPortAddress">true</parameter>
+        <parameter name="ServiceTCCL" locked="false">composite</parameter>
+        <!-- policy copied from http://ws.apache.org/rampart/samples/policy/sample02.xml -->
+        <wsp:PolicyAttachment xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy">
+          <wsp:AppliesTo>
+          <!--  
+            <policy-subject identifier="binding:soap11" />
+            <policy-subject identifier="binding:soap12" />
+            -->
+            <policy-subject identifier="binding:soap11/operation:Subscribe" />
+      	    <policy-subject identifier="binding:soap12/operation:Subscribe" />
+      	    <policy-subject identifier="binding:soap11/operation:Renew" />
+      	    <policy-subject identifier="binding:soap12/operation:Renew" />
+            <policy-subject identifier="binding:soap11/operation:Unsubscribe" />
+      	    <policy-subject identifier="binding:soap12/operation:Unsubscribe" />
+      	    <policy-subject identifier="binding:soap11/operation:PauseSubscription" />
+      	    <policy-subject identifier="binding:soap12/operation:PauseSubscription" />
+      	    <policy-subject identifier="binding:soap11/operation:ResumeSubscription" />
+      	    <policy-subject identifier="binding:soap12/operation:ResumeSubscription" />
+      	    <policy-subject identifier="binding:soap11/operation:RegisterPublisher" />
+      	    <policy-subject identifier="binding:soap12/operation:RegisterPublisher" />
+      	    <policy-subject identifier="binding:soap11/operation:DestroyRegistration" />
+      	    <policy-subject identifier="binding:soap12/operation:DestroyRegistration" />:
+          </wsp:AppliesTo>
+    
+          <wsp:Policy wsu:Id="X509EndPointPolicy" 
+      				xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" 
+      				xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+      				xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+            <wsp:ExactlyOne>
+              <wsp:All>
+                <sp:AsymmetricBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                     <wsp:Policy>
+                       <sp:InitiatorToken>
+                         <wsp:Policy>
+                           <sp:X509Token sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient">
+                             <wsp:Policy>
+                               <sp:WssX509V3Token10 />
+                               <sp:RequireThumbprintReference/> <!-- needed for V1 certs -->
+                             </wsp:Policy>
+                           </sp:X509Token>
+                         </wsp:Policy>
+                       </sp:InitiatorToken>
+                       <sp:RecipientToken>
+                         <wsp:Policy>
+                           <sp:X509Token sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/Always">
+                             <wsp:Policy>
+                               <sp:WssX509V3Token10 />
+                               <sp:RequireThumbprintReference/>
+                             </wsp:Policy>
+                           </sp:X509Token>
+                         </wsp:Policy>
+                       </sp:RecipientToken>
+                       <sp:AlgorithmSuite>
+                         <wsp:Policy>
+                           <sp:TripleDesRsa15 />
+                         </wsp:Policy>
+                       </sp:AlgorithmSuite>
+                       <sp:Layout>
+                         <wsp:Policy>
+                           <sp:Strict />
+                         </wsp:Policy>
+                       </sp:Layout>
+                       <sp:IncludeTimestamp />
+                       <sp:OnlySignEntireHeadersAndBody />
+                     </wsp:Policy>
+                   </sp:AsymmetricBinding>
+                   <sp:Wss10 xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                     <wsp:Policy>
+                       <sp:MustSupportRefKeyIdentifier />
+                       <sp:MustSupportRefIssuerSerial />
+                     </wsp:Policy>
+                   </sp:Wss10>
+                   <!--  include site specific rampart configuration -->
+                   <ramp:RampartConfig xmlns:ramp="http://ws.apache.org/rampart/policy">
+                            <!-- replace with user key entry alias, prompted for during install -->
+                            <ramp:user>server</ramp:user>
+                            <ramp:passwordCallbackClass>net.geant2.jra3.main.PWCallback</ramp:passwordCallbackClass>
+                            <ramp:signatureCrypto>
+                                <ramp:crypto provider="org.apache.ws.security.components.crypto.Merlin">
+                                    <ramp:property name="org.apache.ws.security.crypto.merlin.keystore.type">jks</ramp:property>
+                                    <ramp:property name="org.apache.ws.security.crypto.merlin.file">/etc/security/server.ks</ramp:property>
+                                    <!-- replace with keystore password, prompted for during install -->
+                                    <ramp:property name="org.apache.ws.security.crypto.merlin.keystore.password">bahn2auto</ramp:property>
+                                </ramp:crypto>
+                            </ramp:signatureCrypto>
+                        </ramp:RampartConfig>
+                </wsp:All>
+              </wsp:ExactlyOne>
+          </wsp:Policy>
+        </wsp:PolicyAttachment>
+        <wsp:PolicyAttachment xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy">
+           <wsp:AppliesTo>
+      	     <policy-subject identifier="binding:soap11/operation:Subscribe/in" />
+      	     <policy-subject identifier="binding:soap12/operation:Subscribe/in" />
+      	     <policy-subject identifier="binding:soap11/operation:Renew/in" />
+      	     <policy-subject identifier="binding:soap12/operation:Renew/in" />
+             <policy-subject identifier="binding:soap11/operation:Unsubscribe/in" />
+      	     <policy-subject identifier="binding:soap12/operation:Unsubscribe/in" />
+      	     <policy-subject identifier="binding:soap11/operation:PauseSubscription/in" />
+      	     <policy-subject identifier="binding:soap12/operation:PauseSubscription/in" />
+      	     <policy-subject identifier="binding:soap11/operation:ResumeSubscription/in" />
+      	     <policy-subject identifier="binding:soap12/operation:ResumeSubscription/in" />
+      	     <policy-subject identifier="binding:soap11/operation:RegisterPublisher/in" />
+      	     <policy-subject identifier="binding:soap12/operation:RegisterPublisher/in" />
+      	     <policy-subject identifier="binding:soap11/operation:DestroyRegistration/in" />
+      	     <policy-subject identifier="binding:soap12/operation:DestroyRegistration/in" />
+ 
+          </wsp:AppliesTo>
+          <wsp:Policy wsu:id="signedMsgPolicy"
+        			xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" 
+      			xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+      			xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+      	   <wsp:ExactlyOne>
+               <wsp:All>
+                  <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                      <sp:Body/>
+                  </sp:SignedParts>
+                </wsp:All>
+              </wsp:ExactlyOne>  
+          </wsp:Policy>
+        </wsp:PolicyAttachment>
+ 
+        <operation name="Notify" mep="http://www.w3.org/ns/wsdl/in-only">
+            <actionMapping>http://oscars.es.net/OSCARS/Notify</actionMapping>
+        </operation>
+        <operation name="Subscribe" mep="http://www.w3.org/ns/wsdl/in-out">
+            <module ref="rampart" />
+            <actionMapping>http://oscars.es.net/OSCARS/Subscribe</actionMapping>
+            <outputActionMapping>http://oscars.es.net/OSCARS/OSCARSNotify/SubscribeResponse</outputActionMapping>
+            <faultActionMapping faultName="TopicNotSupportedFault">http://oscars.es.net/OSCARS/OSCARSNotify/Subscribe/Fault/TopicNotSupportedFault</faultActionMapping>
+            <faultActionMapping faultName="InvalidTopicExpressionFault">http://oscars.es.net/OSCARS/OSCARSNotify/Subscribe/Fault/InvalidTopicExpressionFault</faultActionMapping>
+            <faultActionMapping faultName="UnsupportedPolicyRequestFault">http://oscars.es.net/OSCARS/OSCARSNotify/Subscribe/Fault/UnsupportedPolicyRequestFault</faultActionMapping>
+            <faultActionMapping faultName="InvalidMessageContentExpressionFault">http://oscars.es.net/OSCARS/OSCARSNotify/Subscribe/Fault/InvalidMessageContentExpressionFault</faultActionMapping>
+            <faultActionMapping faultName="UnacceptableInitialTerminationTimeFault">http://oscars.es.net/OSCARS/OSCARSNotify/Subscribe/Fault/UnacceptableInitialTerminationTimeFault</faultActionMapping>
+            <faultActionMapping faultName="InvalidProducerPropertiesExpressionFault">http://oscars.es.net/OSCARS/OSCARSNotify/Subscribe/Fault/InvalidProducerPropertiesExpressionFault</faultActionMapping>
+            <faultActionMapping faultName="TopicExpressionDialectUnknownFault">http://oscars.es.net/OSCARS/OSCARSNotify/Subscribe/Fault/TopicExpressionDialectUnknownFault</faultActionMapping>
+            <faultActionMapping faultName="SubscribeCreationFailedFault">http://oscars.es.net/OSCARS/OSCARSNotify/Subscribe/Fault/SubscribeCreationFailedFault</faultActionMapping>
+            <faultActionMapping faultName="InvalidFilterFault">http://oscars.es.net/OSCARS/OSCARSNotify/Subscribe/Fault/InvalidFilterFault</faultActionMapping>
+            <faultActionMapping faultName="UnrecognizedPolicyRequestFault">http://oscars.es.net/OSCARS/OSCARSNotify/Subscribe/Fault/UnrecognizedPolicyRequestFault</faultActionMapping>
+            <faultActionMapping faultName="NotifyMessageNotSupportedFault">http://oscars.es.net/OSCARS/OSCARSNotify/Subscribe/Fault/NotifyMessageNotSupportedFault</faultActionMapping>
+        </operation>
+        <operation name="Renew" mep="http://www.w3.org/ns/wsdl/in-out">
+            <module ref="rampart" />
+            <actionMapping>http://oscars.es.net/OSCARS/Renew</actionMapping>
+            <outputActionMapping>http://oscars.es.net/OSCARS/OSCARSNotify/RenewResponse</outputActionMapping>
+            <faultActionMapping faultName="UnacceptableTerminationTimeFault">http://oscars.es.net/OSCARS/OSCARSNotify/Renew/Fault/UnacceptableTerminationTimeFault</faultActionMapping>
+        </operation>
+        <operation name="Unsubscribe" mep="http://www.w3.org/ns/wsdl/in-out">
+            <module ref="rampart" />
+            <actionMapping>http://oscars.es.net/OSCARS/Unsubscribe</actionMapping>
+            <outputActionMapping>http://oscars.es.net/OSCARS/OSCARSNotify/UnsubscribeResponse</outputActionMapping>
+            <faultActionMapping faultName="UnableToDestroySubscriptionFault">http://oscars.es.net/OSCARS/OSCARSNotify/Unsubscribe/Fault/UnableToDestroySubscriptionFault</faultActionMapping>
+        </operation>
+        <operation name="PauseSubscription" mep="http://www.w3.org/ns/wsdl/in-out">
+            <module ref="rampart" />
+            <actionMapping>http://oscars.es.net/OSCARS/PauseSubscription</actionMapping>
+            <outputActionMapping>http://oscars.es.net/OSCARS/OSCARSNotify/PauseSubscriptionResponse</outputActionMapping>
+            <faultActionMapping faultName="PauseFailedFault">http://oscars.es.net/OSCARS/OSCARSNotify/PauseSubscription/Fault/PauseFailedFault</faultActionMapping>
+        </operation>
+        <operation name="ResumeSubscription" mep="http://www.w3.org/ns/wsdl/in-out">
+            <module ref="rampart" />
+            <actionMapping>http://oscars.es.net/OSCARS/ResumeSubscription</actionMapping>
+            <outputActionMapping>http://oscars.es.net/OSCARS/OSCARSNotify/ResumeSubscriptionResponse</outputActionMapping>
+            <faultActionMapping faultName="ResumeFailedFault">http://oscars.es.net/OSCARS/OSCARSNotify/ResumeSubscription/Fault/ResumeFailedFault</faultActionMapping>
+        </operation>
+        <operation name="RegisterPublisher" mep="http://www.w3.org/ns/wsdl/in-out">
+            <module ref="rampart" />
+            <actionMapping>http://oscars.es.net/OSCARS/RegisterPublisher</actionMapping>
+            <outputActionMapping>http://oscars.es.net/OSCARS/OSCARSNotify/RegisterPublisherResponse</outputActionMapping>
+            <faultActionMapping faultName="TopicNotSupportedFault">http://oscars.es.net/OSCARS/OSCARSNotify/RegisterPublisher/Fault/TopicNotSupportedFault</faultActionMapping>
+            <faultActionMapping faultName="InvalidTopicExpressionFault">http://oscars.es.net/OSCARS/OSCARSNotify/RegisterPublisher/Fault/InvalidTopicExpressionFault</faultActionMapping>
+            <faultActionMapping faultName="PublisherRegistrationFailedFault">http://oscars.es.net/OSCARS/OSCARSNotify/RegisterPublisher/Fault/PublisherRegistrationFailedFault</faultActionMapping>
+            <faultActionMapping faultName="UnacceptableInitialTerminationTimeFault">http://oscars.es.net/OSCARS/OSCARSNotify/RegisterPublisher/Fault/UnacceptableInitialTerminationTimeFault</faultActionMapping>
+            <faultActionMapping faultName="PublisherRegistrationRejectedFault">http://oscars.es.net/OSCARS/OSCARSNotify/RegisterPublisher/Fault/PublisherRegistrationRejectedFault</faultActionMapping>
+        </operation>
+        <operation name="DestroyRegistration" mep="http://www.w3.org/ns/wsdl/in-out">
+            <module ref="rampart" />
+            <actionMapping>http://oscars.es.net/OSCARS/DestroyRegistration</actionMapping>
+            <outputActionMapping>http://oscars.es.net/OSCARS/OSCARSNotify/DestroyRegistrationResponse</outputActionMapping>
+            <faultActionMapping faultName="ResourceNotDestroyedFault">http://oscars.es.net/OSCARS/OSCARSNotify/DestroyRegistration/Fault/ResourceNotDestroyedFault</faultActionMapping>
+        </operation>
+    </service>
+</serviceGroup>

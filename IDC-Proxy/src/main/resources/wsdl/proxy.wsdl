@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="ProxyService" targetNamespace="http://proxy.jra3.geant2.net/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://proxy.jra3.geant2.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://proxy.jra3.geant2.net/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://proxy.jra3.geant2.net/">
+    <xs:complexType name="Range">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="min" type="xs:int"/>
+            <xs:element minOccurs="0" name="max" type="xs:int"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ReservationParams">
+        <xs:sequence>
+            <xs:element name="capacity" type="xs:long"/>
+            <xs:element name="maxDelay" type="xs:int"/>
+            <xs:element minOccurs="0" name="resiliency" type="xs:string"/>
+            <xs:element name="bidirectional" type="xs:boolean"/>
+            <xs:element minOccurs="0" name="startTime" type="xs:dateTime"/>
+            <xs:element minOccurs="0" name="endTime" type="xs:dateTime"/>
+            <xs:element minOccurs="0" name="dcon" type="tns:DomainConstraints"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="DomainConstraints">
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="pathConstraints" nillable="true" type="tns:PathConstraints"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="PathConstraints">
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="addNames" nillable="true" type="tns:constraintsNames"/>
+            <xs:element maxOccurs="unbounded" name="addConstraints" nillable="true" type="tns:AdditiveConstraint"/>
+            <xs:element maxOccurs="unbounded" name="boolNames" nillable="true" type="tns:constraintsNames"/>
+            <xs:element maxOccurs="unbounded" name="boolConstraints" nillable="true" type="tns:BooleanConstraint"/>
+            <xs:element maxOccurs="unbounded" name="rangeNames" nillable="true" type="tns:constraintsNames"/>
+            <xs:element maxOccurs="unbounded" name="rangeConstraints" nillable="true" type="tns:RangeConstraint"/>
+            <xs:element maxOccurs="unbounded" name="minValNames" nillable="true" type="tns:constraintsNames"/>
+            <xs:element maxOccurs="unbounded" name="minValConstraints" nillable="true" type="tns:MinValueConstraint"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="AdditiveConstraint">
+        <xs:complexContent>
+            <xs:extension base="tns:Constraint">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="value" type="xs:double"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType abstract="true" name="Constraint"/>
+    <xs:complexType name="BooleanConstraint">
+        <xs:complexContent>
+            <xs:extension base="tns:Constraint">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="value" type="xs:boolean"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="RangeConstraint">
+        <xs:complexContent>
+            <xs:extension base="tns:Constraint">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="ranges" nillable="true" type="tns:Range"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="MinValueConstraint">
+        <xs:complexContent>
+            <xs:extension base="tns:Constraint">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="value" type="xs:double"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="Link">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+            <xs:element name="kind" type="xs:int"/>
+            <xs:element minOccurs="0" name="startPort" type="tns:Port"/>
+            <xs:element minOccurs="0" name="endPort" type="tns:Port"/>
+            <xs:element name="bidirectional" type="xs:boolean"/>
+            <xs:element name="delay" type="xs:int"/>
+            <xs:element name="manualCost" type="xs:double"/>
+            <xs:element name="monetaryCost" type="xs:double"/>
+            <xs:element name="granularity" type="xs:long"/>
+            <xs:element name="minResCapacity" type="xs:long"/>
+            <xs:element name="maxResCapacity" type="xs:long"/>
+            <xs:element name="capacity" type="xs:long"/>
+            <xs:element minOccurs="0" name="resilience" type="xs:string"/>
+            <xs:element minOccurs="0" name="timestamp" type="xs:dateTime"/>
+            <xs:element minOccurs="0" name="localName" type="xs:string"/>
+            <xs:element minOccurs="0" name="type" type="tns:LinkType"/>
+            <xs:element minOccurs="0" name="operationalState" type="tns:stateOper"/>
+            <xs:element minOccurs="0" name="administrativeState" type="tns:stateAdmin"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Port">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+            <xs:element minOccurs="0" name="address" type="xs:string"/>
+            <xs:element minOccurs="0" name="technology" type="xs:string"/>
+            <xs:element name="bundled" type="xs:boolean"/>
+            <xs:element minOccurs="0" name="node" type="tns:Node"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Node">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+            <xs:element minOccurs="0" name="type" type="xs:string"/>
+            <xs:element minOccurs="0" name="address" type="xs:string"/>
+            <xs:element minOccurs="0" name="provisioningDomain" type="tns:ProvisioningDomain"/>
+            <xs:element minOccurs="0" name="name" type="xs:string"/>
+            <xs:element minOccurs="0" name="country" type="xs:string"/>
+            <xs:element minOccurs="0" name="city" type="xs:string"/>
+            <xs:element minOccurs="0" name="institution" type="xs:string"/>
+            <xs:element minOccurs="0" name="longitude" type="xs:string"/>
+            <xs:element minOccurs="0" name="latitude" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ProvisioningDomain">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+            <xs:element minOccurs="0" name="provType" type="xs:string"/>
+            <xs:element minOccurs="0" name="adminDomain" type="tns:AdminDomain"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="AdminDomain">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+            <xs:element minOccurs="0" name="ASID" type="xs:string"/>
+            <xs:element minOccurs="0" name="name" type="xs:string"/>
+            <xs:element name="clientDomain" type="xs:boolean"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="LinkType">
+        <xs:sequence>
+            <xs:element name="type" type="xs:int"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="stateOper">
+        <xs:sequence>
+            <xs:element name="state" type="xs:int"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="stateAdmin">
+        <xs:sequence>
+            <xs:element name="state" type="xs:int"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="GlobalConstraints">
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="domainsIds" nillable="true" type="xs:string"/>
+            <xs:element maxOccurs="unbounded" name="domainConstraints" nillable="true" type="tns:DomainConstraints"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ProxyInfo">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="endPoint" type="xs:string"/>
+            <xs:element name="port" type="xs:int"/>
+            <xs:element minOccurs="0" name="name" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Reservation">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+            <xs:element minOccurs="0" name="startPort" type="tns:Port"/>
+            <xs:element minOccurs="0" name="endPort" type="tns:Port"/>
+            <xs:element minOccurs="0" name="startTime" type="xs:dateTime"/>
+            <xs:element minOccurs="0" name="endTime" type="xs:dateTime"/>
+            <xs:element name="priority" type="xs:int"/>
+            <xs:element minOccurs="0" name="description" type="xs:string"/>
+            <xs:element name="capacity" type="xs:long"/>
+            <xs:element name="maxDelay" type="xs:int"/>
+            <xs:element minOccurs="0" name="resiliency" type="xs:string"/>
+            <xs:element name="bidirectional" type="xs:boolean"/>
+            <xs:element minOccurs="0" name="globalConstraints" type="tns:GlobalConstraints"/>
+            <xs:element minOccurs="0" name="path" type="tns:Path"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Path">
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="links" nillable="true" type="tns:Link"/>
+            <xs:element name="monetary_cost" type="xs:double"/>
+            <xs:element name="manual_cost" type="xs:double"/>
+            <xs:element name="capacity" type="xs:long"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="constraintsNames">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="TIMESLOTS"/>
+            <xs:enumeration value="VLANS"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:element name="ProxyException" type="tns:ProxyException"/>
+    <xs:complexType name="ProxyException">
+        <xs:sequence/>
+    </xs:complexType>
+    <xs:element name="createReservation" type="tns:createReservation"/>
+    <xs:complexType name="createReservation">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="proxyInfo" type="tns:ProxyInfo"/>
+            <xs:element minOccurs="0" name="reservation" type="tns:ReservationParams"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="createReservationResponse" type="tns:createReservationResponse"/>
+    <xs:complexType name="createReservationResponse">
+        <xs:sequence/>
+    </xs:complexType>
+    <xs:element name="queryReservation" type="tns:queryReservation"/>
+    <xs:complexType name="queryReservation">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="resID" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="queryReservationResponse" type="tns:queryReservationResponse"/>
+    <xs:complexType name="queryReservationResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="reservation" type="tns:Reservation"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="cancelReservation" type="tns:cancelReservation"/>
+    <xs:complexType name="cancelReservation">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="proxyInfo" type="tns:ProxyInfo"/>
+            <xs:element minOccurs="0" name="resID" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="cancelReservationResponse" type="tns:cancelReservationResponse"/>
+    <xs:complexType name="cancelReservationResponse">
+        <xs:sequence/>
+    </xs:complexType>
+    <xs:element name="getProxyInfo" type="tns:getProxyInfo"/>
+    <xs:complexType name="getProxyInfo">
+        <xs:sequence/>
+    </xs:complexType>
+    <xs:element name="getProxyInfoResponse" type="tns:getProxyInfoResponse"/>
+    <xs:complexType name="getProxyInfoResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="proxyInfo" type="tns:ProxyInfo"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="getTopology" type="tns:getTopology"/>
+    <xs:complexType name="getTopology">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="proxyInfo" type="tns:ProxyInfo"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="getTopologyResponse" type="tns:getTopologyResponse"/>
+    <xs:complexType name="getTopologyResponse">
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="links" type="tns:Link"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="listReservations" type="tns:listReservations"/>
+    <xs:complexType name="listReservations">
+        <xs:sequence/>
+    </xs:complexType>
+    <xs:element name="listReservationsResponse" type="tns:listReservationsResponse"/>
+    <xs:complexType name="listReservationsResponse">
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="reservations" type="tns:Reservation"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="forward" type="tns:forward"/>
+    <xs:complexType name="forward">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="reservation" type="tns:Reservation"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="forwardResponse" type="tns:forwardResponse"/>
+    <xs:complexType name="forwardResponse">
+        <xs:sequence/>
+    </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="createReservationResponse">
+    <wsdl:part name="parameters" element="tns:createReservationResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="forwardResponse">
+    <wsdl:part name="parameters" element="tns:forwardResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTopologyResponse">
+    <wsdl:part name="parameters" element="tns:getTopologyResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTopology">
+    <wsdl:part name="parameters" element="tns:getTopology">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="cancelReservationResponse">
+    <wsdl:part name="parameters" element="tns:cancelReservationResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listReservations">
+    <wsdl:part name="parameters" element="tns:listReservations">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createReservation">
+    <wsdl:part name="parameters" element="tns:createReservation">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="cancelReservation">
+    <wsdl:part name="parameters" element="tns:cancelReservation">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getProxyInfo">
+    <wsdl:part name="parameters" element="tns:getProxyInfo">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listReservationsResponse">
+    <wsdl:part name="parameters" element="tns:listReservationsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="forward">
+    <wsdl:part name="parameters" element="tns:forward">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getProxyInfoResponse">
+    <wsdl:part name="parameters" element="tns:getProxyInfoResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="queryReservationResponse">
+    <wsdl:part name="parameters" element="tns:queryReservationResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="queryReservation">
+    <wsdl:part name="parameters" element="tns:queryReservation">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ProxyException">
+    <wsdl:part name="ProxyException" element="tns:ProxyException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="Proxy">
+    <wsdl:operation name="createReservation">
+      <wsdl:input name="createReservation" message="tns:createReservation">
+    </wsdl:input>
+      <wsdl:output name="createReservationResponse" message="tns:createReservationResponse">
+    </wsdl:output>
+      <wsdl:fault name="ProxyException" message="tns:ProxyException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="queryReservation">
+      <wsdl:input name="queryReservation" message="tns:queryReservation">
+    </wsdl:input>
+      <wsdl:output name="queryReservationResponse" message="tns:queryReservationResponse">
+    </wsdl:output>
+      <wsdl:fault name="ProxyException" message="tns:ProxyException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="cancelReservation">
+      <wsdl:input name="cancelReservation" message="tns:cancelReservation">
+    </wsdl:input>
+      <wsdl:output name="cancelReservationResponse" message="tns:cancelReservationResponse">
+    </wsdl:output>
+      <wsdl:fault name="ProxyException" message="tns:ProxyException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getProxyInfo">
+      <wsdl:input name="getProxyInfo" message="tns:getProxyInfo">
+    </wsdl:input>
+      <wsdl:output name="getProxyInfoResponse" message="tns:getProxyInfoResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTopology">
+      <wsdl:input name="getTopology" message="tns:getTopology">
+    </wsdl:input>
+      <wsdl:output name="getTopologyResponse" message="tns:getTopologyResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="listReservations">
+      <wsdl:input name="listReservations" message="tns:listReservations">
+    </wsdl:input>
+      <wsdl:output name="listReservationsResponse" message="tns:listReservationsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="forward">
+      <wsdl:input name="forward" message="tns:forward">
+    </wsdl:input>
+      <wsdl:output name="forwardResponse" message="tns:forwardResponse">
+    </wsdl:output>
+      <wsdl:fault name="ProxyException" message="tns:ProxyException">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ProxyServiceSoapBinding" type="tns:Proxy">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="createReservation">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="createReservation">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="createReservationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ProxyException">
+        <soap:fault name="ProxyException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="queryReservation">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="queryReservation">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="queryReservationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ProxyException">
+        <soap:fault name="ProxyException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="cancelReservation">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="cancelReservation">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="cancelReservationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ProxyException">
+        <soap:fault name="ProxyException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getProxyInfo">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getProxyInfo">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getProxyInfoResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTopology">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getTopology">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getTopologyResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="listReservations">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="listReservations">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="listReservationsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="forward">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="forward">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="forwardResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ProxyException">
+        <soap:fault name="ProxyException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ProxyService">
+    <wsdl:port name="ProxyPort" binding="tns:ProxyServiceSoapBinding">
+      <soap:address location="http://localhost:9090/hello"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
