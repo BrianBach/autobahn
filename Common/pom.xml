@@ -56,52 +56,67 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.geant.autobahn</groupId>
+			<groupId>dom4j</groupId>
 			<artifactId>dom4j</artifactId>
 			<version>1.6.1</version>
 			<type>jar</type>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.geant.autobahn</groupId>
-			<artifactId>hibernate3</artifactId>
-			<version>1.0</version>
-			<type>jar</type>			
+			<groupId>hibernate</groupId>
+			<artifactId>hibernate</artifactId>
+			<version>3.1rc2</version>
+			<type>jar</type>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.geant.autobahn</groupId>
+			<groupId>javax.xml.bind</groupId>
 			<artifactId>jaxb-api</artifactId>
 			<version>2.0</version>
-			<type>jar</type>			
-		</dependency>		
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
 		<dependency>
-			<groupId>net.geant.autobahn</groupId>
+			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.14</version>
+			<type>jar</type>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.geant.autobahn</groupId>
+			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
 			<version>1.1.1</version>
+			<type>jar</type>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.geant.autobahn</groupId>
+			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpcore</artifactId>
 			<version>4.0-beta3</version>
+			<type>jar</type>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.geant.autobahn</groupId>
+			<groupId>net.objectlab.kit.datecalc</groupId>
 			<artifactId>datecalc-common</artifactId>
 			<version>1.0.1</version>
+			<type>jar</type>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.geant.autobahn</groupId>
+			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>4.0</version>
+			<type>jar</type>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.geant.autobahn</groupId>
+			<groupId>xfire</groupId>
 			<artifactId>xfire-jsr181-api</artifactId>
 			<version>1.0-M1</version>
+			<type>jar</type>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.geant.autobahn</groupId>
