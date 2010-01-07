@@ -50,46 +50,161 @@
 					<doUpdate>false</doUpdate>
 				</configuration>
 			</plugin>		
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.0</version>
+				<configuration>
+					<warName>autobahn-proxy</warName>
+					<archive>
+						<manifestEntries>
+							<addClasspath>true</addClasspath>
+						</manifestEntries>
+					</archive>					
+				</configuration>
+			</plugin>					
 		</plugins>		
 	</build>
 
 	<profiles>
 		<profile>
-			<id>wsdl-gen</id>
+			<id>webservice-proxy</id>
 			<build>			
 				<plugins>
 					<plugin>
-						<groupId>org.apache.cxf</groupId>
-						<artifactId>cxf-java2ws-plugin</artifactId>
-						<version>2.2.4</version>
-						<dependencies>
-							<dependency>
-								<groupId>org.apache.cxf</groupId>
-								<artifactId>cxf-rt-frontend-jaxws</artifactId>
-								<version>2.2.1</version>
-							</dependency>
-							<dependency>
-								<groupId>org.apache.cxf</groupId>
-								<artifactId>cxf-rt-frontend-simple</artifactId>
-								<version>2.2.2</version>
-							</dependency>
-						</dependencies>
-
+						<artifactId>maven-antrun-plugin</artifactId>
 						<executions>
 							<execution>
-								<id>wsdl-tool</id>
 								<phase>compile</phase>
-								<configuration>
-									<className>net.geant2.jra3.tool.Tool</className>
-									<outputFile>src/main/resources/wsdl/tool.wsdl</outputFile>
-									<genWsdl>true</genWsdl>
-									<serviceName>Tool</serviceName>
-									<verbose>true</verbose>
-								</configuration>
-								<goals>
-									<goal>java2ws</goal>
-								</goals>
-							</execution>							
+							<configuration>
+								<tasks>
+									<java classname="org.apache.cxf.tools.wsdlto.WSDLToJava" fork="true">
+										<arg value="-server"/>
+										<arg value="-impl"/>
+										<arg value="-quiet"/>
+										<arg line="-d src/main/java"/>
+										<arg value="./src/main/resources/wsdl/proxy.wsdl"/>
+										<classpath>
+											<path refid="maven.compile.classpath"/>
+										</classpath>
+									</java>
+								</tasks>
+							</configuration>
+							<goals>
+								<goal>run</goal>
+							</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		
+		<profile>
+			<id>webservice-oscars</id>
+			<build>			
+				<plugins>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>compile</phase>
+							<configuration>
+								<tasks>
+									<java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true" classpathref="maven.compile.classpath">
+										<arg line="-uri ./src/main/resources/wsdl/oscars.wsdl"/>
+										<arg line="-d adb"/>
+										<arg line="-o ./target/tmp/oscar"/>
+										<arg line="-s -ss -g"/>
+										<arg line="-p net.geant2.jra3.oscars"/>
+										<arg value="-or"/>
+										<arg value="--noBuildXML"/>
+										<arg value="--noWSDL"/>
+									</java>
+									<copy todir="./src/main/java">
+										<fileset dir="./target/tmp/oscar/src"/>
+									</copy>
+									<delete dir="./target/tmp"/>
+								</tasks>
+							</configuration>
+							<goals>
+								<goal>run</goal>
+							</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		
+		<profile>
+			<id>webservice-oscarsnotify</id>
+			<build>			
+				<plugins>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>compile</phase>
+							<configuration>
+								<tasks>
+									<java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true" classpathref="maven.compile.classpath">
+										<arg line="-uri ./src/main/resources/wsdl/oscars-notify.wsdl"/>
+										<arg line="-d adb"/>
+										<arg line="-o ./target/tmp/oscar-notify"/>
+										<arg line="-s -ss -g"/>
+										<arg line="-p net.geant2.jra3.oscars.notify"/>
+										<arg value="-or"/>
+										<arg value="--noBuildXML"/>
+										<arg value="--noWSDL"/>
+									</java>
+									<copy todir="./src/main/java">
+										<fileset dir="./target/tmp/oscar-notify/src"/>
+									</copy>
+									<delete dir="./target/tmp"/>
+								</tasks>
+							</configuration>
+							<goals>
+								<goal>run</goal>
+							</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		
+		<profile>
+			<id>create-aar</id>
+			<build>			
+				<plugins>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>compile</phase>
+							<configuration>
+								<tasks>
+									<mkdir dir="./target/aar"/>
+									<mkdir dir="./target/tmp"/>
+									<copy todir="./target/tmp/META-INF">
+										<fileset dir="./src/main/resources/resourcesOSCARS"/>
+									</copy>
+									<jar basedir="./target/tmp" destfile="./src/main/webapp/WEB-INF/services/Oscars.aar"/>
+									<delete dir="./target/tmp/META-INF"/>
+									
+									<mkdir dir="./target/tmp/META-INF"/>
+									<copy todir="./target/tmp/META-INF">
+										<fileset dir="./src/main/resources/resourcesOSCARSNotify"/>
+									</copy>
+									<jar basedir="./target/tmp" destfile="./src/main/webapp/WEB-INF/services/OscarsNotify.aar"/>		
+									<delete dir="./target/tmp"/>
+								</tasks>
+							</configuration>
+							<goals>
+								<goal>run</goal>
+							</goals>
+							</execution>
 						</executions>
 					</plugin>
 				</plugins>
