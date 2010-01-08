@@ -13,11 +13,11 @@ public class TopologyTest implements Topology {
     List<Link> ls;
     List<Node> ns;
 
-   /*  public TopologyTest(List<AdminDomain> ads, List<Link> ls, List<Node> ns) {
+     public TopologyTest(List<AdminDomain> ads, List<Link> ls, List<Node> ns) {
         this.ads = new ArrayList<AdminDomain>(ads);
         this.ls = new ArrayList<Link>(ls);
         this.ns = new ArrayList<Node>(ns);
-    } */
+    } 
     
     public List<AdminDomain> getDomains() {
         return ads;
@@ -31,7 +31,7 @@ public class TopologyTest implements Topology {
         return ns;
     }
 
-    public boolean insertLink(Link link) {
+    public boolean insertLink(Link link) { 
         ls.add(link);
         return true;
     }

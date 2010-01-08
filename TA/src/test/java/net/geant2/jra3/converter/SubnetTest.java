@@ -17,17 +17,17 @@ public class SubnetTest {
 	public void tearDown() throws Exception {
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=ArrayIndexOutOfBoundsException.class)
 	public void testWrongDataFormat() {
 		Subnet subnet = new Subnet("-- a.b.cxxx");
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=ArrayIndexOutOfBoundsException.class)
 	public void testEmpty() {
 		Subnet subnet = new Subnet("");
 	}
 	
-	@Test
+	@Test(expected=StringIndexOutOfBoundsException.class)
 	public void testIllegalMask() {
 		Subnet subnet = new Subnet("192.168.1.10/33");
 	}
@@ -37,7 +37,7 @@ public class SubnetTest {
 		Subnet subnet = new Subnet("10.300.1.1/24");
 	}
 	
-	@Test
+	@Test(expected=IllegalArgumentException.class)
 	public void testIllegalIpNumber2() {
 		Subnet subnet = new Subnet("10.300.1.1.6/24");
 	}

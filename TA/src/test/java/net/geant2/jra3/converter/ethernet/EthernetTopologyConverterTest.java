@@ -88,7 +88,7 @@ public class EthernetTopologyConverterTest {
 		System.out.println(conv);
 	}
 	
-	@Test
+	@Test(expected=NullPointerException.class)
 	public void testPassingNullAsExternalSource() throws IOException {
 
 		TopologyConverter conv = createTopology2Converter();
@@ -112,7 +112,7 @@ public class EthernetTopologyConverterTest {
 		TestCase.assertEquals(6, stats.numPaths);
 
         ExternalIdentifiersSource source = new FileIdentifiersSource(
-				"test_etc/topology2-external-ids.properties");
+				"./src/test/resources/test_etc/topology2-external-ids.properties");
         List<Link> links = conv.abstractExternalPartOfTopology(source);
         
         TestCase.assertEquals(7, links.size());
@@ -148,7 +148,7 @@ public class EthernetTopologyConverterTest {
         InternalIdentifiersSource internal = new InternalIdentifiersSource(
         		nrange, prange, lrange);
         PublicIdentifiersMapping mapping = new PublicIdentifiersMapping(
-        		"test_etc/topology2-public-ids.properties");
+        		"./src/test/resources/test_etc/topology2-public-ids.properties");
 		
 		TopologyConverter conv = new EthernetTopologyConverter(builder
 				.getTopology(), pf, internal, mapping);
