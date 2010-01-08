@@ -18,13 +18,13 @@
         /* This type was generated from the piece of schema that had
                 name = ResourceUnknownFaultType
                 Namespace URI = http://docs.oasis-open.org/wsrf/r-2
-                Namespace Prefix = ns7
+                Namespace Prefix = ns6
                 */
             
 
         private static java.lang.String generatePrefix(java.lang.String namespace) {
             if(namespace.equals("http://docs.oasis-open.org/wsrf/r-2")){
-                return "ns7";
+                return "ns6";
             }
             return org.apache.axis2.databinding.utils.BeanUtil.getUniquePrefix();
         }

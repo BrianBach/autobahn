@@ -439,16 +439,6 @@
 
               
                   if (
-                  "http://docs.oasis-open.org/wsn/br-2".equals(namespaceURI) &&
-                  "PublisherRegistrationFailedFaultType".equals(typeName)){
-                   
-                            return  org.oasis_open.docs.wsn.br_2.PublisherRegistrationFailedFaultType.Factory.parse(reader);
-                        
-
-                  }
-
-              
-                  if (
                   "http://ogf.org/schema/network/topology/ctrlPlane/20080828/".equals(namespaceURI) &&
                   "Lifetime".equals(typeName)){
                    
@@ -553,16 +543,6 @@
                   "layer2Info".equals(typeName)){
                    
                             return  net.es.oscars.oscars.Layer2Info.Factory.parse(reader);
-                        
-
-                  }
-
-              
-                  if (
-                  "http://docs.oasis-open.org/wsn/br-2".equals(namespaceURI) &&
-                  "PublisherRegistrationRejectedFaultType".equals(typeName)){
-                   
-                            return  org.oasis_open.docs.wsn.br_2.PublisherRegistrationRejectedFaultType.Factory.parse(reader);
                         
 
                   }
@@ -733,16 +713,6 @@
                   "CtrlPlaneLinkContent".equals(typeName)){
                    
                             return  org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneLinkContent.Factory.parse(reader);
-                        
-
-                  }
-
-              
-                  if (
-                  "http://docs.oasis-open.org/wsn/br-2".equals(namespaceURI) &&
-                  "ResourceNotDestroyedFaultType".equals(typeName)){
-                   
-                            return  org.oasis_open.docs.wsn.br_2.ResourceNotDestroyedFaultType.Factory.parse(reader);
                         
 
                   }

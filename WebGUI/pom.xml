@@ -31,11 +31,12 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.0</version>
 				<configuration>
-					<warName>autobahn</warName>
+					<warName>autobahn-gui</warName>
 					<archive>
-						<manifestEntries>
+						<manifest>
 							<addClasspath>true</addClasspath>
-						</manifestEntries>
+							<packageName>true</packageName>
+						</manifest>
 					</archive>					
 				</configuration>
 			</plugin>

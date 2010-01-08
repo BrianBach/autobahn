@@ -168,6 +168,14 @@
 	</profiles>
   
 	<dependencies>
+	
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.7</version>
+			<scope>test</scope>
+		</dependency>
+		
 		<dependency>
 			<groupId>net.geant.autobahn</groupId>
 			<artifactId>autobahn-common</artifactId>
@@ -323,12 +331,6 @@
 			<groupId>net.geant.autobahn</groupId>
 			<artifactId>jta</artifactId>
 			<version>1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.7</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.geant.autobahn</groupId>

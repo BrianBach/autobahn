@@ -57,12 +57,15 @@
 				<configuration>
 					<warName>autobahn-proxy</warName>
 					<archive>
-						<manifestEntries>
+						<manifest>
 							<addClasspath>true</addClasspath>
-						</manifestEntries>
-					</archive>					
+							<packageName>true</packageName>
+						</manifest>
+					</archive>
 				</configuration>
-			</plugin>					
+			</plugin>
+			
+			
 		</plugins>		
 	</build>
 
