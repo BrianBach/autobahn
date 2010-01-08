@@ -76,7 +76,7 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
     private List<String> info = new ArrayList<String>();
     
     // Location of Lookup Server
-    private String lookuphost;
+    private String lookuphost = null;
 
     private boolean internalCalculationEnded = false;
 
@@ -86,6 +86,7 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
      * @param pathfinder Intradomain pathfinder
      * @param internal Source of the abstract identifiers for internal devices 
      * @param mapping Mapping between edge ports real names and public names
+     * @param lookuphost URL of the lookup service
      */
 	public GenericTopologyConverter(IntradomainPathfinder pathfinder, 
 			InternalIdentifiersSource internal, PublicIdentifiersMapping mapping, String lookuphost) {
@@ -94,6 +95,21 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
 		this.idMappings = mapping;
 		this.lookuphost = lookuphost;
 	}
+	
+    /**
+     * Creates topology converter without Lookup Service.
+     * 
+     * @param pathfinder Intradomain pathfinder
+     * @param internal Source of the abstract identifiers for internal devices 
+     * @param mapping Mapping between edge ports real names and public names
+     */
+	public GenericTopologyConverter(IntradomainPathfinder pathfinder, 
+			InternalIdentifiersSource internal, PublicIdentifiersMapping mapping) {
+		this.pathFinder = pathfinder;
+		this.internalIds = internal;
+		this.idMappings = mapping;		
+	}
+	
 
 	/* (non-Javadoc)
 	 * @see net.geant2.jra3.intradomain.converter.TopologyConverter#abstractInternalPartOfTopology()
@@ -150,17 +166,19 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
     		if(glink.getEndInterface().isClientPort()) {
     		    
     		    // Register end port to LS
-    		    String friendlyName = glink.getEndInterface().getName();
-    		    String domain = glink.getEndInterface().getDomainId();
-    		    String portIdentifier = glink.getEndInterface().getDescription();
-    		    LookupService lookup = new LookupService(lookuphost);
-    		    try {
-                    lookup.RegisterEndPort(friendlyName, portIdentifier, domain);
-                } catch (LookupServiceException lse) {
-                    lse.printStackTrace();
-                    log.info("End port " + portIdentifier + " with friendly name " 
-                            + friendlyName + " could not be registered to LS");
-                }
+    			if (lookuphost != null) {
+	    			String friendlyName = glink.getEndInterface().getName();
+	    		    String domain = glink.getEndInterface().getDomainId();
+	    		    String portIdentifier = glink.getEndInterface().getDescription();
+	    		    LookupService lookup = new LookupService(lookuphost);
+	    		    try {
+	                    lookup.RegisterEndPort(friendlyName, portIdentifier, domain);
+	                } catch (LookupServiceException lse) {
+	                    lse.printStackTrace();
+	                    log.info("End port " + portIdentifier + " with friendly name " 
+	                            + friendlyName + " could not be registered to LS");
+	                }
+    			}
     			continue;
     		}
 			refreshInterdomainLink(glink);
@@ -285,23 +303,26 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
     
     private boolean refreshInterdomainLink(GenericLink gl) {
         
-        LookupService lookup = new LookupService(lookuphost);
     	String homeDomain = gl.getStartInterface().getDomainId();
 		String externalDomain = gl.getEndInterface().getDomainId();
 
         String sportname = gl.getStartInterface().getName();
         // Register the local (start) port of the interdomain link at the LS
-        try {
-            lookup.RegisterEdgePort(homeDomain, externalDomain, sportname);
-        } catch (LookupServiceException lse) {
-            log.error("Edge port to domain " + externalDomain + " could not be registered to LS");
-            lse.printStackTrace();
+        if (lookuphost != null) {
+            LookupService lookup = new LookupService(lookuphost);
+	        try {
+	            lookup.RegisterEdgePort(homeDomain, externalDomain, sportname);
+	        } catch (LookupServiceException lse) {
+	            log.error("Edge port to domain " + externalDomain + " could not be registered to LS");
+	            lse.printStackTrace();
+	        }
         }
-		
+        
         String dportname = gl.getEndInterface().getName();
         // If Database did not contain the remote (end) port of the 
         // interdomain link port name, try to query it from the LS
-        if (dportname == null) {
+        if (dportname == null && lookuphost != null) {
+            LookupService lookup = new LookupService(lookuphost);
             ArrayList<String> edgePortIds;
             try {
                 edgePortIds = lookup.QueryEdgePort(externalDomain);

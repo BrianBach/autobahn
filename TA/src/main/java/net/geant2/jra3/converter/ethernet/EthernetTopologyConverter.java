@@ -33,7 +33,7 @@ public class EthernetTopologyConverter extends GenericTopologyConverter {
 			InternalIdentifiersSource internal,	PublicIdentifiersMapping mapping, String lookuphost) {
 		super(pathfinder, internal, mapping, lookuphost);
 	}
-
+	
 	/**
 	 * Creates an instance.
 	 * 
@@ -41,6 +41,7 @@ public class EthernetTopologyConverter extends GenericTopologyConverter {
 	 * @param pathfinder Pathfinder instance
 	 * @param internal Internal identifiers source
 	 * @param mapping Public ports names mapping
+	 * @param lookuphost URL of lookup service
 	 */
 	public EthernetTopologyConverter(IntradomainTopology topology, IntradomainPathfinder pathfinder, 
 			InternalIdentifiersSource internal, PublicIdentifiersMapping mapping, String lookuphost) {
@@ -59,6 +60,31 @@ public class EthernetTopologyConverter extends GenericTopologyConverter {
 		nodes = topology.getNodes();
 	}
 
+	/**
+	 * Creates an instance.
+	 * 
+	 * @param topology Network topology
+	 * @param pathfinder Pathfinder instance
+	 * @param internal Internal identifiers source
+	 * @param mapping Public ports names mapping
+	 */
+	public EthernetTopologyConverter(IntradomainTopology topology, IntradomainPathfinder pathfinder, 
+			InternalIdentifiersSource internal, PublicIdentifiersMapping mapping) {
+		super(pathfinder, internal, mapping);
+		
+		sptrees = topology.getSpanningTrees();
+
+		genericLinks = new ArrayList<GenericLink>();
+
+		if(sptrees != null){
+			for(SpanningTree st: sptrees) {
+				genericLinks.add(st.getEthLink().getGenericLink());
+			}
+		}
+		
+		nodes = topology.getNodes();
+	}
+		
     /**
      * Injects the ethernet topology.
      * 
