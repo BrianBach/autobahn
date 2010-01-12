@@ -47,20 +47,24 @@ public class Dm2IdmClient implements Dm2Idm {
         } catch (IOException e) {
             log.info("Could not load app.properties: " + e.getMessage());
         }
-		String host = properties.getProperty("lookuphost");
         
-        LookupService lookup = new LookupService(host);
-        String idmLocation = null;
-        try {
-            // The IDM endpoint is the /interdomain interface. Here we need
-            // the /dm2idm interface, so we have to modify the connection URL
-            String interdomainEndpoint = endPoint.replaceFirst("/autobahn/dm2idm", "/autobahn/interdomain");
-        	idmLocation = lookup.QueryIdmLocation(interdomainEndpoint);
-        } catch (LookupServiceException e) {
-        	log.info("No query to the Lookup Service could be performed in order to locate IDM.");
-        	log.info(e.getMessage());
-        }
-        if(idmLocation != null && idmLocation != "") {
+		String host = properties.getProperty("lookuphost");
+		String idmLocation = null;
+		
+		if (host != null && host != "") {
+	        LookupService lookup = new LookupService(host);
+	        try {
+	            // The IDM endpoint is the /interdomain interface. Here we need
+	            // the /dm2idm interface, so we have to modify the connection URL
+	            String interdomainEndpoint = endPoint.replaceFirst("/autobahn/dm2idm", "/autobahn/interdomain");
+	        	idmLocation = lookup.QueryIdmLocation(interdomainEndpoint);
+	        } catch (LookupServiceException e) {
+	        	log.info("No query to the Lookup Service could be performed in order to locate IDM.");
+	        	log.info(e.getMessage());
+	        }
+		}
+		
+        if (idmLocation != null && idmLocation != "") {
             // It seems we have found the IDM location at the LS,
             // so use this location as the endPoint
             // First however change the /interdomain back to /dm2idm
