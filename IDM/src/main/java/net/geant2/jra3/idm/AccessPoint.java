@@ -85,7 +85,7 @@ public final class AccessPoint implements UserAccessPoint,
     private State state;
     private int logPosition;
     private Properties properties;
-    private String domain;
+    private String domainURL;
     private String domainName;
     private List<AdminDomain> neighbors;
     
@@ -163,7 +163,7 @@ public final class AccessPoint implements UserAccessPoint,
         
         long stime = System.currentTimeMillis();
         
-		domain = properties.getProperty("domain");
+		domainURL = properties.getProperty("domain");
 		domainName = properties.getProperty("domainName");
 
 		try {
@@ -182,13 +182,13 @@ public final class AccessPoint implements UserAccessPoint,
 	        pathFinder = new InterdomainPathfinderImpl(topology);
 	        
 	        // init neighbors
-	        AdminDomain admin = daos.getAdminDomainDAO().getByBodID(domain);
+	        AdminDomain admin = daos.getAdminDomainDAO().getByBodID(domainName);
 	        
 	        //Register to Lookup
 	        String host = properties.getProperty("lookuphost");
 	        LookupService lookup = new LookupService(host);
 	        try {
-                lookup.RegisterIdm(domainName, domain);
+                lookup.RegisterIdm(domainName, domainURL);
             } catch (LookupServiceException lse) {
                 log.info("IDM could not register itself to the LS");
                 lse.printStackTrace();
@@ -200,7 +200,7 @@ public final class AccessPoint implements UserAccessPoint,
 	        
 	        // init reservation modules
 	        serviceScheduler = new ServiceScheduler();
-	        reservationProcessor = new ReservationProcessor(domain, domainManager);
+	        reservationProcessor = new ReservationProcessor(domainName, domainManager);
 	        
 	        // init startup notifier
 	        String startupNotifyAddress = properties.getProperty("startup.notify");
@@ -226,7 +226,7 @@ public final class AccessPoint implements UserAccessPoint,
 
 	        // call DM to abstract topology
 	        try {
-	        	domainManager.prepareTopology(domain.replace("interdomain", "dm2idm"));
+	        	domainManager.prepareTopology(domainURL.replace("interdomain", "dm2idm"));
 	        } catch(Exception e) {
 	        	log.error("Cannot connect to dm... IDM will not be able to process requests properly.");
 	        }
@@ -295,7 +295,7 @@ public final class AccessPoint implements UserAccessPoint,
 	}
 	
 	public String getLocalDomain() {
-		return domain;
+		return domainName;
 	}
 	
 	public String getProperty(String name) {
@@ -334,7 +334,7 @@ public final class AccessPoint implements UserAccessPoint,
 	 * @see net.geant2.jra3.useraccesspoint.UserAccessPoint#getDomainClientPorts()
 	 */
 	public String[] getDomainClientPorts() {
-		List<Port> cports = daos.getPortDAO().getDomainClientPorts(domain);
+		List<Port> cports = daos.getPortDAO().getDomainClientPorts(domainName);
 		String[] cp = new String[cports.size()];
 		for (int i=0; i < cp.length; i++) 
 			cp[i] = cports.get(i).getBodID();
@@ -660,7 +660,7 @@ public final class AccessPoint implements UserAccessPoint,
 		
 		if(links == null || links.size() < 1) {
 	        if(startupNotifier != null)
-	        	startupNotifier.domainUp(this.domain);
+	        	startupNotifier.domainUp(this.domainURL);
 
 			return;
 		}
@@ -704,7 +704,7 @@ public final class AccessPoint implements UserAccessPoint,
         }
         
         if(startupNotifier != null)
-        	startupNotifier.domainUp(this.domain);
+        	startupNotifier.domainUp(this.domainURL);
         // Now when DM is ready we can recover reservations
         //recoverReservations();
 	}
@@ -896,10 +896,10 @@ public final class AccessPoint implements UserAccessPoint,
 			n.setDomain(neighbors.get(i).getBodID());
 
 			for (Link l : links) {
-				if (l.getStartDomainID().equals(domain) &&
+				if (l.getStartDomainID().equals(domainName) &&
 					l.getEndDomainID().equals(n.getDomain()) ||
 					l.getStartDomainID().equals(n.getDomain()) &&
-					l.getEndDomainID().equals(domain)) {
+					l.getEndDomainID().equals(domainName)) {
 					n.setLink(l);
 				}
 			}
@@ -907,7 +907,7 @@ public final class AccessPoint implements UserAccessPoint,
 		}
 		
 		Status st = new Status();
-		st.setDomain(domain);
+		st.setDomain(domainName);
 		st.setLongitude(lon);
 		st.setLatitude(lat);
 		st.setNeighbors(nbors);

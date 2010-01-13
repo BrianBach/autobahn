@@ -164,21 +164,6 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
 		for(GenericLink glink : eLinks) {
 			// Skip client devices
     		if(glink.getEndInterface().isClientPort()) {
-    		    
-    		    // Register end port to LS
-    			if (lookuphost != null) {
-	    			String friendlyName = glink.getEndInterface().getName();
-	    		    String domain = glink.getEndInterface().getDomainId();
-	    		    String portIdentifier = glink.getEndInterface().getDescription();
-	    		    LookupService lookup = new LookupService(lookuphost);
-	    		    try {
-	                    lookup.RegisterEndPort(friendlyName, portIdentifier, domain);
-	                } catch (LookupServiceException lse) {
-	                    lse.printStackTrace();
-	                    log.info("End port " + portIdentifier + " with friendly name " 
-	                            + friendlyName + " could not be registered to LS");
-	                }
-    			}
     			continue;
     		}
 			refreshInterdomainLink(glink);
@@ -311,7 +296,17 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
         if (lookuphost != null) {
             LookupService lookup = new LookupService(lookuphost);
 	        try {
-	            lookup.RegisterEdgePort(homeDomain, externalDomain, sportname);
+	    		String sportPublicName = idMappings.getIdentifierFor(sportname);
+	    		if (sportPublicName == null) {
+	    			// No mapping to a public name for this port exists, so 
+	    			// we just register the internal port name
+	    			log.debug("Registering internal port name to lookup: " + sportname);
+		            lookup.RegisterEdgePort(homeDomain, externalDomain, sportname);
+	    		} else {
+	    			// Register the public name corresponding to the edge port
+	    			log.debug("Registering public port name to lookup: " + sportPublicName);
+		            lookup.RegisterEdgePort(homeDomain, externalDomain, sportPublicName);
+	    		}
 	        } catch (LookupServiceException lse) {
 	            log.error("Edge port to domain " + externalDomain + " could not be registered to LS");
 	            lse.printStackTrace();
@@ -325,7 +320,7 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
             LookupService lookup = new LookupService(lookuphost);
             ArrayList<String> edgePortIds;
             try {
-                edgePortIds = lookup.QueryEdgePort(externalDomain);
+                edgePortIds = lookup.QueryEdgePort(externalDomain, homeDomain);
             } catch (LookupServiceException e) {
                 // Can't get identifier for remote edge port (LS is not working)
                 log.info("Add to waiting remote edge port of link: " + gl);
@@ -416,6 +411,20 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
             	Port eport = new Port(bodID, bodID, "Ethernet", false, absNodes.get(dnode));
             	
         		info.add("Mapping client port " + dname + "\t to " + bodID);
+    		    
+    		    // Register end port to LS
+    			if (lookuphost != null) {
+	    		    String domain = glink.getEndInterface().getDomainId();
+	    		    String friendlyName = glink.getEndInterface().getDescription();
+	    		    LookupService lookup = new LookupService(lookuphost);
+	    		    try {
+	                    lookup.RegisterEndPort(friendlyName, bodID, domain);
+	                } catch (LookupServiceException lse) {
+	                    lse.printStackTrace();
+	                    log.info("End port " + bodID + " with friendly name " 
+	                            + friendlyName + " could not be registered to LS");
+	                }
+    			}
 
         		// Link
             	Link l = Link.createInterDomainLink(sport, eport, glink.getCapacity());
@@ -519,7 +528,7 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
 			log.warn("WAITING FOR CALCULATION ... GO !");
 		}
 		
-		String sport = idMappings.getIdentifierFor(portName);
+		String sport = idMappings.getIdentifierFor((portName==null) ? null : portName.trim());
 		
 		Link l = tmpLinks.get(sport);
 		

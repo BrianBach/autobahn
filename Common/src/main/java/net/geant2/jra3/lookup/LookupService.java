@@ -159,6 +159,8 @@ public class LookupService {
     /**
      * 
      * Registration of IDM location to domain name association
+     * If the same domain has already registered an IDM, the record is
+     * updated.
      * 
      * @param eventType - type of record
      * @param domain - domain name
@@ -168,6 +170,16 @@ public class LookupService {
      */
     public void RegisterIdm(String domain, String URL)
             throws LookupServiceException {
+    	
+    	if (domain == null || URL == null) {
+    		throw new LookupServiceException("Registration of null IDM record not allowed");
+    	}
+    	
+    	if (QueryIdmLocation(domain) != null) {
+    		// The IDM for the same domain has already been registered
+    		this.RemoveIdm(domain);
+    	}
+    	
         Date today = new Date();
         Timestamp ts = new Timestamp(today.getTime());
         
@@ -182,8 +194,8 @@ public class LookupService {
         String xmlMetadataModule = "</lookup:timestamp><lookup:module>";
 
         //XML query to sent to the lookup service
-        this.xmlToBeSent = this.xmlPrefixRegisterIdm + seckey + this.xmlSecfixRegisterIdm + domain.toString() 
-                + xmlMetadataURL + URL.toString() + xmlMetadataEventType + TYPE2 + xmlMetadataTimestamp 
+        this.xmlToBeSent = this.xmlPrefixRegisterIdm + seckey + this.xmlSecfixRegisterIdm + domain 
+                + xmlMetadataURL + URL + xmlMetadataEventType + TYPE2 + xmlMetadataTimestamp 
                 + ts + xmlMetadataModule + "IDM" + this.xmlSuffixRegisterIdm;
         invokeLS(xmlToBeSent);
     }
@@ -202,6 +214,12 @@ public class LookupService {
     public void RegisterEndPort(String friendlyName, String portIdentifier, String domain)
             throws LookupServiceException {
         
+/*    	if (this.QueryFriendlyName(portIdentifier) !=null) {
+    		// The same port has already been registered
+    		// TODO: Implement and call remove
+    		//RemoveEndPort(portIdentifier);
+    	}*/
+
         // This is an auto generated primary key for the LS
         String firstkey = "http://reed.man.poznan.pl:8085/axis/services/PORT ";
         // Generate key with timestamp
@@ -212,7 +230,9 @@ public class LookupService {
         String xmlMetadataDomain = "</lookup:eventType><lookup:domain>"; 
         
         // XML query to sent to the lookup service
-        this.xmlToBeSent = this.xmlPrefixRegisterPort + seckey + this.xmlSecfixRegisterPort + portIdentifier + xmlMetadataFriendlyName + friendlyName.toString() + xmlMetadataEventType + TYPE1 + xmlMetadataDomain + domain + this.xmlSuffixRegisterPort;
+        this.xmlToBeSent = this.xmlPrefixRegisterPort + seckey + this.xmlSecfixRegisterPort + portIdentifier 
+        	+ xmlMetadataFriendlyName + friendlyName + xmlMetadataEventType + TYPE1 + xmlMetadataDomain
+        	+ domain + this.xmlSuffixRegisterPort;
         invokeLS(xmlToBeSent);
     }
     
@@ -220,7 +240,6 @@ public class LookupService {
      * 
      * Registration of edge port identifier of interdomain link
      * 
-     * @param eventType - type of record
      * @param startDomain - starting domain of the port
      * @param endDomain - end domain of the interdomain link
      * @param edgeport - public edge port identifier
@@ -229,7 +248,12 @@ public class LookupService {
     public void RegisterEdgePort(String startDomain, String endDomain,String edgeport)
             throws LookupServiceException {
         
-        // This is an auto generated primary key for the LS
+    	if (QueryEdgePortForDuplication(startDomain, endDomain, edgeport) != null) {
+    		// The same port has already been registered
+    		RemoveEdgePort(startDomain, endDomain, edgeport);
+    	}
+
+    	// This is an auto generated primary key for the LS
         String firstkey = "http://reed.man.poznan.pl:8085/axis/services/EdgePORT ";
         // Generate key with timestamp
         String seckey = GenerateKey(firstkey);
@@ -279,16 +303,40 @@ public class LookupService {
             log.info("There is no domain with the particular name to delete");
         }
         // XML query to sent to the lookup service
-        this.xmlToBeSent = this.xmlPrefixRemoveIdm + key.toString() + this.xmlSuffixRemoveIdm;
+        this.xmlToBeSent = this.xmlPrefixRemoveIdm + key + this.xmlSuffixRemoveIdm;
         invokeLS(xmlToBeSent);
     }
     
+    /**
+     * 
+     * Removal of edge port
+     * 
+     * @param startDomain - starting domain of the port
+     * @param endDomain - end domain of the interdomain link
+     * @param edgeport - public edge port identifier
+     * @throws LookupServiceException
+     */
+    public void RemoveEdgePort(String startDomain, String endDomain, String edgeport) 
+    		throws LookupServiceException {
+        String key = "";
+        try {
+            // use domain name to get the primary key according to the Exist database
+            key = this.findPortKey(startDomain, endDomain, edgeport);
+        } catch (NullPointerException e){
+            log.info("There is no port with the particular name to delete");
+        }
+        // XML query to sent to the lookup service
+        this.xmlToBeSent = this.xmlPrefixRemoveIdm + key + this.xmlSuffixRemoveIdm;
+        invokeLS(xmlToBeSent);
+    }
+
     /**
      * 
      * Query for location of IDM module
      * 
      * @param domain - domain name
      * @throws LookupServiceException
+     * @return URL of IDM location, null if not found
      */
     public String QueryIdmLocation(String domain)
     		throws LookupServiceException{
@@ -323,7 +371,7 @@ public class LookupService {
         		Element line = (Element) name.item(0);
         		
         		int nodesLength = nodes.getLength();
-                if(nodesLength != 0){
+                if (nodesLength != 0){
                 	fname = getCharacterDataFromElement(line);
                 	return fname;
                 }	
@@ -345,7 +393,7 @@ public class LookupService {
      * 
      * Query friendly name of end port
      * 
-     * @param endPoint - 
+     * @param endPoint - The identifier of the port
      * @throws LookupServiceException
      */
     public String QueryFriendlyName(String endPoint)
@@ -440,7 +488,9 @@ public class LookupService {
                 if(nodesLength != 0) {
                 	fname = getCharacterDataFromElement(line);
                 }
-                friendlynames.add(fname); 
+                if (fname != null) {
+	                friendlynames.add(fname); 
+	            }
             }
             if (nodes.getLength() != 0) {
             	return friendlynames;
@@ -462,16 +512,18 @@ public class LookupService {
      * 
      * Query for edge port identifier of interdomain link
      * 
-     * @param endDomain - domain connected to another domain
+     * @param startDomain - this is the external domain that registered this link
+     * @param endDomain - this is our local domain
      * @throws LookupServiceException
      */
-    public ArrayList<String> QueryEdgePort(String endDomain)
+    public ArrayList<String> QueryEdgePort(String startDomain, String endDomain)
     		throws LookupServiceException {
     	String xmlMetaFirstDataQuery = " declare namespace nmwg=\"http://ggf.org/ns/nmwg/base/2.0/\"; declare namespace perfsonar=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/1.0/\"; declare namespace psservice=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/1.0/\"; " +
     	  							   " declare namespace  xquery=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/lookup/xquery/1.0/\"; declare namespace nmwgt=\"http://ggf.org/ns/nmwg/topology/2.0/\"; declare namespace lookup=\"ru6.cti.gr\";" +
-    	  							   " for $m in  /nmwg:store/nmwg:data/nmwg:metadata/perfsonar:subject  let $accessPoint := $m/nmwgt:interface/lookup:port where  $m/nmwgt:interface/lookup:endDomain = \"";
+    	  							   " for $m in  /nmwg:store/nmwg:data/nmwg:metadata/perfsonar:subject  let $accessPoint := $m/nmwgt:interface/lookup:port where  $m/nmwgt:interface/lookup:startDomain = \"";
+    	String xmlMiddleQuery = "\" and $m/nmwgt:interface/lookup:endDomain = \"";
     	String xmlMetaSuffixQuery = "\" return $accessPoint";
-    	String xmlMetaDataQuery = xmlMetaFirstDataQuery + endDomain + xmlMetaSuffixQuery;
+    	String xmlMetaDataQuery = xmlMetaFirstDataQuery + startDomain + xmlMiddleQuery + endDomain + xmlMetaSuffixQuery;
     	// XML query to sent to the lookup service
     	this.xmlToBeSent = this.xmlPrefixQuery + xmlMetaDataQuery + this.xmlSuffixQuery;
     	String testing = "";
@@ -497,10 +549,12 @@ public class LookupService {
     			Element line = (Element) name.item(0);
     			
     			int nodesLength = nodes.getLength();
-                if(nodesLength != 0) {
+                if (nodesLength != 0) {
                 	fname = getCharacterDataFromElement(line);
                 }
-    			edgeports.add(fname); 
+                if (fname != null) {
+                	edgeports.add(fname);
+                }
     		}
     		if (nodes.getLength() != 0) {
             	return edgeports;
@@ -518,6 +572,60 @@ public class LookupService {
     	return null;
     }
     
+    private String QueryEdgePortForDuplication(String startDomain, String endDomain,String edgeport)
+			throws LookupServiceException {
+    	
+    	String xmlMetaFirstDataQuery = " declare namespace nmwg=\"http://ggf.org/ns/nmwg/base/2.0/\"; declare namespace perfsonar=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/1.0/\"; declare namespace psservice=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/1.0/\"; " +
+		   							   " declare namespace  xquery=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/lookup/xquery/1.0/\"; declare namespace nmwgt=\"http://ggf.org/ns/nmwg/topology/2.0/\"; declare namespace lookup=\"ru6.cti.gr\";" +
+		   							   " for $m in  /nmwg:store/nmwg:data/nmwg:metadata/perfsonar:subject  let $accessPoint := $m/nmwgt:interface/lookup:port where  $m/nmwgt:interface/lookup:startDomain = \"";
+    	String xmlMiddleQuery = "\" and $m/nmwgt:interface/lookup:endDomain = \"";
+    	String xmlMiddleSecondQuery = "\" and $m/nmwgt:interface/lookup:port = \"";
+    	String xmlMetaSuffixQuery = "\" return $accessPoint";
+    	String xmlMetaDataQuery = xmlMetaFirstDataQuery + startDomain + xmlMiddleQuery + endDomain + xmlMiddleSecondQuery + edgeport + xmlMetaSuffixQuery;
+    	// XML query to sent to the lookup service
+    	this.xmlToBeSent = this.xmlPrefixQuery + xmlMetaDataQuery + this.xmlSuffixQuery;
+    	String testing = "";
+   		testing = invokeLS(xmlToBeSent);
+   		
+   		String fname = "";
+   		
+   		try {
+    		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    		DocumentBuilder db = dbf.newDocumentBuilder();
+    		InputSource is = new InputSource();
+    		is.setCharacterStream(new StringReader(testing));
+    		
+    		//Parsing the response of the lookup service
+    		Document doc = db.parse(is);
+    		//Getting data from child nodes of "psservice:datum"
+    		NodeList nodes = doc.getElementsByTagName("psservice:datum");
+    		for (int i = 0; i < nodes.getLength(); i++) {
+    			Element element = (Element) nodes.item(i);
+    			
+    			NodeList name = element.getElementsByTagName("lookup:port");
+    			Element line = (Element) name.item(0);
+    			
+    			int nodesLength = nodes.getLength();
+                if(nodesLength != 0) {
+                	fname = getCharacterDataFromElement(line);
+                }
+                if (fname != null) {
+                	return fname;
+                } 
+    		}
+	 	} catch (ParserConfigurationException e) {
+            e.printStackTrace();
+            throw new LookupServiceException(e.getMessage());
+        } catch (SAXException e) {
+        	e.printStackTrace();
+        	throw new LookupServiceException(e.getMessage());
+        } catch (IOException e) {
+        	e.printStackTrace();
+        	throw new LookupServiceException(e.getMessage());
+        }
+    	return null;
+    }
+
     /**
      * 
      * Query for edge port identifier of interdomain link
@@ -560,7 +668,9 @@ public class LookupService {
                 if (nodesLength != 0) {
                 	fname = getCharacterDataFromElement(line);
                 }
-    			edgeports.add(fname); 
+                if (fname != null) {
+                    edgeports.add(fname); 
+    			}
     		}
     		if (nodes.getLength() != 0) {
             	return edgeports;
@@ -599,7 +709,7 @@ public class LookupService {
     private String GenerateKey(String key){
     	Date today = new Date();
     	Timestamp ts = new Timestamp(today.getTime());
-    	String finalkey = key.toString() + ts.toString();
+    	String finalkey = key + ts.toString();
     
     	return finalkey;
     }
@@ -625,7 +735,7 @@ public class LookupService {
     /**
      * 
      * @param domain
-     * @return domain key record in the database
+     * @return domain key record in the database, or null if not found
      */
     public String findDomainkey(String domain) 
     		throws LookupServiceException {
@@ -640,7 +750,6 @@ public class LookupService {
     	// XML query to sent to the lookup service
     	String toSent = xmlStart + domain + xmlEnd;
     	String testing = "";
-    	
    		testing = invokeLS(toSent);
     	
     	try {
@@ -681,5 +790,59 @@ public class LookupService {
     
     	return null;
     }
+    
+    public String findPortKey(String startDomain, String endDomain, String edgeport) 
+            throws LookupServiceException {
+        String xmlStart = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"><soapenv:Header/><soapenv:Body><nmwg:message type=\"LSQueryRequest\" id=\"msg1\" xmlns:nmwg=\"http://ggf.org/ns/nmwg/base/2.0/\" xmlns:xquery=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/lookup/xquery/1.0/\">" +
+                    	  "<nmwg:metadata id=\"meta1\"><xquery:subject id=\"sub1\">declare namespace nmwg=\"http://ggf.org/ns/nmwg/base/2.0/\"; declare namespace perfsonar=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/1.0/\"; declare namespace psservice=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/1.0/\"; declare namespace xquery=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/lookup/xquery/1.0/\";" +
+                    	  " declare namespace nmwgt=\"http://ggf.org/ns/nmwg/topology/2.0/\"; declare namespace lookup=\"ru6.cti.gr\"; for $m in /nmwg:store/nmwg:metadata let $a := for $j in /nmwg:store/nmwg:data let $n := $j/nmwg:metadata/perfsonar:subject where $n/nmwgt:interface/lookup:port = \"";
+        String xmlEnd = "\" return  data($j/@metadataIdRef) where $m/@id = $a return $m/perfsonar:subject/psservice:service/psservice:accessPoint " +
+                        " </xquery:subject><nmwg:eventType>service.lookup.xquery</nmwg:eventType></nmwg:metadata><nmwg:data id=\"data1\" metadataIdRef=\"meta1\" /></nmwg:message></soapenv:Body></soapenv:Envelope>";
+        String response = "";
+        // XML query to sent to the lookup service
+        String toSent = xmlStart + edgeport + xmlEnd;
+        //String toSent = xmlStart + startDomain + xmlMiddleQuery + endDomain + xmlMiddleSecondQuery + edgeport + xmlEnd;
+        String testing = "";
 
+        testing = invokeLS(toSent);
+        
+        try {
+            DocumentBuilderFactory dbf =
+                DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            InputSource is = new InputSource();
+            is.setCharacterStream(new StringReader(testing));
+            
+            // Parsing the response of the lookup service
+            Document doc = db.parse(is);
+            // Getting data from child nodes of "psservice:datum"
+            NodeList nodes = doc.getElementsByTagName("psservice:datum");
+              
+            for (int i = 0; i < nodes.getLength(); i++) {
+                Element element = (Element) nodes.item(i);
+                
+                NodeList name = element.getElementsByTagName("psservice:accessPoint");
+                
+                Element line = (Element) name.item(0);
+                int nodesLength = nodes.getLength();
+                if (nodesLength != 0) {
+                    response = getCharacterDataFromElement(line);
+                    return response;
+                }
+    	    }
+
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+            throw new LookupServiceException(e.getMessage());
+        } catch (SAXException e) {
+            e.printStackTrace();
+            throw new LookupServiceException(e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new LookupServiceException(e.getMessage());
+        }
+        
+        return null;
+    }
+    
 }
