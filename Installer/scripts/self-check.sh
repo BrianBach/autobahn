@@ -76,6 +76,8 @@ function perform_checks {
 
 	if test ! -x "$java"; then
 	   pushlog "$SCRIPT:$LINENO: Sun Java 1.5+ is not available. Self-check failed. Please install Sun Java 1.5 or higher and retry! \n" >&2
+	   popecholog
+	   finalize
 	   exit 192
 	else
 		ver=`"$java" -version &> javaver.txt && cat javaver.txt | grep version | awk -F "\"" '{print $2}'`
@@ -89,12 +91,16 @@ function perform_checks {
 
 	if test ! -x "$psql"; then
    		pushlog "$SCRIPT:$LINENO: PostgresSQL not found! Please install PostgreSQL 8.x or higher and retry!\n" >&2
+	popecholog
+	finalize
    	exit 192
 	fi
 
 
 	if test ! -x "$quagga_zebra" -a ! -x "$debian_quagga"; then
    		pushlog "$SCRIPT:$LINENO: Quagga routing package is not available. Please install Quagga 0.99.6 and retry!\n" >&2
+		popecholog
+		finalize
 	        exit 192
 	elif test -x "$quagga_zebra"; then
 	   	quagga=`dirname "$quagga_zebra"`
@@ -244,7 +250,7 @@ function read_db_info_from_dm {
 			  ;;
 			  db.name ) DBNAME=$curval; DBNAME=$curval
 		          ;;
-			  db.user ) DBUSER=$curval
+			  db.user ) DBUSER=$curval; DBUSER=$curval
 			  ;;
 			  db.pass ) DBPASS=$curval; DBPASS=$curval
 		   	  ;;
@@ -363,7 +369,7 @@ function get_dm_defaults {
 			  ;;
 			  db.name ) db_name=$curval; DBNAME=$curval
 		          ;;
-			  db.user ) db_user=$curval
+			  db.user ) db_user=$curval; DBUSER=$curval
 			  ;;
 			  db.pass ) db_pass=$curval; DBPASS=$curval
 		   	  ;;
@@ -700,15 +706,20 @@ function init_db {
 	  pushlocalinfo
 	  newlogparagraph "init_db"
 	  export dbname="$1"
+echo "Exported dbname=$dbname"
           export PGPASSWORD="$2"
-          cmd="psql template1  -c \"create database $dbname\" -t > /dev/null 2>&1"
+          export dbuser="$3"
+echo "Exported dbuser $dbuser"
+          sudo -u postgres createuser --superuser $dbuser
+          cmd="sudo -u postgres psql template1  -c \"create database $dbname\" -t > /dev/null 2>&1"
+     echo "Create dbuser performed."
           eval $cmd
           if [ $? -ne 0 ]; then
 	        echo "Database $dbname already existed."
 	  else
                 echo "Database $dbname was created."
 		echo "Proceeding to create the db structure..."
-		psql $dbname < $path_only/create_db.sql
+		sudo -u postgres psql $dbname < $path_only/create_db.sql
 		if [ $? -ne 0 ]; then
 			echo "An error occured while creating the  database structure! Please make sure that the user running this program has the permissions to modify $dbname and try again or run manually create_db.sql!"
 		fi
@@ -840,7 +851,9 @@ if [ "$enterui" == yes ]; then
 		simple_ui
 	fi
 	read_db_info_from_dm $autobahn_folder/etc/dm.properties
-	init_db $DBNAME $DBPASS
+	init_db $DBNAME $DBPASS $DBUSER
+        echo $DBNAME > tempdbname.tmp
+        echo $DBUSER > tempdbuser.tmp
 	init_ospfd
 fi
 

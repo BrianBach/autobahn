@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 #This script marks the link name of a configuration file as i if the corresponding tunnel has been installed
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 #This script takes as user input remote and local public IPs,
 ((i=1))

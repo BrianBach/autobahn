@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 ## PREREQUISITES
 # $DIALOG command (in debian based: apt-get install $DIALOG)
@@ -16,10 +16,11 @@ current_ip=0.0.0.0
 abspath=$(cd ${0%/*} && echo $PWD/${0##*/})
 
 # to get the path only - not the script name - add
-path_only=`dirname "$abspath"`
+export path_only=`dirname "$abspath"`
 
 source $path_only/log.sh
 
+echolog "path_only:$path_only"
 #Manages installation of tunnels
 function install_tunnels {
 	pushlocalinfo
@@ -121,8 +122,13 @@ function setup_database {
 			  extension=${filename##*.}
 			if [ $extension = "sql" ]; then
 				val_sql=1
-				psql autobahn_2 < $FILE
-				log "psql autobahn_2 < $FILE returned $?"
+                                dbname=`cat $path_only/tempdbname.tmp`
+				echolog "dbname:$dbname path_only:$path_only"
+                                rm -f tempdbname.tmp
+                                dbuser=`cat $path_only/tempdbuser.tmp`
+                                rm -f tempdbuser.tmp
+				psql $dbname -U $dbuser < $FILE
+				log "psql $path_only/$dbname -U $dbuser < $FILE returned $?"
 			fi
 				  ;;
 			255) val_sql=1;;
@@ -446,9 +452,15 @@ function setup_database_c {
 			0)filename=${FILE##*/}
 			  extension=${filename##*.}
 			if [ $extension = "sql" ]; then
+				dbname=`cat $path_only/tempdbname.tmp`
+				echolog "dbname:$dbname path_only:$path_only"
+                                rm -f tempdbname.tmp
+                                dbuser=`cat $path_only/tempdbuser.tmp`
+                                rm -f tempdbuser.tmp
+
 				val_sql=1
-				psql autobahn_2 < $FILE
-				log "I ran psql autobahn_2 < $FILE, if unsuccessful either psql doesn't exist or the user doesn't have the appropriate permissions"
+                psql $dbname -U $dbuser < $FILE
+				log "I ran psql $dbname -U $dbuser < $FILE, if unsuccessful either psql doesn't exist or the user doesn't have the appropriate permissions"
 			fi
 				  ;;
 		esac	
@@ -541,7 +553,7 @@ function install_tunnels_c {
 function simple_ui {
 #	echo "In simple_ui ENTER_IP = $ENTER_IP"
 	clear
-	printf "Select sql file to setup database[y/n]:"
+	printf "Do you want to select sql file to setup database[y/n]:"
 	read answer
 	while true; do
 		case "$answer" in
@@ -550,7 +562,8 @@ function simple_ui {
 		       break;;
 		  n|N) #echo "drop it";
 		       break;;
-		    *) echo "Please enter y or n";;
+		    *) echo "Please enter y or n"
+                       read answer;;
 		 esac
         done
 	print_step "1" "Adding tunnels"
@@ -563,7 +576,8 @@ function simple_ui {
 		       ;;
 		  n|N) echo "Tunnel addition terminated.";
 		       break;;
-		    *) echo "Please enter y or n";;
+		    *) echo "Please enter y or n"
+                       read answer;;
 		 esac
         done
 
