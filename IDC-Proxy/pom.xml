@@ -4,13 +4,13 @@
 	<parent>
 		<artifactId>autobahn</artifactId>
 		<groupId>net.geant.autobahn</groupId>
-		<version>0.1.0-SNAPSHOT</version>
+		<version>0.1.0</version>
 	</parent>
 	
 	<modelVersion>4.0.0</modelVersion>
     <groupId>net.geant.autobahn</groupId>
     <artifactId>autobahn-proxy</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.0</version>
     <name>IDC Proxy module</name>
     <packaging>jar</packaging>
 
@@ -82,13 +82,13 @@
 							<configuration>
 								<tasks>
 									<java classname="org.apache.cxf.tools.wsdlto.WSDLToJava" fork="true">
-										<arg value="-server"/>
-										<arg value="-impl"/>
-										<arg value="-quiet"/>
-										<arg line="-d src/main/java"/>
-										<arg value="./src/main/resources/wsdl/proxy.wsdl"/>
+										<arg value="-server" />
+										<arg value="-impl" />
+										<arg value="-quiet" />
+										<arg line="-d src/main/java" />
+										<arg value="./src/main/resources/wsdl/proxy.wsdl" />
 										<classpath>
-											<path refid="maven.compile.classpath"/>
+											<path refid="maven.compile.classpath" />
 										</classpath>
 									</java>
 								</tasks>
@@ -115,19 +115,19 @@
 							<configuration>
 								<tasks>
 									<java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true" classpathref="maven.compile.classpath">
-										<arg line="-uri ./src/main/resources/wsdl/oscars.wsdl"/>
-										<arg line="-d adb"/>
-										<arg line="-o ./target/tmp/oscar"/>
-										<arg line="-s -ss -g"/>
-										<arg line="-p net.geant2.jra3.oscars"/>
-										<arg value="-or"/>
-										<arg value="--noBuildXML"/>
-										<arg value="--noWSDL"/>
+										<arg line="-uri ./src/main/resources/wsdl/oscars.wsdl" />
+										<arg line="-d adb" />
+										<arg line="-o ./target/tmp/oscar" />
+										<arg line="-s -ss -g" />
+										<arg line="-p net.geant2.jra3.oscars" />
+										<arg value="-or" />
+										<arg value="--noBuildXML" />
+										<arg value="--noWSDL" />
 									</java>
 									<copy todir="./src/main/java">
-										<fileset dir="./target/tmp/oscar/src"/>
+										<fileset dir="./target/tmp/oscar/src" />
 									</copy>
-									<delete dir="./target/tmp"/>
+									<delete dir="./target/tmp" />
 								</tasks>
 							</configuration>
 							<goals>
@@ -152,19 +152,19 @@
 							<configuration>
 								<tasks>
 									<java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true" classpathref="maven.compile.classpath">
-										<arg line="-uri ./src/main/resources/wsdl/oscars-notify.wsdl"/>
-										<arg line="-d adb"/>
-										<arg line="-o ./target/tmp/oscar-notify"/>
-										<arg line="-s -ss -g"/>
-										<arg line="-p net.geant2.jra3.oscars.notify"/>
-										<arg value="-or"/>
-										<arg value="--noBuildXML"/>
-										<arg value="--noWSDL"/>
+										<arg line="-uri ./src/main/resources/wsdl/oscars-notify.wsdl" />
+										<arg line="-d adb" />
+										<arg line="-o ./target/tmp/oscar-notify" />
+										<arg line="-s -ss -g" />
+										<arg line="-p net.geant2.jra3.oscars.notify" />
+										<arg value="-or" />
+										<arg value="--noBuildXML" />
+										<arg value="--noWSDL" />
 									</java>
 									<copy todir="./src/main/java">
-										<fileset dir="./target/tmp/oscar-notify/src"/>
+										<fileset dir="./target/tmp/oscar-notify/src" />
 									</copy>
-									<delete dir="./target/tmp"/>
+									<delete dir="./target/tmp" />
 								</tasks>
 							</configuration>
 							<goals>
@@ -188,20 +188,20 @@
 								<phase>compile</phase>
 							<configuration>
 								<tasks>
-									<mkdir dir="./target/aar"/>
-									<mkdir dir="./target/tmp"/>
+									<mkdir dir="./target/aar" />
+									<mkdir dir="./target/tmp" />
 									<copy todir="./target/tmp/META-INF">
-										<fileset dir="./src/main/resources/resourcesOSCARS"/>
+										<fileset dir="./src/main/resources/resourcesOSCARS" />
 									</copy>
-									<jar basedir="./target/tmp" destfile="./src/main/webapp/WEB-INF/services/Oscars.aar"/>
-									<delete dir="./target/tmp/META-INF"/>
+									<jar basedir="./target/tmp" destfile="./src/main/webapp/WEB-INF/services/Oscars.aar" />
+									<delete dir="./target/tmp/META-INF" />
 									
-									<mkdir dir="./target/tmp/META-INF"/>
+									<mkdir dir="./target/tmp/META-INF" />
 									<copy todir="./target/tmp/META-INF">
-										<fileset dir="./src/main/resources/resourcesOSCARSNotify"/>
+										<fileset dir="./src/main/resources/resourcesOSCARSNotify" />
 									</copy>
-									<jar basedir="./target/tmp" destfile="./src/main/webapp/WEB-INF/services/OscarsNotify.aar"/>		
-									<delete dir="./target/tmp"/>
+									<jar basedir="./target/tmp" destfile="./src/main/webapp/WEB-INF/services/OscarsNotify.aar" />		
+									<delete dir="./target/tmp" />
 								</tasks>
 							</configuration>
 							<goals>
@@ -219,7 +219,7 @@
 		<dependency>
 			<groupId>net.geant.autobahn</groupId>
 			<artifactId>autobahn-common</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
+			<version>0.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>net.geant.autobahn</groupId>
@@ -658,19 +658,19 @@
 			<version>1.1</version>
 		</dependency>	
 		<dependency>
-			<groupId>net.geant.autobahn</groupId>
+			<groupId>org.apache.rampart</groupId>
 			<artifactId>rampart-core</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>1.2</version>
 		</dependency>			
 		<dependency>
-			<groupId>net.geant.autobahn</groupId>
+			<groupId>org.apache.rampart</groupId>
 			<artifactId>rampart-policy</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>1.2</version>
 		</dependency>			
 		<dependency>
-			<groupId>net.geant.autobahn</groupId>
+			<groupId>org.apache.rampart</groupId>
 			<artifactId>rampart-trust</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>net.geant.autobahn</groupId>
@@ -756,11 +756,6 @@
 			<groupId>net.geant.autobahn</groupId>
 			<artifactId>wss4j</artifactId>
 			<version>1.5.4</version>
-		</dependency>		
-		<dependency>
-			<groupId>net.geant.autobahn</groupId>
-			<artifactId>wss4j</artifactId>
-			<version>1.5-SNAPSHOT</version>
 		</dependency>			
 		<dependency>
 			<groupId>net.geant.autobahn</groupId>
