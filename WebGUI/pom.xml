@@ -4,13 +4,13 @@
 	<parent>
 		<artifactId>autobahn</artifactId>
 		<groupId>net.geant.autobahn</groupId>
-		<version>0.2.0-SNAPSHOT</version>
+		<version>0.1.0</version>
 	</parent>
 	
 	<modelVersion>4.0.0</modelVersion>
     <groupId>net.geant.autobahn</groupId>
     <artifactId>autobahn-webgui</artifactId>
-    <version>0.2.0-SNAPSHOT</version>
+    <version>0.1.0</version>
     <name>Web GUI</name>
     <packaging>jar</packaging>	
 	
