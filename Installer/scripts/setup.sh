@@ -82,6 +82,29 @@ function valid_ip()
 readonly -f valid_ip
 declare -t valid_ip
 
+function enter_ip_john {
+	pushlocalinfo
+	newlogparagraph "function enter_ip"
+	val_ip=0 #true
+	while [ $val_ip -ne 1 ]; do
+		$DIALOG --title "$1" --inputbox "$2" 9 40 2>ipans
+		if [ $? -eq 255 ]; then #escape was pressed
+			return 1
+		fi
+		IP=`cat ipans`
+		#valid_ip $IP
+		#if [[ $? -eq 0 ]]; then
+			val_ip=1
+			current_ip=$IP
+		#else
+		 # 	$DIALOG --clear --title "Invalid IP address" --msgbox "$IP is an invalid IPv4 address. Please enter a valid one! (X.X.X.X / 0<=X<=255)" 8 67
+	#		val_ip=0
+	#	fi
+	done
+	rm -f ipans
+	poplocalinfo
+	return 0
+}
 #Usage: enter_ip "Window Title" "Window Content"
 #enter_ip displays an input box suitable to enter an IP address 
 function enter_ip {
@@ -152,7 +175,7 @@ function add_tunnel {
 		return
 	fi
 	local_instance=$current_ip
-	$ENTER_IP "Local subnet:" "Local subnet address"
+	enter_ip_c_john "Local subnet:" "Local subnet address"
 	if [ $? -eq 1 ]; then #escape was pressed
 		return 
 	fi
@@ -162,7 +185,7 @@ function add_tunnel {
 		return 
 	fi
 	local_router=$current_ip
-	$ENTER_IP "Network:" "Network"
+	enter_ip_c_john "Network:" "Network"
 	if [ $? -eq 1 ]; then #escape was pressed
 		return 
 	fi
@@ -486,6 +509,34 @@ function main_loop_with_gui {
 		ANS=`cat ans`
 		decide $ANS
 	done
+}
+
+function enter_ip_c_john {
+	pushlocalinfo
+	newlogparagraph "function enter_ip_c"
+	val_ip=0 #true
+	echo
+	while [ $val_ip -ne 1 ]; do
+		echo "---------------------------------------------------"
+		echo $1
+		echo "---------------------------------------------------"
+		echo
+		printf "$2: "
+		read IP
+		#valid_ip $IP
+		#if [[ $? -eq 0 ]]; then
+			val_ip=1
+			current_ip=$IP
+		#else
+		#	echo
+		 # 	echo "$IP is an invalid IPv4 address. Please enter a valid one! (X.X.X.X / 0<=X<=255)"
+		#	echo
+		#	val_ip=0
+	#	fi
+	done
+	rm -f ipans
+	poplocalinfo
+	return 0
 }
 
 function enter_ip_c {
