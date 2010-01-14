@@ -22,7 +22,7 @@
 			<directory>../Installer/scripts</directory>
 			<outputDirectory>/installer</outputDirectory>
 			<includes>
-				<include>*.*</include>
+				<include>*</include>
 			</includes>
 		</fileSet>
 	</fileSets>
