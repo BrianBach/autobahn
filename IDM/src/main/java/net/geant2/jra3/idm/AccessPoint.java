@@ -298,6 +298,10 @@ public final class AccessPoint implements UserAccessPoint,
 		return domainName;
 	}
 	
+    public String getLocalDomainURL() {
+        return domainURL;
+    }
+    
 	public String getProperty(String name) {
 		
 		return properties.getProperty(name);

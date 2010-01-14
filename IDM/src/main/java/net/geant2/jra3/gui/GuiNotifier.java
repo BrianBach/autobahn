@@ -25,7 +25,7 @@ public class GuiNotifier implements Runnable, ReservationStatusListener {
 		
 		gui = new GuiClient(guiAddress);
 		this.update = update;
-		this.domainId = AccessPoint.getInstance().getLocalDomain();
+		this.domainId = AccessPoint.getInstance().getLocalDomainURL();
 		t = new Thread(this);
 		t.start();
 	}
