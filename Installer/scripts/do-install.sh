@@ -76,6 +76,7 @@ cat tunnels_to_install|while read line; do
 #echo "$conf_text"
 echo "$conf_text" > $ospfd_conf
 conf_written="true"
+/etc/init.d/quagga restart
 	fi
 ip tunnel add $tunnel_name mode gre remote $remote local $localn ttl 255
 	ip link set $tunnel_name up multicast on
