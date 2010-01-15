@@ -4,13 +4,13 @@
 	<parent>
 		<artifactId>autobahn</artifactId>
 		<groupId>net.geant.autobahn</groupId>
-		<version>0.2.0-SNAPSHOT</version>
+		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 	
 	<modelVersion>4.0.0</modelVersion>
     <groupId>net.geant.autobahn</groupId>
     <artifactId>autobahn-webgui</artifactId>
-    <version>0.2.0-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
     <name>Web GUI</name>
     <packaging>jar</packaging>	
 	
@@ -42,6 +42,150 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	<profiles>
+		<profile>
+			<id>wsdl-gen</id>
+			<build>			
+				<plugins>
+					<plugin>
+						<groupId>org.apache.cxf</groupId>
+						<artifactId>cxf-java2ws-plugin</artifactId>
+						<version>2.2.4</version>
+						<dependencies>
+							<dependency>
+								<groupId>org.apache.cxf</groupId>
+								<artifactId>cxf-rt-frontend-jaxws</artifactId>
+								<version>2.2.1</version>
+							</dependency>
+							<dependency>
+								<groupId>org.apache.cxf</groupId>
+								<artifactId>cxf-rt-frontend-simple</artifactId>
+								<version>2.2.2</version>
+							</dependency>
+						</dependencies>
+						<executions>
+							<execution>
+								<id>wsdl-useraccesspoint</id>
+								<phase>compile</phase>
+								<configuration>
+									<className>net.geant2.jra3.useraccesspoint.UserAccessPoint</className>
+									<outputFile>src/main/webapp/wsdl/useraccesspoint.wsdl</outputFile>
+									<genWsdl>true</genWsdl>
+									<serviceName>UserAccessPointService</serviceName>
+									<verbose>true</verbose>
+								</configuration>
+								<goals>
+									<goal>java2ws</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>wsdl-administration</id>
+								<phase>compile</phase>
+								<configuration>
+									<className>net.geant2.jra3.administration.Administration</className>
+									<outputFile>src/main/webapp/wsdl/administration.wsdl</outputFile>
+									<genWsdl>true</genWsdl>
+									<serviceName>AdministrationService</serviceName>
+									<verbose>true</verbose>
+								</configuration>
+								<goals>
+									<goal>java2ws</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>wsdl-gui</id>
+								<phase>compile</phase>
+								<configuration>
+									<className>net.geant2.jra3.gui.Gui</className>
+									<outputFile>src/main/webapp/wsdl/gui.wsdl</outputFile>
+									<genWsdl>true</genWsdl>
+									<serviceName>GuiService</serviceName>
+									<verbose>true</verbose>
+								</configuration>
+								<goals>
+									<goal>java2ws</goal>
+								</goals>
+							</execution>							
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		
+		<profile>
+			<id>java-gen</id>
+			<build>			
+				<plugins>
+					<plugin>
+						<groupId>org.apache.cxf</groupId>
+						<artifactId>cxf-codegen-plugin</artifactId>
+						<version>2.0.9</version>
+						<executions>
+							<execution>
+								<id>java-administration</id>
+								<phase>copmpile</phase>
+								<configuration>
+									<sourceRoot>${basedir}/src/main/webapp/wsdl</sourceRoot>                                
+									<wsdlOptions>
+										<wsdlOption>
+											<wsdl>${basedir}/src/main/webapp/wsdl/administration.wsdl</wsdl>
+											<extraargs>
+												<extraarg>-client</extraarg>
+												<extraarg>-quiet</extraarg>
+											</extraargs>
+										</wsdlOption>
+									</wsdlOptions>
+								</configuration>
+								<goals>
+									<goal>wsdl2java</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>java-useraccesspoint</id>
+								<phase>copmpile</phase>
+								<configuration>
+									<sourceRoot>${basedir}/src/main/webapp/wsdl</sourceRoot>                                
+									<wsdlOptions>
+										<wsdlOption>
+											<wsdl>${basedir}/src/main/webapp/wsdl/useraccesspoint.wsdl</wsdl>
+											<extraargs>
+												<extraarg>-client</extraarg>
+												<extraarg>-quiet</extraarg>
+											</extraargs>
+										</wsdlOption>
+									</wsdlOptions>
+								</configuration>
+								<goals>
+									<goal>wsdl2java</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>java-gui</id>
+								<phase>copmpile</phase>
+								<configuration>
+									<sourceRoot>${basedir}/src/main/webapp/wsdl</sourceRoot>                                
+									<wsdlOptions>
+										<wsdlOption>
+											<wsdl>${basedir}/src/main/webapp/wsdl/gui.wsdl</wsdl>
+											<extraargs>
+												<extraarg>-server</extraarg>
+												<extraarg>-quiet</extraarg>
+												<extraarg>-impl</extraarg>
+											</extraargs>
+										</wsdlOption>
+									</wsdlOptions>
+								</configuration>
+								<goals>
+									<goal>wsdl2java</goal>
+								</goals>
+							</execution>							
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 	
 	<dependencies>
 		<dependency> 
