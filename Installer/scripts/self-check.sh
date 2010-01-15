@@ -751,7 +751,7 @@ function init_ospfd {
 	newlogparagraph "init_ospfd"
 	if test -x "$debian_quagga"; then
 		log "Will try to run debian quagga ospfd..."
-		/etc/init.d/quagga start &> $path_only/quaggares
+		/etc/init.d/quagga restart &> $path_only/quaggares
 		echolog "Quagga returned: `cat $path_only/quaggares`"
 	else if test -x "$quagga_zebra"; then
 		log "Will try to run ospfd ..."
