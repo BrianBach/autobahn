@@ -34,7 +34,15 @@ public class CastorGoogleTopologyMarshaler implements TopologyMarshaler {
 	public CastorGoogleTopologyMarshaler(){
 		InputSource mappingResource = new InputSource(getClass().getResourceAsStream("topologymapping.xml"));
 		mapping = new Mapping();
-        mapping.loadMapping(mappingResource);	
+        try {
+			mapping.loadMapping(mappingResource);
+		} catch (IOException e) {
+			logger.error(e.getClass().getName()+":"+e.getMessage());
+			e.printStackTrace();
+		} catch (MappingException e) {
+			logger.error(e.getClass().getName()+":"+e.getMessage());			
+			e.printStackTrace();
+		}	
 	}
 	/*
 	 * (non-Javadoc)
