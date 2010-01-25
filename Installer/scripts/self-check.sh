@@ -144,6 +144,7 @@ function add_attribute {
 function configure_file_c {
 	     pushlocalinfo
 	     newpath=$2
+             newpath_john=$3
              while [[ ! -d "$newpath" && ! -f "$newpath" ]]; do
                      echo -n "Please enter $1 path: " 
 		     read newpath
@@ -159,6 +160,17 @@ function configure_file_c {
              cp ./zebra.conf $newpath_path_only
              echolog "Copied ospfd.conf, debian.conf, daemons, zebra.conf to $newpath_path_only"
 	    done 
+	    
+             while [[ ! -d "$newpath_john" && ! -f "$newpath_john" ]]; do
+                     echo -n "Please enter the path to start daemons: " 
+		     read newpath_john 
+                     echo $newpath_john > startDaemons.tmp
+                     echolog $newpath_john
+		     #export $newpath_john
+		     add_attribute "daemons=$newpath_john" "$path_only/installer.conf"
+		     #source $path_only/installer.conf
+		     #echolog "$1 is at $newpath"
+             done
 	    poplocalinfo	
 }
 
@@ -176,7 +188,7 @@ function file_editor {
 	y2=2
 	x2=22
 	flen=20 
-	ilen=0
+	ilen=100
 	num_of_prop=0
 	until [ $# -eq 0 ]; do
 		cur_property="$1";shift		
@@ -223,7 +235,8 @@ function configure_file {
 	     pushlocalinfo
 	     newlogparagraph "function configure_file"
 	     newpath=$2
-             while [[ ! -d "$newpath" && ! -f "$newpath" ]]; do
+             newpath_john=$3
+	     while [[ ! -d "$newpath" && ! -f "$newpath" ]]; do
 		    FILE=`$DIALOG --stdout --title "Please enter $1 path" --fselect $HOME/$1 24 78`
 		     case $? in
 		        0   )   
@@ -245,6 +258,26 @@ function configure_file {
              cp ./zebra.conf $newpath_path_only
              echolog "Copied ospfd.conf, debian.conf, daemons, zebra.conf to $newpath_path_only"
 	    done 
+	    
+            # while [[ ! -d "$newpath_john" && ! -f "$newpath_john" ]]; do
+                     FILE=`$DIALOG --stdout --title "Please enter path to start the daemons" --fselect $HOME/$1 24 78`
+		     #read newpath_john
+                    
+		     case $? in
+		        0   )   
+		     	      echo $FILE >newpath_john
+			      newpath_john=$FILE
+                              echolog $newpath_john
+			      ;;
+			255 ) break;;
+		     esac
+		     newpath_john=`cat newpath` 
+		     echolog $newpath_john
+		     #export $newpath_john
+		     add_attribute "daemons=$newpath_john" "$path_only/installer.conf"
+		     #source $path_only/installer.conf
+		     #echolog "$1 is at $newpath"
+             #done
 	    poplocalinfo	
 }
 
@@ -751,8 +784,9 @@ function init_ospfd {
 	newlogparagraph "init_ospfd"
 	if test -x "$debian_quagga"; then
 		log "Will try to run debian quagga ospfd..."
-		/etc/init.d/quagga restart &> $path_only/quaggares
-		echolog "Quagga returned: `cat $path_only/quaggares`"
+		$newpath_john restart &> $path_only/quaggares
+		#echolog "testjohn" $newpath_john
+		log "Quagga returned: `cat $path_only/quaggares`"
 	else if test -x "$quagga_zebra"; then
 		log "Will try to run ospfd ..."
 		$quagga/ospfd &> $path_only/quaggares
@@ -772,7 +806,7 @@ function config_editor {
         autobahn_folder=$AUTOBAHN_FOLDER
 	should_exit=0
 	while [ $should_exit -ne 1 ]; do
-		$DIALOG --clear --backtitle "AutoBAHN configuration files editor" --menu "AutoBAHN configuration files" 15 80 8 "dm.properties" "Sets properties about the Domain Manager" "idm.properties" "Sets properties about the Interdomain Manager" "ta.properties" "Sets properties about the Topology Abstraction" "calendar.properties" "Sets properties about the Calendar" "framework.properties" "Sets properties about the Framework" "Exit" "Exits the program" 2>ans
+		$DIALOG --clear --backtitle "AutoBAHN configuration files editor" --menu "AutoBAHN configuration files" 15 80 8 "dm.properties" "Sets properties about the Domain Manager" "idm.properties" "Sets properties about the Interdomain Manager" "ta.properties" "Sets properties about the Topology Abstraction" "calendar.properties" "Sets properties about the Calendar" "framework.properties" "Sets properties about the Framework" "Back" "Return to previous menu" 2>ans
 		case $? in 
 		    255 ) return 1
 		    should_exit=1
@@ -810,7 +844,7 @@ function config_editor {
 		   	   file_editor "$autobahn_folder/etc/framework.properties" `cat $path_only/framework_defaults`
 
 ;; 
-			"Exit" )
+			"Back" )
 			   should_exit=1
 		 	;;
 	esac

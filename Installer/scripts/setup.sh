@@ -10,6 +10,7 @@ DIALOG=${DIALOG=dialog}
 
 #select interface for input
 ENTER_IP=${ENTER_IP=enter_ip}
+ENTER_IP_NO_CHECK=${ENTER_IP_NO_CHECK=enter_ip_john}
 
 should_exit=0
 current_ip=0.0.0.0
@@ -42,7 +43,7 @@ function view_tunnels {
 			log "Error while trying to find installed tunnels. Maybe there aren't any"
 			continue
 		else
-			$DIALOG --no-shadow --title "List of installed tunnels:" --textbox ans 25 78
+			$DIALOG --no-shadow --title "List of installed tunnels:" --msgbox "`cat ans`" 25 78
 			log "List of installed tunnels `cat ans`"
 		fi
 	poplocalinfo
@@ -79,6 +80,23 @@ function valid_ip()
     return $stat
 }
 
+
+function valid_ip_john()
+{
+    #local  ip=$1
+    local  stat=0
+    #if [[ $ip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+     #    OIFS=$IFS
+      #   IFS='.'
+       #  ip=($ip)
+        # IFS=$OIFS
+         #[[ ${ip[0]} -le 255 && ${ip[1]} -le 255 \
+          #     && ${ip[2]} -le 255 && ${ip[3]} -le 255 ]]
+         #stat=$?
+   # fi
+# echo "Tested ip $ip and will return $stat"; sleep 3
+    return $stat
+}
 readonly -f valid_ip
 declare -t valid_ip
 
@@ -175,7 +193,7 @@ function add_tunnel {
 		return
 	fi
 	local_instance=$current_ip
-	enter_ip_c_john "Local subnet:" "Local subnet address"
+	$ENTER_IP_NO_CHECK "Local subnet:" "Local subnet address"
 	if [ $? -eq 1 ]; then #escape was pressed
 		return 
 	fi
@@ -185,7 +203,7 @@ function add_tunnel {
 		return 
 	fi
 	local_router=$current_ip
-	enter_ip_c_john "Network:" "Network"
+	$ENTER_IP_NO_CHECK "Network:" "Network"
 	if [ $? -eq 1 ]; then #escape was pressed
 		return 
 	fi
@@ -333,7 +351,7 @@ function tunnel_editor {
 		 					 	$DIALOG --clear --title "Invalid IP address in Remote Address" --msgbox "$localip is an invalid IPv4 address. Please enter a valid one! (X.X.X.X / 0<=X<=255)" 8 67
 								val_ip=0 
 							fi
-							valid_ip $localsubnet
+							valid_ip_john $localsubnet
 							if [[ $? -eq 0 ]]; then
 							        
 								current_ip=$localsubnet
@@ -348,7 +366,7 @@ function tunnel_editor {
 		 					 	$DIALOG --clear --title "Invalid IP address in Remote Address" --msgbox "$localrouterid is an invalid IPv4 address. Please enter a valid one! (X.X.X.X / 0<=X<=255)" 8 67
 								val_ip=0 
 							fi
-							valid_ip $network
+							valid_ip_john $network
 							if [[ $? -eq 0 ]]; then
 								current_ip=$network
 							else
@@ -420,7 +438,7 @@ declare -t property_editor
 
 #Shows the main menu
 function show_menu {
-  $DIALOG --clear --backtitle "AutoBAHN Command Line Installer" --menu "AutoBAHN Installer Options" 15 80 9 "Add Tunnel" "Adds new tunnel to routing.conf" "Install Tunnels" "Installs tunnels detailed in routing.conf" "View Tunnels" "Shows existing tunnels"  "Tunnel Editor" "Edit Existing Tunnels" "Delete All Tunnels" "Deletes all existing tunnels" "Setup database" "Sets up a database from a PostgresSQL dump" "Property Editor" "Go back to change properties" "Help"  "Shows Help for the installer" "Exit" "Exits the Installer"  2>ans
+  $DIALOG --clear --backtitle "AutoBAHN Command Line Installer" --menu "AutoBAHN Installer Options" 20 80 9 "Add Tunnel" "Adds new tunnel to routing.conf" "Install Tunnels" "Installs tunnels detailed in routing.conf" "View Tunnels" "Shows existing tunnels"  "Tunnel Editor" "Edit Existing Tunnels" "Delete All Tunnels" "Deletes all existing tunnels" "Setup database" "Sets up a database from a PostgresSQL dump" "Property Editor" "Go back to change properties" "Help"  "Shows Help for the installer" "Exit" "Exits the Installer"  2>ans
   return $?
 }
 #Useful functions
@@ -619,6 +637,7 @@ function simple_ui {
         done
 	print_step "1" "Adding tunnels"
 	ENTER_IP=enter_ip_c
+        ENTER_IP_NO_CHECK=enter_ip_c_john
 	while true; do
 		printf "Do you want to enter a new tunnel[y/n]?"
 		read answer

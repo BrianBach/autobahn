@@ -76,8 +76,26 @@ cat tunnels_to_install|while read line; do
 #echo "$conf_text"
 echo "$conf_text" > $ospfd_conf
 conf_written="true"
-/etc/init.d/quagga restart
+#kill `cat /var/run/quagga/ospfd.pid`
+#kill `cat /var/run/quagga/zebra.pid`
+#zebra -d
+#ospfd -d -a
+newpath_john="`cat $path_only/startDaemons.tmp`"
+daemons_start_zebra="$newpath_john/zebra -d"
+daemons_start_ospfd="$newpath_john/ospfd -d -a"
+echolog "Johnies daemons: $newpath_john"
+$daemons_start_zebra restart
+$daemons_start_ospfd restart
+$newpath_john restart
 	fi
+
+newpath_john="`cat $path_only/startDaemons.tmp`"
+daemons_start_zebra="$newpath_john/zebra -d"
+daemons_start_ospfd="$newpath_john/ospfd -d -a"
+echolog "Johnies daemons: $newpath_john"
+$daemons_start_zebra restart
+$daemons_start_ospfd restart
+$newpath_john restart
 ip tunnel add $tunnel_name mode gre remote $remote local $localn ttl 255
 	ip link set $tunnel_name up multicast on
 	ip addr add $local_subnet brd + dev $tunnel_name
@@ -88,5 +106,3 @@ done
 
 rm -f curline tunnels_to_install
 echo "Installation complete."
-
-
