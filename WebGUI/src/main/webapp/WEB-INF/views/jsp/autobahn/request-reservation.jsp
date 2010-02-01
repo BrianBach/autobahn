@@ -114,6 +114,61 @@ function afterSetDateValue(ref_field, target_field, date) {
 		<td class="error"><form:errors path="request.capacity"/></td>
 	</tr>
 	<tr>
+		<td class="label"><spring:message code="reservation.userVlanId"/></td>
+		<td class="value">
+			<form:input path="request.userVlanId"/>
+		</td>
+		<td class="error"><form:errors path="request.userVlanId"/></td>
+	</tr>
+	<tr bgcolor="#48D1CC">
+		<td class="label" valign="top"><spring:message code="reservation.userInclude"/></td>
+		<td>
+			<table>
+				<tr>
+					<td class="label"><spring:message code="reservation.userIncludeDomains"/></td>
+					<td class="value">
+						<form:select path="request.userInclude.domains" multiple="true">
+							<form:options items="${domains_all}"/>
+						</form:select>
+					</td>
+					<td class="error"><form:errors path="request.userInclude.domains"/></td>
+	
+					<td class="label"><spring:message code="reservation.userIncludeLinks"/></td>
+					<td class="value">
+						<form:select path="request.userInclude.links" multiple="true">
+							<form:options items="${links_all}"/>
+						</form:select>
+					</td>
+					<td class="error"><form:errors path="request.userInclude.links"/></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr bgcolor="#FFFF00">
+		<td class="label" valign="top"><spring:message code="reservation.userExclude"/></td>
+		<td>
+			<table>
+				<tr>
+					<td class="label"><spring:message code="reservation.userExcludeDomains"/></td>
+					<td class="value">
+						<form:select path="request.userExclude.domains" multiple="true">
+							<form:options items="${domains_all}"/>
+						</form:select>
+					</td>
+					<td class="error"><form:errors path="request.userExclude.domains"/></td>
+	
+					<td class="label"><spring:message code="reservation.userExcludeLinks"/></td>
+					<td class="value">
+						<form:select path="request.userExclude.links" multiple="true">
+							<form:options items="${links_all}"/>
+						</form:select>
+					</td>
+					<td class="error"><form:errors path="request.userExclude.links"/></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
 		<td class="label"><spring:message code="reservation.resiliency"/></td>
 		<td class="value">
 			<form:select path="request.resiliency">

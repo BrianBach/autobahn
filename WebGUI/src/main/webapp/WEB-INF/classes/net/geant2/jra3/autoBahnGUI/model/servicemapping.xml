@@ -42,6 +42,15 @@
         <field name="capacity" type="long">
               <bind-xml name="capacity" node="element"/>
         </field>
+        <field name="userVlanId" type="int">
+              <bind-xml name="userVlanId" node="element"/>
+        </field>
+        <field name="userInclude" type="net.geant2.jra3.useraccesspoint.PathInfo">
+              <bind-xml name="userInclude"/>
+        </field>
+        <field name="userExclude" type="net.geant2.jra3.useraccesspoint.PathInfo">
+              <bind-xml name="userExclude"/>
+        </field>
         <field name="delay" type="int">
               <bind-xml name="delay" node="element"/>
         </field>
@@ -51,6 +60,14 @@
         <field name="resilience" type="boolean">
               <bind-xml name="resilience" node="element"/>
         </field>
+    </class>
+    <class name="net.geant2.jra3.useraccesspoint.PathInfo">
+        <field name="domains" type="java.lang.String" collection="arraylist">
+              <bind-xml name="domains" node="element"/>
+        </field>
+        <field name="links" type="java.lang.String" collection="arraylist">
+              <bind-xml name="links" node="element"/>
+        </field>    
     </class>
      <class name="net.geant2.jra3.autoBahnGUI.model.UserCredentials">
      	<map-to xml="user"/>

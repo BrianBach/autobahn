@@ -41,6 +41,7 @@
 			<th><spring:message code="reservation.endPort" text="End port"/></th>
 			<th><spring:message code="reservation.delay" text="Delay[ms]"/></th>
 			<th><spring:message code="reservation.capacity" text="Capacity [Mbits/s]"/></th>
+			<th><spring:message code="reservation.userVlanId" text="Vlan"/></th>
 			<th><spring:message code="reservation.resilience" text="Recilance"/></th>
 		</tr>  
 		<c:forEach items="${service.reservations}" var="item" varStatus="loopStatus">
@@ -60,6 +61,7 @@
 					<td>${item.endPort}</td>
 					<td>${item.maxDelay}</td>
 					<td>${item.capacity/1000000}</td>
+					<td>${item.userVlanId}</td>
 					<td>${item.resiliency}</td>
 				</tr>
 			</spring:bind>
