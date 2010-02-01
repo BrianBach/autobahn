@@ -490,9 +490,13 @@ public final class AccessPoint implements UserAccessPoint,
 
         log.info("========== CHECK RESERVATION POSSIBILITY REQUEST ==========\n" + req);
         
-        reservationProcessor.runReservation(res);
-        
         synchronized(listener) {
+            // Reservation processing should be in the synchronized block.
+            // Otherwise, the reservation might be processed before we reach
+            // the wait() and therefore the notification will have been made
+            // before we can receive it.
+            reservationProcessor.runReservation(res);
+            
         	try {
 				listener.wait();
 			} catch (InterruptedException e) { }
