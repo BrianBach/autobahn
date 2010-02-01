@@ -43,9 +43,9 @@ public class LookupService {
     											"xmlns:netutil=\"http://ggf.org/ns/nmwg/characteristic/utilisation/2.0/\">" +
     											"<nmwg:metadata id=\"serviceLookupInfo\"><perfsonar:subject id=\"commonParameters\" xmlns:perfsonar=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/1.0/\">" +
     											"<psservice:service id=\"serviceParameters\" xmlns:psservice=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/1.0/\">" +
-    											"<psservice:serviceName>My_test_IDM</psservice:serviceName><psservice:accessPoint>";
+    											"<psservice:serviceName>TYPE 2</psservice:serviceName><psservice:accessPoint>";
     private final String xmlSecfixRegisterIdm = "</psservice:accessPoint><psservice:serviceType>IDM</psservice:serviceType><psservice:serviceDescription>" +
-    											"This is my testing IDM</psservice:serviceDescription></psservice:service></perfsonar:subject>" +
+    											"Domain name, IDM instance URL, Unix time timestamp, IDM</psservice:serviceDescription></psservice:service></perfsonar:subject>" +
     											"<nmwg:eventType>http://ogf.org/ns/nmwg/tools/org/perfsonar/service/lookup/registration/service/2.0</nmwg:eventType>" +
     											"</nmwg:metadata><nmwg:data id=\"data0\" metadataIdRef=\"serviceLookupInfo\">" +
     											"<nmwg:metadata id=\"meta1\"><perfsonar:subject id=\"subj1\" xmlns:perfsonar=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/1.0/\">" +
@@ -55,9 +55,9 @@ public class LookupService {
     private final String xmlPrefixRegisterPort = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ns=\"http://ggf.org/ns/nmwg/base/2.0/\"><soapenv:Header/><soapenv:Body>" +
      											 " <nmwg:message type=\"LSRegisterRequest\" id=\"msg1\" xmlns:lookup=\"ru6.cti.gr\" xmlns:perfsonar=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/1.0/\" xmlns:nmwg=\"http://ggf.org/ns/nmwg/base/2.0/\" xmlns:psservice=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/1.0/\" xmlns:nmwgt=\"http://ggf.org/ns/nmwg/topology/2.0/\" xmlns:netutil=\"http://ggf.org/ns/nmwg/characteristic/utilisation/2.0/\"> " +
      											 "<nmwg:metadata id=\"serviceLookupInfo\"><perfsonar:subject id=\"commonParameters\" xmlns:perfsonar=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/1.0/\">" +
-     											 "<psservice:service id=\"serviceParameters\" xmlns:psservice=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/1.0/\"><psservice:serviceName>My_test_PORT</psservice:serviceName>" +
+     											 "<psservice:service id=\"serviceParameters\" xmlns:psservice=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/1.0/\"><psservice:serviceName>TYPE 1</psservice:serviceName>" +
      											 "<psservice:accessPoint>";
-    private final String xmlSecfixRegisterPort = "</psservice:accessPoint><psservice:serviceType>PORT</psservice:serviceType><psservice:serviceDescription>This is my testing PORT</psservice:serviceDescription>" +
+    private final String xmlSecfixRegisterPort = "</psservice:accessPoint><psservice:serviceType>PORT</psservice:serviceType><psservice:serviceDescription>End port identifier, User-friendly name, domain name</psservice:serviceDescription>" +
      											 "</psservice:service></perfsonar:subject><nmwg:eventType>http://ogf.org/ns/nmwg/tools/org/perfsonar/service/lookup/registration/service/2.0</nmwg:eventType></nmwg:metadata>" +
      											 "<nmwg:data id=\"data0\" metadataIdRef=\"serviceLookupInfo\"><nmwg:metadata id=\"meta1\"><perfsonar:subject id=\"subj1\" xmlns:perfsonar=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/1.0/\">" +
      											 "<nmwgt:interface xmlns:nmwgt=\"http://ggf.org/ns/nmwg/topology/2.0/\"><lookup:identifier>";
@@ -66,9 +66,9 @@ public class LookupService {
     private final String xmlPrefixRegisterEdgePort = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ns=\"http://ggf.org/ns/nmwg/base/2.0/\"><soapenv:Header/><soapenv:Body>" +
      												 " <nmwg:message type=\"LSRegisterRequest\" id=\"msg1\" xmlns:lookup=\"ru6.cti.gr\" xmlns:perfsonar=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/1.0/\" xmlns:nmwg=\"http://ggf.org/ns/nmwg/base/2.0/\" xmlns:psservice=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/1.0/\" xmlns:nmwgt=\"http://ggf.org/ns/nmwg/topology/2.0/\" xmlns:netutil=\"http://ggf.org/ns/nmwg/characteristic/utilisation/2.0/\"> " +
      												 "<nmwg:metadata id=\"serviceLookupInfo\"><perfsonar:subject id=\"commonParameters\" xmlns:perfsonar=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/1.0/\">" +
-     												 "<psservice:service id=\"serviceParameters\" xmlns:psservice=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/1.0/\"><psservice:serviceName>My_test_EdgePORT</psservice:serviceName>" +
+     												 "<psservice:service id=\"serviceParameters\" xmlns:psservice=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/1.0/\"><psservice:serviceName>TYPE 3</psservice:serviceName>" +
      												 "<psservice:accessPoint>";
-    private final String xmlSecfixRegisterEdgePort = "</psservice:accessPoint><psservice:serviceType>EdgePORT</psservice:serviceType><psservice:serviceDescription>This is my testing EdgePORT</psservice:serviceDescription>" +
+    private final String xmlSecfixRegisterEdgePort = "</psservice:accessPoint><psservice:serviceType>EdgePORT</psservice:serviceType><psservice:serviceDescription>Start domain, end domain, public edge port identifier</psservice:serviceDescription>" +
      												 "</psservice:service></perfsonar:subject><nmwg:eventType>http://ogf.org/ns/nmwg/tools/org/perfsonar/service/lookup/registration/service/2.0</nmwg:eventType></nmwg:metadata>" +
      												 "<nmwg:data id=\"data0\" metadataIdRef=\"serviceLookupInfo\"><nmwg:metadata id=\"meta1\"><perfsonar:subject id=\"subj1\" xmlns:perfsonar=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/1.0/\">" +
      												 "<nmwgt:interface xmlns:nmwgt=\"http://ggf.org/ns/nmwg/topology/2.0/\"><lookup:startDomain>";
@@ -77,9 +77,9 @@ public class LookupService {
     private final String xmlPrefixRegisterLS = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ns=\"http://ggf.org/ns/nmwg/base/2.0/\"><soapenv:Header/><soapenv:Body>" +
        										   " <nmwg:message type=\"LSRegisterRequest\" id=\"msg1\" xmlns:lookup=\"ru6.cti.gr\" xmlns:perfsonar=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/1.0/\" xmlns:nmwg=\"http://ggf.org/ns/nmwg/base/2.0/\" xmlns:psservice=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/1.0/\" xmlns:nmwgt=\"http://ggf.org/ns/nmwg/topology/2.0/\" xmlns:netutil=\"http://ggf.org/ns/nmwg/characteristic/utilisation/2.0/\"> " +
        										   "<nmwg:metadata id=\"serviceLookupInfo\"><perfsonar:subject id=\"commonParameters\" xmlns:perfsonar=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/1.0/\">" +
-       										   "<psservice:service id=\"serviceParameters\" xmlns:psservice=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/1.0/\"><psservice:serviceName>My_test_LS</psservice:serviceName>" +
+       										   "<psservice:service id=\"serviceParameters\" xmlns:psservice=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/1.0/\"><psservice:serviceName>TYPE 4</psservice:serviceName>" +
        										   "<psservice:accessPoint>";
-    private final String xmlSecfixRegisterLS = "</psservice:accessPoint><psservice:serviceType>LS</psservice:serviceType><psservice:serviceDescription>This is my testing LS</psservice:serviceDescription>" +
+    private final String xmlSecfixRegisterLS = "</psservice:accessPoint><psservice:serviceType>LS</psservice:serviceType><psservice:serviceDescription>Lookup server location (URL)</psservice:serviceDescription>" +
        										   "</psservice:service></perfsonar:subject><nmwg:eventType>http://ogf.org/ns/nmwg/tools/org/perfsonar/service/lookup/registration/service/2.0</nmwg:eventType></nmwg:metadata>" +
        										   "<nmwg:data id=\"data0\" metadataIdRef=\"serviceLookupInfo\"><nmwg:metadata id=\"meta1\"><perfsonar:subject id=\"subj1\" xmlns:perfsonar=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/1.0/\">" +
        										   "<nmwgt:interface xmlns:nmwgt=\"http://ggf.org/ns/nmwg/topology/2.0/\"><lookup:eventType>";
@@ -214,11 +214,11 @@ public class LookupService {
     public void RegisterEndPort(String friendlyName, String portIdentifier, String domain)
             throws LookupServiceException {
         
-/*    	if (this.QueryFriendlyName(portIdentifier) !=null) {
+    	if (this.QueryFriendlyName(portIdentifier) !=null) {
     		// The same port has already been registered
     		// TODO: Implement and call remove
-    		//RemoveEndPort(portIdentifier);
-    	}*/
+    		this.RemoveEndPort(portIdentifier);
+    	}
 
         // This is an auto generated primary key for the LS
         String firstkey = "http://reed.man.poznan.pl:8085/axis/services/PORT ";
@@ -324,6 +324,19 @@ public class LookupService {
             key = this.findPortKey(startDomain, endDomain, edgeport);
         } catch (NullPointerException e){
             log.info("There is no port with the particular name to delete");
+        }
+        // XML query to sent to the lookup service
+        this.xmlToBeSent = this.xmlPrefixRemoveIdm + key + this.xmlSuffixRemoveIdm;
+        invokeLS(xmlToBeSent);
+    }
+    
+    public void RemoveEndPort(String portIdentifier) throws LookupServiceException {
+        String key = "";
+        try {
+            // use domain name to get the primary key according to the Exist database
+            key = this.findEndPortkey(portIdentifier);
+        } catch (NullPointerException e){
+            log.info("There is no domain with the particular name to delete");
         }
         // XML query to sent to the lookup service
         this.xmlToBeSent = this.xmlPrefixRemoveIdm + key + this.xmlSuffixRemoveIdm;
@@ -789,6 +802,65 @@ public class LookupService {
         }
     
     	return null;
+    }
+    
+    /**
+     * 
+     * @param domain
+     * @return domain key record in the database, or null if not found
+     */
+    public String findEndPortkey(String domain) 
+            throws LookupServiceException {
+        String xmlStart = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"><soapenv:Header/>" +
+                        "<soapenv:Body><nmwg:message type=\"LSQueryRequest\" id=\"msg1\" xmlns:nmwg=\"http://ggf.org/ns/nmwg/base/2.0/\" xmlns:xquery=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/lookup/xquery/1.0/\">" +
+                        "<nmwg:metadata id=\"meta1\"><xquery:subject id=\"sub1\"> declare namespace nmwg=\"http://ggf.org/ns/nmwg/base/2.0/\"; declare namespace perfsonar=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/1.0/\"; declare namespace psservice=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/1.0/\";" +
+                        " declare namespace xquery=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/lookup/xquery/1.0/\"; declare namespace nmwgt=\"http://ggf.org/ns/nmwg/topology/2.0/\"; declare namespace lookup=\"ru6.cti.gr\";" +
+                        " for $m in /nmwg:store/nmwg:metadata let $a := for $j in /nmwg:store/nmwg:data let $n := $j/nmwg:metadata/perfsonar:subject/nmwgt:interface where  $n/lookup:identifier = \"";
+        String xmlEnd = "\" return  data($j/@metadataIdRef) where $m/@id = $a return $m/perfsonar:subject/psservice:service/psservice:accessPoint " +
+                        " </xquery:subject><nmwg:eventType>service.lookup.xquery</nmwg:eventType></nmwg:metadata><nmwg:data id=\"data1\" metadataIdRef=\"meta1\" /></nmwg:message></soapenv:Body></soapenv:Envelope>";
+        String response = "";
+        // XML query to sent to the lookup service
+        String toSent = xmlStart + domain + xmlEnd;
+        String testing = "";
+        testing = invokeLS(toSent);
+        
+        try {
+            DocumentBuilderFactory dbf =
+                DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            InputSource is = new InputSource();
+            is.setCharacterStream(new StringReader(testing));
+    
+            // Parsing the response of the lookup service
+            Document doc = db.parse(is);
+            // Getting data from child nodes of "psservice:datum"
+            NodeList nodes = doc.getElementsByTagName("psservice:datum");
+          
+            for (int i = 0; i < nodes.getLength(); i++) {
+                Element element = (Element) nodes.item(i);
+    
+                NodeList name = element.getElementsByTagName("psservice:accessPoint");
+                
+                Element line = (Element) name.item(0);
+                int nodesLength = nodes.getLength();
+                if (nodesLength != 0) {
+                    response = getCharacterDataFromElement(line);
+                    return response;
+                }
+            }
+            
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+            throw new LookupServiceException(e.getMessage());
+        } catch (SAXException e) {
+            e.printStackTrace();
+            throw new LookupServiceException(e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new LookupServiceException(e.getMessage());
+        }
+    
+        return null;
     }
     
     public String findPortKey(String startDomain, String endDomain, String edgeport) 
