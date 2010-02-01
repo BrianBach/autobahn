@@ -26,7 +26,7 @@ import net.geant2.jra3.interdomain.Interdomain;
 import net.geant2.jra3.interdomain.InterdomainClient;
 import net.geant2.jra3.interdomain.NoSuchReservationException;
 import net.geant2.jra3.interdomain.pathfinder.InterdomainPathfinder;
-import net.geant2.jra3.interdomain.pathfinder.InterdomainPathfinderImpl;
+import net.geant2.jra3.interdomain.pathfinder.InterdomainPathfinderImplDFS;
 import net.geant2.jra3.interdomain.pathfinder.TopologyImpl;
 import net.geant2.jra3.network.AdminDomain;
 import net.geant2.jra3.network.Link;
@@ -179,7 +179,7 @@ public final class AccessPoint implements UserAccessPoint,
 	        topology = new TopologyImpl();
 	        
 	        // init pathfinder
-	        pathFinder = new InterdomainPathfinderImpl(topology);
+	        pathFinder = new InterdomainPathfinderImplDFS(topology);
 	        
 	        // init neighbors
 	        AdminDomain admin = daos.getAdminDomainDAO().getByBodID(domainName);
@@ -320,6 +320,32 @@ public final class AccessPoint implements UserAccessPoint,
 		if (!serviceScheduler.cancelService(serviceID))
 			throw new UserAccessPointException("service with id " + serviceID + " does not exists");
 	}
+
+	/* (non-Javadoc)
+     * @see net.geant2.jra3.useraccesspoint.UserAccessPoint#getAllDomains()
+     */
+    public String[] getAllDomains() {
+        
+        List<AdminDomain> domains = daos.getAdminDomainDAO().getAll();
+        String[] res = new String[domains.size()];
+        for (int i=0; i < res.length; i++) 
+            res[i] = domains.get(i).getBodID();
+        
+        return res;
+    }
+
+    /* (non-Javadoc)
+     * @see net.geant2.jra3.useraccesspoint.UserAccessPoint#getAllLinks()
+     */
+    public String[] getAllLinks() {
+        
+        List<Link> links = daos.getLinkDAO().getAll();
+        String[] res = new String[links.size()];
+        for (int i=0; i < res.length; i++) 
+            res[i] = links.get(i).getBodID();
+        
+        return res;
+    }
 
 	/* (non-Javadoc)
 	 * @see net.geant2.jra3.useraccesspoint.UserAccessPoint#getAllClientPorts()

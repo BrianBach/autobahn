@@ -1,5 +1,7 @@
 package net.geant2.jra3.useraccesspoint;
 
+import javax.jws.WebResult;
+
 import net.geant2.jra3.idm.AccessPoint;
 
 /**
@@ -20,7 +22,21 @@ public class UserAccessPointImpl implements UserAccessPoint {
 		AccessPoint.getInstance().cancelService(serviceID);
 	}
 
-	/* (non-Javadoc)
+    /* (non-Javadoc)
+     * @see net.geant2.jra3.useraccesspoint.UserAccessPoint#getAllDomains()
+     */
+    public String[] getAllDomains() {
+        return AccessPoint.getInstance().getAllDomains();
+    }
+
+    /* (non-Javadoc)
+     * @see net.geant2.jra3.useraccesspoint.UserAccessPoint#getAllLinks()
+     */
+    public String[] getAllLinks() {
+        return AccessPoint.getInstance().getAllLinks();
+    }
+
+    /* (non-Javadoc)
 	 * @see net.geant2.jra3.useraccesspoint.UserAccessPoint#getAllClientPorts()
 	 */
 	public String[] getAllClientPorts() {

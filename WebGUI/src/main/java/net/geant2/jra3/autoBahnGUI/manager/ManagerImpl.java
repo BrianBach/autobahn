@@ -216,6 +216,47 @@ public class ManagerImpl implements Manager,ManagerNotifier{
 		}
 		return ports;
 	}
+	
+	/*
+     * (non-Javadoc)
+     * @see net.geant2.jra3.autoBahnGUI.manager.Manager#getAllDomains()
+     */
+    public List<String> getAllDomains(){
+        // Parse through IDMs and get the first non-null result
+        Iterator<String> iterator = idms.keySet().iterator();
+        InterDomainManager manager =null;
+        List<String> domains = null;
+        while (iterator.hasNext()){
+            manager = idms.get(iterator.next());
+            if (manager != null){
+                domains = manager.getAllDomains();
+                if (domains != null)
+                    break;
+            }
+        }
+        return domains;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see net.geant2.jra3.autoBahnGUI.manager.Manager#getAllDomains()
+     */
+    public List<String> getAllLinks(){
+        // Parse through IDMs and get the first non-null result
+        Iterator<String> iterator = idms.keySet().iterator();
+        InterDomainManager manager =null;
+        List<String> links = null;
+        while (iterator.hasNext()){
+            manager = idms.get(iterator.next());
+            if (manager != null){
+                links = manager.getAllLinks();
+                if (links != null)
+                    break;
+            }
+        }
+        return links;
+    }
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant2.jra3.autoBahnGUI.manager.Manager#getInterDomainManagerPorts(java.lang.String)

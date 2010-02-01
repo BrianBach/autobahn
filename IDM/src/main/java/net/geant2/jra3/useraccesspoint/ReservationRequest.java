@@ -14,7 +14,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="ReservationRequest", namespace="useraccesspoint.jra3.geant2.net", propOrder={
 		"startPort", "endPort", "startTime", "endTime",
-		"priority", "description", "capacity", "maxDelay",
+		"priority", "description", "capacity",
+		"userInclude", "userExclude", "userVlanId",
+		"maxDelay",
 		"resiliency", "bidirectional", "processNow"
 })
 public class ReservationRequest {
@@ -26,6 +28,9 @@ public class ReservationRequest {
 	private Priority priority;
 	private String description;
 	private long capacity;
+    private PathInfo userInclude;
+    private PathInfo userExclude;
+    private int userVlanId;
 	private int maxDelay;
 	private Resiliency resiliency;
 	private boolean bidirectional;
@@ -115,7 +120,73 @@ public class ReservationRequest {
 	public void setCapacity(long capacity) {
 		this.capacity = capacity;
 	}
+
 	/**
+     * Gets the value of the userInclude property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link PathInfo }
+     *     
+     */
+    public PathInfo getUserInclude() {
+        return userInclude;
+    }
+
+    /**
+     * Sets the value of the userInclude property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link PathInfo }
+     *     
+     */
+    public void setUserInclude(PathInfo value) {
+        this.userInclude = value;
+    }
+
+    /**
+     * Gets the value of the userExclude property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link PathInfo }
+     *     
+     */
+
+    public PathInfo getUserExclude() {
+        return userExclude;
+    }
+
+    /**
+     * Sets the value of the userExclude property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link PathInfo }
+     *     
+     */
+    public void setUserExclude(PathInfo value) {
+        this.userExclude = value;
+    }
+
+    /**
+     * Gets the value of the userVlanId property.
+     * 
+     */
+    public int getUserVlanId() {
+        return userVlanId;
+    }
+
+    /**
+     * Sets the value of the userVlanId property.
+     * 
+     */
+    public void setUserVlanId(int value) {
+        this.userVlanId = value;
+    }
+
+    /**
 	 * @return the bidirectional
 	 */
 	public boolean isBidirectional() {

@@ -112,6 +112,19 @@ public interface Manager {
 	 * @return list of  ports names
 	 */
 	public List<String> getAllPorts ();
+	
+    /**
+     * Gets all domain names
+     * @return list of domains names
+     */
+    public List<String> getAllDomains();
+    
+    /**
+     * Gets all port names
+     * @return list of links names
+     */
+    public List<String> getAllLinks();
+    
 	/**
 	 * Gets names of ports managed by specified JRA3 IDM
 	 * @param idm identifier of the JRA3 IDM

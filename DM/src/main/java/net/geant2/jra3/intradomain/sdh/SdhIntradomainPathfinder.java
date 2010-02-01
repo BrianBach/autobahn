@@ -42,7 +42,8 @@ public class SdhIntradomainPathfinder extends GenericIntradomainPathfinder {
 
 
 	@Override
-	public GraphSearch initGraph(Collection<GenericLink> excluded) {
+	public GraphSearch initGraph(Collection<GenericLink> excluded, int userVlanId) {
+	    // userVlanId parameter is ingored, since an SDH domain does not support this
 		
     	grnodes = new HashMap<Node, GraphNode>();
     	

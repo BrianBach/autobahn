@@ -35,10 +35,13 @@ public interface IntradomainPathfinder {
 	 *            List of links that the path should not contain
 	 * @param limit
 	 *            Number of paths after which the search is stopped
+	 * @param userVlanId
+	 *            User-required VLAN for the reservation (0 if not supplied)
 	 * @return List of intradomain paths found 
 	 */
 	public List<IntradomainPath> findPaths(GenericLink start, GenericLink end,
-			long capacity, Collection<GenericLink> excluded, int limit);
+			long capacity, Collection<GenericLink> excluded, int limit,
+			int userVlanId);
 
 	/**
 	 * Searches for all intradomain paths between the given start node and the
@@ -71,9 +74,12 @@ public interface IntradomainPathfinder {
 	 *            Requested path constraints
 	 * @param excluded
 	 *            List of links that the path should not contain
+	 * @param userVlanId
+	 *            User-required VLAN for the reservation (0 if not supplied)
 	 * @return IntradomainPath that matches given conditions, or null if not
 	 *         found
 	 */
 	public IntradomainPath findPath(GenericLink src, GenericLink dest,
-			long capacity, PathConstraints pcon, Collection<GenericLink> excluded);
+			long capacity, PathConstraints pcon, Collection<GenericLink> excluded,
+			int userVlanId);
 }

@@ -209,8 +209,13 @@ public class ResourcesReservation {
 		Set<GenericLink> excluded = new HashSet<GenericLink>();
 		
 		List<IntradomainPath> paths = pathfinder.findPaths(src, dest, 
-				par.getCapacity(), excluded, PATH_LIMIT);
+				par.getCapacity(), excluded, PATH_LIMIT, par.getUserVlanId());
 
+		if (paths==null) {
+		    //TODO: Perhaps use a more fine-grained exception type
+		    throw new OversubscribedException("No suitable paths found", links[1].getBodID());
+		}
+		
 		log.debug(paths.size() + " possible paths found (before calendar checking)");
 		
 		// Filter paths in calendar
@@ -246,7 +251,7 @@ public class ResourcesReservation {
 				}
 				
 				List<IntradomainPath> npaths = pathfinder.findPaths(src, dest, 
-						par.getCapacity(), excluded, newPathsNeeded);
+						par.getCapacity(), excluded, newPathsNeeded, par.getUserVlanId());
 
 				if(npaths != null)
 					npaths.removeAll(paths);
@@ -312,7 +317,7 @@ public class ResourcesReservation {
 		
 		while(!valid) {
 			path = pathfinder.findPath(src, dest, par.getCapacity(), pcon,
-					excluded);
+					excluded, par.getUserVlanId());
 		
 			if(path == null)
 				break;

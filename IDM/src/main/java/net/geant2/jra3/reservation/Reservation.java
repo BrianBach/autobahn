@@ -18,6 +18,7 @@ import net.geant2.jra3.constraints.PathConstraints;
 import net.geant2.jra3.network.Path;
 import net.geant2.jra3.network.Port;
 import net.geant2.jra3.network.StateOper;
+import net.geant2.jra3.useraccesspoint.PathInfo;
 
 /**
  * @author <a href="mailto:jaxlucas@man.poznan.pl">Jacek Lukasik</a>
@@ -27,7 +28,9 @@ import net.geant2.jra3.network.StateOper;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="Reservation", namespace="reservation.jra3.geant2.net", propOrder={
 		"bodID", "startPort", "endPort", "startTime", "endTime",
-		"priority", "description", "capacity", "maxDelay",
+		"priority", "description", "capacity", 
+	    "userInclude", "userExclude", "userVlanId",
+	    "maxDelay",
 		"resiliency", "bidirectional", "globalConstraints", "path", "intState", "fake" })
 public class Reservation {
 
@@ -42,6 +45,9 @@ public class Reservation {
     protected String description;
     
     protected long capacity;
+    protected PathInfo userInclude;
+    protected PathInfo userExclude;
+    protected int userVlanId;
     protected int maxDelay;
     protected String resiliency;
     protected boolean bidirectional;
@@ -215,6 +221,71 @@ public class Reservation {
         this.capacity = capacity;
     }
 
+    /**
+     * Gets the value of the userInclude property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link PathInfo }
+     *     
+     */
+    public PathInfo getUserInclude() {
+        return userInclude;
+    }
+
+    /**
+     * Sets the value of the userInclude property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link PathInfo }
+     *     
+     */
+    public void setUserInclude(PathInfo value) {
+        this.userInclude = value;
+    }
+
+    /**
+     * Gets the value of the userExclude property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link PathInfo }
+     *     
+     */
+
+    public PathInfo getUserExclude() {
+        return userExclude;
+    }
+
+    /**
+     * Sets the value of the userExclude property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link PathInfo }
+     *     
+     */
+    public void setUserExclude(PathInfo value) {
+        this.userExclude = value;
+    }
+
+    /**
+     * Gets the value of the userVlanId property.
+     * 
+     */
+    public int getUserVlanId() {
+        return userVlanId;
+    }
+
+    /**
+     * Sets the value of the userVlanId property.
+     * 
+     */
+    public void setUserVlanId(int value) {
+        this.userVlanId = value;
+    }
+
     public StateOper getOperationalStatus() {
 		return operationalStatus;
 	}
@@ -345,6 +416,8 @@ public class Reservation {
 	        
 	        par.setPathConstraints(pcon);
         }
+        
+        par.setUserVlanId(userVlanId);
         
         return par;
     }

@@ -26,6 +26,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="priority" type="{http://useraccesspoint.jra3.geant2.net/}priority" minOccurs="0"/>
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="capacity" type="{http://www.w3.org/2001/XMLSchema}long"/>
+ *         &lt;element name="userInclude" type="{useraccesspoint.jra3.geant2.net}PathInfo" minOccurs="0"/>
+ *         &lt;element name="userExclude" type="{useraccesspoint.jra3.geant2.net}PathInfo" minOccurs="0"/>
+ *         &lt;element name="userVlanId" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="maxDelay" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="resiliency" type="{http://useraccesspoint.jra3.geant2.net/}resiliency" minOccurs="0"/>
  *         &lt;element name="bidirectional" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
@@ -47,6 +50,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "priority",
     "description",
     "capacity",
+    "userInclude",
+    "userExclude",
+    "userVlanId",
     "maxDelay",
     "resiliency",
     "bidirectional",
@@ -61,11 +67,19 @@ public class ReservationRequest implements Serializable{
     protected Priority priority;
     protected String description;
     protected long capacity;
+    protected PathInfo userInclude;
+    protected PathInfo userExclude;
+    protected int userVlanId;
     protected int maxDelay;
     protected Resiliency resiliency;
     protected boolean bidirectional;
     protected boolean processNow;
 
+    public ReservationRequest() {
+        this.userInclude = new PathInfo();
+        this.userExclude = new PathInfo();
+    }
+    
     /**
      * Gets the value of the startPort property.
      * 
@@ -226,6 +240,76 @@ public class ReservationRequest implements Serializable{
         this.capacity = value;
     }
 
+    /**
+     * Gets the value of the userInclude property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link PathInfo }
+     *     
+     */
+    public PathInfo getUserInclude() {
+        if (userInclude == null) {
+            return new PathInfo();
+        }
+        return userInclude;
+    }
+
+    /**
+     * Sets the value of the userInclude property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link PathInfo }
+     *     
+     */
+    public void setUserInclude(PathInfo value) {
+        this.userInclude = value;
+    }
+
+    /**
+     * Gets the value of the userExclude property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link PathInfo }
+     *     
+     */
+    public PathInfo getUserExclude() {
+        if (userExclude == null) {
+            return new PathInfo();
+        }
+        return userExclude;
+    }
+
+    /**
+     * Sets the value of the userExclude property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link PathInfo }
+     *     
+     */
+    public void setUserExclude(PathInfo value) {
+        this.userExclude = value;
+    }
+
+    /**
+     * Gets the value of the userVlanId property.
+     * 
+     */
+    public int getUserVlanId() {
+        return userVlanId;
+    }
+
+    /**
+     * Sets the value of the userVlanId property.
+     * 
+     */
+    public void setUserVlanId(int value) {
+        this.userVlanId = value;
+    }
+    
     /**
      * Gets the value of the maxDelay property.
      * 

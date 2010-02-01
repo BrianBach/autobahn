@@ -43,6 +43,9 @@ public class RequestConverter {
         resv.setMaxDelay(req.getMaxDelay());
         resv.setResiliency(req.getResiliency().name());
         resv.setBidirectional(req.isBidirectional());
+        resv.setUserInclude(req.getUserInclude());
+        resv.setUserExclude(req.getUserExclude());
+        resv.setUserVlanId(req.getUserVlanId());
         
         return resv;
 	}

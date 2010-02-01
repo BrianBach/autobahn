@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlType;
 import net.geant2.jra3.constraints.GlobalConstraints;
 import net.geant2.jra3.network.Path;
 import net.geant2.jra3.network.Port;
+import net.geant2.jra3.useraccesspoint.PathInfo;
 
 
 /**
@@ -29,6 +30,9 @@ import net.geant2.jra3.network.Port;
  *         &lt;element name="priority" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="capacity" type="{http://www.w3.org/2001/XMLSchema}long"/>
+ *         &lt;element name="userVlanId" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="userInclude" type="{http://www.w3.org/2001/XMLSchema}PathInfo"/>
+ *         &lt;element name="userExclude" type="{http://www.w3.org/2001/XMLSchema}PathInfo"/>
  *         &lt;element name="maxDelay" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="resiliency" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="bidirectional" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
@@ -53,6 +57,9 @@ import net.geant2.jra3.network.Port;
     "priority",
     "description",
     "capacity",
+    "userInclude",
+    "userExclude",
+    "userVlanId",
     "maxDelay",
     "resiliency",
     "bidirectional",
@@ -70,6 +77,9 @@ public class Reservation implements Serializable {
     protected int priority;
     protected String description;
     protected long capacity;
+    protected int userVlanId;
+    protected PathInfo userInclude;
+    protected PathInfo userExclude;
     protected int maxDelay;
     protected String resiliency;
     protected boolean bidirectional;
@@ -251,6 +261,48 @@ public class Reservation implements Serializable {
      */
     public void setCapacity(long value) {
         this.capacity = value;
+    }
+
+    /**
+     * @return the userVlanId
+     */
+    public int getUserVlanId() {
+        return userVlanId;
+    }
+
+    /**
+     * @param userVlanId the userVlanId to set
+     */
+    public void setUserVlanId(int userVlanId) {
+        this.userVlanId = userVlanId;
+    }
+
+    /**
+     * @return the userInclude
+     */
+    public PathInfo getUserInclude() {
+        return userInclude;
+    }
+
+    /**
+     * @param userInclude the userInclude to set
+     */
+    public void setUserInclude(PathInfo userInclude) {
+        this.userInclude = userInclude;
+    }
+
+    /**
+     * @return the userExclude
+     */
+    public PathInfo getUserExclude() {
+        return userExclude;
+    }
+
+    /**
+     * @param userExclude the userExclude to set
+     */
+    public void setUserExclude(PathInfo userExclude) {
+        this.userExclude = userExclude;
     }
 
     /**

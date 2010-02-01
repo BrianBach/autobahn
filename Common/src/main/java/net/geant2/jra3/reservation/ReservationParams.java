@@ -21,7 +21,7 @@ import net.geant2.jra3.constraints.PathConstraints;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="ReservationParams", namespace="reservation.jra3.geant2.net", propOrder={
 		"capacity", "maxDelay", "resiliency", "bidirectional",
-		"startTime", "endTime", "pathConstraints"
+		"startTime", "endTime", "pathConstraints", "userVlanId"
 })
 public class ReservationParams {
 	@XmlTransient
@@ -36,6 +36,8 @@ public class ReservationParams {
     private Calendar endTime;
 
     private PathConstraints pathConstraints;
+    
+    private int userVlanId;
 
 	public long getId() {
 		return id;
@@ -132,4 +134,18 @@ public class ReservationParams {
 	public void setPathConstraints(PathConstraints pathConstraints) {
 		this.pathConstraints = pathConstraints;
 	}
+
+    /**
+     * @return the userVlanId
+     */
+    public int getUserVlanId() {
+        return userVlanId;
+    }
+
+    /**
+     * @param userVlanId the userVlanId to set
+     */
+    public void setUserVlanId(int userVlanId) {
+        this.userVlanId = userVlanId;
+    }
 }

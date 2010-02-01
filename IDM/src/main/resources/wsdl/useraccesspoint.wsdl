@@ -7,6 +7,10 @@
 <xs:element name="cancelServiceResponse" type="tns:cancelServiceResponse"/>
 <xs:element name="checkReservationPossibility" type="tns:checkReservationPossibility"/>
 <xs:element name="checkReservationPossibilityResponse" type="tns:checkReservationPossibilityResponse"/>
+<xs:element name="getAllDomains" type="tns:getAllDomains"/>
+<xs:element name="getAllDomainsResponse" type="tns:getAllDomainsResponse"/>
+<xs:element name="getAllLinks" type="tns:getAllLinks"/>
+<xs:element name="getAllLinksResponse" type="tns:getAllLinksResponse"/>
 <xs:element name="getAllClientPorts" type="tns:getAllClientPorts"/>
 <xs:element name="getAllClientPortsResponse" type="tns:getAllClientPortsResponse"/>
 <xs:element name="getDomainClientPorts" type="tns:getDomainClientPorts"/>
@@ -56,6 +60,22 @@
 </xs:complexType>
 <xs:complexType name="modifyReservationResponse">
 <xs:sequence/>
+</xs:complexType>
+<xs:complexType name="getAllDomains">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="getAllDomainsResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="Domains" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getAllLinks">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="getAllLinksResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="Links" type="xs:string"/>
+</xs:sequence>
 </xs:complexType>
 <xs:complexType name="getAllClientPorts">
 <xs:sequence/>
@@ -151,11 +171,22 @@
 <xs:element minOccurs="0" name="priority" type="ns1:priority"/>
 <xs:element minOccurs="0" name="description" type="xs:string"/>
 <xs:element name="capacity" type="xs:long"/>
+<xs:element minOccurs="0" name="userInclude" type="tns:PathInfo" />
+<xs:element minOccurs="0" name="userExclude" type="tns:PathInfo" />
+<xs:element name="userVlanId" type="xs:int" />
 <xs:element name="maxDelay" type="xs:int"/>
 <xs:element minOccurs="0" name="resiliency" type="ns1:resiliency"/>
 <xs:element name="bidirectional" type="xs:boolean"/>
 <xs:element name="processNow" type="xs:boolean"/>
 </xs:sequence>
+</xs:complexType>
+<xs:complexType name="PathInfo">
+  <xs:sequence>
+    <xs:element maxOccurs="unbounded" minOccurs="0" name="domains"
+      nillable="true" type="xs:string" />
+    <xs:element maxOccurs="unbounded" minOccurs="0" name="links"
+      nillable="true" type="xs:string" />
+  </xs:sequence>
 </xs:complexType>
 <xs:complexType name="ServiceRequest">
 <xs:sequence>
@@ -212,6 +243,14 @@
     <wsdl:part name="parameters" element="tns:modifyReservation">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="getAllDomainsResponse">
+    <wsdl:part name="parameters" element="tns:getAllDomainsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAllLinksResponse">
+    <wsdl:part name="parameters" element="tns:getAllLinksResponse">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="getAllClientPortsResponse">
     <wsdl:part name="parameters" element="tns:getAllClientPortsResponse">
     </wsdl:part>
@@ -226,6 +265,14 @@
   </wsdl:message>
   <wsdl:message name="UserAccessPointException">
     <wsdl:part name="UserAccessPointException" element="tns:UserAccessPointException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAllDomains">
+    <wsdl:part name="parameters" element="tns:getAllDomains">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAllLinks">
+    <wsdl:part name="parameters" element="tns:getAllLinks">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getAllClientPorts">
@@ -303,6 +350,18 @@
       <wsdl:input name="modifyReservation" message="tns:modifyReservation">
     </wsdl:input>
       <wsdl:output name="modifyReservationResponse" message="tns:modifyReservationResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAllDomains">
+      <wsdl:input name="getAllDomains" message="tns:getAllDomains">
+    </wsdl:input>
+      <wsdl:output name="getAllDomainsResponse" message="tns:getAllDomainsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAllLinks">
+      <wsdl:input name="getAllLinks" message="tns:getAllLinks">
+    </wsdl:input>
+      <wsdl:output name="getAllLinksResponse" message="tns:getAllLinksResponse">
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getAllClientPorts">
@@ -397,6 +456,24 @@
       <wsdl:fault name="UserAccessPointException">
         <soap:fault name="UserAccessPointException" use="literal"/>
       </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAllDomains">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getAllDomains">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAllDomainsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAllLinks">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getAllLinks">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAllLinksResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getAllClientPorts">
       <soap:operation soapAction="" style="document"/>

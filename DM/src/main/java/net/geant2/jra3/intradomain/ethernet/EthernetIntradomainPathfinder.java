@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import net.geant2.jra3.constraints.ConstraintsNames;
 import net.geant2.jra3.constraints.PathConstraints;
 import net.geant2.jra3.constraints.RangeConstraint;
@@ -23,10 +25,12 @@ import net.geant2.jra3.intradomain.pathfinder.GraphSearch;
  *
  */
 public class EthernetIntradomainPathfinder extends GenericIntradomainPathfinder {
+    //TODO: Add unit tests (Akis fixes Maven first)
 
     private List<SpanningTree> all_sptrees = new ArrayList<SpanningTree>();
     private List<Node> all_nodes = new ArrayList<Node>();
 
+    private static final Logger log = Logger.getLogger(EthernetIntradomainPathfinder.class);
     
     /**
      * Initialize object with given topology.
@@ -54,7 +58,7 @@ public class EthernetIntradomainPathfinder extends GenericIntradomainPathfinder 
 	 * @see net.geant2.jra3.intradomain.pathfinder.GenericIntradomainPathfinder#initGraph(java.util.Collection)
 	 */
 	@Override
-	public GraphSearch initGraph(Collection<GenericLink> excluded) {
+	public GraphSearch initGraph(Collection<GenericLink> excluded, int userVlanId) {
 		
 		List<Node> nodes = all_nodes;
 		List<SpanningTree> sptrees = all_sptrees;
@@ -68,6 +72,21 @@ public class EthernetIntradomainPathfinder extends GenericIntradomainPathfinder 
         
         // Determine neighbors of each node
         for (SpanningTree st : sptrees) {
+            
+            // VLANs range from 1-4095, so a zero or negative value means that
+            // the user did not use the VLAN option when creating the reservation
+            //TODO: Verify (and document) that VLAN 0 would never be selected by the user
+            if (userVlanId > 0) {
+                log.debug("User has requested VLAN " + userVlanId 
+                        + ", checking if ethernet link supports it...");
+                // Skip link that does not adhere to user-required VLAN.
+                if (userVlanId < st.getVlan().getLowNumber() || 
+                        userVlanId > st.getVlan().getHighNumber()) {
+                    log.debug("Link " + st.getEthLink() + " rejected.");
+                    continue;
+                }
+            }
+            
             GenericLink link = st.getEthLink().getGenericLink();
             
             // Skip excluded generic links

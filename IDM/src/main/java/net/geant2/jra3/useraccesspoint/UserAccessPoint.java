@@ -13,6 +13,20 @@ import javax.jws.WebService;
 @WebService(targetNamespace = "http://useraccesspoint.jra3.geant2.net/", name = "UserAccessPoint")
 public interface UserAccessPoint {
 	
+    /**
+     * Returns all domains in the global topology
+     * @return domains
+     */
+    @WebResult(name = "Domains")
+    String[] getAllDomains();
+
+    /**
+     * Returns all links in the global topology
+     * @return links
+     */
+    @WebResult(name = "Links")
+    String[] getAllLinks();
+
 	/**
      * Returns all client ports in the global topology
      * @return client ports

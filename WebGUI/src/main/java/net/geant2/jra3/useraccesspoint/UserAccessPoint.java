@@ -43,6 +43,12 @@ public interface UserAccessPoint {
         net.geant2.jra3.useraccesspoint.ServiceRequest request
     ) throws UserAccessPointException_Exception;
 
+    @WebResult(name = "Domains", targetNamespace = "")
+    @RequestWrapper(localName = "getAllDomains", targetNamespace = "http://useraccesspoint.jra3.geant2.net/", className = "net.geant2.jra3.useraccesspoint.GetAllDomains")
+    @ResponseWrapper(localName = "getAllDomainsResponse", targetNamespace = "http://useraccesspoint.jra3.geant2.net/", className = "net.geant2.jra3.useraccesspoint.GetAllDomainsResponse")
+    @WebMethod
+    public java.util.List<java.lang.String> getAllDomains();
+
     @RequestWrapper(localName = "modifyReservation", targetNamespace = "http://useraccesspoint.jra3.geant2.net/", className = "net.geant2.jra3.useraccesspoint.ModifyReservation")
     @ResponseWrapper(localName = "modifyReservationResponse", targetNamespace = "http://useraccesspoint.jra3.geant2.net/", className = "net.geant2.jra3.useraccesspoint.ModifyReservationResponse")
     @WebMethod
@@ -58,6 +64,12 @@ public interface UserAccessPoint {
         @WebParam(name = "serviceID", targetNamespace = "")
         java.lang.String serviceID
     ) throws UserAccessPointException_Exception;
+
+    @WebResult(name = "Links", targetNamespace = "")
+    @RequestWrapper(localName = "getAllLinks", targetNamespace = "http://useraccesspoint.jra3.geant2.net/", className = "net.geant2.jra3.useraccesspoint.GetAllLinks")
+    @ResponseWrapper(localName = "getAllLinksResponse", targetNamespace = "http://useraccesspoint.jra3.geant2.net/", className = "net.geant2.jra3.useraccesspoint.GetAllLinksResponse")
+    @WebMethod
+    public java.util.List<java.lang.String> getAllLinks();
 
     @WebResult(name = "Ports", targetNamespace = "")
     @RequestWrapper(localName = "getAllClientPorts", targetNamespace = "http://useraccesspoint.jra3.geant2.net/", className = "net.geant2.jra3.useraccesspoint.GetAllClientPorts")

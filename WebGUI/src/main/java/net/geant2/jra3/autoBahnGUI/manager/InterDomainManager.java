@@ -410,6 +410,37 @@ public class InterDomainManager implements UserAccessPoint, Administration{
 	public void setPorts(List<String> ports) {
 		this.ports = ports;
 	}
+	
+    /*
+     * (non-Javadoc)
+     * @see net.geant2.jra3.useraccesspoint.UserAccessPoint#getAllDomains()
+     */
+    public List<String> getAllDomains() {
+        try {
+            if (isUserAccessPointConnected())
+                return userAccessPoint.getAllDomains();
+        } catch (Exception e ){
+            logger.error ("Problem with getting domains:"+e.getClass().getName()+":"+e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see net.geant2.jra3.useraccesspoint.UserAccessPoint#getAllLinks()
+     */
+    public List<String> getAllLinks() {
+        try {
+            if (isUserAccessPointConnected())
+                return userAccessPoint.getAllLinks();
+        } catch (Exception e ){
+            logger.error ("Problem with getting links:"+e.getClass().getName()+":"+e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant2.jra3.useraccesspoint.UserAccessPoint#getAllClientPorts()

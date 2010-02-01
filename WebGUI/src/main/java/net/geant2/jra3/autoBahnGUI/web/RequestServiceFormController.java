@@ -121,10 +121,33 @@ public class RequestServiceFormController extends SimpleFormController {
 				for (String port:allPorts){
 					mappedAllPorts.add(manager.mapPort(port));
 				}	
+				
+                List<String> allDomains = manager.getAllDomains();
+                if (allDomains==null) {
+                    try {
+                        errors.rejectValue("service.userHomeDomain", "service.userHomeDomain.error", null, "There is no way to contact with IDM, or domains list is empty.");
+                        return showForm(request, errors, "requestView");
+                    } catch (Exception e) {
+                        logger.error (e.getClass().getName()+":"+e.getMessage());
+                    }
+                }
+                
+                List<String> allLinks = manager.getAllLinks();
+                if (allLinks==null) {
+                    try {
+                        errors.rejectValue("service.userHomeDomain", "service.userHomeDomain.error", null, "There is no way to contact with IDM, or links list is empty.");
+                        return showForm(request, errors, "requestView");
+                    } catch (Exception e) {
+                        logger.error (e.getClass().getName()+":"+e.getMessage());
+                    }
+                }
+
 				model = new ModelAndView(new RedirectView("reservationForm.htm"));
 				HttpSession session = request.getSession();
 				session.setAttribute("idm", service.getUserHomeDomain());
 				session.setAttribute("ports_all", mappedAllPorts);
+                session.setAttribute("domains_all", allDomains);
+                session.setAttribute("links_all", allLinks);
 				session.setAttribute("ports_domain", mappedDomainPorts);
 				session.setAttribute("service", service);
 				return model;
