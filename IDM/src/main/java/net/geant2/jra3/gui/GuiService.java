@@ -1,10 +1,15 @@
 package net.geant2.jra3.gui;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebEndpoint;
 import javax.xml.ws.WebServiceClient;
 import javax.xml.ws.soap.SOAPBinding;
+
+import net.geant2.jra3.edugain.WSSecurity;
 
 /**
  * @author Michal
@@ -30,6 +35,28 @@ class GuiService {
      */
     @WebEndpoint(name = "GuiPort")
     public Gui getGuiPort() {
-        return service.getPort(Gui.class);
+        
+    	Gui port = service.getPort(Gui.class);
+    	
+    	
+    	WSSecurity.setClientTimeout(port);
+    	
+		try {
+			WSSecurity.configureEndpoint(port);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return port;
     }
 }

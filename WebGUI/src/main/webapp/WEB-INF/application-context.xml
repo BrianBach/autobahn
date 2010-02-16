@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:security="http://www.springframework.org/schema/security"
-	xmlns:jaxws="http://cxf.apache.org/jaxws"
-	xsi:schemaLocation="
-http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
-http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.xsd"
->
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:security="http://www.springframework.org/schema/security"
+	   xmlns:jaxws="http://cxf.apache.org/jaxws"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		                   http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+						   http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.xsd">
+						
 	<import resource="ports-mapping.xml"/>
 	
 	<bean id="messageSource"
@@ -23,14 +22,84 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 	
 	<bean id="topologyFinder" class="net.geant2.jra3.autoBahnGUI.topology.TopologyFinder">
 		<property name="manager" ref="manager"/>
-	</bean>
-	<import resource="classpath:META-INF/cxf/cxf.xml" />
-	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
-	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+	</bean>	
+	
+	<import resource="classpath:META-INF/cxf/cxf.xml"/>
+	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml"/>
+	<import resource="classpath:META-INF/cxf/cxf-extension-jaxrs-binding.xml"/>
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
 	
 	<bean id="guiImplementator" class="net.geant2.jra3.gui.GuiImpl">
 		<property name="notifier" ref="manager"/>
 	</bean>
-	<jaxws:endpoint  implementor="#guiImplementator" id="gui"  address="/gui" wsdlLocation="/wsdl/gui.wsdl">
+	
+	<bean id="ServerPasswordCallback"
+      class="net.geant.edugain.ServerPasswordCallback"/>
+	  
+	<bean id="ClientPasswordCallback"
+      class="net.geant.edugain.ClientPasswordCallback"/>	  
+			
+	<bean id="edugainProps" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="staticMethod">
+			<value>net.geant.edugain.Edugain.loadProperties</value>
+		</property>
+		<property name="arguments">
+			<list>
+				<value>webapps/autobahn-gui/WEB-INF/etc/edugain/edugain.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="readProps" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="staticMethod">
+			<value>net.geant.edugain.WSSecurity.readProperties</value>
+		</property>
+	</bean>
+				
+	<jaxws:endpoint  implementor="#guiImplementator"  id="gui"  address="/gui"  wsdlLocation="/wsdl/gui.wsdl">
+		
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+				<constructor-arg>
+					<map>               
+						<entry key="action" value-ref="readProps"/>
+						<entry key="passwordType" value="PasswordDigest"/>
+						<entry key="signaturePropFile" value="../etc/edugain/client-sec.properties"/>
+						<entry key="passwordCallbackRef">
+							<ref bean="ClientPasswordCallback"/>
+						</entry>
+						<entry key="decryptionPropFile" value="../etc/edugain/server-sec.properties"/>						
+					</map>
+				</constructor-arg>
+			</bean>			
+			<bean class="net.geant.edugain.EdugainSupport">
+				<constructor-arg type="java.util.Properties">
+					<ref bean="edugainProps"/>
+				</constructor-arg>
+			</bean>
+		</jaxws:inInterceptors>
+		
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+				<constructor-arg>
+					<map>               
+						<entry key="action" value-ref="readProps"/>
+						<entry key="user" value="autobahn"/>
+						<entry key="signatureKeyIdentifier" value="DirectReference"/>
+						<entry key="signaturePropFile" value="../etc/edugain/server-sec.properties"/>
+						<entry key="passwordType" value="PasswordDigest"/>
+						<entry key="passwordCallbackRef">
+							<ref bean="ServerPasswordCallback"/>
+						</entry>
+						<entry key="encryptionPropFile" value="../etc/edugain/client-sec.properties"/>
+						<entry key="encryptionUser" value="autobahn"/>
+						<entry key="encryptionSymAlgorithm" value="http://www.w3.org/2001/04/xmlenc#tripledes-cbc"/>
+						<entry key="encryptionParts" value="{Content}{}Body"/>						
+					</map>
+				</constructor-arg>
+			</bean>
+		</jaxws:outInterceptors>
+		
 	</jaxws:endpoint>	  
+		
 </beans>

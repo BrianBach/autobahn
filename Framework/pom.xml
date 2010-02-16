@@ -108,6 +108,16 @@
     		<groupId>org.apache.cxf</groupId>
     		<artifactId>cxf-bundle</artifactId>
     		<version>2.2.2</version>
+			<exclusions>
+				<exclusion>
+					<groupId>xalan</groupId>
+					<artifactId>xalan</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.velocity</groupId>
+					<artifactId>velocity</artifactId>
+				</exclusion>				
+			</exclusions>
     	</dependency>
     	<dependency>
     		<groupId>org.hibernate</groupId>
@@ -135,5 +145,10 @@
     		<version>2.2</version>
     		<type>jar</type>
     	</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.5.6</version>
+		</dependency>	
   	</dependencies>
 </project>

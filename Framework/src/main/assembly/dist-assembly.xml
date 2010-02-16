@@ -33,6 +33,7 @@
 			<outputFileNameMapping>${artifact.artifactId}-${artifact.version}.${artifact.extension}</outputFileNameMapping>
             <excludes>
 				<exclude>antlr:antlr</exclude>
+				<exclude>org.slf4j:slf4j-jdk14</exclude>
 			</excludes>
 			<includes>
 				<include>*:jar</include>					

@@ -213,6 +213,44 @@
 				</plugins>
 			</build>
 		</profile>
+		
+		<profile>
+			<id>create-war</id>
+			<build>			
+				<plugins>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>compile</phase>
+							<configuration>
+								<tasks>
+									<mkdir dir="./target/aar" />
+									<mkdir dir="./target/tmp" />
+									<copy todir="./target/tmp/META-INF">
+										<fileset dir="./src/main/resources/resourcesOSCARS" />
+									</copy>
+									<jar basedir="./target/tmp" destfile="./src/main/webapp/WEB-INF/services/Oscars.aar" />
+									<delete dir="./target/tmp/META-INF" />
+									
+									<mkdir dir="./target/tmp/META-INF" />
+									<copy todir="./target/tmp/META-INF">
+										<fileset dir="./src/main/resources/resourcesOSCARSNotify" />
+									</copy>
+									<jar basedir="./target/tmp" destfile="./src/main/webapp/WEB-INF/services/OscarsNotify.aar" />		
+									<delete dir="./target/tmp" />
+								</tasks>
+							</configuration>
+							<goals>
+								<goal>run</goal>
+							</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		
 	</profiles>
   
 	<dependencies>

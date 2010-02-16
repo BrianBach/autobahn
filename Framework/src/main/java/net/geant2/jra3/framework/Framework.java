@@ -2,6 +2,7 @@ package net.geant2.jra3.framework;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -14,6 +15,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import javax.xml.ws.Endpoint;
+import javax.xml.xpath.XPathException;
 
 import net.geant2.jra3.framework.commands.AutobahnCommand;
 import net.geant2.jra3.framework.commands.ClientPortsCommand;
@@ -28,6 +30,7 @@ import net.geant2.jra3.framework.commands.ShutdownCommand;
 import net.geant2.jra3.framework.commands.TopologyCommand;
 import net.geant2.jra3.framework.commands.UptimeCommand;
 import net.geant2.jra3.framework.manager.AutobahnManagerImpl;
+import net.geant2.jra3.edugain.WSSecurity;
 
 import org.apache.cxf.endpoint.Server;
 
@@ -47,9 +50,9 @@ public class Framework {
 
 	private Properties properties;
 	private Map<String, Endpoint> deployedServices = new HashMap<String, Endpoint>();
-	
+		
 	public static Map<String, AutobahnCommand> commands = new HashMap<String, AutobahnCommand>();
-
+		
 	static {
 		commands.put("quit", new QuitCommand());
 		commands.put("exit", new QuitCommand());
@@ -229,14 +232,20 @@ public class Framework {
 					continue;
 				}
 				
-				Endpoint point = Endpoint.publish(prefix + sname, impl
-						.newInstance());
+				Endpoint point = Endpoint.publish(prefix + sname, impl.newInstance());
+				
+				org.apache.cxf.jaxws.EndpointImpl jaxwsEndpointImpl = (org.apache.cxf.jaxws.EndpointImpl)point;
+				org.apache.cxf.endpoint.Server cxfServer = jaxwsEndpointImpl.getServer();
+				org.apache.cxf.endpoint.Endpoint cxfEndpoint = cxfServer.getEndpoint();
+
+				WSSecurity.configureSecurity(cxfEndpoint);
+
 				deployedServices.put(sname, point);
+				
 			} else
 				System.out.println("could not find interface or impl for "
 						+ sname);
 		}
-
 		// Publish the remote manager
 		Endpoint.publish(prefix + "manager", new AutobahnManagerImpl(this));
 		

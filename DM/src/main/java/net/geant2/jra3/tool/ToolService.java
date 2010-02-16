@@ -1,12 +1,17 @@
 package net.geant2.jra3.tool;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebEndpoint;
 import javax.xml.ws.WebServiceClient;
 import javax.xml.ws.soap.SOAPBinding;
 
-import net.geant2.jra3.intradomain.WSSecurity;
+import net.geant2.jra3.edugain.WSSecurity;
 
 
 /**
@@ -21,6 +26,7 @@ public class ToolService {
     private final static QName SERVICE = new QName("http://tool.jra3.geant2.net/", "ToolService");
     private final static QName ToolPort = new QName("http://tool.jra3.geant2.net/", "ToolPort");
     private Service service;
+
     
     public ToolService(String endPoint) {
         service = Service.create(SERVICE);
@@ -37,6 +43,22 @@ public class ToolService {
     	Tool port = service.getPort(Tool.class);
     	
     	WSSecurity.setClientTimeout(port);
+
+    	try {
+			WSSecurity.configureEndpoint(port);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
     	
         return  port;
     }

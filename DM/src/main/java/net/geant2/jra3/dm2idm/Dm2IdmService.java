@@ -1,12 +1,21 @@
 package net.geant2.jra3.dm2idm;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebEndpoint;
 import javax.xml.ws.WebServiceClient;
 import javax.xml.ws.soap.SOAPBinding;
 
-import net.geant2.jra3.intradomain.WSSecurity;
+import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.endpoint.Endpoint;
+import org.apache.cxf.frontend.ClientProxy;
+
+import net.geant2.jra3.edugain.WSSecurity;
 
 
 /**
@@ -33,6 +42,22 @@ class Dm2IdmService {
 		Dm2Idm res = service.getPort(Dm2Idm.class);
 		
 		WSSecurity.setClientTimeout(res);
+		
+		try {
+			WSSecurity.configureEndpoint(res);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 		
 		return res;
 	}
