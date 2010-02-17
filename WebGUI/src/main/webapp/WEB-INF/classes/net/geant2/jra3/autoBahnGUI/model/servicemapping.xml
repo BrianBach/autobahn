@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mapping>     
-   <class name="net.geant2.jra3.autoBahnGUI.model.Service">
+   <class name="net.geant.autobahn.autoBahnGUI.model.Service">
    	<map-to xml="request"/>
          <field name="jastification" type="java.lang.String">
               <bind-xml name="jastification" node="element"/>
           </field>
-         <field name="user" type="net.geant2.jra3.autoBahnGUI.model.UserCredentials">
+         <field name="user" type="net.geant.autobahn.autoBahnGUI.model.UserCredentials">
           		<bind-xml name="user"/>
          </field>
-         <field name="reservations" type="net.geant2.jra3.autoBahnGUI.model.ContenerList">
+         <field name="reservations" type="net.geant.autobahn.autoBahnGUI.model.ContenerList">
          </field>
    	</class>
-   	<class name="net.geant2.jra3.autoBahnGUI.model.ContenerList">
-             <field name="list" type="net.geant2.jra3.autoBahnGUI.model.Reservation" collection="arraylist">
+   	<class name="net.geant.autobahn.autoBahnGUI.model.ContenerList">
+             <field name="list" type="net.geant.autobahn.autoBahnGUI.model.Reservation" collection="arraylist">
              	<bind-xml name="reservation"/>
              </field>
     </class>
-    <class name="net.geant2.jra3.autoBahnGUI.model.Reservation">
+    <class name="net.geant.autobahn.autoBahnGUI.model.Reservation">
     	<map-to name="reservation"/> 
     	<field name="description" type="java.lang.String">
               <bind-xml name="description" node="element"/>
@@ -45,10 +45,10 @@
         <field name="userVlanId" type="int">
               <bind-xml name="userVlanId" node="element"/>
         </field>
-        <field name="userInclude" type="net.geant2.jra3.useraccesspoint.PathInfo">
+        <field name="userInclude" type="net.geant.autobahn.useraccesspoint.PathInfo">
               <bind-xml name="userInclude"/>
         </field>
-        <field name="userExclude" type="net.geant2.jra3.useraccesspoint.PathInfo">
+        <field name="userExclude" type="net.geant.autobahn.useraccesspoint.PathInfo">
               <bind-xml name="userExclude"/>
         </field>
         <field name="delay" type="int">
@@ -61,7 +61,7 @@
               <bind-xml name="resilience" node="element"/>
         </field>
     </class>
-    <class name="net.geant2.jra3.useraccesspoint.PathInfo">
+    <class name="net.geant.autobahn.useraccesspoint.PathInfo">
         <field name="domains" type="java.lang.String" collection="arraylist">
               <bind-xml name="domains" node="element"/>
         </field>
@@ -69,7 +69,7 @@
               <bind-xml name="links" node="element"/>
         </field>    
     </class>
-     <class name="net.geant2.jra3.autoBahnGUI.model.UserCredentials">
+     <class name="net.geant.autobahn.autoBahnGUI.model.UserCredentials">
      	<map-to xml="user"/>
      	     <field name="name" type="java.lang.String">
               <bind-xml name="name" node="element"/>

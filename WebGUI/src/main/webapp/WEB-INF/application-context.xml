@@ -14,13 +14,13 @@
 		<property name="basename" value="messages" />
 	</bean>
 	
-	<bean id="manager" class="net.geant2.jra3.autoBahnGUI.manager.ManagerImpl">
+	<bean id="manager" class="net.geant.autobahn.autoBahnGUI.manager.ManagerImpl">
 		<property name="notifier" ref="topologyFinder"/>
 		<property name="tearDownTime" value="60000"/>
 		<property name="portsMapper" ref="portsMapper"/>
 	</bean>
 	
-	<bean id="topologyFinder" class="net.geant2.jra3.autoBahnGUI.topology.TopologyFinder">
+	<bean id="topologyFinder" class="net.geant.autobahn.autoBahnGUI.topology.TopologyFinder">
 		<property name="manager" ref="manager"/>
 	</bean>	
 	
@@ -29,7 +29,7 @@
 	<import resource="classpath:META-INF/cxf/cxf-extension-jaxrs-binding.xml"/>
 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
 	
-	<bean id="guiImplementator" class="net.geant2.jra3.gui.GuiImpl">
+	<bean id="guiImplementator" class="net.geant.autobahn.gui.GuiImpl">
 		<property name="notifier" ref="manager"/>
 	</bean>
 	

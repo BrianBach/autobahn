@@ -1,4 +1,4 @@
-package net.geant2.jra3.tool;
+package net.geant.autobahn.tool;
 
 import javax.xml.ws.Endpoint;
 

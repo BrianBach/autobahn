@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="net.geant.autobahn.reservation">
+	
+	<class name="ReservationParams" table="RESERVATION_PARAMS">
+		<id name="id" type="long">
+			<generator class="native" />
+		</id>
+
+		<property name="capacity" type="long" />
+		
+		<property name="maxDelay" type="int" />
+		
+		<property name="resiliency" type="string" />
+		
+		<property name="bidirectional" type="boolean" />
+		
+		<property name="startTime" type="calendar" />
+		
+		<property name="endTime" type="calendar" />
+		
+		<many-to-one name="pathConstraints" class="net.geant.autobahn.constraints.PathConstraints" 
+			not-null="true" cascade="save-update" lazy="false" />
+	</class>
+	
+</hibernate-mapping>

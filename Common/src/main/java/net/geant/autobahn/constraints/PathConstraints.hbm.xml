@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="net.geant.autobahn.constraints">
+	
+	<class name="PathConstraints" table="PATH_CONSTRAINT">
+		<id name="constraintID" column="pcon_id" type="long">
+			<generator class="native" />
+		</id>
+
+		<list name="addNames" table="PCON_ADD_NAMES" cascade="all">
+			<key column="pcon_id" />
+			<list-index column="constraint_order" />
+			<element column="name"
+				type="net.geant.autobahn.constraints.HibernateConstraintsNames" />
+		</list>
+
+		<list name="boolNames" table="PCON_BOOL_NAMES" cascade="all">
+			<key column="pcon_id" />
+			<list-index column="constraint_order" />
+			<element column="name"
+				type="net.geant.autobahn.constraints.HibernateConstraintsNames" />
+		</list>
+
+		<list name="rangeNames" table="PCON_RANGE_NAMES" cascade="all">
+			<key column="pcon_id" />
+			<list-index column="constraint_order" />
+			<element column="name"
+				type="net.geant.autobahn.constraints.HibernateConstraintsNames" />
+		</list>
+
+		<list name="minValNames" table="PCON_MINVAL_NAMES" cascade="all">
+			<key column="pcon_id" />
+			<list-index column="constraint_order" />
+			<element column="name"
+				type="net.geant.autobahn.constraints.HibernateConstraintsNames" />
+		</list>
+		
+		<list name="addConstraints" table="PCON_ADD_CONSTRAINTS" cascade="all">
+			<key column="pcon_id" />
+			<list-index column="constraint_order" />
+			<many-to-many column="constraint_id" class="AdditiveConstraint" />
+		</list>
+		
+		<list name="boolConstraints" table="PCON_BOOL_CONSTRAINTS" cascade="all">
+			<key column="pcon_id" />
+			<list-index column="constraint_order" />
+			<many-to-many column="constraint_id" class="BooleanConstraint" />
+		</list>
+		
+		<list name="rangeConstraints" table="PCON_RANGE_CONSTRAINTS" cascade="all">
+			<key column="pcon_id" />
+			<list-index column="constraint_order" />
+			<many-to-many column="constraint_id" class="RangeConstraint" />
+		</list>
+
+		<list name="minValConstraints" table="PCON_MINVAL_CONSTRAINTS" cascade="all">
+			<key column="pcon_id" />
+			<list-index column="constraint_order" />
+			<many-to-many column="constraint_id" class="MinValueConstraint" />
+		</list>
+	</class>
+	
+</hibernate-mapping>

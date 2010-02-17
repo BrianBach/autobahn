@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mapping>     
-   <class name="net.geant2.jra3.autoBahnGUI.model.googlemaps.Topology">
-   		 <field name="markers" type="net.geant2.jra3.autoBahnGUI.model.googlemaps.MarkersContainer">
+   <class name="net.geant.autobahn.autoBahnGUI.model.googlemaps.Topology">
+   		 <field name="markers" type="net.geant.autobahn.autoBahnGUI.model.googlemaps.MarkersContainer">
          </field>
-         <field name="lines" type="net.geant2.jra3.autoBahnGUI.model.googlemaps.LinesContainer">
+         <field name="lines" type="net.geant.autobahn.autoBahnGUI.model.googlemaps.LinesContainer">
          </field>
    </class> 	
-   	<class name="net.geant2.jra3.autoBahnGUI.model.googlemaps.MarkersContainer">
-             <field name="markers" type="net.geant2.jra3.autoBahnGUI.model.googlemaps.Marker" collection="arraylist">
+   	<class name="net.geant.autobahn.autoBahnGUI.model.googlemaps.MarkersContainer">
+             <field name="markers" type="net.geant.autobahn.autoBahnGUI.model.googlemaps.Marker" collection="arraylist">
              	<bind-xml name="marker"/>
              </field>
     </class>
-    <class name="net.geant2.jra3.autoBahnGUI.model.googlemaps.LinesContainer">
-             <field name="lines" type="net.geant2.jra3.autoBahnGUI.model.googlemaps.Line" collection="arraylist">
+    <class name="net.geant.autobahn.autoBahnGUI.model.googlemaps.LinesContainer">
+             <field name="lines" type="net.geant.autobahn.autoBahnGUI.model.googlemaps.Line" collection="arraylist">
              	<bind-xml name="line"/>
              </field>
     </class>
-    <class name="net.geant2.jra3.autoBahnGUI.model.googlemaps.Line">
+    <class name="net.geant.autobahn.autoBahnGUI.model.googlemaps.Line">
     	<map-to name="line"/> 
     	<field name="startLattitude" type="java.lang.String">
               <bind-xml name="start-lat" node="attribute"/>
@@ -41,7 +41,7 @@
         </field>
     </class>
     
-    <class name="net.geant2.jra3.autoBahnGUI.model.googlemaps.Marker">
+    <class name="net.geant.autobahn.autoBahnGUI.model.googlemaps.Marker">
     	<map-to name="marker"/> 
     	<field name="latitude" type="java.lang.String">
               <bind-xml name="lat" node="attribute"/>

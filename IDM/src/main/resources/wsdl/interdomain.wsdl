@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="InterdomainService" targetNamespace="http://interdomain.jra3.geant2.net/" xmlns:tns="http://interdomain.jra3.geant2.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions name="InterdomainService" targetNamespace="http://interdomain.autobahn.geant.net/" xmlns:tns="http://interdomain.autobahn.geant.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="reservation.jra3.geant2.net" xmlns:ns2="network.jra3.geant2.net" xmlns:ns3="constraints.jra3.geant2.net" xmlns:tns="http://interdomain.jra3.geant2.net/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://interdomain.jra3.geant2.net/">
-<xs:import namespace="reservation.jra3.geant2.net"/>
-<xs:import namespace="network.jra3.geant2.net"/>
-<xs:import namespace="constraints.jra3.geant2.net"/>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="reservation.autobahn.geant.net" xmlns:ns2="network.autobahn.geant.net" xmlns:ns3="constraints.autobahn.geant.net" xmlns:tns="http://interdomain.autobahn.geant.net/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://interdomain.autobahn.geant.net/">
+<xs:import namespace="reservation.autobahn.geant.net"/>
+<xs:import namespace="network.autobahn.geant.net"/>
+<xs:import namespace="constraints.autobahn.geant.net"/>
 <xs:element name="cancelReservation" type="tns:cancelReservation"/>
 <xs:element name="cancelReservationResponse" type="tns:cancelReservationResponse"/>
 <xs:element name="getIdentifiers" type="tns:getIdentifiers"/>
@@ -149,9 +149,9 @@
 <xs:sequence/>
 </xs:complexType>
 </xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="reservation.jra3.geant2.net" xmlns:ns1="network.jra3.geant2.net" xmlns:ns2="constraints.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="reservation.jra3.geant2.net">
-<xs:import namespace="network.jra3.geant2.net"/>
-<xs:import namespace="constraints.jra3.geant2.net"/>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="reservation.autobahn.geant.net" xmlns:ns1="network.autobahn.geant.net" xmlns:ns2="constraints.autobahn.geant.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="reservation.autobahn.geant.net">
+<xs:import namespace="network.autobahn.geant.net"/>
+<xs:import namespace="constraints.autobahn.geant.net"/>
 <xs:complexType name="TimeRange">
 <xs:sequence>
 <xs:element minOccurs="0" name="startTime" type="xs:dateTime"/>
@@ -178,7 +178,7 @@
 </xs:sequence>
 </xs:complexType>
 </xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="constraints.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="constraints.jra3.geant2.net">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="constraints.autobahn.geant.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="constraints.autobahn.geant.net">
 <xs:complexType name="GlobalConstraints">
 <xs:sequence>
 <xs:element maxOccurs="unbounded" name="domainsIds" nillable="true" type="xs:string"/>
@@ -254,7 +254,7 @@
 </xs:restriction>
 </xs:simpleType>
 </xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="network.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="network.jra3.geant2.net">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="network.autobahn.geant.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="network.autobahn.geant.net">
 <xs:complexType name="LinkIdentifiers">
 <xs:sequence>
 <xs:element minOccurs="0" name="nodeId" type="xs:string"/>

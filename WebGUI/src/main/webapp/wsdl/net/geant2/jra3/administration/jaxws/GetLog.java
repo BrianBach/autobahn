@@ -1,5 +1,5 @@
 
-package net.geant2.jra3.administration.jaxws;
+package net.geant.autobahn.administration.jaxws;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -14,9 +14,9 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 
-@XmlRootElement(namespace = "http://administration.jra3.geant2.net/", name = "getLog")
+@XmlRootElement(namespace = "http://administration.autobahn.geant.net/", name = "getLog")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(namespace = "http://administration.jra3.geant2.net/", name = "getLog")
+@XmlType(namespace = "http://administration.autobahn.geant.net/", name = "getLog")
 
 public class GetLog {
 

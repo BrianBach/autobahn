@@ -6,10 +6,10 @@
 <serviceGroup>
     <service name="OSCARS" scope="application">
         <messageReceivers>
-            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-only" class="net.geant2.jra3.oscars.OSCARSMessageReceiverInOnly"/>
-            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="net.geant2.jra3.oscars.OSCARSMessageReceiverInOut"/>
+            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-only" class="net.geant.autobahn.oscars.OSCARSMessageReceiverInOnly"/>
+            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="net.geant.autobahn.oscars.OSCARSMessageReceiverInOut"/>
         </messageReceivers>
-        <parameter locked="false" name="ServiceClass">net.geant2.jra3.oscars.OSCARSSkeleton</parameter>
+        <parameter locked="false" name="ServiceClass">net.geant.autobahn.oscars.OSCARSSkeleton</parameter>
         <parameter locked="false" name="useOriginalwsdl">true</parameter>
         <parameter locked="false" name="modifyUserWSDLPortAddress">true</parameter>
         <parameter name="ServiceTCCL" locked="false">composite</parameter>
@@ -99,7 +99,7 @@
                    <ramp:RampartConfig xmlns:ramp="http://ws.apache.org/rampart/policy">
                             <!-- replace with user key entry alias, prompted for during install -->
                             <ramp:user>server</ramp:user>
-                            <ramp:passwordCallbackClass>net.geant2.jra3.main.PWCallback</ramp:passwordCallbackClass>
+                            <ramp:passwordCallbackClass>net.geant.autobahn.main.PWCallback</ramp:passwordCallbackClass>
                             <ramp:signatureCrypto>
                                <ramp:crypto provider="org.apache.ws.security.components.crypto.Merlin">
                                    <ramp:property name="org.apache.ws.security.crypto.merlin.keystore.type">jks</ramp:property>

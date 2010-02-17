@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="net.geant.autobahn.network" auto-import="false">
+	
+	<class name="Path" table="interdomain_path" lazy="false">
+		<id name="pathID" column="path_id" type="long">
+			<generator class="native" />
+		</id>
+		
+		<property name="monetary_cost" type="double" />
+		
+		<property name="manual_cost" type="double" />
+		
+		<list name="links" table="LINK_TO_PATH" cascade="save-update">
+			<key column="path_id" />
+			<list-index column="link_order" />
+			<many-to-many column="link_id" class="Link" />
+		</list>
+	</class>
+	
+</hibernate-mapping>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="UserAccessPointService" targetNamespace="http://useraccesspoint.jra3.geant2.net/" xmlns:tns="http://useraccesspoint.jra3.geant2.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions name="UserAccessPointService" targetNamespace="http://useraccesspoint.autobahn.geant.net/" xmlns:tns="http://useraccesspoint.autobahn.geant.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://useraccesspoint.jra3.geant2.net/" xmlns:tns="useraccesspoint.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="useraccesspoint.jra3.geant2.net">
-    <xs:import namespace="http://useraccesspoint.jra3.geant2.net/"/>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://useraccesspoint.autobahn.geant.net/" xmlns:tns="useraccesspoint.autobahn.geant.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="useraccesspoint.autobahn.geant.net">
+    <xs:import namespace="http://useraccesspoint.autobahn.geant.net/"/>
     <xs:complexType name="ReservationResponse">
         <xs:sequence>
             <xs:element minOccurs="0" name="bodID" type="xs:string"/>
@@ -71,7 +71,7 @@
         </xs:sequence>
     </xs:complexType>
 </xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://useraccesspoint.jra3.geant2.net/" xmlns:ns0="useraccesspoint.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://useraccesspoint.jra3.geant2.net/">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://useraccesspoint.autobahn.geant.net/" xmlns:ns0="useraccesspoint.autobahn.geant.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://useraccesspoint.autobahn.geant.net/">
     <xs:simpleType name="state">
         <xs:restriction base="xs:string">
             <xs:enumeration value="CANCELLED"/>

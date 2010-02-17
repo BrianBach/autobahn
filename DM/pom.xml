@@ -89,7 +89,7 @@
 								<id>wsdl-idm2dm</id>
 								<phase>compile</phase>
 								<configuration>
-									<className>net.geant2.jra3.idm2dm.Idm2Dm</className>
+									<className>net.geant.autobahn.idm2dm.Idm2Dm</className>
 									<outputFile>src/main/resources/wsdl/idm2dm.wsdl</outputFile>
 									<genWsdl>true</genWsdl>
 									<serviceName>Idm2Dm</serviceName>
@@ -103,7 +103,7 @@
 								<id>wsdl-dm2idm</id>
 								<phase>compile</phase>
 								<configuration>
-									<className>net.geant2.jra3.dm2idm.Dm2Idm</className>
+									<className>net.geant.autobahn.dm2idm.Dm2Idm</className>
 									<outputFile>src/main/resources/wsdl/dm2idm.wsdl</outputFile>
 									<genWsdl>true</genWsdl>
 									<serviceName>Dm2Idm</serviceName>
@@ -117,7 +117,7 @@
 								<id>wsdl-ta</id>
 								<phase>compile</phase>
 								<configuration>
-									<className>net.geant2.jra3.topologyabstraction.TopologyAbstraction</className>
+									<className>net.geant.autobahn.topologyabstraction.TopologyAbstraction</className>
 									<outputFile>src/main/resources/wsdl/ta.wsdl</outputFile>
 									<genWsdl>true</genWsdl>
 									<serviceName>TopologyAbstraction</serviceName>
@@ -131,7 +131,7 @@
 								<id>wsdl-tool</id>
 								<phase>compile</phase>
 								<configuration>
-									<className>net.geant2.jra3.tool.Tool</className>
+									<className>net.geant.autobahn.tool.Tool</className>
 									<outputFile>src/main/resources/wsdl/tool.wsdl</outputFile>
 									<genWsdl>true</genWsdl>
 									<serviceName>Tool</serviceName>
@@ -145,7 +145,7 @@
 								<id>wsdl-dmadmin</id>
 								<phase>compile</phase>
 								<configuration>
-									<className>net.geant2.jra3.intradomain.administration.Administration</className>
+									<className>net.geant.autobahn.intradomain.administration.Administration</className>
 									<outputFile>src/main/resources/wsdl/dmadmin.wsdl</outputFile>
 									<genWsdl>true</genWsdl>
 									<serviceName>DmAdmin</serviceName>
@@ -159,7 +159,7 @@
 								<id>wsdl-resourcesreservationcalendar</id>
 								<phase>compile</phase>
 								<configuration>
-									<className>net.geant2.jra3.intradomain.calendar.ResourcesReservationCalendarImpl</className>
+									<className>net.geant.autobahn.intradomain.calendar.ResourcesReservationCalendarImpl</className>
 									<outputFile>src/main/resources/wsdl/resourcesreservationcalendar.wsdl</outputFile>
 									<genWsdl>true</genWsdl>
 									<serviceName>ResourcesReservationCalendar</serviceName>

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="net.geant.autobahn.intradomain.sdh">
+    <class name="StmLink" table="stm_link" schema="public">
+        <composite-id>
+        	<key-many-to-one name="stmLink" column="stm_link_id" class="net.geant.autobahn.intradomain.common.GenericLink">
+            </key-many-to-one>
+        </composite-id>
+        <many-to-one name="och" class="Och" fetch="select" cascade="save-update">
+            <column name="och_id" /> 
+        </many-to-one>
+        <many-to-one name="stmType" class="StmType" fetch="select" cascade="save-update">
+            <column name="stm_type_id" /> 
+        </many-to-one>
+        <property name="status" type="string">
+            <column name="status" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -119,7 +119,7 @@
 										<arg line="-d adb" />
 										<arg line="-o ./target/tmp/oscar" />
 										<arg line="-s -ss -g" />
-										<arg line="-p net.geant2.jra3.oscars" />
+										<arg line="-p net.geant.autobahn.oscars" />
 										<arg value="-or" />
 										<arg value="--noBuildXML" />
 										<arg value="--noWSDL" />
@@ -156,7 +156,7 @@
 										<arg line="-d adb" />
 										<arg line="-o ./target/tmp/oscar-notify" />
 										<arg line="-s -ss -g" />
-										<arg line="-p net.geant2.jra3.oscars.notify" />
+										<arg line="-p net.geant.autobahn.oscars.notify" />
 										<arg value="-or" />
 										<arg value="--noBuildXML" />
 										<arg value="--noWSDL" />

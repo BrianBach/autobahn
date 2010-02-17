@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="net.geant.autobahn.intradomain.sdh">
+    <class name="SdhDomain" table="sdh_domain" schema="public">
+        <id name="sdhDomainId" type="long">
+            <column name="sdh_domain_id" />
+            <generator class="increment" />
+        </id>
+        <property name="name" type="string">
+            <column name="name" />
+        </property>
+        <property name="provMethod" type="string">
+            <column name="provMethod" />
+        </property>
+        <property name="equipmentProvider" type="string">
+            <column name="equipment_provider" />
+        </property>
+        <property name="dateModified" type="date">
+            <column name="date_modified" />
+        </property>
+    </class>
+</hibernate-mapping>

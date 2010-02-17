@@ -1,5 +1,5 @@
 
-package net.geant2.jra3.gui.jaxws;
+package net.geant.autobahn.gui.jaxws;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -13,9 +13,9 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 
-@XmlRootElement(namespace = "http://gui.jra3.geant2.net/", name = "reservationChangedResponse")
+@XmlRootElement(namespace = "http://gui.autobahn.geant.net/", name = "reservationChangedResponse")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(namespace = "http://gui.jra3.geant2.net/", name = "reservationChangedResponse")
+@XmlType(namespace = "http://gui.autobahn.geant.net/", name = "reservationChangedResponse")
 
 public class ReservationChangedResponse {
 

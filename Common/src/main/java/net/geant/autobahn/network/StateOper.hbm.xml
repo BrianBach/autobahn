@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="net.geant.autobahn.network">
+	
+	<class name="StateOper" table="State_oper" lazy="false">
+		<id name="state" column="State_oper_enum" type="int" />
+	</class>
+	
+</hibernate-mapping>

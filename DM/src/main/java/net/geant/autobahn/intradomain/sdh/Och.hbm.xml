@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="net.geant.autobahn.intradomain.sdh">
+    <class name="Och" table="och" schema="public">
+        <id name="ochId" type="long">
+            <column name="och_id" />
+            <generator class="increment" />
+        </id>
+        <property name="payload" type="string">
+            <column name="payload" />
+        </property>
+        <property name="status" type="string">
+            <column name="status" />
+        </property>
+    </class>
+</hibernate-mapping>

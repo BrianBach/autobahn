@@ -17,28 +17,28 @@
           xmlns:xs="http://www.w3.org/2001/XMLSchema"
           xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
           xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <jaxws:bindings  node="wsdl:definitions/wsdl:types/xs:schema[@targetNamespace='reservation.jra3.geant2.net']">
+  <jaxws:bindings  node="wsdl:definitions/wsdl:types/xs:schema[@targetNamespace='reservation.autobahn.geant.net']">
       <jxb:globalBindings xmlns:jxb="http://java.sun.com/xml/ns/jaxb" xmlns:xs="http://www.w3.org/2001/XMLSchema">
         <jxb:javaType name="java.util.Calendar" xmlType="xs:dateTime"
                       parseMethod="javax.xml.bind.DatatypeConverter.parseDateTime"
                       printMethod="javax.xml.bind.DatatypeConverter.printDateTime"/>
       </jxb:globalBindings>
   </jaxws:bindings>
-  <jaxws:bindings  node="wsdl:definitions/wsdl:types/xs:schema[@targetNamespace='network.jra3.geant2.net']">
+  <jaxws:bindings  node="wsdl:definitions/wsdl:types/xs:schema[@targetNamespace='network.autobahn.geant.net']">
       <jxb:globalBindings xmlns:jxb="http://java.sun.com/xml/ns/jaxb" xmlns:xs="http://www.w3.org/2001/XMLSchema">
         <jxb:javaType name="java.util.Calendar" xmlType="xs:dateTime"
                       parseMethod="javax.xml.bind.DatatypeConverter.parseDateTime"
                       printMethod="javax.xml.bind.DatatypeConverter.printDateTime"/>
       </jxb:globalBindings>
   </jaxws:bindings>
-  <jaxws:bindings  node="wsdl:definitions/wsdl:types/xs:schema[@targetNamespace='http://interdomain.jra3.geant2.net/']">
+  <jaxws:bindings  node="wsdl:definitions/wsdl:types/xs:schema[@targetNamespace='http://interdomain.autobahn.geant.net/']">
       <jxb:globalBindings xmlns:jxb="http://java.sun.com/xml/ns/jaxb" xmlns:xs="http://www.w3.org/2001/XMLSchema">
         <jxb:javaType name="java.util.Calendar" xmlType="xs:dateTime"
                       parseMethod="javax.xml.bind.DatatypeConverter.parseDateTime"
                       printMethod="javax.xml.bind.DatatypeConverter.printDateTime"/>
       </jxb:globalBindings>
   </jaxws:bindings>
-  <jaxws:bindings  node="wsdl:definitions/wsdl:types/xs:schema[@targetNamespace='constraints.jra3.geant2.net']">
+  <jaxws:bindings  node="wsdl:definitions/wsdl:types/xs:schema[@targetNamespace='constraints.autobahn.geant.net']">
       <jxb:globalBindings xmlns:jxb="http://java.sun.com/xml/ns/jaxb" xmlns:xs="http://www.w3.org/2001/XMLSchema">
         <jxb:javaType name="java.util.Calendar" xmlType="xs:dateTime"
                       parseMethod="javax.xml.bind.DatatypeConverter.parseDateTime"

@@ -37,7 +37,7 @@
 			<evaluate expression="manager.getReservationResiliencies()" result="flowScope.resiliences"/>
 			<evaluate expression="manager.getTimezones()" result="flowScope.timezones"/>
 		</transition>
-		<transition on-exception="net.geant2.jra3.autoBahnGUI.manager.ManagerException"  to="request-service"> 
+		<transition on-exception="net.geant.autobahn.autoBahnGUI.manager.ManagerException"  to="request-service"> 
 			<evaluate expression="exceptionTranslator.translateException(flowRequestContext, flowExecutionException)"/>
 		</transition>	
 		<transition on="remove" to="request-service">

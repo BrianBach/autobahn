@@ -1,5 +1,5 @@
 
-package net.geant2.jra3.useraccesspoint.jaxws;
+package net.geant.autobahn.useraccesspoint.jaxws;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -14,20 +14,20 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 
-@XmlRootElement(namespace = "http://useraccesspoint.jra3.geant2.net/", name = "queryServiceResponse")
+@XmlRootElement(namespace = "http://useraccesspoint.autobahn.geant.net/", name = "queryServiceResponse")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(namespace = "http://useraccesspoint.jra3.geant2.net/", name = "queryServiceResponse")
+@XmlType(namespace = "http://useraccesspoint.autobahn.geant.net/", name = "queryServiceResponse")
 
 public class QueryServiceResponse {
 
 @XmlElement(namespace = "", name = "ServiceResponse")
-    private net.geant2.jra3.useraccesspoint.ServiceResponse ServiceResponse;
+    private net.geant.autobahn.useraccesspoint.ServiceResponse ServiceResponse;
 
-    public net.geant2.jra3.useraccesspoint.ServiceResponse getServiceResponse ()     {
+    public net.geant.autobahn.useraccesspoint.ServiceResponse getServiceResponse ()     {
 	           return this.ServiceResponse;
         }
 
-    public void setServiceResponse (   net.geant2.jra3.useraccesspoint.ServiceResponse newServiceResponse  )     {
+    public void setServiceResponse (   net.geant.autobahn.useraccesspoint.ServiceResponse newServiceResponse  )     {
 	           this.ServiceResponse = newServiceResponse;
         }
 

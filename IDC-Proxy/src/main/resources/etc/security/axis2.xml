@@ -28,7 +28,7 @@
 		<ramp:RampartConfig xmlns:ramp="http://ws.apache.org/rampart/policy">
 		<!-- replace with user key entry alias, prompted for during install -->
 		<ramp:user>client</ramp:user>
-		<ramp:passwordCallbackClass>net.geant2.jra3.main.PWCallback</ramp:passwordCallbackClass>
+		<ramp:passwordCallbackClass>net.geant.autobahn.main.PWCallback</ramp:passwordCallbackClass>
 		<ramp:signatureCrypto>
 		<ramp:crypto provider="org.apache.ws.security.components.crypto.Merlin">
 		<ramp:property name="org.apache.ws.security.crypto.merlin.keystore.type">jks</ramp:property>

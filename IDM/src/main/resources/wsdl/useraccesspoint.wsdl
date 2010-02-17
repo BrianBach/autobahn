@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="UserAccessPointService" targetNamespace="http://useraccesspoint.jra3.geant2.net/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://useraccesspoint.jra3.geant2.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+<wsdl:definitions name="UserAccessPointService" targetNamespace="http://useraccesspoint.autobahn.geant.net/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://useraccesspoint.autobahn.geant.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
   <wsdl:types>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="useraccesspoint.jra3.geant2.net" xmlns:tns="http://useraccesspoint.jra3.geant2.net/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://useraccesspoint.jra3.geant2.net/">
-<xs:import namespace="useraccesspoint.jra3.geant2.net"/>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="useraccesspoint.autobahn.geant.net" xmlns:tns="http://useraccesspoint.autobahn.geant.net/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://useraccesspoint.autobahn.geant.net/">
+<xs:import namespace="useraccesspoint.autobahn.geant.net"/>
 <xs:element name="cancelService" type="tns:cancelService"/>
 <xs:element name="cancelServiceResponse" type="tns:cancelServiceResponse"/>
 <xs:element name="checkReservationPossibility" type="tns:checkReservationPossibility"/>
@@ -160,8 +160,8 @@
 <xs:sequence/>
 </xs:complexType>
 </xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://useraccesspoint.jra3.geant2.net/" xmlns:tns="useraccesspoint.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="useraccesspoint.jra3.geant2.net">
-<xs:import namespace="http://useraccesspoint.jra3.geant2.net/"/>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://useraccesspoint.autobahn.geant.net/" xmlns:tns="useraccesspoint.autobahn.geant.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="useraccesspoint.autobahn.geant.net">
+<xs:import namespace="http://useraccesspoint.autobahn.geant.net/"/>
 <xs:complexType name="ReservationRequest">
 <xs:sequence>
 <xs:element minOccurs="0" name="startPort" type="xs:string"/>

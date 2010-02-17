@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="UapCallbackService" targetNamespace="http://callback.useraccesspoint.jra3.geant2.net/" xmlns:tns="http://callback.useraccesspoint.jra3.geant2.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions name="UapCallbackService" targetNamespace="http://callback.useraccesspoint.autobahn.geant.net/" xmlns:tns="http://callback.useraccesspoint.autobahn.geant.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://callback.useraccesspoint.jra3.geant2.net/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://callback.useraccesspoint.jra3.geant2.net/">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://callback.useraccesspoint.autobahn.geant.net/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://callback.useraccesspoint.autobahn.geant.net/">
 <xs:element name="domainUp" type="tns:domainUp"/>
 <xs:element name="domainUpResponse" type="tns:domainUpResponse"/>
 <xs:element name="reservationActive" type="tns:reservationActive"/>

@@ -16,7 +16,7 @@
 		<property name="preparerFactoryClass" value="org.springframework.web.servlet.view.tiles2.SpringBeanPreparerFactory" />
     </bean>
 
-	<context:component-scan base-package="net.geant2.jra3.autoBahnGUI.web"/>
+	<context:component-scan base-package="net.geant.autobahn.autoBahnGUI.web"/>
 	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
 	</bean>
     
@@ -27,7 +27,7 @@
 	</bean>
 	
 		
-  	<bean id="loginController" class="net.geant2.jra3.autoBahnGUI.web.LoginController">
+  	<bean id="loginController" class="net.geant.autobahn.autoBahnGUI.web.LoginController">
     	<property name="formView"><value>loginView</value></property> 
     	<property name="authenticators">
     		<map>

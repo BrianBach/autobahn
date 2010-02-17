@@ -10,6 +10,6 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
   <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/> 
  
   <jaxws:endpoint id="greeter" 
-                  implementor="net.geant2.jra3.idm2dm.Idm2DmImpl" 
+                  implementor="net.geant.autobahn.idm2dm.Idm2DmImpl" 
                   address="/idm2dm"/> 
 </beans> 

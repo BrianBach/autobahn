@@ -3,7 +3,7 @@
  * 2007-03-28
  */
 
-package net.geant2.jra3.intradomain.common;
+package net.geant.autobahn.intradomain.common;
 
 import java.io.Serializable;
 
@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name="Location", namespace="common.intradomain.jra3.geant2.net", 
+@XmlType(name="Location", namespace="common.intradomain.autobahn.geant.net", 
 		propOrder={ "name", "description", "country", "institution",
 		"street", "floor", "roomSuite", "row_", "cabinet", "zipCode",
 		"phoneNumber", "eMailAddress", "geoLatitude", "geoLongitude",

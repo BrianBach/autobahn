@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="net.geant.autobahn.intradomain.common">
+    <class name="Location" table="location" schema="public">
+        <id name="locationId" type="long">
+            <column name="location_id" />
+            <generator class="increment" />
+        </id>
+        <property name="name" type="string">
+            <column name="name" />
+        </property>
+        <property name="description" type="string">
+            <column name="description" />
+        </property>
+        <property name="country" type="string">
+            <column name="country" />
+        </property>
+        <property name="institution" type="string">
+            <column name="institution" />
+        </property>
+        <property name="street" type="string">
+            <column name="street" />
+        </property>
+        <property name="floor" type="integer">
+            <column name="floor" />
+        </property>
+        <property name="roomSuite" type="integer">
+            <column name="room_suite" />
+        </property>
+        <property name="row_" type="integer">
+            <column name="row_" />
+        </property>
+        <property name="cabinet" type="integer">
+            <column name="cabinet" />
+        </property>
+        <property name="zipCode" type="string">
+            <column name="zip_code" />
+        </property>
+        <property name="phoneNumber" type="string">
+            <column name="phone_number" />
+        </property>
+        <property name="eMailAddress" type="string">
+            <column name="e_mail_address" />
+        </property>                
+        <property name="geoLatitude" type="double">
+            <column name="geo_latitude" precision="8" scale="0" />
+        </property>
+        <property name="geoLongitude" type="double">
+            <column name="geo_longitude" precision="8" scale="0" />
+        </property>
+        <property name="type" type="string">
+            <column name="type" />
+        </property>
+        <property name="zone" type="string">
+            <column name="zone" />
+        </property>
+        <property name="altitude" type="double">
+            <column name="altitude" precision="8" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

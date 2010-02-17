@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="Dm2IdmService" targetNamespace="http://dm2idm.jra3.geant2.net/" xmlns:tns="http://dm2idm.jra3.geant2.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions name="Dm2IdmService" targetNamespace="http://dm2idm.autobahn.geant.net/" xmlns:tns="http://dm2idm.autobahn.geant.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="network.jra3.geant2.net" xmlns:tns="http://dm2idm.jra3.geant2.net/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://dm2idm.jra3.geant2.net/">
-<xs:import namespace="network.jra3.geant2.net"/>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="network.autobahn.geant.net" xmlns:tns="http://dm2idm.autobahn.geant.net/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://dm2idm.autobahn.geant.net/">
+<xs:import namespace="network.autobahn.geant.net"/>
 <xs:element name="activate" type="tns:activate"/>
 <xs:element name="activateResponse" type="tns:activateResponse"/>
 <xs:element name="finish" type="tns:finish"/>
@@ -63,7 +63,7 @@
 </xs:sequence>
 </xs:complexType>
 </xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="network.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="network.jra3.geant2.net">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="network.autobahn.geant.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="network.autobahn.geant.net">
 <xs:complexType name="Link">
 <xs:sequence>
 <xs:element minOccurs="0" name="bodID" type="xs:string"/>

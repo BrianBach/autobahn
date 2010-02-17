@@ -1,5 +1,5 @@
 
-package net.geant2.jra3.administration.jaxws;
+package net.geant.autobahn.administration.jaxws;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -14,20 +14,20 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 
-@XmlRootElement(namespace = "http://administration.jra3.geant2.net/", name = "getStatusResponse")
+@XmlRootElement(namespace = "http://administration.autobahn.geant.net/", name = "getStatusResponse")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(namespace = "http://administration.jra3.geant2.net/", name = "getStatusResponse")
+@XmlType(namespace = "http://administration.autobahn.geant.net/", name = "getStatusResponse")
 
 public class GetStatusResponse {
 
 @XmlElement(namespace = "", name = "status")
-    private net.geant2.jra3.administration.Status status;
+    private net.geant.autobahn.administration.Status status;
 
-    public net.geant2.jra3.administration.Status getStatus ()     {
+    public net.geant.autobahn.administration.Status getStatus ()     {
 	           return this.status;
         }
 
-    public void setStatus (   net.geant2.jra3.administration.Status newStatus  )     {
+    public void setStatus (   net.geant.autobahn.administration.Status newStatus  )     {
 	           this.status = newStatus;
         }
 

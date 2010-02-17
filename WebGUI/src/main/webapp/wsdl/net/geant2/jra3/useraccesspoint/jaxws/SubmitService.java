@@ -1,5 +1,5 @@
 
-package net.geant2.jra3.useraccesspoint.jaxws;
+package net.geant.autobahn.useraccesspoint.jaxws;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -14,20 +14,20 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 
-@XmlRootElement(namespace = "http://useraccesspoint.jra3.geant2.net/", name = "submitService")
+@XmlRootElement(namespace = "http://useraccesspoint.autobahn.geant.net/", name = "submitService")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(namespace = "http://useraccesspoint.jra3.geant2.net/", name = "submitService")
+@XmlType(namespace = "http://useraccesspoint.autobahn.geant.net/", name = "submitService")
 
 public class SubmitService {
 
 @XmlElement(namespace = "", name = "request")
-    private net.geant2.jra3.useraccesspoint.ServiceRequest request;
+    private net.geant.autobahn.useraccesspoint.ServiceRequest request;
 
-    public net.geant2.jra3.useraccesspoint.ServiceRequest getRequest ()     {
+    public net.geant.autobahn.useraccesspoint.ServiceRequest getRequest ()     {
 	           return this.request;
         }
 
-    public void setRequest (   net.geant2.jra3.useraccesspoint.ServiceRequest newRequest  )     {
+    public void setRequest (   net.geant.autobahn.useraccesspoint.ServiceRequest newRequest  )     {
 	           this.request = newRequest;
         }
 

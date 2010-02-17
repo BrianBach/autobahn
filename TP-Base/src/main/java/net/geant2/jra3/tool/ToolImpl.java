@@ -1,12 +1,12 @@
-package net.geant2.jra3.tool;
+package net.geant.autobahn.tool;
 
 import java.util.List;
 
 import javax.jws.WebService;
 
-import net.geant2.jra3.aai.AAIException;
-import net.geant2.jra3.intradomain.common.GenericLink;
-import net.geant2.jra3.reservation.ReservationParams;
+import net.geant.autobahn.aai.AAIException;
+import net.geant.autobahn.intradomain.common.GenericLink;
+import net.geant.autobahn.reservation.ReservationParams;
 
 /**
  * @author Michal
@@ -14,12 +14,12 @@ import net.geant2.jra3.reservation.ReservationParams;
 
 @WebService(name = "Tool", serviceName = "ToolService",
         portName = "ToolPort",
-        targetNamespace = "http://tool.jra3.geant2.net/", 
-        endpointInterface = "net.geant2.jra3.tool.Tool")
+        targetNamespace = "http://tool.autobahn.geant.net/", 
+        endpointInterface = "net.geant.autobahn.tool.Tool")
 public class ToolImpl implements Tool {
 
 	/* (non-Javadoc)
-	 * @see net.geant2.jra3.tool.Tool#addReservation(java.lang.String, java.util.List, net.geant2.jra3.reservation.ReservationParams)
+	 * @see net.geant.autobahn.tool.Tool#addReservation(java.lang.String, java.util.List, net.geant.autobahn.reservation.ReservationParams)
 	 */
 	public void addReservation(String resID, List<GenericLink> links,
 			ReservationParams params) throws AAIException, RequestException,
@@ -48,7 +48,7 @@ public class ToolImpl implements Tool {
 	}
 
 	/* (non-Javadoc)
-	 * @see net.geant2.jra3.tool.Tool#removeReservation(java.lang.String)
+	 * @see net.geant.autobahn.tool.Tool#removeReservation(java.lang.String)
 	 */
 	public void removeReservation(String resID, List<GenericLink> links,
 			ReservationParams params) throws AAIException,

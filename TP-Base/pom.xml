@@ -80,7 +80,7 @@
 								<id>wsdl-tool</id>
 								<phase>compile</phase>
 								<configuration>
-									<className>net.geant2.jra3.tool.Tool</className>
+									<className>net.geant.autobahn.tool.Tool</className>
 									<outputFile>src/main/resources/wsdl/tool.wsdl</outputFile>
 									<genWsdl>true</genWsdl>
 									<serviceName>Tool</serviceName>

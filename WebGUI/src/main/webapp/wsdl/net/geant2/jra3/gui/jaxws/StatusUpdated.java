@@ -1,5 +1,5 @@
 
-package net.geant2.jra3.gui.jaxws;
+package net.geant.autobahn.gui.jaxws;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -14,16 +14,16 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 
-@XmlRootElement(namespace = "http://gui.jra3.geant2.net/", name = "statusUpdated")
+@XmlRootElement(namespace = "http://gui.autobahn.geant.net/", name = "statusUpdated")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(namespace = "http://gui.jra3.geant2.net/", name = "statusUpdated")
+@XmlType(namespace = "http://gui.autobahn.geant.net/", name = "statusUpdated")
 
 public class StatusUpdated {
 
 @XmlElement(namespace = "", name = "idm")
     private java.lang.String idm;
 @XmlElement(namespace = "", name = "status")
-    private net.geant2.jra3.administration.Status status;
+    private net.geant.autobahn.administration.Status status;
 
     public java.lang.String getIdm ()     {
 	           return this.idm;
@@ -33,11 +33,11 @@ public class StatusUpdated {
 	           this.idm = newIdm;
         }
 
-    public net.geant2.jra3.administration.Status getStatus ()     {
+    public net.geant.autobahn.administration.Status getStatus ()     {
 	           return this.status;
         }
 
-    public void setStatus (   net.geant2.jra3.administration.Status newStatus  )     {
+    public void setStatus (   net.geant.autobahn.administration.Status newStatus  )     {
 	           this.status = newStatus;
         }
 

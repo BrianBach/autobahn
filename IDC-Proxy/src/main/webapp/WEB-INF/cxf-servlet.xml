@@ -11,6 +11,6 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
   <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
 -->
   <jaxws:endpoint id="proxy"
-                  implementor="net.geant2.jra3.proxy.ProxyImpl"
+                  implementor="net.geant.autobahn.proxy.ProxyImpl"
                   address="/proxy"/>
 </beans>

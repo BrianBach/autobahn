@@ -24,7 +24,7 @@
         <items>Timestamp Signature</items>
         <user>jra-client</user>
         <passwordCallbackClass>
-            net.geant2.jra3.interdomain.PWCallback
+            net.geant.autobahn.interdomain.PWCallback
         </passwordCallbackClass>
         <signaturePropFile>sec-client.properties</signaturePropFile>
         <signatureKeyIdentifier>DirectReference</signatureKeyIdentifier>

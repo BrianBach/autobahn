@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="AdministrationService" targetNamespace="http://administration.jra3.geant2.net/" xmlns:tns="http://administration.jra3.geant2.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions name="AdministrationService" targetNamespace="http://administration.autobahn.geant.net/" xmlns:tns="http://administration.autobahn.geant.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://administration.jra3.geant2.net/" xmlns:ns2="network.jra3.geant2.net" xmlns:ns3="constraints.jra3.geant2.net" xmlns:tns="reservation.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="reservation.jra3.geant2.net">
-    <xs:import namespace="http://administration.jra3.geant2.net/"/>
-    <xs:import namespace="network.jra3.geant2.net"/>
-    <xs:import namespace="constraints.jra3.geant2.net"/>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://administration.autobahn.geant.net/" xmlns:ns2="network.autobahn.geant.net" xmlns:ns3="constraints.autobahn.geant.net" xmlns:tns="reservation.autobahn.geant.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="reservation.autobahn.geant.net">
+    <xs:import namespace="http://administration.autobahn.geant.net/"/>
+    <xs:import namespace="network.autobahn.geant.net"/>
+    <xs:import namespace="constraints.autobahn.geant.net"/>
     <xs:complexType name="Service">
         <xs:sequence>
             <xs:element minOccurs="0" name="state" type="ns1:state"/>
@@ -42,7 +42,7 @@
         </xs:sequence>
     </xs:complexType>
 </xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="network.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="network.jra3.geant2.net">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="network.autobahn.geant.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="network.autobahn.geant.net">
     <xs:complexType name="AdminDomain">
         <xs:sequence>
             <xs:element minOccurs="0" name="bodID" type="xs:string"/>
@@ -127,7 +127,7 @@
         </xs:sequence>
     </xs:complexType>
 </xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://administration.jra3.geant2.net/" xmlns:ns0="reservation.jra3.geant2.net" xmlns:ns1="administration.jra3.geant2.net" xmlns:ns2="network.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://administration.jra3.geant2.net/">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://administration.autobahn.geant.net/" xmlns:ns0="reservation.autobahn.geant.net" xmlns:ns1="administration.autobahn.geant.net" xmlns:ns2="network.autobahn.geant.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://administration.autobahn.geant.net/">
     <xs:complexType abstract="true" name="autobahnReservation">
         <xs:complexContent>
             <xs:extension base="ns0:Reservation">
@@ -240,7 +240,7 @@
         <xs:sequence/>
     </xs:complexType>
 </xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="constraints.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="constraints.jra3.geant2.net">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="constraints.autobahn.geant.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="constraints.autobahn.geant.net">
     <xs:complexType name="RangeConstraint">
         <xs:complexContent>
             <xs:extension base="tns:Constraint">
@@ -314,8 +314,8 @@
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="network.jra3.geant2.net" xmlns:tns="administration.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="administration.jra3.geant2.net">
-    <xs:import namespace="network.jra3.geant2.net"/>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="network.autobahn.geant.net" xmlns:tns="administration.autobahn.geant.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="administration.autobahn.geant.net">
+    <xs:import namespace="network.autobahn.geant.net"/>
     <xs:complexType name="KeyValue">
         <xs:sequence>
             <xs:element minOccurs="0" name="key" type="xs:string"/>

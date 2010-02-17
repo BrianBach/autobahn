@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"hibernate-mapping-3.0.dtd">
+	
+<hibernate-mapping package="net.geant.autobahn.network">
+	
+	<class name="Link" table="LINK" lazy="false">
+		<id name="bodID" column="link_id" type="string" />
+		
+		<property name="kind" type="integer" not-null="false" />
+		
+		<many-to-one name="startPort" class="Port" not-null="true" 
+			cascade="save-update" />
+		
+		<many-to-one name="endPort" class="Port" not-null="true" 
+			cascade="save-update" />
+		
+		<property name="bidirectional" type="boolean" not-null="false" />
+		
+		<property name="delay" type="integer" not-null="false" />
+		
+		<property name="manualCost" type="double" not-null="false" />
+		
+		<property name="monetaryCost" type="double" not-null="false" />
+		
+		<property name="granularity" type="long" not-null="false" />
+		
+		<property name="minResCapacity" type="long" not-null="false" />
+		
+		<property name="maxResCapacity" type="long" not-null="false" />
+		
+		<property name="capacity" type="long" not-null="false" />
+		
+		<property name="resilience" type="string" not-null="false" />
+		
+		<many-to-one name="operationalState" column="State_oper_enum" 
+			class="StateOper" />
+		
+		<many-to-one name="administrativeState" column="State_admin_enum"
+			class="StateAdmin" />
+		
+		<many-to-one name="type" column="Link_type_enum"
+			class="LinkType" />
+
+		<property name="localName" type="string" not-null="false" />
+		
+		<property name="timestamp" type="timestamp"/>
+	</class>
+	
+</hibernate-mapping>

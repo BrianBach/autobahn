@@ -3,7 +3,7 @@
  * 2007-03-28
  */
 
-package net.geant2.jra3.intradomain.common;
+package net.geant.autobahn.intradomain.common;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name="VersionInfo", namespace="common.intradomain.jra3.geant2.net", 
+@XmlType(name="VersionInfo", namespace="common.intradomain.autobahn.geant.net", 
 		propOrder={ "startDate", "endDate", "createdBy", "modifiedBy",
 		"dateCreated", "dateModified"
 })

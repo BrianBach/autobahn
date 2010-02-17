@@ -1,5 +1,5 @@
 
-package net.geant2.jra3.dm2idm.jaxws;
+package net.geant.autobahn.dm2idm.jaxws;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -14,9 +14,9 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 
-@XmlRootElement(namespace = "http://dm2idm.jra3.geant2.net/", name = "finish")
+@XmlRootElement(namespace = "http://dm2idm.autobahn.geant.net/", name = "finish")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(namespace = "http://dm2idm.jra3.geant2.net/", name = "finish")
+@XmlType(namespace = "http://dm2idm.autobahn.geant.net/", name = "finish")
 
 public class Finish {
 

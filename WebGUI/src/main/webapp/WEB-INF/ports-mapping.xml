@@ -9,7 +9,7 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
 http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.xsd"
 >
 
-<bean id="portsMapper" class="net.geant2.jra3.autoBahnGUI.manager.PortsMapperImpl">
+<bean id="portsMapper" class="net.geant.autobahn.autoBahnGUI.manager.PortsMapperImpl">
 <property name="portsMapping">	
 			<map key-type="java.lang.String">
 				<!-- <entry><key><value>10.10.32.31</value></key><value type="java.lang.String">Amsterdam</value></entry>

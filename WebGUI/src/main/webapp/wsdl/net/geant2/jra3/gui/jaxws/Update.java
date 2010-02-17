@@ -1,5 +1,5 @@
 
-package net.geant2.jra3.gui.jaxws;
+package net.geant.autobahn.gui.jaxws;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -14,16 +14,16 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 
-@XmlRootElement(namespace = "http://gui.jra3.geant2.net/", name = "update")
+@XmlRootElement(namespace = "http://gui.autobahn.geant.net/", name = "update")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(namespace = "http://gui.jra3.geant2.net/", name = "update")
+@XmlType(namespace = "http://gui.autobahn.geant.net/", name = "update")
 
 public class Update {
 
 @XmlElement(namespace = "", name = "idm")
     private java.lang.String idm;
 @XmlElement(namespace = "", name = "event")
-    private net.geant2.jra3.gui.EventType event;
+    private net.geant.autobahn.gui.EventType event;
 @XmlElement(namespace = "", name = "properties")
     private java.util.List properties;
 
@@ -35,11 +35,11 @@ public class Update {
 	           this.idm = newIdm;
         }
 
-    public net.geant2.jra3.gui.EventType getEvent ()     {
+    public net.geant.autobahn.gui.EventType getEvent ()     {
 	           return this.event;
         }
 
-    public void setEvent (   net.geant2.jra3.gui.EventType newEvent  )     {
+    public void setEvent (   net.geant.autobahn.gui.EventType newEvent  )     {
 	           this.event = newEvent;
         }
 

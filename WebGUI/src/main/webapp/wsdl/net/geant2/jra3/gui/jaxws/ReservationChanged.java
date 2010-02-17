@@ -1,5 +1,5 @@
 
-package net.geant2.jra3.gui.jaxws;
+package net.geant.autobahn.gui.jaxws;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -14,9 +14,9 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 
-@XmlRootElement(namespace = "http://gui.jra3.geant2.net/", name = "reservationChanged")
+@XmlRootElement(namespace = "http://gui.autobahn.geant.net/", name = "reservationChanged")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(namespace = "http://gui.jra3.geant2.net/", name = "reservationChanged")
+@XmlType(namespace = "http://gui.autobahn.geant.net/", name = "reservationChanged")
 
 public class ReservationChanged {
 
@@ -27,7 +27,7 @@ public class ReservationChanged {
 @XmlElement(namespace = "", name = "resID")
     private java.lang.String resID;
 @XmlElement(namespace = "", name = "state")
-    private net.geant2.jra3.gui.ReservationChangedType state;
+    private net.geant.autobahn.gui.ReservationChangedType state;
 @XmlElement(namespace = "", name = "message")
     private java.lang.String message;
 
@@ -55,11 +55,11 @@ public class ReservationChanged {
 	           this.resID = newResID;
         }
 
-    public net.geant2.jra3.gui.ReservationChangedType getState ()     {
+    public net.geant.autobahn.gui.ReservationChangedType getState ()     {
 	           return this.state;
         }
 
-    public void setState (   net.geant2.jra3.gui.ReservationChangedType newState  )     {
+    public void setState (   net.geant.autobahn.gui.ReservationChangedType newState  )     {
 	           this.state = newState;
         }
 

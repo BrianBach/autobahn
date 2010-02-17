@@ -42,7 +42,7 @@
     <servlet>
     	<servlet-name>PROXY</servlet-name>
     	<display-name>PROXY</display-name>
-    	<servlet-class>net.geant2.jra3.main.ProxyServlet</servlet-class>
+    	<servlet-class>net.geant.autobahn.main.ProxyServlet</servlet-class>
     	<load-on-startup>50</load-on-startup>
     </servlet>
     

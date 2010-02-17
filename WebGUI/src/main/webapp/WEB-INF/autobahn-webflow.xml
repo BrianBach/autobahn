@@ -22,20 +22,20 @@ http://www.springframework.org/schema/webflow-config/spring-webflow-config-2.0.x
 		<property name="order" value="0"/>
 	</bean>
 
-	<bean  id="conversionService" class="net.geant2.jra3.autoBahnGUI.webflow.ConversionService" init-method="initConverters">
+	<bean  id="conversionService" class="net.geant.autobahn.autoBahnGUI.webflow.ConversionService" init-method="initConverters">
 		<property name="converters">
 			<map>
-				<entry key="calendar"><bean class="net.geant2.jra3.autoBahnGUI.webflow.CalendarConverter"/></entry>
-				<entry key="reservation-priority"><bean class="net.geant2.jra3.autoBahnGUI.webflow.ReservationPriorityConverter"/></entry>
-				<entry key="reservation-resiliency"><bean class="net.geant2.jra3.autoBahnGUI.webflow.ReservationResiliencyConverter"/></entry>
+				<entry key="calendar"><bean class="net.geant.autobahn.autoBahnGUI.webflow.CalendarConverter"/></entry>
+				<entry key="reservation-priority"><bean class="net.geant.autobahn.autoBahnGUI.webflow.ReservationPriorityConverter"/></entry>
+				<entry key="reservation-resiliency"><bean class="net.geant.autobahn.autoBahnGUI.webflow.ReservationResiliencyConverter"/></entry>
 			</map>
 		</property>
 		
 	</bean>
-	<bean id="exceptionTranslator" class="net.geant2.jra3.autoBahnGUI.webflow.ExceptionTranslator">
+	<bean id="exceptionTranslator" class="net.geant.autobahn.autoBahnGUI.webflow.ExceptionTranslator">
 	</bean>
 	
-	<bean id="serviceValidator" class="net.geant2.jra3.autoBahnGUI.webflow.ServiceValidator">
+	<bean id="serviceValidator" class="net.geant.autobahn.autoBahnGUI.webflow.ServiceValidator">
 	</bean>
 
 	<webflow:flow-registry id="flowRegistry" flow-builder-services="flowBuilderServices" >

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="net.geant.autobahn.network">
+	
+	<class name="ProvisioningDomain" table="PROVISIONING_DOMAIN" lazy="false">
+		<id name="bodID" column="provdomain_id" type="string" />
+		
+		<property name="provType" type="string" />
+		
+		<many-to-one name="adminDomain" class="AdminDomain" not-null="true" 
+			cascade="save-update" />
+	</class>
+	
+</hibernate-mapping>

@@ -3,7 +3,7 @@
  * 2007-03-28
  */
 
-package net.geant2.jra3.intradomain.common;
+package net.geant.autobahn.intradomain.common;
 
 import java.io.Serializable;
 
@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name="GenericInterface", namespace="common.intradomain.jra3.geant2.net",
+@XmlType(name="GenericInterface", namespace="common.intradomain.autobahn.geant.net",
 	propOrder={ "version", "interfaceType", "parentInterface", "node",
 		"name", "description", "bandwidth", "status", "mtu", "domainId"
 })

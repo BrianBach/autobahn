@@ -10,18 +10,18 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
   <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/> 
  
   <jaxws:endpoint id="uap" 
-                  implementor="net.geant2.jra3.useraccesspoint.UserAccessPointImpl" 
+                  implementor="net.geant.autobahn.useraccesspoint.UserAccessPointImpl" 
                   address="/uap" />
                   
   <jaxws:endpoint id="administration" 
-                  implementor="net.geant2.jra3.administration.AdministrationImpl" 
+                  implementor="net.geant.autobahn.administration.AdministrationImpl" 
                   address="/administration" /> 
 
   <jaxws:endpoint id="interdomain" 
-                  implementor="net.geant2.jra3.interdomain.InterdomainImpl" 
+                  implementor="net.geant.autobahn.interdomain.InterdomainImpl" 
                   address="/interdomain" /> 
 
-  <bean id="dm2idm-impl" class="net.geant2.jra3.dm2idm.Dm2IdmImpl" destroy-method="dispose"/>
+  <bean id="dm2idm-impl" class="net.geant.autobahn.dm2idm.Dm2IdmImpl" destroy-method="dispose"/>
 
 
   <jaxws:endpoint id="dm2idm"

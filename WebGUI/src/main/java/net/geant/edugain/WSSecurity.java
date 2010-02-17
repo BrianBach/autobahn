@@ -47,9 +47,9 @@ public class WSSecurity {
 	private final static Logger log = Logger.getLogger(WSSecurity.class);
 	static public String EDUGAIN_PROPERTIES = "webapps\\autobahn-gui\\WEB-INF\\etc\\edugain\\edugain.properties";
 	static public String activatedStr, timestampStr, encryptStr, encrypt, timestamp;
-	static public final String PROPERTY_ACTIVATED = "net.geant2.jra3.edugain.activated";
-	static public final String PROPERTY_ENCRYPT = "net.geant2.jra3.edugain.encrypt";
-	static public final String PROPERTY_TIMESTAMP = "net.geant2.jra3.edugain.timestamp";
+	static public final String PROPERTY_ACTIVATED = "net.geant.autobahn.edugain.activated";
+	static public final String PROPERTY_ENCRYPT = "net.geant.autobahn.edugain.encrypt";
+	static public final String PROPERTY_TIMESTAMP = "net.geant.autobahn.edugain.timestamp";
 	static public final String WSS_X509_TOKENPROFILE = "http://docs.oasis-open"
 		+ ".org/wss/2004/01/oasis-200401-wss-x509-token-profile-1.0#X509v3";
 	

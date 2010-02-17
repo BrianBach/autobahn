@@ -1,5 +1,5 @@
 
-package net.geant2.jra3.useraccesspoint.jaxws;
+package net.geant.autobahn.useraccesspoint.jaxws;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -13,9 +13,9 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 
-@XmlRootElement(namespace = "http://useraccesspoint.jra3.geant2.net/", name = "UserAccessPointException")
+@XmlRootElement(namespace = "http://useraccesspoint.autobahn.geant.net/", name = "UserAccessPointException")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(namespace = "http://useraccesspoint.jra3.geant2.net/", name = "UserAccessPointException")
+@XmlType(namespace = "http://useraccesspoint.autobahn.geant.net/", name = "UserAccessPointException")
 
 public class UserAccessPointExceptionBean {
 

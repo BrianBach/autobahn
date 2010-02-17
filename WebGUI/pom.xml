@@ -69,7 +69,7 @@
 								<id>wsdl-useraccesspoint</id>
 								<phase>compile</phase>
 								<configuration>
-									<className>net.geant2.jra3.useraccesspoint.UserAccessPoint</className>
+									<className>net.geant.autobahn.useraccesspoint.UserAccessPoint</className>
 									<outputFile>src/main/webapp/wsdl/useraccesspoint.wsdl</outputFile>
 									<genWsdl>true</genWsdl>
 									<serviceName>UserAccessPointService</serviceName>
@@ -83,7 +83,7 @@
 								<id>wsdl-administration</id>
 								<phase>compile</phase>
 								<configuration>
-									<className>net.geant2.jra3.administration.Administration</className>
+									<className>net.geant.autobahn.administration.Administration</className>
 									<outputFile>src/main/webapp/wsdl/administration.wsdl</outputFile>
 									<genWsdl>true</genWsdl>
 									<serviceName>AdministrationService</serviceName>
@@ -97,7 +97,7 @@
 								<id>wsdl-gui</id>
 								<phase>compile</phase>
 								<configuration>
-									<className>net.geant2.jra3.gui.Gui</className>
+									<className>net.geant.autobahn.gui.Gui</className>
 									<outputFile>src/main/webapp/wsdl/gui.wsdl</outputFile>
 									<genWsdl>true</genWsdl>
 									<serviceName>GuiService</serviceName>

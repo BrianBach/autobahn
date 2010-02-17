@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="net.geant.autobahn.constraints">
+	
+	<class name="Range" table="RANGE">
+		<id name="rangeID" column="range_id" type="long">
+			<generator class="native" />
+		</id>
+		
+		<property name="min" type="integer" />
+		
+		<property name="max" type="integer" />		
+	</class>
+	
+</hibernate-mapping>

@@ -1,16 +1,16 @@
 /**
  * 
  */
-package net.geant2.jra3.tool;
+package net.geant.autobahn.tool;
 
 import java.util.List;
 
 import javax.jws.WebService;
 import javax.jws.WebParam;
 
-import net.geant2.jra3.aai.AAIException;
-import net.geant2.jra3.intradomain.common.GenericLink;
-import net.geant2.jra3.reservation.ReservationParams;
+import net.geant.autobahn.aai.AAIException;
+import net.geant.autobahn.intradomain.common.GenericLink;
+import net.geant.autobahn.reservation.ReservationParams;
 
 /**
  * Interface between DomainManager and Network managment proxy to create and
@@ -19,7 +19,7 @@ import net.geant2.jra3.reservation.ReservationParams;
  * @author <a href="mailto:michalb@man.poznan.pl">Michal Balcerkiewicz</a>
  */
 
-@WebService(targetNamespace = "http://tool.jra3.geant2.net/", name = "Tool")
+@WebService(targetNamespace = "http://tool.autobahn.geant.net/", name = "Tool")
 public interface Tool {
 
 	/**

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="net.geant.autobahn.intradomain.sdh">
+    <class name="OchLink" table="och_link" schema="public">
+        <id name="ochLinkId" type="long">
+            <column name="och_link_id" />
+            <generator class="increment" />
+        </id>
+        <many-to-one name="opsLink" class="OpsLink" fetch="select" cascade="save-update">
+            <column name="ops_link_id" /> 
+        </many-to-one>
+        <many-to-one name="och" class="Och" fetch="select" cascade="save-update">
+            <column name="och_id" /> 
+        </many-to-one>
+        <property name="frequency" type="double">
+            <column name="frequency" />
+        </property>
+        <property name="status" type="string">
+            <column name="status" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="GuiService" targetNamespace="http://gui.jra3.geant2.net/" xmlns:tns="http://gui.jra3.geant2.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions name="GuiService" targetNamespace="http://gui.autobahn.geant.net/" xmlns:tns="http://gui.autobahn.geant.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="network.jra3.geant2.net" xmlns:tns="administration.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="administration.jra3.geant2.net">
-<xs:import namespace="network.jra3.geant2.net"/>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="network.autobahn.geant.net" xmlns:tns="administration.autobahn.geant.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="administration.autobahn.geant.net">
+<xs:import namespace="network.autobahn.geant.net"/>
 <xs:complexType name="Status">
 <xs:sequence>
 <xs:element minOccurs="0" name="domain" type="xs:string"/>
@@ -24,8 +24,8 @@
 </xs:sequence>
 </xs:complexType>
 </xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="administration.jra3.geant2.net" xmlns:tns="http://gui.jra3.geant2.net/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://gui.jra3.geant2.net/">
-<xs:import namespace="administration.jra3.geant2.net"/>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="administration.autobahn.geant.net" xmlns:tns="http://gui.autobahn.geant.net/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://gui.autobahn.geant.net/">
+<xs:import namespace="administration.autobahn.geant.net"/>
 <xs:element name="reservationChanged" type="tns:reservationChanged"/>
 <xs:element name="reservationChangedResponse" type="tns:reservationChangedResponse"/>
 <xs:element name="statusUpdated" type="tns:statusUpdated"/>
@@ -80,7 +80,7 @@
 </xs:restriction>
 </xs:simpleType>
 </xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="network.jra3.geant2.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="network.jra3.geant2.net">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="network.autobahn.geant.net" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="network.autobahn.geant.net">
 <xs:complexType name="Link">
 <xs:sequence>
 <xs:element minOccurs="0" name="bodID" type="xs:string"/>

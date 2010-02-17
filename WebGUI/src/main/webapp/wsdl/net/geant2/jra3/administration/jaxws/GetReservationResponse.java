@@ -1,5 +1,5 @@
 
-package net.geant2.jra3.administration.jaxws;
+package net.geant.autobahn.administration.jaxws;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -14,20 +14,20 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 
-@XmlRootElement(namespace = "http://administration.jra3.geant2.net/", name = "getReservationResponse")
+@XmlRootElement(namespace = "http://administration.autobahn.geant.net/", name = "getReservationResponse")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(namespace = "http://administration.jra3.geant2.net/", name = "getReservationResponse")
+@XmlType(namespace = "http://administration.autobahn.geant.net/", name = "getReservationResponse")
 
 public class GetReservationResponse {
 
 @XmlElement(namespace = "", name = "Reservation")
-    private net.geant2.jra3.reservation.Reservation Reservation;
+    private net.geant.autobahn.reservation.Reservation Reservation;
 
-    public net.geant2.jra3.reservation.Reservation getReservation ()     {
+    public net.geant.autobahn.reservation.Reservation getReservation ()     {
 	           return this.Reservation;
         }
 
-    public void setReservation (   net.geant2.jra3.reservation.Reservation newReservation  )     {
+    public void setReservation (   net.geant.autobahn.reservation.Reservation newReservation  )     {
 	           this.Reservation = newReservation;
         }
 

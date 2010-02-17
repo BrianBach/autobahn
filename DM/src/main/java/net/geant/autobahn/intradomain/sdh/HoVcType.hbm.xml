@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="net.geant.autobahn.intradomain.sdh">
+    <class name="HoVcType" table="ho_vc_type" schema="public">
+        <id name="hoVcTypeId" type="long">
+            <column name="ho_vc_type_id" />
+            <generator class="increment" />
+        </id>
+        <property name="name" type="string">
+            <column name="name" />
+        </property>
+        <property name="bandwidth" type="long">
+            <column name="bandwidth" />
+        </property>
+        <property name="payload" type="long">
+            <column name="payload" />
+        </property>
+    </class>
+</hibernate-mapping>
