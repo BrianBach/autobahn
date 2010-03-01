@@ -72,7 +72,7 @@ function afterSetDateValue(ref_field, target_field, date) {
 </tr>
 
 	<tag:tableFormElement name="Delay [ms]" path="reservation.maxDelay"/>
-	<tag:tableFormElement name="Capacity [Mbits/s]" path="reservation.capacity"/>	
+	<tag:tableFormElement name="Capacity [bits/s]" path="reservation.capacity"/>	
 	<tag:tableFormElement name="Vlan" path="reservation.userVlanId"/>	
 	<tag:tagSelectedElement name="Resiliency" list="${resilencies}" path="reservation.resiliency"/>
 	<tag:tagSelectedElement name="Priority" list="${priorities}" path="reservation.priority"/>
