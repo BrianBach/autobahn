@@ -1,8 +1,8 @@
 package net.geant.autobahn.edugain;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Properties;
 
 import javax.security.auth.callback.Callback;
@@ -20,11 +20,21 @@ import org.apache.ws.security.WSPasswordCallback;
  */
 public class ServerPasswordCallback implements CallbackHandler {
 
-	private final static Logger log = Logger.getLogger(ClientPasswordCallback.class);
-	static public String SERVER_PROPERTIES = "etc/edugain/client-sec.properties";
-	static public String PASSWORD_PROPERTY = "org.apache.ws.security.crypto.merlin.keystore.password";
-	static public String PASSWORD = null;
+	private final static Logger log = Logger.getLogger(ServerPasswordCallback.class);
+	private String PASSWORD;
+	private String PASSWORD_PROPERTY = "org.apache.ws.security.crypto.merlin.keystore.password";
+	private URL server;
 	
+	public ServerPasswordCallback (URL url) {
+		
+		this.server = url;
+	}
+	
+	public ServerPasswordCallback (String path) {
+		
+		ClassLoader server = getClass().getClassLoader();
+		this.server = server.getResource(path);
+	}
 	
 	/* (non-Javadoc)
 	 * @see javax.security.auth.callback.CallbackHandler#handle(javax.security.auth.callback.Callback[])
@@ -35,9 +45,9 @@ public class ServerPasswordCallback implements CallbackHandler {
 		Properties properties = new Properties();
 		
 		try {
-			properties.load(new FileInputStream(SERVER_PROPERTIES));
+			properties.load(server.openStream());
 			PASSWORD = properties.getProperty(PASSWORD_PROPERTY);
-						
+
 		} catch (FileNotFoundException e) {
 			log.error("Server side security properties not found: " + e.getMessage());
 		}

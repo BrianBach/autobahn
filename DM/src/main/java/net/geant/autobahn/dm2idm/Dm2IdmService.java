@@ -1,19 +1,16 @@
 package net.geant.autobahn.dm2idm;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Properties;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebEndpoint;
 import javax.xml.ws.WebServiceClient;
 import javax.xml.ws.soap.SOAPBinding;
+import javax.xml.xpath.XPathException;
 
-import org.apache.cxf.endpoint.Client;
-import org.apache.cxf.endpoint.Endpoint;
-import org.apache.cxf.frontend.ClientProxy;
+import org.apache.log4j.Logger;
 
 import net.geant.autobahn.dm2idm.Dm2Idm;
 import net.geant.autobahn.edugain.WSSecurity;
@@ -32,6 +29,7 @@ class Dm2IdmService {
 	private final static QName Dm2IdmPort = new QName("http://dm2idm.autobahn.geant.net/", "Dm2IdmPort");
 	public final static QName SERVICE = new QName("http://dm2idm.autobahn.geant.net/", "Dm2IdmService");
 	private Service service;
+	private final static Logger log = Logger.getLogger(Dm2IdmService.class);
 	
 	public Dm2IdmService(String endPoint) {
 		service = Service.create(SERVICE);
@@ -42,22 +40,25 @@ class Dm2IdmService {
 	public Dm2Idm getDm2IdmPort() {
 		Dm2Idm res = service.getPort(Dm2Idm.class);
 		
-		WSSecurity.setClientTimeout(res);
+		WSSecurity dm2idm = null;
+        try {
+            dm2idm = new WSSecurity("etc/edugain");
+        } catch (XPathException e) {
+            log.error("Could not create security object: " + e.getMessage());
+        }
+        
+		dm2idm.setClientTimeout(res);
 		
 		try {
-			WSSecurity.configureEndpoint(res);
+			dm2idm.configureEndpoint(res);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("File not found: " + e.getMessage());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("I/O exception : " + e.getMessage());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("General exception: " + e.getMessage());
 		} catch (Throwable e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Exception: " + e.getMessage());
 		}		
 		
 		return res;

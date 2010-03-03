@@ -237,8 +237,9 @@ public class Framework {
 				org.apache.cxf.jaxws.EndpointImpl jaxwsEndpointImpl = (org.apache.cxf.jaxws.EndpointImpl)point;
 				org.apache.cxf.endpoint.Server cxfServer = jaxwsEndpointImpl.getServer();
 				org.apache.cxf.endpoint.Endpoint cxfEndpoint = cxfServer.getEndpoint();
-
-				WSSecurity.configureSecurity(cxfEndpoint);
+				
+				WSSecurity security = new WSSecurity("etc/edugain");
+				security.configureSecurity(cxfEndpoint);
 
 				deployedServices.put(sname, point);
 				

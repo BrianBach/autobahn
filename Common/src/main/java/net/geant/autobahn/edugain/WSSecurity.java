@@ -1,13 +1,12 @@
 package net.geant.autobahn.edugain;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Properties;
-
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -16,8 +15,6 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-//import net.geant.edugain.Edugain;
-import net.geant.autobahn.edugain.Edugain;
 import net.geant.autobahn.edugain.EdugainSupport;
 import net.geant.autobahn.edugain.SecurityTokenNotFoundException;
 
@@ -38,21 +35,24 @@ import org.apache.log4j.Logger;
 
 /**
  * Enables safe ws communication
- * @author Michal
+ * and also edugain validation.
+ * 
+ * @author Akis Kalligeros
  */
 public class WSSecurity {
 	
-	static final String USER = "autobahn";
-	static public String security = null;
+	public URL edugain, client, server;
+	public String security;
 	private final static Logger log = Logger.getLogger(WSSecurity.class);
-	static public String EDUGAIN_PROPERTIES = "etc/edugain/edugain.properties";
-	static public String activatedStr, timestampStr, encryptStr, encrypt, timestamp;
-	static public final String PROPERTY_ACTIVATED = "net.geant.autobahn.edugain.activated";
-	static public final String PROPERTY_ENCRYPT = "net.geant.autobahn.edugain.encrypt";
-	static public final String PROPERTY_TIMESTAMP = "net.geant.autobahn.edugain.timestamp";
-	static public final String WSS_X509_TOKENPROFILE = "http://docs.oasis-open"
+	private String WSS4J_CLIENT_PATH, WSS4J_SERVER_PATH;
+	private String activatedStr, timestampStr, encryptStr, clientUser, serverUser;
+	public final String PROPERTY_ACTIVATED = "net.geant.autobahn.edugain.activated";
+	public final String PROPERTY_ENCRYPT = "net.geant.autobahn.edugain.encrypt";
+	public final String PROPERTY_TIMESTAMP = "net.geant.autobahn.edugain.timestamp";
+	public final String PROPERTY_USER = "org.apache.ws.security.crypto.merlin.keystore.alias";
+	public final String WSS_X509_TOKENPROFILE = "http://docs.oasis-open"
 		+ ".org/wss/2004/01/oasis-200401-wss-x509-token-profile-1.0#X509v3";
-	
+
 	
 	XPathExpression xpath;
 	
@@ -60,9 +60,23 @@ public class WSSecurity {
 
 		xpath = compileXpathExpression();
 	}
-
 	
-	public static void setClientTimeout(Object clientInterface) {
+	
+	public WSSecurity(String commonPath) throws XPathException {
+
+		xpath = compileXpathExpression();
+		ClassLoader securityLoader = getClass().getClassLoader();
+		
+		this.edugain = securityLoader.getResource(commonPath + "/edugain.properties");
+		this.client = securityLoader.getResource(commonPath + "/client-sec.properties");
+		this.server = securityLoader.getResource(commonPath + "/server-sec.properties");
+		this.WSS4J_SERVER_PATH = commonPath + "/server-sec.properties";
+		this.WSS4J_CLIENT_PATH = commonPath + "/client-sec.properties";
+
+	}
+	
+	
+	public void setClientTimeout(Object clientInterface) {
 		
 		final int TIMEOUT = 36000 * 1000;
 		
@@ -76,90 +90,132 @@ public class WSSecurity {
 
 	}
 	
-	public static String readProperties () throws IOException {
-		
-		Properties properties = new Properties();
-				
+	/**
+	 * Reads the edugain property file and creates a String that represents
+	 * the security methods that will be used (Signature, Timestamp, Encryption)
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+	public String readProperties () throws IOException {
+
+		Properties edugainProps = new Properties();
+		Properties clientProps = new Properties();
+		Properties serverProps = new Properties();
+
 		try {
-			properties.load(new FileInputStream(EDUGAIN_PROPERTIES));
-			activatedStr = properties.getProperty(PROPERTY_ACTIVATED);
-			timestampStr = properties.getProperty(PROPERTY_TIMESTAMP);
-			encryptStr = properties.getProperty(PROPERTY_ENCRYPT);
-						
-		} catch (FileNotFoundException e) {
-			log.error("Edugain Properties not found: " + e.getMessage());
+			edugainProps.load(edugain.openStream());
+			activatedStr = edugainProps.getProperty(PROPERTY_ACTIVATED);
+			timestampStr = edugainProps.getProperty(PROPERTY_TIMESTAMP);
+			encryptStr = edugainProps.getProperty(PROPERTY_ENCRYPT);
+		} catch (IOException e) {
+			log.error("Couldn't load edugain properties: " + e.getMessage());
+		}
+
+		try {
+			clientProps.load(client.openStream());
+			clientUser = clientProps.getProperty(PROPERTY_USER);
+		} catch (IOException e) {
+			log.error("Couldn't load client properties: " + e.getMessage());
+		}
+		
+		try {
+			serverProps.load(server.openStream());
+			serverUser = serverProps.getProperty(PROPERTY_USER);
+		} catch (IOException e) {
+			log.error("Couldn't load server properties: " + e.getMessage());
 		}
 		
 		if (activatedStr != null && "true".equalsIgnoreCase(activatedStr)) {
-			
+
 			security = "Signature";
 			
 			if (timestampStr != null && "true".equalsIgnoreCase(timestampStr)) {
 				
-				security += " Timestamp";
-			
-			}			
+				security += " Timestamp";			
+			}		
 			
 			if (encryptStr != null && "true".equalsIgnoreCase(encryptStr)) {
-				
-				security += " Encrypt";
-			
+
+				security += " Encrypt";		
 			} 
 			
 		} else security = "NoSecurity";
-		
+
 		return security;
+		
 	}
 	
-	public static void configureEndpoint(Object clientInterface) 
+	/**
+	 * Retrieves the CXF endpoint from the client's interface object
+	 * 
+	 * @param clientInterface
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 * @throws Exception
+	 * @throws Throwable
+	 */
+	public void configureEndpoint(Object clientInterface) 
 		throws FileNotFoundException, IOException, Exception, Throwable {
 		
 		Client client = ClientProxy.getClient(clientInterface);
 		Endpoint endpoint = client.getEndpoint();
-
 		configureSecurity(endpoint);
 	}
-
-	public static void configureSecurity(Endpoint cxfEndpoint) 
+	
+	/**
+	 * Configures the interceptors for enabling security. Also creates 
+	 * and adds a custom edugain validator
+	 * 
+	 * @param cxfEndpoint
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 * @throws XPathException
+	 * @throws Exception
+	 */
+	public void configureSecurity(Endpoint cxfEndpoint) 
 		throws FileNotFoundException, IOException, XPathException, Exception {
 
 		Map<String, Object> in = new HashMap<String, Object>();
 		Map<String, Object> out = new HashMap<String, Object>();
 		
-		out.put(WSHandlerConstants.ACTION, readProperties());
-		out.put(WSHandlerConstants.ENC_PROP_FILE,"etc/edugain/client-sec.properties");
-		out.put(WSHandlerConstants.SIG_PROP_FILE, "etc/edugain/server-sec.properties");
-		out.put(WSHandlerConstants.ENCRYPTION_USER, "autobahn");
-		out.put(WSHandlerConstants.USER, "autobahn");
-		out.put(WSHandlerConstants.PW_CALLBACK_CLASS, ServerPasswordCallback.class.getName());
-		out.put(WSHandlerConstants.ENC_SYM_ALGO, WSConstants.TRIPLE_DES);
-		out.put(WSHandlerConstants.SIG_KEY_ID, "DirectReference");
+		ClientPasswordCallback clientPassword = new ClientPasswordCallback(client);
+		ServerPasswordCallback serverPassword = new ServerPasswordCallback(server);
 		
 		//Encrypt the SOAP body
 		String bodyPart = "{Content}{}Body";
+		
+		out.put(WSHandlerConstants.ENC_PROP_FILE, WSS4J_CLIENT_PATH);
+		out.put(WSHandlerConstants.SIG_PROP_FILE, WSS4J_SERVER_PATH);
+		out.put(WSHandlerConstants.ACTION, readProperties());
+		out.put(WSHandlerConstants.ENCRYPTION_USER, clientUser);
+		out.put(WSHandlerConstants.USER, serverUser);
+		out.put(WSHandlerConstants.PW_CALLBACK_REF, serverPassword);
+		out.put(WSHandlerConstants.ENC_SYM_ALGO, WSConstants.TRIPLE_DES);
+		out.put(WSHandlerConstants.SIG_KEY_ID, "DirectReference");
 		out.put(WSHandlerConstants.ENCRYPTION_PARTS, bodyPart);
 		
 		in.put(WSHandlerConstants.ACTION, readProperties());
-		in.put(WSHandlerConstants.PW_CALLBACK_CLASS, ClientPasswordCallback.class.getName());
-		in.put(WSHandlerConstants.DEC_PROP_FILE, "etc/edugain/server-sec.properties");
-		in.put(WSHandlerConstants.SIG_PROP_FILE, "etc/edugain/client-sec.properties");
+		in.put(WSHandlerConstants.PW_CALLBACK_REF, clientPassword);
+		in.put(WSHandlerConstants.DEC_PROP_FILE, WSS4J_SERVER_PATH);
+		in.put(WSHandlerConstants.SIG_PROP_FILE, WSS4J_CLIENT_PATH);
 				
 		WSS4JOutInterceptor wssOut = new WSS4JOutInterceptor(out);
 		cxfEndpoint.getOutInterceptors().add(wssOut);
-		
 		WSS4JInInterceptor wssIn = new WSS4JInInterceptor(in);
 		cxfEndpoint.getInInterceptors().add(wssIn);
-		
+
 		if (security != "NoSecurity") {
 			
-			EdugainSupport edugainInInterceptor = new EdugainSupport(Edugain.loadProperties(EDUGAIN_PROPERTIES));
-			EdugainSupport edugainOutInterceptor = new EdugainSupport(Edugain.loadProperties(EDUGAIN_PROPERTIES));
-			cxfEndpoint.getInInterceptors().add(edugainInInterceptor);
-			cxfEndpoint.getOutInterceptors().add(edugainOutInterceptor);
+			Properties properties = new Properties();
+			properties.load(edugain.openStream());
 			
+			EdugainSupport edugainInInterceptor = new EdugainSupport(edugain);
+			EdugainSupport edugainOutInterceptor = new EdugainSupport(edugain);
+			cxfEndpoint.getInInterceptors().add(edugainInInterceptor);
+			cxfEndpoint.getOutInterceptors().add(edugainOutInterceptor);			
 		}
 	}
-	
 	
 	private XPathExpression compileXpathExpression()
 		throws XPathExpressionException {
@@ -169,7 +225,8 @@ public class WSSecurity {
 		xpath.setNamespaceContext(new WSSENamespaceContext());
 		XPathExpression expr = xpath.compile("//wsse:BinarySecurityToken");
 		return expr;
-} 
+	}
+	
 	public String extractBstFromSoapEnvelope(Document doc) 
 		throws XPathException, SecurityTokenNotFoundException {
 

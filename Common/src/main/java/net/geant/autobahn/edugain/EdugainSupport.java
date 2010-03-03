@@ -6,6 +6,7 @@ package net.geant.autobahn.edugain;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Properties;
@@ -32,12 +33,7 @@ import net.geant.edugain.validation.ValidationException;
 
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.AbstractSoapInterceptor;
-import org.apache.cxf.binding.soap.interceptor.EndpointSelectionInterceptor;
-import org.apache.cxf.binding.soap.interceptor.ReadHeadersInterceptor;
-import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
-import org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor;
-
 import org.apache.commons.logging.Log;
 import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.util.Base64;
@@ -67,10 +63,7 @@ public class EdugainSupport extends AbstractSoapInterceptor {
 	private Log log = org.apache.commons.logging.LogFactory.getLog(EdugainSupport.class);
 	private Edugain edugain; 
 	private WSSecurity wss;
-	private Document doc;
 	private X509CertManager x509;
-	
-	
 	public EdugainSupport(Properties properties) throws XPathException, ValidationException {
 
 		this();
@@ -79,7 +72,18 @@ public class EdugainSupport extends AbstractSoapInterceptor {
 		this.edugain = new Edugain(properties); 
 	}
 	
+	public EdugainSupport(URL url) throws XPathException, ValidationException, IOException {
+		
+		this();
+		this.wss = new WSSecurity();
+		this.x509 = new X509CertManager();
+		
+		Properties properties = new Properties();
+		properties.load(url.openStream());
 
+		this.edugain = new Edugain(properties); 
+	}
+	
 	/**
 	 * This contructor performs basic handler initialization
 	 * 
@@ -88,8 +92,7 @@ public class EdugainSupport extends AbstractSoapInterceptor {
 	
 	 private EdugainSupport() {
 
-		super(Phase.POST_INVOKE);
-        		
+		super(Phase.SEND);        		
 	 }
 
     public void handleMessage(SoapMessage message) {

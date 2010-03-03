@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.security.cert.X509Certificate;
 import java.util.Properties;
 
@@ -28,14 +29,15 @@ import org.opensaml.common.SignableSAMLObject;
  */
 public class Edugain {
 
-	static private Log log = org.apache.commons.logging.LogFactory
-			.getLog(Edugain.class);
+	public URL edugain = null;
+	static private Log log = org.apache.commons.logging.LogFactory.getLog(Edugain.class);
 
 	Validator validator;
 
 	public Edugain(String configFile) throws ValidationException, IOException {
 
-		this(loadProperties(configFile));
+		ClassLoader edugainLoader = getClass().getClassLoader();
+		this.edugain = edugainLoader.getResource(configFile);
 	}
 	
 	public Edugain(Properties properties) throws ValidationException {
@@ -43,6 +45,13 @@ public class Edugain {
 		this.validator = new Validator(properties);
 	}
 	
+	/**
+	 * Static method that is used by Spring framework (WebGUI)
+	 * 
+	 * @param file
+	 * @return
+	 * @throws IOException
+	 */
 	public static Properties loadProperties(String file) throws IOException {
 
 		Properties result = new Properties();
@@ -61,7 +70,45 @@ public class Edugain {
 		
 		return result;
 	}
+	
+	public static Properties loadProperties(URL url) throws IOException {
 
+		Properties result = new Properties();
+		InputStream in = url.openStream();
+
+		if (in == null) {
+			throw new IOException();
+		}
+		try {
+			result.load(in);
+		} catch (IOException e) {
+			throw e;
+		} finally {
+			in.close();
+		}
+		
+		return result;
+	}
+	
+	public Properties getPropsLoader() throws IOException {
+		
+		Properties result = new Properties();
+		InputStream in = edugain.openStream();
+		
+		if (in == null) {
+			throw new FileNotFoundException();
+		}
+		try {
+			result.load(in);
+		} catch (IOException e) {
+			throw e;
+		} finally {
+			in.close();
+		}
+		
+		return result;
+	}
+	
 	public ComponentID validateCert(X509Certificate cert)
 			throws ValidationException {
 

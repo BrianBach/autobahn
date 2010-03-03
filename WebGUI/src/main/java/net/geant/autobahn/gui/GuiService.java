@@ -7,7 +7,6 @@ import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebEndpoint;
 import javax.xml.ws.WebServiceClient;
-
 import net.geant.autobahn.gui.Gui;
 
 
@@ -24,6 +23,7 @@ public class GuiService extends Service {
     public final static URL WSDL_LOCATION;
     public final static QName SERVICE = new QName("http://gui.autobahn.geant.net/", "GuiService");
     public final static QName GuiPort = new QName("http://gui.autobahn.geant.net/", "GuiPort");
+
     static {
         URL url = null;
         try {
@@ -54,7 +54,10 @@ public class GuiService extends Service {
      */
     @WebEndpoint(name = "GuiPort")
     public Gui getGuiPort() {
-        return (Gui)super.getPort(GuiPort, Gui.class);
+        
+        Gui port = super.getPort(GuiPort, Gui.class);
+        
+        return port;
     }
 
 }

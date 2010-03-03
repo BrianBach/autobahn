@@ -32,28 +32,31 @@
 	<bean id="guiImplementator" class="net.geant.autobahn.gui.GuiImpl">
 		<property name="notifier" ref="manager"/>
 	</bean>
-	
-	<bean id="ServerPasswordCallback"
-      class="net.geant.edugain.ServerPasswordCallback"/>
-	  
-	<bean id="ClientPasswordCallback"
-      class="net.geant.edugain.ClientPasswordCallback"/>	  
-			
-	<bean id="edugainProps" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-		<property name="staticMethod">
-			<value>net.geant.edugain.Edugain.loadProperties</value>
-		</property>
-		<property name="arguments">
-			<list>
-				<value>webapps/autobahn-gui/WEB-INF/etc/edugain/edugain.properties</value>
-			</list>
-		</property>
+		
+	<bean id="ServerPasswordCallback" class="net.geant.autobahn.edugain.ServerPasswordCallback">
+		<constructor-arg type="java.lang.String" value="../etc/edugain/server-sec.properties"/>
 	</bean>
 	
+	<bean id="ClientPasswordCallback" class="net.geant.autobahn.edugain.ClientPasswordCallback">
+		<constructor-arg type="java.lang.String" value="../etc/edugain/client-sec.properties"/>	
+	</bean>
+	
+	<bean id="initSecurity" class="net.geant.autobahn.edugain.WSSecurity">
+		<constructor-arg index="0" type="java.lang.String" value="../etc/edugain"/>
+	</bean>	
+			
 	<bean id="readProps" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-		<property name="staticMethod">
-			<value>net.geant.edugain.WSSecurity.readProperties</value>
-		</property>
+		<property name="targetObject"><ref bean="initSecurity"/></property>
+		<property name="targetMethod"><value>readProperties</value></property>
+	</bean>
+	
+	<bean id="initEdugain" class="net.geant.autobahn.edugain.Edugain">
+		<constructor-arg index="0" type="java.lang.String" value="../etc/edugain/edugain.properties"/>
+	</bean>
+	
+	<bean id="edugainProps" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject"><ref bean="initEdugain"/></property>
+		<property name="targetMethod"><value>getPropsLoader</value></property>
 	</bean>
 				
 	<jaxws:endpoint  implementor="#guiImplementator"  id="gui"  address="/gui"  wsdlLocation="/wsdl/gui.wsdl">
@@ -72,7 +75,7 @@
 					</map>
 				</constructor-arg>
 			</bean>			
-			<bean class="net.geant.edugain.EdugainSupport">
+			<bean class="net.geant.autobahn.edugain.EdugainSupport">
 				<constructor-arg type="java.util.Properties">
 					<ref bean="edugainProps"/>
 				</constructor-arg>
