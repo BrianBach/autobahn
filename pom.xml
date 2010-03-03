@@ -16,8 +16,8 @@
     <packaging>pom</packaging>
  
 	<scm>
-		<connection>scm:svn:svn+ssh://svn@svn.geant2.net/GEANT2/JRA3/AutoBAHN-base/trunk</connection>
-        <developerConnection>scm:svn:svn+ssh://svn@svn.geant2.net/GEANT2/JRA3/AutoBAHN-base/trunk</developerConnection>
+		<connection>scm:svn:svn+ssh://svn@svn.geant.net/GEANT/SA2/AutoBAHN/AutoBAHN-base/trunk</connection>
+        <developerConnection>scm:svn:svn+ssh://svn@svn.geant.net/GEANT/SA2/AutoBAHN/AutoBAHN-base/trunk</developerConnection>
     </scm>
 	
 	<repositories>
@@ -113,7 +113,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
                 <configuration>
-                    <tagBase>svn+ssh://svn@svn.geant2.net/GEANT2/JRA3/AutoBAHN-base/tags</tagBase>
+                    <tagBase>svn+ssh://svn@svn.geant2.net/GEANT/SA2/AutoBAHN/AutoBAHN-base/tags</tagBase>
                 </configuration>
             </plugin>            
 			<plugin>
