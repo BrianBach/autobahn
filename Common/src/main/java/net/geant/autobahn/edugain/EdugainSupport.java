@@ -123,7 +123,7 @@ public class EdugainSupport extends AbstractSoapInterceptor {
 			byte[] bytes = Base64.decode(bst);
 			ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
 			X509Certificate cert = x509.loadCertificate(bais);
-			log.debug(cert.toString());
+			//log.debug(cert.toString());
 			this.edugain.validateCert(cert);
 		} catch (SecurityTokenNotFoundException e) {
 			errorMsg = valErrPrefix + "the Binary Security Token "
