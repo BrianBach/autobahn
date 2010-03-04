@@ -100,13 +100,6 @@ function afterSetDateValue(ref_field, target_field, date) {
 		<td class="error"><form:errors path="request.maxDelay"/></td>
 	</tr>
 	<tr>
-		<td class="label"><spring:message code="reservation.maxDelay"/></td>
-		<td class="value">
-			<form:input path="request.maxDelay"/>
-		</td>
-		<td class="error"><form:errors path="request.maxDelay"/></td>
-	</tr>
-	<tr>
 		<td class="label"><spring:message code="reservation.capacity"/></td>
 		<td class="value">
 			<form:input path="request.capacity"/>
