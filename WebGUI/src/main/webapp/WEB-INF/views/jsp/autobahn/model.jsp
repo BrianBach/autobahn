@@ -40,7 +40,7 @@
     </div>
     </div>
     <div id="footer">
-    	<p>Copyrights@ GEANT2 JRA3 AutoBAHN</p>
+    	<p>Copyrights@ GEANT AutoBAHN</p>
     	<p>Designed and Developed by <a href="http://www.psnc.pl">PSNC </a></p> 
     </div>
     </div>

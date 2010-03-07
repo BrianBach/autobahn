@@ -40,7 +40,7 @@ import net.geant.autobahn.useraccesspoint.ServiceRequest;
 import net.geant.autobahn.useraccesspoint.UserAccessPointException_Exception;
 
 /**
- * Manager is responsible for communication and managing of JRA3 IDMs registered in WEB GUI
+ * Manager is responsible for communication and managing of IDMs registered in WEB GUI
  * 
  * @author Lucas Dolata <ldolata@man.poznan.pl>
  *
@@ -48,11 +48,11 @@ import net.geant.autobahn.useraccesspoint.UserAccessPointException_Exception;
 public class ManagerImpl implements Manager,ManagerNotifier{
 	
 	/**
-	 * Default time zone for JRA3 GUI
+	 * Default time zone for WEB GUI
 	 */
 	private  String timezone ="UTC";
 	/**
-	 * List of all timezones for JRA3 WEB GUI
+	 * List of all timezones for WEB GUI
 	 */
 	private List<String> timezones = Arrays.asList(TimeZone.getAvailableIDs());
 	/**
@@ -96,12 +96,12 @@ public class ManagerImpl implements Manager,ManagerNotifier{
 	public static final String[] priorities ={};
 	
 	/**
-	 * Map with JRA3 IDM registered in the system
+	 * Map with IDM registered in the system
 	 */
 	private  Map<String, InterDomainManager> idms = Collections.synchronizedMap(new HashMap<String, InterDomainManager>());
 	
 	/**
-	 * Identifies period of time when JRA3 IDM register in WEB GUI is mark as down
+	 * Identifies period of time when IDM register in WEB GUI is mark as down
 	 */
 	private long tearDownTime = 10000;
 	/**
@@ -307,7 +307,7 @@ public class ManagerImpl implements Manager,ManagerNotifier{
 	}
 	
 	/**
-	 * Make actions needed when  new JRA3 IDM appear for first time  
+	 * Make actions needed when  new IDM appear for first time  
 	 * @param idm
 	 * @return
 	 */
@@ -608,7 +608,7 @@ public class ManagerImpl implements Manager,ManagerNotifier{
 		return tearDownTime;
 	}
 	/** 
-	 * Sets period of time after it the registered JRA3 IDM is mark as not accessible
+	 * Sets period of time after it the registered IDM is mark as not accessible
 	 * @param tearDownTime period in mili seconds
 	 */
 	public void setTearDownTime(long tearDownTime) {

@@ -7,7 +7,7 @@
 		<td>
 			<STRONG>The AutoBAHN Topology Builder</STRONG> 
 			<p>
-				Has been developed for the purposes of the GEANT2 JRA3 acitivity. The application helps to build topology configurations for the Domain Manager part of the AutoBAHN Bandwidth on Demand Service and provides a user-friendly GUI. This version of the tool supports the building of topologies for the following types of network:
+				Has been developed for the purposes of the AutoBAHN system. The application helps to build topology configurations for the Domain Manager part of the AutoBAHN Bandwidth on Demand Service and provides a user-friendly GUI. This version of the tool supports the building of topologies for the following types of network:
      		</p>
      			<ul style="margin=20px;">
      				<li>Ethernet</li>

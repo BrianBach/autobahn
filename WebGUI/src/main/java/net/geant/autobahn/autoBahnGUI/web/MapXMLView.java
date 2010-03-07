@@ -15,7 +15,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
- * Class is responsible for creating XML view of JRA3 topology
+ * Class is responsible for creating XML view of AutoBAHN topology
  * 
  * @author Lucas Dolata <ldolata@man.poznan.pl>
  *

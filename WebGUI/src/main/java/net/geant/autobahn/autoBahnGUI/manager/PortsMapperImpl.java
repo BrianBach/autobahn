@@ -10,11 +10,11 @@ import java.util.Map;
  */
 public class PortsMapperImpl implements PortsMapper{
 	/**
-	 * Map used for mapping real JRA3 IDM port to virtual one
+	 * Map used for mapping real IDM port to virtual one
 	 */
 	protected Map<String, String> portsMapping = new HashMap<String, String>();
 	/**
-	 * Map used for mapping virtual JRA3 IDM port to real one 
+	 * Map used for mapping virtual IDM port to real one 
 	 */
 	protected Map <String, String> deMappingPorts = new HashMap<String, String>();
 	

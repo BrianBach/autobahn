@@ -11,7 +11,7 @@
 		</form:select>
 	</td>
 	<td>
-		<input type="submit" name="_eventId_change" value="Change JRA3 IDM" style="width:100px"/>
+		<input type="submit" name="_eventId_change" value="Change IDM" style="width:100px"/>
 	</td>
 	</tr>
 </table>

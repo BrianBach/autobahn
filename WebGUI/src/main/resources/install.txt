@@ -1,15 +1,15 @@
-JRA3 AutoBAHN GUI
+AutoBAHN GUI
 ======================
 
 INFORMATION
 
-Application is web based GUI Framework for managing the JRA3 AutoBAHN system
-In order to  be manage all JRA3 IDM should register in the WEB GUI. The valid
-url to the service of JRA3 Autobahn GUI
+Application is web based GUI Framework for managing the AutoBAHN system
+In order to be managed, all IDMs should register in the WEB GUI. The valid
+url to the service of Autobahn GUI
 
 APPLICATION SERVER
 
 This supports all known Java Web Servers (Tomcat, Jetty, JBoss)
 
-INSTALATION
+INSTALLATION
 

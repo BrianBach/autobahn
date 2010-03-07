@@ -31,7 +31,7 @@ public class RequestServiceFormController extends SimpleFormController {
 	 */
 	private Manager manager;	
 	/**
-	 * Identifies the chose JRA3 IDM name
+	 * Identifies the chosen IDM name
 	 */
 	private String  selectedIDM;
 	/**

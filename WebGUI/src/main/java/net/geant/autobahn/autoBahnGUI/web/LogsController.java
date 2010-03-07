@@ -12,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.SimpleFormController;
 
 /**
- * Controller is used for showing logs gather by different JRA3 IDMs
+ * Controller is used for showing logs gather by different AutoBAHN IDMs
  * 
  * @author Lucas Dolata <ldolata@man.poznan.pl>
  *

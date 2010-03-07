@@ -23,7 +23,7 @@ import net.geant.autobahn.useraccesspoint.UserAccessPointException_Exception;
 import net.geant.autobahn.useraccesspoint.UserAccessPointService;
 
 /**
- * Models JRA3 InterDomainManager (JRA3 IDM) 
+ * Models AutoBAHN InterDomainManager (IDM) 
  * 
  * @author Lucas Dolata <ldolata@man.poznan.pl>
  *
@@ -46,27 +46,27 @@ public class InterDomainManager implements UserAccessPoint, Administration{
 	 */
 	private Administration administration;
 	/**
-	 * Services submited in JRA3 IDM
+	 * Services submited in IDM
 	 */
 	public Map<String, Service> services = Collections.synchronizedMap(new HashMap <String, Service>());
 	
 	/**
-	 * JRA3 IDM status
+	 * IDM status
 	 */
 	private Status status;
 	
 	/**
-	 * Time of last update of JRA3 IDM status
+	 * Time of last update of IDM status
 	 */
 	private long lastStatusUpdateInMillis;
 	
 	/**
-	 * JRA3 IDM managed ports
+	 * IDM managed ports
 	 */
 	private List<String> ports;
 
 	/**
-	 * JRA3 IDM logs 
+	 * IDM logs 
 	 */
 	private String logs;
 	
@@ -87,7 +87,7 @@ public class InterDomainManager implements UserAccessPoint, Administration{
 		connect (url);
 	}
 	/**
-	 * Establish connections with JRA3 IDM UserAccessPoint and Administration web service interface  
+	 * Establish connections with IDM UserAccessPoint and Administration web service interface  
 	 * 
 	 * @param url web services address prefix
 	 */
@@ -96,7 +96,7 @@ public class InterDomainManager implements UserAccessPoint, Administration{
 		administration = connectAdministration(url);
 	}
 	/**
-	 * Establish connection with JRA3 IDM  Administration web service interface
+	 * Establish connection with IDM  Administration web service interface
 	 * 
 	 * @param url web services address prefix
 	 * @return connected Administration web service interface
@@ -108,7 +108,7 @@ public class InterDomainManager implements UserAccessPoint, Administration{
 	    return admin; 
 	}
 	/**
-	 * Establish connection with JRA3 IDM  UserAccessPoint web service interface
+	 * Establish connection with IDM  UserAccessPoint web service interface
 	 * 
 	 * @param url web services address prefix
 	 * @return connected UserAccessPoint web service interface
@@ -249,9 +249,9 @@ public class InterDomainManager implements UserAccessPoint, Administration{
 		this.url = url;
 	}
 	/**
-	 * Sets JRA3 IDM status
+	 * Sets IDM status
 	 * 
-	 * @return web JRA3 IDM status
+	 * @return web IDM status
 	 */
 	public void setStatus (Status status){
 		if (status!= null){
@@ -282,7 +282,7 @@ public class InterDomainManager implements UserAccessPoint, Administration{
 		return null;
 	}
 	/**
-	 * Get service submitted in JRA3 IDM 
+	 * Get service submitted in IDM 
 	 * @param clearOld identifies if cached list should be clear before get new list
 	 * @return Service object lists
 	 */
@@ -329,7 +329,7 @@ public class InterDomainManager implements UserAccessPoint, Administration{
 		return servicesIdm;
 	}
 	/**
-	 * Gets logs from JRA3 IDM
+	 * Gets logs from IDM
 	 * 
 	 * @param refreash
 	 * @param all
@@ -345,7 +345,7 @@ public class InterDomainManager implements UserAccessPoint, Administration{
 		return logs;
 	}
 	/**
-	 * Check if UserAccessPoint web service interface is connected  JRA3 IDM
+	 * Check if UserAccessPoint web service interface is connected IDM
 	 * 
 	 * @return true if yes, if no tries to establish connection 
 	 */
@@ -356,7 +356,7 @@ public class InterDomainManager implements UserAccessPoint, Administration{
 		return userAccessPoint!=null;
 	}
 	/**
-	 * Check if Administration web service interface is connected  JRA3 IDM
+	 * Check if Administration web service interface is connected IDM
 	 * 
 	 * @return true if yes, if no tries to establish connection 
 	 */
@@ -391,21 +391,21 @@ public class InterDomainManager implements UserAccessPoint, Administration{
 		this.lastStatusUpdateInMillis = lastStatusUpdateInMillis;
 	}
 	/**
-	 * Gets logs from JRA3 IDM
-	 * @return logs  form JRA3 IDM
+	 * Gets logs from IDM
+	 * @return logs  form IDM
 	 */
 	public String getLogs() {
 		return logs;
 	}
 	/**
-	 * Sets logs from JRA3 IDM
-	 * @param logs  form JRA3 IDM
+	 * Sets logs from IDM
+	 * @param logs  form IDM
 	 */
 	public void setLogs(String logs) {
 		this.logs = logs;
 	}
 	/** 
-	 * Sets ports managed by JRA3 IDM
+	 * Sets ports managed by IDM
 	 * @ports 
 	 */
 	public void setPorts(List<String> ports) {
@@ -477,7 +477,7 @@ public class InterDomainManager implements UserAccessPoint, Administration{
 	}
 	/**
 	 * In normal way service is cached  in InterDomainManager services collection
-	 * This method force to download service state from JRA3 IDM manager directly 
+	 * This method force to download service state from IDM manager directly 
 	 */
 	public void forceUpdateService (String serviceID){
 		if (!isAdmnistrationConnected())

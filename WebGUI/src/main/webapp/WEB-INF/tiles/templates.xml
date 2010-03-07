@@ -34,8 +34,8 @@
         <put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/logs.jsp"/>  
     </definition>  
     
-    <definition name="secure/noJRA3IDMRegistered" extends="template.main">
-    	<put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/noJRA3IDMRegistered.jsp"/>
+    <definition name="secure/noIDMRegistered" extends="template.main">
+    	<put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/noIDMRegistered.jsp"/>
     </definition>
     
   	<definition name="secure/request-service" extends="template.main">  

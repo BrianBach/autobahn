@@ -73,7 +73,7 @@ public class AutobahnController {
 		Logger.getLogger("Kupa w pory").info("In tools");
 	}
 	
-	@RequestMapping("/secure/noJRA3IDMRegistered.htm")
+	@RequestMapping("/secure/noIDMRegistered.htm")
 	public void noIdms(){
 		Logger.getLogger("Kupa w pory").info("In tools");
 	}

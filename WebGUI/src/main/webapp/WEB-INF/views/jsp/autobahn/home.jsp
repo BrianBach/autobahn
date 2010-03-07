@@ -2,7 +2,9 @@
 
 <h2><spring:message code="home.title" text="About AutoBAHN"/></h2>
 <p>
-GN2-JRA3 is about the investigation and development of an end-to-end (and therefore multi-domain) "Bandwidth Allocation and Reservation Service" – in other words a "Bandwidth on Demand" (BoD) service. Sometimes the term "circuit-based" 
+AutoBAHN is about the investigation and development of an end-to-end (and therefore multi-domain) 
+"Bandwidth Allocation and Reservation Service" – in other words a "Bandwidth on Demand" (BoD) service. 
+Sometimes the term "circuit-based" 
 has been used in order to highlight the fact that the bandwidth should be reserved,
 not contended, exhibit some form of deterministic performance and be logically separated
 from other traffic sharing the network. A number of end-to-end services fulfill these criteria including:

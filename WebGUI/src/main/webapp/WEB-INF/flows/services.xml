@@ -29,6 +29,6 @@
 		
 	</view-state>
 	
-	<end-state id="no-idm-regitered" view="secure/noJRA3IDMRegistered"/>
+	<end-state id="no-idm-regitered" view="secure/noIDMRegistered"/>
 	
 </flow>

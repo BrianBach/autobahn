@@ -84,7 +84,7 @@
 		</transition>
 	</view-state> 
 	
-	<end-state id="no-idm-regitered" view="secure/noJRA3IDMRegistered"/>
+	<end-state id="no-idm-regitered" view="secure/noIDMRegistered"/>
 	 <end-state id="services" 
          view="externalRedirect:contextRelative:/portal/secure/reservations.htm">
       </end-state>  

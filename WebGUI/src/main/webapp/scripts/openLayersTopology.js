@@ -22,9 +22,9 @@ function init() {
        map.addLayers([gphy, gmap]);
        map.setCenter(new OpenLayers.LonLat( 12.920068, 50.457761).transform(new OpenLayers.Projection('EPSG:4326'), new OpenLayers.Projection('EPSG:900913')), 4);
        map.addControl(new OpenLayers.Control.LayerSwitcher());
-       var vector = new OpenLayers.Layer.Vector('JRA3 Connections');
+       var vector = new OpenLayers.Layer.Vector('AutoBAHN Connections');
        map.addLayer(vector);
-       var markers = new OpenLayers.Layer.Markers('JRA3 IDMs');
+       var markers = new OpenLayers.Layer.Markers('AutoBAHN IDMs');
        map.addLayer(markers);
        make_all(map);
        //map.zoomToMaxExtent();        
@@ -69,9 +69,9 @@ function processResponse(http) {
 
 function addLines (map, lines){
 	var length = lines.length;
-	var vector = map.getLayersByName ('JRA3 Connections')[0];
+	var vector = map.getLayersByName ('AutoBAHN Connections')[0];
     if (vector== null){
-   	  vector= new OpenLayers.Layer.Vector('JRA3 Connections');
+   	  vector= new OpenLayers.Layer.Vector('AutoBAHN Connections');
       map.addLayer (vector);
     }else{
    	  vector.removeFeatures();
@@ -100,12 +100,12 @@ function addLines (map, lines){
 }
 
 function addMarkers (map, markersXML){
-	 var markers = map.getLayersByName ('JRA3 IDMs')[0];
+	 var markers = map.getLayersByName ('AutoBAHN IDMs')[0];
 	 var features = map.getLayersByName ('Popups')[0];
 	 if (markers != null){
     	 markers.clearMarkers();
      }else{
-   	  markers = new OpenLayers.Layer.Markers('JRA3 IDMs');
+   	  markers = new OpenLayers.Layer.Markers('AutoBAHN IDMs');
    	  map.addLayer (markers);
    	 }
      

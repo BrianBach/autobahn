@@ -30,27 +30,27 @@ public interface Manager {
 	 */
 	public String[] getServiceStates();
 	/**
-	 * Gets list of all of JRA3 IDMs names registered in WEB GUI
+	 * Gets list of all of IDMs names registered in WEB GUI
 	 * @return array with string ReservationService types members 
 	 */
 	public List<String> getAllInterdomainManagers ();
 	/**
-	 * Gets list of all services from all JRA3 IDMs registered in WEB GUI
+	 * Gets list of all services from all IDMs registered in WEB GUI
 	 * @return list of Service objects  
 	 */
 	public List<Service> getServicesForAllInterDomainManagers();
 	/**
-	 * Gets list of all JRA3 IDMs registered in WEB GUI
+	 * Gets list of all IDMs registered in WEB GUI
 	 * @return list of InterDomain  types members 
 	 */
 	public List<InterDomainManager> getInterDomainManagers();
 	/**
-	 * Check if UserAccessPoint web service interface for JRA3 IDM is accessible
+	 * Check if UserAccessPoint web service interface for IDM is accessible
 	 * @return true if interface is working 
 	 */
 	public boolean checkUserAccessPointConnection (String idm);
 	/**
-	 * Check if Administration web service interface for JRA3 IDM is accessible
+	 * Check if Administration web service interface for IDM is accessible
 	 * @return true if interface is accessible 
 	 */
 	public boolean checkAdminstrationConnection (String idm);
@@ -61,55 +61,55 @@ public interface Manager {
 	 */
 	public String submitServiceAtInterDomainManager (String idm, ServiceRequest request)throws UserAccessPointException_Exception, ManagerException;
 	/**
-	 * Gets list of configuration properties for specified JRA3 IDM 
+	 * Gets list of configuration properties for specified IDM 
 	 * 
-	 * @param idm identifier name of the JRA3 IDM
+	 * @param idm identifier name of the IDM
 	 * @return	list of KeyValue
 	 */
 	public List<KeyValue> getPropertiesForInterDomainManager (String idm);
 	/**
-	 * Sets list of configuration properties for specified JRA3 IDM registerd in WEB GUI 
+	 * Sets list of configuration properties for specified IDM registerd in WEB GUI 
 	 * 
-	 * @param idm identifier of the JRA3 IDM
+	 * @param idm identifier of the IDM
 	 * @param list of KeyValue
 	 */
 	public void setPropertiesForInterDomainManager (String idm, List<KeyValue> properties);
 	/**
-	 * Gets list of all services for specified JRA3 IDM registered in WEB GUI
-	 * @param idm identifier of the JRA3 IDM
+	 * Gets list of all services for specified IDM registered in WEB GUI
+	 * @param idm identifier of the IDM
 	 * @return list of Service objects  
 	 */
 	public List<Service> getServicesFromInterDomainManager (String idm);
 	/**
-	 * Gets specified service from specified JRA3 IDM registered in WEB GUI
+	 * Gets specified service from specified IDM registered in WEB GUI
 	 * 
-	 * @param idm identifier of the JRA3 IDM 
+	 * @param idm identifier of the IDM 
 	 * @param serviceId identifier of the search service
 	 * @return Service if exist, null if not
 	 */
 	public Service getServiceFromInterDomainManager (String idm, String serviceId);
 	/**
-	 * Cancel specified service in specified JRA3 IDM ristered in WEB GUI
+	 * Cancel specified service in specified IDM ristered in WEB GUI
 	 *  
-	 * @param idm identifier of the JRA3 IDM 
+	 * @param idm identifier of the IDM 
 	 * @param serviceId identifier of the search service
 	 * @throws UserAccessPointException_Exception if some connection problem or cancelling error appear
 	 */
 	public void cancelServiceInInterDomainManager(String idm,String serviceId) throws UserAccessPointException_Exception;
 	/**
-	 * Gets specified JRA3 IDM registered in WEB GUI
-	 * @param idm identifier of the JRA3 IDM
+	 * Gets specified IDM registered in WEB GUI
+	 * @param idm identifier of the IDM
 	 * @return InterDomainManager object if exist, if not null
 	 */
 	public InterDomainManager getInterDomainManager (String idm);
 	/**
-	 * Gets logged information from specified JRA3 IDM registered in WEB GUI
-	 * @param idm identifier of the JRA3 IDM
+	 * Gets logged information from specified IDM registered in WEB GUI
+	 * @param idm identifier of the IDM
 	 * @return String log information
 	 */
 	public String getLogsInterDomainManager(String idm, boolean b, boolean c);
 	/**
-	 * Gets all port names in all JRA3 IDM registered in WEB GUI
+	 * Gets all port names in all IDM registered in WEB GUI
 	 * @return list of  ports names
 	 */
 	public List<String> getAllPorts ();
@@ -127,13 +127,13 @@ public interface Manager {
     public List<String> getAllLinks();
     
 	/**
-	 * Gets names of ports managed by specified JRA3 IDM
-	 * @param idm identifier of the JRA3 IDM
+	 * Gets names of ports managed by specified IDM
+	 * @param idm identifier of the IDM
 	 * @return list of  ports names
 	 */
 	public List<String> getInterDomainManagerPorts (String idm);
 	/**
-	 * Gets time period after with the  registered earlier JRA3 IDM is mark as not accessible
+	 * Gets time period after with the  registered earlier IDM is mark as not accessible
 	 * @return
 	 */
 	public long getTearDownTime();
@@ -154,7 +154,7 @@ public interface Manager {
 	
 	/**
 	 * Checks if request reservation is possible to schedule
-	 * @param idm identifier of the JRA3 IDM
+	 * @param idm identifier of the IDM
 	 * @param request reservation request
 	 * @return true if reservation is possible to schedule
 	 */
@@ -197,14 +197,14 @@ public interface Manager {
 	public void mapPortsForServiceRequest (ServiceRequest service);
 	
 	/**
-	 * Get mapped ports names manages by JRA3 IDM
-	 * @param idm identifier of JRA3 IDM
+	 * Get mapped ports names manages by IDM
+	 * @param idm identifier of IDM
 	 * @return list of mapped ports names
 	 */
 	public List<String> getMappedInterDomainManagerPorts(String idm);
 	
 	/**
-	 * Get mapped ports names manages by all JRA3 IDMs
+	 * Get mapped ports names manages by all IDMs
 	 * @return list of mapped ports names
 	 */
 	public List<String> getMappedAllPorts();
@@ -218,7 +218,7 @@ public interface Manager {
 	 */
 	public List<String> getTimezones ();
 	/**
-	 * Gets default time zone for JRA3 Web GUI
+	 * Gets default time zone for Web GUI
 	 * @return time zone name
 	 */
 	public String getTimezone ();
@@ -238,20 +238,20 @@ public interface Manager {
 	public void convertTimeToTimezone(String timezone, ReservationRequest request);
 	
 	/**
-	 * Gets submitted services in JRA3 IDM
-	 * @param idm identifier of the JRA3 IDM if null provides list of all JRA3 IDM services
+	 * Gets submitted services in IDM
+	 * @param idm identifier of the IDM if null provides list of all IDM services
 	 * @return ServicesFormModel
 	 */
 	public ServicesFormModel getSubmitedServicesInInterDomainManager(String idm);
 	/**
-	 * Gets SettingFormModel used in JRA3 IDM setting view
-	 * @param idm identifier of JRA3 IDM
+	 * Gets SettingFormModel used in IDM setting view
+	 * @param idm identifier of IDM
 	 * @return	SettingsFormModel
 	 */
 	public SettingsFormModel getSettingsForInterDomainManager  (String idm);
 	/**
-	 * Gets LogsFormModel used in JRA3 IDM logs view
-	 * @param idm identifier of JRA3 IDM
+	 * Gets LogsFormModel used in IDM logs view
+	 * @param idm identifier of IDM
 	 * @return LogsFormModel
 	 */
 	public LogsFormModel getLogsForInterDomainManager (String idm);

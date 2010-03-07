@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Form model for showing logs for each JRA3 IDM
+ * Form model for showing logs for each AutoBAHN IDM
  * 
  * @author Lucas Dolata <ldolata@man.poznan.pl>
  *
@@ -16,11 +16,11 @@ public class LogsFormModel implements Serializable{
 	 */
 	private List<String> idms;
 	/**
-	 * Chosen JRA3 IDM
+	 * Chosen IDM
 	 */
 	private String currentIdm;
 	/**
-	 * Logs information get from JRA3 IDM
+	 * Logs information get from IDM
 	 */
 	private String logs;
 	/**

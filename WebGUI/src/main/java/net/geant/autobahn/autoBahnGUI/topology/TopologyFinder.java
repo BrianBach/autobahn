@@ -35,7 +35,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 	protected final Log logger = LogFactory.getLog(getClass());
 	
 	/**
-	 * Time after which the JRA3 IDM is mark as not accessible
+	 * Time after which the IDM is mark as not accessible
 	 */
 	public static final long DEFAULT_DOWN_TIME = 10000;
 	
@@ -277,10 +277,10 @@ public class TopologyFinder implements TopologyFinderNotifier{
 		return buffer.toString();
 	}
 	/**
-	 * Creates the HTML info for JRA3 IDM Node 
+	 * Creates the HTML info for IDM Node 
 	 *  
-	 * @param name	name of the JRA3 IDM
-	 * @param state current JRA3 IDM status
+	 * @param name	name of the IDM
+	 * @param state current IDM status
 	 * @return String with HTML info
 	 */
 	private String createHTMLNodeInfo(String name,Status state) {
