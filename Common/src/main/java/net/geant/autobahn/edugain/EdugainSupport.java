@@ -34,7 +34,7 @@ import net.geant.edugain.validation.ValidationException;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.AbstractSoapInterceptor;
 import org.apache.cxf.phase.Phase;
-import org.apache.commons.logging.Log;
+import org.apache.log4j.Logger;
 import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.util.Base64;
 
@@ -60,7 +60,7 @@ public class EdugainSupport extends AbstractSoapInterceptor {
 
 	static private final String valErrPrefix = "SOAP message validation failed: ";
 
-	private Log log = org.apache.commons.logging.LogFactory.getLog(EdugainSupport.class);
+	private Logger log = Logger.getLogger(EdugainSupport.class);
 	private Edugain edugain; 
 	private WSSecurity wss;
 	private X509CertManager x509;
@@ -153,7 +153,7 @@ public class EdugainSupport extends AbstractSoapInterceptor {
 			throw new EdugainCxfFault(e, errorMsg);
 		}
 		
-		log.debug("Edugain Validation finished succesfully!");
+		//log.debug("Edugain Validation finished succesfully!");
 	}
     	
 	 /**

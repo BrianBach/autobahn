@@ -16,7 +16,7 @@ import net.geant.edugain.validation.ComponentID;
 import net.geant.edugain.validation.ValidationException;
 import net.geant.edugain.validation.Validator;
 
-import org.apache.commons.logging.Log;
+import org.apache.log4j.Logger;
 import org.opensaml.common.SignableSAMLObject;
 
 
@@ -30,7 +30,7 @@ import org.opensaml.common.SignableSAMLObject;
 public class Edugain {
 
 	public URL edugain = null;
-	static private Log log = org.apache.commons.logging.LogFactory.getLog(Edugain.class);
+	static private Logger log = Logger.getLogger(Edugain.class);
 
 	Validator validator;
 
@@ -112,13 +112,13 @@ public class Edugain {
 	public ComponentID validateCert(X509Certificate cert)
 			throws ValidationException {
 
-		log.debug("Validation (" + cert.getType() + "|"
+		/*log.debug("Validation (" + cert.getType() + "|"
 				+ cert.getIssuerDN().getName() + "|"
-				+ cert.getSubjectDN().getName() + ")");
+				+ cert.getSubjectDN().getName() + ")");*/
 
 		ComponentID result = validator.validate(cert);
 
-		log.debug("Certificate successfully validated (CID: " + result.getURN()
+		log.debug("Certificate successfully validated by Edugain (CID: " + result.getURN()
 				+ ")");
 
 		return result;
