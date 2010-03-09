@@ -253,7 +253,9 @@ public class InterdomainPathfinderImplDFS extends InterdomainPathfinderAbstractI
             return;
         
         List<Link> nodeEdges = getNodeEdges(start, edges);
+        log.debug(start + " has " + nodeEdges.size() + " edges.");
         for (Link edge : nodeEdges) {
+            log.debug("Trying edge " + edge + " at Node " + start);
             
             Node neighbor = edge.getEndPort().getNode();
             // "edge" is a Link from Node "start" to another node.
