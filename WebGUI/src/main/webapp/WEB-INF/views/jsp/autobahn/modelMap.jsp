@@ -84,12 +84,13 @@
     <div id="top"><c:import url="top.jsp"/></div>
     <div id="content">
     	<tiles:insertAttribute name="content"/>
-    <br style="clear:both"/>
+    </div>
+    <div id="clearer">
     </div>
     </div>
     <div id="footer">
     	<p>Copyrights@ GEANT AutoBAHN</p>
-    	<p>Designed and Developed by <a href="http://www.psnc.pl">PSNC </a></p> 
+    	<p>Designed and Developed by <a href="http://www.geant.net">GEANT</a></p> 
     </div>
     </div>
   </body>

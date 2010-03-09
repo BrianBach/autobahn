@@ -113,54 +113,65 @@ function afterSetDateValue(ref_field, target_field, date) {
 		</td>
 		<td class="error"><form:errors path="request.userVlanId"/></td>
 	</tr>
-	<tr bgcolor="#48D1CC">
+	<tr><td><br><br></td></tr>
+	<tr>
 		<td class="label" valign="top"><spring:message code="reservation.userInclude"/></td>
 		<td>
 			<table>
 				<tr>
-					<td class="label"><spring:message code="reservation.userIncludeDomains"/></td>
-					<td class="value">
+					<td class="labelcenter"><spring:message code="reservation.userIncludeDomains"/></td>
+					<td class="labelcenter"><spring:message code="reservation.userIncludeLinks"/></td>
+				</tr>
+				<tr>
+					<td class="valuecenter">
 						<form:select path="request.userInclude.domains" multiple="true">
 							<form:options items="${domains_all}"/>
 						</form:select>
 					</td>
-					<td class="error"><form:errors path="request.userInclude.domains"/></td>
 	
-					<td class="label"><spring:message code="reservation.userIncludeLinks"/></td>
-					<td class="value">
+					<td class="valuecenter">
 						<form:select path="request.userInclude.links" multiple="true">
 							<form:options items="${links_all}"/>
 						</form:select>
 					</td>
-					<td class="error"><form:errors path="request.userInclude.links"/></td>
 				</tr>
 			</table>
 		</td>
+		<td class="error">
+			<form:errors path="request.userInclude.domains"/><br>
+			<form:errors path="request.userInclude.links"/>
+		</td>
 	</tr>
-	<tr bgcolor="#FFFF00">
+	<tr><td><br><br></td></tr>
+	<tr>
 		<td class="label" valign="top"><spring:message code="reservation.userExclude"/></td>
 		<td>
 			<table>
 				<tr>
-					<td class="label"><spring:message code="reservation.userExcludeDomains"/></td>
-					<td class="value">
+					<td class="labelcenter"><spring:message code="reservation.userExcludeDomains"/></td>
+					<td class="labelcenter"><spring:message code="reservation.userExcludeLinks"/></td>
+				</tr>
+				<tr>
+					<td class="valuecenter">
 						<form:select path="request.userExclude.domains" multiple="true">
 							<form:options items="${domains_all}"/>
 						</form:select>
 					</td>
-					<td class="error"><form:errors path="request.userExclude.domains"/></td>
 	
-					<td class="label"><spring:message code="reservation.userExcludeLinks"/></td>
-					<td class="value">
+					<td class="valuecenter">
 						<form:select path="request.userExclude.links" multiple="true">
 							<form:options items="${links_all}"/>
 						</form:select>
 					</td>
-					<td class="error"><form:errors path="request.userExclude.links"/></td>
 				</tr>
 			</table>
 		</td>
+		<td class="error">
+			<form:errors path="request.userExclude.domains"/><br>
+			<form:errors path="request.userExclude.links"/>
+		</td>
 	</tr>
+	<tr><td><br><br></td></tr>
 	<tr>
 		<td class="label"><spring:message code="reservation.resiliency"/></td>
 		<td class="value">

@@ -28,7 +28,9 @@ form {font-family: Arial, Helvetica, sans; font-size:11px;font-weight:normal;mar
 form td{font-family: Arial, Helvetica, sans; font-size:11px;font-weight:normal;margin:0px;color:#000080;}
 form select{font-family: Arial, Helvetica, sans; font-size:11px;font-weight:normal;margin:0px;color:#000080;}
 form td.label {font-family: Arial, Helvetica, sans; font-size:11px;font-weight:bold; height:20px;text-align:right;width:150px; }
+form td.labelcenter {font-family: Arial, Helvetica, sans; font-size:11px;font-weight:bold; height:20px;text-align:center;width:150px; }
 form td.value {font-family: Arial, Helvetica, sans; text-align:left;width:55%;height:20px;color:#000080;}
+form td.valuecenter {font-family: Arial, Helvetica, sans; text-align:center;width:55%;height:20px;color:#000080;}
 form td.error {font-family: Arial, Helvetica, sans; color:red;font-size:9px;text-align:left;width:25%;height:20px;}
 form textarea {font-family: Arial, Helvetica, sans; width: 100%;border:#C9C9C9 1px solid;background-color:#F5F5F5; }
 form input {font-family: Arial, Helvetica, sans; color:#000080;font-size:11px;font-weight:normal;height:20px}
@@ -62,9 +64,10 @@ p.error {font-family: Arial, Helvetica, sans; color:red;font-size:9px;text-align
 
 #login{padding:0px; text-align:right;font-family: Arial, Helvetica, sans; font-size:11px;color:#caf8f5; background-color:#000080;font-weight: bold}
 
-#content {margin: 0px 0px 0px 150px; padding:0px; background: none; font-size: 12px; color: #000080; text-align:left;}
+#content {width:800px; float:left; padding:0px; background: none; font-size: 12px; color: #000080; text-align:left;}
 #content p{padding:0px 0px 0px 10px}
 
+#clearer {clear:both;}
 
 #footer {margin:0px; padding:0; height:35px; background: url(footer.png) no-repeat;text-align:center;color:white;font-family: Arial, Helvetica, sans; font-size:10px;}
 #footer p {padding:0px; margin:0px;}
