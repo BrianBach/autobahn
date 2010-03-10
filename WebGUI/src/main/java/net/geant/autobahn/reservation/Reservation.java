@@ -40,6 +40,7 @@ import net.geant.autobahn.useraccesspoint.PathInfo;
  *         &lt;element name="globalConstraints" type="{constraints.autobahn.geant.net}GlobalConstraints" minOccurs="0"/>
  *         &lt;element name="path" type="{network.autobahn.geant.net}Path" minOccurs="0"/>
  *         &lt;element name="intState" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="fake" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -66,7 +67,8 @@ import net.geant.autobahn.useraccesspoint.PathInfo;
     "bidirectional",
     "globalConstraints",
     "path",
-    "intState"
+    "intState",
+    "fake"
 })
 public class Reservation implements Serializable {
 
@@ -87,6 +89,7 @@ public class Reservation implements Serializable {
     protected GlobalConstraints globalConstraints;
     protected Path path;
     protected int intState;
+    protected boolean fake;
 
     /**
      * Gets the value of the bodID property.
@@ -426,4 +429,19 @@ public class Reservation implements Serializable {
         this.intState = value;
     }
 
+    /**
+     * Gets the value of the intState property.
+     * 
+     */
+    public boolean isFake() {
+        return fake;
+    }
+
+    /**
+     * Sets the value of the fake property.
+     * 
+     */
+    public void setFake(boolean fake) {
+        this.fake = fake;
+    }
 }
