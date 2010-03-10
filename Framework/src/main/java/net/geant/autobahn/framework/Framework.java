@@ -2,7 +2,6 @@ package net.geant.autobahn.framework;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -15,8 +14,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import javax.xml.ws.Endpoint;
-import javax.xml.xpath.XPathException;
-
 import net.geant.autobahn.edugain.WSSecurity;
 import net.geant.autobahn.framework.commands.AutobahnCommand;
 import net.geant.autobahn.framework.commands.ClientPortsCommand;
