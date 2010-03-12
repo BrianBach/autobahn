@@ -50,8 +50,8 @@ public class RequestConverter {
             throw new UserAccessPointException("reservation capacity cannot be negative or zero");
         }
         resv.setMaxDelay(req.getMaxDelay());
-        if (req.getMaxDelay() <= 0) {
-            throw new UserAccessPointException("reservation max delay cannot be negative or zero");
+        if (req.getMaxDelay() < 0) {
+            throw new UserAccessPointException("reservation max delay cannot be negative");
         }
         resv.setResiliency(req.getResiliency().name());
         resv.setBidirectional(req.isBidirectional());
