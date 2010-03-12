@@ -9,6 +9,6 @@
         <tr><td class="label">User:</td><td class="value"><input type='text' name='j_username'/></td></tr>
         <tr><td class="label">Password:</td><td  class="value"><input type='password' name='j_password'></td></tr>
         <tr><td><input type="checkbox" name="_spring_se curity_remember_me"></td><td>Don't ask for my password for two weeks</td></tr>
-        <tr><td colspan='2'><input name="Login" type="submit"/></td></tr>
+        <tr><td colspan='2'><input name="Login" value="Log in" type="submit"/></td></tr>
       </table>
  </form>
