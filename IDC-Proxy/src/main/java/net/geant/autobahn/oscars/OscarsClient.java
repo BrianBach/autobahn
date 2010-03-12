@@ -4,38 +4,27 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.es.oscars.oscars.CancelReservation;
-import net.es.oscars.oscars.CancelReservationResponse;
-import net.es.oscars.oscars.CreatePath;
-import net.es.oscars.oscars.CreatePathContent;
-import net.es.oscars.oscars.CreatePathResponse;
-import net.es.oscars.oscars.CreateReply;
-import net.es.oscars.oscars.CreateReservation;
-import net.es.oscars.oscars.CreateReservationResponse;
-import net.es.oscars.oscars.GetNetworkTopology;
-import net.es.oscars.oscars.GetNetworkTopologyResponse;
+import javax.xml.ws.Holder;
+
+import net.es.oscars.oscars.AAAFaultMessage;
+import net.es.oscars.oscars.BSSFaultMessage;
 import net.es.oscars.oscars.GetTopologyContent;
+import net.es.oscars.oscars.GetTopologyResponseContent;
 import net.es.oscars.oscars.GlobalReservationId;
 import net.es.oscars.oscars.Layer2Info;
+import net.es.oscars.oscars.ListReply;
 import net.es.oscars.oscars.ListRequest;
-import net.es.oscars.oscars.ListReservations;
-import net.es.oscars.oscars.ListReservationsResponse;
+import net.es.oscars.oscars.OscarsConverter;
 import net.es.oscars.oscars.PathInfo;
-import net.es.oscars.oscars.ResCreateContent;
 import net.es.oscars.oscars.ResDetails;
 import net.es.oscars.oscars.VlanTag;
-import net.geant.autobahn.main.ProxyServlet;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.proxy.ReservationInfo;
 
-import org.apache.axis2.AxisFault;
-import org.apache.axis2.client.Options;
-import org.apache.axis2.client.ServiceClient;
-import org.apache.axis2.context.ConfigurationContext;
-import org.apache.axis2.context.ConfigurationContextFactory;
+import net.es.oscars.oscars.OSCARS;
+import net.es.oscars.oscars.OSCARS_Service;
+
 import org.apache.log4j.Logger;
-import org.oasis_open.docs.wsn.b_2.MessageType;
-import org.oasis_open.docs.wsn.b_2.NotificationMessageHolderType;
 import org.oasis_open.docs.wsn.b_2.Notify;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneDomainContent;
 
@@ -58,44 +47,28 @@ public class OscarsClient {
 	public static final String ST_FAILED = "FAILED";
 	public static final String ST_PENDINGCANCEL = "PENDINGCANCEL";
 	public static final String ST_PRECANCEL = "PRECANCEL";
-	private final static String repo = ProxyServlet.getAppPath() + "/etc/security";
-	private final static String localRepo = "C:/Repo";
-	private OSCARSStub stub;
 
-	public OscarsClient(String endPoint) throws AxisFault {
+	private OSCARS rc = null;
+
+	public OscarsClient(String endPoint) {
 		
-		this(endPoint, repo);
+        if("none".equals(endPoint))
+            return;
+        
+        OSCARS_Service service = new OSCARS_Service(/*TODO endPoint*/);
+        rc = service.getOSCARS();
 	}
 	
-	public OscarsClient(String endPoint, String repoPath) throws AxisFault {
 
-		ConfigurationContext context = ConfigurationContextFactory.createConfigurationContextFromFileSystem(repoPath, null);
-		stub = new OSCARSStub(context, endPoint);
-		ServiceClient service = stub._getServiceClient();
-		Options opts = service.getOptions();
-		opts.setTimeOutInMilliSeconds(120000);
-		service.setOptions(opts);
-		stub._setServiceClient(service);
-	}
+	public List<ReservationInfo> getReservationList() throws AAAFaultMessage, BSSFaultMessage {
 
-	public List<ReservationInfo> getReservationList() throws RemoteException {
-
-		ListReservations lres = new ListReservations();
 		ListRequest lreq = new ListRequest();
-		lres.setListReservations(lreq);
-		ListReservationsResponse resp = null;
-		try {
-			stub.listReservations(lres);
-		} catch (Exception e) {
-			System.out.println("getReservationList: " + e.getMessage());
-		}
-		if (resp != null) {
-
-			ResDetails[] res = resp.getListReservationsResponse()
-					.getResDetails();
-			List<ReservationInfo> resinfo = new ArrayList<ReservationInfo>();
+		ListReply lrep = rc.listReservations(lreq);
+		
+        List<ReservationInfo> resinfo = new ArrayList<ReservationInfo>();
+		if (lrep != null) {
+			List<ResDetails> res = lrep.getResDetails();
 			for (ResDetails rd : res) {
-
 				ReservationInfo ri = new ReservationInfo();
 				ri.setBodID(rd.getGlobalReservationId());
 				ri.setDescription(rd.getDescription());
@@ -103,24 +76,23 @@ public class OscarsClient {
 				// TODO
 				resinfo.add(ri);
 			}
-			return resinfo;
 		}
-		return null;
+        return resinfo;
 	}
 
 	public List<Link> getTopology() throws Exception {
 		log.debug("getTopology.begin");
-		GetNetworkTopology param = new GetNetworkTopology();
-		GetTopologyContent content = new GetTopologyContent();
-		content.setTopologyType("all");
-		param.setGetNetworkTopology(content);
-		GetNetworkTopologyResponse response = stub.getNetworkTopology(param);
-		CtrlPlaneDomainContent[] domains = response
-				.getGetNetworkTopologyResponse().getTopology().getDomain();
 
-		System.out.println("Domains: " + domains.length);
+        GetTopologyContent content = new GetTopologyContent();
+        content.setTopologyType("all");
+        GetTopologyResponseContent resp = rc.getNetworkTopology(content);
+        
+		List<CtrlPlaneDomainContent> domains = resp.getTopology().getDomain();
 
-		List<Link> links = OscarsConverter.getGeantTopology(domains);
+		System.out.println("Domains: " + domains.size());
+
+		
+		List<Link> links = OscarsConverter.getGeantTopology((CtrlPlaneDomainContent[]) domains.toArray());
 		log.debug("getTopology.end");
 		return links;
 	}
@@ -140,15 +112,12 @@ public class OscarsClient {
 
 		final String resID = reservation.getBodID();
 
-		ResCreateContent content = new ResCreateContent();
-
-		content
-				.setStartTime(reservation.getStartTime().getTimeInMillis() / 1000);
-		content.setEndTime(reservation.getEndTime().getTimeInMillis() / 1000);
-		content.setDescription(reservation.getDescription());
-		content.setGlobalReservationId(resID);
+		long startTime = reservation.getStartTime().getTimeInMillis() / 1000;
+		long endTime = reservation.getEndTime().getTimeInMillis() / 1000;
+		String description = reservation.getDescription();
+		Holder<String> globalReservationId = new Holder<String>(resID);
 		// Bandwidth in Mbps
-		content.setBandwidth((int) (reservation.getCapacity() / 1000000));
+		int bandwidth = ((int) (reservation.getCapacity() / 1000000));
 
 		// Path
 		PathInfo pinfo = new PathInfo();
@@ -159,38 +128,33 @@ public class OscarsClient {
 		l2.setDestEndpoint(dest);
 
 		VlanTag vlan = new VlanTag();
-		vlan.setString(vlans);
+		vlan.setValue(vlans);
 		vlan.setTagged(true);
 		l2.setSrcVtag(vlan);
 		l2.setDestVtag(vlan);
 
 		pinfo.setLayer2Info(l2);
 
-		content.setPathInfo(pinfo);
-
-		CreateReservation param = new CreateReservation();
-		param.setCreateReservation(content);
-
-		CreateReservationResponse response = null;
+		Holder <PathInfo> pathInfo = new Holder<PathInfo>(pinfo);
 
 		ReservationInfo result = new ReservationInfo();
 		result.setBodID(reservation.getBodID());
 
+		Holder<String> token = new Holder<String>();
+		Holder<String> status = new Holder<String>();
 		try {
-			response = stub.createReservation(param);
+			rc.createReservation(globalReservationId, startTime, endTime, bandwidth, description, pathInfo, token, status);
 		} catch (Exception e) {
 			System.out.println("Error when schedule oscars: " + e.getMessage());
 			result.setDescription(e.getMessage());
 
 			return result;
 		}
-
-		CreateReply resp = response.getCreateReservationResponse();
-
-		if (ST_PENDING.equals(resp.getStatus())) {
+		
+		if (ST_PENDING.equals(status)) {
 			// Read and return vlan
-			Integer sel_vlan = Integer.valueOf(resp.getPathInfo()
-					.getLayer2Info().getSrcVtag().getString());
+			Integer sel_vlan = Integer.valueOf(pathInfo.value
+					.getLayer2Info().getSrcVtag().getValue());
 
 			result.setCalculatedConstraints("" + sel_vlan);
 		}
@@ -199,69 +163,40 @@ public class OscarsClient {
 	}
 
 	public void cancelReservation(String resID) throws RemoteException {
-		CancelReservation param = new CancelReservation();
 
 		GlobalReservationId gid = new GlobalReservationId();
 		gid.setGri(resID);
 
-		param.setCancelReservation(gid);
-
 		try {
-			CancelReservationResponse resp = stub.cancelReservation(param);
-			System.out.println("Cancel resp from OSCARS: "
-					+ resp.getCancelReservationResponse());
+			rc.cancelReservation(gid);
 		} catch (Exception e) {
 			throw new RemoteException(e.getMessage(), e.getCause());
 		}
 	}
 
 	public String createPath(String resID) throws RemoteException {
-		CreatePath cp = new CreatePath();
-		CreatePathContent content = new CreatePathContent();
-
-		content.setGlobalReservationId(resID);
-
-		cp.setCreatePath(content);
-
-		CreatePathResponse resp;
+	    Holder<String> globalReservationId = new Holder<String>();
+	    Holder<String> status = new Holder<String>();
 		try {
-			resp = stub.createPath(cp);
+			rc.createPath(resID, globalReservationId, status);
+	        return status.value;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RemoteException(e.getMessage(), e.getCause());
 		}
-
-		return resp.getCreatePathResponse().getStatus();
 	}
 
 	public void Notify() throws RemoteException {
 
 		Notify notify = new Notify();
-		NotificationMessageHolderType message = new NotificationMessageHolderType();
-
-		MessageType messageType = new MessageType();
-
-		message.setMessage(messageType);
-
-		notify.addNotificationMessage(message);
-
+		// TODO: Fill the notify message with something useful??
 		try {
 
-			stub.Notify(notify);
+			rc.notify(notify);
 
 		} catch (Exception e) {
 
 			System.out.println("notify exception " + e.getMessage());
 		}
-	}
-
-	public static void main(String[] args) throws Exception {
-
-		String addr = "http://localhost:8080/autobahn-proxy/services/OSCARS";
-		
-		OscarsClient oscars = new OscarsClient(addr, localRepo);
-		oscars.getTopology();
-
-		System.out.println("program exit...");
 	}
 }

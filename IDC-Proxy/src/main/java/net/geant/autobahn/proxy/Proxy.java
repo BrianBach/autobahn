@@ -5,7 +5,6 @@ import javax.jws.WebResult;
 import javax.jws.WebParam;
 import java.util.List;
 import java.io.IOException;
-
 import net.geant.autobahn.network.Link;
 
 /**

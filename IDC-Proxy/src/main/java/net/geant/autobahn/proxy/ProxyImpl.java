@@ -9,15 +9,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.geant.autobahn.main.ProxyServlet;
+import net.es.oscars.oscars.AAAFaultMessage;
+import net.es.oscars.oscars.BSSFaultMessage;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.oscars.OscarsClient;
 import net.geant.autobahn.oscars.notify.OscarsNotifyClient;
+
+import javax.jws.WebService;
 
 /**
  * @author Michal
  *
  */
+@WebService(name="Proxy", serviceName="ProxyService",
+        portName="ProxyPort", 
+        targetNamespace="http://proxy.autobahn.geant.net/",
+        endpointInterface="net.geant.autobahn.proxy.Proxy")
 public class ProxyImpl implements Proxy {
 
     private static Map<String, String> vlans = new HashMap<String, String>();
@@ -37,8 +44,9 @@ public class ProxyImpl implements Proxy {
      */
     public void cancelReservation(String resID) throws IOException {
 
-        System.out.println("cancelReservation: " + resID);
-        OscarsClient oscars = new OscarsClient(ProxyServlet.getProperties().getProperty("oscars.address"));
+        System.out.println("cancelReservation for JOHNIES: " + resID);
+        //OscarsClient oscars = new OscarsClient("http://150.140.8.10:8090/autobahn-idm2proxy/proxy");
+        OscarsClient oscars = new OscarsClient("http://150.140.8.10:8096");
 
         try {
             oscars.cancelReservation(resID);
@@ -53,10 +61,13 @@ public class ProxyImpl implements Proxy {
      */
     public ReservationInfo createReservation(ReservationInfo resInfo)
             throws IOException {
-
+        //System.out.println("Inside IMPL");
         System.out.println("Sending create reservation - " + resInfo.getBodID());
-        OscarsClient oscars = new OscarsClient(ProxyServlet.getProperties().getProperty("oscars.address"));
-
+        //TODO read properties
+        OscarsClient oscars = new OscarsClient("http://150.140.8.14:8080");
+        //modified by Johnies Zaoudis for testing
+        //OscarsClient oscars = new OscarsClient();
+        
         String src = "";
 
         // Old Link
@@ -86,7 +97,7 @@ public class ProxyImpl implements Proxy {
     public List<Link> getTopology() throws IOException {
 
         System.out.println("getTopology");
-        OscarsClient oscars = new OscarsClient(ProxyServlet.getProperties().getProperty("oscars.address"));
+        OscarsClient oscars = new OscarsClient("http://150.140.8.10:8096");//ProxyServlet.getProperties().getProperty("oscars.address"));
         try {
             return oscars.getTopology();
         } catch (Exception e) {
@@ -100,12 +111,15 @@ public class ProxyImpl implements Proxy {
     public List<ReservationInfo> listReservations() throws IOException {
 
         System.out.println("listReservations");
-        OscarsClient oscars = new OscarsClient(ProxyServlet.getProperties().getProperty("oscars.address"));
+        OscarsClient oscars = new OscarsClient("");//ProxyServlet.getProperties().getProperty("oscars.address"));
         try {
             return oscars.getReservationList();
-        } catch (RemoteException e) {
-            throw new IOException(e.getMessage());
+        } catch (AAAFaultMessage e) {
+            e.printStackTrace();
+        } catch (BSSFaultMessage e) {
+            e.printStackTrace();
         }
+        return null;
     }
 
     /* (non-Javadoc)
@@ -115,7 +129,7 @@ public class ProxyImpl implements Proxy {
             throws IOException {
         
         System.out.println("modifyReservation: " + resInfo.getBodID());
-        OscarsClient oscars = new OscarsClient(ProxyServlet.getProperties().getProperty("oscars.address"));
+        OscarsClient oscars = new OscarsClient("");//ProxyServlet.getProperties().getProperty("oscars.address"));
         try {
             // do not support for now
             throw new RemoteException("not implemented");
@@ -132,7 +146,7 @@ public class ProxyImpl implements Proxy {
     public ReservationInfo queryReservation(String resID) throws IOException {
         
         System.out.println("queryReservation: " + resID);
-        OscarsClient oscars = new OscarsClient(ProxyServlet.getProperties().getProperty("oscars.address"));
+        OscarsClient oscars = new OscarsClient("");//ProxyServlet.getProperties().getProperty("oscars.address"));
         try {
             oscars.cancelReservation(resID);
         } catch (RemoteException e) {
@@ -149,7 +163,7 @@ public class ProxyImpl implements Proxy {
         
         // using OSCARSNotifyClient
         System.out.println("notify: " + resInfo.getBodID());
-        OscarsNotifyClient oscars = new OscarsNotifyClient(ProxyServlet.getProperties().getProperty("oscars.address"));
+        OscarsNotifyClient oscars = new OscarsNotifyClient("");//ProxyServlet.getProperties().getProperty("oscars.address"));
 
         try {
             oscars.Notify(resInfo);

@@ -169,16 +169,6 @@
             element="tns:getNetworkTopologyResponse" />
     </wsdl:message>
 
-    <wsdl:message name="initiateTopologyPull">
-        <wsdl:part name="initiateTopologyPull"
-            element="tns:initiateTopologyPull">
-        </wsdl:part>
-    </wsdl:message>
-    <wsdl:message name="initiateTopologyPullResponse">
-        <wsdl:part name="initiateTopologyPullResponse"
-            element="tns:initiateTopologyPullResponse" />
-    </wsdl:message>
-
     <wsdl:message name="createPath">
         <wsdl:part name="createPath"
             element="tns:createPath">
@@ -281,15 +271,6 @@
         <wsdl:operation name="getNetworkTopology">
             <wsdl:input message="tns:getNetworkTopology" />
             <wsdl:output message="tns:getNetworkTopologyResponse" />
-            <wsdl:fault name="AAAErrorException"
-                message="tns:AAAFaultMessage" />
-            <wsdl:fault name="BSSErrorException"
-                message="tns:BSSFaultMessage" />
-        </wsdl:operation>
-
-        <wsdl:operation name="initiateTopologyPull">
-            <wsdl:input message="tns:initiateTopologyPull" />
-            <wsdl:output message="tns:initiateTopologyPullResponse" />
             <wsdl:fault name="AAAErrorException"
                 message="tns:AAAFaultMessage" />
             <wsdl:fault name="BSSErrorException"
@@ -463,26 +444,6 @@
             </wsdl:fault>
         </wsdl:operation>
 
-        <wsdl:operation name="initiateTopologyPull">
-            <wsp:PolicyReference URI="#X509BindingPolicy"  /> 
-            <soap:operation style="document"
-                soapAction="http://oscars.es.net/OSCARS/initiateTopologyPull" />
-            <wsdl:input>
-                <wsp:PolicyReference URI="#signedMsgPolicy"  /> 
-                <soap:body use="literal" parts="initiateTopologyPull" />
-            </wsdl:input>
-            <wsdl:output>
-                <soap:body use="literal"
-                    parts="initiateTopologyPullResponse" />
-            </wsdl:output>
-            <wsdl:fault name="AAAErrorException">
-                <soap:fault name="AAAErrorException" use="literal" />
-            </wsdl:fault>
-            <wsdl:fault name="BSSErrorException">
-                <soap:fault name="BSSErrorException" use="literal" />
-            </wsdl:fault>
-        </wsdl:operation>
-
         <wsdl:operation name="createPath">
             <wsp:PolicyReference URI="#X509BindingPolicy"  /> 
             <soap:operation style="document"
@@ -576,7 +537,7 @@
     <wsdl:service name="OSCARS">
         <wsdl:port name="OSCARS" binding="tns:OSCARSSOAP">
             <soap:address
-                location="https://oscars-dev.es.net:9090/axis2/services/OSCARS" />
+                location="http://150.140.141.15:8096/" />
         </wsdl:port>
     </wsdl:service>
 </wsdl:definitions>

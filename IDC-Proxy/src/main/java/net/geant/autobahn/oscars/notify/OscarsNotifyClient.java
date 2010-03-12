@@ -1,29 +1,25 @@
 package net.geant.autobahn.oscars.notify;
 
 import java.rmi.RemoteException;
-import net.es.oscars.oscars.Event;
+//import net.es.oscars.oscars.Event;
 import net.es.oscars.oscars.EventContent;
+import net.es.oscars.oscars.OSCARS;
+import net.es.oscars.oscars.OSCARS_Service;
 import net.es.oscars.oscars.PathInfo;
 import net.es.oscars.oscars.ResDetails;
-import net.geant.autobahn.main.ProxyServlet;
 import net.geant.autobahn.proxy.ReservationInfo;
 
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
-import org.apache.axis2.AxisFault;
-import org.apache.axis2.client.Options;
-import org.apache.axis2.client.ServiceClient;
-import org.apache.axis2.context.ConfigurationContext;
-import org.apache.axis2.context.ConfigurationContextFactory;
-import org.apache.axis2.databinding.ADBException;
-import org.apache.axis2.databinding.types.URI;
-import org.apache.axis2.databinding.types.URI.MalformedURIException;
+import org.apache.cxf.ws.addressing.EndpointReferenceType;
+import org.apache.cxf.ws.addressing.AttributedURIType;
 import org.apache.log4j.Logger;
 import org.oasis_open.docs.wsn.b_2.*;
 import org.oasis_open.docs.wsn.br_2.*;
-import org.w3.www._2005._08.addressing.*;
-
+//import org.w3.www._2005._08.addressing.*;
+import net.es.oscars.oscars.OSCARSNotify;
+import net.es.oscars.oscars.OSCARSNotify_Service;
 
 /**
  *
@@ -31,9 +27,14 @@ import org.w3.www._2005._08.addressing.*;
  */
 public class OscarsNotifyClient {
 
+    // Added during CXF migration (formerly existing in net.es.oscars.oscars.Event class)
+    public static final javax.xml.namespace.QName MY_QNAME = new javax.xml.namespace.QName(
+            "http://oscars.es.net/OSCARS",
+            "event",
+            "ns2");
+    
     private Logger log = Logger.getLogger(this.getClass());
-    private String repo = ProxyServlet.getAppPath() + "/etc/security";
-    private OSCARSNotifyStub stub;
+    private OSCARSNotify rc = null;
 
     String toOscarsReservationState(int resState) {
 
@@ -74,19 +75,17 @@ public class OscarsNotifyClient {
         return state;
     }
 
-    public OscarsNotifyClient(String endPoint) throws AxisFault {
-
-        ConfigurationContext context = ConfigurationContextFactory.createConfigurationContextFromFileSystem(repo, null);
-        stub = new OSCARSNotifyStub(context, endPoint);
-        ServiceClient service = stub._getServiceClient();
-        Options opts = service.getOptions();
-        opts.setTimeOutInMilliSeconds(120000);
-        service.setOptions(opts);
-        stub._setServiceClient(service);
+    public OscarsNotifyClient(String endPoint) {
+        
+        if("none".equals(endPoint))
+            return;
+        
+        OSCARSNotify_Service service = new OSCARSNotify_Service(/*TODO endPoint*/);
+        rc = service.getOSCARSNotify();
     }
 
     public void Notify(ReservationInfo resInfo) throws RemoteException {
-
+            
         // try to see if we should notify about this event
         String resState = toOscarsReservationState(resInfo.getState());
         if (resState == null)
@@ -123,21 +122,18 @@ public class OscarsNotifyClient {
         MessageType msg = new MessageType();
         OMFactory omFactory = (OMFactory) OMAbstractFactory.getOMFactory();
         OMElement omEvent = null;
+        /*
+         TODO: Implement business logic (commented out during CXF migration)
         try {
-            omEvent = event.getOMElement(Event.MY_QNAME, omFactory);
+            omEvent = event.getOMElement(this.MY_QNAME, omFactory);
         } catch (ADBException ex) {
             System.out.println("Notify axis internals - " + ex.getMessage());
         }
-        msg.addExtraElement(omEvent);
+        msg.addExtraElement(omEvent);*/
 
         TopicExpressionType topicExpr = new TopicExpressionType();
-        topicExpr.setString("idc:INFO");
-        URI topicDialectUri = null;
-        try {
-            topicDialectUri = new URI("http://docs.oasis-open.org/wsn/t-1/TopicExpression/Simple");
-        } catch (MalformedURIException ex) { }
-
-        topicExpr.setDialect(topicDialectUri);
+        topicExpr.setValue("idc:INFO");
+        topicExpr.setDialect("http://docs.oasis-open.org/wsn/t-1/TopicExpression/Simple");
 
         //msgHolder.setSubscriptionReference(subRef);
         msgHolder.setTopic(topicExpr);
@@ -146,8 +142,8 @@ public class OscarsNotifyClient {
 
 
         Notify notification = new Notify();
-        notification.addNotificationMessage(msgHolder);
-        stub.Notify(notification);
+        notification.getNotificationMessage().add(msgHolder);
+        rc.notify(notification);
     }
 
     public void subscribe() throws RemoteException {
@@ -172,22 +168,16 @@ public class OscarsNotifyClient {
             RegisterPublisher register = new RegisterPublisher();
             register.setDemand(true);
             TopicExpressionType topic = new TopicExpressionType();
-            URI uri = new URI();
-            uri.setHost("hemp.man.poznan.pl");
-            topic.setDialect(uri);
-            topic.setString("IDC:INFO");
-            register.addTopic(topic);
+            topic.setDialect("hemp.man.poznan.pl");
+            topic.setValue("IDC:INFO");
+            register.getTopic().add(topic);
             EndpointReferenceType publisherRef = new EndpointReferenceType();
             AttributedURIType address = new AttributedURIType();
-            uri = new URI();
-            uri.setHost("hemp.man.poznan.pl");
-            address.setAnyURI(uri);
+            address.setValue("hemp.man.poznan.pl");
             publisherRef.setAddress(address);
             register.setPublisherReference(publisherRef);
 
-
-
-            resp = stub.RegisterPublisher(register);
+            resp = rc.registerPublisher(register);
             EndpointReferenceType pubRef = resp.getPublisherRegistrationReference();
             EndpointReferenceType conRef = resp.getConsumerReference();
 
@@ -205,22 +195,19 @@ public class OscarsNotifyClient {
 
     public void destroyRegistration() throws RemoteException {
 
-        log.debug("destroyRegistration.begin");
+       log.debug("destroyRegistration.begin");
 
         try {
             DestroyRegistrationResponse resp;
             DestroyRegistration destroy = new DestroyRegistration();
             EndpointReferenceType publisherRef = new EndpointReferenceType();
             AttributedURIType address = new AttributedURIType();
-            URI uri = new URI();
-            uri.setHost("hemp.man.poznan.pl");
-            address.setAnyURI(uri);
+            address.setValue("hemp.man.poznan.pl");
             publisherRef.setAddress(address);
 
             destroy.setPublisherRegistrationReference(publisherRef);
 
-
-            resp = stub.DestroyRegistration(destroy);
+            resp = rc.destroyRegistration(destroy);
 
         } catch (Exception e) {
 

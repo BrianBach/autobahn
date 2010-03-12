@@ -35,12 +35,12 @@ This document and the information contained herein is provided on an "AS IS" bas
       <xsd:element name="Originator" type="wsa:EndpointReferenceType" 
                minOccurs="0" maxOccurs="1"/>
       <xsd:element name="ErrorCode" 
-               minOccurs="0" maxOccurs="1" type="ErrorCodeType" />
+               minOccurs="0" maxOccurs="1" type="wsrf-bf:ErrorCodeType" />
       
       <!-- made a string instead of a complex type -->
       <xsd:element name="Description" 
                minOccurs="0" maxOccurs="unbounded" type="xsd:string" />
-      <xsd:element name="FaultCause" minOccurs="0" maxOccurs="1" type="FaultCauseType"/>
+      <xsd:element name="FaultCause" minOccurs="0" maxOccurs="1" type="wsrf-bf:FaultCauseType"/>
     </xsd:sequence>
     <!-- <xsd:anyAttribute namespace="##other" processContents="lax"/> -->
  </xsd:complexType>

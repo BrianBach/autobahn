@@ -32,10 +32,6 @@
 
     <xsd:element name="getNetworkTopologyResponse" type="tns:getTopologyResponseContent" />
 
-    <xsd:element name="initiateTopologyPull" type="tns:initiateTopologyPullContent" />
-
-    <xsd:element name="initiateTopologyPullResponse" type="tns:initiateTopologyPullResponseContent" />
-
     <xsd:element name="createPath" type="tns:createPathContent" />
 
     <xsd:element name="createPathResponse" type="tns:createPathResponseContent" />
@@ -53,6 +49,8 @@
     <xsd:element name="subscriptionId" type="xsd:string" />
     
     <xsd:element name="publisherRegistrationId" type="xsd:string" />
+    
+    <xsd:element name="reservationResource" type="tns:reservationResourceType" />
     
     <xsd:element name="forward">
         <xsd:complexType>
@@ -147,18 +145,6 @@
         <xsd:sequence>
            <!-- nmwg goes here -->
            <xsd:element ref="ctrlp:topology" minOccurs="1"/>
-        </xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:complexType name="initiateTopologyPullContent">
-        <xsd:sequence>
-            <xsd:element name="topologyType" type="xsd:string" minOccurs="1" />
-        </xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:complexType name="initiateTopologyPullResponseContent">
-        <xsd:sequence>
-            <xsd:element name="resultMsg" type="xsd:string" minOccurs="1" />
         </xsd:sequence>
     </xsd:complexType>
 
@@ -481,5 +467,15 @@
         <xsd:sequence>
             <xsd:element name="gri" type="xsd:string" />
         </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="reservationResourceType">
+        <xsd:complexContent>
+            <xsd:extension base="tns:resCreateContent">
+                <xsd:sequence minOccurs="0">
+                    <xsd:element name="localDetails" type="tns:localDetails" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
     </xsd:complexType>
 </xsd:schema>

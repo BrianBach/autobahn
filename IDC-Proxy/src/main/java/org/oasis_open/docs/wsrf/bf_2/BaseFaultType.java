@@ -1,966 +1,238 @@
 
+package org.oasis_open.docs.wsrf.bf_2;
+
+import java.util.ArrayList;
+import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.datatype.XMLGregorianCalendar;
+import org.apache.cxf.ws.addressing.EndpointReferenceType;
+import org.oasis_open.docs.wsn.b_2.InvalidFilterFaultType;
+import org.oasis_open.docs.wsn.b_2.InvalidMessageContentExpressionFaultType;
+import org.oasis_open.docs.wsn.b_2.InvalidProducerPropertiesExpressionFaultType;
+import org.oasis_open.docs.wsn.b_2.InvalidTopicExpressionFaultType;
+import org.oasis_open.docs.wsn.b_2.MultipleTopicsSpecifiedFaultType;
+import org.oasis_open.docs.wsn.b_2.NoCurrentMessageOnTopicFaultType;
+import org.oasis_open.docs.wsn.b_2.NotifyMessageNotSupportedFaultType;
+import org.oasis_open.docs.wsn.b_2.PauseFailedFaultType;
+import org.oasis_open.docs.wsn.b_2.ResumeFailedFaultType;
+import org.oasis_open.docs.wsn.b_2.SubscribeCreationFailedFaultType;
+import org.oasis_open.docs.wsn.b_2.TopicExpressionDialectUnknownFaultType;
+import org.oasis_open.docs.wsn.b_2.TopicNotSupportedFaultType;
+import org.oasis_open.docs.wsn.b_2.UnableToCreatePullPointFaultType;
+import org.oasis_open.docs.wsn.b_2.UnableToDestroyPullPointFaultType;
+import org.oasis_open.docs.wsn.b_2.UnableToDestroySubscriptionFaultType;
+import org.oasis_open.docs.wsn.b_2.UnableToGetMessagesFaultType;
+import org.oasis_open.docs.wsn.b_2.UnacceptableInitialTerminationTimeFaultType;
+import org.oasis_open.docs.wsn.b_2.UnacceptableTerminationTimeFaultType;
+import org.oasis_open.docs.wsn.b_2.UnrecognizedPolicyRequestFaultType;
+import org.oasis_open.docs.wsn.b_2.UnsupportedPolicyRequestFaultType;
+import org.oasis_open.docs.wsn.br_2.PublisherRegistrationFailedFaultType;
+import org.oasis_open.docs.wsn.br_2.PublisherRegistrationRejectedFaultType;
+import org.oasis_open.docs.wsn.br_2.ResourceNotDestroyedFaultType;
+import org.oasis_open.docs.wsrf.r_2.ResourceUnavailableFaultType;
+import org.oasis_open.docs.wsrf.r_2.ResourceUnknownFaultType;
+
+
 /**
- * BaseFaultType.java
- *
- * This file was auto-generated from WSDL
- * by the Apache Axis2 version: 1.4.1  Built on : Aug 13, 2008 (05:03:41 LKT)
+ * <p>Java class for BaseFaultType complex type.
+ * 
+ * <p>The following schema fragment specifies the expected content contained within this class.
+ * 
+ * <pre>
+ * &lt;complexType name="BaseFaultType">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;sequence>
+ *         &lt;element name="Timestamp" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
+ *         &lt;element name="Originator" type="{http://www.w3.org/2005/08/addressing}EndpointReferenceType" minOccurs="0"/>
+ *         &lt;element name="ErrorCode" type="{http://docs.oasis-open.org/wsrf/bf-2}ErrorCodeType" minOccurs="0"/>
+ *         &lt;element name="Description" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="FaultCause" type="{http://docs.oasis-open.org/wsrf/bf-2}FaultCauseType" minOccurs="0"/>
+ *       &lt;/sequence>
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
+ * 
  */
-            
-                package org.oasis_open.docs.wsrf.bf_2;
-            
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "BaseFaultType", propOrder = {
+    "timestamp",
+    "originator",
+    "errorCode",
+    "description",
+    "faultCause"
+})
+@XmlSeeAlso({
+    TopicExpressionDialectUnknownFaultType.class,
+    UnableToGetMessagesFaultType.class,
+    ResumeFailedFaultType.class,
+    InvalidProducerPropertiesExpressionFaultType.class,
+    SubscribeCreationFailedFaultType.class,
+    UnableToDestroySubscriptionFaultType.class,
+    UnrecognizedPolicyRequestFaultType.class,
+    NotifyMessageNotSupportedFaultType.class,
+    UnableToCreatePullPointFaultType.class,
+    UnacceptableInitialTerminationTimeFaultType.class,
+    InvalidTopicExpressionFaultType.class,
+    UnsupportedPolicyRequestFaultType.class,
+    PauseFailedFaultType.class,
+    InvalidMessageContentExpressionFaultType.class,
+    UnableToDestroyPullPointFaultType.class,
+    MultipleTopicsSpecifiedFaultType.class,
+    NoCurrentMessageOnTopicFaultType.class,
+    InvalidFilterFaultType.class,
+    TopicNotSupportedFaultType.class,
+    UnacceptableTerminationTimeFaultType.class,
+    ResourceUnknownFaultType.class,
+    ResourceUnavailableFaultType.class,
+    PublisherRegistrationFailedFaultType.class,
+    ResourceNotDestroyedFaultType.class,
+    PublisherRegistrationRejectedFaultType.class
+})
+public class BaseFaultType {
 
-            /**
-            *  BaseFaultType bean class
-            */
-        
-        public  class BaseFaultType
-        implements org.apache.axis2.databinding.ADBBean{
-        /* This type was generated from the piece of schema that had
-                name = BaseFaultType
-                Namespace URI = http://docs.oasis-open.org/wsrf/bf-2
-                Namespace Prefix = ns4
-                */
-            
+    @XmlElement(name = "Timestamp", required = true)
+    @XmlSchemaType(name = "dateTime")
+    protected XMLGregorianCalendar timestamp;
+    @XmlElement(name = "Originator")
+    protected EndpointReferenceType originator;
+    @XmlElement(name = "ErrorCode")
+    protected ErrorCodeType errorCode;
+    @XmlElement(name = "Description")
+    protected List<String> description;
+    @XmlElement(name = "FaultCause")
+    protected FaultCauseType faultCause;
 
-        private static java.lang.String generatePrefix(java.lang.String namespace) {
-            if(namespace.equals("http://docs.oasis-open.org/wsrf/bf-2")){
-                return "ns4";
-            }
-            return org.apache.axis2.databinding.utils.BeanUtil.getUniquePrefix();
-        }
-
-        
-
-                        /**
-                        * field for Timestamp
-                        */
-
-                        
-                                    protected java.util.Calendar localTimestamp ;
-                                
-
-                           /**
-                           * Auto generated getter method
-                           * @return java.util.Calendar
-                           */
-                           public  java.util.Calendar getTimestamp(){
-                               return localTimestamp;
-                           }
-
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param Timestamp
-                               */
-                               public void setTimestamp(java.util.Calendar param){
-                            
-                                            this.localTimestamp=param;
-                                    
-
-                               }
-                            
-
-                        /**
-                        * field for Originator
-                        */
-
-                        
-                                    protected org.w3.www._2005._08.addressing.EndpointReferenceType localOriginator ;
-                                
-                           /*  This tracker boolean wil be used to detect whether the user called the set method
-                          *   for this attribute. It will be used to determine whether to include this field
-                           *   in the serialized XML
-                           */
-                           protected boolean localOriginatorTracker = false ;
-                           
-
-                           /**
-                           * Auto generated getter method
-                           * @return org.w3.www._2005._08.addressing.EndpointReferenceType
-                           */
-                           public  org.w3.www._2005._08.addressing.EndpointReferenceType getOriginator(){
-                               return localOriginator;
-                           }
-
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param Originator
-                               */
-                               public void setOriginator(org.w3.www._2005._08.addressing.EndpointReferenceType param){
-                            
-                                       if (param != null){
-                                          //update the setting tracker
-                                          localOriginatorTracker = true;
-                                       } else {
-                                          localOriginatorTracker = false;
-                                              
-                                       }
-                                   
-                                            this.localOriginator=param;
-                                    
-
-                               }
-                            
-
-                        /**
-                        * field for ErrorCode
-                        */
-
-                        
-                                    protected org.apache.axiom.om.OMElement localErrorCode ;
-                                
-                           /*  This tracker boolean wil be used to detect whether the user called the set method
-                          *   for this attribute. It will be used to determine whether to include this field
-                           *   in the serialized XML
-                           */
-                           protected boolean localErrorCodeTracker = false ;
-                           
-
-                           /**
-                           * Auto generated getter method
-                           * @return org.apache.axiom.om.OMElement
-                           */
-                           public  org.apache.axiom.om.OMElement getErrorCode(){
-                               return localErrorCode;
-                           }
-
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param ErrorCode
-                               */
-                               public void setErrorCode(org.apache.axiom.om.OMElement param){
-                            
-                                       if (param != null){
-                                          //update the setting tracker
-                                          localErrorCodeTracker = true;
-                                       } else {
-                                          localErrorCodeTracker = false;
-                                              
-                                       }
-                                   
-                                            this.localErrorCode=param;
-                                    
-
-                               }
-                            
-
-                        /**
-                        * field for Description
-                        * This was an Array!
-                        */
-
-                        
-                                    protected java.lang.String[] localDescription ;
-                                
-                           /*  This tracker boolean wil be used to detect whether the user called the set method
-                          *   for this attribute. It will be used to determine whether to include this field
-                           *   in the serialized XML
-                           */
-                           protected boolean localDescriptionTracker = false ;
-                           
-
-                           /**
-                           * Auto generated getter method
-                           * @return java.lang.String[]
-                           */
-                           public  java.lang.String[] getDescription(){
-                               return localDescription;
-                           }
-
-                           
-                        
-
-
-                               
-                              /**
-                               * validate the array for Description
-                               */
-                              protected void validateDescription(java.lang.String[] param){
-                             
-                              }
-
-
-                             /**
-                              * Auto generated setter method
-                              * @param param Description
-                              */
-                              public void setDescription(java.lang.String[] param){
-                              
-                                   validateDescription(param);
-
-                               
-                                          if (param != null){
-                                             //update the setting tracker
-                                             localDescriptionTracker = true;
-                                          } else {
-                                             localDescriptionTracker = false;
-                                                 
-                                          }
-                                      
-                                      this.localDescription=param;
-                              }
-
-                               
-                             
-                             /**
-                             * Auto generated add method for the array for convenience
-                             * @param param java.lang.String
-                             */
-                             public void addDescription(java.lang.String param){
-                                   if (localDescription == null){
-                                   localDescription = new java.lang.String[]{};
-                                   }
-
-                            
-                                 //update the setting tracker
-                                localDescriptionTracker = true;
-                            
-
-                               java.util.List list =
-                            org.apache.axis2.databinding.utils.ConverterUtil.toList(localDescription);
-                               list.add(param);
-                               this.localDescription =
-                             (java.lang.String[])list.toArray(
-                            new java.lang.String[list.size()]);
-
-                             }
-                             
-
-                        /**
-                        * field for FaultCause
-                        */
-
-                        
-                                    protected org.apache.axiom.om.OMElement localFaultCause ;
-                                
-                           /*  This tracker boolean wil be used to detect whether the user called the set method
-                          *   for this attribute. It will be used to determine whether to include this field
-                           *   in the serialized XML
-                           */
-                           protected boolean localFaultCauseTracker = false ;
-                           
-
-                           /**
-                           * Auto generated getter method
-                           * @return org.apache.axiom.om.OMElement
-                           */
-                           public  org.apache.axiom.om.OMElement getFaultCause(){
-                               return localFaultCause;
-                           }
-
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param FaultCause
-                               */
-                               public void setFaultCause(org.apache.axiom.om.OMElement param){
-                            
-                                       if (param != null){
-                                          //update the setting tracker
-                                          localFaultCauseTracker = true;
-                                       } else {
-                                          localFaultCauseTracker = false;
-                                              
-                                       }
-                                   
-                                            this.localFaultCause=param;
-                                    
-
-                               }
-                            
-
-     /**
-     * isReaderMTOMAware
-     * @return true if the reader supports MTOM
+    /**
+     * Gets the value of the timestamp property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
-   public static boolean isReaderMTOMAware(javax.xml.stream.XMLStreamReader reader) {
-        boolean isReaderMTOMAware = false;
-        
-        try{
-          isReaderMTOMAware = java.lang.Boolean.TRUE.equals(reader.getProperty(org.apache.axiom.om.OMConstants.IS_DATA_HANDLERS_AWARE));
-        }catch(java.lang.IllegalArgumentException e){
-          isReaderMTOMAware = false;
+    public XMLGregorianCalendar getTimestamp() {
+        return timestamp;
+    }
+
+    /**
+     * Sets the value of the timestamp property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
+     */
+    public void setTimestamp(XMLGregorianCalendar value) {
+        this.timestamp = value;
+    }
+
+    /**
+     * Gets the value of the originator property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link EndpointReferenceType }
+     *     
+     */
+    public EndpointReferenceType getOriginator() {
+        return originator;
+    }
+
+    /**
+     * Sets the value of the originator property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link EndpointReferenceType }
+     *     
+     */
+    public void setOriginator(EndpointReferenceType value) {
+        this.originator = value;
+    }
+
+    /**
+     * Gets the value of the errorCode property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ErrorCodeType }
+     *     
+     */
+    public ErrorCodeType getErrorCode() {
+        return errorCode;
+    }
+
+    /**
+     * Sets the value of the errorCode property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ErrorCodeType }
+     *     
+     */
+    public void setErrorCode(ErrorCodeType value) {
+        this.errorCode = value;
+    }
+
+    /**
+     * Gets the value of the description property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the description property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getDescription().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link String }
+     * 
+     * 
+     */
+    public List<String> getDescription() {
+        if (description == null) {
+            description = new ArrayList<String>();
         }
-        return isReaderMTOMAware;
-   }
-     
-     
-        /**
-        *
-        * @param parentQName
-        * @param factory
-        * @return org.apache.axiom.om.OMElement
-        */
-       public org.apache.axiom.om.OMElement getOMElement (
-               final javax.xml.namespace.QName parentQName,
-               final org.apache.axiom.om.OMFactory factory) throws org.apache.axis2.databinding.ADBException{
-
-
-        
-               org.apache.axiom.om.OMDataSource dataSource =
-                       new org.apache.axis2.databinding.ADBDataSource(this,parentQName){
-
-                 public void serialize(org.apache.axis2.databinding.utils.writer.MTOMAwareXMLStreamWriter xmlWriter) throws javax.xml.stream.XMLStreamException {
-                       BaseFaultType.this.serialize(parentQName,factory,xmlWriter);
-                 }
-               };
-               return new org.apache.axiom.om.impl.llom.OMSourcedElementImpl(
-               parentQName,factory,dataSource);
-            
-       }
-
-         public void serialize(final javax.xml.namespace.QName parentQName,
-                                       final org.apache.axiom.om.OMFactory factory,
-                                       org.apache.axis2.databinding.utils.writer.MTOMAwareXMLStreamWriter xmlWriter)
-                                throws javax.xml.stream.XMLStreamException, org.apache.axis2.databinding.ADBException{
-                           serialize(parentQName,factory,xmlWriter,false);
-         }
-
-         public void serialize(final javax.xml.namespace.QName parentQName,
-                               final org.apache.axiom.om.OMFactory factory,
-                               org.apache.axis2.databinding.utils.writer.MTOMAwareXMLStreamWriter xmlWriter,
-                               boolean serializeType)
-            throws javax.xml.stream.XMLStreamException, org.apache.axis2.databinding.ADBException{
-            
-                
-
-
-                java.lang.String prefix = null;
-                java.lang.String namespace = null;
-                
-
-                    prefix = parentQName.getPrefix();
-                    namespace = parentQName.getNamespaceURI();
-
-                    if ((namespace != null) && (namespace.trim().length() > 0)) {
-                        java.lang.String writerPrefix = xmlWriter.getPrefix(namespace);
-                        if (writerPrefix != null) {
-                            xmlWriter.writeStartElement(namespace, parentQName.getLocalPart());
-                        } else {
-                            if (prefix == null) {
-                                prefix = generatePrefix(namespace);
-                            }
-
-                            xmlWriter.writeStartElement(prefix, parentQName.getLocalPart(), namespace);
-                            xmlWriter.writeNamespace(prefix, namespace);
-                            xmlWriter.setPrefix(prefix, namespace);
-                        }
-                    } else {
-                        xmlWriter.writeStartElement(parentQName.getLocalPart());
-                    }
-                
-                  if (serializeType){
-               
-
-                   java.lang.String namespacePrefix = registerPrefix(xmlWriter,"http://docs.oasis-open.org/wsrf/bf-2");
-                   if ((namespacePrefix != null) && (namespacePrefix.trim().length() > 0)){
-                       writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
-                           namespacePrefix+":BaseFaultType",
-                           xmlWriter);
-                   } else {
-                       writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
-                           "BaseFaultType",
-                           xmlWriter);
-                   }
-
-               
-                   }
-               
-                                    namespace = "http://docs.oasis-open.org/wsrf/bf-2";
-                                    if (! namespace.equals("")) {
-                                        prefix = xmlWriter.getPrefix(namespace);
-
-                                        if (prefix == null) {
-                                            prefix = generatePrefix(namespace);
-
-                                            xmlWriter.writeStartElement(prefix,"Timestamp", namespace);
-                                            xmlWriter.writeNamespace(prefix, namespace);
-                                            xmlWriter.setPrefix(prefix, namespace);
-
-                                        } else {
-                                            xmlWriter.writeStartElement(namespace,"Timestamp");
-                                        }
-
-                                    } else {
-                                        xmlWriter.writeStartElement("Timestamp");
-                                    }
-                                
-
-                                          if (localTimestamp==null){
-                                              // write the nil attribute
-                                              
-                                                     throw new org.apache.axis2.databinding.ADBException("Timestamp cannot be null!!");
-                                                  
-                                          }else{
-
-                                        
-                                                   xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localTimestamp));
-                                            
-                                          }
-                                    
-                                   xmlWriter.writeEndElement();
-                              if (localOriginatorTracker){
-                                            if (localOriginator==null){
-                                                 throw new org.apache.axis2.databinding.ADBException("Originator cannot be null!!");
-                                            }
-                                           localOriginator.serialize(new javax.xml.namespace.QName("http://docs.oasis-open.org/wsrf/bf-2","Originator"),
-                                               factory,xmlWriter);
-                                        } if (localErrorCodeTracker){
-                                    namespace = "http://docs.oasis-open.org/wsrf/bf-2";
-                                    if (! namespace.equals("")) {
-                                        prefix = xmlWriter.getPrefix(namespace);
-
-                                        if (prefix == null) {
-                                            prefix = generatePrefix(namespace);
-
-                                            xmlWriter.writeStartElement(prefix,"ErrorCode", namespace);
-                                            xmlWriter.writeNamespace(prefix, namespace);
-                                            xmlWriter.setPrefix(prefix, namespace);
-
-                                        } else {
-                                            xmlWriter.writeStartElement(namespace,"ErrorCode");
-                                        }
-
-                                    } else {
-                                        xmlWriter.writeStartElement("ErrorCode");
-                                    }
-                                
-
-                                          if (localErrorCode==null){
-                                              // write the nil attribute
-                                              
-                                                     throw new org.apache.axis2.databinding.ADBException("ErrorCode cannot be null!!");
-                                                  
-                                          }else{
-
-                                        localErrorCode.serialize(xmlWriter);
-                                            
-                                          }
-                                    
-                                   xmlWriter.writeEndElement();
-                             } if (localDescriptionTracker){
-                             if (localDescription!=null) {
-                                   namespace = "http://docs.oasis-open.org/wsrf/bf-2";
-                                   boolean emptyNamespace = namespace == null || namespace.length() == 0;
-                                   prefix =  emptyNamespace ? null : xmlWriter.getPrefix(namespace);
-                                   for (int i = 0;i < localDescription.length;i++){
-                                        
-                                            if (localDescription[i] != null){
-                                        
-                                                if (!emptyNamespace) {
-                                                    if (prefix == null) {
-                                                        java.lang.String prefix2 = generatePrefix(namespace);
-
-                                                        xmlWriter.writeStartElement(prefix2,"Description", namespace);
-                                                        xmlWriter.writeNamespace(prefix2, namespace);
-                                                        xmlWriter.setPrefix(prefix2, namespace);
-
-                                                    } else {
-                                                        xmlWriter.writeStartElement(namespace,"Description");
-                                                    }
-
-                                                } else {
-                                                    xmlWriter.writeStartElement("Description");
-                                                }
-
-                                            
-                                                        xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localDescription[i]));
-                                                    
-                                                xmlWriter.writeEndElement();
-                                              
-                                                } else {
-                                                   
-                                                           // we have to do nothing since minOccurs is zero
-                                                       
-                                                }
-
-                                   }
-                             } else {
-                                 
-                                         throw new org.apache.axis2.databinding.ADBException("Description cannot be null!!");
-                                    
-                             }
-
-                        } if (localFaultCauseTracker){
-                                    namespace = "http://docs.oasis-open.org/wsrf/bf-2";
-                                    if (! namespace.equals("")) {
-                                        prefix = xmlWriter.getPrefix(namespace);
-
-                                        if (prefix == null) {
-                                            prefix = generatePrefix(namespace);
-
-                                            xmlWriter.writeStartElement(prefix,"FaultCause", namespace);
-                                            xmlWriter.writeNamespace(prefix, namespace);
-                                            xmlWriter.setPrefix(prefix, namespace);
-
-                                        } else {
-                                            xmlWriter.writeStartElement(namespace,"FaultCause");
-                                        }
-
-                                    } else {
-                                        xmlWriter.writeStartElement("FaultCause");
-                                    }
-                                
-
-                                          if (localFaultCause==null){
-                                              // write the nil attribute
-                                              
-                                                     throw new org.apache.axis2.databinding.ADBException("FaultCause cannot be null!!");
-                                                  
-                                          }else{
-
-                                        localFaultCause.serialize(xmlWriter);
-                                            
-                                          }
-                                    
-                                   xmlWriter.writeEndElement();
-                             }
-                    xmlWriter.writeEndElement();
-               
-
-        }
-
-         /**
-          * Util method to write an attribute with the ns prefix
-          */
-          private void writeAttribute(java.lang.String prefix,java.lang.String namespace,java.lang.String attName,
-                                      java.lang.String attValue,javax.xml.stream.XMLStreamWriter xmlWriter) throws javax.xml.stream.XMLStreamException{
-              if (xmlWriter.getPrefix(namespace) == null) {
-                       xmlWriter.writeNamespace(prefix, namespace);
-                       xmlWriter.setPrefix(prefix, namespace);
-
-              }
-
-              xmlWriter.writeAttribute(namespace,attName,attValue);
-
-         }
-
-        /**
-          * Util method to write an attribute without the ns prefix
-          */
-          private void writeAttribute(java.lang.String namespace,java.lang.String attName,
-                                      java.lang.String attValue,javax.xml.stream.XMLStreamWriter xmlWriter) throws javax.xml.stream.XMLStreamException{
-                if (namespace.equals(""))
-              {
-                  xmlWriter.writeAttribute(attName,attValue);
-              }
-              else
-              {
-                  registerPrefix(xmlWriter, namespace);
-                  xmlWriter.writeAttribute(namespace,attName,attValue);
-              }
-          }
-
-
-           /**
-             * Util method to write an attribute without the ns prefix
-             */
-            private void writeQNameAttribute(java.lang.String namespace, java.lang.String attName,
-                                             javax.xml.namespace.QName qname, javax.xml.stream.XMLStreamWriter xmlWriter) throws javax.xml.stream.XMLStreamException {
-
-                java.lang.String attributeNamespace = qname.getNamespaceURI();
-                java.lang.String attributePrefix = xmlWriter.getPrefix(attributeNamespace);
-                if (attributePrefix == null) {
-                    attributePrefix = registerPrefix(xmlWriter, attributeNamespace);
-                }
-                java.lang.String attributeValue;
-                if (attributePrefix.trim().length() > 0) {
-                    attributeValue = attributePrefix + ":" + qname.getLocalPart();
-                } else {
-                    attributeValue = qname.getLocalPart();
-                }
-
-                if (namespace.equals("")) {
-                    xmlWriter.writeAttribute(attName, attributeValue);
-                } else {
-                    registerPrefix(xmlWriter, namespace);
-                    xmlWriter.writeAttribute(namespace, attName, attributeValue);
-                }
-            }
-        /**
-         *  method to handle Qnames
-         */
-
-        private void writeQName(javax.xml.namespace.QName qname,
-                                javax.xml.stream.XMLStreamWriter xmlWriter) throws javax.xml.stream.XMLStreamException {
-            java.lang.String namespaceURI = qname.getNamespaceURI();
-            if (namespaceURI != null) {
-                java.lang.String prefix = xmlWriter.getPrefix(namespaceURI);
-                if (prefix == null) {
-                    prefix = generatePrefix(namespaceURI);
-                    xmlWriter.writeNamespace(prefix, namespaceURI);
-                    xmlWriter.setPrefix(prefix,namespaceURI);
-                }
-
-                if (prefix.trim().length() > 0){
-                    xmlWriter.writeCharacters(prefix + ":" + org.apache.axis2.databinding.utils.ConverterUtil.convertToString(qname));
-                } else {
-                    // i.e this is the default namespace
-                    xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(qname));
-                }
-
-            } else {
-                xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(qname));
-            }
-        }
-
-        private void writeQNames(javax.xml.namespace.QName[] qnames,
-                                 javax.xml.stream.XMLStreamWriter xmlWriter) throws javax.xml.stream.XMLStreamException {
-
-            if (qnames != null) {
-                // we have to store this data until last moment since it is not possible to write any
-                // namespace data after writing the charactor data
-                java.lang.StringBuffer stringToWrite = new java.lang.StringBuffer();
-                java.lang.String namespaceURI = null;
-                java.lang.String prefix = null;
-
-                for (int i = 0; i < qnames.length; i++) {
-                    if (i > 0) {
-                        stringToWrite.append(" ");
-                    }
-                    namespaceURI = qnames[i].getNamespaceURI();
-                    if (namespaceURI != null) {
-                        prefix = xmlWriter.getPrefix(namespaceURI);
-                        if ((prefix == null) || (prefix.length() == 0)) {
-                            prefix = generatePrefix(namespaceURI);
-                            xmlWriter.writeNamespace(prefix, namespaceURI);
-                            xmlWriter.setPrefix(prefix,namespaceURI);
-                        }
-
-                        if (prefix.trim().length() > 0){
-                            stringToWrite.append(prefix).append(":").append(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(qnames[i]));
-                        } else {
-                            stringToWrite.append(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(qnames[i]));
-                        }
-                    } else {
-                        stringToWrite.append(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(qnames[i]));
-                    }
-                }
-                xmlWriter.writeCharacters(stringToWrite.toString());
-            }
-
-        }
-
-
-         /**
-         * Register a namespace prefix
-         */
-         private java.lang.String registerPrefix(javax.xml.stream.XMLStreamWriter xmlWriter, java.lang.String namespace) throws javax.xml.stream.XMLStreamException {
-                java.lang.String prefix = xmlWriter.getPrefix(namespace);
-
-                if (prefix == null) {
-                    prefix = generatePrefix(namespace);
-
-                    while (xmlWriter.getNamespaceContext().getNamespaceURI(prefix) != null) {
-                        prefix = org.apache.axis2.databinding.utils.BeanUtil.getUniquePrefix();
-                    }
-
-                    xmlWriter.writeNamespace(prefix, namespace);
-                    xmlWriter.setPrefix(prefix, namespace);
-                }
-
-                return prefix;
-            }
-
-
-  
-        /**
-        * databinding method to get an XML representation of this object
-        *
-        */
-        public javax.xml.stream.XMLStreamReader getPullParser(javax.xml.namespace.QName qName)
-                    throws org.apache.axis2.databinding.ADBException{
-
-
-        
-                 java.util.ArrayList elementList = new java.util.ArrayList();
-                 java.util.ArrayList attribList = new java.util.ArrayList();
-
-                
-                                      elementList.add(new javax.xml.namespace.QName("http://docs.oasis-open.org/wsrf/bf-2",
-                                                                      "Timestamp"));
-                                 
-                                        if (localTimestamp != null){
-                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localTimestamp));
-                                        } else {
-                                           throw new org.apache.axis2.databinding.ADBException("Timestamp cannot be null!!");
-                                        }
-                                     if (localOriginatorTracker){
-                            elementList.add(new javax.xml.namespace.QName("http://docs.oasis-open.org/wsrf/bf-2",
-                                                                      "Originator"));
-                            
-                            
-                                    if (localOriginator==null){
-                                         throw new org.apache.axis2.databinding.ADBException("Originator cannot be null!!");
-                                    }
-                                    elementList.add(localOriginator);
-                                } if (localErrorCodeTracker){
-                                      elementList.add(new javax.xml.namespace.QName("http://docs.oasis-open.org/wsrf/bf-2",
-                                                                      "ErrorCode"));
-                                 
-                                        if (localErrorCode != null){
-                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localErrorCode));
-                                        } else {
-                                           throw new org.apache.axis2.databinding.ADBException("ErrorCode cannot be null!!");
-                                        }
-                                    } if (localDescriptionTracker){
-                            if (localDescription!=null){
-                                  for (int i = 0;i < localDescription.length;i++){
-                                      
-                                         if (localDescription[i] != null){
-                                          elementList.add(new javax.xml.namespace.QName("http://docs.oasis-open.org/wsrf/bf-2",
-                                                                              "Description"));
-                                          elementList.add(
-                                          org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localDescription[i]));
-                                          } else {
-                                             
-                                                    // have to do nothing
-                                                
-                                          }
-                                      
-
-                                  }
-                            } else {
-                              
-                                    throw new org.apache.axis2.databinding.ADBException("Description cannot be null!!");
-                                
-                            }
-
-                        } if (localFaultCauseTracker){
-                                      elementList.add(new javax.xml.namespace.QName("http://docs.oasis-open.org/wsrf/bf-2",
-                                                                      "FaultCause"));
-                                 
-                                        if (localFaultCause != null){
-                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localFaultCause));
-                                        } else {
-                                           throw new org.apache.axis2.databinding.ADBException("FaultCause cannot be null!!");
-                                        }
-                                    }
-
-                return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
-            
-            
-
-        }
-
-  
-
-     /**
-      *  Factory class that keeps the parse method
-      */
-    public static class Factory{
-
-        
-        
-
-        /**
-        * static method to create the object
-        * Precondition:  If this object is an element, the current or next start element starts this object and any intervening reader events are ignorable
-        *                If this object is not an element, it is a complex type and the reader is at the event just after the outer start element
-        * Postcondition: If this object is an element, the reader is positioned at its end element
-        *                If this object is a complex type, the reader is positioned at the end element of its outer element
-        */
-        public static BaseFaultType parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
-            BaseFaultType object =
-                new BaseFaultType();
-
-            int event;
-            java.lang.String nillableValue = null;
-            java.lang.String prefix ="";
-            java.lang.String namespaceuri ="";
-            try {
-                
-                while (!reader.isStartElement() && !reader.isEndElement())
-                    reader.next();
-
-                
-                if (reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","type")!=null){
-                  java.lang.String fullTypeName = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance",
-                        "type");
-                  if (fullTypeName!=null){
-                    java.lang.String nsPrefix = null;
-                    if (fullTypeName.indexOf(":") > -1){
-                        nsPrefix = fullTypeName.substring(0,fullTypeName.indexOf(":"));
-                    }
-                    nsPrefix = nsPrefix==null?"":nsPrefix;
-
-                    java.lang.String type = fullTypeName.substring(fullTypeName.indexOf(":")+1);
-                    
-                            if (!"BaseFaultType".equals(type)){
-                                //find namespace for the prefix
-                                java.lang.String nsUri = reader.getNamespaceContext().getNamespaceURI(nsPrefix);
-                                return (BaseFaultType)net.es.oscars.oscars.ExtensionMapper.getTypeObject(
-                                     nsUri,type,reader);
-                              }
-                        
-
-                  }
-                
-
-                }
-
-                
-
-                
-                // Note all attributes that were handled. Used to differ normal attributes
-                // from anyAttributes.
-                java.util.Vector handledAttributes = new java.util.Vector();
-                
-
-                 
-                    
-                    reader.next();
-                
-                        java.util.ArrayList list4 = new java.util.ArrayList();
-                    
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://docs.oasis-open.org/wsrf/bf-2","Timestamp").equals(reader.getName())){
-                                
-                                    java.lang.String content = reader.getElementText();
-                                    
-                                              object.setTimestamp(
-                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToDateTime(content));
-                                              
-                                        reader.next();
-                                    
-                              }  // End of if for expected property start element
-                                
-                                else{
-                                    // A start element we are not expecting indicates an invalid parameter was passed
-                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getLocalName());
-                                }
-                            
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://docs.oasis-open.org/wsrf/bf-2","Originator").equals(reader.getName())){
-                                
-                                                object.setOriginator(org.w3.www._2005._08.addressing.EndpointReferenceType.Factory.parse(reader));
-                                              
-                                        reader.next();
-                                    
-                              }  // End of if for expected property start element
-                                
-                                    else {
-                                        
-                                    }
-                                
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
-                                   if (reader.isStartElement()){
-                                
-                                    java.lang.String content = reader.getElementText();
-                                    
-                                                org.apache.axiom.om.OMFactory fac = org.apache.axiom.om.OMAbstractFactory.getOMFactory();
-                                                org.apache.axiom.om.OMNamespace omNs = fac.createOMNamespace("http://docs.oasis-open.org/wsrf/bf-2", "");
-                                                org.apache.axiom.om.OMElement _valueErrorCode = fac.createOMElement("ErrorCode", omNs);
-                                                _valueErrorCode.addChild(fac.createOMText(_valueErrorCode, content));
-                                                object.setErrorCode(_valueErrorCode);
-                                              
-                                        reader.next();
-                                    
-                              }  // End of if for expected property start element
-                                
-                                    else {
-                                        
-                                    }
-                                
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://docs.oasis-open.org/wsrf/bf-2","Description").equals(reader.getName())){
-                                
-                                    
-                                    
-                                    // Process the array and step past its final element's end.
-                                    list4.add(reader.getElementText());
-                                            
-                                            //loop until we find a start element that is not part of this array
-                                            boolean loopDone4 = false;
-                                            while(!loopDone4){
-                                                // Ensure we are at the EndElement
-                                                while (!reader.isEndElement()){
-                                                    reader.next();
-                                                }
-                                                // Step out of this element
-                                                reader.next();
-                                                // Step to next element event.
-                                                while (!reader.isStartElement() && !reader.isEndElement())
-                                                    reader.next();
-                                                if (reader.isEndElement()){
-                                                    //two continuous end elements means we are exiting the xml structure
-                                                    loopDone4 = true;
-                                                } else {
-                                                    if (new javax.xml.namespace.QName("http://docs.oasis-open.org/wsrf/bf-2","Description").equals(reader.getName())){
-                                                         list4.add(reader.getElementText());
-                                                        
-                                                    }else{
-                                                        loopDone4 = true;
-                                                    }
-                                                }
-                                            }
-                                            // call the converter utility  to convert and set the array
-                                            
-                                                    object.setDescription((java.lang.String[])
-                                                        list4.toArray(new java.lang.String[list4.size()]));
-                                                
-                              }  // End of if for expected property start element
-                                
-                                    else {
-                                        
-                                    }
-                                
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
-                                   if (reader.isStartElement()){
-                                
-                                    java.lang.String content = reader.getElementText();
-                                    
-                                                org.apache.axiom.om.OMFactory fac = org.apache.axiom.om.OMAbstractFactory.getOMFactory();
-                                                org.apache.axiom.om.OMNamespace omNs = fac.createOMNamespace("http://docs.oasis-open.org/wsrf/bf-2", "");
-                                                org.apache.axiom.om.OMElement _valueFaultCause = fac.createOMElement("FaultCause", omNs);
-                                                _valueFaultCause.addChild(fac.createOMText(_valueFaultCause, content));
-                                                object.setFaultCause(_valueFaultCause);
-                                              
-                                        reader.next();
-                                    
-                              }  // End of if for expected property start element
-                                
-                                    else {
-                                        
-                                    }
-                                  
-                            while (!reader.isStartElement() && !reader.isEndElement())
-                                reader.next();
-                            
-                                if (reader.isStartElement())
-                                // A start element we are not expecting indicates a trailing invalid property
-                                throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getLocalName());
-                            
-
-
-
-            } catch (javax.xml.stream.XMLStreamException e) {
-                throw new java.lang.Exception(e);
-            }
-
-            return object;
-        }
-
-        }//end of factory class
-
-        
-
-        }
-           
-          
+        return this.description;
+    }
+
+    /**
+     * Gets the value of the faultCause property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link FaultCauseType }
+     *     
+     */
+    public FaultCauseType getFaultCause() {
+        return faultCause;
+    }
+
+    /**
+     * Sets the value of the faultCause property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link FaultCauseType }
+     *     
+     */
+    public void setFaultCause(FaultCauseType value) {
+        this.faultCause = value;
+    }
+
+}

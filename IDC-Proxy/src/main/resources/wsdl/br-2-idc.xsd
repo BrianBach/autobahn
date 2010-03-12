@@ -32,14 +32,14 @@ This document and the information contained herein is provided on an "AS IS" bas
 <!-- ====== Resource Properties for PublisherRegistration ========= -->
    <xsd:element name="PublisherReference" 
                       type="wsa:EndpointReferenceType"/>
-   <xsd:element name="ConsumerReference" 
-                      type="wsa:EndpointReferenceType"/>
-   <xsd:element name="Topic"
-                      type="wsn-b:TopicExpressionType"/>
+   <!--xsd:element name="ConsumerReference" 
+                      type="wsa:EndpointReferenceType"/-->
+   <!--xsd:element name="Topic"
+                      type="wsn-b:TopicExpressionType"/-->
    <xsd:element name="Demand" 
                       type="xsd:boolean"/>
-   <xsd:element name="CreationTime" 
-                      type="xsd:dateTime"/>
+   <!--xsd:element name="CreationTime" 
+                      type="xsd:dateTime"/-->
 
 <!-- ========== Message Types for NotificationBroker  ============ -->
    <xsd:element name="RegisterPublisher">

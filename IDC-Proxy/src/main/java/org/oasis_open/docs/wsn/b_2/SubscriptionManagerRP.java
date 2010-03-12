@@ -1,706 +1,152 @@
 
+package org.oasis_open.docs.wsn.b_2;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.datatype.XMLGregorianCalendar;
+import org.apache.cxf.ws.addressing.EndpointReferenceType;
+
+
 /**
- * SubscriptionManagerRP.java
- *
- * This file was auto-generated from WSDL
- * by the Apache Axis2 version: 1.4.1  Built on : Aug 13, 2008 (05:03:41 LKT)
+ * <p>Java class for anonymous complex type.
+ * 
+ * <p>The following schema fragment specifies the expected content contained within this class.
+ * 
+ * <pre>
+ * &lt;complexType>
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;sequence>
+ *         &lt;element ref="{http://docs.oasis-open.org/wsn/b-2}ConsumerReference"/>
+ *         &lt;element ref="{http://docs.oasis-open.org/wsn/b-2}Filter" minOccurs="0"/>
+ *         &lt;element ref="{http://docs.oasis-open.org/wsn/b-2}SubscriptionPolicy" minOccurs="0"/>
+ *         &lt;element ref="{http://docs.oasis-open.org/wsn/b-2}CreationTime" minOccurs="0"/>
+ *       &lt;/sequence>
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
+ * 
  */
-            
-                package org.oasis_open.docs.wsn.b_2;
-            
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "", propOrder = {
+    "consumerReference",
+    "filter",
+    "subscriptionPolicy",
+    "creationTime"
+})
+@XmlRootElement(name = "SubscriptionManagerRP")
+public class SubscriptionManagerRP {
 
-            /**
-            *  SubscriptionManagerRP bean class
-            */
-        
-        public  class SubscriptionManagerRP
-        implements org.apache.axis2.databinding.ADBBean{
-        
-                public static final javax.xml.namespace.QName MY_QNAME = new javax.xml.namespace.QName(
-                "http://docs.oasis-open.org/wsn/b-2",
-                "SubscriptionManagerRP",
-                "ns5");
+    @XmlElement(name = "ConsumerReference", required = true)
+    protected EndpointReferenceType consumerReference;
+    @XmlElement(name = "Filter")
+    protected FilterType filter;
+    @XmlElement(name = "SubscriptionPolicy")
+    protected SubscriptionPolicyType subscriptionPolicy;
+    @XmlElement(name = "CreationTime")
+    @XmlSchemaType(name = "dateTime")
+    protected XMLGregorianCalendar creationTime;
 
-            
-
-        private static java.lang.String generatePrefix(java.lang.String namespace) {
-            if(namespace.equals("http://docs.oasis-open.org/wsn/b-2")){
-                return "ns5";
-            }
-            return org.apache.axis2.databinding.utils.BeanUtil.getUniquePrefix();
-        }
-
-        
-
-                        /**
-                        * field for ConsumerReference
-                        */
-
-                        
-                                    protected org.w3.www._2005._08.addressing.EndpointReferenceType localConsumerReference ;
-                                
-
-                           /**
-                           * Auto generated getter method
-                           * @return org.w3.www._2005._08.addressing.EndpointReferenceType
-                           */
-                           public  org.w3.www._2005._08.addressing.EndpointReferenceType getConsumerReference(){
-                               return localConsumerReference;
-                           }
-
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param ConsumerReference
-                               */
-                               public void setConsumerReference(org.w3.www._2005._08.addressing.EndpointReferenceType param){
-                            
-                                            this.localConsumerReference=param;
-                                    
-
-                               }
-                            
-
-                        /**
-                        * field for Filter
-                        */
-
-                        
-                                    protected org.oasis_open.docs.wsn.b_2.FilterType localFilter ;
-                                
-                           /*  This tracker boolean wil be used to detect whether the user called the set method
-                          *   for this attribute. It will be used to determine whether to include this field
-                           *   in the serialized XML
-                           */
-                           protected boolean localFilterTracker = false ;
-                           
-
-                           /**
-                           * Auto generated getter method
-                           * @return org.oasis_open.docs.wsn.b_2.FilterType
-                           */
-                           public  org.oasis_open.docs.wsn.b_2.FilterType getFilter(){
-                               return localFilter;
-                           }
-
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param Filter
-                               */
-                               public void setFilter(org.oasis_open.docs.wsn.b_2.FilterType param){
-                            
-                                       if (param != null){
-                                          //update the setting tracker
-                                          localFilterTracker = true;
-                                       } else {
-                                          localFilterTracker = false;
-                                              
-                                       }
-                                   
-                                            this.localFilter=param;
-                                    
-
-                               }
-                            
-
-                        /**
-                        * field for SubscriptionPolicy
-                        */
-
-                        
-                                    protected org.oasis_open.docs.wsn.b_2.SubscriptionPolicyType localSubscriptionPolicy ;
-                                
-                           /*  This tracker boolean wil be used to detect whether the user called the set method
-                          *   for this attribute. It will be used to determine whether to include this field
-                           *   in the serialized XML
-                           */
-                           protected boolean localSubscriptionPolicyTracker = false ;
-                           
-
-                           /**
-                           * Auto generated getter method
-                           * @return org.oasis_open.docs.wsn.b_2.SubscriptionPolicyType
-                           */
-                           public  org.oasis_open.docs.wsn.b_2.SubscriptionPolicyType getSubscriptionPolicy(){
-                               return localSubscriptionPolicy;
-                           }
-
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param SubscriptionPolicy
-                               */
-                               public void setSubscriptionPolicy(org.oasis_open.docs.wsn.b_2.SubscriptionPolicyType param){
-                            
-                                       if (param != null){
-                                          //update the setting tracker
-                                          localSubscriptionPolicyTracker = true;
-                                       } else {
-                                          localSubscriptionPolicyTracker = false;
-                                              
-                                       }
-                                   
-                                            this.localSubscriptionPolicy=param;
-                                    
-
-                               }
-                            
-
-                        /**
-                        * field for CreationTime
-                        */
-
-                        
-                                    protected java.util.Calendar localCreationTime ;
-                                
-                           /*  This tracker boolean wil be used to detect whether the user called the set method
-                          *   for this attribute. It will be used to determine whether to include this field
-                           *   in the serialized XML
-                           */
-                           protected boolean localCreationTimeTracker = false ;
-                           
-
-                           /**
-                           * Auto generated getter method
-                           * @return java.util.Calendar
-                           */
-                           public  java.util.Calendar getCreationTime(){
-                               return localCreationTime;
-                           }
-
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param CreationTime
-                               */
-                               public void setCreationTime(java.util.Calendar param){
-                            
-                                       if (param != null){
-                                          //update the setting tracker
-                                          localCreationTimeTracker = true;
-                                       } else {
-                                          localCreationTimeTracker = false;
-                                              
-                                       }
-                                   
-                                            this.localCreationTime=param;
-                                    
-
-                               }
-                            
-
-     /**
-     * isReaderMTOMAware
-     * @return true if the reader supports MTOM
+    /**
+     * Gets the value of the consumerReference property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link EndpointReferenceType }
+     *     
      */
-   public static boolean isReaderMTOMAware(javax.xml.stream.XMLStreamReader reader) {
-        boolean isReaderMTOMAware = false;
-        
-        try{
-          isReaderMTOMAware = java.lang.Boolean.TRUE.equals(reader.getProperty(org.apache.axiom.om.OMConstants.IS_DATA_HANDLERS_AWARE));
-        }catch(java.lang.IllegalArgumentException e){
-          isReaderMTOMAware = false;
-        }
-        return isReaderMTOMAware;
-   }
-     
-     
-        /**
-        *
-        * @param parentQName
-        * @param factory
-        * @return org.apache.axiom.om.OMElement
-        */
-       public org.apache.axiom.om.OMElement getOMElement (
-               final javax.xml.namespace.QName parentQName,
-               final org.apache.axiom.om.OMFactory factory) throws org.apache.axis2.databinding.ADBException{
-
-
-        
-                org.apache.axiom.om.OMDataSource dataSource =
-                       new org.apache.axis2.databinding.ADBDataSource(this,MY_QNAME){
-
-                 public void serialize(org.apache.axis2.databinding.utils.writer.MTOMAwareXMLStreamWriter xmlWriter) throws javax.xml.stream.XMLStreamException {
-                       SubscriptionManagerRP.this.serialize(MY_QNAME,factory,xmlWriter);
-                 }
-               };
-               return new org.apache.axiom.om.impl.llom.OMSourcedElementImpl(
-               MY_QNAME,factory,dataSource);
-            
-       }
-
-         public void serialize(final javax.xml.namespace.QName parentQName,
-                                       final org.apache.axiom.om.OMFactory factory,
-                                       org.apache.axis2.databinding.utils.writer.MTOMAwareXMLStreamWriter xmlWriter)
-                                throws javax.xml.stream.XMLStreamException, org.apache.axis2.databinding.ADBException{
-                           serialize(parentQName,factory,xmlWriter,false);
-         }
-
-         public void serialize(final javax.xml.namespace.QName parentQName,
-                               final org.apache.axiom.om.OMFactory factory,
-                               org.apache.axis2.databinding.utils.writer.MTOMAwareXMLStreamWriter xmlWriter,
-                               boolean serializeType)
-            throws javax.xml.stream.XMLStreamException, org.apache.axis2.databinding.ADBException{
-            
-                
-
-
-                java.lang.String prefix = null;
-                java.lang.String namespace = null;
-                
-
-                    prefix = parentQName.getPrefix();
-                    namespace = parentQName.getNamespaceURI();
-
-                    if ((namespace != null) && (namespace.trim().length() > 0)) {
-                        java.lang.String writerPrefix = xmlWriter.getPrefix(namespace);
-                        if (writerPrefix != null) {
-                            xmlWriter.writeStartElement(namespace, parentQName.getLocalPart());
-                        } else {
-                            if (prefix == null) {
-                                prefix = generatePrefix(namespace);
-                            }
-
-                            xmlWriter.writeStartElement(prefix, parentQName.getLocalPart(), namespace);
-                            xmlWriter.writeNamespace(prefix, namespace);
-                            xmlWriter.setPrefix(prefix, namespace);
-                        }
-                    } else {
-                        xmlWriter.writeStartElement(parentQName.getLocalPart());
-                    }
-                
-                  if (serializeType){
-               
-
-                   java.lang.String namespacePrefix = registerPrefix(xmlWriter,"http://docs.oasis-open.org/wsn/b-2");
-                   if ((namespacePrefix != null) && (namespacePrefix.trim().length() > 0)){
-                       writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
-                           namespacePrefix+":SubscriptionManagerRP",
-                           xmlWriter);
-                   } else {
-                       writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
-                           "SubscriptionManagerRP",
-                           xmlWriter);
-                   }
-
-               
-                   }
-               
-                                            if (localConsumerReference==null){
-                                                 throw new org.apache.axis2.databinding.ADBException("ConsumerReference cannot be null!!");
-                                            }
-                                           localConsumerReference.serialize(new javax.xml.namespace.QName("http://docs.oasis-open.org/wsn/b-2","ConsumerReference"),
-                                               factory,xmlWriter);
-                                         if (localFilterTracker){
-                                            if (localFilter==null){
-                                                 throw new org.apache.axis2.databinding.ADBException("Filter cannot be null!!");
-                                            }
-                                           localFilter.serialize(new javax.xml.namespace.QName("http://docs.oasis-open.org/wsn/b-2","Filter"),
-                                               factory,xmlWriter);
-                                        } if (localSubscriptionPolicyTracker){
-                                            if (localSubscriptionPolicy==null){
-                                                 throw new org.apache.axis2.databinding.ADBException("SubscriptionPolicy cannot be null!!");
-                                            }
-                                           localSubscriptionPolicy.serialize(new javax.xml.namespace.QName("http://docs.oasis-open.org/wsn/b-2","SubscriptionPolicy"),
-                                               factory,xmlWriter);
-                                        } if (localCreationTimeTracker){
-                                    namespace = "http://docs.oasis-open.org/wsn/b-2";
-                                    if (! namespace.equals("")) {
-                                        prefix = xmlWriter.getPrefix(namespace);
-
-                                        if (prefix == null) {
-                                            prefix = generatePrefix(namespace);
-
-                                            xmlWriter.writeStartElement(prefix,"CreationTime", namespace);
-                                            xmlWriter.writeNamespace(prefix, namespace);
-                                            xmlWriter.setPrefix(prefix, namespace);
-
-                                        } else {
-                                            xmlWriter.writeStartElement(namespace,"CreationTime");
-                                        }
-
-                                    } else {
-                                        xmlWriter.writeStartElement("CreationTime");
-                                    }
-                                
-
-                                          if (localCreationTime==null){
-                                              // write the nil attribute
-                                              
-                                                     throw new org.apache.axis2.databinding.ADBException("CreationTime cannot be null!!");
-                                                  
-                                          }else{
-
-                                        
-                                                   xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localCreationTime));
-                                            
-                                          }
-                                    
-                                   xmlWriter.writeEndElement();
-                             }
-                    xmlWriter.writeEndElement();
-               
-
-        }
-
-         /**
-          * Util method to write an attribute with the ns prefix
-          */
-          private void writeAttribute(java.lang.String prefix,java.lang.String namespace,java.lang.String attName,
-                                      java.lang.String attValue,javax.xml.stream.XMLStreamWriter xmlWriter) throws javax.xml.stream.XMLStreamException{
-              if (xmlWriter.getPrefix(namespace) == null) {
-                       xmlWriter.writeNamespace(prefix, namespace);
-                       xmlWriter.setPrefix(prefix, namespace);
-
-              }
-
-              xmlWriter.writeAttribute(namespace,attName,attValue);
-
-         }
-
-        /**
-          * Util method to write an attribute without the ns prefix
-          */
-          private void writeAttribute(java.lang.String namespace,java.lang.String attName,
-                                      java.lang.String attValue,javax.xml.stream.XMLStreamWriter xmlWriter) throws javax.xml.stream.XMLStreamException{
-                if (namespace.equals(""))
-              {
-                  xmlWriter.writeAttribute(attName,attValue);
-              }
-              else
-              {
-                  registerPrefix(xmlWriter, namespace);
-                  xmlWriter.writeAttribute(namespace,attName,attValue);
-              }
-          }
-
-
-           /**
-             * Util method to write an attribute without the ns prefix
-             */
-            private void writeQNameAttribute(java.lang.String namespace, java.lang.String attName,
-                                             javax.xml.namespace.QName qname, javax.xml.stream.XMLStreamWriter xmlWriter) throws javax.xml.stream.XMLStreamException {
-
-                java.lang.String attributeNamespace = qname.getNamespaceURI();
-                java.lang.String attributePrefix = xmlWriter.getPrefix(attributeNamespace);
-                if (attributePrefix == null) {
-                    attributePrefix = registerPrefix(xmlWriter, attributeNamespace);
-                }
-                java.lang.String attributeValue;
-                if (attributePrefix.trim().length() > 0) {
-                    attributeValue = attributePrefix + ":" + qname.getLocalPart();
-                } else {
-                    attributeValue = qname.getLocalPart();
-                }
-
-                if (namespace.equals("")) {
-                    xmlWriter.writeAttribute(attName, attributeValue);
-                } else {
-                    registerPrefix(xmlWriter, namespace);
-                    xmlWriter.writeAttribute(namespace, attName, attributeValue);
-                }
-            }
-        /**
-         *  method to handle Qnames
-         */
-
-        private void writeQName(javax.xml.namespace.QName qname,
-                                javax.xml.stream.XMLStreamWriter xmlWriter) throws javax.xml.stream.XMLStreamException {
-            java.lang.String namespaceURI = qname.getNamespaceURI();
-            if (namespaceURI != null) {
-                java.lang.String prefix = xmlWriter.getPrefix(namespaceURI);
-                if (prefix == null) {
-                    prefix = generatePrefix(namespaceURI);
-                    xmlWriter.writeNamespace(prefix, namespaceURI);
-                    xmlWriter.setPrefix(prefix,namespaceURI);
-                }
-
-                if (prefix.trim().length() > 0){
-                    xmlWriter.writeCharacters(prefix + ":" + org.apache.axis2.databinding.utils.ConverterUtil.convertToString(qname));
-                } else {
-                    // i.e this is the default namespace
-                    xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(qname));
-                }
-
-            } else {
-                xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(qname));
-            }
-        }
-
-        private void writeQNames(javax.xml.namespace.QName[] qnames,
-                                 javax.xml.stream.XMLStreamWriter xmlWriter) throws javax.xml.stream.XMLStreamException {
-
-            if (qnames != null) {
-                // we have to store this data until last moment since it is not possible to write any
-                // namespace data after writing the charactor data
-                java.lang.StringBuffer stringToWrite = new java.lang.StringBuffer();
-                java.lang.String namespaceURI = null;
-                java.lang.String prefix = null;
-
-                for (int i = 0; i < qnames.length; i++) {
-                    if (i > 0) {
-                        stringToWrite.append(" ");
-                    }
-                    namespaceURI = qnames[i].getNamespaceURI();
-                    if (namespaceURI != null) {
-                        prefix = xmlWriter.getPrefix(namespaceURI);
-                        if ((prefix == null) || (prefix.length() == 0)) {
-                            prefix = generatePrefix(namespaceURI);
-                            xmlWriter.writeNamespace(prefix, namespaceURI);
-                            xmlWriter.setPrefix(prefix,namespaceURI);
-                        }
-
-                        if (prefix.trim().length() > 0){
-                            stringToWrite.append(prefix).append(":").append(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(qnames[i]));
-                        } else {
-                            stringToWrite.append(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(qnames[i]));
-                        }
-                    } else {
-                        stringToWrite.append(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(qnames[i]));
-                    }
-                }
-                xmlWriter.writeCharacters(stringToWrite.toString());
-            }
-
-        }
-
-
-         /**
-         * Register a namespace prefix
-         */
-         private java.lang.String registerPrefix(javax.xml.stream.XMLStreamWriter xmlWriter, java.lang.String namespace) throws javax.xml.stream.XMLStreamException {
-                java.lang.String prefix = xmlWriter.getPrefix(namespace);
-
-                if (prefix == null) {
-                    prefix = generatePrefix(namespace);
-
-                    while (xmlWriter.getNamespaceContext().getNamespaceURI(prefix) != null) {
-                        prefix = org.apache.axis2.databinding.utils.BeanUtil.getUniquePrefix();
-                    }
-
-                    xmlWriter.writeNamespace(prefix, namespace);
-                    xmlWriter.setPrefix(prefix, namespace);
-                }
-
-                return prefix;
-            }
-
-
-  
-        /**
-        * databinding method to get an XML representation of this object
-        *
-        */
-        public javax.xml.stream.XMLStreamReader getPullParser(javax.xml.namespace.QName qName)
-                    throws org.apache.axis2.databinding.ADBException{
-
-
-        
-                 java.util.ArrayList elementList = new java.util.ArrayList();
-                 java.util.ArrayList attribList = new java.util.ArrayList();
-
-                
-                            elementList.add(new javax.xml.namespace.QName("http://docs.oasis-open.org/wsn/b-2",
-                                                                      "ConsumerReference"));
-                            
-                            
-                                    if (localConsumerReference==null){
-                                         throw new org.apache.axis2.databinding.ADBException("ConsumerReference cannot be null!!");
-                                    }
-                                    elementList.add(localConsumerReference);
-                                 if (localFilterTracker){
-                            elementList.add(new javax.xml.namespace.QName("http://docs.oasis-open.org/wsn/b-2",
-                                                                      "Filter"));
-                            
-                            
-                                    if (localFilter==null){
-                                         throw new org.apache.axis2.databinding.ADBException("Filter cannot be null!!");
-                                    }
-                                    elementList.add(localFilter);
-                                } if (localSubscriptionPolicyTracker){
-                            elementList.add(new javax.xml.namespace.QName("http://docs.oasis-open.org/wsn/b-2",
-                                                                      "SubscriptionPolicy"));
-                            
-                            
-                                    if (localSubscriptionPolicy==null){
-                                         throw new org.apache.axis2.databinding.ADBException("SubscriptionPolicy cannot be null!!");
-                                    }
-                                    elementList.add(localSubscriptionPolicy);
-                                } if (localCreationTimeTracker){
-                                      elementList.add(new javax.xml.namespace.QName("http://docs.oasis-open.org/wsn/b-2",
-                                                                      "CreationTime"));
-                                 
-                                        if (localCreationTime != null){
-                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localCreationTime));
-                                        } else {
-                                           throw new org.apache.axis2.databinding.ADBException("CreationTime cannot be null!!");
-                                        }
-                                    }
-
-                return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
-            
-            
-
-        }
-
-  
-
-     /**
-      *  Factory class that keeps the parse method
-      */
-    public static class Factory{
-
-        
-        
-
-        /**
-        * static method to create the object
-        * Precondition:  If this object is an element, the current or next start element starts this object and any intervening reader events are ignorable
-        *                If this object is not an element, it is a complex type and the reader is at the event just after the outer start element
-        * Postcondition: If this object is an element, the reader is positioned at its end element
-        *                If this object is a complex type, the reader is positioned at the end element of its outer element
-        */
-        public static SubscriptionManagerRP parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
-            SubscriptionManagerRP object =
-                new SubscriptionManagerRP();
-
-            int event;
-            java.lang.String nillableValue = null;
-            java.lang.String prefix ="";
-            java.lang.String namespaceuri ="";
-            try {
-                
-                while (!reader.isStartElement() && !reader.isEndElement())
-                    reader.next();
-
-                
-                if (reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","type")!=null){
-                  java.lang.String fullTypeName = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance",
-                        "type");
-                  if (fullTypeName!=null){
-                    java.lang.String nsPrefix = null;
-                    if (fullTypeName.indexOf(":") > -1){
-                        nsPrefix = fullTypeName.substring(0,fullTypeName.indexOf(":"));
-                    }
-                    nsPrefix = nsPrefix==null?"":nsPrefix;
-
-                    java.lang.String type = fullTypeName.substring(fullTypeName.indexOf(":")+1);
-                    
-                            if (!"SubscriptionManagerRP".equals(type)){
-                                //find namespace for the prefix
-                                java.lang.String nsUri = reader.getNamespaceContext().getNamespaceURI(nsPrefix);
-                                return (SubscriptionManagerRP)net.es.oscars.oscars.ExtensionMapper.getTypeObject(
-                                     nsUri,type,reader);
-                              }
-                        
-
-                  }
-                
-
-                }
-
-                
-
-                
-                // Note all attributes that were handled. Used to differ normal attributes
-                // from anyAttributes.
-                java.util.Vector handledAttributes = new java.util.Vector();
-                
-
-                 
-                    
-                    reader.next();
-                
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://docs.oasis-open.org/wsn/b-2","ConsumerReference").equals(reader.getName())){
-                                
-                                                object.setConsumerReference(org.w3.www._2005._08.addressing.EndpointReferenceType.Factory.parse(reader));
-                                              
-                                        reader.next();
-                                    
-                              }  // End of if for expected property start element
-                                
-                                else{
-                                    // A start element we are not expecting indicates an invalid parameter was passed
-                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getLocalName());
-                                }
-                            
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://docs.oasis-open.org/wsn/b-2","Filter").equals(reader.getName())){
-                                
-                                                object.setFilter(org.oasis_open.docs.wsn.b_2.FilterType.Factory.parse(reader));
-                                              
-                                        reader.next();
-                                    
-                              }  // End of if for expected property start element
-                                
-                                    else {
-                                        
-                                    }
-                                
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://docs.oasis-open.org/wsn/b-2","SubscriptionPolicy").equals(reader.getName())){
-                                
-                                                object.setSubscriptionPolicy(org.oasis_open.docs.wsn.b_2.SubscriptionPolicyType.Factory.parse(reader));
-                                              
-                                        reader.next();
-                                    
-                              }  // End of if for expected property start element
-                                
-                                    else {
-                                        
-                                    }
-                                
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://docs.oasis-open.org/wsn/b-2","CreationTime").equals(reader.getName())){
-                                
-                                    java.lang.String content = reader.getElementText();
-                                    
-                                              object.setCreationTime(
-                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToDateTime(content));
-                                              
-                                        reader.next();
-                                    
-                              }  // End of if for expected property start element
-                                
-                                    else {
-                                        
-                                    }
-                                  
-                            while (!reader.isStartElement() && !reader.isEndElement())
-                                reader.next();
-                            
-                                if (reader.isStartElement())
-                                // A start element we are not expecting indicates a trailing invalid property
-                                throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getLocalName());
-                            
-
-
-
-            } catch (javax.xml.stream.XMLStreamException e) {
-                throw new java.lang.Exception(e);
-            }
-
-            return object;
-        }
-
-        }//end of factory class
-
-        
-
-        }
-           
-          
+    public EndpointReferenceType getConsumerReference() {
+        return consumerReference;
+    }
+
+    /**
+     * Sets the value of the consumerReference property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link EndpointReferenceType }
+     *     
+     */
+    public void setConsumerReference(EndpointReferenceType value) {
+        this.consumerReference = value;
+    }
+
+    /**
+     * Gets the value of the filter property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link FilterType }
+     *     
+     */
+    public FilterType getFilter() {
+        return filter;
+    }
+
+    /**
+     * Sets the value of the filter property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link FilterType }
+     *     
+     */
+    public void setFilter(FilterType value) {
+        this.filter = value;
+    }
+
+    /**
+     * Gets the value of the subscriptionPolicy property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link SubscriptionPolicyType }
+     *     
+     */
+    public SubscriptionPolicyType getSubscriptionPolicy() {
+        return subscriptionPolicy;
+    }
+
+    /**
+     * Sets the value of the subscriptionPolicy property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link SubscriptionPolicyType }
+     *     
+     */
+    public void setSubscriptionPolicy(SubscriptionPolicyType value) {
+        this.subscriptionPolicy = value;
+    }
+
+    /**
+     * Gets the value of the creationTime property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
+     */
+    public XMLGregorianCalendar getCreationTime() {
+        return creationTime;
+    }
+
+    /**
+     * Sets the value of the creationTime property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
+     */
+    public void setCreationTime(XMLGregorianCalendar value) {
+        this.creationTime = value;
+    }
+
+}

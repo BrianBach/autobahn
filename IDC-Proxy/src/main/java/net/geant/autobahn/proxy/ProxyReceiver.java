@@ -1,4 +1,5 @@
 package net.geant.autobahn.proxy;
+/*package net.geant.autobahn.proxy;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -16,7 +17,7 @@ import net.geant.autobahn.network.Link;
  * Handles incoming messages
  * @author Michal
  *
- */
+ *//*
 public class ProxyReceiver implements Closeable, Runnable {
 
     private ServerSocket listen;
@@ -34,7 +35,7 @@ public class ProxyReceiver implements Closeable, Runnable {
 
     /* (non-Javadoc)
      * @see java.io.Closeable#close()
-     */
+     *//*
     public void close() {
 
         if (listen != null && !listen.isClosed()) {
@@ -147,7 +148,7 @@ public class ProxyReceiver implements Closeable, Runnable {
 
     /* (non-Javadoc)
      * @see java.lang.Runnable#run()
-     */
+     *//*
     public void run() {
 
         while (running) {
@@ -163,4 +164,12 @@ public class ProxyReceiver implements Closeable, Runnable {
             }
         }
     }
-}
+
+    public static void main(String[] args) throws Exception {
+
+        ProxyReceiver proxy = new ProxyReceiver();
+        int port = 4079;//Integer.parseInt(properties.getProperty("proxy.listen.port"));
+        proxy.init(port, new ProxyImpl());
+    }
+    
+}*/

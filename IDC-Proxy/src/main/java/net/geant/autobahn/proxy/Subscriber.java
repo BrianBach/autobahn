@@ -1,17 +1,16 @@
 package net.geant.autobahn.proxy;
-
+/*
 import java.io.Closeable;
 import java.io.IOException;
 import java.rmi.RemoteException;
-
-import net.geant.autobahn.oscars.OscarsClient;
 import net.geant.autobahn.oscars.notify.OscarsNotifyClient;
+import net.geant.autobahn.oscars.OscarsClient;
 
 /**
  * Subscribes to the NotificationBroker and sends keep a live messages
  * every 1 hour
  * @author Michał
- */
+ *//*
 public class Subscriber implements Runnable, Closeable {
 
     OscarsNotifyClient oscarsNotify;
@@ -63,7 +62,7 @@ public class Subscriber implements Runnable, Closeable {
             }
             */
             // call registerSubscriber
-            
+            /*
             try {
                 Thread.sleep(notifyFrequency);
             } catch (InterruptedException e) { }
@@ -77,3 +76,4 @@ public class Subscriber implements Runnable, Closeable {
         oscarsNotify.destroyRegistration();
     }
 }
+*/
