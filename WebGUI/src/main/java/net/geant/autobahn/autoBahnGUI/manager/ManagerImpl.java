@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TimeZone;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -106,9 +108,14 @@ public class ManagerImpl implements Manager,ManagerNotifier{
 	private  Map<String, InterDomainManager> idms = Collections.synchronizedMap(new HashMap<String, InterDomainManager>());
 	
 	/**
+	 * Map with IDM registration times
+	 */
+	private ConcurrentMap<String, Long> idmsTime = new ConcurrentHashMap<String, Long>();
+	
+	/**
 	 * Identifies period of time when IDM register in WEB GUI is mark as down
 	 */
-	private long tearDownTime = 10000;
+	private long tearDownTime = 60000;
 	/**
 	 * Logs information
 	 */
@@ -426,6 +433,22 @@ public class ManagerImpl implements Manager,ManagerNotifier{
 			}
 		}
 	}
+	
+	/**
+	 * Checks if an IDM is disconnected 
+	 */
+	public void isIdmDisconnected() {
+		
+		if (!idms.isEmpty()) {
+			Iterator<String> iterator = idmsTime.keySet().iterator();
+			do 	{
+					String nextElement = iterator.next();
+		            if (System.currentTimeMillis() - idmsTime.get(nextElement) > tearDownTime) 
+		                idms.remove(nextElement);                
+	        } while (iterator.hasNext());
+        }
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.ManagerNotifier#statusUpdated(java.lang.String, net.geant.autobahn.administration.Status)
@@ -434,15 +457,24 @@ public class ManagerImpl implements Manager,ManagerNotifier{
 		InterDomainManager manager = idms.get(idm);
 		if (manager == null)
 			manager= newInterDomainManagerConnected(idm);
+		
 		manager.setStatus(status);
-		if (manager.getLastStatusUpdateInMillis()>tearDownTime)
-		try{
-			manager.getServices(true);
-			manager.getProperties();
-			manager.getLog(true);
-		}catch (Exception e){
-			logger.info (e.getClass().getName()+":"+e.getMessage());
+		
+		if (!idmsTime.containsKey(idm)) {
+			idmsTime.put(idm, manager.getLastStatusUpdateInMillis());
+		} else {
+			idmsTime.replace(idm, manager.getLastStatusUpdateInMillis());			
 		}
+				
+		if (manager.getLastStatusUpdateInMillis()>tearDownTime) {
+			try{
+				manager.getServices(true);
+				manager.getProperties();
+				manager.getLog(true);
+			}catch (Exception e){
+				logger.info (e.getClass().getName()+":"+e.getMessage());
+			}
+		}		
 		if (notifier!= null)
 				notifier.updateTopology();
 	}
@@ -939,8 +971,8 @@ public class ManagerImpl implements Manager,ManagerNotifier{
 			serv.setCurrentIdm(managers.get(0));
 			InterDomainManager manager = idms.get(managers.get(0));
 			serv.setServices(manager.getServices());
-		}else{
-			InterDomainManager manager = idms.get(idm);	
+		} else {
+			InterDomainManager manager = idms.get(idm);
 			List<Service> services = manager.getServices();
 			serv.setServices(services);
 			serv.setCurrentIdm(idm);

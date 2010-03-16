@@ -6,6 +6,7 @@
 
 	<on-start>
 		<evaluate expression="manager.getLogsForInterDomainManager(null)" result="flowScope.logs" />	
+		<evaluate expression="manager.isIdmDisconnected()" result="flowScope.disconnect" />
 	</on-start>
 	<!-- 
 	<decision-state id="check-idm">
