@@ -1,5 +1,7 @@
 package net.geant.autobahn.autoBahnGUI.manager;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +13,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.TimeZone;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -31,6 +34,8 @@ import net.geant.autobahn.autoBahnGUI.model.SettingsFormModel;
 import net.geant.autobahn.autoBahnGUI.topology.TopologyFinderNotifier;
 import net.geant.autobahn.gui.EventType;
 import net.geant.autobahn.gui.ReservationChangedType;
+import net.geant.autobahn.lookup.LookupService;
+import net.geant.autobahn.lookup.LookupServiceException;
 import net.geant.autobahn.reservation.Reservation;
 import net.geant.autobahn.reservation.Service;
 import net.geant.autobahn.useraccesspoint.Priority;
@@ -217,7 +222,56 @@ public class ManagerImpl implements Manager,ManagerNotifier{
 		return ports;
 	}
 	
-	/*
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllFriendlyPorts()
+     */
+    public List<PortMap> getAllFriendlyPorts () {
+        List<String> ports = getAllPorts();
+        List<PortMap> friendlyPorts = new ArrayList<PortMap>();
+        
+        for (String p_id : ports) {
+            String friendlyName = getFriendlyNamefromLS(p_id);
+            if (friendlyName == null || friendlyName.trim().equals("")) {
+                friendlyPorts.add(new PortMap(p_id, p_id));                
+            } else {
+                friendlyPorts.add(new PortMap(p_id, p_id + " (" + friendlyName + ")"));
+            }
+        }
+        return friendlyPorts;
+    }
+
+    /**
+     * Checks the Lookup Service for the friendly name of a port identifier.
+     * 
+     * @param The port identifier to look for.
+     * @return The friendly name if operation was successful, null otherwise
+     */
+    public String getFriendlyNamefromLS(String identifier) {
+        // Read LS location from properties
+        Properties properties = new Properties();
+        try {
+            InputStream is = getClass().getClassLoader().getResourceAsStream(
+                        "../etc/webgui.properties");
+            properties.load(is);
+            is.close();
+            logger.debug(properties.size() + " properties loaded");
+        } catch (IOException e) {
+            logger.info("Could not load lookuphost properties: " + e.getMessage());
+        }
+        String host = properties.getProperty("lookuphost");
+        LookupService lookup = new LookupService(host);
+        String friendlyName = null;
+        try {
+            friendlyName = lookup.QueryFriendlyName(identifier);
+        } catch (LookupServiceException e) {
+            logger.info("End port friendly name could not be acquired from LS");
+            logger.info(e.getMessage());
+        }
+        return friendlyName;
+    }
+
+    /*
      * (non-Javadoc)
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllDomains()
      */
@@ -269,6 +323,25 @@ public class ManagerImpl implements Manager,ManagerNotifier{
 	    logger.info (ports);
 	    return ports;
 	}
+	
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllFriendlyPorts()
+     */
+    public List<PortMap> getFriendlyInterDomainManagerPorts(String idmIdentifier) {
+        List<String> ports = getInterDomainManagerPorts(idmIdentifier);
+        List<PortMap> friendlyPorts = new ArrayList<PortMap>();
+        
+        for (String p_id : ports) {
+            String friendlyName = getFriendlyNamefromLS(p_id);
+            if (friendlyName == null || friendlyName.trim().equals("")) {
+                friendlyPorts.add(new PortMap(p_id, p_id));                
+            } else {
+                friendlyPorts.add(new PortMap(p_id, p_id + " (" + friendlyName + ")"));
+            }
+        }
+        return friendlyPorts;
+    }
 	
 	/**
 	public Service requestService (String idm, ServiceRequest service) throws UserAccessPointException_Exception{

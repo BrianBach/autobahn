@@ -115,6 +115,13 @@ public interface Manager {
 	public List<String> getAllPorts ();
 	
     /**
+     * Gets all port names (with associated friendly ones from LS) in all IDM
+     * registered in WEB GUI
+     * @return list of ports names with associated friendly ones
+     */
+    public List<PortMap> getAllFriendlyPorts ();
+    
+    /**
      * Gets all domain names
      * @return list of domains names
      */
@@ -132,6 +139,15 @@ public interface Manager {
 	 * @return list of  ports names
 	 */
 	public List<String> getInterDomainManagerPorts (String idm);
+
+	/**
+     * Gets names of ports (with associated friendly ones from LS) 
+     * managed by specified IDM
+	 * @param idm identifier of the IDM
+	 * @return list of ports names with associated friendly ones from LS 
+	 */
+    public List<PortMap> getFriendlyInterDomainManagerPorts(String idmIdentifier);
+
 	/**
 	 * Gets time period after with the  registered earlier IDM is mark as not accessible
 	 * @return

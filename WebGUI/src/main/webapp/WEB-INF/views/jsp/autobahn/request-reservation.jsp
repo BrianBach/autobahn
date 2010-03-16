@@ -39,7 +39,7 @@ function afterSetDateValue(ref_field, target_field, date) {
 		<td class="label"><spring:message code="reservation.startPort"/></td>
 		<td class="value">
 			<form:select path="request.startPort">
-				<form:options items="${ports_domain}"/>
+				<form:options items="${friendlyports_domain}" itemValue="identifier" itemLabel="friendlyName"/>
 			</form:select>
 		</td>
 		<td class="error"><form:errors path="request.startPort"/></td>
@@ -48,7 +48,7 @@ function afterSetDateValue(ref_field, target_field, date) {
 		<td class="label"><spring:message code="reservation.endPort"/></td>
 		<td class="value">
 			<form:select path="request.endPort">
-				<form:options items="${ports_all}"/>
+				<form:options items="${friendlyports_all}" itemValue="identifier" itemLabel="friendlyName"/>
 			</form:select>
 		</td>
 		<td class="error"><form:errors path="request.endPort"/></td>
