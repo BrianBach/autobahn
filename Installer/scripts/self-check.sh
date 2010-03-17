@@ -146,7 +146,7 @@ function configure_file_c {
 	     newpath=$2
              newpath_john=$3
              while [[ ! -d "$newpath" && ! -f "$newpath" ]]; do
-                     echo -n "Please enter $1 path: " 
+                     echo -n "Please enter $1 path (end path with a /): " 
 		     read newpath
 		     add_attribute "$3=$newpath" "$path_only/installer.conf"
 		     source $path_only/installer.conf
@@ -237,7 +237,7 @@ function configure_file {
 	     newpath=$2
              newpath_john=$3
 	     while [[ ! -d "$newpath" && ! -f "$newpath" ]]; do
-		    FILE=`$DIALOG --stdout --title "Please enter $1 path" --fselect $HOME/$1 24 78`
+		    FILE=`$DIALOG --stdout --title "Please enter $1 path (end path with a /)" --fselect $HOME/$1 24 78`
 		     case $? in
 		        0   )   
 		     	      echo $FILE >newpath
