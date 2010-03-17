@@ -14,7 +14,7 @@ path_only=`dirname "$abspath"`
 
 
 ospfd_conf="./ospfd.conf"
-ospfd_conf_backup="/home/nsuser/autobahn_backup/ospfd.backup"
+ospfd_conf_backup="./ospfd.backup"
 #Backup old ospfd.conf, create new!
 [ -f $ospfd_conf ] && cp $ospfd_conf $ospfd_conf_backup
 

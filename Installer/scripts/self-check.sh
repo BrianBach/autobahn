@@ -208,6 +208,7 @@ function file_editor {
 #If user pressed Cancel    
      if [ -z "$cmd" ]; then
 	log "User pressed Cancel while editing $conf_file"
+	rm -f cur_properties temp_editor
 	return 1
      fi
      log "CMD = $cmd num_of_properties = $num_of_prop"
