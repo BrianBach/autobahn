@@ -8,11 +8,11 @@
 		<evaluate expression="manager.getLogsForInterDomainManager(null)" result="flowScope.logs" />	
 		<evaluate expression="manager.isIdmDisconnected()" result="flowScope.disconnect" />
 	</on-start>
-	<!-- 
+	 
 	<decision-state id="check-idm">
-    	<if test="flowScope.settings.logs== null ||flowScope.logs.idms.size()==0" then="no-idm-regitered" else="logs"/>		
+    	<if test="flowScope.logs.idms == null ||flowScope.logs.idms.size()==0" then="no-idm-regitered" else="logs"/>		
 	</decision-state>
-	 -->
+	
 	<view-state id="logs" view="secure/logs" model="logs">
 		<binder>
 			<binding property="currentIdm"/>
