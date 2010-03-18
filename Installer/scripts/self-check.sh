@@ -162,7 +162,7 @@ function configure_file_c {
 	    done 
 	    
              while [[ ! -d "$newpath_john" && ! -f "$newpath_john" ]]; do
-                     echo -n "Please enter the path to start daemons: " 
+                     echo -n "Please enter the path to start Quagga daemons (end path with a /): " 
 		     read newpath_john 
                      echo $newpath_john > startDaemons.tmp
                      echolog $newpath_john
@@ -402,6 +402,10 @@ function get_dm_defaults {
 	db_user=jra3
 	db_pass="pass"
 	db_type=ethernet
+	tool_address=none
+	tool_time_setup=120
+	tool_time_teardown=60	
+	lookuphost="http://ls-host:8080/perfsonar-java-xml-ls/services/LookupService"
 	monitoring_use=""
 	log "The dm file is $1"
 	if [ -e "$1" ]; then
@@ -418,36 +422,48 @@ function get_dm_defaults {
 			  db.port ) db_port=$curval
 			  ;;
 			  db.name ) db_name=$curval; DBNAME=$curval
-		          ;;
+		      ;;
 			  db.user ) db_user=$curval; DBUSER=$curval
 			  ;;
 			  db.pass ) db_pass=$curval; DBPASS=$curval
 		   	  ;;
 			  db.type ) db_type=$curval
-		          ;;
+		      ;;
+			  tool.address ) tool_address=$curval
+		      ;;
+			  tool.time.setup ) tool_time_setup=$curval
+		      ;;
+			  tool.time.teardown ) tool_time_teardown=$curval
+		      ;;
+			  lookuphost ) lookuphost=$curval
+		      ;;
 			  monitoring.use ) monitoring_use=$curval
 		   	  ;;
 			esac
 		done
 	fi	
-	log "db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type}"| tr -d '\r' 
-	echo -n "db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type}"| tr -d '\r' > $path_only/dm_defaults
+	log "db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} tool.time.setup ${tool_time_setup} tool.time.teardown ${tool_time_teardown} lookuphost ${lookuphost}"| tr -d '\r' 
+	echo -n "db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} tool.time.setup ${tool_time_setup} tool.time.teardown ${tool_time_teardown} lookuphost ${lookuphost}"| tr -d '\r' > $path_only/dm_defaults
 	poplocalinfo
 }
 
 function get_idm_defaults {
 	pushlocalinfo
 	newlogparagraph "function get_idm_defaults"
+	domain="http://your-host:8080/autobahn/interdomain"
+	domainName="http://some_domain:8080/autobahn/interdomain"
+	latitude="0.000000"
+	longitude="0.000000"
+	ospf_use=true
+	ospf_opaqueType=135
+	ospf_opaqueId=1001
 	db_host=localhost
 	db_port=5432
-	db_name=autobahn_2
+	db_name=jra3_1
 	db_user=jra3
 	db_pass="pass"
-	db_type=ethernet
-	monitoring_use="-"
-	domain="-"
-	ospf_use=true
-	gui_address=none
+	gui_address="http://gui-host:8080/autobahn-gui/service/gui"
+	lookuphost="http://ls-host:8080/perfsonar-java-xml-ls/services/LookupService"
 	if [ -f $1 ]; then
 		propfile=`cat $1`
 		for line in $propfile; do
@@ -457,31 +473,39 @@ function get_idm_defaults {
 				continue
 			fi
 			case $curprop in 
+			  domain ) domain=$curval
+			  ;;
+			  domainName ) domainName=$curval
+			  ;;
+			  latitude ) latitude=$curval
+			  ;;
+			  longitude ) longitude=$curval
+			  ;;
+			  ospf.use ) ospf_use=$curval
+		      ;;
+			  ospf.opaqueType ) ospf_opaqueType=$curval
+		      ;;
+			  ospf.opaqueId ) ospf_opaqueId=$curval
+		      ;;
 			  db.host ) db_host=$curval
 			  ;;
 			  db.port ) db_port=$curval
 			  ;;
 			  db.name ) db_name=$curval
-		          ;;
+		      ;;
 			  db.user ) db_user=$curval
 			  ;;
 			  db.pass ) db_pass=$curval
 		   	  ;;
-			  db.type ) db_type=$curval
-		          ;;
-			  monitoring.use ) monitoring_use=$curval
-		   	  ;;
-			  domain ) domain=$curval
-			  ;;
-			  ospf.use ) ospf_use=$curval
-		          ;;
 			  gui.address ) gui_address=$curval
-		          ;;
+		      ;;
+			  lookuphost ) lookuphost=$curval
+		      ;;
 			esac
 		done
 	fi	
-	log "db.host $db_host db.port $db_port db.name $db_name db.user $db_user db.pass $db_pass db.type $db_type domain $domain ospf.use $ospf_use gui.address $gui_address"
-	echo -n "db.host $db_host db.port $db_port db.name $db_name db.user $db_user db.pass $db_pass db.type $db_type domain $domain ospf.use $ospf_use gui.address $gui_address" | tr -d '\r' > $path_only/idm_defaults
+	log "domain $domain domainName $domainName latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf.opaqueType ospf.opaqueId $ospf.opaqueId db.host $db_host db.port $db_port db.name $db_name db.user $db_user db.pass $db_pass gui.address $gui_address lookuphost $lookuphost"
+	echo -n "domain $domain domainName $domainName latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf.opaqueType ospf.opaqueId $ospf.opaqueId db.host $db_host db.port $db_port db.name $db_name db.user $db_user db.pass $db_pass gui.address $gui_address lookuphost $lookuphost" | tr -d '\r' > $path_only/idm_defaults
 	poplocalinfo
 }
 
@@ -489,6 +513,8 @@ function get_calendar_defaults {
 	pushlocalinfo
 	newlogparagraph "function get_calendar_defaults"
 	db_type=ethernet
+	tool_time_setup=120
+	tool_time_teardown=60
 	if [ -f $1 ]; then
 		propfile=`cat $1`
 		for line in $propfile; do
@@ -497,17 +523,22 @@ function get_calendar_defaults {
 			case $curprop in 
 			  db.type ) db_type=$curval
 		          ;;
+			  tool.time.setup ) tool_time_setup=$curval
+		          ;;
+			  tool.time.teardown ) tool_time_teardown=$curval
+		          ;;
 			esac
 		done
 	fi	
-	log "db.type $db_type" 
-	echo -n "db.type $db_type" | tr -d '\r' > $path_only/calendar_defaults
+	log "db.type $db_type tool.time.setup $tool_time_setup tool.time.teardown $tool_time_teardown" 
+	echo -n "db.type $db_type tool.time.setup $tool_time_setup tool.time.teardown $tool_time_teardown" | tr -d '\r' > $path_only/calendar_defaults
 	poplocalinfo
 }
 
 function get_framework_defaults {
 	pushlocalinfo
 	newlogparagraph "function get_framework_defaults"
+	framework_commandLine=localhost
 	framework_port=5000 
 	if [ -f $1 ]; then
 		propfile=`cat $1`
@@ -515,13 +546,15 @@ function get_framework_defaults {
 			curprop=`echo $line | awk -F "=" '{print $1}'`
 			curval=`echo $line |awk -F "=" '{print $2}'`
 			case $curprop in 
+		          framework.commandLine ) framework_commandLine=$curval
+			  ;;
 		          framework.port ) framework_port=$curval
 			  ;;
 			esac
 		done
 	fi	
-	log "framework.port $framework_port" 
-	echo -n "framework.port $framework_port" | tr -d '\r' > $path_only/framework_defaults
+	log "framework.commandLine $framework_commandLine framework.port $framework_port" 
+	echo -n "framework.commandLine $framework_commandLine framework.port $framework_port" | tr -d '\r' > $path_only/framework_defaults
 	poplocalinfo
 }
 
@@ -532,6 +565,7 @@ function get_ta_defaults {
 	id_nodes=10.10.0.0/24
 	id_ports=10.10.32.0/24
 	id_links=10.10.64.0/24
+	lookuphost="http://ls-host:8080/perfsonar-java-xml-ls/services/LookupService"
 	if [ -f $1 ]; then
 		propfile=`cat $1`
 		for line in $propfile; do
@@ -544,11 +578,13 @@ function get_ta_defaults {
 		          ;;
 			  id.links ) id_links=$curval
 		          ;;
+			  lookuphost ) lookuphost=$curval
+		          ;;
 			esac
 		done
 	fi	
-	log "id.nodes $id_nodes id.ports $id_ports id.links $id_links" 
-	echo -n "id.nodes $id_nodes id.ports $id_ports id.links $id_links" > $path_only/ta_defaults
+	log "id.nodes $id_nodes id.ports $id_ports id.links $id_links lookuphost $lookuphost" 
+	echo -n "id.nodes $id_nodes id.ports $id_ports id.links $id_links lookuphost $lookuphost" > $path_only/ta_defaults
 	poplocalinfo
 }
 
