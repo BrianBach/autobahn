@@ -83,19 +83,19 @@ conf_written="true"
 newpath_john="`cat $path_only/startDaemons.tmp`"
 daemons_start_zebra="$newpath_john/zebra -d"
 daemons_start_ospfd="$newpath_john/ospfd -d -a"
-echolog "Johnies daemons: $newpath_john"
-$daemons_start_zebra restart
-$daemons_start_ospfd restart
-$newpath_john restart
+#echolog "Johnies daemons: $newpath_john"
+$daemons_start_zebra restart > /dev/null 2>&1
+$daemons_start_ospfd restart > /dev/null 2>&1
+$newpath_john restart > /dev/null 2>&1
 	fi
 
 newpath_john="`cat $path_only/startDaemons.tmp`"
 daemons_start_zebra="$newpath_john/zebra -d"
 daemons_start_ospfd="$newpath_john/ospfd -d -a"
-echolog "Johnies daemons: $newpath_john"
-$daemons_start_zebra restart
-$daemons_start_ospfd restart
-$newpath_john restart
+#echolog "Johnies daemons: $newpath_john"
+$daemons_start_zebra restart > /dev/null 2>&1
+$daemons_start_ospfd restart > /dev/null 2>&1
+$newpath_john restart > /dev/null 2>&1
 ip tunnel add $tunnel_name mode gre remote $remote local $localn ttl 255
 	ip link set $tunnel_name up multicast on
 	ip addr add $local_subnet brd + dev $tunnel_name
