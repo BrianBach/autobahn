@@ -74,28 +74,33 @@ cat tunnels_to_install|while read line; do
 	conf_text=`printf "!\n!Zebra configuration saved from vty\nrouter ospf\n\tospf router-id %s\n\tnetwork %s area %s\n\tcapability opaque\n!\npassword XXXX\nlog file /var/log/quagga/ospfd.log\n!\n" "$local_router_id" "$network" "$area"`
 
 #echo "$conf_text"
-echo "$conf_text" > $ospfd_conf
+echo "$conf_text" > ${ospfd_conf}/ospfd.conf
 conf_written="true"
 #kill `cat /var/run/quagga/ospfd.pid`
 #kill `cat /var/run/quagga/zebra.pid`
 #zebra -d
 #ospfd -d -a
 newpath_john="`cat $path_only/startDaemons.tmp`"
-daemons_start_zebra="$newpath_john/zebra -d"
-daemons_start_ospfd="$newpath_john/ospfd -d -a"
+newpath_john_2="${newpath_john}quagga"
+daemons_start_zebra="${newpath_john}zebra -d"
+daemons_start_ospfd="${newpath_john}ospfd -d -a"
 #echolog "Johnies daemons: $newpath_john"
 $daemons_start_zebra restart > /dev/null 2>&1
 $daemons_start_ospfd restart > /dev/null 2>&1
 $newpath_john restart > /dev/null 2>&1
+$newpath_john_2 restart > /dev/null 2>&1
 	fi
 
 newpath_john="`cat $path_only/startDaemons.tmp`"
-daemons_start_zebra="$newpath_john/zebra -d"
-daemons_start_ospfd="$newpath_john/ospfd -d -a"
+newpath_john_2="${newpath_john}quagga"
+echo $newpath_john_2
+daemons_start_zebra="${newpath_john}zebra -d"
+daemons_start_ospfd="${newpath_john}ospfd -d -a"
 #echolog "Johnies daemons: $newpath_john"
 $daemons_start_zebra restart > /dev/null 2>&1
 $daemons_start_ospfd restart > /dev/null 2>&1
 $newpath_john restart > /dev/null 2>&1
+$newpath_john_2 restart > /dev/null 2>&1
 ip tunnel add $tunnel_name mode gre remote $remote local $localn ttl 255
 	ip link set $tunnel_name up multicast on
 	ip addr add $local_subnet brd + dev $tunnel_name
