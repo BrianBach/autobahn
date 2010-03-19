@@ -495,6 +495,7 @@ public class IntradomainTopology {
 	        }
 
 	        for(SdhDevice dev : sdhDevices) {
+	            daos.getNodeDAO().create(dev.getNode());
 	        	daos.getSdhDeviceDAO().update(dev);
 	        }
     	}

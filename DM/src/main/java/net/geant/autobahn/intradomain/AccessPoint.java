@@ -139,7 +139,7 @@ public final class AccessPoint implements Idm2Dm, Administration {
             topologyType = properties.getProperty("db.type");
             //topologyType = ta.getTopologyType();
             IntradomainTopology topology = new IntradomainTopology(properties.getProperty("cnis.address"),
-            		properties.getProperty("idm.address"), topologyType);
+            		properties.getProperty("domainName"), topologyType);
             
             // Send topology to TA via WS
             ta.setIntradomainTopology(topology, topologyType);
@@ -154,7 +154,6 @@ public final class AccessPoint implements Idm2Dm, Administration {
             
             // Run abstraction of internal part of topology process
             ta.abstractInternalPartOfTopology();
-    
             
             DmHibernateUtil.getInstance().closeSession();
             
