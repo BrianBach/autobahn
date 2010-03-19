@@ -19,7 +19,8 @@ declare -rx java=`which java`
 declare -rx psql=`which psql`
 declare -x quagga
 declare -x INSTALL_COMMAND
-declare -x CONFIGURE_FILE="configure_file_c"
+declare -x CONFIGURE_FILE_QUAGGA="configure_file_quagga_c"
+declare -x CONFIGURE_FILE_AUTOBAHN="configure_file_autobahn_c"
 declare -x DIALOG=${DIALOG=dialog}
 declare -r quagga_zebra=`which zebra`
 declare -r debian_quagga="/etc/init.d/quagga"
@@ -139,14 +140,14 @@ function add_attribute {
 	log "$initkey=$initvalue was written in $2"
 	poplocalinfo
 }
-## Asks the user configuration info in a non graphical way
-#configure_file_c filename path attribute_name
-function configure_file_c {
+## Asks the user configuration info for Quagga in a non graphical way
+#configure_file_quagga_c filename path attribute_name
+function configure_file_quagga_c {
 	     pushlocalinfo
 	     newpath=$2
              newpath_john=$3
              while [[ ! -d "$newpath" && ! -f "$newpath" ]]; do
-                     echo -n "Please enter $1 path (end path with a /): " 
+                     echo -n "Enter the system folder (end with a /) where $1 is located (e.g. /etc/quagga/): "
 		     read newpath
 		     add_attribute "$3=$newpath" "$path_only/installer.conf"
 		     source $path_only/installer.conf
@@ -171,6 +172,21 @@ function configure_file_c {
 		     #source $path_only/installer.conf
 		     #echolog "$1 is at $newpath"
              done
+	    poplocalinfo	
+}
+
+## Asks the user configuration info for autobahn in a non graphical way
+#configure_file_autobahn_c filename path attribute_name
+function configure_file_autobahn_c {
+	     pushlocalinfo
+	     newpath=$2
+             while [[ ! -d "$newpath" && ! -f "$newpath" ]]; do
+                     echo -n "Please enter $1 path: " 
+		     read newpath
+		     add_attribute "$3=$newpath" "$path_only/installer.conf"
+		     source $path_only/installer.conf
+		     echolog "$1 is at $newpath"
+	    done 
 	    poplocalinfo	
 }
 
@@ -231,14 +247,14 @@ function file_editor {
      
 
 
-#Configuring a file in an ncurses env
-function configure_file {
+#Configuring a Quagga file in an ncurses env
+function configure_file_quagga {
 	     pushlocalinfo
-	     newlogparagraph "function configure_file"
+	     newlogparagraph "function configure_file_quagga"
 	     newpath=$2
              newpath_john=$3
 	     while [[ ! -d "$newpath" && ! -f "$newpath" ]]; do
-		    FILE=`$DIALOG --stdout --title "Please enter $1 path (end path with a /)" --fselect $HOME/$1 24 78`
+		    FILE=`$DIALOG --stdout --title "Enter system folder (end path with a /) containing $1 (e.g. /etc/quagga/) " --fselect $HOME/$1 24 78`
 		     case $? in
 		        0   )   
 		     	      echo $FILE >newpath
@@ -261,7 +277,7 @@ function configure_file {
 	    done 
 	    
             # while [[ ! -d "$newpath_john" && ! -f "$newpath_john" ]]; do
-                     FILE=`$DIALOG --stdout --title "Please enter path to start the daemons" --fselect $HOME/$1 24 78`
+                     FILE=`$DIALOG --stdout --title "Enter system folder (end path with a /) containing the scripts to run Quagga daemons (e.g. /etc/init.d/) " --fselect $HOME/$1 24 78`
 		     #read newpath_john
                     
 		     case $? in
@@ -279,6 +295,28 @@ function configure_file {
 		     #source $path_only/installer.conf
 		     #echolog "$1 is at $newpath"
              #done
+	    poplocalinfo	
+}
+
+#Configuring an Autobahn file in an ncurses env
+function configure_file_autobahn {
+	     pushlocalinfo
+	     newlogparagraph "function configure_file_autobahn"
+	     newpath=$2
+             while [[ ! -d "$newpath" && ! -f "$newpath" ]]; do
+		    FILE=`$DIALOG --stdout --title "Enter $1 folder (end with a /): " --fselect $HOME/$1 24 78`
+		     case $? in
+		        0   )   
+		     	      echo $FILE >newpath
+			      newpath=$FILE
+			      ;;
+			255 ) break;;
+		     esac
+		     newpath=`cat newpath` 
+		     add_attribute "$3=$newpath" "$path_only/installer.conf"
+		     source $path_only/installer.conf
+ 		     log "$1 is at $newpath"
+	    done 
 	    poplocalinfo	
 }
 
@@ -679,7 +717,7 @@ function get_default_autobahn_folder {
 		autobahn_folder=$(cd ${path_only} && cd .. && echo $PWD/${0##*/})
 	        autobahn_folder=`dirname "$autobahn_folder"`
 		AUTOBAHN_FOLDER=$autobahn_folder
-#$CONFIGURE_FILE "autobahn folder" $autobahn_folder "autobahn_folder"
+#$CONFIGURE_FILE_AUTOBAHN "autobahn folder" $autobahn_folder "autobahn_folder"
 	else
 #echo "FOUND autofolder=$autobahn_folder"
 		autobahn_folder=$(cd ${autobahn_folder%/*} && echo $PWD/${0##*/})
@@ -705,7 +743,7 @@ function check_configuration_files {
 	ospfd_path=`dirname "$ospfd_path"`
 	ospfd_conf="$ospfd_path/ospfd.conf"
 
-	$CONFIGURE_FILE "ospfd.conf" "$ospfd_conf" "ospfd_conf"
+	$CONFIGURE_FILE_QUAGGA "ospfd.conf" "$ospfd_conf" "ospfd_conf"
 
 	##Check ip permissions
 	ip tunnel add gre
@@ -718,7 +756,7 @@ function check_configuration_files {
 	if [ ! -d "$autobahn_folder" ]; then
 		autobahn_folder=$(cd ${path_only} && cd .. && echo $PWD/${0##*/})
 	        autobahn_folder=`dirname "$autobahn_folder"`
-		$CONFIGURE_FILE "autobahn folder" $autobahn_folder "autobahn_folder"
+		$CONFIGURE_FILE_AUTOBAHN "autobahn folder" $autobahn_folder "autobahn_folder"
 	else
 		autobahn_folder=$(cd ${autobahn_folder%/*} && echo $PWD/${0##*/})
 	        autobahn_folder=`dirname "$autobahn_folder"`
@@ -751,7 +789,8 @@ function main_loop_with_gui {
 	newlogparagraph "function main_loop_with_gui"		
 	GRAPHICAL="yes"
 	LOGGER_GRAPHICAL="yes"
-	CONFIGURE_FILE="configure_file"
+	CONFIGURE_FILE_QUAGGA="configure_file_quagga"
+	CONFIGURE_FILE_AUTOBAHN="configure_file_autobahn"
 	ASK_FOR_PARAMETER="ask_for_parameter"
 		$DIALOG --title "AutoBAHN Installer" --keep-window --yesno "Do you want the property wizard to begin(Yes) or the Property Editor(No). If unsure choose Yes." 10 80
 	if [ $? -eq 0 ]; then
@@ -771,7 +810,8 @@ function simple_ui {
 	newlogparagraph "function simple_ui"
 	GRAPHICAL="no"
 	LOGGER_GRAPHICAL="no"
-	CONFIGURE_FILE="configure_file_c"
+	CONFIGURE_FILE_QUAGGA="configure_file_quagga_c"
+	CONFIGURE_FILE_AUTOBAHN="configure_file_autobahn_c"
 	ASK_FOR_PARAMETER="ask_for_parameter_c"
 	check_configuration_files 
 	poplocalinfo
