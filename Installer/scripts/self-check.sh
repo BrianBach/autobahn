@@ -284,12 +284,14 @@ function configure_file_quagga {
 		        0   )   
 		     	      echo $FILE >newpath_john
 			      newpath_john=$FILE
+                              echo $newpath_john > startDaemons.tmp
                               echolog $newpath_john
 			      ;;
 			255 ) break;;
 		     esac
 		     newpath_john=`cat newpath` 
 		     echolog $newpath_john
+                     #echo $newpath_john > startDaemons.tmp
 		     #export $newpath_john
 		     add_attribute "daemons=$newpath_john" "$path_only/installer.conf"
 		     #source $path_only/installer.conf

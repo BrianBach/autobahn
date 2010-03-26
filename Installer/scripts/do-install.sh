@@ -80,27 +80,27 @@ conf_written="true"
 #kill `cat /var/run/quagga/zebra.pid`
 #zebra -d
 #ospfd -d -a
-newpath_john="`cat $path_only/startDaemons.tmp`"
-newpath_john_2="${newpath_john}quagga"
-daemons_start_zebra="${newpath_john}zebra -d"
-daemons_start_ospfd="${newpath_john}ospfd -d -a"
+#newpath_john="`cat $path_only/startDaemons.tmp`"
+#newpath_john_2="${newpath_john}quagga"
+#daemons_start_zebra="${newpath_john}zebra -d"
+#daemons_start_ospfd="${newpath_john}ospfd -d -a"
 #echolog "Johnies daemons: $newpath_john"
-$daemons_start_zebra restart > /dev/null 2>&1
-$daemons_start_ospfd restart > /dev/null 2>&1
-$newpath_john restart > /dev/null 2>&1
-$newpath_john_2 restart > /dev/null 2>&1
+#$daemons_start_zebra restart > /dev/null 2>&1
+#$daemons_start_ospfd restart > /dev/null 2>&1
+#$newpath_john restart > /dev/null 2>&1
+#$newpath_john_2 restart > /dev/null 2>&1
 	fi
 
-newpath_john="`cat $path_only/startDaemons.tmp`"
-newpath_john_2="${newpath_john}quagga"
-echo $newpath_john_2
-daemons_start_zebra="${newpath_john}zebra -d"
-daemons_start_ospfd="${newpath_john}ospfd -d -a"
+#newpath_john="`cat $path_only/startDaemons.tmp`"
+#newpath_john_2="${newpath_john}quagga"
+#echo $newpath_john_2
+#daemons_start_zebra="${newpath_john}zebra -d"
+#daemons_start_ospfd="${newpath_john}ospfd -d -a"
 #echolog "Johnies daemons: $newpath_john"
-$daemons_start_zebra restart > /dev/null 2>&1
-$daemons_start_ospfd restart > /dev/null 2>&1
-$newpath_john restart > /dev/null 2>&1
-$newpath_john_2 restart > /dev/null 2>&1
+#$daemons_start_zebra restart > /dev/null 2>&1
+#$daemons_start_ospfd restart > /dev/null 2>&1
+#$newpath_john restart > /dev/null 2>&1
+#$newpath_john_2 restart > /dev/null 2>&1
 ip tunnel add $tunnel_name mode gre remote $remote local $localn ttl 255
 	ip link set $tunnel_name up multicast on
 	ip addr add $local_subnet brd + dev $tunnel_name
@@ -109,5 +109,6 @@ ip tunnel add $tunnel_name mode gre remote $remote local $localn ttl 255
 
 done
 
+$path_only/startDaemons.sh
 rm -f curline tunnels_to_install
 echo "Installation complete."
