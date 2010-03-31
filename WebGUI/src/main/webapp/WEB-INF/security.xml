@@ -11,7 +11,8 @@
     <http auto-config="true">
     	<intercept-url pattern="/portal/login.htm" filters="none"/>
     	<intercept-url pattern="/portal/home.htm" filters="none"/>
-        <intercept-url pattern="/portal/secure/**" access="ROLE_USER,IS_AUTHENTICATED_REMEMBERED"/>
+		<intercept-url pattern="/portal/secure/servicesforidm.htm" filters="none"/>
+		<intercept-url pattern="/portal/secure/**" access="ROLE_USER,IS_AUTHENTICATED_REMEMBERED"/>
         <form-login login-page='/portal/login.htm'/>
         <logout logout-success-url="/portal/login.htm"/> 
         <logout invalidate-session="true"/>
