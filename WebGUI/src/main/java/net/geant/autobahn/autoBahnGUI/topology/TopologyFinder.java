@@ -1,6 +1,10 @@
 package net.geant.autobahn.autoBahnGUI.topology;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Properties;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -11,6 +15,8 @@ import net.geant.autobahn.autoBahnGUI.manager.Manager;
 import net.geant.autobahn.autoBahnGUI.model.googlemaps.Line;
 import net.geant.autobahn.autoBahnGUI.model.googlemaps.Marker;
 import net.geant.autobahn.autoBahnGUI.model.googlemaps.Topology;
+import net.geant.autobahn.lookup.LookupService;
+import net.geant.autobahn.lookup.LookupServiceException;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.Path;
 import net.geant.autobahn.reservation.Reservation;
@@ -185,9 +191,33 @@ public class TopologyFinder implements TopologyFinderNotifier{
 				if (neighbors==null || neighbors.isEmpty())
 					continue;				
 				int lengthN = neighbors.size();
+				
+				// Read LS location from properties
+		        Properties properties = new Properties();
+		        try {
+		            InputStream is = getClass().getClassLoader().getResourceAsStream(
+		                        "../etc/webgui.properties");
+		            properties.load(is);
+		            is.close();
+		            logger.debug(properties.size() + " properties loaded");
+		        } catch (IOException e) {
+		            logger.info("Could not load lookuphost properties: " + e.getMessage());
+		        }
+		        String host = properties.getProperty("lookuphost");
+		        LookupService lookup = new LookupService(host);
+		        
 				Status statusNeighbor;
 				for (int j=0;j<lengthN;j++){
-					neighbourIdm = manager.getInterDomainManager(neighbors.get(j).getDomain());
+					
+					try {
+						String temp = lookup.QueryIdmLocation(neighbors.get(j).getDomain());
+						String trimed = temp.replace("\n",""); //Without escape characters included
+						neighbourIdm = manager.getInterDomainManager(trimed);
+						
+					} catch (LookupServiceException e) {
+						logger.info("Lookup query failed: " + e.getMessage());						
+					}
+					
 					if (neighbourIdm==null)
 						continue;
 					statusNeighbor = neighbourIdm.getStatus();
@@ -289,7 +319,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 		buffer.append("<br/><hr/>");
 		buffer.append("<ul>");
 		buffer.append("<div id=\"form\">");
-		buffer.append ("<li><strong>Name:  </strong>").append(name).append("</li>");
+		buffer.append ("<li><strong>Name:  </strong>").append(state.getDomain()).append("</li>");
 		buffer.append ("<li><strong>Latitude:  </strong>").append(state.getLatitude()).append("</li>");
 		buffer.append ("<li><strong>Longitude:  </strong>").append(state.getLongitude()).append("</li>");
 		buffer.append ("<li><strong>Show services:  </strong>").append("<a href=\"reservations.htm?domain=").append(name).append("\">services</a>").append("</li>");
