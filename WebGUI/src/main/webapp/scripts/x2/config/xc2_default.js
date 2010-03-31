@@ -94,7 +94,7 @@ xcDayContentsCurrent=xcDayContents;
 
 // mod conf
 // --------
-xcModPath="/autobahn/scripts/x2/script/";
+xcModPath="/autobahn-gui/scripts/x2/script/";
 xcMods=[{"order": 0,  "mod": "Month/Year List",   "script": "mod_list.js"},
         {"order": 0,  "mod": "Date Range",        "script": "mod_date.js"},
         {"order": 0,  "mod": "Special Days",      "script": "mod_days.js"},
@@ -162,7 +162,7 @@ xcCSSTimeList="time_list"; // CSS class for the select list
 // Popup-Window Version
 xcWindowWidth=215;
 xcWindowHeight=195;
-xcWindowTemplate="/autobahn/scripts/x2/script/xc2_template.html"
+xcWindowTemplate="/autobahn-gui/scripts/x2/script/xc2_template.html"
 
 
 // tooltips

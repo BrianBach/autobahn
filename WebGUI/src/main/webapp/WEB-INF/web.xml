@@ -100,7 +100,7 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" version="2.
 
 	<filter-mapping>
 		<filter-name>EGFilter</filter-name>
-		<url-pattern>/autobahn/portal/secure</url-pattern>
+		<url-pattern>/autobahn-gui/portal/secure</url-pattern>
 	</filter-mapping>
 -->
 </web-app>

@@ -3,7 +3,7 @@
 <br/>
 <table>
 	<tr>
-		<td><img src="/autobahn/images/splash.png"></img></td>
+		<td><img src="/autobahn-gui/images/splash.png"></img></td>
 		<td>
 			<STRONG>The AutoBAHN Topology Builder</STRONG> 
 			<p>

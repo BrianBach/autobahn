@@ -14,7 +14,7 @@ function createRequestObject() {
 var http = createRequestObject();
 
 function makeGetRequest() {
-    http.open('get', '/autobahn/portal/secure/services-list.htm');
+    http.open('get', '/autobahn-gui/portal/secure/services-list.htm');
     http.onreadystatechange = processResponse;
     http.send(null);
 }
@@ -43,9 +43,9 @@ function refreashMap (){
   var domain = gup("domain");
 
   if (service==null)
-  	request.open("GET", "/autobahn/portal/secure/topology.xml", true);
+  	request.open("GET", "/autobahn-gui/portal/secure/topology.xml", true);
 	  else{
-	  	var url = "/autobahn/portal/secure/topology.xml"+"?"+"service="+service+"&domain="+domain;
+	  	var url = "/autobahn-gui/portal/secure/topology.xml"+"?"+"service="+service+"&domain="+domain;
 	  	request.open("GET", url, true);
 	  }
   request.onreadystatechange = function() {
@@ -109,7 +109,7 @@ function refreashMap (){
   }
 function createMarker(point,name,html, image,text) {
   	var Icon = new GIcon();
-  	if (image == "/autobahn/images/autobahnMarker-info.png"){
+  	if (image == "/autobahn-gui/images/autobahnMarker-info.png"){
   		Icon.iconSize = new GSize(16, 16);
   		Icon.shadowSize = new GSize(16, 16);
   		

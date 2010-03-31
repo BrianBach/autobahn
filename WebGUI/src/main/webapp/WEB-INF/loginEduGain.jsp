@@ -5,7 +5,7 @@
 <head>
 	<title>Autobahn client portal</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<link rel="stylesheet" href="/autobahn/themes/spring/spring.css" type="text/css"/>
+	<link rel="stylesheet" href="/autobahn-gui/themes/spring/spring.css" type="text/css"/>
 </head>
 
 <body>
