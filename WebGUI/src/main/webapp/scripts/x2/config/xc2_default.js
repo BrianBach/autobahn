@@ -94,7 +94,8 @@ xcDayContentsCurrent=xcDayContents;
 
 // mod conf
 // --------
-xcModPath="/autobahn-gui/scripts/x2/script/";
+//DO NOT SET xcModPath. Double Time ticket will appear. DO NOT SET IT
+xcModPath="/DONT_SET_THIS/scripts/x2/script/";
 xcMods=[{"order": 0,  "mod": "Month/Year List",   "script": "mod_list.js"},
         {"order": 0,  "mod": "Date Range",        "script": "mod_date.js"},
         {"order": 0,  "mod": "Special Days",      "script": "mod_days.js"},

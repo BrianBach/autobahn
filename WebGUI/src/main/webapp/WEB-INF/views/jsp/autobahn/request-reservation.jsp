@@ -2,6 +2,7 @@
 <script language="javascript">
 
 function beforeSetDateValue(ref_field, target_field, date) {
+  
   if (date!="") {
     var startDate=document.forms[0]["startTime"];
     var endDate=document.forms[0]["endTime"];
@@ -15,7 +16,10 @@ function beforeSetDateValue(ref_field, target_field, date) {
   }
   return date;
 }
+
+
 function afterSetDateValue(ref_field, target_field, date) {
+	checkDateJohn("start",'',date,'','','','','','');
   if (date!="") {
     var startDate=document.forms[0]["startTime"];
     var endDate=document.forms[0]["endTime"];
@@ -23,11 +27,113 @@ function afterSetDateValue(ref_field, target_field, date) {
     if (target_field==startDate &&
         checkDate(getDateValue(endDate))==0 &&
         compareDates(date, getDateValue(endDate))>0) {
-      setDateValue(endDate, date);
-      alert("End Date was earlier than Start Date, it's now set to Start Date.");
+	 setDateValue(endDate, date);
+var john2 = dateOffset(date);//endDate.value);
+setDateValue(endDate, john2);
+      alert("End Date was earlier than Start Date, it's now set to one day after Start Date.");
     }
   }
 }
+
+function dateOffset(date) {
+var d=toJSDate(date||"");
+  
+d.setTime(d.getTime()+86400000);
+var offsetbazo = toCalendarDate(d);
+var mySplitResult = offsetbazo.split("T");
+var splittaro = mySplitResult[0]+"T23:59:59";
+return splittaro;
+}
+
+function checkDateJohn(date1,date2,date3,date4,date5,date6,date7,date8) {
+var today = new Date();
+var d=toCalendarDate(today);
+var mySplitResult1 = d.split("T");
+var mySplitResult2 = date3.split("T");
+	if(mySplitResult2[0]<mySplitResult1[0]){
+		var splittaro = mySplitResult1[0]+"T00:00:00";
+		if(date1=="start"){
+			document.forms[0]["startTime"].value=splittaro;
+	              alert("The date you selected is old. Your calendar has been reset.");
+		} else if (date1=="end") {
+			document.forms[0]["endTime"].value=splittaro;
+			alert("The date you selected is old. Your calendar has been reset.");
+		} else {
+			return 0;
+		}
+	}
+}
+
+function checkMinus(field,id){
+
+var testing = document.forms[0][id];
+var val = testing.value;
+var final = testing.value;
+
+var count = "un"; 
+	for(var i=0;i<val.length;i++){
+		if((!isDigit(val.charAt(i))) && (val.charAt(i)!=".")){
+		final = val.replace(/[^0-9.]/gi,'');
+			if(count!="lo"){
+				alert("Positive " + field + " value is only accepted. We assume " + field + " is: " + final);
+				count="lo";
+			}
+		}
+	}
+	if(final=='' || final==undefined){
+		final = 0;
+		alert("Positive " + field + " value is only accepted. We assume " + field + " is: " + final);		
+		document.forms[0][id].value= final;
+	} else {
+		document.forms[0][id].value= final;
+	}
+}
+
+
+function isDigit(num) {
+	if (num.length>1){return false;}
+	var string="1234567890";
+	if (string.indexOf(num)!=-1){return true;}
+	return false;
+}
+
+function checkMinusCapacityVlan(field,id){
+
+var testing = document.forms[0][id];
+var val = testing.value;
+var final = testing.value;
+
+
+	if(document.forms[0][id].value==0 && field=="capacity"){
+		alert("Capacity cannot be zero. We assume " + field + " is: " + 1000);
+		final = 1000;
+		document.forms[0][id].value= final;
+	}
+
+	var count = "un"; 
+	for(var i=0;i<val.length;i++){
+		if(!isDigit(val.charAt(i))){
+			final = val.replace(/[^0-9]/gi,'');
+			if(count!="lo"){
+				alert("Positive " + field + " value is only accepted. We assume " + field + " is: " + final);
+				count="lo";
+			}
+		}
+	}
+	if((final=='' || final==undefined) && field=="capacity"){
+		final = 1000;
+		alert("Positive " + field + " value is only accepted. We assume " + field + " is: " + final);		
+		document.forms[0][id].value= final;
+	} else if(final=='' || final==undefined && field!="capacity") {
+		final = 0;
+		alert("Positive " + field + " value is only accepted. We assume " + field + " is: " + final);		
+		document.forms[0][id].value= final;
+	} else {
+		document.forms[0][id].value= final;
+	}
+
+}
+
 </script>
 <form:form commandName="reservation">
 <div id="form">
@@ -95,21 +201,21 @@ function afterSetDateValue(ref_field, target_field, date) {
 	<tr>
 		<td class="label"><spring:message code="reservation.maxDelay"/></td>
 		<td class="value">
-			<form:input path="request.maxDelay"/>
+			<form:input path="request.maxDelay" onblur="checkMinus('delay','request.maxDelay')" />
 		</td>
 		<td class="error"><form:errors path="request.maxDelay"/></td>
 	</tr>
 	<tr>
-		<td class="label"><spring:message code="reservation.capacity"/></td>
+		<td class="label"><spring:message code="reservation.capacity"  /></td>
 		<td class="value">
-			<form:input path="request.capacity"/>
+			<form:input path="request.capacity" onblur="checkMinusCapacityVlan('capacity','request.capacity')" />
 		</td>
 		<td class="error"><form:errors path="request.capacity"/></td>
 	</tr>
 	<tr>
 		<td class="label"><spring:message code="reservation.userVlanId"/></td>
 		<td class="value">
-			<form:input path="request.userVlanId"/>
+			<form:input path="request.userVlanId" onblur="checkMinusCapacityVlan('VLAN identifier','request.userVlanId')" />
 		</td>
 		<td class="error"><form:errors path="request.userVlanId"/></td>
 	</tr>
