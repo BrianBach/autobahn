@@ -89,7 +89,7 @@ public abstract class GenericIntradomainPathfinder implements
 			return null;
 		}
 		
-		List<GraphEdge[]> paths = graph.findPaths(start, end, capacity, null, limit);
+		List<GraphEdge[]> paths = graph.findPaths(start, end, capacity, pcon, limit);
 		
 		// Sort results by number of links
 		List<IntradomainPath> res = new ArrayList<IntradomainPath>();

@@ -73,8 +73,16 @@ public class GraphSearch {
     		pcons = new PathConstraints();
     	}
     	pcons = pcons.intersect(src.getConstraints());
-    	pcons = pcons.intersect(dest.getConstraints());
-
+    	if (pcons != null) {
+    	    pcons = pcons.intersect(dest.getConstraints());
+    	}
+    	
+    	if (pcons == null) {
+    	    // If pcons equals to null, it means that path
+    	    // constraints could not be agreed between src and dest,
+    	    // so we return the empty path List
+    	    return paths;
+    	}
     	
     	if(src_node.equals(dst_node) && pathCapacity >= minCapacity) {
     		paths.add(new GraphEdge[] {});
