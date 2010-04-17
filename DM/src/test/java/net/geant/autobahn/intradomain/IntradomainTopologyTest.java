@@ -7,6 +7,7 @@ import net.geant.autobahn.dao.hibernate.DmHibernateUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Ignore;
 
 public class IntradomainTopologyTest {
 
@@ -22,7 +23,8 @@ public class IntradomainTopologyTest {
     public void tearDown() throws Exception {
     }
 
-    //@Test
+    @Ignore
+    @Test
     public void testIntradomainTopology_Eth() {
         
         
