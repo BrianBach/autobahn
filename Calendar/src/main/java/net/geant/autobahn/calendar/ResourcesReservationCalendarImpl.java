@@ -30,12 +30,26 @@ import net.geant.autobahn.resourcesreservationcalendar.ResourcesReservationCalen
         endpointInterface="net.geant.autobahn.resourcesreservationcalendar.ResourcesReservationCalendar")
 public class ResourcesReservationCalendarImpl implements ResourcesReservationCalendar {
 
+    private java.util.Properties props = null;
+    
+    /**
+     * This constructor is used if we want to initialize the properties
+     * @param props
+     */
+    public ResourcesReservationCalendarImpl(java.util.Properties props) {
+        this.props = props;
+    }
+    
 	/* (non-Javadoc)
      * @see net.geant.autobahn.resourcesreservationcalendar.ResourcesReservationCalendar#checkCapacity()
      */
 	public List<GenericLink> checkCapacity(List<GenericLink> glinks, long capacity, 
     		Calendar start, Calendar end) {
-        return AccessPoint.getInstance().checkCapacity(glinks, capacity, start, end);
+	    if (props != null) {
+	        return AccessPoint.getInstance(props).checkCapacity(glinks, capacity, start, end);	        
+	    } else {
+	        return AccessPoint.getInstance().checkCapacity(glinks, capacity, start, end);
+	    }
     }
 	
 	/* (non-Javadoc)
@@ -43,7 +57,11 @@ public class ResourcesReservationCalendarImpl implements ResourcesReservationCal
      */
 	public PathConstraints getConstraints(IntradomainPath path,
 			Calendar start, Calendar end) {
-        return AccessPoint.getInstance().getConstraints(path, start, end);
+        if (props != null) {
+            return AccessPoint.getInstance(props).getConstraints(path, start, end);
+        } else {
+            return AccessPoint.getInstance().getConstraints(path, start, end);
+        }
     }
 	
 	/* (non-Javadoc)
@@ -52,7 +70,11 @@ public class ResourcesReservationCalendarImpl implements ResourcesReservationCal
 	public void addReservation(List<GenericLink> glinks, long capacity,
 			PathConstraints pcon, Calendar start, Calendar end)
 			throws ConstraintsAlreadyUsedException {
-         AccessPoint.getInstance().addReservation(glinks, capacity, pcon, start, end);
+        if (props != null) {
+            AccessPoint.getInstance(props).addReservation(glinks, capacity, pcon, start, end);
+        } else {
+            AccessPoint.getInstance().addReservation(glinks, capacity, pcon, start, end);
+        }
     }
 	
 	/* (non-Javadoc)
@@ -60,7 +82,11 @@ public class ResourcesReservationCalendarImpl implements ResourcesReservationCal
      */
 	public void removeReservation(List<GenericLink> glinks, long capacity,
 			PathConstraints pcon, Calendar start, Calendar end) {
-         AccessPoint.getInstance().removeReservation(glinks, capacity, pcon, start, end);
+        if (props != null) {
+            AccessPoint.getInstance(props).removeReservation(glinks, capacity, pcon, start, end);          
+        } else {
+            AccessPoint.getInstance().removeReservation(glinks, capacity, pcon, start, end);
+        }
     }
    
 }

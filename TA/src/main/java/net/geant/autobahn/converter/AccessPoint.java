@@ -40,8 +40,7 @@ public final class AccessPoint implements TopologyAbstraction {
     
     /**
      * Entry point for application:<br/>
-     * reads properties from app.properties (some properties can be changed later
-     * via monitoring interface), sets ssl properties, calls <code>init</code> method
+     * reads properties from app.properties 
      * @throws Exception when one of the submodules could not be initialized
      */
     public AccessPoint() throws Exception {
@@ -64,6 +63,21 @@ public final class AccessPoint implements TopologyAbstraction {
     }
 
     /**
+     * Entry point for application:<br/>
+     * reads properties from parameter
+     * @throws Exception when properties parameter is null
+     */
+    public AccessPoint(Properties props) throws Exception {
+
+        if (props != null) {
+            properties = props;
+        }
+        else {
+            throw new Exception("No properties provided.");
+        }
+    }
+
+    /**
      * Returns an instance of AccessPoint. Singleton.
      * @return
      */
@@ -72,6 +86,24 @@ public final class AccessPoint implements TopologyAbstraction {
         if (instance == null) {
             try {
                 instance = new AccessPoint();
+            } catch (Exception e) {
+                instance.log.error("Error while creating Topology Abstraction module AccessPoint", e);
+            }
+        }
+        return instance;
+    }
+
+    /**
+     * Returns an instance of AccessPoint. Singleton.
+     * The AP instance will be initialized with the provided properties.
+     * @param props
+     * @return
+     */
+    public synchronized static AccessPoint getInstance(Properties props) {
+        
+        if (instance == null) {
+            try {
+                instance = new AccessPoint(props);
             } catch (Exception e) {
                 instance.log.error("Error while creating Topology Abstraction module AccessPoint", e);
             }
