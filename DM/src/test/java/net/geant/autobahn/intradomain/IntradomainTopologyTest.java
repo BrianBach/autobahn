@@ -22,7 +22,7 @@ public class IntradomainTopologyTest {
     public void tearDown() throws Exception {
     }
 
-    @Test
+    //@Test
     public void testIntradomainTopology_Eth() {
         
         
