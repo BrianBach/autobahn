@@ -39,6 +39,9 @@ public class ResourcesReservationCalendarImpl implements ResourcesReservationCal
     public ResourcesReservationCalendarImpl(java.util.Properties props) {
         this.props = props;
     }
+
+    public ResourcesReservationCalendarImpl() {
+    }
     
 	/* (non-Javadoc)
      * @see net.geant.autobahn.resourcesreservationcalendar.ResourcesReservationCalendar#checkCapacity()
