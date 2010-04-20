@@ -181,6 +181,7 @@
 		<module>WebGUI</module>
 		<module>TP-Base</module>
 		<module>IDC-Proxy</module>
+		<module>Clients</module>
 	</modules>
 	
 	<dependencies>
