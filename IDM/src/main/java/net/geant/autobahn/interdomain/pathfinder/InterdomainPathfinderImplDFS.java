@@ -31,8 +31,10 @@ public class InterdomainPathfinderImplDFS extends InterdomainPathfinderAbstractI
 
     private final Logger log = Logger.getLogger(InterdomainPathfinderImplDFS.class);
     
+    public final int MAX_ITERATIONS = 30;
+    
     // Global variables used by search
-    int limit = 30;
+    int limit = MAX_ITERATIONS;
     List<Path> foundPaths;
     List<Link> edges;
 
@@ -46,6 +48,8 @@ public class InterdomainPathfinderImplDFS extends InterdomainPathfinderAbstractI
 
     public Iterator<Path> findInterdomainPaths(Reservation reservation, List<Link> excludedLinks) {
 
+        limit = MAX_ITERATIONS; // Initialize iteration limit
+        
         foundPaths = new ArrayList<Path>();
         edges = topology.getLinks();
         List<Link> allEdges = new ArrayList<Link>();
