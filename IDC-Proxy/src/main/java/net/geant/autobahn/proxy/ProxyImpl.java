@@ -44,9 +44,7 @@ public class ProxyImpl implements Proxy {
      */
     public void cancelReservation(String resID) throws IOException {
 
-        System.out.println("cancelReservation for JOHNIES: " + resID);
-        //OscarsClient oscars = new OscarsClient("http://150.140.8.10:8090/autobahn-idm2proxy/proxy");
-        OscarsClient oscars = new OscarsClient("http://150.140.8.10:8096");
+        OscarsClient oscars = new OscarsClient();
 
         try {
             oscars.cancelReservation(resID);
@@ -61,12 +59,7 @@ public class ProxyImpl implements Proxy {
      */
     public ReservationInfo createReservation(ReservationInfo resInfo)
             throws IOException {
-        //System.out.println("Inside IMPL");
-        System.out.println("Sending create reservation - " + resInfo.getBodID());
-        //TODO read properties
-        OscarsClient oscars = new OscarsClient("http://150.140.8.14:8080");
-        //modified by Johnies Zaoudis for testing
-        //OscarsClient oscars = new OscarsClient();
+        OscarsClient oscars = new OscarsClient();
         
         String src = "";
 
@@ -97,7 +90,7 @@ public class ProxyImpl implements Proxy {
     public List<Link> getTopology() throws IOException {
 
         System.out.println("getTopology");
-        OscarsClient oscars = new OscarsClient("http://150.140.8.10:8096");//ProxyServlet.getProperties().getProperty("oscars.address"));
+        OscarsClient oscars = new OscarsClient();
         try {
             return oscars.getTopology();
         } catch (Exception e) {
@@ -111,7 +104,7 @@ public class ProxyImpl implements Proxy {
     public List<ReservationInfo> listReservations() throws IOException {
 
         System.out.println("listReservations");
-        OscarsClient oscars = new OscarsClient("");//ProxyServlet.getProperties().getProperty("oscars.address"));
+        OscarsClient oscars = new OscarsClient();
         try {
             return oscars.getReservationList();
         } catch (AAAFaultMessage e) {
@@ -129,7 +122,7 @@ public class ProxyImpl implements Proxy {
             throws IOException {
         
         System.out.println("modifyReservation: " + resInfo.getBodID());
-        OscarsClient oscars = new OscarsClient("");//ProxyServlet.getProperties().getProperty("oscars.address"));
+        OscarsClient oscars = new OscarsClient();
         try {
             // do not support for now
             throw new RemoteException("not implemented");
@@ -146,7 +139,7 @@ public class ProxyImpl implements Proxy {
     public ReservationInfo queryReservation(String resID) throws IOException {
         
         System.out.println("queryReservation: " + resID);
-        OscarsClient oscars = new OscarsClient("");//ProxyServlet.getProperties().getProperty("oscars.address"));
+        OscarsClient oscars = new OscarsClient();
         try {
             oscars.cancelReservation(resID);
         } catch (RemoteException e) {
@@ -163,6 +156,7 @@ public class ProxyImpl implements Proxy {
         
         // using OSCARSNotifyClient
         System.out.println("notify: " + resInfo.getBodID());
+        //TODO: Verify how the location will be retrieved
         OscarsNotifyClient oscars = new OscarsNotifyClient("");//ProxyServlet.getProperties().getProperty("oscars.address"));
 
         try {

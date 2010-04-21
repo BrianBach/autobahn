@@ -96,12 +96,10 @@ public abstract class ExternalDomainState extends State {
     }
     
     public void domainDown(ExternalReservation res, String domain) {
-        // TODO Auto-generated method stub
         
     }
 
     public void domainUp(ExternalReservation res, String domain) {
-        // TODO Auto-generated method stub
         
     }
 

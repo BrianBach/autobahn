@@ -13,7 +13,6 @@ public class UserAccessPointException extends Exception {
 	 */
 	public UserAccessPointException() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -22,7 +21,6 @@ public class UserAccessPointException extends Exception {
 	 */
 	public UserAccessPointException(String message, Throwable cause) {
 		super(message, cause);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -30,7 +28,6 @@ public class UserAccessPointException extends Exception {
 	 */
 	public UserAccessPointException(String message) {
 		super(message);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -38,6 +35,5 @@ public class UserAccessPointException extends Exception {
 	 */
 	public UserAccessPointException(Throwable cause) {
 		super(cause);
-		// TODO Auto-generated constructor stub
 	}
 }

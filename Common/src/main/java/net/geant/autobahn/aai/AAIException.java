@@ -16,7 +16,6 @@ public class AAIException extends Exception {
 	 */
 	public AAIException() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -25,7 +24,6 @@ public class AAIException extends Exception {
 	 */
 	public AAIException(String message, Throwable cause) {
 		super(message, cause);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -33,7 +31,6 @@ public class AAIException extends Exception {
 	 */
 	public AAIException(String message) {
 		super(message);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -41,6 +38,5 @@ public class AAIException extends Exception {
 	 */
 	public AAIException(Throwable cause) {
 		super(cause);
-		// TODO Auto-generated constructor stub
 	}
 }

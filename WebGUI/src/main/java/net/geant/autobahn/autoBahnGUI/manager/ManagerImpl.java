@@ -787,7 +787,6 @@ public class ManagerImpl implements Manager,ManagerNotifier{
 			reservation.setStartTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(times[0]));
 			reservation.setEndTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(times[1]));
 		} catch (DatatypeConfigurationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		res.setRequest(reservation);
@@ -931,7 +930,6 @@ public class ManagerImpl implements Manager,ManagerNotifier{
 			request.setStartTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(startDate));
 			request.setEndTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(endDate));
 		} catch (DatatypeConfigurationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
 	}
@@ -954,7 +952,6 @@ public class ManagerImpl implements Manager,ManagerNotifier{
 			request.setStartTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(startDate));
 			request.setEndTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(endDate));
 		} catch (DatatypeConfigurationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
 	}

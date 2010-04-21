@@ -29,7 +29,6 @@ public class Cancelling extends ExternalDomainState {
     
     @Override
     public void recover(ExternalReservation res) {
-        // TODO Auto-generated method stub
         
     }
 }

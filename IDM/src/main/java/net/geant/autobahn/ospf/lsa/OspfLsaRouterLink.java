@@ -30,7 +30,7 @@ public class OspfLsaRouterLink extends OspfLsa {
 
     @Override
     protected void readSelfFromStream(DataInputStream input) throws IOException {
-        // TODO Auto-generated method stub
+        
     }
 
     /**

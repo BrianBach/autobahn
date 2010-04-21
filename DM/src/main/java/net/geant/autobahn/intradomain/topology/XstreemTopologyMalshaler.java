@@ -92,15 +92,12 @@ public class XstreemTopologyMalshaler implements TopologyMarshaler {
 				ethTopologyClearing(topology);
 				
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new WrongFileFormatException ();
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new WrongFileFormatException ();
-			// TODO Auto-generated catch block
-			
 		}
 		return topology;
 	}

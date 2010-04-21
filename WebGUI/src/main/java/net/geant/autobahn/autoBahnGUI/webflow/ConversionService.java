@@ -29,7 +29,6 @@ public class ConversionService extends DefaultConversionService {
 
 	@Override
 	protected void addDefaultConverters() {
-		// TODO Auto-generated method stub
 		super.addDefaultConverters();
 		addConverter("calendar", new CalendarConverter());
 		addConverter("reservation-priority", new ReservationPriorityConverter());

@@ -18,7 +18,6 @@ public class OspfException extends Exception {
      */
     public OspfException() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     /**
@@ -27,7 +26,6 @@ public class OspfException extends Exception {
      */
     public OspfException(String message, Throwable cause) {
         super(message, cause);
-        // TODO Auto-generated constructor stub
     }
 
     /**
@@ -35,7 +33,6 @@ public class OspfException extends Exception {
      */
     public OspfException(String message) {
         super(message);
-        // TODO Auto-generated constructor stub
     }
 
     /**
@@ -43,6 +40,5 @@ public class OspfException extends Exception {
      */
     public OspfException(Throwable cause) {
         super(cause);
-        // TODO Auto-generated constructor stub
     }
 }

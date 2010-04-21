@@ -62,7 +62,6 @@ public class LocalCheck extends LastDomainState {
     
     @Override
     public void recover(LastDomainReservation res) {
-        // TODO Auto-generated method stub
         
     }
 }

@@ -402,7 +402,6 @@ public class ReservationProcessor {
 	}
 
 	public boolean hello() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

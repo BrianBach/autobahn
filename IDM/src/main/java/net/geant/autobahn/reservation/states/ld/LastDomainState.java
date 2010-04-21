@@ -67,12 +67,10 @@ public abstract class LastDomainState extends State {
     }
 
     public void domainDown(LastDomainReservation res, String domain) {
-        // TODO Auto-generated method stub
         
     }
 
     public void domainUp(LastDomainReservation res, String domain) {
-        // TODO Auto-generated method stub
         
     }
 

@@ -91,11 +91,10 @@ public class EduGAINFilter implements Filter {
 	}
 
 	public EduGAINFilter() {
-		// TODO Auto-generated constructor stub
+	    
 	}
 
 	public void destroy() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -240,10 +239,8 @@ public class EduGAINFilter implements Filter {
 			addAttributes(attrs,request.getSession());
 			chain.doFilter(request,response);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ServletException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
 	}
@@ -330,7 +327,6 @@ public class EduGAINFilter implements Filter {
 			this.log.info("lkey sucessfully read from: " + lkeyFile );
 			this.log.info("statekey sucessfully read from: " + statekeyFile );
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			this.log.error("Unable to read key from: " + lkeyFile + " or " + statekeyFile);
 		}
 	}
@@ -354,7 +350,6 @@ public class EduGAINFilter implements Filter {
 		} catch (IOException e) {
 			this.log.error("Exception while reading file " + requestDBName);
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		finally {

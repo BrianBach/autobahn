@@ -50,12 +50,9 @@ public class OscarsClient {
 
 	private OSCARS rc = null;
 
-	public OscarsClient(String endPoint) {
-		
-        if("none".equals(endPoint))
-            return;
-        
-        OSCARS_Service service = new OSCARS_Service(/*TODO endPoint*/);
+	public OscarsClient() {
+        // The OSCARS location will be retrieved from WSDL
+        OSCARS_Service service = new OSCARS_Service();
         rc = service.getOSCARS();
 	}
 	
