@@ -25,7 +25,6 @@ import net.geant.autobahn.intradomain.pathfinder.GraphSearch;
  *
  */
 public class EthernetIntradomainPathfinder extends GenericIntradomainPathfinder {
-    //TODO: Add unit tests (Akis fixes Maven first)
 
     private List<SpanningTree> all_sptrees = new ArrayList<SpanningTree>();
     private List<Node> all_nodes = new ArrayList<Node>();

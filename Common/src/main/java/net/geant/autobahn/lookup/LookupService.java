@@ -216,7 +216,6 @@ public class LookupService {
         
     	if (this.QueryFriendlyName(portIdentifier) !=null) {
     		// The same port has already been registered
-    		// TODO: Implement and call remove
     		this.RemoveEndPort(portIdentifier);
     	}
 
