@@ -73,12 +73,12 @@ public class ResourcesReservationTest extends TestCase {
         props = new Properties();
         props.setProperty("db.type", "eth");
         //props.setProperty("tool.address", "http://leontodon.man.poznan.pl:8081/autobahn/tool");
-        props.setProperty("topologyabstraction.address", "http://localhost:8080/autobahn/topologyabstraction");
+        props.setProperty("topologyabstraction.address", "http://localhost:8090/autobahn/topologyabstraction");
         props.setProperty("tool.address", "none");
         props.setProperty("idm.address", "none");
         props.setProperty("tool.time.setup", "0");
         props.setProperty("tool.time.teardown", "0");
-        props.setProperty("resourcesreservationcalendar.address", "http://localhost:8080/autobahn/resourcesreservationcalendar");
+        props.setProperty("resourcesreservationcalendar.address", "http://localhost:8090/autobahn/resourcesreservationcalendar");
 
         taProps = new Properties();
         taProps.setProperty("id.nodes", "10.10.0.0/24");
