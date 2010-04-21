@@ -6,6 +6,7 @@
 package net.geant.autobahn.reservation.states.hd;
 
 import java.util.Iterator;
+import java.util.List;
 
 import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.constraints.GlobalConstraints;
@@ -49,18 +50,41 @@ public class LocalCheck extends HomeDomainState {
             return;
         }
         
+        // The above check is not enough, as there may be multiple paths
+        // returned by the PF. So we need to check if the current path under
+        // examination has already been checked and failed, not only in the 
+        // immediate previous check, but any time in the past.
+        List<Path> failedPaths = res.getFailedPaths();
+        if (failedPaths != null) {
+            while (true) {
+                if (Path.containedInList_LbL(path, failedPaths)) {   // This is a path that failed in the past
+                    if (paths.hasNext()) {
+                        path = paths.next();
+                        continue;
+                    }
+                    else {
+                        log.warn("Found same paths as previously failed checks!");
+                        res.fail("No more paths found");
+                        return;
+                    }
+                } else {    // This is a new path, so we can move on to check it
+                    break;
+                }
+            }
+        }
+        
         res.setPath(path);
         
         log.info("" + res + "@" + this + ", trying path " + path);
         final String domainID = res.getLocalDomainID();
         
         if(path.getCapacity() < res.getCapacity()) {
-        	pathFailed(res, ReservationErrors.PATH_CAPACITY_NOT_ENOUGH, path.toString());
+        	pathFailed(res, ReservationErrors.PATH_CAPACITY_NOT_ENOUGH, path.toString(), path);
         	return;
         }
         
         if (!path.isHomeDomain(domainID)) {
-            pathFailed(res, ReservationErrors.WRONG_DOMAIN, domainID);
+            pathFailed(res, ReservationErrors.WRONG_DOMAIN, domainID, path);
             return;
         }
 
@@ -77,11 +101,11 @@ public class LocalCheck extends HomeDomainState {
         	Link failedLink = res.getPath().getLink(e.getFailedLink());
         	
             res.excludeLink(failedLink);
-            pathFailed(res, ReservationErrors.NOT_ENOUGH_CAPACITY, failedLink.getBodID());
+            pathFailed(res, ReservationErrors.NOT_ENOUGH_CAPACITY, failedLink.getBodID(), path);
             return;
 		} catch (Exception e) {
 			log.error("Error while checking resources", e);
-			pathFailed(res, ReservationErrors.LOCAL_COMMUNICATION_ERROR, domainID);
+			pathFailed(res, ReservationErrors.LOCAL_COMMUNICATION_ERROR, domainID, path);
 			return;
 		}
 
@@ -91,7 +115,7 @@ public class LocalCheck extends HomeDomainState {
         }
         
         if(dcon == null || !dcon.isValid()) {
-            pathFailed(res, ReservationErrors.CONSTRAINTS_NOT_CORRECT, path.toString());
+            pathFailed(res, ReservationErrors.CONSTRAINTS_NOT_CORRECT, path.toString(), path);
             return;
         }
         
@@ -110,7 +134,7 @@ public class LocalCheck extends HomeDomainState {
             res.forwardSchedule();
         } catch (Exception e) {
             log.error(this + ", scheduling: " + e.getMessage(), e);
-            pathFailed(res, ReservationErrors.COMMUNICATION_ERROR, res.getNextDomainAddress());
+            pathFailed(res, ReservationErrors.COMMUNICATION_ERROR, res.getNextDomainAddress(), path);
             return;
         }
     }
@@ -124,11 +148,12 @@ public class LocalCheck extends HomeDomainState {
         res.run();
     }
 
-    private void pathFailed(HomeDomainReservation res, int code, String args) {
+    private void pathFailed(HomeDomainReservation res, int code, String args, Path p) {
         
         Iterator<Path> paths = res.getPaths();
         
         res.pathFailed(code, args);
+        res.addToFailedPaths(p);    // Keep a list of all paths that were tested and failed
         
         if (paths == null || !paths.hasNext()) {
             // all paths has failed

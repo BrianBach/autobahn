@@ -385,4 +385,50 @@ public class Path implements Serializable {
         
         return sb.toString();
     }
+    
+    /**
+     * Checks whether a Path is contained in a list of Paths.
+     * This method does the checking based on a link-by-link (LbL) basis, and
+     * is therefore safe to call when paths do not contain IDs.
+     * 
+     * @param p the path
+     * @param pList the List of Paths
+     * @return
+     */
+    public static boolean containedInList_LbL(Path p, List<Path> pList) {
+        for (Path listedPath : pList) {
+            if (checkIfEqual_LbL(listedPath, p)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Checks whether two paths are the same.
+     * This method does the checking based on a link-by-link basis, and
+     * is therefore safe to call when paths do not contain IDs.
+     * 
+     * @param p1
+     * @param p2
+     * @return
+     */
+    public static boolean checkIfEqual_LbL(Path p1, Path p2) {
+        List<Link> p1Links = p1.getLinks();
+        List<Link> p2Links = p2.getLinks();
+        
+        if (p1Links.size() != p2Links.size()) {
+            return false;
+        }
+        
+        for (int i=0; i<p1Links.size(); i++) {
+            Link p1Link = (Link) p1Links.get(i);
+            Link p2Link = (Link) p2Links.get(i);
+            if (!(p1Link.equals(p2Link))) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
 }

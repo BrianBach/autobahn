@@ -36,6 +36,9 @@ public class HomeDomainReservation extends AutobahnReservation {
      */
     protected InterdomainPathfinder pathFinder = null;
     
+    // The paths that the reservation has checked in the past and were not suitable
+    private List<Path> failedPaths = null;
+
     private Iterator<Path> paths = null;
     private List<Link> excludedLinks = new ArrayList<Link>();
     private List<String> failures = new ArrayList<String>();
@@ -194,6 +197,23 @@ public class HomeDomainReservation extends AutobahnReservation {
     	return temp;
     }
     
+    /**
+     * @return the failedPaths
+     */
+    public List<Path> getFailedPaths() {
+        return failedPaths;
+    }
+
+    /**
+     * @param failedPath a Path to add to the failedPaths list
+     */
+    public void addToFailedPaths(Path failedPath) {
+        if (failedPaths == null) {
+            failedPaths = new ArrayList<Path>();
+        }
+        failedPaths.add(failedPath);
+    }
+
     /**
      * Returns the <code>Iterator</code> on paths found by pathfinder.
      * 
