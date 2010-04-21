@@ -27,7 +27,8 @@ public class Subscriber implements Runnable, Closeable {
         this.notifyFrequency = notifyFrequency;
         try {
             oscarsNotify = new OscarsNotifyClient(this.endPoint + "OSCARSNotify");
-            oscars = new OscarsClient(this.endPoint + "OSCARS");
+            //oscars = new OscarsClient(this.endPoint + "OSCARS");
+            oscars = new OscarsClient();
             
         } catch (Exception e) {
             
