@@ -171,8 +171,8 @@ public class InterDomainManager implements UserAccessPoint, Administration{
 	public List<KeyValue> getProperties() {
 		if (isAdmnistrationConnected()){
 			try{
-			return administration.getProperties();
-			}catch (Exception e){
+			    return administration.getProperties();
+			} catch (Exception e){
 				logger.error ("Cannot reservation from idm:"+e.getClass().getName()+":"+e.getMessage());
 			}
 		}
@@ -338,7 +338,11 @@ public class InterDomainManager implements UserAccessPoint, Administration{
 	public String getLog (boolean refreash, boolean all){
 		if (refreash){
 			if (isAdmnistrationConnected())
-				logs = administration.getLog(all);
+				try{
+				    logs = administration.getLog(all);
+				} catch (Exception e) {
+				    return "Cannot retrieve logs. Cannot connect to IDM.";
+				}
 			else
 				return null;
 		}

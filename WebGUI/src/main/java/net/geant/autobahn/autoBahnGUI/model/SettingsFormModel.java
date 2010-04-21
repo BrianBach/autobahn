@@ -65,9 +65,13 @@ public class SettingsFormModel implements Serializable{
 	}
 	public void setProperties(List<KeyValue> properties) {
 		prop = new HashMap<String, Object>();
-		for (KeyValue v: properties){
-			prop.put(v.getKey(), v.getValue());
-		}
+		try {
+    		for (KeyValue v: properties){
+    			prop.put(v.getKey(), v.getValue());
+    		}
+		} catch (Exception e){
+		    prop = null;
+    	}
 	}
 	public String getError() {
 		return error;

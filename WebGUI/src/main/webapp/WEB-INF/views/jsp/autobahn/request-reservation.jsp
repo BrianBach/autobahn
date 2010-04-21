@@ -140,6 +140,7 @@ var final = testing.value;
 <hr> 
 <h2><spring:message code="reservation.htitle" text="Reservation form" /></h2>
 <hr>
+<c:if test="${friendlyports_domain != null}" >
 <table>
 	<tr>
 		<td class="label"><spring:message code="reservation.startPort"/></td>
@@ -334,5 +335,9 @@ var final = testing.value;
 	</td>
 	</tr>
 	</table>
+</c:if>
+<c:if test="${friendlyports_domain == null}" >
+	Cannot retrieve ports. Cannot connect to IDM.
+</c:if>	
 </div>
 </form:form>

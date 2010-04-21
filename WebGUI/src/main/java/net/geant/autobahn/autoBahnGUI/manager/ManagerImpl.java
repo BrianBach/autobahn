@@ -338,7 +338,9 @@ public class ManagerImpl implements Manager,ManagerNotifier{
     public List<PortMap> getFriendlyInterDomainManagerPorts(String idmIdentifier) {
         List<String> ports = getInterDomainManagerPorts(idmIdentifier);
         List<PortMap> friendlyPorts = new ArrayList<PortMap>();
-        
+        if (ports == null){
+            return null;
+        }
         for (String p_id : ports) {
             String friendlyName = getFriendlyNamefromLS(p_id);
             if (friendlyName == null || friendlyName.trim().equals("")) {
@@ -1012,8 +1014,13 @@ public class ManagerImpl implements Manager,ManagerNotifier{
 		if (idm ==null){
 			idm = managers.get(0);
 		}
-		InterDomainManager manager = idms.get(idm);	
-		serv.setProperties(manager.getProperties());
+		InterDomainManager manager = idms.get(idm);
+		try {
+		    serv.setProperties(manager.getProperties());
+		} catch (Exception e){
+		    logger.error("No settings");
+		    serv.setProperties(null);
+		}
 		serv.setCurrentIdm(idm);
 		return serv;
 	}

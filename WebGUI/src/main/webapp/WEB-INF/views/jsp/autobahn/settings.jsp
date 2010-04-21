@@ -17,6 +17,7 @@
 </table>
 </form:form>
 <form:form commandName="settings">
+<c:if test="${settings.prop != null}" >
 <table>
 <thead>
 	<tr><th style="background-color: blue; color:white;" colspan="2">Inter Domain Manager settings</th></tr>
@@ -32,5 +33,10 @@
 <tfoot>
 	<tr style="background-color: blue; color:white;"><td>&nbsp;</td><td><input width="300px" type="submit" name="_eventId_restart" value="Set Properties" style="width:100px"/></td></tr>
 </tfoot>
-</table>	
+</table>
+</c:if>
+<c:if test="${settings.prop == null}" >
+	Cannot retrieve settings. Cannot connect to IDM.
+</c:if>	
+
 </form:form>
