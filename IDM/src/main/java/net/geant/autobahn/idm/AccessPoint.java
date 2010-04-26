@@ -35,7 +35,6 @@ import net.geant.autobahn.network.LinkIdentifiers;
 import net.geant.autobahn.network.Port;
 import net.geant.autobahn.network.StateOper;
 import net.geant.autobahn.proxy.ProxyImpl;
-import net.geant.autobahn.proxy.ProxyReceiver;
 import net.geant.autobahn.reservation.AutobahnReservation;
 import net.geant.autobahn.reservation.HomeDomainReservation;
 import net.geant.autobahn.reservation.Reservation;
@@ -89,7 +88,6 @@ public final class AccessPoint implements UserAccessPoint,
     private String domainName;
     private List<AdminDomain> neighbors;
     
-    private ProxyReceiver proxy = null;
     private TopologyImpl topology = null;
     private InterdomainPathfinder pathFinder = null;
     private ServiceScheduler serviceScheduler = null;
@@ -215,13 +213,6 @@ public final class AccessPoint implements UserAccessPoint,
 	        	guiNotifier = new GuiNotifier(guiAddress, update);
 	        }
 	
-	        // init proxy
-	        String proxyAddress = properties.getProperty("proxy.listen.port");
-	        if(!proxyAddress.equals("none")) {
-	            proxy = new ProxyReceiver();
-	            proxy.init(Integer.valueOf(proxyAddress), new ProxyImpl());
-	        }
-
 	        recoverReservations();
 
 	        // call DM to abstract topology
@@ -264,8 +255,6 @@ public final class AccessPoint implements UserAccessPoint,
 		
         log.info("===== Disposing =====");
         topology.close();
-        if(proxy != null)
-        	proxy.close();
         
         if(serviceScheduler != null)
         	serviceScheduler.stop();
