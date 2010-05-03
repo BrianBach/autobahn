@@ -436,6 +436,7 @@ function get_dm_defaults {
 	pushlocalinfo
 	newlogparagraph "function get_dm_defaults"	
 	declare db_host db_port db_name db_user db_pass db_type
+	domainName="http://some_domain:8080/autobahn/interdomain"
 	db_host=localhost
 	db_port=5432
 	db_name=autobahn_2
@@ -446,6 +447,7 @@ function get_dm_defaults {
 	tool_time_setup=120
 	tool_time_teardown=60	
 	lookuphost="http://ls-host:8080/perfsonar-java-xml-ls/services/LookupService"
+	cnis_address="http://cnis-host/abs/Autobahn"
 	monitoring_use=""
 	log "The dm file is $1"
 	if [ -e "$1" ]; then
@@ -457,6 +459,8 @@ function get_dm_defaults {
 			curval=`echo $line |awk -F "=" '{print $2}'`
 #echo "Curprop=$curprop Curval=$curval";sleep 5
 			case $curprop in 
+			  domainName ) domainName=$curval
+			  ;;
 			  db.host ) db_host=$curval
 			  ;;
 			  db.port ) db_port=$curval
@@ -477,13 +481,15 @@ function get_dm_defaults {
 		      ;;
 			  lookuphost ) lookuphost=$curval
 		      ;;
+		      cnis.address ) cnis_address=$curval
+		   	  ;;
 			  monitoring.use ) monitoring_use=$curval
 		   	  ;;
 			esac
 		done
 	fi	
-	log "db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} tool.time.setup ${tool_time_setup} tool.time.teardown ${tool_time_teardown} lookuphost ${lookuphost}"| tr -d '\r' 
-	echo -n "db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} tool.time.setup ${tool_time_setup} tool.time.teardown ${tool_time_teardown} lookuphost ${lookuphost}"| tr -d '\r' > $path_only/dm_defaults
+	log "domainName $domainName db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} tool.time.setup ${tool_time_setup} tool.time.teardown ${tool_time_teardown} lookuphost ${lookuphost} cnis.address ${cnis_address}"| tr -d '\r' 
+	echo -n "domainName $domainName db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} tool.time.setup ${tool_time_setup} tool.time.teardown ${tool_time_teardown} lookuphost ${lookuphost} cnis.address ${cnis_address}"| tr -d '\r' > $path_only/dm_defaults
 	poplocalinfo
 }
 
