@@ -12,6 +12,27 @@ import net.geant.autobahn.utils.IntraTopologyBuilder;
  */
 public class TestTopology2 {
 
+    // cli-node----Node1.2~~~~Node1.1
+    //                      (dom1-node)
+    //                     /          \
+    //                    /            \
+    //                   /              \
+    //                  /              Node3.1-------cli-node
+    //                 /              (dom3-node)
+    //                |                 /
+    //                |                /
+    //                |               /
+    //               Node2.1~~~~~~Node2.2
+    //            (dom2-node1)  (dom2-node2)
+    //                  ~          ~
+    //                   ~        ~
+    //                    ~      ~
+    //                    Node2.3
+    //                    /     \
+    //                   /       \
+    //                  /         \
+    //           cli-node1       cli-node2
+
     public static long _1Gb = (long) 1 * 1000 * 1000 * 1000;
     public static long _10Gb = (long) 10 * 1000 * 1000 * 1000;
 
@@ -23,7 +44,11 @@ public class TestTopology2 {
     private final static String hostDomain2 = "http://client-domain.domain2.com";
     private final static String hostDomain3 = "http://client-domain.domain3.com";
 
-    
+    // dom2-node1----Node1.1~~~~Node1.2----cli-node
+    //             /
+    //            /
+    //           /
+    //   dom3-node
     public void domain1(IntraTopologyBuilder t) {
         
         GenericInterface p1 = t.createRouterIf("Node1.1", "p1.1", domain1, _1Gb);
@@ -45,6 +70,15 @@ public class TestTopology2 {
         t.addSpanningTree(p4, p5, 150, 200);
     }
 
+    // dom1-node-----Node2.1~~~~Node2.2----dom3-node
+    //                  ~          ~
+    //                   ~        ~
+    //                    ~      ~
+    //                    Node2.3
+    //                    /     \
+    //                   /       \
+    //                  /         \
+    //           cli-node1       cli-node2
     public void domain2(IntraTopologyBuilder t) {
         
         GenericInterface p1 = t.createRouterIf("Node2.1", "p2.1", domain2, _1Gb);
@@ -75,6 +109,10 @@ public class TestTopology2 {
         t.addSpanningTree(p8, p10, 100, 200);
     }
 
+    // dom1-node----Node3.1----dom2-node2
+    //               |
+    //               |
+    //            cli-node
     public void domain3(IntraTopologyBuilder t) {
         
         GenericInterface p1 = t.createRouterIf("Node3.1", "p3.1", domain3, _1Gb);

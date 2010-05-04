@@ -35,6 +35,7 @@ public class EthernetTopologyConverterTest {
 
 	@Test
 	public void testSingleDomainWith2Clients() throws IOException {
+	    System.out.println(" ---Running testSingleDomainWith2Clients");
 		IntraTopologyBuilder builder = new IntraTopologyBuilder(false);
 		TestTopology1 topo = new TestTopology1();
 		topo.domain1(builder);
@@ -71,11 +72,47 @@ public class EthernetTopologyConverterTest {
 	
 	@Test
 	public void testTopologyWithoutExternalConnections() {
-		//TODO write the test body
+        System.out.println(" ---Running testTopologyWithoutExternalConnections");
+        IntraTopologyBuilder builder = new IntraTopologyBuilder(false);
+        TestTopology3 topo = new TestTopology3();
+        topo.domain1(builder);
+        
+        IntradomainPathfinder pf = IntradomainPathfinderFactory.getIntradomainPathfinder(
+                builder.getTopology());
+        
+        String nrange = "10.11.0.0/19";
+        String prange = "10.11.32.0/19";
+        String lrange = "10.11.64.0/19";
+        
+        InternalIdentifiersSource internal = new InternalIdentifiersSource(
+                nrange, prange, lrange);
+        
+        // It's OK as this topology has no neighbors
+        PublicIdentifiersMapping mapping = null;
+        
+        TopologyConverter conv = new EthernetTopologyConverter(builder
+                .getTopology(), pf, internal, mapping);
+
+        Stats stats = conv.abstractInternalPartOfTopology();
+        
+        // TestTopology3 contains 5 nodes, but zero edge nodes
+        // Therefore no virtual links are created and no paths are returned
+        TestCase.assertEquals(5, stats.numNodes);
+        TestCase.assertEquals(0, stats.numEdgeNodes);
+        TestCase.assertEquals(0, stats.numPaths);
+
+        // It's OK as this topology has no neighbors
+        conv.abstractExternalPartOfTopology(null);
+        
+        List<Link> links = conv.getAbstractLinks();
+        
+        // No virtual or edge links in TestTopology3, so no abstract links
+        TestCase.assertEquals(0, links.size());
 	}
 	
 	@Test
 	public void testAbstractingInternalPart() throws IOException {
+        System.out.println(" ---Running testAbstractingInternalPart");
 
 		TopologyConverter conv = createTopology2Converter();
 		
@@ -91,10 +128,9 @@ public class EthernetTopologyConverterTest {
 	
 	@Test(expected=NullPointerException.class)
 	public void testPassingNullAsExternalSource() throws IOException {
+        System.out.println(" ---Running testPassingNullAsExternalSource");
 
 		TopologyConverter conv = createTopology2Converter();
-		
-		//TODO write the test body
 		
 		Stats stats = conv.abstractInternalPartOfTopology();
 		conv.abstractExternalPartOfTopology(null);
@@ -102,6 +138,7 @@ public class EthernetTopologyConverterTest {
 	
 	@Test
 	public void testAbstractingSampleTopology() throws IOException {
+        System.out.println(" ---Running testAbstractingSampleTopology");
 
 		TopologyConverter conv = createTopology2Converter();
 		

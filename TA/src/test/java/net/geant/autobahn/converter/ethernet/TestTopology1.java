@@ -19,7 +19,13 @@ public class TestTopology1 {
 
     private final static String hostDomain1 = "http://client-domain.domain1.com";
 
-    
+    //  cli-node2-----Node 1.2-----Node1.1-----cli-node1
+    //                  |        /     |
+    //                  |       /      |
+    //                  |      /       |
+    //                  |     /        |
+    //                  |    /         |
+    //                Node 1.3-----Node1.4
     public void domain1(IntraTopologyBuilder t) {
         
         GenericInterface p1 = t.createRouterIf("Node1.1", "p1.1", domain1, _1Gb);
