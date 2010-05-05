@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="Proxy" targetNamespace="http://proxy.autobahn.geant.net/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://proxy.autobahn.geant.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="network.autobahn.geant.net" targetNamespace="network.autobahn.geant.net" version="1.0">
+<xs:complexType name="Link">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+      <xs:element name="kind" type="xs:int"/>
+      <xs:element minOccurs="0" name="startPort" type="tns:Port"/>
+      <xs:element minOccurs="0" name="endPort" type="tns:Port"/>
+      <xs:element name="bidirectional" type="xs:boolean"/>
+      <xs:element name="delay" type="xs:int"/>
+      <xs:element name="manualCost" type="xs:double"/>
+      <xs:element name="monetaryCost" type="xs:double"/>
+      <xs:element name="granularity" type="xs:long"/>
+      <xs:element name="minResCapacity" type="xs:long"/>
+      <xs:element name="maxResCapacity" type="xs:long"/>
+      <xs:element name="capacity" type="xs:long"/>
+      <xs:element minOccurs="0" name="resilience" type="xs:string"/>
+      <xs:element minOccurs="0" name="timestamp" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="localName" type="xs:string"/>
+      <xs:element minOccurs="0" name="type" type="tns:LinkType"/>
+      <xs:element minOccurs="0" name="operationalState" type="tns:StateOper"/>
+      <xs:element minOccurs="0" name="administrativeState" type="tns:StateAdmin"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="Port">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+      <xs:element minOccurs="0" name="address" type="xs:string"/>
+      <xs:element minOccurs="0" name="technology" type="xs:string"/>
+      <xs:element name="bundled" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="node" type="tns:Node"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="Node">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+      <xs:element minOccurs="0" name="type" type="xs:string"/>
+      <xs:element minOccurs="0" name="address" type="xs:string"/>
+      <xs:element minOccurs="0" name="provisioningDomain" type="tns:ProvisioningDomain"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="country" type="xs:string"/>
+      <xs:element minOccurs="0" name="city" type="xs:string"/>
+      <xs:element minOccurs="0" name="institution" type="xs:string"/>
+      <xs:element minOccurs="0" name="longitude" type="xs:string"/>
+      <xs:element minOccurs="0" name="latitude" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ProvisioningDomain">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+      <xs:element minOccurs="0" name="provType" type="xs:string"/>
+      <xs:element minOccurs="0" name="adminDomain" type="tns:AdminDomain"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="AdminDomain">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+      <xs:element minOccurs="0" name="ASID" type="xs:string"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element name="clientDomain" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="LinkType">
+    <xs:sequence>
+      <xs:element name="type" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="StateOper">
+    <xs:sequence>
+      <xs:element name="state" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="StateAdmin">
+    <xs:sequence>
+      <xs:element name="state" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="network.autobahn.geant.net" xmlns:tns="http://proxy.autobahn.geant.net/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://proxy.autobahn.geant.net/">
+  <xs:import namespace="network.autobahn.geant.net"/>
+  <xs:element name="Notify" type="tns:Notify"/>
+  <xs:element name="NotifyResponse" type="tns:NotifyResponse"/>
+  <xs:element name="cancelReservation" type="tns:cancelReservation"/>
+  <xs:element name="cancelReservationResponse" type="tns:cancelReservationResponse"/>
+  <xs:element name="createReservation" type="tns:createReservation"/>
+  <xs:element name="createReservationResponse" type="tns:createReservationResponse"/>
+  <xs:element name="getTopology" type="tns:getTopology"/>
+  <xs:element name="getTopologyResponse" type="tns:getTopologyResponse"/>
+  <xs:element name="listReservations" type="tns:listReservations"/>
+  <xs:element name="listReservationsResponse" type="tns:listReservationsResponse"/>
+  <xs:element name="modifyReservation" type="tns:modifyReservation"/>
+  <xs:element name="modifyReservationResponse" type="tns:modifyReservationResponse"/>
+  <xs:element name="queryReservation" type="tns:queryReservation"/>
+  <xs:element name="queryReservationResponse" type="tns:queryReservationResponse"/>
+  <xs:complexType name="listReservations">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="listReservationsResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="reservations" type="tns:ReservationInfo"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ReservationInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+      <xs:element minOccurs="0" name="startPort" type="xs:string"/>
+      <xs:element minOccurs="0" name="endPort" type="xs:string"/>
+      <xs:element minOccurs="0" name="startTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="endTime" type="xs:dateTime"/>
+      <xs:element name="priority" type="xs:int"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element name="capacity" type="xs:long"/>
+      <xs:element name="maxDelay" type="xs:int"/>
+      <xs:element minOccurs="0" name="resiliency" type="xs:string"/>
+      <xs:element name="bidirectional" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="userVlans" type="xs:string"/>
+      <xs:element minOccurs="0" name="calculatedConstraints" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="path" nillable="true" type="ns1:Link"/>
+      <xs:element name="state" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="createReservation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="resInfo" type="tns:ReservationInfo"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="createReservationResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="reservationInfo" type="tns:ReservationInfo"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Notify">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="resInfo" type="tns:ReservationInfo"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="NotifyResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="cancelReservation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="resID" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="cancelReservationResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="modifyReservation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="resInfo" type="tns:ReservationInfo"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="modifyReservationResponse">
+    <xs:sequence>
+      <xs:element name="possible" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="queryReservation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="resID" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="queryReservationResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="reservationInfo" type="tns:ReservationInfo"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getTopology">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getTopologyResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="links" type="ns1:Link"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="IOException" type="tns:IOException"/>
+  <xs:complexType name="IOException">
+    <xs:sequence/>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="Notify">
+    <wsdl:part name="parameters" element="tns:Notify">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="modifyReservationResponse">
+    <wsdl:part name="parameters" element="tns:modifyReservationResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="queryReservation">
+    <wsdl:part name="parameters" element="tns:queryReservation">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="NotifyResponse">
+    <wsdl:part name="parameters" element="tns:NotifyResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="queryReservationResponse">
+    <wsdl:part name="parameters" element="tns:queryReservationResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listReservationsResponse">
+    <wsdl:part name="parameters" element="tns:listReservationsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="cancelReservation">
+    <wsdl:part name="parameters" element="tns:cancelReservation">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createReservation">
+    <wsdl:part name="parameters" element="tns:createReservation">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listReservations">
+    <wsdl:part name="parameters" element="tns:listReservations">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="cancelReservationResponse">
+    <wsdl:part name="parameters" element="tns:cancelReservationResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="modifyReservation">
+    <wsdl:part name="parameters" element="tns:modifyReservation">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="IOException">
+    <wsdl:part name="IOException" element="tns:IOException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTopology">
+    <wsdl:part name="parameters" element="tns:getTopology">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTopologyResponse">
+    <wsdl:part name="parameters" element="tns:getTopologyResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createReservationResponse">
+    <wsdl:part name="parameters" element="tns:createReservationResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="Proxy">
+    <wsdl:operation name="listReservations">
+      <wsdl:input name="listReservations" message="tns:listReservations">
+    </wsdl:input>
+      <wsdl:output name="listReservationsResponse" message="tns:listReservationsResponse">
+    </wsdl:output>
+      <wsdl:fault name="IOException" message="tns:IOException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createReservation">
+      <wsdl:input name="createReservation" message="tns:createReservation">
+    </wsdl:input>
+      <wsdl:output name="createReservationResponse" message="tns:createReservationResponse">
+    </wsdl:output>
+      <wsdl:fault name="IOException" message="tns:IOException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="Notify">
+      <wsdl:input name="Notify" message="tns:Notify">
+    </wsdl:input>
+      <wsdl:output name="NotifyResponse" message="tns:NotifyResponse">
+    </wsdl:output>
+      <wsdl:fault name="IOException" message="tns:IOException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="cancelReservation">
+      <wsdl:input name="cancelReservation" message="tns:cancelReservation">
+    </wsdl:input>
+      <wsdl:output name="cancelReservationResponse" message="tns:cancelReservationResponse">
+    </wsdl:output>
+      <wsdl:fault name="IOException" message="tns:IOException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="modifyReservation">
+      <wsdl:input name="modifyReservation" message="tns:modifyReservation">
+    </wsdl:input>
+      <wsdl:output name="modifyReservationResponse" message="tns:modifyReservationResponse">
+    </wsdl:output>
+      <wsdl:fault name="IOException" message="tns:IOException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="queryReservation">
+      <wsdl:input name="queryReservation" message="tns:queryReservation">
+    </wsdl:input>
+      <wsdl:output name="queryReservationResponse" message="tns:queryReservationResponse">
+    </wsdl:output>
+      <wsdl:fault name="IOException" message="tns:IOException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getTopology">
+      <wsdl:input name="getTopology" message="tns:getTopology">
+    </wsdl:input>
+      <wsdl:output name="getTopologyResponse" message="tns:getTopologyResponse">
+    </wsdl:output>
+      <wsdl:fault name="IOException" message="tns:IOException">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ProxyServiceSoapBinding" type="tns:Proxy">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="listReservations">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="listReservations">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="listReservationsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="IOException">
+        <soap:fault name="IOException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createReservation">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="createReservation">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="createReservationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="IOException">
+        <soap:fault name="IOException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="Notify">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="Notify">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="NotifyResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="IOException">
+        <soap:fault name="IOException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="cancelReservation">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="cancelReservation">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="cancelReservationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="IOException">
+        <soap:fault name="IOException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="modifyReservation">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="modifyReservation">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="modifyReservationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="IOException">
+        <soap:fault name="IOException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="queryReservation">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="queryReservation">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="queryReservationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="IOException">
+        <soap:fault name="IOException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getTopology">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getTopology">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getTopologyResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="IOException">
+        <soap:fault name="IOException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Proxy">
+    <wsdl:port name="ProxyPort" binding="tns:ProxyServiceSoapBinding">
+      <soap:address location="http://localhost:9090/ProxyPort"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

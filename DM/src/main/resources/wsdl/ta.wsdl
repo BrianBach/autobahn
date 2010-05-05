@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="TopologyAbstraction" targetNamespace="http://topologyabstraction.autobahn.geant.net/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://topologyabstraction.autobahn.geant.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="common.intradomain.autobahn.geant.net" xmlns:tns="sdh.intradomain.autobahn.geant.net" targetNamespace="sdh.intradomain.autobahn.geant.net" version="1.0">
+<xs:import namespace="common.intradomain.autobahn.geant.net"/>
+<xs:complexType name="StmLink">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="stmLink" type="ns1:GenericLink"/>
+      <xs:element minOccurs="0" name="och" type="tns:Och"/>
+      <xs:element minOccurs="0" name="stmType" type="tns:StmType"/>
+      <xs:element minOccurs="0" name="status" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="Och">
+    <xs:sequence>
+      <xs:element name="ochId" type="xs:long"/>
+      <xs:element minOccurs="0" name="payload" type="xs:string"/>
+      <xs:element minOccurs="0" name="Status" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="StmType">
+    <xs:sequence>
+      <xs:element name="stmTypeId" type="xs:long"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element name="bandwidth" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="SdhDevice">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="node" type="ns1:Node"/>
+      <xs:element minOccurs="0" name="sdhDomain" type="tns:SdhDomain"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element name="nsap" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="SdhDomain">
+    <xs:sequence>
+      <xs:element name="sdhDomainId" type="xs:long"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="provMethod" type="xs:string"/>
+      <xs:element minOccurs="0" name="equipmentProvider" type="xs:string"/>
+      <xs:element minOccurs="0" name="dateModified" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="network.autobahn.geant.net" targetNamespace="network.autobahn.geant.net" version="1.0">
+<xs:complexType name="Link">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+      <xs:element name="kind" type="xs:int"/>
+      <xs:element minOccurs="0" name="startPort" type="tns:Port"/>
+      <xs:element minOccurs="0" name="endPort" type="tns:Port"/>
+      <xs:element name="bidirectional" type="xs:boolean"/>
+      <xs:element name="delay" type="xs:int"/>
+      <xs:element name="manualCost" type="xs:double"/>
+      <xs:element name="monetaryCost" type="xs:double"/>
+      <xs:element name="granularity" type="xs:long"/>
+      <xs:element name="minResCapacity" type="xs:long"/>
+      <xs:element name="maxResCapacity" type="xs:long"/>
+      <xs:element name="capacity" type="xs:long"/>
+      <xs:element minOccurs="0" name="resilience" type="xs:string"/>
+      <xs:element minOccurs="0" name="timestamp" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="localName" type="xs:string"/>
+      <xs:element minOccurs="0" name="type" type="tns:LinkType"/>
+      <xs:element minOccurs="0" name="operationalState" type="tns:StateOper"/>
+      <xs:element minOccurs="0" name="administrativeState" type="tns:StateAdmin"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="Port">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+      <xs:element minOccurs="0" name="address" type="xs:string"/>
+      <xs:element minOccurs="0" name="technology" type="xs:string"/>
+      <xs:element name="bundled" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="node" type="tns:Node"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="Node">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+      <xs:element minOccurs="0" name="type" type="xs:string"/>
+      <xs:element minOccurs="0" name="address" type="xs:string"/>
+      <xs:element minOccurs="0" name="provisioningDomain" type="tns:ProvisioningDomain"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="country" type="xs:string"/>
+      <xs:element minOccurs="0" name="city" type="xs:string"/>
+      <xs:element minOccurs="0" name="institution" type="xs:string"/>
+      <xs:element minOccurs="0" name="longitude" type="xs:string"/>
+      <xs:element minOccurs="0" name="latitude" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ProvisioningDomain">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+      <xs:element minOccurs="0" name="provType" type="xs:string"/>
+      <xs:element minOccurs="0" name="adminDomain" type="tns:AdminDomain"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="AdminDomain">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+      <xs:element minOccurs="0" name="ASID" type="xs:string"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element name="clientDomain" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="LinkType">
+    <xs:sequence>
+      <xs:element name="type" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="StateOper">
+    <xs:sequence>
+      <xs:element name="state" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="StateAdmin">
+    <xs:sequence>
+      <xs:element name="state" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="LinkIdentifiers">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="nodeId" type="xs:string"/>
+      <xs:element minOccurs="0" name="portId" type="xs:string"/>
+      <xs:element minOccurs="0" name="linkId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="common.intradomain.autobahn.geant.net" xmlns:ns2="ethernet.intradomain.autobahn.geant.net" xmlns:ns3="sdh.intradomain.autobahn.geant.net" xmlns:tns="intradomain.autobahn.geant.net" targetNamespace="intradomain.autobahn.geant.net" version="1.0">
+<xs:import namespace="common.intradomain.autobahn.geant.net"/>
+<xs:import namespace="ethernet.intradomain.autobahn.geant.net"/>
+<xs:import namespace="sdh.intradomain.autobahn.geant.net"/>
+<xs:complexType name="IntradomainTopology">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="genericLinks" nillable="true" type="ns1:GenericLink"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="nodes" nillable="true" type="ns1:Node"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="sptrees" nillable="true" type="ns2:SpanningTree"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="ethpp" nillable="true" type="ns2:EthPhysicalPort"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="vlaps" nillable="true" type="ns2:VlanPort"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="stmLinks" nillable="true" type="ns3:StmLink"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="sdhDevices" nillable="true" type="ns3:SdhDevice"/>
+      <xs:element minOccurs="0" name="type" type="tns:Type"/>
+      <xs:element minOccurs="0" name="domainAddress" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:simpleType name="Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ETH"/>
+      <xs:enumeration value="SDH"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="converter.intradomain.autobahn.geant.net" xmlns:ns2="intradomain.autobahn.geant.net" xmlns:ns3="network.autobahn.geant.net" xmlns:ns4="common.intradomain.autobahn.geant.net" xmlns:tns="http://topologyabstraction.autobahn.geant.net/" elementFormDefault="unqualified" targetNamespace="http://topologyabstraction.autobahn.geant.net/" version="1.0">
+<xs:import namespace="converter.intradomain.autobahn.geant.net"/>
+<xs:import namespace="intradomain.autobahn.geant.net"/>
+<xs:import namespace="network.autobahn.geant.net"/>
+<xs:import namespace="common.intradomain.autobahn.geant.net"/>
+<xs:element name="abstractExternalPartOfTopology" type="tns:abstractExternalPartOfTopology"/>
+<xs:element name="abstractExternalPartOfTopologyResponse" type="tns:abstractExternalPartOfTopologyResponse"/>
+<xs:element name="abstractInternalPartOfTopology" type="tns:abstractInternalPartOfTopology"/>
+<xs:element name="abstractInternalPartOfTopologyResponse" type="tns:abstractInternalPartOfTopologyResponse"/>
+<xs:element name="getAbstractLinks" type="tns:getAbstractLinks"/>
+<xs:element name="getAbstractLinksResponse" type="tns:getAbstractLinksResponse"/>
+<xs:element name="getAllEdgeLinks" type="tns:getAllEdgeLinks"/>
+<xs:element name="getAllEdgeLinksResponse" type="tns:getAllEdgeLinksResponse"/>
+<xs:element name="getEdgeLink" type="tns:getEdgeLink"/>
+<xs:element name="getEdgeLinkResponse" type="tns:getEdgeLinkResponse"/>
+<xs:element name="getIdentifiers" type="tns:getIdentifiers"/>
+<xs:element name="getIdentifiersResponse" type="tns:getIdentifiersResponse"/>
+<xs:element name="setIntradomainTopology" type="tns:setIntradomainTopology"/>
+<xs:element name="setIntradomainTopologyResponse" type="tns:setIntradomainTopologyResponse"/>
+<xs:complexType name="abstractInternalPartOfTopology">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="abstractInternalPartOfTopologyResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="stats" type="ns1:Stats"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="setIntradomainTopology">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="topology" type="ns2:IntradomainTopology"/>
+      <xs:element minOccurs="0" name="topologyType" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="VtpDomain">
+    <xs:sequence>
+      <xs:element name="vtpDomainId" type="xs:long"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="srvIpv4Addr" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="setIntradomainTopologyResponse">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="abstractExternalPartOfTopology">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="idmAddress" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="abstractExternalPartOfTopologyResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="abstractLinks" type="ns3:Link"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="getAbstractLinks">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="getAbstractLinksResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="abstractLinks" type="ns3:Link"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="getIdentifiers">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="portName" type="xs:string"/>
+      <xs:element minOccurs="0" name="linkBodId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="getIdentifiersResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="identifiers" type="ns3:LinkIdentifiers"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="getEdgeLink">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="l" type="ns3:Link"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="getEdgeLinkResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="genericLink" type="ns4:GenericLink"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="getAllEdgeLinks">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="getAllEdgeLinksResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="links" type="ns3:Link"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="common.intradomain.autobahn.geant.net" xmlns:ns2="http://topologyabstraction.autobahn.geant.net/" xmlns:tns="ethernet.intradomain.autobahn.geant.net" targetNamespace="ethernet.intradomain.autobahn.geant.net" version="1.0">
+<xs:import namespace="common.intradomain.autobahn.geant.net"/>
+<xs:import namespace="http://topologyabstraction.autobahn.geant.net/"/>
+<xs:complexType name="SpanningTree">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ethLink" type="tns:EthLink"/>
+      <xs:element minOccurs="0" name="vlan" type="tns:Vlan"/>
+      <xs:element minOccurs="0" name="state" type="xs:string"/>
+      <xs:element name="cost" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="EthLink">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="genericLink" type="ns1:GenericLink"/>
+      <xs:element minOccurs="0" name="discoveryProtocol" type="xs:string"/>
+      <xs:element name="isTrunk" type="xs:boolean"/>
+      <xs:element name="isL2Bndry" type="xs:boolean"/>
+      <xs:element name="nativeVlan" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="Vlan">
+    <xs:sequence>
+      <xs:element name="vlanId" type="xs:long"/>
+      <xs:element minOccurs="0" name="vtpDomain" type="ns2:VtpDomain"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element name="lowNumber" type="xs:long"/>
+      <xs:element name="highNumber" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="EthPhysicalPort">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="genericInterface" type="ns1:GenericInterface"/>
+      <xs:element minOccurs="0" name="interfaceName" type="xs:string"/>
+      <xs:element minOccurs="0" name="macAddress" type="xs:string"/>
+      <xs:element minOccurs="0" name="duplex" type="xs:string"/>
+      <xs:element minOccurs="0" name="mediumDependentInterface" type="xs:string"/>
+      <xs:element name="isTagged" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="VlanPort">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="genericInterface" type="ns1:GenericInterface"/>
+      <xs:element minOccurs="0" name="vlan" type="tns:Vlan"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="converter.intradomain.autobahn.geant.net" version="1.0">
+<xs:complexType name="Stats">
+    <xs:sequence>
+      <xs:element name="numNodes" type="xs:int"/>
+      <xs:element name="numEdgeNodes" type="xs:int"/>
+      <xs:element name="numLinks" type="xs:int"/>
+      <xs:element name="numPaths" type="xs:int"/>
+      <xs:element name="calcTime" type="xs:float"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="common.intradomain.autobahn.geant.net" targetNamespace="common.intradomain.autobahn.geant.net" version="1.0">
+<xs:complexType name="GenericLink">
+    <xs:sequence>
+      <xs:element name="linkId" type="xs:long"/>
+      <xs:element minOccurs="0" name="version" type="tns:VersionInfo"/>
+      <xs:element minOccurs="0" name="startInterface" type="tns:GenericInterface"/>
+      <xs:element minOccurs="0" name="endInterface" type="tns:GenericInterface"/>
+      <xs:element minOccurs="0" name="direction" type="xs:string"/>
+      <xs:element name="protection" type="xs:boolean"/>
+      <xs:element name="propDelay" type="xs:double"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="VersionInfo">
+    <xs:sequence>
+      <xs:element name="versionId" type="xs:long"/>
+      <xs:element minOccurs="0" name="startDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="endDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="createdBy" type="xs:string"/>
+      <xs:element minOccurs="0" name="modifiedBy" type="xs:string"/>
+      <xs:element minOccurs="0" name="dateCreated" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="dateModified" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="GenericInterface">
+    <xs:sequence>
+      <xs:element name="interfaceId" type="xs:long"/>
+      <xs:element minOccurs="0" name="version" type="tns:VersionInfo"/>
+      <xs:element minOccurs="0" name="interfaceType" type="tns:InterfaceType"/>
+      <xs:element minOccurs="0" name="parentInterface" type="tns:GenericInterface"/>
+      <xs:element minOccurs="0" name="node" type="tns:Node"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element name="bandwidth" type="xs:long"/>
+      <xs:element minOccurs="0" name="status" type="xs:string"/>
+      <xs:element minOccurs="0" name="mtu" type="xs:string"/>
+      <xs:element minOccurs="0" name="domainId" type="xs:string"/>
+      <xs:element name="clientPort" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="InterfaceType">
+    <xs:sequence>
+      <xs:element name="interfaceTypeId" type="xs:long"/>
+      <xs:element minOccurs="0" name="switchingType" type="xs:string"/>
+      <xs:element minOccurs="0" name="dataEncodingType" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="Node">
+    <xs:sequence>
+      <xs:element name="nodeId" type="xs:long"/>
+      <xs:element minOccurs="0" name="version" type="tns:VersionInfo"/>
+      <xs:element minOccurs="0" name="location" type="tns:Location"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="status" type="xs:string"/>
+      <xs:element minOccurs="0" name="vendor" type="xs:string"/>
+      <xs:element minOccurs="0" name="model" type="xs:string"/>
+      <xs:element minOccurs="0" name="osName" type="xs:string"/>
+      <xs:element minOccurs="0" name="osVersion" type="xs:string"/>
+      <xs:element minOccurs="0" name="ipAddress" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="Location">
+    <xs:sequence>
+      <xs:element name="locationId" type="xs:long"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="country" type="xs:string"/>
+      <xs:element minOccurs="0" name="institution" type="xs:string"/>
+      <xs:element minOccurs="0" name="street" type="xs:string"/>
+      <xs:element name="floor" type="xs:int"/>
+      <xs:element name="roomSuite" type="xs:int"/>
+      <xs:element name="row_" type="xs:int"/>
+      <xs:element name="cabinet" type="xs:int"/>
+      <xs:element minOccurs="0" name="zipCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="phoneNumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="eMailAddress" type="xs:string"/>
+      <xs:element name="geoLatitude" type="xs:double"/>
+      <xs:element name="geoLongitude" type="xs:double"/>
+      <xs:element minOccurs="0" name="type" type="xs:string"/>
+      <xs:element minOccurs="0" name="zone" type="xs:string"/>
+      <xs:element name="altitude" type="xs:double"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="setIntradomainTopologyResponse">
+    <wsdl:part name="parameters" element="tns:setIntradomainTopologyResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAllEdgeLinksResponse">
+    <wsdl:part name="parameters" element="tns:getAllEdgeLinksResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setIntradomainTopology">
+    <wsdl:part name="parameters" element="tns:setIntradomainTopology">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="abstractExternalPartOfTopologyResponse">
+    <wsdl:part name="parameters" element="tns:abstractExternalPartOfTopologyResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAbstractLinksResponse">
+    <wsdl:part name="parameters" element="tns:getAbstractLinksResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="abstractExternalPartOfTopology">
+    <wsdl:part name="parameters" element="tns:abstractExternalPartOfTopology">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="abstractInternalPartOfTopologyResponse">
+    <wsdl:part name="parameters" element="tns:abstractInternalPartOfTopologyResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAllEdgeLinks">
+    <wsdl:part name="parameters" element="tns:getAllEdgeLinks">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getIdentifiersResponse">
+    <wsdl:part name="parameters" element="tns:getIdentifiersResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getEdgeLinkResponse">
+    <wsdl:part name="parameters" element="tns:getEdgeLinkResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getEdgeLink">
+    <wsdl:part name="parameters" element="tns:getEdgeLink">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getIdentifiers">
+    <wsdl:part name="parameters" element="tns:getIdentifiers">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAbstractLinks">
+    <wsdl:part name="parameters" element="tns:getAbstractLinks">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="abstractInternalPartOfTopology">
+    <wsdl:part name="parameters" element="tns:abstractInternalPartOfTopology">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="TopologyAbstraction">
+    <wsdl:operation name="abstractInternalPartOfTopology">
+      <wsdl:input name="abstractInternalPartOfTopology" message="tns:abstractInternalPartOfTopology">
+    </wsdl:input>
+      <wsdl:output name="abstractInternalPartOfTopologyResponse" message="tns:abstractInternalPartOfTopologyResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="setIntradomainTopology">
+      <wsdl:input name="setIntradomainTopology" message="tns:setIntradomainTopology">
+    </wsdl:input>
+      <wsdl:output name="setIntradomainTopologyResponse" message="tns:setIntradomainTopologyResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="abstractExternalPartOfTopology">
+      <wsdl:input name="abstractExternalPartOfTopology" message="tns:abstractExternalPartOfTopology">
+    </wsdl:input>
+      <wsdl:output name="abstractExternalPartOfTopologyResponse" message="tns:abstractExternalPartOfTopologyResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAbstractLinks">
+      <wsdl:input name="getAbstractLinks" message="tns:getAbstractLinks">
+    </wsdl:input>
+      <wsdl:output name="getAbstractLinksResponse" message="tns:getAbstractLinksResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getIdentifiers">
+      <wsdl:input name="getIdentifiers" message="tns:getIdentifiers">
+    </wsdl:input>
+      <wsdl:output name="getIdentifiersResponse" message="tns:getIdentifiersResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getEdgeLink">
+      <wsdl:input name="getEdgeLink" message="tns:getEdgeLink">
+    </wsdl:input>
+      <wsdl:output name="getEdgeLinkResponse" message="tns:getEdgeLinkResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAllEdgeLinks">
+      <wsdl:input name="getAllEdgeLinks" message="tns:getAllEdgeLinks">
+    </wsdl:input>
+      <wsdl:output name="getAllEdgeLinksResponse" message="tns:getAllEdgeLinksResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="TopologyAbstractionServiceSoapBinding" type="tns:TopologyAbstraction">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="abstractInternalPartOfTopology">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="abstractInternalPartOfTopology">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="abstractInternalPartOfTopologyResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="setIntradomainTopology">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="setIntradomainTopology">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="setIntradomainTopologyResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="abstractExternalPartOfTopology">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="abstractExternalPartOfTopology">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="abstractExternalPartOfTopologyResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAbstractLinks">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getAbstractLinks">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAbstractLinksResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getIdentifiers">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getIdentifiers">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getIdentifiersResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getEdgeLink">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getEdgeLink">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getEdgeLinkResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAllEdgeLinks">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getAllEdgeLinks">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAllEdgeLinksResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="TopologyAbstraction">
+    <wsdl:port name="TopologyAbstractionPort" binding="tns:TopologyAbstractionServiceSoapBinding">
+      <soap:address location="http://localhost:9090/TopologyAbstractionPort"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

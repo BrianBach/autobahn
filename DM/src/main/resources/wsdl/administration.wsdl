@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="Administration" targetNamespace="http://administration.intradomain.autobahn.geant.net/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://administration.intradomain.autobahn.geant.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="common.intradomain.autobahn.geant.net" xmlns:tns="sdh.intradomain.autobahn.geant.net" targetNamespace="sdh.intradomain.autobahn.geant.net" version="1.0">
+<xs:import namespace="common.intradomain.autobahn.geant.net"/>
+<xs:complexType name="StmLink">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="stmLink" type="ns1:GenericLink"/>
+      <xs:element minOccurs="0" name="och" type="tns:Och"/>
+      <xs:element minOccurs="0" name="stmType" type="tns:StmType"/>
+      <xs:element minOccurs="0" name="status" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="Och">
+    <xs:sequence>
+      <xs:element name="ochId" type="xs:long"/>
+      <xs:element minOccurs="0" name="payload" type="xs:string"/>
+      <xs:element minOccurs="0" name="Status" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="StmType">
+    <xs:sequence>
+      <xs:element name="stmTypeId" type="xs:long"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element name="bandwidth" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="SdhDevice">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="node" type="ns1:Node"/>
+      <xs:element minOccurs="0" name="sdhDomain" type="tns:SdhDomain"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element name="nsap" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="SdhDomain">
+    <xs:sequence>
+      <xs:element name="sdhDomainId" type="xs:long"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="provMethod" type="xs:string"/>
+      <xs:element minOccurs="0" name="equipmentProvider" type="xs:string"/>
+      <xs:element minOccurs="0" name="dateModified" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="common.intradomain.autobahn.geant.net" xmlns:ns2="ethernet.intradomain.autobahn.geant.net" xmlns:ns3="sdh.intradomain.autobahn.geant.net" xmlns:tns="intradomain.autobahn.geant.net" targetNamespace="intradomain.autobahn.geant.net" version="1.0">
+<xs:import namespace="common.intradomain.autobahn.geant.net"/>
+<xs:import namespace="ethernet.intradomain.autobahn.geant.net"/>
+<xs:import namespace="sdh.intradomain.autobahn.geant.net"/>
+<xs:complexType name="IntradomainTopology">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="genericLinks" nillable="true" type="ns1:GenericLink"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="nodes" nillable="true" type="ns1:Node"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="sptrees" nillable="true" type="ns2:SpanningTree"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="ethpp" nillable="true" type="ns2:EthPhysicalPort"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="vlaps" nillable="true" type="ns2:VlanPort"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="stmLinks" nillable="true" type="ns3:StmLink"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="sdhDevices" nillable="true" type="ns3:SdhDevice"/>
+      <xs:element minOccurs="0" name="type" type="tns:Type"/>
+      <xs:element minOccurs="0" name="domainAddress" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:simpleType name="Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ETH"/>
+      <xs:enumeration value="SDH"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="administration.intradomain.autobahn.geant.net" xmlns:ns2="intradomain.autobahn.geant.net" xmlns:tns="http://administration.intradomain.autobahn.geant.net/" elementFormDefault="unqualified" targetNamespace="http://administration.intradomain.autobahn.geant.net/" version="1.0">
+<xs:import namespace="administration.intradomain.autobahn.geant.net"/>
+<xs:import namespace="intradomain.autobahn.geant.net"/>
+<xs:element name="getProperties" type="tns:getProperties"/>
+<xs:element name="getPropertiesResponse" type="tns:getPropertiesResponse"/>
+<xs:element name="setProperties" type="tns:setProperties"/>
+<xs:element name="setPropertiesResponse" type="tns:setPropertiesResponse"/>
+<xs:element name="setTopology" type="tns:setTopology"/>
+<xs:element name="setTopologyResponse" type="tns:setTopologyResponse"/>
+<xs:complexType name="getProperties">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="getPropertiesResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="Properties" type="ns1:KeyValue"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="setProperties">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="properties" type="ns1:KeyValue"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="setPropertiesResponse">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="setTopology">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="ns2:IntradomainTopology"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="VtpDomain">
+    <xs:sequence>
+      <xs:element name="vtpDomainId" type="xs:long"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="srvIpv4Addr" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="setTopologyResponse">
+    <xs:sequence/>
+  </xs:complexType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="common.intradomain.autobahn.geant.net" xmlns:ns2="http://administration.intradomain.autobahn.geant.net/" xmlns:tns="ethernet.intradomain.autobahn.geant.net" targetNamespace="ethernet.intradomain.autobahn.geant.net" version="1.0">
+<xs:import namespace="common.intradomain.autobahn.geant.net"/>
+<xs:import namespace="http://administration.intradomain.autobahn.geant.net/"/>
+<xs:complexType name="SpanningTree">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ethLink" type="tns:EthLink"/>
+      <xs:element minOccurs="0" name="vlan" type="tns:Vlan"/>
+      <xs:element minOccurs="0" name="state" type="xs:string"/>
+      <xs:element name="cost" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="EthLink">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="genericLink" type="ns1:GenericLink"/>
+      <xs:element minOccurs="0" name="discoveryProtocol" type="xs:string"/>
+      <xs:element name="isTrunk" type="xs:boolean"/>
+      <xs:element name="isL2Bndry" type="xs:boolean"/>
+      <xs:element name="nativeVlan" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="Vlan">
+    <xs:sequence>
+      <xs:element name="vlanId" type="xs:long"/>
+      <xs:element minOccurs="0" name="vtpDomain" type="ns2:VtpDomain"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element name="lowNumber" type="xs:long"/>
+      <xs:element name="highNumber" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="EthPhysicalPort">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="genericInterface" type="ns1:GenericInterface"/>
+      <xs:element minOccurs="0" name="interfaceName" type="xs:string"/>
+      <xs:element minOccurs="0" name="macAddress" type="xs:string"/>
+      <xs:element minOccurs="0" name="duplex" type="xs:string"/>
+      <xs:element minOccurs="0" name="mediumDependentInterface" type="xs:string"/>
+      <xs:element name="isTagged" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="VlanPort">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="genericInterface" type="ns1:GenericInterface"/>
+      <xs:element minOccurs="0" name="vlan" type="tns:Vlan"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="common.intradomain.autobahn.geant.net" targetNamespace="common.intradomain.autobahn.geant.net" version="1.0">
+<xs:complexType name="GenericLink">
+    <xs:sequence>
+      <xs:element name="linkId" type="xs:long"/>
+      <xs:element minOccurs="0" name="version" type="tns:VersionInfo"/>
+      <xs:element minOccurs="0" name="startInterface" type="tns:GenericInterface"/>
+      <xs:element minOccurs="0" name="endInterface" type="tns:GenericInterface"/>
+      <xs:element minOccurs="0" name="direction" type="xs:string"/>
+      <xs:element name="protection" type="xs:boolean"/>
+      <xs:element name="propDelay" type="xs:double"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="VersionInfo">
+    <xs:sequence>
+      <xs:element name="versionId" type="xs:long"/>
+      <xs:element minOccurs="0" name="startDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="endDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="createdBy" type="xs:string"/>
+      <xs:element minOccurs="0" name="modifiedBy" type="xs:string"/>
+      <xs:element minOccurs="0" name="dateCreated" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="dateModified" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="GenericInterface">
+    <xs:sequence>
+      <xs:element name="interfaceId" type="xs:long"/>
+      <xs:element minOccurs="0" name="version" type="tns:VersionInfo"/>
+      <xs:element minOccurs="0" name="interfaceType" type="tns:InterfaceType"/>
+      <xs:element minOccurs="0" name="parentInterface" type="tns:GenericInterface"/>
+      <xs:element minOccurs="0" name="node" type="tns:Node"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element name="bandwidth" type="xs:long"/>
+      <xs:element minOccurs="0" name="status" type="xs:string"/>
+      <xs:element minOccurs="0" name="mtu" type="xs:string"/>
+      <xs:element minOccurs="0" name="domainId" type="xs:string"/>
+      <xs:element name="clientPort" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="InterfaceType">
+    <xs:sequence>
+      <xs:element name="interfaceTypeId" type="xs:long"/>
+      <xs:element minOccurs="0" name="switchingType" type="xs:string"/>
+      <xs:element minOccurs="0" name="dataEncodingType" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="Node">
+    <xs:sequence>
+      <xs:element name="nodeId" type="xs:long"/>
+      <xs:element minOccurs="0" name="version" type="tns:VersionInfo"/>
+      <xs:element minOccurs="0" name="location" type="tns:Location"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="status" type="xs:string"/>
+      <xs:element minOccurs="0" name="vendor" type="xs:string"/>
+      <xs:element minOccurs="0" name="model" type="xs:string"/>
+      <xs:element minOccurs="0" name="osName" type="xs:string"/>
+      <xs:element minOccurs="0" name="osVersion" type="xs:string"/>
+      <xs:element minOccurs="0" name="ipAddress" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="Location">
+    <xs:sequence>
+      <xs:element name="locationId" type="xs:long"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="country" type="xs:string"/>
+      <xs:element minOccurs="0" name="institution" type="xs:string"/>
+      <xs:element minOccurs="0" name="street" type="xs:string"/>
+      <xs:element name="floor" type="xs:int"/>
+      <xs:element name="roomSuite" type="xs:int"/>
+      <xs:element name="row_" type="xs:int"/>
+      <xs:element name="cabinet" type="xs:int"/>
+      <xs:element minOccurs="0" name="zipCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="phoneNumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="eMailAddress" type="xs:string"/>
+      <xs:element name="geoLatitude" type="xs:double"/>
+      <xs:element name="geoLongitude" type="xs:double"/>
+      <xs:element minOccurs="0" name="type" type="xs:string"/>
+      <xs:element minOccurs="0" name="zone" type="xs:string"/>
+      <xs:element name="altitude" type="xs:double"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="administration.intradomain.autobahn.geant.net" version="1.0">
+<xs:complexType name="KeyValue">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="key" type="xs:string"/>
+      <xs:element minOccurs="0" name="value" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="setPropertiesResponse">
+    <wsdl:part name="parameters" element="tns:setPropertiesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setTopologyResponse">
+    <wsdl:part name="parameters" element="tns:setTopologyResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setProperties">
+    <wsdl:part name="parameters" element="tns:setProperties">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getProperties">
+    <wsdl:part name="parameters" element="tns:getProperties">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setTopology">
+    <wsdl:part name="parameters" element="tns:setTopology">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPropertiesResponse">
+    <wsdl:part name="parameters" element="tns:getPropertiesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="DmAdministration">
+    <wsdl:operation name="getProperties">
+      <wsdl:input name="getProperties" message="tns:getProperties">
+    </wsdl:input>
+      <wsdl:output name="getPropertiesResponse" message="tns:getPropertiesResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="setProperties">
+      <wsdl:input name="setProperties" message="tns:setProperties">
+    </wsdl:input>
+      <wsdl:output name="setPropertiesResponse" message="tns:setPropertiesResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="setTopology">
+      <wsdl:input name="setTopology" message="tns:setTopology">
+    </wsdl:input>
+      <wsdl:output name="setTopologyResponse" message="tns:setTopologyResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AdministrationServiceSoapBinding" type="tns:DmAdministration">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getProperties">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getProperties">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getPropertiesResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="setProperties">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="setProperties">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="setPropertiesResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="setTopology">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="setTopology">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="setTopologyResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Administration">
+    <wsdl:port name="DmAdministrationPort" binding="tns:AdministrationServiceSoapBinding">
+      <soap:address location="http://localhost:9090/DmAdministrationPort"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
