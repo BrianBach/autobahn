@@ -122,27 +122,31 @@ public class GraphSearch {
     	
     	for(GraphEdge edge : start.getEdges()) {
     		
-    		if(edge.isInterdomain())
+    		if(edge.isInterdomain()) {
     			continue;
+    		}
     		
     		GraphNode neighbor = edge.getEndNode();
     		
-    		if(containsNode(currentPath, neighbor))
+    		if(containsNode(currentPath, neighbor)) {
     			continue;
+    		}
 
     		// Update capacity
     		long tmp = Math.min(pathCapacity, edge.getCapacity());
 
     		// Cut off - capacity
-    		if(tmp < minCapacity)
+    		if(tmp < minCapacity) {
     			continue;
+    		}
     		
     		// Update constraints
     		PathConstraints merged = pcons.intersect(edge.getConstraints());
 
-    		// Cut off constarints
-    		if(merged == null)
+    		// Cut off constraints
+    		if(merged == null) {
     			continue;
+    		}
 
     		if(neighbor.equals(dest)) {
    	    		GraphEdge[] completePath = new GraphEdge[currentPath.size() + 1];

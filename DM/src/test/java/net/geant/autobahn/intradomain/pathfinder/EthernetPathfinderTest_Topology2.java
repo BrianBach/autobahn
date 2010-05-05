@@ -66,7 +66,8 @@ public class EthernetPathfinderTest_Topology2 {
     }
 
     @Test
-    public void testFindingAllPaths() {
+    public void testFindingAllPathsBetweenNodes1_3() {
+        System.out.println("---testFindingAllPathsBetweenNodes1_3");
         List<IntradomainPath> paths = pf.findPaths(nodes.get("Node1.1"), 
                 nodes.get("Node1.3"), null, Integer.MAX_VALUE);
         
@@ -74,6 +75,18 @@ public class EthernetPathfinderTest_Topology2 {
         for(IntradomainPath path : paths) {
             System.out.println(path);
         }
+    }
+
+    @Test
+    public void testFindingAllPathsBetweenNodes4_3() {
+        System.out.println("---testFindingAllPathsBetweenNodes4_3");
+        List<IntradomainPath> paths = pf.findPaths(nodes.get("Node1.4"), 
+                nodes.get("Node1.3"), null, Integer.MAX_VALUE);
+        
+        for(IntradomainPath path : paths) {
+            System.out.println(path);
+        }
+        TestCase.assertEquals(3, paths.size());
     }
     
     @Test

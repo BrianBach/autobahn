@@ -146,4 +146,9 @@ public class GraphEdge {
 			return false;
 		return true;
 	}
+	
+    @Override
+    public String toString() {
+        return this.getLink().toString();
+    }
 }
