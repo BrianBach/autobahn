@@ -46,6 +46,10 @@ public class IpAddress {
         
         for(String n : nums) {
             int val = Integer.valueOf(n);
+            
+            if (val < 0 || val > 255) {
+                throw new IllegalArgumentException("Wrong address - each number between dots must be in the [0,255] range");
+            }
 
             value = value << 8;
             value += val;

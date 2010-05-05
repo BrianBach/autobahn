@@ -27,30 +27,44 @@ public class Subnet {
     }
     
     private void parse() {
+        // Split the Subnet, e.g. 192.168.1.1/16
         String[] parts = subnet.split("\\/");
         
-        String network = parts[0];
-        int bits = Integer.valueOf(parts[1]);
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("Subnet must have an IP and a mask");
+        }
+        
+        String network = parts[0];  // e.g. 192.168.1.1
+        int bits = Integer.valueOf(parts[1]);   // e.g. 16
+        
+        if (bits > 32 || bits < 0) {
+            throw new IllegalArgumentException("Subnet mask must be in the [0,32] range");
+        }
         
         address = new IpAddress(network);
         
-        String str = address.getBits();
+        String str = address.getBits();   // e.g. 11000000 10101000 00000001 00000001
         
         // then apply a mask
-        String sbase = str.substring(0, bits);
+        String sbase = str.substring(0, bits);  // e.g. 11000000 10101000
         
         String smin = sbase;
         String smax = sbase;
         
         for(int i = 0; i < 32 - bits; i++) {
-            smin += "0";
-            smax += "1";
+            smin += "0";    // e.g. 11000000 10101000 00000000 00000000
+            smax += "1";    // e.g. 11000000 10101000 11111111 11111111
         }
 
-        long rest = Long.parseLong(str.substring(bits), 2);
+        long rest = 0;
+        String rest_str = str.substring(bits);
+        // If bits is equal to 32, we only have a single address subnet
+        if (!rest_str.equals("")) {
+            rest = Long.parseLong(str.substring(bits), 2); // e.g.  00000001 00000001
+        }
         
-        min = Long.parseLong(smin, 2) + rest;
-        max = Long.parseLong(smax, 2);
+        min = Long.parseLong(smin, 2) + rest;   // e.g. 192.168.1.1
+        max = Long.parseLong(smax, 2);      // e.g. 192.168.255.255
         
         current = min;
     }
