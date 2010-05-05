@@ -73,17 +73,17 @@
 					<plugin>
 						<groupId>org.apache.cxf</groupId>
 						<artifactId>cxf-java2ws-plugin</artifactId>
-						<version>2.2.4</version>
+						<version>2.2.7</version>
 						<dependencies>
 							<dependency>
 								<groupId>org.apache.cxf</groupId>
 								<artifactId>cxf-rt-frontend-jaxws</artifactId>
-								<version>2.2.1</version>
+								<version>2.2.7</version>
 							</dependency>
 							<dependency>
 								<groupId>org.apache.cxf</groupId>
 								<artifactId>cxf-rt-frontend-simple</artifactId>
-								<version>2.2.2</version>
+								<version>2.2.7</version>
 							</dependency>
 						</dependencies>
 
@@ -149,9 +149,9 @@
 								<phase>compile</phase>
 								<configuration>
 									<className>net.geant.autobahn.intradomain.administration.Administration</className>
-									<outputFile>src/main/resources/wsdl/dmadmin.wsdl</outputFile>
+									<outputFile>src/main/resources/wsdl/administration.wsdl</outputFile>
 									<genWsdl>true</genWsdl>
-									<serviceName>DmAdmin</serviceName>
+									<serviceName>Administration</serviceName>
 									<verbose>true</verbose>
 								</configuration>
 								<goals>
@@ -162,7 +162,7 @@
 								<id>wsdl-resourcesreservationcalendar</id>
 								<phase>compile</phase>
 								<configuration>
-									<className>net.geant.autobahn.intradomain.calendar.ResourcesReservationCalendarImpl</className>
+									<className>net.geant.autobahn.resourcesreservationcalendar.ResourcesReservationCalendar</className>
 									<outputFile>src/main/resources/wsdl/resourcesreservationcalendar.wsdl</outputFile>
 									<genWsdl>true</genWsdl>
 									<serviceName>ResourcesReservationCalendar</serviceName>
