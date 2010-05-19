@@ -207,6 +207,7 @@ public class IntraTopologyBuilder {
 	    	topo.setStmLinks(stmLinks);
 	    	topo.setSdhDevices(getSdhDevices());
 	    	topo.setType(IntradomainTopology.Type.SDH);
+	    	topo.setNodes(getNodes());
 	    	
 	    	List<GenericLink> glinks = new ArrayList<GenericLink>();
 	    	for(StmLink slink : stmLinks) {
