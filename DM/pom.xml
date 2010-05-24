@@ -60,6 +60,9 @@
 					<excludes>
 						<exclude>**/EthTopology*.java</exclude>
 					</excludes>
+					<excludes>
+						<exclude>**/SdhTopology*.java</exclude>
+					</excludes>
 				</configuration>
 			</plugin>
 		</plugins>		
