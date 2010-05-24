@@ -45,10 +45,28 @@
 					<doUpdate>false</doUpdate>
 				</configuration>
 			</plugin>			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<includes>
+						<include>**/*.java</include>
+					</includes>
+					<!--excludes>
+						<exclude>**/TopologyTest.java</exclude>
+					</excludes-->
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 	
 	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.7</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>net.geant.autobahn</groupId>
 			<artifactId>edugain</artifactId>
@@ -74,12 +92,6 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>			
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-			<scope>test</scope>
-		</dependency>
 		<dependency>
 			<groupId>dom4j</groupId>
 			<artifactId>dom4j</artifactId>

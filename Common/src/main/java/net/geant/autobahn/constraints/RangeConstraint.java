@@ -333,6 +333,9 @@ public class RangeConstraint extends Constraint implements Serializable {
         
         if(desc.contains("-")) {
             String[] ns = desc.split("-");
+            if (ns.length != 2) {
+                throw new IllegalArgumentException("dash should separate 2 numbers");
+            }
             r = new Range(Integer.parseInt(ns[0]), Integer.parseInt(ns[1]));
         } else {
             r = new Range(Integer.parseInt(desc), Integer.parseInt(desc));
