@@ -58,10 +58,8 @@
 						<include>**/*.java</include>
 					</includes>
 					<excludes>
-						<exclude>**/EthTopology*.java</exclude>
-					</excludes>
-					<excludes>
 						<exclude>**/SdhTopology*.java</exclude>
+						<exclude>**/EthTopology*.java</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
