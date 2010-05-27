@@ -14,7 +14,13 @@ public class TestTopology1 {
 
     private final static String hostDomain1 = "http://client-domain.domain1.com";
 
-    
+    //  cli-node2-----Node 1.2-----Node1.1-----cli-node1
+    //                  |        /     |
+    //                  |       /      |
+    //                  |      /       |
+    //                  |     /        |
+    //                  |    /         |
+    //                Node 1.3-----Node1.4
     public void domain1(IntraTopologyBuilder t) {
         
         GenericInterface p1 = t.createRouterIf("Node1.1", "p1.1", domain1, _1Gb);
@@ -41,11 +47,10 @@ public class TestTopology1 {
         GenericInterface cli1 = t.createClientIf("cli-node1", "cli-port1", hostDomain1, _10Gb);
         GenericInterface cli2 = t.createClientIf("cli-node2", "cli-port2", hostDomain1, _10Gb);
         
-      //Stm links
+        // Stm links
         StmType type0 = new StmType();
         type0.setName("stm type 0");
         type0.setBandwidth(10);
-        
         
         // Links
         t.addStmLink(p1, cli1, type0);
@@ -56,6 +61,5 @@ public class TestTopology1 {
         t.addStmLink(p7, p10, type0);
         t.addStmLink(p9, p12, type0);
     }
-    
 
 }

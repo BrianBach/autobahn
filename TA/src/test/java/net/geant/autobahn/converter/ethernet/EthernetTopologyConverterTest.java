@@ -1,6 +1,5 @@
 package net.geant.autobahn.converter.ethernet;
 
-
 import java.io.IOException;
 import java.util.List;
 
@@ -193,6 +192,5 @@ public class EthernetTopologyConverterTest {
 		
 		return conv;
 	}
-	
 
 }
