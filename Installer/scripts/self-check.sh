@@ -25,7 +25,7 @@ declare -x DIALOG=${DIALOG=dialog}
 declare -r quagga_zebra=`which zebra`
 declare -r debian_quagga="/etc/init.d/quagga"
 declare -r ip_gre_loaded=`lsmod | grep ip_gre`
-declare -x DBNAME="autobahn"
+declare -x DBNAME
 declare -x DBPASS
 declare -x DBUSER
 declare -x DBHOST
@@ -36,7 +36,6 @@ declare -x GRAPHICAL
 declare -x AUTOBAHN_FOLDER
 
 
-echo
 
 #Performs dependency checks
 function perform_checks {
@@ -456,7 +455,13 @@ function get_dm_defaults {
 			#curprop has the current property that is read
 			#and curval its value
 			curprop=`echo $line | awk -F "=" '{print $1}'`
-			curval=`echo $line |awk -F "=" '{print $2}'`
+			curval=`echo $line | tr -s '' | cut -d '=' -f 2 `
+			if [[ "$curval" == '' ]]; then
+			curval="none"
+			else
+			echo &>/dev/null
+			fi
+
 #echo "Curprop=$curprop Curval=$curval";sleep 5
 			case $curprop in 
 			  domainName ) domainName=$curval
