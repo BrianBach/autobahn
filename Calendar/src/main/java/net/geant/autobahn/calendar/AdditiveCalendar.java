@@ -59,6 +59,9 @@ public class AdditiveCalendar {
      */
     public void removeReservation(long value, Calendar start, Calendar end) {
     	
+        if(usage == null)
+            usage = new TreeMap<Calendar, Long>();
+        
         // Remove capacity reservations from calendar
         // update all events between [startTime, endTime)
 		SortedMap<Calendar, Long> between = usage.subMap(start, end);
