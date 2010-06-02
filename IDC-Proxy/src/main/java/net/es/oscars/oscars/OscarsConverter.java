@@ -81,13 +81,13 @@ public class OscarsConverter {
 		Map<String, ProvisioningDomain> pds = new HashMap<String, ProvisioningDomain>();
 		Map<String, Node> nodes = new HashMap<String, Node>();
 		Map<String, Port> ports = new HashMap<String, Port>();
-		
+
 		final int LINK_NUM_SPLITS = 7;
 		List<Link> links = new ArrayList<Link>();
 		
 		if (domains == null)
 			return links;
-		
+
 		for (CtrlPlaneDomainContent domain : domains) {
 			if (domain.getNode() == null)  
 				continue;
@@ -98,14 +98,14 @@ public class OscarsConverter {
 					if (port.getLink() == null)
 						continue;
 					for (CtrlPlaneLinkContent link : port.getLink()) {
-
+												
 						String[] split = link.getRemoteLinkId().split(":");
 						if (split.length != LINK_NUM_SPLITS)
 							continue;
-						
+
 						CtrlPlaneFindResults find = findRemote(split[3], split[4], split[5], split[6], domains);
 						if (find != null) {
-							
+
 							split = link.getId().split(":");
 							
 							String domainID = split[3].replace("domain=", "");
@@ -114,12 +114,12 @@ public class OscarsConverter {
 							String linkID = split[6].replace("link=", "");
 							String fullLinkID = "urn:ogf:network:" + domainID
 									+ ":" + nodeID + ":" + portID + ":" + linkID;
-							
+
 							// set start port
 							AdminDomain aDomain = ads.get(domainID);
 							if(aDomain == null) {
 								aDomain = new AdminDomain();
-								
+
 								aDomain.setBodID(domainID);
 								aDomain.setName(domainID);
 								
@@ -134,7 +134,7 @@ public class OscarsConverter {
 
 								pds.put(domainID, pDomain);
 							}
-							
+
 							Node startNode = nodes.get(nodeID);
 							if(startNode == null) {
 								startNode = new Node();
@@ -143,17 +143,16 @@ public class OscarsConverter {
 								startNode.setBodID(nodeID);
 								if (node.getAddress() != null) {
 									//TODO: Check if getValue() instead of getCtrlPlaneAddressContentValue() should be used
-									startNode.setAddress(node.getAddress().getCtrlPlaneAddressContentValue());
+									startNode.setAddress(node.getAddress().getValue());
 									startNode.setType(node.getAddress().getType());
 								}
-								
 								nodes.put(nodeID, startNode);
 							}
 							
 							Port startPort = ports.get(portID);
 							if(startPort == null) {
 								startPort = new Port();
-							
+
 								startPort.setNode(startNode);
 								startPort.setBodID(portID);
 								
@@ -166,7 +165,7 @@ public class OscarsConverter {
 							nodeID = split2[4].replace("node=", "");
 							portID = split2[5].replace("port=", "");
 							linkID = split2[6].replace("link=", "");
-							
+
 							aDomain = ads.get(domainID);
 							
 							if(aDomain == null) {
@@ -176,44 +175,38 @@ public class OscarsConverter {
 								
 								ads.put(domainID, aDomain);
 							}
-							
 							pDomain = pds.get(domainID);
 							if(pDomain == null) {
 								pDomain = new ProvisioningDomain();
 								pDomain.setAdminDomain(aDomain);
 								pDomain.setBodID(domainID);
-	
+
 								pds.put(domainID, pDomain);
 							}
 							
 							Node endNode = nodes.get(nodeID);
 							if(endNode == null) {
 								endNode = new Node();
-								
+
 								endNode.setProvisioningDomain(pDomain);
 								endNode.setBodID(nodeID);
-								if (node.getAddress() != null) {
+								if (find.node.getAddress() != null) {
 									//TODO: Check if getValue() instead of getCtrlPlaneAddressContentValue() should be used
-									endNode.setAddress(find.node.getAddress().getCtrlPlaneAddressContentValue());
+									endNode.setAddress(find.node.getAddress().getValue());
 									endNode.setType(find.node.getAddress().getType());
 								}
 								
 								nodes.put(nodeID, endNode);
 							}
-							
 							Port endPort = ports.get(portID);
 							if(endPort == null) {
 								endPort = new Port();
-							
+
 								endPort.setNode(endNode);
 								endPort.setBodID(portID);
 								
 								ports.put(portID, endPort);
 							}
-						
-							// dump values
-							//System.out.println("port cap: " + port.getCapacity() + ", " + find.port.getCapacity());
-							//System.out.println("link cap: " + link.getCapacity() + ", " + find.link.getCapacity());
 							
 							// decide if inter or intra link
 							Link addLink;
@@ -226,11 +219,22 @@ public class OscarsConverter {
 							}
 							// set link properties from link
 							addLink.setBodID(fullLinkID);
-							addLink.setCapacity(Long.valueOf(link.getCapacity()));
-							addLink.setGranularity(Long.valueOf(link.getGranularity()));
-							addLink.setMaxResCapacity(Long.valueOf(link.getMaximumReservableCapacity()));
-							addLink.setMinResCapacity(Long.valueOf(link.getMinimumReservableCapacity()));
-														
+							
+							if (link.getCapacity() != null) {
+								addLink.setCapacity(Long.valueOf(link.getCapacity()));
+							}
+							
+							if (link.getGranularity() != null) {
+								addLink.setGranularity(Long.valueOf(link.getGranularity()));
+							}
+							
+							if (link.getMaximumReservableCapacity() != null) {
+								addLink.setMaxResCapacity(Long.valueOf(link.getMaximumReservableCapacity()));
+							}
+							
+							if (link.getMinimumReservableCapacity() != null) {
+								addLink.setMinResCapacity(Long.valueOf(link.getMinimumReservableCapacity()));
+							}
 							links.add(addLink);
 						} else {
 							//System.out.println("remote link not found for: " + link.getId());
@@ -362,16 +366,21 @@ public class OscarsConverter {
 		System.out.println("numDomains: " + domains.length);
     	for (CtrlPlaneDomainContent domain : domains) {
     	
-    		System.out.println("domain: " + domain.getId());
+    		System.out.println("domain: " + domain.getId());    		
     		
-    		System.out.println("nodes: ");
-    		CtrlPlaneNodeContent[] nodes = (CtrlPlaneNodeContent[])domain.getNode().toArray();
+    		System.out.println("nodes: ");    		
+    		CtrlPlaneNodeContent[] nodes = new CtrlPlaneNodeContent[domain.getNode().size()];
+    		
+    		for (int i=0; i < domain.getNode().size(); i++) {
+    			nodes[i] = domain.getNode().get(i);
+    			//System.out.println("***TOPO: " + domains.get(i));
+    		}
+    		    		
+    		//CtrlPlaneNodeContent[] nodes = (CtrlPlaneNodeContent[])domain.getNode().toArray();
     		if (nodes != null) {
+    		
     			for (CtrlPlaneNodeContent node : nodes) {
-    			
-    				System.out.println("node: " + node.getId());
     				
-    				System.out.println("node ports: ");
     				if (node.getPort() != null) {
     					for (CtrlPlanePortContent port : node.getPort()) {
     					
@@ -400,7 +409,15 @@ public class OscarsConverter {
     		}
     		
     		System.out.println("links: ");
-    		CtrlPlaneLinkContent[] links = (CtrlPlaneLinkContent[])domain.getLink().toArray();
+    		
+    		//CtrlPlaneLinkContent[] links = (CtrlPlaneLinkContent[])domain.getLink().toArray();
+    		
+    		CtrlPlaneLinkContent[] links = new CtrlPlaneLinkContent[domain.getLink().size()];
+    		
+    		for (int i=0; i < domain.getLink().size(); i++) {
+    			links[i] = domain.getLink().get(i);
+    		}
+    		
     		if (links != null) {
     			for (CtrlPlaneLinkContent link : links) {
     				
@@ -409,7 +426,14 @@ public class OscarsConverter {
     		}
     		
     		System.out.println("ports: ");
-    		CtrlPlanePortContent[] ports = (CtrlPlanePortContent[])domain.getPort().toArray();
+    		//CtrlPlanePortContent[] ports = (CtrlPlanePortContent[])domain.getPort().toArray();
+    		
+    		CtrlPlanePortContent[] ports = new CtrlPlanePortContent[domain.getPort().size()];
+    		
+    		for (int i=0; i < domain.getPort().size(); i++) {
+    			ports[i] = domain.getPort().get(i);
+    		}
+    		
     		if (ports != null) {
     			for (CtrlPlanePortContent port : ports) {
     			

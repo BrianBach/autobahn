@@ -11,6 +11,7 @@ import java.util.Map;
 
 import net.es.oscars.oscars.AAAFaultMessage;
 import net.es.oscars.oscars.BSSFaultMessage;
+import net.es.oscars.oscars.ResDetails;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.oscars.OscarsClient;
 import net.geant.autobahn.oscars.notify.OscarsNotifyClient;
@@ -45,13 +46,15 @@ public class ProxyImpl implements Proxy {
     public void cancelReservation(String resID) throws IOException {
 
         OscarsClient oscars = new OscarsClient();
-
+        String response = null;
         try {
-            oscars.cancelReservation(resID);
+            response = oscars.cancelReservation(resID);
         } catch (RemoteException e) {
             System.out.println("cancelReservation: " + e.getMessage());
             throw new IOException(e.getMessage());
         }
+        
+        //return response;
     }
 
     /* (non-Javadoc)
@@ -62,25 +65,16 @@ public class ProxyImpl implements Proxy {
         OscarsClient oscars = new OscarsClient();
         
         String src = "";
-
-        // Old Link
-        if ("10.10.32.30".equals(resInfo.getEndPort())) {
-            src = "urn:ogf:network:domain=dcn.internet2.edu:node=NEWY:port=S27135:link=10.100.80.197";
-        } else if ("10.10.32.29".equals(resInfo.getEndPort())) {
-            // New link
-            src = "urn:ogf:network:domain=dcn.internet2.edu:node=NEWY:port=S27391:link=10.100.80.201";
-        } else {
-            System.out.println("Warn - wrong Internet2 endport");
-        }
-
-        String dest = "urn:ogf:network:domain=dcn.internet2.edu:node=LOSA:port=S27135:link=10.100.100.9";
-
+        
+        src = resInfo.getStartPort();
+        String dest = resInfo.getEndPort();        
         String vlan = vlans.get(resInfo.getStartPort());
+
         if (vlan == null) {
             System.out.println("Warn - no assigned vlan found");
             vlan = "3210";
         }
-
+        
         return oscars.scheduleReservation(resInfo, src, dest, vlan);
     }
 
@@ -121,16 +115,31 @@ public class ProxyImpl implements Proxy {
     public boolean modifyReservation(ReservationInfo resInfo)
             throws IOException {
         
-        System.out.println("modifyReservation: " + resInfo.getBodID());
         OscarsClient oscars = new OscarsClient();
+        ResDetails resTemp = null;
+        
+        String src = "";
+        
+        src = resInfo.getStartPort();
+        String dest = resInfo.getEndPort();        
+        String vlan = vlans.get(resInfo.getStartPort());
+
+        if (vlan == null) {
+            System.out.println("Warn - no assigned vlan found");
+            vlan = "3210";
+        }
+
         try {
             // do not support for now
-            throw new RemoteException("not implemented");
-            
+            //throw new RemoteException("not implemented");
+        	resTemp = oscars.modifyReservation(resInfo, src, dest, vlan);
+
         } catch (RemoteException e) {
-            System.out.println("cancelReservation: " + e.getMessage());
-            throw new IOException(e.getMessage());
+        	throw new IOException(e.getMessage());
         }
+        
+        return ((resTemp != null) ? true : false);
+
     }
 
     /* (non-Javadoc)
@@ -140,13 +149,16 @@ public class ProxyImpl implements Proxy {
         
         System.out.println("queryReservation: " + resID);
         OscarsClient oscars = new OscarsClient();
+        
+        ReservationInfo response = null;
         try {
-            oscars.cancelReservation(resID);
+            response = oscars.queryReservation(resID);
         } catch (RemoteException e) {
-            System.out.println("cancelReservation: " + e.getMessage());
+            System.out.println("queryReservation: " + e.getMessage());
             throw new IOException(e.getMessage());
         }
-        return null;
+        
+        return response;
     }
 
      /* (non-Javadoc)

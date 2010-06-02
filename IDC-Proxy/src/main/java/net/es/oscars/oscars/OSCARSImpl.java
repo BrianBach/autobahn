@@ -47,6 +47,7 @@ import org.apache.log4j.Logger;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneDomainContent;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneDomainSignatureContent;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneHopContent;
+import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneLinkContent;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneTopologyContent;
 
 
@@ -93,7 +94,14 @@ public class OSCARSImpl implements OSCARS {
         // Vlans
         String vlans = pathInfo.value.getLayer2Info().getSrcVtag().getValue();
         
-        CtrlPlaneHopContent[] hops = (CtrlPlaneHopContent[]) pathInfo.value.getPath().getHop().toArray();
+        //CtrlPlaneHopContent[] hops = (CtrlPlaneHopContent[]) pathInfo.value.getPath().getHop().toArray();
+                
+        CtrlPlaneHopContent[] hops = new CtrlPlaneHopContent[pathInfo.value.getPath().getHop().size()];
+		
+		for (int i=0; i < pathInfo.value.getPath().getHop().size(); i++) {
+			hops[i] = pathInfo.value.getPath().getHop().get(i);
+		}
+		
         System.out.println("Hops received: " + hops.length);
         
         CtrlPlaneHopContent srcHop = hops[hops.length - 2];

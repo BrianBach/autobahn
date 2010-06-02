@@ -6,21 +6,7 @@
     <param-name>contextConfigLocation</param-name>
     <param-value>/WEB-INF/cxf-servlet.xml</param-value>
   </context-param>
-  <!--context-param>
-    <param-name>Security</param-name>
-    <param-value>/WEB-INF/application-context.xml</param-value>
-  </context-param-->
-  <!--listener>
-    <listener-class>
-	org.springframework.web.util.Log4jConfigListener
-      org.springframework.web.context.ContextLoaderListener
-    </listener-class>
-  </listener-->
-  <!--listener>
-    <listener-class>
-		
-    </listener-class>
-  </listener-->
+  
   <servlet>
     <servlet-name>CXFServlet</servlet-name>
     <servlet-class>
@@ -32,52 +18,3 @@
     <url-pattern>/*</url-pattern>
   </servlet-mapping>
 </web-app>
-<!--web-app xmlns="http://java.sun.com/xml/ns/j2ee" 
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" version="2.4">
-	<display-name>Autobahn IDM to proxy</display-name>
-	<description>Autobahn client portal </description>
-	
-	<context-param>
-		<param-name>webAppRootKey</param-name>
-		<param-value>autobahn.root</param-value>
-	</context-param>
-	<context-param>
-		<param-name>log4jConfigLocation</param-name>
-		<param-value>/WEB-INF/classes/log4j.properties</param-value>
-	</context-param-->
-	<!--Johnies-->
-	<!--listener>
-		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
-	</listener-->
-	<!--/Johnies-->
-
-	<!--context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>
-			/WEB-INF/cxf-servlet.xml		
-		</param-value>
-	</context-param>		
-
-	<servlet>
-		<servlet-name>CXFServlet</servlet-name>
-		<display-name>CXF Servlet</display-name>
-		<servlet-class>
-			org.apache.cxf.transport.servlet.CXFServlet
-		</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>CXFServlet</servlet-name>
-		<url-pattern>/services/*</url-pattern>
-		<load-on-startup>1</load-on-startup> 
-	</servlet-mapping>
-
-	<session-config>
-		<session-timeout>45</session-timeout>
-	</session-config>
-
-
-	
-</web-app-->

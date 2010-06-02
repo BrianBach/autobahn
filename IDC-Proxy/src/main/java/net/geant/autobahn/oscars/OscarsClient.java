@@ -2,7 +2,10 @@ package net.geant.autobahn.oscars;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.xml.ws.Holder;
 
@@ -27,7 +30,8 @@ import net.es.oscars.oscars.OSCARS_Service;
 import org.apache.log4j.Logger;
 import org.oasis_open.docs.wsn.b_2.Notify;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneDomainContent;
-
+import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneHopContent;
+import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneLinkContent;
 /**
  * @author Michal
  * 
@@ -61,7 +65,7 @@ public class OscarsClient {
 
 		ListRequest lreq = new ListRequest();
 		ListReply lrep = rc.listReservations(lreq);
-		
+
         List<ReservationInfo> resinfo = new ArrayList<ReservationInfo>();
 		if (lrep != null) {
 			List<ResDetails> res = lrep.getResDetails();
@@ -77,19 +81,27 @@ public class OscarsClient {
         return resinfo;
 	}
 
+	@SuppressWarnings("deprecation")
 	public List<Link> getTopology() throws Exception {
 		log.debug("getTopology.begin");
 
         GetTopologyContent content = new GetTopologyContent();
         content.setTopologyType("all");
-        GetTopologyResponseContent resp = rc.getNetworkTopology(content);
         
+        GetTopologyResponseContent resp = rc.getNetworkTopology(content);
+                
 		List<CtrlPlaneDomainContent> domains = resp.getTopology().getDomain();
 
 		System.out.println("Domains: " + domains.size());
-
 		
-		List<Link> links = OscarsConverter.getGeantTopology((CtrlPlaneDomainContent[]) domains.toArray());
+		CtrlPlaneDomainContent[] ctrlDomains = new CtrlPlaneDomainContent[domains.size()];
+
+		for (int i=0; i < domains.size(); i++) {
+			ctrlDomains[i] = domains.get(i);
+		}
+		
+		//CtrlPlaneDomainContent[] test = (CtrlPlaneDomainContent[]) domains.toArray();
+		List<Link> links = OscarsConverter.getGeantTopology(ctrlDomains);
 		log.debug("getTopology.end");
 		return links;
 	}
@@ -112,14 +124,15 @@ public class OscarsClient {
 		long startTime = reservation.getStartTime().getTimeInMillis() / 1000;
 		long endTime = reservation.getEndTime().getTimeInMillis() / 1000;
 		String description = reservation.getDescription();
+		
 		Holder<String> globalReservationId = new Holder<String>(resID);
 		// Bandwidth in Mbps
 		int bandwidth = ((int) (reservation.getCapacity() / 1000000));
-
+		
 		// Path
 		PathInfo pinfo = new PathInfo();
 		pinfo.setPathSetupMode(SIG_AUTO);
-
+		
 		Layer2Info l2 = new Layer2Info();
 		l2.setSrcEndpoint(src);
 		l2.setDestEndpoint(dest);
@@ -129,46 +142,53 @@ public class OscarsClient {
 		vlan.setTagged(true);
 		l2.setSrcVtag(vlan);
 		l2.setDestVtag(vlan);
-
+		
 		pinfo.setLayer2Info(l2);
 
 		Holder <PathInfo> pathInfo = new Holder<PathInfo>(pinfo);
 
 		ReservationInfo result = new ReservationInfo();
 		result.setBodID(reservation.getBodID());
-
+		
 		Holder<String> token = new Holder<String>();
 		Holder<String> status = new Holder<String>();
 		try {
+			
 			rc.createReservation(globalReservationId, startTime, endTime, bandwidth, description, pathInfo, token, status);
+			
 		} catch (Exception e) {
 			System.out.println("Error when schedule oscars: " + e.getMessage());
 			result.setDescription(e.getMessage());
-
+			
 			return result;
 		}
 		
 		if (ST_PENDING.equals(status)) {
 			// Read and return vlan
+			
 			Integer sel_vlan = Integer.valueOf(pathInfo.value
 					.getLayer2Info().getSrcVtag().getValue());
-
+			
 			result.setCalculatedConstraints("" + sel_vlan);
 		}
-
+		
 		return result;
 	}
 
-	public void cancelReservation(String resID) throws RemoteException {
+	public String cancelReservation(String resID) throws RemoteException {
 
 		GlobalReservationId gid = new GlobalReservationId();
 		gid.setGri(resID);
+		
+		String response = null;
 
 		try {
-			rc.cancelReservation(gid);
+			response = rc.cancelReservation(gid);
 		} catch (Exception e) {
 			throw new RemoteException(e.getMessage(), e.getCause());
 		}
+		
+		return response;
 	}
 
 	public String createPath(String resID) throws RemoteException {
@@ -182,7 +202,130 @@ public class OscarsClient {
 			throw new RemoteException(e.getMessage(), e.getCause());
 		}
 	}
+	
+	public ResDetails modifyReservation(ReservationInfo reservation, String src, String dest, String vlans) throws RemoteException {
 
+		final String resID = reservation.getBodID();
+		
+		long startTime = reservation.getStartTime().getTimeInMillis() / 1000;
+		long endTime = reservation.getEndTime().getTimeInMillis() / 1000;
+		String description = reservation.getDescription();
+		
+		String globalReservationId = resID;
+		// Bandwidth in Mbps
+		int bandwidth = ((int) (reservation.getCapacity() / 1000000));
+		
+		// Path
+		PathInfo pinfo = new PathInfo();
+		pinfo.setPathSetupMode(SIG_AUTO);
+		
+		Layer2Info l2 = new Layer2Info();
+		l2.setSrcEndpoint(src);
+		l2.setDestEndpoint(dest);
+		
+		VlanTag vlan = new VlanTag();
+		vlan.setValue(vlans);
+		vlan.setTagged(true);
+		l2.setSrcVtag(vlan);
+		l2.setDestVtag(vlan);
+		
+		pinfo.setLayer2Info(l2);
+
+        ReservationInfo result = new ReservationInfo();
+        result.setBodID(reservation.getBodID());
+
+        ResDetails resD = null;
+        try {
+            resD = rc.modifyReservation(globalReservationId, startTime, endTime, bandwidth, description, pinfo);
+        
+        } catch (Exception e) {
+            result.setDescription(e.getMessage());
+
+        }
+        /*
+        if (ST_PENDING.equals(status)) {
+            // Read and return vlan
+            Integer sel_vlan = Integer.valueOf(pathInfo.value
+                    .getLayer2Info().getSrcVtag().getValue());
+
+            result.setCalculatedConstraints("" + sel_vlan);
+        } */
+        //ResDetails temp = null;
+        
+        return resD;
+    }
+	
+	public ReservationInfo queryReservation(String resID) throws RemoteException {
+
+		GlobalReservationId gid = new GlobalReservationId();
+		gid.setGri(resID);
+		
+		Holder<String> globalReservationId = new Holder<String>();
+		Holder<String> login = new Holder<String>();
+		Holder<String> status = new Holder<String>();
+		Holder<Long> startTime = new Holder<Long>();
+		Holder<Long> endTime = new Holder<Long>();
+		Holder<Long> createTime = new Holder<Long>();
+		Holder<Integer> bandwidth = new Holder<Integer>();
+		Holder<String> description = new Holder<String>();
+		Holder<PathInfo> pathInfo = new Holder<PathInfo>();
+
+		try {
+			rc.queryReservation(resID, globalReservationId, login, status, startTime, endTime, createTime, bandwidth, description, pathInfo);
+		} catch (Exception e) {
+			throw new RemoteException(e.getMessage(), e.getCause());
+		}
+		
+		// Time
+        Calendar start = Calendar.getInstance();
+        start.setTimeInMillis(startTime.value * 1000);
+        
+        Calendar end = Calendar.getInstance();
+        end.setTimeInMillis(endTime.value * 1000);
+        
+        // Ports
+        String dest = pathInfo.value.getLayer2Info().getDestEndpoint();        
+        String src = pathInfo.value.getLayer2Info().getSrcEndpoint();
+        
+        // Vlans
+        String vlans = pathInfo.value.getLayer2Info().getSrcVtag().getValue();
+        
+        //CtrlPlaneHopContent[] hops = (CtrlPlaneHopContent[]) pathInfo.value.getPath().getHop().toArray();
+        CtrlPlaneHopContent[] hops = new CtrlPlaneHopContent[pathInfo.value.getPath().getHop().size()];
+		
+        for (int i=0; i < pathInfo.value.getPath().getHop().size(); i++) {
+			hops[i] = pathInfo.value.getPath().getHop().get(i);
+		}
+		
+        System.out.println("Hops received: " + hops.length);
+        
+        //Original implementation
+        /*
+        CtrlPlaneHopContent srcHop = hops[hops.length - 2];
+        String src = srcHop.getLinkIdRef();
+        CtrlPlaneLinkContent srcLink = hops[hops.length - 2].getLink();
+        String src = srcLink.getId();
+        */
+        
+        String bodId = globalReservationId.value;
+        
+        ReservationInfo resInfo = new ReservationInfo();
+        
+        src = src.substring(src.indexOf(":link=") + 6);
+        dest = dest.substring(dest.indexOf(":link=") + 6);
+        
+		resInfo.setBodID(bodId);
+		resInfo.setDescription(description.value);
+		resInfo.setCapacity(bandwidth.value);
+		resInfo.setStartTime(start);
+        resInfo.setEndTime(end);
+        resInfo.setStartPort(src);
+        resInfo.setEndPort(dest);
+        resInfo.setUserVlans(vlans);		
+		
+		return resInfo;
+	}
+	
 	public void Notify() throws RemoteException {
 
 		Notify notify = new Notify();
