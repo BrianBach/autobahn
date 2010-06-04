@@ -193,10 +193,16 @@ public class ResourcesReservation {
 		GenericLink src = ta.getEdgeLink(ingress);
 		GenericLink dest = ta.getEdgeLink(egress);
 
-		if(src == null || dest == null) {
-			log.debug("Edge link not found!");
+		if (src == null) {
+			log.debug("Edge link not found for source link " + ingress + "!");
+			log.info("checkResources by DM failed!");
 			return null;
 		}
+        if (dest == null) {
+            log.debug("Edge link not found for destination link " + egress + "!");
+            log.info("checkResources by DM failed!");
+            return null;
+        }
 
 		Calendar sTime = par.getStartTime();
 		Calendar eTime = par.getEndTime();
