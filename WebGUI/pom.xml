@@ -9,14 +9,14 @@
 	
 	<modelVersion>4.0.0</modelVersion>
     <groupId>net.geant.autobahn</groupId>
-    <artifactId>autobahn-webgui</artifactId>
+    <artifactId>autobahn-gui</artifactId>
     <version>0.4.0-SNAPSHOT</version>
     <name>Web GUI</name>
-    <packaging>jar</packaging>	
+    <packaging>war</packaging>	
 	
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
-        <finalName>autobahn-webgui</finalName>
+        <finalName>autobahn-gui</finalName>
 		<resources>
 			<resource>
 				<directory>./src/main/java/</directory>
@@ -40,6 +40,47 @@
 					</archive>					
 				</configuration>
 			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<includes>
+						<include>**/*.java</include>
+					</includes>
+					<excludes>
+						<exclude>**/Actions.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+            	<groupId>org.codehaus.mojo</groupId>
+            	<artifactId>tomcat-maven-plugin</artifactId>
+            	<configuration>
+            		<!-- Server is defined in settings.xml -->
+                    <server>tomcat_150_140_8_58</server>
+                    <url>http://150.140.8.58:8080/manager</url>
+                    <path>/autobahn-gui</path>
+            	</configuration>
+        	</plugin>
+        	
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>selenium-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>start-server</goal>
+						</goals>
+						<configuration>
+							<background>true</background>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
 		</plugins>
 	</build>
 	
@@ -339,5 +380,17 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency--> 
+		<dependency>
+		    <groupId>org.seleniumhq.selenium.client-drivers</groupId>
+		    <artifactId>selenium-java-client-driver</artifactId>
+		    <version>1.0.1</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.7</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>
