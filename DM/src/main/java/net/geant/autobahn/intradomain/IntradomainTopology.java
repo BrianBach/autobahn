@@ -98,7 +98,11 @@ public class IntradomainTopology {
 
     	domainAddress = domainId.replace("dm2idm", "interdomain");
     	
-    	if(cnisAddress == null || "none".equals(cnisAddress)) {
+    	// cNIS is not going to be used (even if it is available), in case
+    	// the database is not empty, because this might create consistency problems.
+    	// For example, the cNIS topology could been updated while our database
+    	// contains reservations on the old topology.
+    	if(cnisAddress == null || "none".equals(cnisAddress) || !isDatabaseEmpty()) {
     		// read it from db
 			readFromDatabase();
     	} else {
@@ -110,6 +114,17 @@ public class IntradomainTopology {
 				readFromDatabase();
 			}
     	}
+    }
+    
+    // Checks if Database is empty by searching for Intradomain Reservations
+    private boolean isDatabaseEmpty() {
+        DmDAOFactory daos = HibernateDmDAOFactory.getInstance();
+        List<IntradomainReservation> rsv_list = daos.getIntradomainReservationDAO().getAll();
+        if (rsv_list == null || rsv_list.size() == 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 	private void readFromDatabase() {
