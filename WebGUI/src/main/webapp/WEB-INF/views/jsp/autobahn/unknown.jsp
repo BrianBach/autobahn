@@ -43,7 +43,7 @@
 			<th><spring:message code="reservation.delay" text="Delay"/></th>
 			<th><spring:message code="reservation.capacity" text="Capacity"/></th>
 			<th><spring:message code="reservation.userVlanId" text="Vlan"/></th>
-			<th><spring:message code="reservation.resilience" text="Recilance"/></th>
+			<th><spring:message code="reservation.resilience" text="Resilience"/></th>
 		</tr>  
 		<c:forEach items="${service.reservations}" var="item" varStatus="loopStatus">
 			<spring:bind path="service.reservations.list">
