@@ -315,7 +315,7 @@ var final = testing.value;
 	<hr/>
 	<c:if test="${test!= null}">
 		<c:if test="${test.status==true}">
-			<h2>Reservation test successed</h2>
+			<h2>Reservation test succeeded</h2>
 		</c:if>
 		<c:if test="${test.status==false}">
 			<h2 style="color:red">Reservation test failed</h2>
