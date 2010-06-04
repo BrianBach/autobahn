@@ -352,7 +352,7 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
 			log.warn(" -- -- Already refreshed ! " + gl);
 			
 			// Link id already established
-			info.add("Mapping link " + gl + "\t to " + l.getBodID());
+			info.add("Mapping interdomain link " + gl + "\t to " + l.getBodID());
 			edgeLinks.put(l, gl);
 			return true;
 		}
@@ -391,7 +391,7 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
 		absLinks.put(sportname, l);
 		edgeLinks.put(l, gl);
 
-		info.add("Mapping link " + gl + "\t to " + identifiers.getLinkId());
+		info.add("Mapping interdomain link " + gl + "\t to " + identifiers.getLinkId());
 		
 		return true;
     }
@@ -432,7 +432,7 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
             	bodID = internalIds.generateLinkID();
             	l.setBodID(bodID);
             	
-            	info.add("Mapping link " + sname + " - " + dname + "\t to " + bodID);
+            	info.add("Mapping client link " + sname + " - " + dname + "\t to " + bodID);
             	
             	edgeLinks.put(l, glink);
     		}
