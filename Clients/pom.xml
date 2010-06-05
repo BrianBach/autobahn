@@ -51,6 +51,49 @@
 		</plugins>		
 	</build>
 
+	<profiles>
+		<profile>
+			<id>wsdl-gen</id>
+			<build>			
+				<plugins>
+					<plugin>
+						<groupId>org.apache.cxf</groupId>
+						<artifactId>cxf-java2ws-plugin</artifactId>
+						<version>2.2.4</version>
+						<dependencies>
+							<dependency>
+								<groupId>org.apache.cxf</groupId>
+								<artifactId>cxf-rt-frontend-jaxws</artifactId>
+								<version>2.2.1</version>
+							</dependency>
+							<dependency>
+								<groupId>org.apache.cxf</groupId>
+								<artifactId>cxf-rt-frontend-simple</artifactId>
+								<version>2.2.2</version>
+							</dependency>
+						</dependencies>
+						<executions>
+							<execution>
+								<id>wsdl-authorization</id>
+								<phase>compile</phase>
+								<configuration>
+									<className>net.geant.autobahn.aai.Authorization</className>
+									<outputFile>src/main/resources/wsdl/authorization.wsdl</outputFile>
+									<genWsdl>true</genWsdl>
+									<serviceName>AuthorizationService</serviceName>
+									<verbose>true</verbose>
+								</configuration>
+								<goals>
+									<goal>java2ws</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	
 	<dependencies>
     	<dependency>
       		<groupId>net.geant.autobahn</groupId>

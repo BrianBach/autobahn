@@ -1,0 +1,662 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="AuthorizationService" targetNamespace="http://aai.autobahn.geant.net/"
+xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://aai.autobahn.geant.net/"
+xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:tns="constraints.autobahn.geant.net" attributeFormDefault="unqualified"
+    elementFormDefault="unqualified" targetNamespace="constraints.autobahn.geant.net">
+      <xs:complexType name="PathConstraints">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" name="addNames" nillable="true"
+          type="tns:ConstraintsNames" />
+          <xs:element maxOccurs="unbounded" name="addConstraints" nillable="true"
+          type="tns:AdditiveConstraint" />
+          <xs:element maxOccurs="unbounded" name="boolNames" nillable="true"
+          type="tns:ConstraintsNames" />
+          <xs:element maxOccurs="unbounded" name="boolConstraints" nillable="true"
+          type="tns:BooleanConstraint" />
+          <xs:element maxOccurs="unbounded" name="rangeNames" nillable="true"
+          type="tns:ConstraintsNames" />
+          <xs:element maxOccurs="unbounded" name="rangeConstraints" nillable="true"
+          type="tns:RangeConstraint" />
+          <xs:element maxOccurs="unbounded" name="minValNames" nillable="true"
+          type="tns:ConstraintsNames" />
+          <xs:element maxOccurs="unbounded" name="minValConstraints" nillable="true"
+          type="tns:MinValueConstraint" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="AdditiveConstraint">
+        <xs:complexContent>
+          <xs:extension base="tns:Constraint">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="value" type="xs:double" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType abstract="true" name="Constraint">
+        <xs:all />
+      </xs:complexType>
+      <xs:complexType name="BooleanConstraint">
+        <xs:complexContent>
+          <xs:extension base="tns:Constraint">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="value" type="xs:boolean" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="RangeConstraint">
+        <xs:complexContent>
+          <xs:extension base="tns:Constraint">
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="ranges" nillable="true" type="tns:Range" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="Range">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="min" type="xs:int" />
+          <xs:element minOccurs="0" name="max" type="xs:int" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="MinValueConstraint">
+        <xs:complexContent>
+          <xs:extension base="tns:Constraint">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="value" type="xs:double" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="GlobalConstraints">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" name="domainsIds" nillable="true" type="xs:string" />
+          <xs:element maxOccurs="unbounded" name="domainConstraints" nillable="true"
+          type="tns:DomainConstraints" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="DomainConstraints">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" name="pathConstraints" nillable="true"
+          type="tns:PathConstraints" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="ConstraintsNames">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="VLANS" />
+          <xs:enumeration value="TIMESLOTS" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:schema>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:tns="common.intradomain.autobahn.geant.net" attributeFormDefault="unqualified"
+    elementFormDefault="unqualified" targetNamespace="common.intradomain.autobahn.geant.net">
+      <xs:complexType name="GenericLink">
+        <xs:sequence>
+          <xs:element name="linkId" type="xs:long" />
+          <xs:element minOccurs="0" name="version" type="tns:VersionInfo" />
+          <xs:element minOccurs="0" name="startInterface" type="tns:GenericInterface" />
+          <xs:element minOccurs="0" name="endInterface" type="tns:GenericInterface" />
+          <xs:element minOccurs="0" name="direction" type="xs:string" />
+          <xs:element name="protection" type="xs:boolean" />
+          <xs:element name="propDelay" type="xs:double" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="VersionInfo">
+        <xs:sequence>
+          <xs:element name="versionId" type="xs:long" />
+          <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="createdBy" type="xs:string" />
+          <xs:element minOccurs="0" name="modifiedBy" type="xs:string" />
+          <xs:element minOccurs="0" name="dateCreated" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="dateModified" type="xs:dateTime" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="GenericInterface">
+        <xs:sequence>
+          <xs:element name="interfaceId" type="xs:long" />
+          <xs:element minOccurs="0" name="version" type="tns:VersionInfo" />
+          <xs:element minOccurs="0" name="interfaceType" type="tns:InterfaceType" />
+          <xs:element minOccurs="0" name="parentInterface" type="tns:GenericInterface" />
+          <xs:element minOccurs="0" name="node" type="tns:Node" />
+          <xs:element minOccurs="0" name="name" type="xs:string" />
+          <xs:element minOccurs="0" name="description" type="xs:string" />
+          <xs:element name="bandwidth" type="xs:long" />
+          <xs:element minOccurs="0" name="status" type="xs:string" />
+          <xs:element minOccurs="0" name="mtu" type="xs:string" />
+          <xs:element minOccurs="0" name="domainId" type="xs:string" />
+          <xs:element name="clientPort" type="xs:boolean" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="InterfaceType">
+        <xs:sequence>
+          <xs:element name="interfaceTypeId" type="xs:long" />
+          <xs:element minOccurs="0" name="switchingType" type="xs:string" />
+          <xs:element minOccurs="0" name="dataEncodingType" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="Node">
+        <xs:sequence>
+          <xs:element name="nodeId" type="xs:long" />
+          <xs:element minOccurs="0" name="version" type="tns:VersionInfo" />
+          <xs:element minOccurs="0" name="location" type="tns:Location" />
+          <xs:element minOccurs="0" name="name" type="xs:string" />
+          <xs:element minOccurs="0" name="description" type="xs:string" />
+          <xs:element minOccurs="0" name="status" type="xs:string" />
+          <xs:element minOccurs="0" name="vendor" type="xs:string" />
+          <xs:element minOccurs="0" name="model" type="xs:string" />
+          <xs:element minOccurs="0" name="osName" type="xs:string" />
+          <xs:element minOccurs="0" name="osVersion" type="xs:string" />
+          <xs:element minOccurs="0" name="ipAddress" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="Location">
+        <xs:sequence>
+          <xs:element name="locationId" type="xs:long" />
+          <xs:element minOccurs="0" name="name" type="xs:string" />
+          <xs:element minOccurs="0" name="description" type="xs:string" />
+          <xs:element minOccurs="0" name="country" type="xs:string" />
+          <xs:element minOccurs="0" name="institution" type="xs:string" />
+          <xs:element minOccurs="0" name="street" type="xs:string" />
+          <xs:element name="floor" type="xs:int" />
+          <xs:element name="roomSuite" type="xs:int" />
+          <xs:element name="row_" type="xs:int" />
+          <xs:element name="cabinet" type="xs:int" />
+          <xs:element minOccurs="0" name="zipCode" type="xs:string" />
+          <xs:element minOccurs="0" name="phoneNumber" type="xs:string" />
+          <xs:element minOccurs="0" name="eMailAddress" type="xs:string" />
+          <xs:element name="geoLatitude" type="xs:double" />
+          <xs:element name="geoLongitude" type="xs:double" />
+          <xs:element minOccurs="0" name="type" type="xs:string" />
+          <xs:element minOccurs="0" name="zone" type="xs:string" />
+          <xs:element name="altitude" type="xs:double" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns="useraccesspoint.autobahn.geant.net" attributeFormDefault="unqualified"
+    elementFormDefault="unqualified" targetNamespace="useraccesspoint.autobahn.geant.net">
+      <xs:complexType name="PathInfo">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="domains" nillable="true"
+          type="xs:string" />
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="links" nillable="true"
+          type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns="net.geant.autobahn.intradomain.IntradomainPath"
+    xmlns:ns1="common.intradomain.autobahn.geant.net" xmlns:ns2="constraints.autobahn.geant.net"
+    attributeFormDefault="unqualified" elementFormDefault="unqualified"
+    targetNamespace="net.geant.autobahn.intradomain.IntradomainPath">
+      <xs:import namespace="common.intradomain.autobahn.geant.net" />
+      <xs:import namespace="constraints.autobahn.geant.net" />
+      <xs:complexType name="IntradomainPath">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="gLinks" nillable="true"
+          type="ns1:GenericLink" />
+          <xs:element name="pcons">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="entry">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element minOccurs="0" name="key" type="ns1:GenericLink" />
+                      <xs:element minOccurs="0" name="value" type="ns2:PathConstraints" />
+                    </xs:sequence>
+                  </xs:complexType>
+                </xs:element>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="capacity" type="xs:long" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:ns1="reservation.autobahn.geant.net" xmlns:ns2="network.autobahn.geant.net"
+    xmlns:ns3="net.geant.autobahn.intradomain.IntradomainPath"
+    xmlns:tns="http://aai.autobahn.geant.net/" attributeFormDefault="unqualified"
+    elementFormDefault="unqualified" targetNamespace="http://aai.autobahn.geant.net/">
+      <xs:import namespace="reservation.autobahn.geant.net" />
+      <xs:import namespace="network.autobahn.geant.net" />
+      <xs:import namespace="net.geant.autobahn.intradomain.IntradomainPath" />
+      <xs:element name="cancelReservation" type="tns:cancelReservation" />
+      <xs:element name="cancelReservationResponse" type="tns:cancelReservationResponse" />
+      <xs:element name="configureSystem" type="tns:configureSystem" />
+      <xs:element name="configureSystemResponse" type="tns:configureSystemResponse" />
+      <xs:element name="modifyACL" type="tns:modifyACL" />
+      <xs:element name="modifyACLResponse" type="tns:modifyACLResponse" />
+      <xs:element name="modifyReservation" type="tns:modifyReservation" />
+      <xs:element name="modifyReservationResponse" type="tns:modifyReservationResponse" />
+      <xs:element name="monitorPath" type="tns:monitorPath" />
+      <xs:element name="monitorPathResponse" type="tns:monitorPathResponse" />
+      <xs:element name="reserveInterdomainPath" type="tns:reserveInterdomainPath" />
+      <xs:element name="reserveInterdomainPathResponse"
+      type="tns:reserveInterdomainPathResponse" />
+      <xs:element name="reserveIntradomainPath" type="tns:reserveIntradomainPath" />
+      <xs:element name="reserveIntradomainPathResponse"
+      type="tns:reserveIntradomainPathResponse" />
+      <xs:element name="viewSystemLogs" type="tns:viewSystemLogs" />
+      <xs:element name="viewSystemLogsResponse" type="tns:viewSystemLogsResponse" />
+      <xs:complexType name="modifyReservation">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="reservation" type="xs:string" />
+          <xs:element minOccurs="0" name="user" type="ns1:User" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="modifyReservationResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="response" type="tns:response" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="cancelReservation">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="reservation" type="xs:string" />
+          <xs:element minOccurs="0" name="user" type="ns1:User" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="cancelReservationResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="response" type="tns:response" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="reserveInterdomainPath">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="path" type="ns2:Path" />
+          <xs:element minOccurs="0" name="user" type="ns1:User" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="reserveInterdomainPathResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="response" type="tns:response" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="viewSystemLogs">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="user" type="ns1:User" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="viewSystemLogsResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="response" type="tns:response" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="reserveIntradomainPath">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="path" type="ns3:IntradomainPath" />
+          <xs:element minOccurs="0" name="user" type="ns1:User" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="reserveIntradomainPathResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="response" type="tns:response" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="monitorPath">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="path" type="ns2:Path" />
+          <xs:element minOccurs="0" name="user" type="ns1:User" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="monitorPathResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="response" type="tns:response" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="configureSystem">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="user" type="ns1:User" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="configureSystemResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="response" type="tns:response" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="modifyACL">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="user" type="ns1:User" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="modifyACLResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="response" type="tns:response" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="response">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="PERMIT" />
+          <xs:enumeration value="DENY" />
+          <xs:enumeration value="NOTAPPLICABLE" />
+          <xs:enumeration value="INDETERMINATE" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:schema>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="network.autobahn.geant.net"
+    xmlns:ns2="useraccesspoint.autobahn.geant.net" xmlns:ns3="constraints.autobahn.geant.net"
+    xmlns:tns="reservation.autobahn.geant.net" attributeFormDefault="unqualified"
+    elementFormDefault="unqualified" targetNamespace="reservation.autobahn.geant.net">
+      <xs:import namespace="network.autobahn.geant.net" />
+      <xs:import namespace="useraccesspoint.autobahn.geant.net" />
+      <xs:import namespace="constraints.autobahn.geant.net" />
+      <xs:complexType name="User">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="name" type="xs:string" />
+          <xs:element minOccurs="0" name="homeDomain" type="ns1:AdminDomain" />
+          <xs:element minOccurs="0" name="email" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="Service">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="state" type="tns:state" />
+          <xs:element minOccurs="0" name="bodID" type="xs:string" />
+          <xs:element minOccurs="0" name="justification" type="xs:string" />
+          <xs:element name="priority" type="xs:int" />
+          <xs:element minOccurs="0" name="user" type="tns:User" />
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="reservations" nillable="true"
+          type="tns:autobahnReservation" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType abstract="true" name="autobahnReservation">
+        <xs:complexContent>
+          <xs:extension base="tns:Reservation">
+            <xs:sequence />
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="Reservation">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="bodID" type="xs:string" />
+          <xs:element minOccurs="0" name="startPort" type="ns1:Port" />
+          <xs:element minOccurs="0" name="endPort" type="ns1:Port" />
+          <xs:element minOccurs="0" name="startTime" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="endTime" type="xs:dateTime" />
+          <xs:element name="priority" type="xs:int" />
+          <xs:element minOccurs="0" name="description" type="xs:string" />
+          <xs:element name="capacity" type="xs:long" />
+          <xs:element minOccurs="0" name="userInclude" type="ns2:PathInfo" />
+          <xs:element minOccurs="0" name="userExclude" type="ns2:PathInfo" />
+          <xs:element name="userVlanId" type="xs:int" />
+          <xs:element name="maxDelay" type="xs:int" />
+          <xs:element minOccurs="0" name="resiliency" type="xs:string" />
+          <xs:element name="bidirectional" type="xs:boolean" />
+          <xs:element minOccurs="0" name="globalConstraints" type="ns3:GlobalConstraints" />
+          <xs:element minOccurs="0" name="path" type="ns1:Path" />
+          <xs:element name="intState" type="xs:int" />
+          <xs:element name="fake" type="xs:boolean" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="state">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="SCHEDULING" />
+          <xs:enumeration value="SCHEDULED" />
+          <xs:enumeration value="FAILED" />
+          <xs:enumeration value="CANCELLING" />
+          <xs:enumeration value="CANCELLED" />
+          <xs:enumeration value="FINISHED" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:schema>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="network.autobahn.geant.net"
+    attributeFormDefault="unqualified" elementFormDefault="unqualified"
+    targetNamespace="network.autobahn.geant.net">
+      <xs:complexType name="AdminDomain">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="bodID" type="xs:string" />
+          <xs:element minOccurs="0" name="ASID" type="xs:string" />
+          <xs:element minOccurs="0" name="name" type="xs:string" />
+          <xs:element name="clientDomain" type="xs:boolean" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="Path">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" name="links" nillable="true" type="tns:Link" />
+          <xs:element name="monetary_cost" type="xs:double" />
+          <xs:element name="manual_cost" type="xs:double" />
+          <xs:element name="capacity" type="xs:long" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="Link">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="bodID" type="xs:string" />
+          <xs:element name="kind" type="xs:int" />
+          <xs:element minOccurs="0" name="startPort" type="tns:Port" />
+          <xs:element minOccurs="0" name="endPort" type="tns:Port" />
+          <xs:element name="bidirectional" type="xs:boolean" />
+          <xs:element name="delay" type="xs:int" />
+          <xs:element name="manualCost" type="xs:double" />
+          <xs:element name="monetaryCost" type="xs:double" />
+          <xs:element name="granularity" type="xs:long" />
+          <xs:element name="minResCapacity" type="xs:long" />
+          <xs:element name="maxResCapacity" type="xs:long" />
+          <xs:element name="capacity" type="xs:long" />
+          <xs:element minOccurs="0" name="resilience" type="xs:string" />
+          <xs:element minOccurs="0" name="timestamp" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="localName" type="xs:string" />
+          <xs:element minOccurs="0" name="type" type="tns:LinkType" />
+          <xs:element minOccurs="0" name="operationalState" type="tns:StateOper" />
+          <xs:element minOccurs="0" name="administrativeState" type="tns:StateAdmin" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="Port">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="bodID" type="xs:string" />
+          <xs:element minOccurs="0" name="address" type="xs:string" />
+          <xs:element minOccurs="0" name="technology" type="xs:string" />
+          <xs:element name="bundled" type="xs:boolean" />
+          <xs:element minOccurs="0" name="node" type="tns:Node" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="Node">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="bodID" type="xs:string" />
+          <xs:element minOccurs="0" name="type" type="xs:string" />
+          <xs:element minOccurs="0" name="address" type="xs:string" />
+          <xs:element minOccurs="0" name="provisioningDomain" type="tns:ProvisioningDomain" />
+          <xs:element minOccurs="0" name="name" type="xs:string" />
+          <xs:element minOccurs="0" name="country" type="xs:string" />
+          <xs:element minOccurs="0" name="city" type="xs:string" />
+          <xs:element minOccurs="0" name="institution" type="xs:string" />
+          <xs:element minOccurs="0" name="longitude" type="xs:string" />
+          <xs:element minOccurs="0" name="latitude" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ProvisioningDomain">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="bodID" type="xs:string" />
+          <xs:element minOccurs="0" name="provType" type="xs:string" />
+          <xs:element minOccurs="0" name="adminDomain" type="tns:AdminDomain" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="LinkType">
+        <xs:sequence>
+          <xs:element name="type" type="xs:int" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="StateOper">
+        <xs:sequence>
+          <xs:element name="state" type="xs:int" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="StateAdmin">
+        <xs:sequence>
+          <xs:element name="state" type="xs:int" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="configureSystemResponse">
+    <wsdl:part name="parameters" element="tns:configureSystemResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reserveIntradomainPathResponse">
+    <wsdl:part name="parameters" element="tns:reserveIntradomainPathResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reserveInterdomainPath">
+    <wsdl:part name="parameters" element="tns:reserveInterdomainPath"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="monitorPath">
+    <wsdl:part name="parameters" element="tns:monitorPath"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="modifyACLResponse">
+    <wsdl:part name="parameters" element="tns:modifyACLResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="modifyReservationResponse">
+    <wsdl:part name="parameters" element="tns:modifyReservationResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="viewSystemLogsResponse">
+    <wsdl:part name="parameters" element="tns:viewSystemLogsResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="viewSystemLogs">
+    <wsdl:part name="parameters" element="tns:viewSystemLogs"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reserveInterdomainPathResponse">
+    <wsdl:part name="parameters" element="tns:reserveInterdomainPathResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="modifyACL">
+    <wsdl:part name="parameters" element="tns:modifyACL"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="modifyReservation">
+    <wsdl:part name="parameters" element="tns:modifyReservation"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="cancelReservationResponse">
+    <wsdl:part name="parameters" element="tns:cancelReservationResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="configureSystem">
+    <wsdl:part name="parameters" element="tns:configureSystem"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="monitorPathResponse">
+    <wsdl:part name="parameters" element="tns:monitorPathResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="cancelReservation">
+    <wsdl:part name="parameters" element="tns:cancelReservation"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reserveIntradomainPath">
+    <wsdl:part name="parameters" element="tns:reserveIntradomainPath"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="Authorization">
+    <wsdl:operation name="modifyReservation">
+      <wsdl:input name="modifyReservation" message="tns:modifyReservation"></wsdl:input>
+      <wsdl:output name="modifyReservationResponse" message="tns:modifyReservationResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cancelReservation">
+      <wsdl:input name="cancelReservation" message="tns:cancelReservation"></wsdl:input>
+      <wsdl:output name="cancelReservationResponse" message="tns:cancelReservationResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="reserveInterdomainPath">
+      <wsdl:input name="reserveInterdomainPath" message="tns:reserveInterdomainPath"></wsdl:input>
+      <wsdl:output name="reserveInterdomainPathResponse"
+      message="tns:reserveInterdomainPathResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="viewSystemLogs">
+      <wsdl:input name="viewSystemLogs" message="tns:viewSystemLogs"></wsdl:input>
+      <wsdl:output name="viewSystemLogsResponse" message="tns:viewSystemLogsResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="reserveIntradomainPath">
+      <wsdl:input name="reserveIntradomainPath" message="tns:reserveIntradomainPath"></wsdl:input>
+      <wsdl:output name="reserveIntradomainPathResponse"
+      message="tns:reserveIntradomainPathResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="monitorPath">
+      <wsdl:input name="monitorPath" message="tns:monitorPath"></wsdl:input>
+      <wsdl:output name="monitorPathResponse" message="tns:monitorPathResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="configureSystem">
+      <wsdl:input name="configureSystem" message="tns:configureSystem"></wsdl:input>
+      <wsdl:output name="configureSystemResponse" message="tns:configureSystemResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="modifyACL">
+      <wsdl:input name="modifyACL" message="tns:modifyACL"></wsdl:input>
+      <wsdl:output name="modifyACLResponse" message="tns:modifyACLResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AuthorizationServiceSoapBinding" type="tns:Authorization">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="modifyReservation">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="modifyReservation">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="modifyReservationResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cancelReservation">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="cancelReservation">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="cancelReservationResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="reserveInterdomainPath">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="reserveInterdomainPath">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="reserveInterdomainPathResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="viewSystemLogs">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="viewSystemLogs">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="viewSystemLogsResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="monitorPath">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="monitorPath">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="monitorPathResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="reserveIntradomainPath">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="reserveIntradomainPath">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="reserveIntradomainPathResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="configureSystem">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="configureSystem">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="configureSystemResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="modifyACL">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="modifyACL">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="modifyACLResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AuthorizationService">
+    <wsdl:port name="AuthorizationPort" binding="tns:AuthorizationServiceSoapBinding">
+      <soap:address location="http://localhost:9090/AuthorizationPort" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
