@@ -4,13 +4,13 @@
 	<parent>
 		<artifactId>autobahn</artifactId>
 		<groupId>net.geant.autobahn</groupId>
-		<version>0.5.0-SNAPSHOT</version>
+		<version>0.4.0</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
     <groupId>net.geant.autobahn</groupId>
     <artifactId>autobahn-calendar</artifactId>
-    <version>0.5.0-SNAPSHOT</version>
+    <version>0.4.0</version>
     <name>Calendar module</name>
     <packaging>jar</packaging>
 	
@@ -133,12 +133,12 @@
 		<dependency>
 			<groupId>net.geant.autobahn</groupId>
 			<artifactId>autobahn-common</artifactId>
-			<version>0.4.0-SNAPSHOT</version>
+			<version>0.4.0</version>
 		</dependency>
 		<dependency>
 			<groupId>net.geant.autobahn</groupId>
 			<artifactId>autobahn-dm</artifactId>
-			<version>0.4.0-SNAPSHOT</version>
+			<version>0.4.0</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
