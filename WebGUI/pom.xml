@@ -44,6 +44,9 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<finalName>autobahn-webgui</finalName>
+				</configuration>
 				<executions>
 					<execution>
 						<id>make-a-jar</id>
