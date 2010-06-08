@@ -17,7 +17,6 @@ import net.geant.autobahn.useraccesspoint.ReservationRequest;
 import net.geant.autobahn.useraccesspoint.Resiliency;
 import net.geant.autobahn.useraccesspoint.ServiceRequest;
 import net.geant.autobahn.useraccesspoint.UserAccessPoint;
-import net.geant.autobahn.useraccesspoint.UserAccessPointException_Exception;
 
 public class UserAccessPointSampleClient {
 
