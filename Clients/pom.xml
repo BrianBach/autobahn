@@ -120,11 +120,11 @@
       		<artifactId>autobahn-ta</artifactId>
       		<version>0.4.1-SNAPSHOT</version>
     	</dependency>
-    	<dependency>
+    	<!--dependency>
       		<groupId>net.geant.autobahn</groupId>
       		<artifactId>autobahn-webgui</artifactId>
       		<version>0.4.1-SNAPSHOT</version>
-    	</dependency>
+    	</dependency-->
 	</dependencies>
 
 </project>
