@@ -4,13 +4,13 @@
 	<parent>
 		<artifactId>autobahn</artifactId>
 		<groupId>net.geant.autobahn</groupId>
-		<version>0.4.1-SNAPSHOT</version>
+		<version>0.4.1</version>
 	</parent>
 	
 	<modelVersion>4.0.0</modelVersion>
     <groupId>net.geant.autobahn</groupId>
     <artifactId>autobahn-webgui</artifactId>
-    <version>0.4.1-SNAPSHOT</version>
+    <version>0.4.1</version>
     <name>Web GUI</name>
     <packaging>war</packaging>	
 	
@@ -80,7 +80,7 @@
 				</executions>
 			</plugin>
 
-			<plugin>
+			<!--plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-deploy-plugin</artifactId>
 				<executions>
@@ -92,7 +92,9 @@
 						<configuration>
 							<packaging>jar</packaging>
 							<generatePom>true</generatePom>
+							<server>geant</server>
 							<url>${project.distributionManagement.repository.url}</url>
+							<url>scp://maven@maven.geant.net/repo</url>
 							<artifactId>${project.artifactId}</artifactId>
 							<groupId>${project.groupId}</groupId>
 							<version>${project.version}</version>
@@ -100,7 +102,7 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin-->
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -293,7 +295,7 @@
 		<dependency>
 			<groupId>net.geant.autobahn</groupId>
 			<artifactId>autobahn-common</artifactId>
-			<version>0.4.1-SNAPSHOT</version>
+			<version>0.4.1</version>
 		</dependency>	
 		<dependency>
 			<groupId>org.opensaml</groupId>
