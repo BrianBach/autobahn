@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import net.geant.autobahn.constraints.GlobalConstraints;
+import net.geant.autobahn.idm.AccessPoint;
 import net.geant.autobahn.lookup.LookupService;
 import net.geant.autobahn.lookup.LookupServiceException;
 import net.geant.autobahn.network.LinkIdentifiers;
@@ -25,19 +26,10 @@ public class InterdomainClient implements Interdomain {
 	private String endPoint;
 	
 	public InterdomainClient(String endPoint) {
+        String finalEndPoint = endPoint;
+        
 		// Query IDM to Lookup
-		String finalEndPoint = endPoint;
-        Properties properties = new Properties();
-        try {
-            InputStream is = getClass().getClassLoader().getResourceAsStream(
-                        "etc/idm.properties");
-            properties.load(is);
-            is.close();
-            log.debug(properties.size() + " properties loaded");
-        } catch (IOException e) {
-            log.info("Could not load app.properties: " + e.getMessage());
-        }
-		String host = properties.getProperty("lookuphost");
+		String host = AccessPoint.getInstance().getProperty("lookuphost");
         LookupService lookup = new LookupService(host);
         String idmLocation = "";
         try {
@@ -46,7 +38,9 @@ public class InterdomainClient implements Interdomain {
         	log.info("IDM module was not found, Please check your syntax");
         	log.info(e.getMessage());
         }
-        if (idmLocation != "") {
+        if (idmLocation != null && !idmLocation.equals("")) {
+            // If the Lookup contained the required information, this will be
+            // used as the endpoint
         	finalEndPoint = idmLocation;
         }
         
