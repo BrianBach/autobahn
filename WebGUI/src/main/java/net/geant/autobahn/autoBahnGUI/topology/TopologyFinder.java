@@ -209,18 +209,25 @@ public class TopologyFinder implements TopologyFinderNotifier{
 				Status statusNeighbor;
 				for (int j=0;j<lengthN;j++){
 					
-					try {
-						String temp = lookup.QueryIdmLocation(neighbors.get(j).getDomain());
-						String trimed = temp.replace("\n",""); //Without escape characters included
-						neighbourIdm = manager.getInterDomainManager(trimed);
-						
-					} catch (LookupServiceException e) {
-						logger.info("Lookup query failed: " + e.getMessage());
-						
-						// Try a fallback since the Lookup query was not successful
-						neighbourIdm = manager.getInterDomainManager(neighbors.get(j).getDomain());
-					}
+				    String idmLocation = "";
+				    if (host != null && host != "") {
+    					try {
+    						String temp = lookup.QueryIdmLocation(neighbors.get(j).getDomain());
+    						idmLocation = temp.replace("\n",""); //Without escape characters included
+    					} catch (LookupServiceException e) {
+    						logger.info("Lookup query failed: " + e.getMessage());
+    					}
+			        }
 					
+			        if (idmLocation != null && !idmLocation.equals("")) {
+			            // If the Lookup contained the required information, use it
+	                    neighbourIdm = manager.getInterDomainManager(idmLocation);
+			        }
+			        else {
+			            logger.debug("IDM location could not be obtained from Lookup, falling back to direct contact");
+	                    neighbourIdm = manager.getInterDomainManager(neighbors.get(j).getDomain());
+			        }
+                    
 					if (neighbourIdm==null)
 						continue;
 					statusNeighbor = neighbourIdm.getStatus();
