@@ -215,7 +215,10 @@ public class TopologyFinder implements TopologyFinderNotifier{
 						neighbourIdm = manager.getInterDomainManager(trimed);
 						
 					} catch (LookupServiceException e) {
-						logger.info("Lookup query failed: " + e.getMessage());						
+						logger.info("Lookup query failed: " + e.getMessage());
+						
+						// Try a fallback since the Lookup query was not successful
+						neighbourIdm = manager.getInterDomainManager(neighbors.get(j).getDomain());
 					}
 					
 					if (neighbourIdm==null)

@@ -30,18 +30,28 @@ public class InterdomainClient implements Interdomain {
         
 		// Query IDM to Lookup
 		String host = AccessPoint.getInstance().getProperty("lookuphost");
-        LookupService lookup = new LookupService(host);
         String idmLocation = "";
-        try {
-        	idmLocation = lookup.QueryIdmLocation(endPoint);
-        } catch (LookupServiceException e) {
-        	log.info("IDM module was not found, Please check your syntax");
-        	log.info(e.getMessage());
+        
+        if (host != null && host != "") {
+            LookupService lookup = new LookupService(host);
+            try {
+            	idmLocation = lookup.QueryIdmLocation(endPoint);
+            } catch (LookupServiceException e) {
+                log.info("No query to the Lookup Service could be performed in order to locate IDM.");
+            	log.info(e.getMessage());
+            }
         }
+        
         if (idmLocation != null && !idmLocation.equals("")) {
             // If the Lookup contained the required information, this will be
             // used as the endpoint
         	finalEndPoint = idmLocation;
+        }
+        else {
+            log.debug("IDM location could not be obtained from Lookup, falling back to direct contact");
+            // However, this is not a fatal error, as the IDM location might be
+            // available through another channel (e.g. in properties files), and
+            // so the provided endPoint parameter might be a valid URL
         }
         
 		InterdomainService service = new InterdomainService(finalEndPoint);

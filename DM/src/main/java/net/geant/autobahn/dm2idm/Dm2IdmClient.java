@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Properties;
 
 import net.geant.autobahn.dm2idm.Dm2Idm;
+import net.geant.autobahn.intradomain.AccessPoint;
 import net.geant.autobahn.lookup.LookupService;
 import net.geant.autobahn.lookup.LookupServiceException;
 import net.geant.autobahn.network.Link;
@@ -37,19 +38,7 @@ public class Dm2IdmClient implements Dm2Idm {
 		log.debug("DM client tries to connect to " + endPoint);
 		
 		// Query IDM location from Lookup Service
-		
-		Properties properties = new Properties();
-        try {
-            InputStream is = getClass().getClassLoader().getResourceAsStream(
-                        "etc/dm.properties");
-            properties.load(is);
-            is.close();
-            log.debug(properties.size() + " properties loaded");
-        } catch (IOException e) {
-            log.info("Could not load app.properties: " + e.getMessage());
-        }
-        
-		String host = properties.getProperty("lookuphost");
+        String host = AccessPoint.getInstance().getProperty("lookuphost");
 		String idmLocation = null;
 		
 		if (host != null && host != "") {
@@ -72,7 +61,7 @@ public class Dm2IdmClient implements Dm2Idm {
         	endPoint = idmLocation.replaceFirst("/autobahn/interdomain", "/autobahn/dm2idm");
         }
         else {
-            log.info("IDM location could not be found at the Lookup Service.");
+            log.debug("IDM location could not be obtained from Lookup, falling back to direct contact");
             // However, this is not a fatal error, as the IDM location might be
             // available through another channel (e.g. in properties files), and
             // so the provided endPoint parameter might be a valid URL
