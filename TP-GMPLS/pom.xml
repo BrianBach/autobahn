@@ -9,7 +9,7 @@
 	
 	<modelVersion>4.0.0</modelVersion>
     <groupId>net.geant.autobahn</groupId>
-    <artifactId>autobahn-tool-pionier</artifactId>
+    <artifactId>autobahn-tool-gmpls</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Pionier tool module</name>
     <description>SSH client for configuring XMR devices</description>
