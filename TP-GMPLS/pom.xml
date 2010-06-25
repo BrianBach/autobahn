@@ -11,7 +11,7 @@
     <groupId>net.geant.autobahn</groupId>
     <artifactId>autobahn-tool-gmpls</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Pionier tool module</name>
+    <name>GMPLS tool module</name>
     <description>SSH client for configuring XMR devices</description>
     <packaging>jar</packaging>
 
