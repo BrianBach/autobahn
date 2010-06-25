@@ -170,7 +170,74 @@
             </plugins>
         </pluginManagement>
     </build>
-	
+
+	<profiles>
+    	<profile>
+        	<id>CodeAnalysis</id>
+			<build>
+            	<pluginManagement>
+                	<plugins>
+	                   	<plugin>
+	                    	<groupId>org.codehaus.mojo</groupId>
+			                <artifactId>findbugs-maven-plugin</artifactId>
+			                <version>2.0.1</version>
+			                <configuration>
+		                        <findbugsXmlOutput>true</findbugsXmlOutput>
+		                        <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
+		                        <xmlOutput>true</xmlOutput>
+		                    </configuration>
+		                    <executions>
+		                        <execution>
+		                            <goals>
+		                                <goal>findbugs</goal>
+		                            </goals>
+		                            <phase>verify</phase>
+		                        </execution>
+							</executions>
+	                    </plugin>
+	                    <plugin>
+	                    	<groupId>org.apache.maven.plugins</groupId>
+	                        <artifactId>maven-pmd-plugin</artifactId>
+	                        <version>2.3</version>
+	                        <executions>
+	                        	<execution>
+	                            	<goals>
+	                                	<goal>pmd</goal>
+	                                    <goal>cpd</goal>
+	                                </goals>
+	                                <phase>verify</phase>
+	                            </execution>
+	                        </executions>
+	                    </plugin>
+	                    <!-- plugin>
+	                        <groupId>org.apache.maven.plugins</groupId>
+	                        <artifactId>maven-checkstyle-plugin</artifactId>
+	                        <version>2.5</version>
+	                        <dependencies>
+	                        	<dependency>
+	                            	<groupId>net.geant.ishare.common</groupId>
+	                                <artifactId>ishare-common-tools</artifactId>
+	                                <version>1.0-beta-SNAPSHOT</version>
+	                            </dependency>
+	                        </dependencies>
+	                        <executions>
+	                            <execution>
+	                                <goals>
+	                                    <goal>checkstyle</goal>
+	                                </goals>
+	                                <phase>verify</phase>
+	                            </execution>
+	                        </executions>
+	                        <configuration>
+	                            <configLocation>checkstyle_checks.xml</configLocation>
+	                        </configuration>
+	                    </plugin -->
+                	</plugins>
+            	</pluginManagement>
+        	</build>
+		</profile>
+    </profiles>
+   	
 	<modules>
 		<module>Common</module>
 		<module>DM</module>
