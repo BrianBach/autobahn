@@ -22,11 +22,11 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
 	</bean>	 
 	
 	<bean id="OscarsServerPasswordCallback" class="net.geant.autobahn.edugain.ServerPasswordCallback">
-		<constructor-arg type="java.lang.String" value="../etc/edugain/server-sec.properties"/>
+		<constructor-arg type="java.lang.String" value="../etc/oscars/server-sec.properties"/>
 	</bean>
 	
 	<bean id="OscarsClientPasswordCallback" class="net.geant.autobahn.edugain.ClientPasswordCallback">
-		<constructor-arg type="java.lang.String" value="../etc/edugain/client-sec.properties"/>	
+		<constructor-arg type="java.lang.String" value="../etc/oscars/client-sec.properties"/>	
 	</bean>	
 	
 	<bean id="initSecurity" class="net.geant.autobahn.edugain.WSSecurity">
@@ -43,8 +43,10 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
 			<entry key="ws-security.callback-handler">
 				<ref bean="OscarsServerPasswordCallback"/>
 			</entry>
-			<!--entry key="ws-security.encryption.properties" value="serviceKeystore.properties"/-->
+			<entry key="ws-security.encryption.properties" value="../etc/oscars/client-sec.properties"/>
 			<entry key="ws-security.signature.properties" value="../etc/oscars/server-sec.properties"/>
+			<entry key="ws-security.encryption.username" value="guest"/>
+			<entry key="ws-security.signature.username" value="guest"/>
 		</jaxws:properties> 
 	</jaxws:endpoint>
 	

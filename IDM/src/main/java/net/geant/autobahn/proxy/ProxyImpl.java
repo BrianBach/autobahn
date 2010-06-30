@@ -13,6 +13,8 @@ import java.util.Map;
 
 import javax.jws.WebService;
 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.mortbay.log.Log;
 
 import net.geant.autobahn.constraints.ConstraintsNames;
@@ -21,7 +23,10 @@ import net.geant.autobahn.constraints.PathConstraints;
 import net.geant.autobahn.constraints.RangeConstraint;
 import net.geant.autobahn.dao.IdmDAOFactory;
 import net.geant.autobahn.dao.hibernate.HibernateIdmDAOFactory;
+import net.geant.autobahn.dao.hibernate.HibernateUtil;
+import net.geant.autobahn.dao.hibernate.IdmHibernateUtil;
 import net.geant.autobahn.idm.AccessPoint;
+import net.geant.autobahn.idm.ServiceScheduler;
 import net.geant.autobahn.interdomain.NoSuchReservationException;
 import net.geant.autobahn.network.AdminDomain;
 import net.geant.autobahn.network.Link;
@@ -71,12 +76,12 @@ public class ProxyImpl implements Proxy, ReservationStatusListener {
         IdmDAOFactory daos = HibernateIdmDAOFactory.getInstance();
         
         User u = new User();
-        u.setName("dragon");
+        u.setName("Internet2");
         u.setEmail("ma@nie.da");
         
         AdminDomain ad = new AdminDomain();
         ad.setClientDomain(false);
-        ad.setBodID("http://dragon.com/");
+        ad.setBodID("http://www.es.net/oscars/");
         
         u.setHomeDomain(ad);
 
@@ -197,6 +202,8 @@ public class ProxyImpl implements Proxy, ReservationStatusListener {
      * @see net.geant.autobahn.proxy.Proxy#getTopology()
      */
     public List<Link> getTopology() throws IOException {
+    	
+    	System.out.println("Everything OK!!!");
 
         return AccessPoint.getInstance().getTopology();
     }
@@ -205,8 +212,32 @@ public class ProxyImpl implements Proxy, ReservationStatusListener {
      * @see net.geant.autobahn.proxy.Proxy#listReservations()
      */
     public List<ReservationInfo> listReservations() throws IOException {
-        // TODO Auto-generated method stub
-        return null;
+        
+    	List<Service> services = null;
+    	
+		try {
+			IdmDAOFactory daos = HibernateIdmDAOFactory.getInstance();
+			services = daos.getServiceDAO().getActiveServices();
+		} catch (Exception e) {
+			System.out.println("Hibernate error: " + e.getMessage());
+		}
+    	
+    	List<ReservationInfo> listResv = new ArrayList<ReservationInfo>();
+		
+    	try {
+			for (Service serv : services) {
+				for (Reservation resv : serv.getReservations()) {
+					if(resv != null){
+						listResv.add(Autobahn2OscarsConverter.convertReservation(resv));						
+					}						
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("No reservation found: " + e.getMessage());
+		}
+		
+		IdmHibernateUtil.getInstance().closeSession();
+    	return listResv;
     }
 
     /* (non-Javadoc)
@@ -223,8 +254,28 @@ public class ProxyImpl implements Proxy, ReservationStatusListener {
      */
     public ReservationInfo queryReservation(String resID) throws IOException {
         
-        Reservation res = AccessPoint.getInstance().getReservation(resID);
-        return Autobahn2OscarsConverter.convertReservation(res);
+    	List<Service> services = null;
+    	
+		try {
+			IdmDAOFactory daos = HibernateIdmDAOFactory.getInstance();
+			services = daos.getServiceDAO().getActiveServices();
+		} catch (Exception e) {
+			System.out.println("Hibernate Error: " + e.getMessage());
+		}
+    	
+    	try {
+			for (Service serv : services) {
+				for (Reservation resv : serv.getReservations()) {
+					if (resv.getBodID().equals(resID))
+						return Autobahn2OscarsConverter.convertReservation(resv);					
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("Query Reservation Error: " + e.getMessage());
+		}
+		
+		IdmHibernateUtil.getInstance().closeSession();
+    	return null;
     }
 
     /**

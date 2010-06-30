@@ -18,7 +18,7 @@ import net.es.oscars.oscars.OSCARS;
  * 
  */
 
-@WebServiceClient(name = "OSCARS", targetNamespace = "http://oscars.es.net/OSCARS", wsdlLocation = "http://150.140.8.10/test/wsdl/OSCARS.wsdl")
+@WebServiceClient(name = "OSCARS", targetNamespace = "http://oscars.es.net/OSCARS", wsdlLocation = "http://150.140.8.11:80/oscars/OSCARS.wsdl")
 public class OSCARS_Service extends Service {
 
     private final static URL WSDL_LOCATION;
@@ -27,9 +27,9 @@ public class OSCARS_Service extends Service {
     static {
         URL url = null;
         try {
-            url = new URL("http://150.140.8.10/test/wsdl/OSCARS.wsdl");
+            url = new URL("wsdl/OSCARS.wsdl");
         } catch (MalformedURLException e) {
-            System.err.println("Can not initialize the default wsdl from file:/WEB-INF/wsdl/OSCARS.wsdl");
+            System.err.println("Can not initialize the default wsdl from file:/WEB-INF/classes/wsdl/OSCARS.wsdl");
             // e.printStackTrace();
         }
         WSDL_LOCATION = url;

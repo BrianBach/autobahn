@@ -80,11 +80,9 @@ public class OSCARSImpl implements OSCARS {
     throws IOException {
     
         int capacity = bandwidth;
-        
         // Time
         Calendar start = Calendar.getInstance();
         start.setTimeInMillis(startTime * 1000);
-        
         Calendar end = Calendar.getInstance();
         end.setTimeInMillis(endTime * 1000);
         
@@ -95,24 +93,19 @@ public class OSCARSImpl implements OSCARS {
         String vlans = pathInfo.value.getLayer2Info().getSrcVtag().getValue();
         
         //CtrlPlaneHopContent[] hops = (CtrlPlaneHopContent[]) pathInfo.value.getPath().getHop().toArray();
-                
         CtrlPlaneHopContent[] hops = new CtrlPlaneHopContent[pathInfo.value.getPath().getHop().size()];
-		
 		for (int i=0; i < pathInfo.value.getPath().getHop().size(); i++) {
 			hops[i] = pathInfo.value.getPath().getHop().get(i);
 		}
-		
         System.out.println("Hops received: " + hops.length);
         
         CtrlPlaneHopContent srcHop = hops[hops.length - 2];
         String src = srcHop.getLinkIdRef();
         String resID = globalReservationId.value;
-        
         ReservationInfo resInfo = new ReservationInfo();
-        
-        src = src.substring(src.indexOf(":link=") + 6);
-        dest = dest.substring(dest.indexOf(":link=") + 6);
-        
+        //src = src.substring(src.indexOf(":link=") + 6);
+        //dest = dest.substring(dest.indexOf(":link=") + 6);
+
         resInfo.setBodID(resID);
         resInfo.setCapacity(capacity);
         resInfo.setStartTime(start);
@@ -122,10 +115,10 @@ public class OSCARSImpl implements OSCARS {
         resInfo.setUserVlans(vlans);
         
         // TODO vlans, port, bodID?
-        
         ProxyClient proxy = new ProxyClient();
         ReservationInfo resp = null;
         resp = proxy.createReservation(resInfo);
+
         return resp;
     }
 
@@ -250,14 +243,14 @@ public class OSCARSImpl implements OSCARS {
         log.debug("getNetworkTopology.begin");
 
         List<Link> links = new ArrayList<Link>();
-
+        
         try {
             ProxyClient proxy = new ProxyClient();
             links = proxy.getTopology();
         } catch (IOException e) {
             throw new BSSFaultMessage(e.getMessage());
         }
-
+        
         GetTopologyResponseContent cont = new GetTopologyResponseContent();
         CtrlPlaneTopologyContent ctrlTopology = new CtrlPlaneTopologyContent();
         ctrlTopology.setId("GEANT2");
@@ -266,12 +259,12 @@ public class OSCARSImpl implements OSCARS {
         ctrlSigns[0] = new CtrlPlaneDomainSignatureContent();
         ctrlSigns[0].setDomainId("NOT SET");
         ctrlTopology.setDomainSignature(ctrlSigns);
+
         //TODO THE RIGHT CONVERTER JOHNIES
         CtrlPlaneDomainContent[] ctrlDomains = OscarsConverter
                 .getOscarsTopology(links);
         ctrlTopology.setDomain(ctrlDomains);
         cont.setTopology(ctrlTopology);
-
         log.debug("getNetworkTopolgoy.finish");
 
         return cont;
@@ -419,7 +412,6 @@ public class OSCARSImpl implements OSCARS {
         } catch (IOException e) {
             throw new BSSFaultMessage(e.getMessage());
         }
-
         ResDetails[] resDetails = new ResDetails[reservations.size()];
         int index = 0;
 
@@ -434,6 +426,7 @@ public class OSCARSImpl implements OSCARS {
             rd.setStartTime(ri.getStartTime().getTimeInMillis());
             rd.setEndTime(ri.getEndTime().getTimeInMillis());
             resDetails[index++] = rd;
+
         }
 
         ListReply list = new ListReply();

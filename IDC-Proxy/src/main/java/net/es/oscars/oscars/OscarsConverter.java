@@ -259,35 +259,28 @@ public class OscarsConverter {
 		
 	public static CtrlPlaneDomainContent[] getOscarsTopology(List<Link> links) {
 		
-		if (links == null)
+		if (links == null){
 			return new CtrlPlaneDomainContent[1];
-		
+		}
 		// sort links acording to domain
 		Map<ProvisioningDomain, List<Link>> sortLinks = new HashMap<ProvisioningDomain, List<Link>>();
-		
 		for (Link link : links) {
-			
 			ProvisioningDomain provDomain = link.getStartPort().getNode().getProvisioningDomain();
 			if (!sortLinks.containsKey(provDomain)) 
 				sortLinks.put(provDomain, new ArrayList<Link>());
-			
 			sortLinks.get(provDomain).add(link);
 		}
 		int numDomains = sortLinks.keySet().size();
 		//System.out.println("num domains: " + sortLinks.keySet().size());
 		CtrlPlaneDomainContent[] domains = new CtrlPlaneDomainContent[numDomains];
 		ProvisioningDomain[] provDomains = sortLinks.keySet().toArray(new ProvisioningDomain[0]);
-		
 		for (int i=0; i < numDomains; i++) {
-
 			CtrlPlaneDomainContent domain = new CtrlPlaneDomainContent();
 			List<Link> itLinks = sortLinks.get(provDomains[i]);
 			for (Link l : itLinks) {
 			
 				domain.setId(provDomains[i].getAdminDomain().getBodID());
-
 				final String prefix = "urn:org.network";
-				
 				// set start link
 				CtrlPlaneLinkContent link = new CtrlPlaneLinkContent();
 				link.setId(prefix + ":domain=" + provDomains[i].getAdminDomainID() + ":node=" + l.getStartPort().getNode().getBodID() + ":port=" + l.getStartPort().getBodID() + ":link=" + l.getBodID());
@@ -295,11 +288,9 @@ public class OscarsConverter {
 				link.setGranularity(String.valueOf(l.getGranularity()));
 				link.setMaximumReservableCapacity(String.valueOf(l.getMaxResCapacity()));
 				link.setMinimumReservableCapacity(String.valueOf(l.getMinResCapacity()));
-				
 				link.setRemoteLinkId(prefix + ":domain=" + provDomains[i].getAdminDomainID() + 
 						":node=" + l.getEndPort().getNode().getBodID() + ":port=" + 
 						l.getEndPort().getBodID() + ":link=" + l.getBodID());
-				
 				CtrlPlanePortContent port = new CtrlPlanePortContent();
 				port.setId(prefix + ":domain=" + provDomains[i].getAdminDomainID() + ":node=" + l.getStartPort().getNode().getBodID() + ":port=" + l.getStartPort().getBodID());
 				port.setCapacity(String.valueOf(l.getCapacity()));
@@ -307,7 +298,6 @@ public class OscarsConverter {
 				port.setMaximumReservableCapacity(String.valueOf(l.getMaxResCapacity()));
 				port.setMinimumReservableCapacity(String.valueOf(l.getMinResCapacity()));
 				port.addLink(link);
-			
 				CtrlPlaneNodeContent node = new CtrlPlaneNodeContent();
 				node.setId(prefix + ":domain=" + provDomains[i].getAdminDomainID() + ":node=" + l.getStartPort().getNode().getBodID());
 				CtrlPlaneAddressContent addr = new CtrlPlaneAddressContent();
@@ -317,10 +307,8 @@ public class OscarsConverter {
 				addr.setValue(l.getStartPort().getNode().getAddress());
 				node.setAddress(addr);
 				node.addPort(port);
-				
 				domain.addNode(node);
 				domain.setId(prefix + ":domain=" + provDomains[i].getAdminDomainID());
-			
 				// set end link
 				/*
 				link = new CtrlPlaneLinkContent();

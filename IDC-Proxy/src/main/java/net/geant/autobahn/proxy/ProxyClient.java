@@ -41,7 +41,7 @@ public class ProxyClient implements Proxy {
     public ProxyClient() {
 
         //TODO: Instead of hard-coded IDM read from Properties
-        String endPoint = "http://150.140.8.14:8080/autobahn/proxy";//ProxyServlet.getProperties().getProperty("idm.address");
+        String endPoint = "http://150.140.141.15:8096/autobahn/proxy";//ProxyServlet.getProperties().getProperty("idm.address");
         if("none".equals(endPoint))
             return;
         service = new ProxyService(endPoint);
@@ -109,8 +109,9 @@ public class ProxyClient implements Proxy {
             // So we need to make sure that in that case an empty list is returned.
             List<ReservationInfo> res = rc.listReservations();
             if (res==null) {
-                res = new ArrayList<ReservationInfo>();
+            	res = new ArrayList<ReservationInfo>();
             }
+
             return res;
         }
         return null;
