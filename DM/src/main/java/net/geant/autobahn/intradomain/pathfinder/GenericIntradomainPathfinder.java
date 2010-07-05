@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import net.geant.autobahn.constraints.PathConstraints;
 import net.geant.autobahn.intradomain.IntradomainPath;
 import net.geant.autobahn.intradomain.common.GenericLink;
@@ -21,6 +23,8 @@ import net.geant.autobahn.intradomain.common.Node;
 public abstract class GenericIntradomainPathfinder implements
 		IntradomainPathfinder {
 
+    private static final Logger log = Logger.getLogger(GenericIntradomainPathfinder.class);
+    
 	protected Map<GenericLink, GraphEdge> gredges = new HashMap<GenericLink, GraphEdge>();
 	protected Map<Node, GraphNode> grnodes = new HashMap<Node, GraphNode>();
 	
@@ -121,7 +125,7 @@ public abstract class GenericIntradomainPathfinder implements
 	
 	private IntradomainPath createIntradomainPath(GraphEdge[] path) {
 		if(path.length < 1) {
-			System.out.println("Wrong path!");
+			log.info("Wrong path!");
 		}
 		
 		long capacity = Long.MAX_VALUE;

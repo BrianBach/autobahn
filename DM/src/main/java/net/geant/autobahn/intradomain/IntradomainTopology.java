@@ -338,7 +338,7 @@ public class IntradomainTopology {
 				stmLink.setStmLink(gl);
 				stmLink.setStmType(stmType);
 
-				System.out.println(gl + " " + gl.getLinkId());
+				log.debug(gl + " " + gl.getLinkId());
 				
 				stmLinks.add(stmLink);
 			}

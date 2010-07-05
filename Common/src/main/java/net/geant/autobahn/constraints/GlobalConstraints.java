@@ -268,7 +268,7 @@ public class GlobalConstraints implements Serializable {
 
     private void findPathsFrom(int num, Map<String, List<PathConstraints>> allPaths, Stack<PathConstraints> current, List<List<PathConstraints>> result) {
         String domainId = domainsIds.get(num);
-        //System.out.println("Trying [" + num + "] " + domainId);
+        log.debug("Trying [" + num + "] " + domainId);
         
         Iterator<PathConstraints> paths = allPaths.get(domainId).iterator();
         
