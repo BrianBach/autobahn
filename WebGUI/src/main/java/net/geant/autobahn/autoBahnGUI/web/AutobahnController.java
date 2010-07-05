@@ -55,7 +55,7 @@ public class AutobahnController {
 	 */
 	@RequestMapping("/home.htm")
 	public void homeHandler(){
-		Logger.getLogger("Kupa w pory").info("Kupa w pory");
+		Logger.getLogger("autoBAHN controler").info("In homeHandler");
 	}
 	
 	/**
@@ -65,17 +65,17 @@ public class AutobahnController {
 	 */
 	@RequestMapping("/login.htm")
 	public void homeLogin(){
-		Logger.getLogger("Kupa w pory").info("Kupa w pory");
+		Logger.getLogger("autoBAHN controler").info("In login");
 	}
 	
 	@RequestMapping("/secure/tools.htm")
 	public void homeTools(){
-		Logger.getLogger("Kupa w pory").info("In tools");
+		Logger.getLogger("autoBAHN controler").info("In homeTools");
 	}
 	
 	@RequestMapping("/secure/noIDMRegistered.htm")
 	public void noIdms(){
-		Logger.getLogger("Kupa w pory").info("In tools");
+		Logger.getLogger("autoBAHN controler").info("In noIdms");
 	}
 	
 	/**

@@ -7,6 +7,7 @@ import net.geant.autobahn.autoBahnGUI.model.ReservatiomDepandentOnTimezone;
 import net.geant.autobahn.autoBahnGUI.model.ReservationTest;
 import net.geant.autobahn.autoBahnGUI.model.ServicesFormModel;
 import net.geant.autobahn.autoBahnGUI.model.SettingsFormModel;
+import net.geant.autobahn.lookup.LookupService;
 import net.geant.autobahn.reservation.Service;
 import net.geant.autobahn.useraccesspoint.ReservationRequest;
 import net.geant.autobahn.useraccesspoint.ServiceRequest;
@@ -271,6 +272,10 @@ public interface Manager {
 	 * @return LogsFormModel
 	 */
 	public LogsFormModel getLogsForInterDomainManager (String idm);
+	
+	public LookupService getLookupServiceObject();
+	
+	public String getFriendlyNamefromLS(String identifier);
 	
 }
 

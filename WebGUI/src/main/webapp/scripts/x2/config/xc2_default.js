@@ -82,8 +82,8 @@ xcBaseZIndex=100;      // z-index for calendar layers
 xcMultiCalendar=0;     // 1:multi-calendar, 0:single-calendar
 xcShowCurrentDate=1;   // 1:highlight current date/today, 0:no highlight
 xcWeekStart=0;         // 0:Sunday, 1:Monday
-xcAutoHide=0;          // 0: no auto hide, non-zero:auto hide interval in ms
-xcStickyMode=0;        // 0:non-sticky, 1:sticky
+xcAutoHide=1;          // 0: no auto hide, non-zero:auto hide interval in ms
+xcStickyMode=1;        // 0:non-sticky, 1:sticky
 xcShowPrevNextMonth=1; // 0:not show, 1: show
 
 // day contents

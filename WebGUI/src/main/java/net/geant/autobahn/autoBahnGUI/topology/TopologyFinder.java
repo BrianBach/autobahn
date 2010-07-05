@@ -83,7 +83,15 @@ public class TopologyFinder implements TopologyFinderNotifier{
 		Topology top=new Topology();
 		top.addTopology (topology);
 		top.getLines().removeAll();
-		InterDomainManager idm = manager.getInterDomainManager(domain);
+		InterDomainManager idm = null;
+		LookupService lookup = manager.getLookupServiceObject();
+		try {
+			String temp = lookup.QueryIdmLocation(domain);
+			String replace = temp.replace("\n",""); //Without escape characters included
+			idm = manager.getInterDomainManager(replace);
+		} catch (LookupServiceException e) {
+			logger.info("Lookup query failed: " + e.getMessage());
+		}
 		if (idm==null)
 			return top;
 		if (serviceId !=null)
@@ -118,7 +126,15 @@ public class TopologyFinder implements TopologyFinderNotifier{
 						float startLongitude =0;
 						float endLatitude = 0;
 						float endLongitude = 0;
-						startDomain= manager.getInterDomainManager(link.getStartPort().getNode().getProvisioningDomain().getAdminDomain().getBodID());
+						
+						try {
+							String temp = lookup.QueryIdmLocation(link.getStartPort().getNode().getProvisioningDomain().getAdminDomain().getBodID());
+							String replace = temp.replace("\n",""); //Without escape characters included
+							startDomain = manager.getInterDomainManager(replace);
+						} catch (LookupServiceException e) {
+							logger.info("Lookup query failed: " + e.getMessage());
+						}
+				
 							if (startDomain== null){
 								if (link.getStartPort().getBodID().equals("10.10.32.23")||link.getStartPort().getBodID().equals("10.10.32.22")){
 									startLatitude=(float)40.722580;
@@ -127,10 +143,21 @@ public class TopologyFinder implements TopologyFinderNotifier{
 								else
 									continue;
 							}else{
+								
 							startLatitude = startDomain.getStatus().getLatitude();
 							startLongitude = startDomain.getStatus().getLongitude();
 							}
-							endDomain = manager.getInterDomainManager(link.getEndPort().getNode().getProvisioningDomain().getAdminDomain().getBodID());
+							
+							try {
+								if(link.getEndPort().getNode().getProvisioningDomain().getAdminDomain().isClientDomain())
+									continue;
+								String temp = lookup.QueryIdmLocation(link.getEndPort().getNode().getProvisioningDomain().getAdminDomain().getBodID());
+								String replace = temp.replace("\n",""); //Without escape characters included
+								endDomain = manager.getInterDomainManager(replace);
+							} catch (LookupServiceException e) {
+								logger.info("Lookup query failed: " + e.getMessage());
+							}
+							
 							if (endDomain == null ){
 								if (link.getEndPort().getBodID().equals("10.10.32.23")||link.getEndPort().getBodID().equals("10.10.32.22")){
 									endLatitude=(float)40.722580;
@@ -147,7 +174,6 @@ public class TopologyFinder implements TopologyFinderNotifier{
 					line = new Line();
 					line.setStartLattitude(""+startLatitude);
 					line.setStartLongitude(""+startLongitude);
-				
 					line.setEndLattitude(""+endLatitude);
 					line.setEndLongitude(""+endLongitude);
 					line.setColor(Line.getReservationLineColor(reservations.get(i).getIntState()));
@@ -191,26 +217,14 @@ public class TopologyFinder implements TopologyFinderNotifier{
 				if (neighbors==null || neighbors.isEmpty())
 					continue;				
 				int lengthN = neighbors.size();
-				
-				// Read LS location from properties
-		        Properties properties = new Properties();
-		        try {
-		            InputStream is = getClass().getClassLoader().getResourceAsStream(
-		                        "../etc/webgui.properties");
-		            properties.load(is);
-		            is.close();
-		            logger.debug(properties.size() + " properties loaded");
-		        } catch (IOException e) {
-		            logger.info("Could not load lookuphost properties: " + e.getMessage());
-		        }
-		        String host = properties.getProperty("lookuphost");
-		        LookupService lookup = new LookupService(host);
 		        
+				LookupService lookup = manager.getLookupServiceObject();
+				
 				Status statusNeighbor;
 				for (int j=0;j<lengthN;j++){
 					
 				    String idmLocation = "";
-				    if (host != null && host != "") {
+				    if (lookup != null) {
     					try {
     						String temp = lookup.QueryIdmLocation(neighbors.get(j).getDomain());
     						idmLocation = temp.replace("\n",""); //Without escape characters included

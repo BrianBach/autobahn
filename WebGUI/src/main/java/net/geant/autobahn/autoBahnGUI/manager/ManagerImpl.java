@@ -126,8 +126,26 @@ public class ManagerImpl implements Manager,ManagerNotifier{
  	 */
 	private PortsMapper portsMapper;
 	
+	private LookupService lookupService;
 	
+	public ManagerImpl(){
+		Properties properties = new Properties();
+        try {
+            InputStream is = getClass().getClassLoader().getResourceAsStream(
+                        "../etc/webgui.properties");
+            properties.load(is);
+            is.close();
+            logger.debug(properties.size() + " properties loaded");
+        } catch (IOException e) {
+            logger.info("Could not load lookuphost properties: " + e.getMessage());
+        }
+        String host = properties.getProperty("lookuphost");
+        lookupService = new LookupService(host);
+	}
 	
+	public LookupService getLookupServiceObject(){
+		return lookupService;
+	}
 	/**
 	 * Creates the InterDomainManager
 	 * @param name name of new InterDomainManagert
@@ -256,21 +274,22 @@ public class ManagerImpl implements Manager,ManagerNotifier{
      */
     public String getFriendlyNamefromLS(String identifier) {
         // Read LS location from properties
-        Properties properties = new Properties();
-        try {
-            InputStream is = getClass().getClassLoader().getResourceAsStream(
-                        "../etc/webgui.properties");
-            properties.load(is);
-            is.close();
-            logger.debug(properties.size() + " properties loaded");
-        } catch (IOException e) {
-            logger.info("Could not load lookuphost properties: " + e.getMessage());
-        }
-        String host = properties.getProperty("lookuphost");
-        LookupService lookup = new LookupService(host);
+//        Properties properties = new Properties();
+//        try {
+//            InputStream is = getClass().getClassLoader().getResourceAsStream(
+//                        "../etc/webgui.properties");
+//            properties.load(is);
+//            is.close();
+//            logger.debug(properties.size() + " properties loaded");
+//        } catch (IOException e) {
+//            logger.info("Could not load lookuphost properties: " + e.getMessage());
+//        }
+//        String host = properties.getProperty("lookuphost");
+//        LookupService lookup = new LookupService(host);
+    	
         String friendlyName = null;
         try {
-            friendlyName = lookup.QueryFriendlyName(identifier);
+            friendlyName = lookupService.QueryFriendlyName(identifier);
         } catch (LookupServiceException e) {
             logger.info("End port friendly name could not be acquired from LS");
             logger.info(e.getMessage());
