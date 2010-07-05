@@ -62,7 +62,6 @@ public class ProxyImpl implements Proxy, ReservationStatusListener {
         try {
             AccessPoint.getInstance().cancelReservation(resID);
         } catch (NoSuchReservationException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -85,7 +84,7 @@ public class ProxyImpl implements Proxy, ReservationStatusListener {
         
         u.setHomeDomain(ad);
 
-        System.out.println("Sport: " + resInfo.getStartPort() + ", dport: " + resInfo.getEndPort());
+        log.info("Sport: " + resInfo.getStartPort() + ", dport: " + resInfo.getEndPort());
 
         Link slink = daos.getLinkDAO().getByBodID(resInfo.getStartPort());
         Link dlink = daos.getLinkDAO().getByBodID(resInfo.getEndPort());
@@ -97,7 +96,7 @@ public class ProxyImpl implements Proxy, ReservationStatusListener {
         Port dport = dlink.getStartPort().isClientPort() ? dlink.getStartPort()
                 : dlink.getEndPort();
             
-        System.out.println("DRAGON request: " + sport + " to " + dport);
+        log.info("DRAGON request: " + sport + " to " + dport);
         
         
         List<HomeDomainReservation> reservations = new ArrayList<HomeDomainReservation>();
@@ -106,21 +105,21 @@ public class ProxyImpl implements Proxy, ReservationStatusListener {
         
         // not process now - check if: and start > now
         if (resInfo.getStartTime().compareTo(now) < 0) {
-            System.out.println("wrong reservation time - startTime: " + resInfo.getStartTime().getTime() + " < currentTime: " + now.getTime());
+            log.error("wrong reservation time - startTime: " + resInfo.getStartTime().getTime() + " < currentTime: " + now.getTime());
             return null;
         }
 
         // check if start < end
         if (resInfo.getStartTime().compareTo(resInfo.getEndTime()) >= 0) { 
-            System.out.println("wrong reservation time - startTime: " + resInfo.getStartTime().getTime() + " >= endTime: " + resInfo.getEndTime().getTime());
+            log.error("wrong reservation time - startTime: " + resInfo.getStartTime().getTime() + " >= endTime: " + resInfo.getEndTime().getTime());
             return null;
         }
         
         HomeDomainReservation resv = new HomeDomainReservation(sport, dport,
                 resInfo.getStartTime(), resInfo.getEndTime(), resInfo.getPriority());
         
-        System.out.println("StartTime: " + resInfo.getStartTime().getTime());
-        System.out.println("EndTime: " + resInfo.getEndTime().getTime());
+        log.info("StartTime: " + resInfo.getStartTime().getTime());
+        log.info("EndTime: " + resInfo.getEndTime().getTime());
         
         resv.setDescription(resInfo.getDescription());
         resv.setCapacity(resInfo.getCapacity() * 1000000);
@@ -159,7 +158,7 @@ public class ProxyImpl implements Proxy, ReservationStatusListener {
             }
         }
 
-        System.out.println("WAKE UP");
+        log.info("WAKE UP");
         
         HomeDomainReservation res1 = (HomeDomainReservation) srv.getReservations().get(0);
 
@@ -167,7 +166,7 @@ public class ProxyImpl implements Proxy, ReservationStatusListener {
         String failure = failures.get(res1.getBodID());
         
         if(failure != null) {
-            System.out.println("Failure: " + failure);
+            log.error("Failure: " + failure);
             resInfo.setDescription(failure);
         } else {
             PathConstraints pcon = res1.getGlobalConstraints()
@@ -193,7 +192,7 @@ public class ProxyImpl implements Proxy, ReservationStatusListener {
             resInfo.setPath(links);
         }
             
-        System.out.println("Returning");
+        log.debug("Returning");
         
         return resInfo;
     }
@@ -203,7 +202,7 @@ public class ProxyImpl implements Proxy, ReservationStatusListener {
      */
     public List<Link> getTopology() throws IOException {
     	
-    	System.out.println("Everything OK!!!");
+        log.debug("Everything OK!!!");
 
         return AccessPoint.getInstance().getTopology();
     }
@@ -219,7 +218,7 @@ public class ProxyImpl implements Proxy, ReservationStatusListener {
 			IdmDAOFactory daos = HibernateIdmDAOFactory.getInstance();
 			services = daos.getServiceDAO().getActiveServices();
 		} catch (Exception e) {
-			System.out.println("Hibernate error: " + e.getMessage());
+		    log.error("Hibernate error: " + e.getMessage());
 		}
     	
     	List<ReservationInfo> listResv = new ArrayList<ReservationInfo>();
@@ -233,7 +232,7 @@ public class ProxyImpl implements Proxy, ReservationStatusListener {
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("No reservation found: " + e.getMessage());
+		    log.error("No reservation found: " + e.getMessage());
 		}
 		
 		IdmHibernateUtil.getInstance().closeSession();
@@ -260,7 +259,7 @@ public class ProxyImpl implements Proxy, ReservationStatusListener {
 			IdmDAOFactory daos = HibernateIdmDAOFactory.getInstance();
 			services = daos.getServiceDAO().getActiveServices();
 		} catch (Exception e) {
-			System.out.println("Hibernate Error: " + e.getMessage());
+		    log.error("Hibernate Error: " + e.getMessage());
 		}
     	
     	try {
@@ -271,7 +270,7 @@ public class ProxyImpl implements Proxy, ReservationStatusListener {
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("Query Reservation Error: " + e.getMessage());
+		    log.error("Query Reservation Error: " + e.getMessage());
 		}
 		
 		IdmHibernateUtil.getInstance().closeSession();
@@ -352,7 +351,7 @@ public class ProxyImpl implements Proxy, ReservationStatusListener {
             Reservation res = cache.get(reservationId);
             proxy.Notify(Autobahn2OscarsConverter.convertReservation(res));
         } catch(IOException e) {
-            System.out.println("notify error: " + e.getMessage());
+            log.error("notify error: " + e.getMessage());
         }
 */  }
 }

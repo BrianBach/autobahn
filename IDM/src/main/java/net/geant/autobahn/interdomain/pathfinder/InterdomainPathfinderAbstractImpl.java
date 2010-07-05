@@ -3,6 +3,8 @@ package net.geant.autobahn.interdomain.pathfinder;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import net.geant.autobahn.network.AdminDomain;
 import net.geant.autobahn.network.Link;
 
@@ -14,6 +16,8 @@ import net.geant.autobahn.network.Link;
  * @author <a href="mailto:stamos@cti.gr">Kostas Stamos</a>
  */
 public abstract class InterdomainPathfinderAbstractImpl implements InterdomainPathfinder {
+
+    private final Logger log = Logger.getLogger(InterdomainPathfinderAbstractImpl.class);
 
     protected Topology topology;
     
@@ -61,7 +65,7 @@ public abstract class InterdomainPathfinderAbstractImpl implements InterdomainPa
                 }
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            log.error(e.getMessage());
             e.printStackTrace();
             return neighbors;
         }

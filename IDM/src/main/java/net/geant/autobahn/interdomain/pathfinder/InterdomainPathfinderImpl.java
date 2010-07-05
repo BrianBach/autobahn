@@ -144,7 +144,7 @@ public class InterdomainPathfinderImpl extends InterdomainPathfinderAbstractImpl
             }
         }
         catch (Exception e) {
-            System.out.println(e.getMessage());
+            log.error(e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -216,7 +216,7 @@ public class InterdomainPathfinderImpl extends InterdomainPathfinderAbstractImpl
             }
         }
         
-        log.info("Node not found: " + n.getBodID());
+        log.error("Node not found: " + n.getBodID());
         
         // Node could not be found, throw exception
         throw new Exception("PF exception: The node attached to a link could not be found in the nodes list");

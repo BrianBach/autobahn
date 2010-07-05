@@ -119,7 +119,7 @@ public final class AccessPoint implements UserAccessPoint,
 				log.debug("Creating instance: IDM AP");
 				instance = new AccessPoint();
 			} catch (Exception e) {
-				System.out.println("Error while creating IDM AP");
+				log.error("Error while creating IDM AP");
 				e.printStackTrace();
 			}
 		}
