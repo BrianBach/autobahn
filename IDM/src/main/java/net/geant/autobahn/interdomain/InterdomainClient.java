@@ -26,6 +26,7 @@ public class InterdomainClient implements Interdomain {
 	private String endPoint;
 	
 	public InterdomainClient(String endPoint) {
+	    log.debug("Initial IDM endpoint is: " + endPoint);
         String finalEndPoint = endPoint;
         
 		// Query IDM to Lookup
@@ -36,6 +37,7 @@ public class InterdomainClient implements Interdomain {
             LookupService lookup = new LookupService(host);
             try {
             	idmLocation = lookup.QueryIdmLocation(endPoint);
+                log.debug("IDM endpoint retrieved from LS: " + idmLocation);
             } catch (LookupServiceException e) {
                 log.info("No query to the Lookup Service could be performed in order to locate IDM.");
             	log.info(e.getMessage());
@@ -48,12 +50,13 @@ public class InterdomainClient implements Interdomain {
         	finalEndPoint = idmLocation;
         }
         else {
-            log.debug("IDM location could not be obtained from Lookup, falling back to direct contact");
+            log.info("IDM location could not be obtained from Lookup, falling back to direct contact");
             // However, this is not a fatal error, as the IDM location might be
             // available through another channel (e.g. in properties files), and
             // so the provided endPoint parameter might be a valid URL
         }
         
+        log.debug("IDM endpoint finally to be used for IDM -> IDM communication: " + finalEndPoint);
 		InterdomainService service = new InterdomainService(finalEndPoint);
 		this.endPoint = finalEndPoint;
 		this.interdomain = service.getInterdomainPort();
