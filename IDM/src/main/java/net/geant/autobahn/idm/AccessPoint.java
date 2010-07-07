@@ -317,8 +317,37 @@ public final class AccessPoint implements UserAccessPoint,
         
         List<AdminDomain> domains = daos.getAdminDomainDAO().getAll();
         String[] res = new String[domains.size()];
-        for (int i=0; i < res.length; i++) 
-            res[i] = domains.get(i).getBodID();
+        for (int i=0; i < res.length; i++) {
+            AdminDomain ad = domains.get(i);
+            if (ad == null) {
+                log.error("A domain returned from DB is null");
+                continue;
+            }
+            
+            res[i] = ad.getBodID();
+        }
+        
+        return res;
+    }
+
+    /* (non-Javadoc)
+     * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getAllDomains_NonClient()
+     */
+    public String[] getAllDomains_NonClient() {
+        
+        List<AdminDomain> domains = daos.getAdminDomainDAO().getAll();
+        String[] res = new String[domains.size()];
+        for (int i=0; i < res.length; i++) {
+            AdminDomain ad = domains.get(i);
+            if (ad == null) {
+                log.error("A domain returned from DB is null");
+                continue;
+            }
+            
+            if (!ad.isClientDomain()) {
+                res[i] = ad.getBodID();
+            }
+        }
         
         return res;
     }
@@ -330,8 +359,39 @@ public final class AccessPoint implements UserAccessPoint,
         
         List<Link> links = daos.getLinkDAO().getAll();
         String[] res = new String[links.size()];
-        for (int i=0; i < res.length; i++) 
-            res[i] = links.get(i).getBodID();
+        for (int i=0; i < res.length; i++) {
+            Link lnk = links.get(i);
+            if (lnk == null) {
+                log.error("A link returned from DB is null");
+                continue;
+            }
+            
+            res[i] = lnk.getBodID();
+        }
+        
+        return res;
+    }
+
+    /* (non-Javadoc)
+     * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getAllLinks_NonClient()
+     */
+    public String[] getAllLinks_NonClient() {
+        
+        List<Link> links = daos.getLinkDAO().getAll();
+        String[] res = new String[links.size()];
+        for (int i=0; i < res.length; i++) {
+            Link l = links.get(i);
+            if (l == null) {
+                log.error("A link returned from DB is null");
+                continue;
+            }
+            
+            AdminDomain startDom = l.getStartPort().getNode().getProvisioningDomain().getAdminDomain();
+            AdminDomain endDom = l.getEndPort().getNode().getProvisioningDomain().getAdminDomain();
+            if (!startDom.isClientDomain() && !endDom.isClientDomain()) {
+                res[i] = l.getBodID();
+            }
+        }
         
         return res;
     }

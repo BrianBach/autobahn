@@ -49,6 +49,11 @@ public interface UserAccessPoint {
     @WebMethod
     public java.util.List<java.lang.String> getAllDomains();
 
+    @WebResult(name = "Domains", targetNamespace = "")
+    @RequestWrapper(localName = "getAllDomains_NonClient", targetNamespace = "http://useraccesspoint.autobahn.geant.net/", className = "net.geant.autobahn.useraccesspoint.GetAllDomains_NonClient")
+    @ResponseWrapper(localName = "getAllDomains_NonClientResponse", targetNamespace = "http://useraccesspoint.autobahn.geant.net/", className = "net.geant.autobahn.useraccesspoint.GetAllDomains_NonClientResponse")
+    public java.util.List<java.lang.String> getAllDomains_NonClient();
+
     @RequestWrapper(localName = "modifyReservation", targetNamespace = "http://useraccesspoint.autobahn.geant.net/", className = "net.geant.autobahn.useraccesspoint.ModifyReservation")
     @ResponseWrapper(localName = "modifyReservationResponse", targetNamespace = "http://useraccesspoint.autobahn.geant.net/", className = "net.geant.autobahn.useraccesspoint.ModifyReservationResponse")
     @WebMethod
@@ -70,6 +75,11 @@ public interface UserAccessPoint {
     @ResponseWrapper(localName = "getAllLinksResponse", targetNamespace = "http://useraccesspoint.autobahn.geant.net/", className = "net.geant.autobahn.useraccesspoint.GetAllLinksResponse")
     @WebMethod
     public java.util.List<java.lang.String> getAllLinks();
+
+    @WebResult(name = "Links", targetNamespace = "")
+    @RequestWrapper(localName = "getAllLinks_NonClient", targetNamespace = "http://useraccesspoint.autobahn.geant.net/", className = "net.geant.autobahn.useraccesspoint.GetAllLinks_NonClient")
+    @ResponseWrapper(localName = "getAllLinks_NonClientResponse", targetNamespace = "http://useraccesspoint.autobahn.geant.net/", className = "net.geant.autobahn.useraccesspoint.GetAllLinks_NonClientResponse")
+    public java.util.List<java.lang.String> getAllLinks_NonClient();
 
     @WebResult(name = "Ports", targetNamespace = "")
     @RequestWrapper(localName = "getAllClientPorts", targetNamespace = "http://useraccesspoint.autobahn.geant.net/", className = "net.geant.autobahn.useraccesspoint.GetAllClientPorts")

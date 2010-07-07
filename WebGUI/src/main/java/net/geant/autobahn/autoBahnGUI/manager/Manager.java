@@ -129,10 +129,22 @@ public interface Manager {
     public List<String> getAllDomains();
     
     /**
-     * Gets all port names
+     * Gets all non-client domain names
+     * @return list of domains names
+     */
+    public List<String> getAllDomains_NonClient();
+    
+    /**
+     * Gets all link names
      * @return list of links names
      */
     public List<String> getAllLinks();
+    
+    /**
+     * Gets all link names that do not attach to a client domain
+     * @return list of links names
+     */
+    public List<String> getAllLinks_NonClient();
     
 	/**
 	 * Gets names of ports managed by specified IDM

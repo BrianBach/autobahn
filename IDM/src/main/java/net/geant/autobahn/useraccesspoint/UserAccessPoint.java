@@ -21,11 +21,26 @@ public interface UserAccessPoint {
     String[] getAllDomains();
 
     /**
+     * Returns all non-client domains in the global topology
+     * @return domains
+     */
+    @WebResult(name = "Domains")
+    String[] getAllDomains_NonClient();
+
+    /**
      * Returns all links in the global topology
      * @return links
      */
     @WebResult(name = "Links")
     String[] getAllLinks();
+
+    /**
+     * Returns all links in the global topology that do not attach to 
+     * a client domain
+     * @return links
+     */
+    @WebResult(name = "Links")
+    String[] getAllLinks_NonClient();
 
 	/**
      * Returns all client ports in the global topology

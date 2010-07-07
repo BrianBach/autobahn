@@ -33,8 +33,8 @@
 			<evaluate expression="manager.getFriendlyInterDomainManagerPorts(service.userHomeDomain)" result="flowScope.friendlyports_domain"/>
 			<evaluate expression="manager.getMappedAllPorts()" result="flowScope.ports_all"/>
 			<evaluate expression="manager.getAllFriendlyPorts()" result="flowScope.friendlyports_all"/>
-			<evaluate expression="manager.getAllDomains()" result="flowScope.domains_all"/>
-			<evaluate expression="manager.getAllLinks()" result="flowScope.links_all"/>
+			<evaluate expression="manager.getAllDomains_NonClient()" result="flowScope.domains_all"/>
+			<evaluate expression="manager.getAllLinks_NonClient()" result="flowScope.links_all"/>
 			<evaluate expression="manager.getReservationRequestTemplate()" result="flowScope.reservation"/>
 			<evaluate expression="manager.getReservationPriorities()" result="flowScope.priorities"/>
 			<evaluate expression="manager.getReservationResiliencies()" result="flowScope.resiliences"/>

@@ -228,7 +228,7 @@
 						<executions>
 							<execution>
 								<id>java-administration</id>
-								<phase>copmpile</phase>
+								<phase>compile</phase>
 								<configuration>
 									<sourceRoot>${basedir}/src/main/webapp/wsdl</sourceRoot>                                
 									<wsdlOptions>
@@ -247,7 +247,7 @@
 							</execution>
 							<execution>
 								<id>java-useraccesspoint</id>
-								<phase>copmpile</phase>
+								<phase>compile</phase>
 								<configuration>
 									<sourceRoot>${basedir}/src/main/webapp/wsdl</sourceRoot>                                
 									<wsdlOptions>
@@ -266,7 +266,7 @@
 							</execution>
 							<execution>
 								<id>java-gui</id>
-								<phase>copmpile</phase>
+								<phase>compile</phase>
 								<configuration>
 									<sourceRoot>${basedir}/src/main/webapp/wsdl</sourceRoot>                                
 									<wsdlOptions>

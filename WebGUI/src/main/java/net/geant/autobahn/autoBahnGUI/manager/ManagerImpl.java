@@ -304,11 +304,11 @@ public class ManagerImpl implements Manager,ManagerNotifier{
     public List<String> getAllDomains(){
         // Parse through IDMs and get the first non-null result
         Iterator<String> iterator = idms.keySet().iterator();
-        InterDomainManager manager =null;
+        InterDomainManager manager = null;
         List<String> domains = null;
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             manager = idms.get(iterator.next());
-            if (manager != null){
+            if (manager != null) {
                 domains = manager.getAllDomains();
                 if (domains != null)
                     break;
@@ -319,17 +319,57 @@ public class ManagerImpl implements Manager,ManagerNotifier{
 
     /*
      * (non-Javadoc)
-     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllDomains()
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllDomains_NonClient()
+     */
+    public List<String> getAllDomains_NonClient(){
+        // Parse through IDMs and get the first non-null result
+        Iterator<String> iterator = idms.keySet().iterator();
+        InterDomainManager manager = null;
+        List<String> domains = null;
+        while (iterator.hasNext()) {
+            manager = idms.get(iterator.next());
+            if (manager != null) {
+                domains = manager.getAllDomains_NonClient();
+                if (domains != null)
+                    break;
+            }
+        }
+        return domains;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllLinks()
      */
     public List<String> getAllLinks(){
         // Parse through IDMs and get the first non-null result
         Iterator<String> iterator = idms.keySet().iterator();
-        InterDomainManager manager =null;
+        InterDomainManager manager = null;
         List<String> links = null;
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             manager = idms.get(iterator.next());
-            if (manager != null){
+            if (manager != null) {
                 links = manager.getAllLinks();
+                if (links != null)
+                    break;
+            }
+        }
+        return links;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllLinks_NonClient()
+     */
+    public List<String> getAllLinks_NonClient(){
+        // Parse through IDMs and get the first non-null result
+        Iterator<String> iterator = idms.keySet().iterator();
+        InterDomainManager manager = null;
+        List<String> links = null;
+        while (iterator.hasNext()) {
+            manager = idms.get(iterator.next());
+            if (manager != null) {
+                links = manager.getAllLinks_NonClient();
                 if (links != null)
                     break;
             }

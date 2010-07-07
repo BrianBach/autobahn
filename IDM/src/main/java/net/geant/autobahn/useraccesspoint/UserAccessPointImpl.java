@@ -1,8 +1,12 @@
 package net.geant.autobahn.useraccesspoint;
 
+import java.util.List;
+
 import javax.jws.WebResult;
 
 import net.geant.autobahn.idm.AccessPoint;
+import net.geant.autobahn.network.AdminDomain;
+import net.geant.autobahn.network.Link;
 
 /**
  * @author Michal
@@ -30,12 +34,26 @@ public class UserAccessPointImpl implements UserAccessPoint {
     }
 
     /* (non-Javadoc)
+     * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getAllDomains_NonClient()
+     */
+    public String[] getAllDomains_NonClient() {
+        return AccessPoint.getInstance().getAllDomains_NonClient();
+    }
+
+    /* (non-Javadoc)
      * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getAllLinks()
      */
     public String[] getAllLinks() {
         return AccessPoint.getInstance().getAllLinks();
     }
 
+    /* (non-Javadoc)
+     * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getAllLinks_NonClient()
+     */
+    public String[] getAllLinks_NonClient() {
+        return AccessPoint.getInstance().getAllLinks_NonClient();
+    }
+    
     /* (non-Javadoc)
 	 * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getAllClientPorts()
 	 */

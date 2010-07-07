@@ -79,8 +79,12 @@
   <xs:element name="getAllClientPortsResponse" type="tns:getAllClientPortsResponse"/>
   <xs:element name="getAllDomains" type="tns:getAllDomains"/>
   <xs:element name="getAllDomainsResponse" type="tns:getAllDomainsResponse"/>
+  <xs:element name="getAllDomains_NonClient" type="tns:getAllDomains_NonClient"/>
+  <xs:element name="getAllDomains_NonClientResponse" type="tns:getAllDomains_NonClientResponse"/>
   <xs:element name="getAllLinks" type="tns:getAllLinks"/>
   <xs:element name="getAllLinksResponse" type="tns:getAllLinksResponse"/>
+  <xs:element name="getAllLinks_NonClient" type="tns:getAllLinks_NonClient"/>
+  <xs:element name="getAllLinks_NonClientResponse" type="tns:getAllLinks_NonClientResponse"/>
   <xs:element name="getDomainClientPorts" type="tns:getDomainClientPorts"/>
   <xs:element name="getDomainClientPortsResponse" type="tns:getDomainClientPortsResponse"/>
   <xs:element name="modifyReservation" type="tns:modifyReservation"/>
@@ -147,6 +151,14 @@
   <xs:complexType name="cancelServiceResponse">
     <xs:sequence/>
   </xs:complexType>
+  <xs:complexType name="getAllLinks_NonClient">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getAllLinks_NonClientResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="Links" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
   <xs:complexType name="submitService">
     <xs:sequence>
       <xs:element minOccurs="0" name="request" type="ns1:ServiceRequest"/>
@@ -191,6 +203,14 @@
       <xs:element maxOccurs="unbounded" minOccurs="0" name="Ports" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
+  <xs:complexType name="getAllDomains_NonClient">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getAllDomains_NonClientResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="Domains" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
   <xs:simpleType name="priority">
     <xs:restriction base="xs:string">
       <xs:enumeration value="NORMAL"/>
@@ -229,20 +249,12 @@
   </xs:complexType>
 </xs:schema>
   </wsdl:types>
-  <wsdl:message name="checkReservationPossibility">
-    <wsdl:part name="parameters" element="tns:checkReservationPossibility">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="queryServiceResponse">
-    <wsdl:part name="parameters" element="tns:queryServiceResponse">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="cancelService">
     <wsdl:part name="parameters" element="tns:cancelService">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="getAllLinksResponse">
-    <wsdl:part name="parameters" element="tns:getAllLinksResponse">
+  <wsdl:message name="queryServiceResponse">
+    <wsdl:part name="parameters" element="tns:queryServiceResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getAllClientPortsResponse">
@@ -253,20 +265,48 @@
     <wsdl:part name="parameters" element="tns:modifyReservation">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="queryService">
-    <wsdl:part name="parameters" element="tns:queryService">
+  <wsdl:message name="getAllLinks_NonClientResponse">
+    <wsdl:part name="parameters" element="tns:getAllLinks_NonClientResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UserAccessPointException">
+    <wsdl:part name="UserAccessPointException" element="tns:UserAccessPointException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="submitServiceResponse">
+    <wsdl:part name="parameters" element="tns:submitServiceResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAllDomains_NonClientResponse">
+    <wsdl:part name="parameters" element="tns:getAllDomains_NonClientResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAllLinks_NonClient">
+    <wsdl:part name="parameters" element="tns:getAllLinks_NonClient">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="checkReservationPossibility">
+    <wsdl:part name="parameters" element="tns:checkReservationPossibility">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAllDomains_NonClient">
+    <wsdl:part name="parameters" element="tns:getAllDomains_NonClient">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAllLinksResponse">
+    <wsdl:part name="parameters" element="tns:getAllLinksResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="cancelServiceResponse">
     <wsdl:part name="parameters" element="tns:cancelServiceResponse">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="submitServiceAndRegister">
-    <wsdl:part name="parameters" element="tns:submitServiceAndRegister">
+  <wsdl:message name="queryService">
+    <wsdl:part name="parameters" element="tns:queryService">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="UserAccessPointException">
-    <wsdl:part name="UserAccessPointException" element="tns:UserAccessPointException">
+  <wsdl:message name="submitServiceAndRegister">
+    <wsdl:part name="parameters" element="tns:submitServiceAndRegister">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getAllClientPorts">
@@ -297,16 +337,12 @@
     <wsdl:part name="parameters" element="tns:submitServiceAndRegisterResponse">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="submitServiceResponse">
-    <wsdl:part name="parameters" element="tns:submitServiceResponse">
+  <wsdl:message name="modifyReservationResponse">
+    <wsdl:part name="parameters" element="tns:modifyReservationResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getAllDomains">
     <wsdl:part name="parameters" element="tns:getAllDomains">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="modifyReservationResponse">
-    <wsdl:part name="parameters" element="tns:modifyReservationResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getAllDomainsResponse">
@@ -364,6 +400,12 @@
       <wsdl:fault name="UserAccessPointException" message="tns:UserAccessPointException">
     </wsdl:fault>
     </wsdl:operation>
+    <wsdl:operation name="getAllLinks_NonClient">
+      <wsdl:input name="getAllLinks_NonClient" message="tns:getAllLinks_NonClient">
+    </wsdl:input>
+      <wsdl:output name="getAllLinks_NonClientResponse" message="tns:getAllLinks_NonClientResponse">
+    </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="submitService">
       <wsdl:input name="submitService" message="tns:submitService">
     </wsdl:input>
@@ -396,6 +438,12 @@
       <wsdl:input name="getDomainClientPorts" message="tns:getDomainClientPorts">
     </wsdl:input>
       <wsdl:output name="getDomainClientPortsResponse" message="tns:getDomainClientPortsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAllDomains_NonClient">
+      <wsdl:input name="getAllDomains_NonClient" message="tns:getAllDomains_NonClient">
+    </wsdl:input>
+      <wsdl:output name="getAllDomains_NonClientResponse" message="tns:getAllDomains_NonClientResponse">
     </wsdl:output>
     </wsdl:operation>
   </wsdl:portType>
@@ -464,6 +512,15 @@
         <soap:fault name="UserAccessPointException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
+    <wsdl:operation name="getAllLinks_NonClient">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getAllLinks_NonClient">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAllLinks_NonClientResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="submitService">
       <soap:operation soapAction="" style="document"/>
       <wsdl:input name="submitService">
@@ -512,6 +569,15 @@
         <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="getDomainClientPortsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAllDomains_NonClient">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getAllDomains_NonClient">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAllDomains_NonClientResponse">
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>

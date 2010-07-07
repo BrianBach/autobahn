@@ -433,6 +433,21 @@ public class InterDomainManager implements UserAccessPoint, Administration{
 
     /*
      * (non-Javadoc)
+     * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getAllDomains_NonClient()
+     */
+    public List<String> getAllDomains_NonClient() {
+        try {
+            if (isUserAccessPointConnected())
+                return userAccessPoint.getAllDomains_NonClient();
+        } catch (Exception e ){
+            logger.error ("Problem with getting non-client domains:"+e.getClass().getName()+":"+e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /*
+     * (non-Javadoc)
      * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getAllLinks()
      */
     public List<String> getAllLinks() {
@@ -441,6 +456,21 @@ public class InterDomainManager implements UserAccessPoint, Administration{
                 return userAccessPoint.getAllLinks();
         } catch (Exception e ){
             logger.error ("Problem with getting links:"+e.getClass().getName()+":"+e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getAllLinks_NonClient()
+     */
+    public List<String> getAllLinks_NonClient() {
+        try {
+            if (isUserAccessPointConnected())
+                return userAccessPoint.getAllLinks_NonClient();
+        } catch (Exception e ){
+            logger.error ("Problem with getting non-client links:"+e.getClass().getName()+":"+e.getMessage());
             e.printStackTrace();
         }
         return null;
