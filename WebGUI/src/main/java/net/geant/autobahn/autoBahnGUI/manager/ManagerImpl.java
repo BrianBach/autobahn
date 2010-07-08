@@ -316,16 +316,22 @@ public class ManagerImpl implements Manager, ManagerNotifier {
         // Parse through IDMs and get the first non-null result
         Iterator<String> iterator = idms.keySet().iterator();
         InterDomainManager manager = null;
-        List<String> domains = null;
+        
         while (iterator.hasNext()) {
             manager = idms.get(iterator.next());
             if (manager != null) {
-                domains = manager.getAllDomains_NonClient();
-                if (domains != null)
-                    break;
+                List<String> domains = new ArrayList<String>();
+            	
+            	String[] temp = manager.getAllDomains_NonClient();
+        		for(String domain : temp) {
+        			domains.add(domain);
+        		}
+
+        		return domains;
             }
         }
-        return domains;
+        
+        return null;
     }
 
     /*
@@ -338,9 +344,9 @@ public class ManagerImpl implements Manager, ManagerNotifier {
         	InterDomainManager manager = idms.get(idm);
         	String[] temp = manager.getAllLinks();
         	
-        	List<String> links = new ArrayList<String>();
-        	
         	if(temp != null) {
+            	List<String> links = new ArrayList<String>();
+            	
         		for(String link : temp) {
         			links.add(link);
         		}
@@ -360,16 +366,23 @@ public class ManagerImpl implements Manager, ManagerNotifier {
         // Parse through IDMs and get the first non-null result
         Iterator<String> iterator = idms.keySet().iterator();
         InterDomainManager manager = null;
-        List<String> links = null;
         while (iterator.hasNext()) {
             manager = idms.get(iterator.next());
             if (manager != null) {
-                links = manager.getAllLinks_NonClient();
-                if (links != null)
-                    break;
+                String[] temp = manager.getAllLinks_NonClient();
+                
+                if (temp != null) {
+                    List<String> links = new ArrayList<String>();
+
+            		for(String link : temp) {
+            			links.add(link);
+            		}
+            		
+            		return links;
+                }
             }
         }
-        return links;
+        return null;
     }
 
 	/*

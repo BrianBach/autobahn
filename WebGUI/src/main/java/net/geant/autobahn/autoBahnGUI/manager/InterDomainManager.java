@@ -438,7 +438,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
      * (non-Javadoc)
      * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getAllDomains_NonClient()
      */
-    public List<String> getAllDomains_NonClient() {
+    public String[] getAllDomains_NonClient() {
         try {
             if (isUserAccessPointConnected())
                 return userAccessPoint.getAllDomains_NonClient();
@@ -468,7 +468,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
      * (non-Javadoc)
      * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getAllLinks_NonClient()
      */
-    public List<String> getAllLinks_NonClient() {
+    public String[] getAllLinks_NonClient() {
         try {
             if (isUserAccessPointConnected())
                 return userAccessPoint.getAllLinks_NonClient();
