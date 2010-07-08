@@ -1,12 +1,8 @@
 package net.geant.autobahn.useraccesspoint;
 
-import java.util.List;
-
 import javax.jws.WebResult;
 
 import net.geant.autobahn.idm.AccessPoint;
-import net.geant.autobahn.network.AdminDomain;
-import net.geant.autobahn.network.Link;
 
 /**
  * @author Michal
