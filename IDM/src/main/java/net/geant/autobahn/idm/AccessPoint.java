@@ -12,7 +12,9 @@ import java.util.Properties;
 import net.geant.autobahn.administration.Administration;
 import net.geant.autobahn.administration.KeyValue;
 import net.geant.autobahn.administration.Neighbor;
+import net.geant.autobahn.administration.ServiceType;
 import net.geant.autobahn.administration.Status;
+import net.geant.autobahn.administration.Translator;
 import net.geant.autobahn.constraints.GlobalConstraints;
 import net.geant.autobahn.dao.IdmDAOFactory;
 import net.geant.autobahn.dao.hibernate.HibernateIdmDAOFactory;
@@ -560,7 +562,7 @@ public final class AccessPoint implements UserAccessPoint,
 	public void registerCallback(String serviceId, String url) {
 		UapCallbackClient client = new UapCallbackClient(url);
 		
-		Service srv = getService(serviceId);
+		Service srv = serviceScheduler.getService(serviceId);
 		
 		for(AutobahnReservation res : srv.getReservations()) {
 			res.addStatusListener(client);
@@ -940,8 +942,8 @@ public final class AccessPoint implements UserAccessPoint,
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.administration.Administration#getService(java.lang.String)
 	 */
-	public Service getService(String serviceId) {
-		return serviceScheduler.getService(serviceId);
+	public ServiceType getService(String serviceId) {
+		return Translator.convert(serviceScheduler.getService(serviceId));
 	}
 
 	/**
@@ -956,8 +958,16 @@ public final class AccessPoint implements UserAccessPoint,
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.administration.Administration#getServices()
 	 */
-	public List<Service> getServices() {
-		return serviceScheduler.getServices();
+	public List<ServiceType> getServices() {
+		List<Service> services = serviceScheduler.getServices();
+		
+		List<ServiceType> result = new ArrayList<ServiceType>();
+		for(Service serv : services) {
+			ServiceType stype = Translator.convert(serv);
+			result.add(stype);
+		}
+		
+		return result;
 	}
 
 	/* (non-Javadoc)
