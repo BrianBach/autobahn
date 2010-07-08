@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import net.geant.autobahn.reservation.Service;
+import net.geant.autobahn.administration.ServiceType;
 
 
 /**
@@ -26,38 +26,45 @@ public class ServicesFormModel implements Serializable{
 	/**
 	 * Identifies services submitted at selected interdomain manager
 	 */
-	List<Service> services;
+	List<ServiceType> services;
 	/**
 	 * Indetifies comparator for ordering serices list
 	 */
-	Comparator<Service> comparator;
+	Comparator<ServiceType> comparator;
 	
 	public List<String> getIdms() {
 		return idms;
 	}
+
 	public void setIdms(List idms) {
 		this.idms = idms;
 	}
+
 	public String getCurrentIdm() {
 		return currentIdm;
 	}
+
 	public void setCurrentIdm(String currentIdm) {
 		this.currentIdm = currentIdm;
 	}
-	public List<Service> getServices() {
+
+	public List<ServiceType> getServices() {
 		return services;
 	}
-	public void setServices(List<Service> services) {
-		this.services=services;
-		if (services!= null && comparator!=null)
+
+	public void setServices(List<ServiceType> services) {
+		this.services = services;
+		if (services != null && comparator != null)
 			Collections.sort(services, comparator);
 	}
-	public Comparator<Service> getComparator() {
+
+	public Comparator<ServiceType> getComparator() {
 		return comparator;
 	}
-	public void setComparator(Comparator<Service> comparator) {
+
+	public void setComparator(Comparator<ServiceType> comparator) {
 		this.comparator = comparator;
-		if (services!= null && comparator!=null)
+		if (services != null && comparator != null)
 			Collections.sort(services, comparator);
 	}
 	

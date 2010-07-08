@@ -3,13 +3,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.geant.autobahn.administration.ServiceType;
 import net.geant.autobahn.autoBahnGUI.manager.Manager;
 import net.geant.autobahn.autoBahnGUI.model.ServicesComparator;
 import net.geant.autobahn.autoBahnGUI.model.ServicesFormModel;
-import net.geant.autobahn.reservation.Service;
 
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -59,7 +60,7 @@ public class SubmitedReservationsController extends SimpleFormController {
 			currentIdm =domain;
 		services.setIdms(idms);
 		services.setCurrentIdm(currentIdm);
-		List<Service> servicesList= manager.getServicesFromInterDomainManager(currentIdm);
+		List<ServiceType> servicesList= manager.getServicesFromInterDomainManager(currentIdm);
 		services.setServices(servicesList);
 		services.setComparator(new ServicesComparator());
 		return services;
@@ -83,9 +84,9 @@ public class SubmitedReservationsController extends SimpleFormController {
 		if (action.equals("change"))
 		{	
 			String current = services.getCurrentIdm();	
-			List<Service> service= manager.getServicesFromInterDomainManager(current);
-			if (service==null)
-				services.setServices(new ArrayList<Service>());
+			List<ServiceType> service= manager.getServicesFromInterDomainManager(current);
+			if (service == null)
+				services.setServices(new ArrayList<ServiceType>());
 			else
 				services.setServices(service);
 			return showForm(request, errors, "reservationsView");
@@ -95,7 +96,7 @@ public class SubmitedReservationsController extends SimpleFormController {
 					"id", null);
 			if (id != null && manager.checkUserAccessPointConnection(services.getCurrentIdm()))
 			{
-				Service service = manager.getServiceFromInterDomainManager(services.getCurrentIdm(), id);
+				ServiceType service = manager.getServiceFromInterDomainManager(services.getCurrentIdm(), id);
 				if (service != null){
 					if (manager.checkUserAccessPointConnection(services.getCurrentIdm())){
 						manager.cancelServiceInInterDomainManager(services.getCurrentIdm(), service.getBodID());

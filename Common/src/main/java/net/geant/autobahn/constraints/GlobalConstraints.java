@@ -44,7 +44,7 @@ import org.apache.log4j.Logger;
 public class GlobalConstraints implements Serializable {
 
 	@XmlTransient
-    private Logger log = Logger.getLogger(GlobalConstraints.class);
+    private static final Logger log = Logger.getLogger(GlobalConstraints.class);
     
 	@XmlTransient
     private long constraintID;

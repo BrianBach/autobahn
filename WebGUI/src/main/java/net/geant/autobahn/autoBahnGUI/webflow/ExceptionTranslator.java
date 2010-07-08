@@ -3,11 +3,9 @@ package net.geant.autobahn.autoBahnGUI.webflow;
 import java.util.Locale;
 
 import net.geant.autobahn.autoBahnGUI.manager.ManagerException;
-import net.geant.autobahn.useraccesspoint.UserAccessPointException_Exception;
+import net.geant.autobahn.useraccesspoint.UserAccessPointException;
 
 import org.apache.log4j.Logger;
-import org.springframework.binding.message.MessageBuilder;
-import org.springframework.binding.message.MessageContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
 import org.springframework.webflow.execution.FlowExecutionException;
@@ -43,11 +41,11 @@ public class ExceptionTranslator implements MessageSourceAware {
         
         return null;
     }
-    private UserAccessPointException_Exception  findUserAccessPointException_Exception(FlowExecutionException ex) {
+    private UserAccessPointException  findUserAccessPointException(FlowExecutionException ex) {
         Throwable cause = ex.getCause();
         while (cause != null) {
-            if (cause instanceof UserAccessPointException_Exception) {
-            	return (UserAccessPointException_Exception) cause;
+            if (cause instanceof UserAccessPointException) {
+            	return (UserAccessPointException) cause;
             }
             cause = cause.getCause();
         }
@@ -67,7 +65,7 @@ public class ExceptionTranslator implements MessageSourceAware {
 					requestContext.getFlowScope().put("error", messages.getMessage(ManagerException.name+"."+conf.getError(), null, Locale.getDefault()));
 					return;
 				}
-				UserAccessPointException_Exception ue = findUserAccessPointException_Exception ((FlowExecutionException)exception);
+				UserAccessPointException ue = findUserAccessPointException ((FlowExecutionException)exception);
 				
 				if (ue!= null){
 					logger.info("FileSystemManagerException:"+conf.getMessage());

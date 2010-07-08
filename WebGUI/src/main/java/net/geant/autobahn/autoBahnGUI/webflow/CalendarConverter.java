@@ -2,9 +2,11 @@ package net.geant.autobahn.autoBahnGUI.webflow;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
+
 import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
+
 import org.springframework.binding.convert.converters.TwoWayConverter;
 import org.springframework.util.StringUtils;
 
@@ -14,7 +16,7 @@ public class CalendarConverter implements TwoWayConverter {
 	
 	private SimpleDateFormat dateFormat;
 	
-	public CalendarConverter (){
+	public CalendarConverter () {
 		dateFormat = new SimpleDateFormat(format);
 		dateFormat.setLenient(false);		
 	}
@@ -22,15 +24,16 @@ public class CalendarConverter implements TwoWayConverter {
 	public Object convertTargetToSourceClass(Object target, Class c)
 			throws Exception {	
 		String dateInString = (String) target;
-		if (!c.equals(XMLGregorianCalendar.class))
+		if (!c.equals(Calendar.class))
 			throw new IllegalArgumentException();
 		if (StringUtils.hasText(dateInString)){
 			try{
 				this.dateFormat.parse(dateInString);
-			} catch (ParseException ex) {  
+			} catch (ParseException ex) {
 		    	   throw new IllegalArgumentException();  
 		    } 
-		XMLGregorianCalendar calendar= DatatypeFactory.newInstance().newXMLGregorianCalendar(dateInString);
+		
+		Calendar calendar= DatatypeFactory.newInstance().newXMLGregorianCalendar(dateInString).toGregorianCalendar();
 		return calendar;    
 	        
 	 }else
@@ -39,19 +42,17 @@ public class CalendarConverter implements TwoWayConverter {
 
 	public Object convertSourceToTargetClass(Object calendar, Class c)
 			throws Exception {
-		XMLGregorianCalendar value = (XMLGregorianCalendar) calendar;
-		if (value == null)
-		{
+		Calendar value = (Calendar) calendar;
+		if (value == null) {
 			GregorianCalendar cal = (GregorianCalendar) GregorianCalendar.getInstance();
 			cal.setTimeInMillis(System.currentTimeMillis());
-			value= DatatypeFactory.newInstance().newXMLGregorianCalendar();		
 		}
-		return value.toString();
+		return value.getTime().toString();
 
 	}
 
 	public Class getSourceClass() {
-		return XMLGregorianCalendar.class;
+		return Calendar.class;
 	}
 
 	public Class getTargetClass() {

@@ -1,8 +1,10 @@
 
 package net.geant.autobahn.useraccesspoint;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -34,9 +36,11 @@ import javax.xml.bind.annotation.XmlType;
     "domains",
     "links"
 })
-public class PathInfo {
+public class PathInfo implements Serializable {
 
-    @XmlElement(nillable = true)
+	private static final long serialVersionUID = -994095816306898439L;
+	
+	@XmlElement(nillable = true)
     protected List<String> domains;
     @XmlElement(nillable = true)
     protected List<String> links;

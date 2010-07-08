@@ -296,7 +296,12 @@
 			<groupId>net.geant.autobahn</groupId>
 			<artifactId>autobahn-common</artifactId>
 			<version>0.4.3-SNAPSHOT</version>
-		</dependency>	
+		</dependency>
+		<dependency>
+			<groupId>net.geant.autobahn</groupId>
+			<artifactId>autobahn-idm</artifactId>
+			<version>0.4.3-SNAPSHOT</version>
+		</dependency>		
 		<dependency>
 			<groupId>org.opensaml</groupId>
 			<artifactId>opensaml1</artifactId>

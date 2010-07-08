@@ -2,11 +2,11 @@ package net.geant.autobahn.autoBahnGUI.web;
 import java.util.List;
 import java.util.Map;
 
+import net.geant.autobahn.administration.ServiceType;
 import net.geant.autobahn.autoBahnGUI.manager.Manager;
 import net.geant.autobahn.autoBahnGUI.model.googlemaps.Line;
 import net.geant.autobahn.autoBahnGUI.model.googlemaps.Topology;
 import net.geant.autobahn.autoBahnGUI.topology.TopologyFinder;
-import net.geant.autobahn.reservation.Service;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -41,8 +41,9 @@ public class AutobahnController {
 	protected final Log logger = LogFactory.getLog(getClass());
 	
 	public AutobahnController(){
-		Logger.getLogger("Creating controller").info("Creating controller");
+		logger.info("Creating controller");
 	}
+	
 	@RequestMapping("/notfound.htm")
 	public void notFound (){
 		
@@ -91,7 +92,7 @@ public class AutobahnController {
 		String[] linkStatusName = {"Up","Down"};
 		model.put("linkColors",linkStatusColor);
 		model.put("linkStates",linkStatusName);
-		List<Service> services = manager.getServicesForAllInterDomainManagers();
+		List<ServiceType> services = manager.getServicesForAllInterDomainManagers();
 		model.put ("services", services);
 		if (service!=null && service.length()>0){
 			model.put("reservationLinkColors",Line.reservationsStates);
@@ -111,7 +112,7 @@ public class AutobahnController {
 	}*/
 	@RequestMapping("/secure/services-list.htm")
     public void mapServicesListHandler ( Map<String, Object> model){
-		List<Service> services = manager.getServicesForAllInterDomainManagers();
+		List<ServiceType> services = manager.getServicesForAllInterDomainManagers();
 		model.put ("services", services);
 	}
 
@@ -156,7 +157,7 @@ public class AutobahnController {
 	}*/
 	@RequestMapping("/secure/topology.xml")
 	public void handleTopologyXML(@RequestParam String service,@RequestParam String domain, Map<String, Object> model){
-		Logger.getLogger("handle topology xml");
+		logger.debug("handle topology xml");
 		Topology topology=null;
 		if (service !=null && service.length()>0)
 			topology=topologyFinder.getGoogleTopology(domain,service);
@@ -167,11 +168,11 @@ public class AutobahnController {
 
 	@RequestMapping("/secure/servicesforidm.htm")
 	public void handleServicesForIdm(@RequestParam String link, @RequestParam String currentIdm,Map<String, Object> model){
-		Logger.getLogger("getting services for idm");
-		List<Service> services=null;
+		logger.debug("getting services for idm");
+		List<ServiceType> services=null;
 		String[] reservationStates=null;
 		if (currentIdm  !=null){
-			services =manager.getServicesFromInterDomainManager(currentIdm);
+			services = manager.getServicesFromInterDomainManager(currentIdm);
 			reservationStates=manager.getReservationStates();
 		}
 		model.put("link", link);

@@ -1,5 +1,6 @@
 package net.geant.autobahn.useraccesspoint;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -19,7 +20,9 @@ import javax.xml.bind.annotation.XmlType;
 		"maxDelay",
 		"resiliency", "bidirectional", "processNow"
 })
-public class ReservationRequest {
+public class ReservationRequest implements Serializable {
+	
+	private static final long serialVersionUID = -612896116488675810L;
 	
 	private String startPort;
 	private String endPort;
@@ -35,6 +38,11 @@ public class ReservationRequest {
 	private Resiliency resiliency;
 	private boolean bidirectional;
 	private boolean processNow;
+	
+	public ReservationRequest() {
+        this.userInclude = new PathInfo();
+        this.userExclude = new PathInfo();
+	}
 	
 	/**
 	 * @return the startPort

@@ -67,9 +67,9 @@
 		</tr>  
 		<c:forEach items="${element.reservations}" var="item" varStatus="loopStatus">
 				<tr>
-					<td>${reservationStates[item.intState]}(${item.intState})</td>
-					<td>${item.startTime.textContent}</td>
-					<td>${item.endTime.textContent}</td>
+					<td>${reservationStates[item.state]}(${item.state})</td>
+					<td>${item.startTime.time}</td>
+					<td>${item.endTime.time}</td>
 					<td>${item.priority}</td>
 					<td>${item.startPort.bodID}</td>
 					<td>${item.endPort.bodID}</td>

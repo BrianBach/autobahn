@@ -4,8 +4,6 @@ import java.util.Locale;
 
 import net.geant.autobahn.useraccesspoint.ServiceRequest;
 
-import org.springframework.binding.message.MessageBuilder;
-import org.springframework.binding.message.MessageContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
 import org.springframework.webflow.action.AbstractAction;
@@ -19,6 +17,7 @@ public class ServiceValidator  extends AbstractAction implements MessageSourceAw
 	@Override
 	protected Event doExecute(RequestContext context) throws Exception {
 		ServiceRequest request =(ServiceRequest)context.getFlowScope().get("service");
+		System.out.println("Elo");
 		if (request == null){
 			context.getFlowScope().put("error", messages.getMessage("service.not.provided", null, Locale.getDefault()));
 			return error();

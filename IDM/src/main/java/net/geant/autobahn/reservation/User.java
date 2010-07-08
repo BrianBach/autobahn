@@ -5,6 +5,8 @@
  */
 package net.geant.autobahn.reservation;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
@@ -22,9 +24,11 @@ import net.geant.autobahn.network.AdminDomain;
 @XmlType(name="User", namespace="reservation.autobahn.geant.net", propOrder={
 		"name", "homeDomain", "email"
 })
-public class User {
+public class User implements Serializable {
     
-    /**
+	private static final long serialVersionUID = 5943540458179600381L;
+
+	/**
      * User name/identifier
      */
     private String name;

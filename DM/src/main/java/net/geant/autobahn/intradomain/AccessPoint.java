@@ -13,7 +13,7 @@ import net.geant.autobahn.dm2idm.Dm2IdmClient;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
 import net.geant.autobahn.idm2dm.Idm2Dm;
 import net.geant.autobahn.idm2dm.OversubscribedException;
-import net.geant.autobahn.intradomain.administration.Administration;
+import net.geant.autobahn.intradomain.administration.DmAdministration;
 import net.geant.autobahn.intradomain.administration.KeyValue;
 import net.geant.autobahn.intradomain.ethernet.EthMonitoring;
 import net.geant.autobahn.intradomain.pathfinder.IntradomainPathfinder;
@@ -35,7 +35,7 @@ import org.hibernate.Transaction;
  * 
  * @author Michal
  */
-public final class AccessPoint implements Idm2Dm, Administration {
+public final class AccessPoint implements Idm2Dm, DmAdministration {
 
 	private static AccessPoint instance;
 	private enum State { READY, PROCESSING, INACTIVE, RESTARTING, ERROR };

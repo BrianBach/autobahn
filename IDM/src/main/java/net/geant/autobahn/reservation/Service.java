@@ -28,7 +28,7 @@ import net.geant.autobahn.reservation.states.hd.HomeDomainState;
 public class Service implements ReservationStatusListener {
 
 	@XmlTransient
-	private Logger log = Logger.getLogger(Service.class);
+	private static Logger log = Logger.getLogger(Service.class);
 	@XmlAccessorType(XmlAccessType.FIELD)
 	private enum State { SCHEDULING, SCHEDULED, FAILED, CANCELLING, CANCELLED, FINISHED };
 	private State state;

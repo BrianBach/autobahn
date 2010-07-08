@@ -1,14 +1,10 @@
 package net.geant.autobahn.autoBahnGUI.topology;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import net.geant.autobahn.administration.Neighbor;
+import net.geant.autobahn.administration.ServiceType;
 import net.geant.autobahn.administration.Status;
 import net.geant.autobahn.autoBahnGUI.manager.InterDomainManager;
 import net.geant.autobahn.autoBahnGUI.manager.Manager;
@@ -20,7 +16,9 @@ import net.geant.autobahn.lookup.LookupServiceException;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.Path;
 import net.geant.autobahn.reservation.Reservation;
-import net.geant.autobahn.reservation.Service;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Class creates topology model from IDM informahttp://www.pornhub.com/communitytion. 
@@ -96,9 +94,11 @@ public class TopologyFinder implements TopologyFinderNotifier{
 			return top;
 		if (serviceId !=null)
 		{
-			Service service= idm.getService(serviceId);
+			ServiceType service = idm.getService(serviceId);
 			if (service!= null){
-				List<Reservation> reservations =service.getReservations();
+				List<Reservation> reservations = new ArrayList<Reservation>(); 
+				reservations.addAll(service.getReservations());
+				
 				if (reservations==null || reservations.isEmpty())
 					return top;
 				InterDomainManager startDomain=null;
@@ -176,7 +176,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 					line.setStartLongitude(""+startLongitude);
 					line.setEndLattitude(""+endLatitude);
 					line.setEndLongitude(""+endLongitude);
-					line.setColor(Line.getReservationLineColor(reservations.get(i).getIntState()));
+					line.setColor(Line.getReservationLineColor(reservations.get(i).getState()));
 					line.setTickness("8");
 					line.setOblique(0);
 					top.addLine(line);

@@ -63,8 +63,8 @@
 					<td>
 						<a href="${flowExecutionUrl}&_eventId=remove&id=${loop.count-1}">Remove</a>
         			</td>
-					<td>${item.startTime}</td>
-					<td>${item.endTime}</td>
+					<td>${item.startTime.time}</td>
+					<td>${item.endTime.time}</td>
 					<td>${item.priority}</td>
 					<td>${item.startPort}</td>
 					<td>${item.endPort}</td>

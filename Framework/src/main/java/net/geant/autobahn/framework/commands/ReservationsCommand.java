@@ -6,9 +6,9 @@ package net.geant.autobahn.framework.commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.geant.autobahn.administration.ServiceType;
 import net.geant.autobahn.framework.Framework;
 import net.geant.autobahn.reservation.Reservation;
-import net.geant.autobahn.reservation.Service;
 import net.geant.autobahn.reservation.states.hd.HomeDomainState;
 
 /**
@@ -41,7 +41,7 @@ public class ReservationsCommand implements AutobahnCommand {
 			filter = args[1];
 		}
 		
-		for(Service srv : autobahn.getIdm().getServices()) {
+		for(ServiceType srv : autobahn.getIdm().getServices()) {
 			for(Reservation r : srv.getReservations()) {
 				if(r.getState() >= min && r.getState() < max)
 					reservations.add(r);

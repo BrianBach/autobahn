@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
@@ -29,11 +32,18 @@ import org.apache.log4j.Logger;
  * @author jacek
  *
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name="AutobahnReservation", namespace="reservation.autobahn.geant.net", propOrder={
+		"bodID", "startPort", "endPort", "startTime", "endTime",
+		"priority", "description", "capacity", 
+	    "userInclude", "userExclude", "userVlanId",
+	    "maxDelay",
+		"resiliency", "bidirectional", "globalConstraints", "path", "intState", "fake" })
 public abstract class AutobahnReservation extends Reservation implements Runnable,
 		ReservationEvents, ReservationReportEvents {
 
 	@XmlTransient
-    protected Logger log = Logger.getLogger(AutobahnReservation.class);
+    protected static Logger log = Logger.getLogger(AutobahnReservation.class);
     
     @XmlTransient
     protected List<ReservationStatusListener> statusListeners = new ArrayList<ReservationStatusListener>();

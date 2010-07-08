@@ -5,6 +5,7 @@
  */
 package net.geant.autobahn.reservation;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -18,7 +19,6 @@ import net.geant.autobahn.constraints.PathConstraints;
 import net.geant.autobahn.network.Path;
 import net.geant.autobahn.network.Port;
 import net.geant.autobahn.network.StateOper;
-import net.geant.autobahn.reservation.ReservationParams;
 import net.geant.autobahn.useraccesspoint.PathInfo;
 
 /**
@@ -33,7 +33,9 @@ import net.geant.autobahn.useraccesspoint.PathInfo;
 	    "userInclude", "userExclude", "userVlanId",
 	    "maxDelay",
 		"resiliency", "bidirectional", "globalConstraints", "path", "intState", "fake" })
-public class Reservation {
+public class Reservation implements Serializable {
+
+	private static final long serialVersionUID = -98008799451486690L;
 
 	protected String bodID;
 	

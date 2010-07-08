@@ -2,16 +2,16 @@ package net.geant.autobahn.autoBahnGUI.manager;
 import java.util.List;
 
 import net.geant.autobahn.administration.KeyValue;
+import net.geant.autobahn.administration.ServiceType;
 import net.geant.autobahn.autoBahnGUI.model.LogsFormModel;
 import net.geant.autobahn.autoBahnGUI.model.ReservatiomDepandentOnTimezone;
 import net.geant.autobahn.autoBahnGUI.model.ReservationTest;
 import net.geant.autobahn.autoBahnGUI.model.ServicesFormModel;
 import net.geant.autobahn.autoBahnGUI.model.SettingsFormModel;
 import net.geant.autobahn.lookup.LookupService;
-import net.geant.autobahn.reservation.Service;
 import net.geant.autobahn.useraccesspoint.ReservationRequest;
 import net.geant.autobahn.useraccesspoint.ServiceRequest;
-import net.geant.autobahn.useraccesspoint.UserAccessPointException_Exception;
+import net.geant.autobahn.useraccesspoint.UserAccessPointException;
 /**
  * Interface for WEB GUI Manager
  * 
@@ -39,7 +39,7 @@ public interface Manager {
 	 * Gets list of all services from all IDMs registered in WEB GUI
 	 * @return list of Service objects  
 	 */
-	public List<Service> getServicesForAllInterDomainManagers();
+	public List<ServiceType> getServicesForAllInterDomainManagers();
 	/**
 	 * Gets list of all IDMs registered in WEB GUI
 	 * @return list of InterDomain  types members 
@@ -60,7 +60,7 @@ public interface Manager {
 	 * @throws UserAccessPointException_Exception if some connection problem appears or user cannot request service
 	 * @throws ManagerException 
 	 */
-	public String submitServiceAtInterDomainManager (String idm, ServiceRequest request)throws UserAccessPointException_Exception, ManagerException;
+	public String submitServiceAtInterDomainManager (String idm, ServiceRequest request)throws UserAccessPointException, ManagerException;
 	/**
 	 * Gets list of configuration properties for specified IDM 
 	 * 
@@ -80,7 +80,7 @@ public interface Manager {
 	 * @param idm identifier of the IDM
 	 * @return list of Service objects  
 	 */
-	public List<Service> getServicesFromInterDomainManager (String idm);
+	public List<ServiceType> getServicesFromInterDomainManager (String idm);
 	/**
 	 * Gets specified service from specified IDM registered in WEB GUI
 	 * 
@@ -88,7 +88,7 @@ public interface Manager {
 	 * @param serviceId identifier of the search service
 	 * @return Service if exist, null if not
 	 */
-	public Service getServiceFromInterDomainManager (String idm, String serviceId);
+	public ServiceType getServiceFromInterDomainManager (String idm, String serviceId);
 	/**
 	 * Cancel specified service in specified IDM ristered in WEB GUI
 	 *  
@@ -96,7 +96,7 @@ public interface Manager {
 	 * @param serviceId identifier of the search service
 	 * @throws UserAccessPointException_Exception if some connection problem or cancelling error appear
 	 */
-	public void cancelServiceInInterDomainManager(String idm,String serviceId) throws UserAccessPointException_Exception;
+	public void cancelServiceInInterDomainManager(String idm,String serviceId) throws UserAccessPointException;
 	/**
 	 * Gets specified IDM registered in WEB GUI
 	 * @param idm identifier of the IDM
@@ -187,7 +187,7 @@ public interface Manager {
 	 * @param request reservation request
 	 * @return true if reservation is possible to schedule
 	 */
-	public ReservationTest  checkReservationPossibility(String idm,ReservationRequest request)throws UserAccessPointException_Exception ;
+	public ReservationTest  checkReservationPossibility(String idm,ReservationRequest request)throws UserAccessPointException;
 	
 	/**
 	 * Gets ServiceRequest template for service request form

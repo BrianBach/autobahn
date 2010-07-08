@@ -14,8 +14,8 @@ import net.geant.autobahn.intradomain.IntradomainTopology;
 @WebService(name = "DmAdministration", serviceName = "DmAdministrationService",
         portName = "DmAdministrationPort",
         targetNamespace = "http://administration.intradomain.autobahn.geant.net/", 
-        endpointInterface = "net.geant.autobahn.intradomain.administration.Administration")
-public class AdministrationImpl implements Administration {
+        endpointInterface = "net.geant.autobahn.intradomain.administration.DmAdministration")
+public class AdministrationImpl implements DmAdministration {
 
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.administration.Administration#getProperties()

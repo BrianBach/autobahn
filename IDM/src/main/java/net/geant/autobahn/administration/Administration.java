@@ -35,10 +35,10 @@ public interface Administration {
 	void setTopology(@WebParam(name="links")List<Link> links);
 	
 	@WebResult(name="serivces")
-	List<Service> getServices();
+	List<ServiceType> getServices();
 	
 	@WebResult(name="service")
-	Service getService(String serviceId);
+	ServiceType getService(String serviceId);
 	
 	@WebResult(name="status")
 	Status getStatus();

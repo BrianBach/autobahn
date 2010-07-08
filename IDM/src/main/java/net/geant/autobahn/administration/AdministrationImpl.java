@@ -1,5 +1,6 @@
 package net.geant.autobahn.administration;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.jws.WebService;
 
@@ -69,17 +70,15 @@ public class AdministrationImpl implements Administration {
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.administration.Administration#getServices()
 	 */
-	public List<Service> getServices() {
-		
+	public List<ServiceType> getServices() {
 		return AccessPoint.getInstance().getServices();
 	}
 
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.administration.Administration#getService(java.lang.String)
 	 */
-	public Service getService(String serviceId) {
-
-		return AccessPoint.getInstance().getService(serviceId);
+	public ServiceType getService(String serviceId) {
+		return AccessPoint.getInstance().getService(serviceId); 
 	}
 
 	/* (non-Javadoc)

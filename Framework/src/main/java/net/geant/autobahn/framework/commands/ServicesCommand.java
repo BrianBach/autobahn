@@ -5,9 +5,9 @@ package net.geant.autobahn.framework.commands;
 
 import java.util.List;
 
+import net.geant.autobahn.administration.ServiceType;
 import net.geant.autobahn.framework.Framework;
-import net.geant.autobahn.reservation.AutobahnReservation;
-import net.geant.autobahn.reservation.Service;
+import net.geant.autobahn.reservation.Reservation;
 
 /**
  * @author jacek
@@ -20,20 +20,20 @@ public class ServicesCommand implements AutobahnCommand {
 	 */
 	public String execute(Framework autobahn, String[] args) {
 		
-		List<Service> services = autobahn.getIdm().getServices();
+		List<ServiceType> services = autobahn.getIdm().getServices();
 		
 		StringBuffer sb = new StringBuffer();
 		
 		sb.append("Services found: " + services.size());
 		
-		for(Service srv : services) {
+		for(ServiceType srv : services) {
 			sb.append("Service: " + srv.getBodID() + ", user: " + srv.getUser().getName() + "\n");
-			List<AutobahnReservation> reservations = srv.getReservations();
+			List<Reservation> reservations = srv.getReservations();
 			sb.append("Reservations (" + reservations.size() + "):\n");
-			for(AutobahnReservation r : reservations) {
+			for(Reservation r : reservations) {
 				sb.append("\t" + r.getBodID() + " [" + r.getStartPort() + " - " + r.getEndPort() + "] " +
 						"(" + r.getStartTime().getTime() + " - " + r.getEndTime().getTime() + ") " +
-						r.getCapacity() + " bps | " + r.getStateObject());
+						r.getCapacity() + " bps | " + r.getState());
 				sb.append("\n");
 			}
 		}

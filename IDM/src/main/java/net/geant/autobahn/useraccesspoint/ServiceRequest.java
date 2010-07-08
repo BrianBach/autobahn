@@ -1,5 +1,7 @@
 package net.geant.autobahn.useraccesspoint;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -16,7 +18,9 @@ import javax.xml.bind.annotation.XmlType;
 		"userName", "userHomeDomain", "userEmail", "justification",
 		"reservations"
 })
-public class ServiceRequest {
+public class ServiceRequest implements Serializable {
+	
+	private static final long serialVersionUID = -2744900026489569640L;
 	
 	private String userName;
 	private String userHomeDomain;
@@ -24,7 +28,7 @@ public class ServiceRequest {
 	private String justification;
 	
 	@XmlElement(required = true, nillable = true)
-	private List<ReservationRequest> reservations;
+	private List<ReservationRequest> reservations = new ArrayList<ReservationRequest>();
 
 	/**
 	 * @return the userName

@@ -12,7 +12,7 @@ import net.geant.autobahn.autoBahnGUI.manager.ManagerNotifier;
 @javax.jws.WebService(name = "Gui", serviceName = "GuiService",
                       portName = "GuiPort",
                       targetNamespace = "http://gui.autobahn.geant.net/", 
-                      wsdlLocation = "file:wsdl/gui.wsdl" ,
+                      wsdlLocation = "WEB-INF/wsdl/gui.wsdl" ,
 		      endpointInterface = "net.geant.autobahn.gui.Gui")
                       
 public class GuiImpl implements Gui {
