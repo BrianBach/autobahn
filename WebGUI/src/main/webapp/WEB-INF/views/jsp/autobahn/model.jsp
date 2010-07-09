@@ -12,6 +12,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
    	<link rel="stylesheet" href="<c:url value="/themes/style/style.css"/>" type="text/css" />
   	<link rel="stylesheet" href="<c:url value="/scripts/x2/css/xc2_default.css"/>" type="text/css" />
+  	<link rel="stylesheet" type="text/css" media="all" href="<c:url value="/scripts/jscalendar/css/jscal2.css"/>" />
+	<link rel="stylesheet" type="text/css" media="all" href="<c:url value="/scripts/jscalendar/css/border-radius.css"/>" />
+	<link rel="stylesheet" type="text/css" media="all" href="<c:url value="/scripts/jscalendar/css/steel/steel.css"/>" />
   	<script type="text/javascript" src="<c:url value="/scripts/x2/config/xc2_default.js"/>"></script>
   	<script type="text/javascript" src="<c:url value="/scripts/x2/script/xc2_inpage.js"/>"></script>
   	<script type="text/javascript" src="<c:url value="/scripts/x2/script/mod_time.js"/>"></script>

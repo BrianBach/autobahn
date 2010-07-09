@@ -21,11 +21,11 @@ public class Line
 	 * Colors for representing reservation states
 	 */
     public static final String reservationsStates[] = {
-        "#000000", "#9EA5B3", "#9A64AC", "#ED31EB",
-        "#338A83", "#4BCFC4", "#E3E27E", "#000000", "#39f906", "#000000",
-         "#00FF00", "#088F15",
-         "#000000","#000000","#000000","#000000","#000000","#000000","#000000","#000000","#000000",
-         "#04530B", "#FFFC00","#FF0000"
+        "#FF00FF", "#FFFF00", "#FF00FF", "#FF00FF",
+        "#0000FF", "#000080", "#808080", "#FF00FF", "#FF00FF", "#00FF00",
+         "#008000", "#996633",
+         "#FF00FF","#FF00FF","#FF00FF","#FF00FF","#FF00FF","#FF00FF","#FF00FF","#FF00FF","#FF00FF",
+         "#663300", "#000000","#FF0000"
     };
     /**
      * Geographical start line point latitude

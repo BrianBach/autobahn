@@ -1,4 +1,6 @@
 <%@ include file="../common/includes.jsp"%>
+<script type="text/javascript" src="<c:url value="/scripts/jscalendar/js/jscal2.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/scripts/jscalendar/js/lang/en.js"/>"></script>
 <script language="javascript">
 
 function beforeSetDateValue(ref_field, target_field, date) {
@@ -177,7 +179,23 @@ var final = testing.value;
 			<tr>
 				<td id="holder">&nbsp;</td>
 				<td>
-					<form:input  path="request.startTime" id="startTime"  onfocus="showCalendar('',this,this,'2006-01-01 00:00 AM','holder',0,30,1)"/>
+				<form:input path="request.startTime" id="startTime" cssStyle="width:150px;margin-right:0px;"/> 
+				<script type="text/javascript">
+					    Calendar.setup({
+					        animation  : false,
+					        trigger    : "startTime",
+					        inputField : "startTime",
+					        showTime   : true,
+					        date	   : "%Y-%m-%d %H:%M:%S",
+					        dateFormat : "%Y-%m-%dT%H:%M:%S",
+					        minuteStep : 1,
+					        flatCallback : dateChanged,
+					        onSelect   : function(){
+							this.hide();
+						    } 
+					    });
+					   
+					</script>
 				</td>
 			</tr>
 		</table>
@@ -191,7 +209,21 @@ var final = testing.value;
 			<tr>
 				<td id="holder">&nbsp;</td>
 				<td>
-					<form:input  path="request.endTime" id="endTime"  onfocus="showCalendar('',this,this,'2006-01-01 00:00 AM','holder',0,30,1)"/>
+				<form:input path="request.endTime" id="endTime" cssStyle="width:150px;margin-right:0px;"/> 
+				<script type="text/javascript">
+					    Calendar.setup({
+					        animation  : false,
+					        trigger    : "endTime",
+					        inputField : "endTime",
+					        selection  : Calendar.dateToInt(new Date()),
+					        showTime   : true,
+					        date	   : "%Y-%m-%d %H:%M:%S",
+					        dateFormat : "%Y-%m-%dT%H:%M:%S",
+					        minuteStep : 1,
+					        onSelect   : function() { 		
+					        this.hide(); }
+					    });
+					</script>
 				</td>
 			</tr>
 		</table>
@@ -341,3 +373,4 @@ var final = testing.value;
 </c:if>	
 </div>
 </form:form>
+

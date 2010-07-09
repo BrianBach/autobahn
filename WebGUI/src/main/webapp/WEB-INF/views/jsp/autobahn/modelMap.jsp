@@ -40,7 +40,7 @@
 			{
 				if (colors==null || i >= statesLength|| states[i]==null)
 					break;
-				if ((i>=0 && i<=11) || (i>20 && i<=23))
+				if ((i>=0 && i<=1)||(i>=4 && i<=6)|| (i>=9 && i<=11) || (i>20 && i<=23))
 				{
 				out.println ("<tr>");
 				out.println ("<td style=\"width:15;background-color:"+colors[i]+";\">");
@@ -73,7 +73,7 @@
 					out.println ("</td>");
 					out.println ("<td>");
 					out.println (states[i]);
-					out.println ("</td>");
+					out.println ("</td>");					
 					out.println ("</tr>");
 				}
 				}
@@ -95,3 +95,4 @@
     </div>
   </body>
 </html>
+
