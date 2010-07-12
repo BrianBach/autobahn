@@ -452,6 +452,10 @@ public final class AccessPoint implements UserAccessPoint,
 			resv.setStartPort(r.getStartPort().getBodID());
 			resv.setStartTime(r.getStartTime());
 			resv.setEndTime(r.getEndTime());
+			
+			resv.setUserInclude(r.getUserInclude());
+			resv.setUserExclude(r.getUserExclude());
+			resv.setUserVlanId(r.getUserVlanId());
 
 			// set enums
 			String slabel = r.getStateObject().toString();
