@@ -58,7 +58,7 @@ function perform_checks {
 	fi	
 
 	#Check for redhat-based distribution
-	yum install &>/dev/null
+	yum2 install &>/dev/null
 	if [ $? -ne 127 ]; then
 		pushlog "Redhat package management detected.\n"
 		INSTALL_COMMAND="yum install"
@@ -145,33 +145,36 @@ function configure_file_quagga_c {
 	     pushlocalinfo
 	     newpath=$2
              newpath_john=$3
-             while [[ ! -d "$newpath" && ! -f "$newpath" ]]; do
-                     echo -n "Enter the system folder (end with a /) where $1 is located (e.g. /etc/quagga/): "
+             while [[ ! -d "$newpath" ]]; do
+                     echo -n "Enter the system folder where $1 is located (e.g. /etc/quagga/): "
 		     read newpath
-		     add_attribute "$3=$newpath" "$path_only/installer.conf"
-		     source $path_only/installer.conf
-		     echolog "$1 is at $newpath"
+	     done
 
-             # Kostas-Giannis addition to copy conf files to quagga etc folder
-             newpath_path_only=$(cd ${newpath%/*} && echo $PWD)
-             cp ./ospfd.conf $newpath_path_only
-             cp ./debian.conf $newpath_path_only
-             cp ./daemons $newpath_path_only
-             cp ./zebra.conf $newpath_path_only
-             echolog "Copied ospfd.conf, debian.conf, daemons, zebra.conf to $newpath_path_only"
-	    done 
+	     add_attribute "$3=$newpath" "$path_only/installer.conf"
+	     source $path_only/installer.conf
+	     echolog "$1 is at $newpath"
+		
+	     # Kostas-Giannis addition to copy conf files to quagga etc folder
+	     newpath_path_only=$(cd $newpath && echo $PWD)
+		
+	     cp ./ospfd.conf $newpath_path_only
+	     cp ./debian.conf $newpath_path_only
+	     cp ./daemons $newpath_path_only
+	     cp ./zebra.conf $newpath_path_only
+	     echolog "Copied ospfd.conf, debian.conf, daemons, zebra.conf to $newpath_path_only"
 	    
-             while [[ ! -d "$newpath_john" && ! -f "$newpath_john" ]]; do
-                     echo -n "Please enter the path to start Quagga daemons (end path with a /): " 
-		     read newpath_john 
-                     echo $newpath_john > startDaemons.tmp
-                     echolog $newpath_john
-		     #export $newpath_john
-		     add_attribute "daemons=$newpath_john" "$path_only/installer.conf"
-		     #source $path_only/installer.conf
-		     #echolog "$1 is at $newpath"
-             done
-	    poplocalinfo	
+	     while [[ ! -d "$newpath_john" || ( ! -f "$newpath_john/zebra" && ! -f "$newpath_john/quagga" ) ]]; do
+                     echo -n "Please enter the path to start Quagga daemons: " 
+		     read newpath_john
+	     done
+		     
+	     echo $newpath_john > startDaemons.tmp
+	     echolog $newpath_john
+	     #export $newpath_john
+	     add_attribute "daemons=$newpath_john" "$path_only/installer.conf"
+	     #source $path_only/installer.conf
+	     #echolog "$1 is at $newpath"
+	     poplocalinfo	
 }
 
 ## Asks the user configuration info for autobahn in a non graphical way
