@@ -827,7 +827,7 @@ public final class AccessPoint implements UserAccessPoint,
 	public String getLog(boolean all) {
 		
 		try {
-			BufferedInputStream bis = new BufferedInputStream(new FileInputStream("autobahn.log"));
+			BufferedInputStream bis = new BufferedInputStream(new FileInputStream("logs/autobahn.log"));
 			if (!all)
 				bis.skip(logPosition);
 			StringBuffer sb = new StringBuffer();
