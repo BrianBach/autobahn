@@ -106,7 +106,7 @@ function enter_ip_john {
 	val_ip=0 #true
 	while [ $val_ip -ne 1 ]; do
 		$DIALOG --title "$1" --inputbox "$2" 9 40 2>ipans
-		if [ $? -eq 255 ]; then #escape was pressed
+		if [ ! $? -eq 0 ]; then #escape was pressed
 			return 1
 		fi
 		IP=`cat ipans`
@@ -131,7 +131,7 @@ function enter_ip {
 	val_ip=0 #true
 	while [ $val_ip -ne 1 ]; do
 		$DIALOG --title "$1" --inputbox "$2" 9 40 2>ipans
-		if [ $? -eq 255 ]; then #escape was pressed
+		if [ ! $? -eq 0 ]; then #escape was pressed
 			return 1
 		fi
 		IP=`cat ipans`
@@ -317,7 +317,7 @@ function tunnel_editor {
 						val_ip=0 #true
 						while [ $val_ip -ne 1 ]; do
 						$DIALOG --backtitle "Edit Tunnel" --title "Edit tunnel" --form "Use [up] [down] to select input field" 21 70 18 "Remote IP:" 2 4 "$remoteip" 2 22 20 0 "Local IP:" 4 4 "$localip" 4 22 20 0 "Local Subnet:" 6 4 "$localsubnet" 6 22 20 0 "Local Router ID:" 8 4 "$localrouterid" 8 22 20 0 "Network:" 10 4 "$network" 10 22 20 0 "Area:" 12 4 "$area" 12 22 20 0 2>ans
-							if [ $? -eq 255 ]; then #escape was pressed
+							if [ ! $? -eq 0 ]; then #escape was pressed
 								return 1
 							fi
 							(( i=0 ));

@@ -180,16 +180,17 @@ function configure_file_quagga_c {
 ## Asks the user configuration info for autobahn in a non graphical way
 #configure_file_autobahn_c filename path attribute_name
 function configure_file_autobahn_c {
-	     pushlocalinfo
-	     newpath=$2
-             while [[ ! -d "$newpath" && ! -f "$newpath" ]]; do
-                     echo -n "Please enter $1 path: " 
-		     read newpath
-		     add_attribute "$3=$newpath" "$path_only/installer.conf"
-		     source $path_only/installer.conf
-		     echolog "$1 is at $newpath"
-	    done 
-	    poplocalinfo	
+	pushlocalinfo
+	newpath=$2
+	while [[ ! -d "$newpath" ]]; do
+		echo -n "Please enter $1 path: " 
+		read newpath
+	done
+	
+	add_attribute "$3=$newpath" "$path_only/installer.conf"
+	source $path_only/installer.conf
+	echolog "$1 is at $newpath"
+	poplocalinfo	
 }
 
 #file_editor presents an ncurses form which shows the basic attributes of a file and permits editing them
@@ -251,77 +252,81 @@ function file_editor {
 
 #Configuring a Quagga file in an ncurses env
 function configure_file_quagga {
-	     pushlocalinfo
-	     newlogparagraph "function configure_file_quagga"
-	     newpath=$2
-             newpath_john=$3
-	     while [[ ! -d "$newpath" && ! -f "$newpath" ]]; do
-		    FILE=`$DIALOG --stdout --title "Enter system folder (end path with a /) containing $1 (e.g. /etc/quagga/) " --fselect $HOME/$1 24 78`
-		     case $? in
-		        0   )   
-		     	      echo $FILE >newpath
-			      newpath=$FILE
-			      ;;
-			255 ) break;;
-		     esac
-		     newpath=`cat newpath` 
-		     add_attribute "$3=$newpath" "$path_only/installer.conf"
-		     source $path_only/installer.conf
- 		     log "$1 is at $newpath"
+	pushlocalinfo
+	newlogparagraph "function configure_file_quagga"
+	newpath=$2
+	newpath_john=$3
+	while [[ ! -d "$newpath" ]]; do
+		FILE=`$DIALOG --stdout --title "Enter system folder containing $1 (e.g. /etc/quagga/) " --fselect /etc/quagga 24 78`
+		case $? in
+		0   )   
+			echo $FILE >newpath
+			newpath=$FILE
+			;;
+		255 ) break;;
+		esac
+		newpath=`cat newpath` 
+	done
 
-             # Kostas-Giannis addition to copy conf files to quagga etc folder
-             newpath_path_only=$(cd ${newpath%/*} && echo $PWD)
-             cp ./ospfd.conf $newpath_path_only
-             cp ./debian.conf $newpath_path_only
-             cp ./daemons $newpath_path_only
-             cp ./zebra.conf $newpath_path_only
-             echolog "Copied ospfd.conf, debian.conf, daemons, zebra.conf to $newpath_path_only"
-	    done 
-	    
-            # while [[ ! -d "$newpath_john" && ! -f "$newpath_john" ]]; do
-                     FILE=`$DIALOG --stdout --title "Enter system folder (end path with a /) containing the scripts to run Quagga daemons (e.g. /etc/init.d/) " --fselect $HOME/$1 24 78`
-		     #read newpath_john
-                    
-		     case $? in
-		        0   )   
-		     	      echo $FILE >newpath_john
-			      newpath_john=$FILE
-                              echo $newpath_john > startDaemons.tmp
-                              echolog $newpath_john
-			      ;;
-			255 ) break;;
-		     esac
-		     newpath_john=`cat newpath` 
-		     echolog $newpath_john
-                     #echo $newpath_john > startDaemons.tmp
-		     #export $newpath_john
-		     add_attribute "daemons=$newpath_john" "$path_only/installer.conf"
-		     #source $path_only/installer.conf
-		     #echolog "$1 is at $newpath"
-             #done
-	    poplocalinfo	
+	add_attribute "$3=$newpath" "$path_only/installer.conf"
+	source $path_only/installer.conf
+	log "$1 is at $newpath"
+
+	# Kostas-Giannis addition to copy conf files to quagga etc folder
+	newpath_path_only=$(cd ${newpath%/*} && echo $PWD)
+	cp ./ospfd.conf $newpath_path_only
+	cp ./debian.conf $newpath_path_only
+	cp ./daemons $newpath_path_only
+	cp ./zebra.conf $newpath_path_only
+	echolog "Copied ospfd.conf, debian.conf, daemons, zebra.conf to $newpath_path_only"
+	
+	while [[ ! -d "$newpath_john" || ( ! -f "$newpath_john/zebra" && ! -f "$newpath_john/quagga" ) ]]; do
+		FILE=`$DIALOG --stdout --title "Enter system folder containing the scripts to run Quagga daemons (e.g. /etc/init.d/) " --fselect /etc/init.d 24 78`
+		#read newpath_john
+		
+		case $? in
+		0   )   
+			echo $FILE >newpath_john
+			newpath_john=$FILE
+			echo $newpath_john > startDaemons.tmp
+# 			echolog $newpath_john
+			;;
+		255 ) break;;
+		esac
+		newpath_john=`cat newpath_john` 
+	done
+		
+	echolog $newpath_john
+	#echo $newpath_john > startDaemons.tmp
+	#export $newpath_john
+	add_attribute "daemons=$newpath_john" "$path_only/installer.conf"
+	#source $path_only/installer.conf
+	#echolog "$1 is at $newpath"
+	poplocalinfo	
 }
 
 #Configuring an Autobahn file in an ncurses env
 function configure_file_autobahn {
-	     pushlocalinfo
-	     newlogparagraph "function configure_file_autobahn"
-	     newpath=$2
-             while [[ ! -d "$newpath" && ! -f "$newpath" ]]; do
-		    FILE=`$DIALOG --stdout --title "Enter $1 folder (end with a /): " --fselect $HOME/$1 24 78`
-		     case $? in
-		        0   )   
-		     	      echo $FILE >newpath
-			      newpath=$FILE
-			      ;;
-			255 ) break;;
-		     esac
-		     newpath=`cat newpath` 
-		     add_attribute "$3=$newpath" "$path_only/installer.conf"
-		     source $path_only/installer.conf
- 		     log "$1 is at $newpath"
-	    done 
-	    poplocalinfo	
+	pushlocalinfo
+	newlogparagraph "function configure_file_autobahn"
+	newpath=$2
+	while [[ ! -d "$newpath" ]]; do
+		FILE=`$DIALOG --stdout --title "Enter $1 folder: " --fselect $HOME/$1 24 78`
+		case $? in
+		0   )   
+			echo $FILE >newpath
+			newpath=$FILE
+			;;
+		255 ) break;;
+		esac
+		newpath=`cat newpath` 
+	done
+	
+	add_attribute "$3=$newpath" "$path_only/installer.conf"
+	source $path_only/installer.conf
+	log "$1 is at $newpath"
+
+	poplocalinfo	
 }
 
 #Parses the db and stores important information  
@@ -558,8 +563,8 @@ function get_idm_defaults {
 			esac
 		done
 	fi	
-	log "domain $domain domainName $domainName latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf.opaqueType ospf.opaqueId $ospf.opaqueId db.host $db_host db.port $db_port db.name $db_name db.user $db_user db.pass $db_pass gui.address $gui_address lookuphost $lookuphost"
-	echo -n "domain $domain domainName $domainName latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf.opaqueType ospf.opaqueId $ospf.opaqueId db.host $db_host db.port $db_port db.name $db_name db.user $db_user db.pass $db_pass gui.address $gui_address lookuphost $lookuphost" | tr -d '\r' > $path_only/idm_defaults
+	log "domain $domain domainName $domainName latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf_opaqueType ospf.opaqueId $ospf_opaqueId db.host $db_host db.port $db_port db.name $db_name db.user $db_user db.pass $db_pass gui.address $gui_address lookuphost $lookuphost"
+	echo -n "domain $domain domainName $domainName latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf_opaqueType ospf.opaqueId $ospf_opaqueId db.host $db_host db.port $db_port db.name $db_name db.user $db_user db.pass $db_pass gui.address $gui_address lookuphost $lookuphost" | tr -d '\r' > $path_only/idm_defaults
 	poplocalinfo
 }
 
@@ -795,7 +800,7 @@ function check_ui {
 	dialog &>/dev/null
 	if [ $? -ne 0 ]; then
 		return 1
-	fi	
+	fi
 	return 0
 }
 
