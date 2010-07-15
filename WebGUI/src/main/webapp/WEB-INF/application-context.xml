@@ -61,7 +61,7 @@
 				
 	<jaxws:endpoint  implementor="#guiImplementator" id="gui" address="/gui" wsdlLocation="WEB-INF/wsdl/gui.wsdl">
 		
-		<!--  <jaxws:inInterceptors>
+		<jaxws:inInterceptors>
 			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
 				<constructor-arg>
 					<map>               
@@ -101,7 +101,7 @@
 					</map>
 				</constructor-arg>
 			</bean>
-		</jaxws:outInterceptors>  -->
+		</jaxws:outInterceptors>
 		
 	</jaxws:endpoint>	  
 		
