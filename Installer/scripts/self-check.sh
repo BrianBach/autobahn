@@ -764,13 +764,13 @@ function check_configuration_files {
 	ospfd_path=`dirname "$ospfd_path"`
 	ospfd_conf="$ospfd_path/ospfd.conf"
 
-	$CONFIGURE_FILE_QUAGGA "ospfd.conf" "$ospfd_conf" "ospfd_conf"
+# 	$CONFIGURE_FILE_QUAGGA "ospfd.conf" "$ospfd_conf" "ospfd_conf"
 
 	##Check ip permissions
 	ip tunnel add gre
 	if [ $? -ne 0 ]; then
 		echolog "*ERROR*: You need to adjust permissions of the \"ip\" command.Either run installer as root or set the suid bit of ip command e.g. chmod +s `which ip` "
-		exit 1
+# 		exit 1
 	fi
 
 	echo 
@@ -813,7 +813,11 @@ function main_loop_with_gui {
 	CONFIGURE_FILE_QUAGGA="configure_file_quagga"
 	CONFIGURE_FILE_AUTOBAHN="configure_file_autobahn"
 	ASK_FOR_PARAMETER="ask_for_parameter"
-		$DIALOG --title "AutoBAHN Installer" --keep-window --yesno "Do you want the property wizard to begin(Yes) or the Property Editor(No). If unsure choose Yes." 10 80
+		
+	$CONFIGURE_FILE_QUAGGA "ospfd.conf" "tmp_ospfd_dir" "ospfd_conf"
+		
+	$DIALOG --title "AutoBAHN Installer" --keep-window --yesno "Do you want the property wizard to begin(Yes) or the Property Editor(No). If unsure choose Yes." 10 80
+	
 	if [ $? -eq 0 ]; then
 		check_configuration_files 
 	else
