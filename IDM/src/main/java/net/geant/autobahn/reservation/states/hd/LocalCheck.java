@@ -8,6 +8,8 @@ package net.geant.autobahn.reservation.states.hd;
 import java.util.Iterator;
 import java.util.List;
 
+import org.mortbay.log.Log;
+
 import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.constraints.GlobalConstraints;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
@@ -57,17 +59,21 @@ public class LocalCheck extends HomeDomainState {
         List<Path> failedPaths = res.getFailedPaths();
         if (failedPaths != null) {
             while (true) {
+                log.debug("Checking whether path " + path + " belongs to already failed paths list...");
                 if (Path.containedInList_LbL(path, failedPaths)) {   // This is a path that failed in the past
+                    log.debug("It is an already failed path");
                     if (paths.hasNext()) {
                         path = paths.next();
+                        log.debug("PF has returned more paths, get next one: " + path);
                         continue;
                     }
                     else {
-                        log.warn("Found same paths as previously failed checks!");
+                        log.debug("Found same paths as previously failed checks!");
                         res.fail("No more paths found");
                         return;
                     }
                 } else {    // This is a new path, so we can move on to check it
+                    log.debug("It is a new path");
                     break;
                 }
             }
