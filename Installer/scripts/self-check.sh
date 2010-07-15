@@ -58,7 +58,7 @@ function perform_checks {
 	fi	
 
 	#Check for redhat-based distribution
-	yum2 install &>/dev/null
+	yum install &>/dev/null
 	if [ $? -ne 127 ]; then
 		pushlog "Redhat package management detected.\n"
 		INSTALL_COMMAND="yum install"
