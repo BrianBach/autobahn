@@ -31,6 +31,9 @@ import org.oasis_open.docs.wsn.b_2.UnacceptableInitialTerminationTimeFaultType;
 import org.oasis_open.docs.wsn.b_2.UnacceptableTerminationTimeFaultType;
 import org.oasis_open.docs.wsn.b_2.UnrecognizedPolicyRequestFaultType;
 import org.oasis_open.docs.wsn.b_2.UnsupportedPolicyRequestFaultType;
+import org.oasis_open.docs.wsn.br_2.PublisherRegistrationFailedFaultType;
+import org.oasis_open.docs.wsn.br_2.PublisherRegistrationRejectedFaultType;
+import org.oasis_open.docs.wsn.br_2.ResourceNotDestroyedFaultType;
 import org.oasis_open.docs.wsrf.r_2.ResourceUnavailableFaultType;
 import org.oasis_open.docs.wsrf.r_2.ResourceUnknownFaultType;
 
@@ -67,6 +70,9 @@ import org.oasis_open.docs.wsrf.r_2.ResourceUnknownFaultType;
     "faultCause"
 })
 @XmlSeeAlso({
+    PublisherRegistrationFailedFaultType.class,
+    ResourceNotDestroyedFaultType.class,
+    PublisherRegistrationRejectedFaultType.class,
     ResourceUnknownFaultType.class,
     ResourceUnavailableFaultType.class,
     TopicExpressionDialectUnknownFaultType.class,

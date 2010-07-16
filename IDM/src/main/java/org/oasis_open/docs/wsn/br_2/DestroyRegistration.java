@@ -1,5 +1,5 @@
 
-package org.oasis_open.docs.wsn.b_2;
+package org.oasis_open.docs.wsn.br_2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +23,7 @@ import org.w3c.dom.Element;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="TerminationTime" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element ref="{http://docs.oasis-open.org/wsn/b-2}SubscriptionReference"/>
+ *         &lt;element name="PublisherRegistrationReference" type="{http://www.w3.org/2005/08/addressing}EndpointReferenceType"/>
  *         &lt;any processContents='lax' namespace='##other' maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -36,66 +35,39 @@ import org.w3c.dom.Element;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "terminationTime",
-    "subscriptionReference",
+    "publisherRegistrationReference",
     "any"
 })
-@XmlRootElement(name = "Renew")
-public class Renew {
+@XmlRootElement(name = "DestroyRegistration")
+public class DestroyRegistration {
 
-    @XmlElement(name = "TerminationTime", required = true, nillable = true)
-    protected String terminationTime;
-    @XmlElement(name = "SubscriptionReference", required = true)
-    protected W3CEndpointReference subscriptionReference;
+    @XmlElement(name = "PublisherRegistrationReference", required = true)
+    protected W3CEndpointReference publisherRegistrationReference;
     @XmlAnyElement(lax = true)
     protected List<Object> any;
 
     /**
-     * Gets the value of the terminationTime property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getTerminationTime() {
-        return terminationTime;
-    }
-
-    /**
-     * Sets the value of the terminationTime property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setTerminationTime(String value) {
-        this.terminationTime = value;
-    }
-
-    /**
-     * Gets the value of the subscriptionReference property.
+     * Gets the value of the publisherRegistrationReference property.
      * 
      * @return
      *     possible object is
      *     {@link W3CEndpointReference }
      *     
      */
-    public W3CEndpointReference getSubscriptionReference() {
-        return subscriptionReference;
+    public W3CEndpointReference getPublisherRegistrationReference() {
+        return publisherRegistrationReference;
     }
 
     /**
-     * Sets the value of the subscriptionReference property.
+     * Sets the value of the publisherRegistrationReference property.
      * 
      * @param value
      *     allowed object is
      *     {@link W3CEndpointReference }
      *     
      */
-    public void setSubscriptionReference(W3CEndpointReference value) {
-        this.subscriptionReference = value;
+    public void setPublisherRegistrationReference(W3CEndpointReference value) {
+        this.publisherRegistrationReference = value;
     }
 
     /**
