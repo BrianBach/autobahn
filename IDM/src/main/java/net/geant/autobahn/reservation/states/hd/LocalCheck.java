@@ -59,7 +59,9 @@ public class LocalCheck extends HomeDomainState {
         List<Path> failedPaths = res.getFailedPaths();
         if (failedPaths != null) {
             while (true) {
-                log.debug("Checking whether path " + path + " belongs to already failed paths list...");
+                log.debug("Checking whether path " + path + 
+                        " belongs to already failed paths list... (size "
+                        + failedPaths.size() + ")");
                 if (Path.containedInList_LbL(path, failedPaths)) {   // This is a path that failed in the past
                     log.debug("It is an already failed path");
                     if (paths.hasNext()) {
@@ -85,12 +87,12 @@ public class LocalCheck extends HomeDomainState {
         final String domainID = res.getLocalDomainID();
         
         if(path.getCapacity() < res.getCapacity()) {
-        	pathFailed(res, ReservationErrors.PATH_CAPACITY_NOT_ENOUGH, path.toString(), path);
+        	pathFailed(res, ReservationErrors.PATH_CAPACITY_NOT_ENOUGH, path.toString());
         	return;
         }
         
         if (!path.isHomeDomain(domainID)) {
-            pathFailed(res, ReservationErrors.WRONG_DOMAIN, domainID, path);
+            pathFailed(res, ReservationErrors.WRONG_DOMAIN, domainID);
             return;
         }
 
@@ -107,11 +109,11 @@ public class LocalCheck extends HomeDomainState {
         	Link failedLink = res.getPath().getLink(e.getFailedLink());
         	
             res.excludeLink(failedLink);
-            pathFailed(res, ReservationErrors.NOT_ENOUGH_CAPACITY, failedLink.getBodID(), path);
+            pathFailed(res, ReservationErrors.NOT_ENOUGH_CAPACITY, failedLink.getBodID());
             return;
 		} catch (Exception e) {
 			log.error("Error while checking resources", e);
-			pathFailed(res, ReservationErrors.LOCAL_COMMUNICATION_ERROR, domainID, path);
+			pathFailed(res, ReservationErrors.LOCAL_COMMUNICATION_ERROR, domainID);
 			return;
 		}
 
@@ -121,7 +123,7 @@ public class LocalCheck extends HomeDomainState {
         }
         
         if(dcon == null || !dcon.isValid()) {
-            pathFailed(res, ReservationErrors.CONSTRAINTS_NOT_CORRECT, path.toString(), path);
+            pathFailed(res, ReservationErrors.CONSTRAINTS_NOT_CORRECT, path.toString());
             return;
         }
         
@@ -140,7 +142,7 @@ public class LocalCheck extends HomeDomainState {
             res.forwardSchedule();
         } catch (Exception e) {
             log.error(this + ", scheduling: " + e.getMessage(), e);
-            pathFailed(res, ReservationErrors.COMMUNICATION_ERROR, res.getNextDomainAddress(), path);
+            pathFailed(res, ReservationErrors.COMMUNICATION_ERROR, res.getNextDomainAddress());
             return;
         }
     }
@@ -154,12 +156,11 @@ public class LocalCheck extends HomeDomainState {
         res.run();
     }
 
-    private void pathFailed(HomeDomainReservation res, int code, String args, Path p) {
+    private void pathFailed(HomeDomainReservation res, int code, String args) {
         
         Iterator<Path> paths = res.getPaths();
         
         res.pathFailed(code, args);
-        res.addToFailedPaths(p);    // Keep a list of all paths that were tested and failed
         
         if (paths == null || !paths.hasNext()) {
             // all paths has failed

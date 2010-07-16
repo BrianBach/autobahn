@@ -144,7 +144,9 @@ public class HomeDomainReservation extends AutobahnReservation {
      * @throws RemoteException 
      */
     public void pathFailed(int code, String args) {
-    	String msg = ReservationErrors.getInfo(code, args);
+        this.addToFailedPaths(this.getPath());    // Keep a list of all paths that were tested and failed
+
+        String msg = ReservationErrors.getInfo(code, args);
     	
         log.info(this + " PATH FAILURE: " + msg);
         
