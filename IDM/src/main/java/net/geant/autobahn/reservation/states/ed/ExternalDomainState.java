@@ -37,15 +37,15 @@ public abstract class ExternalDomainState extends State {
     }
 
     public void stateEnter(ExternalReservation res) {
-        log.debug("ENTERING: " + this + " [" + res + "]");
+        log.info("ENTERING: " + this + " [" + res + "]");
     }
 
     public void stateExit(ExternalReservation res) {
-        log.debug("EXITTING: " + this + " [" + res + "]");
+        log.info("EXITTING: " + this + " [" + res + "]");
     }
     
     public void run(ExternalReservation res) {
-        log.debug("EXECUTING: " + this + " [" + res + "]");
+        log.info("EXECUTING: " + this + " [" + res + "]");
     }
 
     public void cancel(ExternalReservation res) {
@@ -61,7 +61,7 @@ public abstract class ExternalDomainState extends State {
     }
     
     public void recover(ExternalReservation res) {
-        log.debug(res + " RECOVERING..." );
+        log.info(res + " RECOVERING..." );
     }
     
     public void reservationActivated(ExternalReservation res, String message,

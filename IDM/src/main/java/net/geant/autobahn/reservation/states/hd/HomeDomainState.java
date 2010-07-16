@@ -43,15 +43,15 @@ public abstract class HomeDomainState extends State {
     }
     
     public void run(HomeDomainReservation res) {
-        log.debug("EXECUTING: " + this + " [" + res + "]");
+        log.info("EXECUTING: " + this + " [" + res + "]");
     }
 
     public void stateEnter(HomeDomainReservation res) {
-        log.debug("ENTERING: " + this + " [" + res + "]");
+        log.info("ENTERING: " + this + " [" + res + "]");
     }
     
     public void stateExit(HomeDomainReservation res) {
-        log.debug("EXITTING: " + this + " [" + res + "]");
+        log.info("EXITTING: " + this + " [" + res + "]");
     }
 
     public void cancel(HomeDomainReservation res) {
@@ -86,7 +86,7 @@ public abstract class HomeDomainState extends State {
     }
 
     public void reservationFinished(HomeDomainReservation res, String message, boolean success) {
-    	log.debug("Reservation finished " + res.getBodID() + " wrong state ?");
+    	log.info("Reservation finished " + res.getBodID() + " wrong state ?");
         //throw new IllegalStateException("Finished - wrong state! " + this);
     }
 
@@ -96,15 +96,15 @@ public abstract class HomeDomainState extends State {
     }
     
     public void recover(HomeDomainReservation res) {
-        log.debug(res + " RECOVERING..." );
+        log.info(res + " RECOVERING..." );
     }
     
     public void domainDown(HomeDomainReservation res, String domain) {
-        log.debug("Domain down: " + domain);
+        log.info("Domain down: " + domain);
     }
 
     public void domainUp(HomeDomainReservation res, String domain) {
-        log.debug("Domain up: " + domain);
+        log.info("Domain up: " + domain);
     }
 
     public static HomeDomainState getState(int i) {

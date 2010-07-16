@@ -38,32 +38,32 @@ public abstract class LastDomainState extends State {
     }
 
     public void stateEnter(LastDomainReservation res) {
-        log.debug("ENTERING: " + this + " [" + res + "]");
+        log.info("ENTERING: " + this + " [" + res + "]");
     }
     
     public void stateExit(LastDomainReservation res) {
-        log.debug("EXITTING: " + this + " [" + res + "]");
+        log.info("EXITTING: " + this + " [" + res + "]");
     }
 
     public void run(LastDomainReservation res) {
-        log.debug("EXECUTING: " + this + " [" + res + "]");
+        log.info("EXECUTING: " + this + " [" + res + "]");
     }
 
     public void cancel(LastDomainReservation res) {
-        log.debug("CANCELLING: " + res);
+        log.info("CANCELLING: " + res);
     }
 
     public void modify(LastDomainReservation res, Calendar startTime,
 			Calendar endTime) {
-    	log.debug("WITHDRAWING: " + res);
+    	log.info("WITHDRAWING: " + res);
     }
     
     public void withdraw(LastDomainReservation res) {
-    	log.debug("WITHDRAWING: " + res);
+    	log.info("WITHDRAWING: " + res);
     }
     
     public void recover(LastDomainReservation res) {
-        log.debug("RECOVERING: " + res);
+        log.info("RECOVERING: " + res);
     }
 
     public void domainDown(LastDomainReservation res, String domain) {
