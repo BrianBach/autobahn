@@ -1,7 +1,7 @@
 package net.geant.autobahn.resourcesreservationcalendar;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,9 +36,9 @@ public class ResourcesReservationCalendarClient implements ResourcesReservationC
         }
         
         try {
-            new URI(endPoint);
-            log.debug("RRCalendar location seems a valid URI, trying to connect to it");
-        } catch (URISyntaxException e) {
+            new URL(endPoint);
+            log.debug("RRCalendar location seems a valid URL, trying to connect to it");
+        } catch (MalformedURLException e) {
             log.error("No valid RRCalendar location ("+ endPoint +") could be found, DM->Cal communication impossible");
             return;
         }

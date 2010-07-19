@@ -2,8 +2,8 @@ package net.geant.autobahn.interdomain;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.MalformedURLException;
 import java.util.Properties;
 
 import net.geant.autobahn.constraints.GlobalConstraints;
@@ -27,7 +27,7 @@ public class InterdomainClient implements Interdomain {
 	private Interdomain interdomain;
 	private String endPoint;
 	
-	public InterdomainClient(String endPoint) throws URISyntaxException {
+	public InterdomainClient(String endPoint) throws MalformedURLException {
 	    log.debug("Initial IDM endpoint is: " + endPoint);
         String finalEndPoint = endPoint;
         
@@ -57,8 +57,8 @@ public class InterdomainClient implements Interdomain {
             // available through another channel (e.g. in properties files), and
             // so the provided endPoint parameter might be a valid URL
             
-            new URI(finalEndPoint);
-            log.info("IDM name ("+ endPoint +") seems a valid URI, trying to connect to it");
+            new URL(finalEndPoint);
+            log.info("IDM name ("+ endPoint +") seems a valid URL, trying to connect to it");
         }
         
         log.debug("IDM endpoint finally to be used for IDM -> IDM communication: " + finalEndPoint);

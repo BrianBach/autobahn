@@ -1,7 +1,7 @@
 package net.geant.autobahn.tool;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,9 +37,9 @@ public class ToolClient implements Tool {
         }
         
         try {
-            new URI(endPoint);
-            log.debug("TP location seems a valid URI, trying to connect to it");
-        } catch (URISyntaxException e) {
+            new URL(endPoint);
+            log.debug("TP location seems a valid URL, trying to connect to it");
+        } catch (MalformedURLException e) {
             log.error("No valid TP location ("+ endPoint +") could be found, DM->TP communication impossible");
             return;
         }

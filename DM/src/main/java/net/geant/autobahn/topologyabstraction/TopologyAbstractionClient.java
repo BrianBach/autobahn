@@ -1,7 +1,7 @@
 package net.geant.autobahn.topologyabstraction;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Set;
 
@@ -36,9 +36,9 @@ public class TopologyAbstractionClient implements TopologyAbstraction {
         }
         
         try {
-            new URI(endPoint);
-            log.debug("TA location seems a valid URI, trying to connect to it");
-        } catch (URISyntaxException e) {
+            new URL(endPoint);
+            log.debug("TA location seems a valid URL, trying to connect to it");
+        } catch (MalformedURLException e) {
             log.error("No valid TA location ("+ endPoint +") could be found, communication impossible");
             return;
         }

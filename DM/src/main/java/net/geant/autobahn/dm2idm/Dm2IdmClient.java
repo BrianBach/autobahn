@@ -2,8 +2,8 @@ package net.geant.autobahn.dm2idm;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Properties;
 
@@ -71,9 +71,9 @@ public class Dm2IdmClient implements Dm2Idm {
             // so the provided endPoint parameter might be a valid URL
             
             try {
-                new URI(endPoint);
-                log.info("IDM name ("+ endPoint +") seems a valid URI, trying to connect to it");
-            } catch (URISyntaxException e) {
+                new URL(endPoint);
+                log.info("IDM name ("+ endPoint +") seems a valid URL, trying to connect to it");
+            } catch (MalformedURLException e) {
                 log.error("No valid IDM location ("+ endPoint +") could be found, DM->IDM communication impossible");
                 return;
             }
