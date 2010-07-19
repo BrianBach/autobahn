@@ -289,7 +289,7 @@ public abstract class AutobahnReservation extends Reservation implements Runnabl
         client.scheduleReservation(this);
     }
  
-    public void forwardModify(Calendar start, Calendar end) {
+    public void forwardModify(Calendar start, Calendar end) throws Exception {
     	String address = getNextDomainAddress();
     	
        	Interdomain client = new InterdomainClient(address);

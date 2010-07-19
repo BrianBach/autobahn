@@ -107,7 +107,14 @@ public class Scheduled extends HomeDomainState {
 				return;
 			}
 			
-			res.forwardModify(start, end);
+			try {
+			    res.forwardModify(start, end);
+            } catch (Exception e) {
+                log.error("HomeDomainReservation modification was not possible " + e.getMessage(), e);
+                for(ReservationStatusListener listener : res.getStatusListeners()) {
+                    listener.reservationModified(res.getBodID(), false);
+                }
+            }
 		} else {
 			for(ReservationStatusListener listener : res.getStatusListeners()) {
 				listener.reservationModified(res.getBodID(), false);

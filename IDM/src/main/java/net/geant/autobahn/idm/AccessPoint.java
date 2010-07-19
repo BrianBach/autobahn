@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -724,7 +725,13 @@ public final class AccessPoint implements UserAccessPoint,
 	 */
 	public LinkIdentifiers getIdentifiers(String domain, String portName, String linkBodId) {
 		
-		Interdomain idm = new InterdomainClient(domain);
+		Interdomain idm;
+        try {
+            idm = new InterdomainClient(domain);
+        } catch (Exception e1) {
+            log.error(this + " getIdentifiers: " + e1.getMessage(), e1);
+            return null;
+        }
 		
 		int maxTries = 3;
 		
@@ -733,7 +740,7 @@ public final class AccessPoint implements UserAccessPoint,
 			try {
 				return idm.getIdentifiers(portName, linkBodId);
 			} catch (Exception ex) {
-				//log.debug("getLinkId, #" + (i + 1) + ": "  + ex.getMessage());
+				log.debug("getLinkId, #" + (i + 1) + ": "  + ex.getMessage());
 			}
 			try {
 				Thread.sleep(2000);

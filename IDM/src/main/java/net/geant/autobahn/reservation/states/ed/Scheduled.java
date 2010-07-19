@@ -74,7 +74,15 @@ public class Scheduled extends ExternalDomainState {
 		boolean possible = res.checkModification(startTime, endTime);
 		
 		if(possible) {
-			res.forwardModify(startTime, endTime);
+			try {
+                res.forwardModify(startTime, endTime);
+            } catch (Exception e) {
+                log.error("Modification was not possible " + e.getMessage(), e);
+                res.reportModification(startTime, endTime,
+                        "Modification not possible in domain: " + res.getLocalDomainID() +
+                        " due to exception: " + e.getMessage(),
+                        false);
+            }
 		} else {
 			res.reportModification(startTime, endTime,
 					"Modification not possible in domain: " + res.getLocalDomainID(),

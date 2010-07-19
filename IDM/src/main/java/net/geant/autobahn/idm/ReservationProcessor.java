@@ -1,5 +1,6 @@
 package net.geant.autobahn.idm;
 
+import java.net.URISyntaxException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -271,8 +272,13 @@ public class ReservationProcessor {
 		if(res != null) {
 			if (res instanceof ExternalReservation) {
 				// Just forward the message
-	        	Interdomain client = new InterdomainClient(res.getPrevDomainAddress());
-	        	client.reportFinished(resID, message, success);
+	        	Interdomain client;
+                try {
+                    client = new InterdomainClient(res.getPrevDomainAddress());
+                    client.reportFinished(resID, message, success);
+                } catch (Exception e) {
+                    log.error(this + " reportFinished: " + e.getMessage(), e);
+                }
 					
 				return;
 			}
@@ -292,8 +298,13 @@ public class ReservationProcessor {
 			String prevDomain = previousDomains.get(resID);
 			
 			if(prevDomain != null) {
-	        	Interdomain client = new InterdomainClient(prevDomain);
-	        	client.reportFinished(resID, message, success);
+	        	Interdomain client;
+                try {
+                    client = new InterdomainClient(prevDomain);
+                    client.reportFinished(resID, message, success);
+                } catch (Exception e) {
+                    log.error(this + " reportFinished: " + e.getMessage(), e);
+                }
 			} else {
 				log.info(resID + " Report finish received: Reservation not found in the processor.");
 			}

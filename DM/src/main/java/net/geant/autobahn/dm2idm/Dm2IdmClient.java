@@ -2,6 +2,8 @@ package net.geant.autobahn.dm2idm;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Properties;
 
@@ -32,8 +34,10 @@ public class Dm2IdmClient implements Dm2Idm {
 	 * @param endPoint URL address of an IDM
 	 */
 	public Dm2IdmClient(String endPoint) {
-		if("none".equals(endPoint))
+		if("none".equals(endPoint)) {
+            log.info("IDM location was specified as none, DM->IDM communication impossible");
 			return;
+		}
 		
 		log.debug("DM client tries to connect to " + endPoint);
 		
@@ -62,9 +66,17 @@ public class Dm2IdmClient implements Dm2Idm {
         }
         else {
             log.debug("IDM location could not be obtained from Lookup, falling back to direct contact");
-            // However, this is not a fatal error, as the IDM location might be
+            // This is not a fatal situation, as the IDM location might be
             // available through another channel (e.g. in properties files), and
             // so the provided endPoint parameter might be a valid URL
+            
+            try {
+                new URI(endPoint);
+                log.info("IDM name ("+ endPoint +") seems a valid URI, trying to connect to it");
+            } catch (URISyntaxException e) {
+                log.error("No valid IDM location ("+ endPoint +") could be found, DM->IDM communication impossible");
+                return;
+            }
         }
         
 		Dm2IdmService service = new Dm2IdmService(endPoint);

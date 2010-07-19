@@ -1,5 +1,8 @@
 package net.geant.autobahn.idm2dm;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
 import net.geant.autobahn.idm2dm.Idm2Dm;
@@ -23,6 +26,19 @@ public class Idm2DmClient implements Idm2Dm {
 	private Idm2Dm idm2dm;
 	
 	public Idm2DmClient(String endPoint) {
+        if("none".equals(endPoint)) {
+            log.info("DM location was specified as none, IDM->DM communication impossible");
+            return;
+        }
+        
+        try {
+            new URI(endPoint);
+            log.debug("DM location seems a valid URI, trying to connect to it");
+        } catch (URISyntaxException e) {
+            log.error("No valid DM location ("+ endPoint +") could be found, IDM->DM communication impossible");
+            return;
+        }
+        
 		Idm2DmService service = new Idm2DmService(endPoint);
 		idm2dm = service.getIdm2DmPort();
 	}

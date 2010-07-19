@@ -1,7 +1,11 @@
 package net.geant.autobahn.topologyabstraction;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Set;
+
+import org.apache.log4j.Logger;
 
 import net.geant.autobahn.intradomain.IntradomainTopology;
 import net.geant.autobahn.intradomain.common.GenericLink;
@@ -16,16 +20,28 @@ import net.geant.autobahn.network.LinkIdentifiers;
  */
 public class TopologyAbstractionClient implements TopologyAbstraction {
     
+    private final static Logger log = Logger.getLogger(TopologyAbstractionClient.class);
+    
     private TopologyAbstraction ta = null;
     
     /**
      * Creates an instance sending requests to a given endpoint.
      * 
-     * @param endPoint URL address of an IDM
+     * @param endPoint URL address of a TA
      */
     public TopologyAbstractionClient(String endPoint) {
-        if("none".equals(endPoint))
+        if("none".equals(endPoint)) {
+            log.info("TA location was specified as none, DM->TA communication impossible");
             return;
+        }
+        
+        try {
+            new URI(endPoint);
+            log.debug("TA location seems a valid URI, trying to connect to it");
+        } catch (URISyntaxException e) {
+            log.error("No valid TA location ("+ endPoint +") could be found, communication impossible");
+            return;
+        }
         
         TopologyAbstractionService service = new TopologyAbstractionService(endPoint);
         ta = service.getTopologyAbstractionPort();

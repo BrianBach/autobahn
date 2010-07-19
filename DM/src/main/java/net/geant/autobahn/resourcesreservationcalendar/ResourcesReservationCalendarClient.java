@@ -1,8 +1,12 @@
 package net.geant.autobahn.resourcesreservationcalendar;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import org.apache.log4j.Logger;
 
 import net.geant.autobahn.constraints.PathConstraints;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
@@ -16,6 +20,8 @@ import net.geant.autobahn.intradomain.common.GenericLink;
  */
 public class ResourcesReservationCalendarClient implements ResourcesReservationCalendar {
 	
+    private final static Logger log = Logger.getLogger(ResourcesReservationCalendarClient.class);
+    
 	private ResourcesReservationCalendar rc = null; 
 	
 	/**
@@ -24,8 +30,18 @@ public class ResourcesReservationCalendarClient implements ResourcesReservationC
      * @param endPoint URL address of a DM
      */
 	public ResourcesReservationCalendarClient(String endPoint) {
-        if("none".equals(endPoint))
+        if("none".equals(endPoint)) {
+            log.info("RRCalendar location was specified as none, DM->Cal communication impossible");
             return;
+        }
+        
+        try {
+            new URI(endPoint);
+            log.debug("RRCalendar location seems a valid URI, trying to connect to it");
+        } catch (URISyntaxException e) {
+            log.error("No valid RRCalendar location ("+ endPoint +") could be found, DM->Cal communication impossible");
+            return;
+        }
         
         ResourcesReservationCalendarService service = new ResourcesReservationCalendarService(endPoint);
         rc = service.getResourcesReservationCalendarPort();

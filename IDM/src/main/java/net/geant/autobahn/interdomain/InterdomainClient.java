@@ -2,6 +2,8 @@ package net.geant.autobahn.interdomain;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Properties;
 
 import net.geant.autobahn.constraints.GlobalConstraints;
@@ -25,7 +27,7 @@ public class InterdomainClient implements Interdomain {
 	private Interdomain interdomain;
 	private String endPoint;
 	
-	public InterdomainClient(String endPoint) {
+	public InterdomainClient(String endPoint) throws URISyntaxException {
 	    log.debug("Initial IDM endpoint is: " + endPoint);
         String finalEndPoint = endPoint;
         
@@ -50,10 +52,13 @@ public class InterdomainClient implements Interdomain {
         	finalEndPoint = idmLocation;
         }
         else {
-            log.info("IDM location could not be obtained from Lookup, falling back to direct contact");
-            // However, this is not a fatal error, as the IDM location might be
+            log.info("IDM location could not be obtained from Lookup, trying other options...");
+            // This is not a fatal situation, as the IDM location might be
             // available through another channel (e.g. in properties files), and
             // so the provided endPoint parameter might be a valid URL
+            
+            new URI(finalEndPoint);
+            log.info("IDM name ("+ endPoint +") seems a valid URI, trying to connect to it");
         }
         
         log.debug("IDM endpoint finally to be used for IDM -> IDM communication: " + finalEndPoint);
