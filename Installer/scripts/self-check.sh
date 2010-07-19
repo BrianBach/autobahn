@@ -257,7 +257,7 @@ function configure_file_quagga {
 	newpath=$2
 	newpath_john=$3
 	while [[ ! -d "$newpath" ]]; do
-		FILE=`$DIALOG --stdout --title "Enter system folder containing $1 (e.g. /etc/quagga/) " --fselect /etc/quagga 24 78`
+		FILE=`$DIALOG --stdout --title "Enter system folder containing $1 (e.g. /etc/quagga/) " --fselect /etc/quagga/ 24 78`
 		case $? in
 		0   )   
 			echo $FILE >newpath
@@ -273,7 +273,8 @@ function configure_file_quagga {
 	log "$1 is at $newpath"
 
 	# Kostas-Giannis addition to copy conf files to quagga etc folder
-	newpath_path_only=$(cd ${newpath%/*} && echo $PWD)
+	#newpath_path_only=$(cd ${newpath%/*} && echo $PWD)
+	newpath_path_only=$newpath
 	cp ./ospfd.conf $newpath_path_only
 	cp ./debian.conf $newpath_path_only
 	cp ./daemons $newpath_path_only
@@ -281,7 +282,7 @@ function configure_file_quagga {
 	echolog "Copied ospfd.conf, debian.conf, daemons, zebra.conf to $newpath_path_only"
 	
 	while [[ ! -d "$newpath_john" || ( ! -f "$newpath_john/zebra" && ! -f "$newpath_john/quagga" ) ]]; do
-		FILE=`$DIALOG --stdout --title "Enter system folder containing the scripts to run Quagga daemons (e.g. /etc/init.d/) " --fselect /etc/init.d 24 78`
+		FILE=`$DIALOG --stdout --title "Enter system folder containing the scripts to run Quagga daemons (e.g. /etc/init.d/) " --fselect /etc/init.d/ 24 78`
 		#read newpath_john
 		
 		case $? in
@@ -838,6 +839,7 @@ function simple_ui {
 	CONFIGURE_FILE_QUAGGA="configure_file_quagga_c"
 	CONFIGURE_FILE_AUTOBAHN="configure_file_autobahn_c"
 	ASK_FOR_PARAMETER="ask_for_parameter_c"
+	$CONFIGURE_FILE_QUAGGA "ospfd.conf" "tmp_ospfd_dir" "ospfd_conf"
 	check_configuration_files 
 	poplocalinfo
 }
