@@ -1,5 +1,7 @@
 package net.geant.autobahn.tool;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +31,18 @@ public class ToolClient implements Tool {
 	 * @param endPoint
 	 */
 	public ToolClient(String endPoint) {
-		if(endPoint.equals("none"))
-			return;
+		if(endPoint.equals("none")) {
+            log.info("TP location was specified as none, DM->TP communication impossible");
+            return;
+        }
+        
+        try {
+            new URI(endPoint);
+            log.debug("TP location seems a valid URI, trying to connect to it");
+        } catch (URISyntaxException e) {
+            log.error("No valid TP location ("+ endPoint +") could be found, DM->TP communication impossible");
+            return;
+        }
 		
 		ToolService service = new ToolService(endPoint);
 		tool = service.getToolPort();
