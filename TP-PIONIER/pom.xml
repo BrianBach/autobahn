@@ -101,7 +101,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>net.geant.autobahn</groupId>
-			<artifactId>autobahn-common</artifactId>
+			<artifactId>autobahn-tool</artifactId>
 			<version>0.4.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
