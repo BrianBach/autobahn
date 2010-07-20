@@ -26,7 +26,7 @@ done
 check_ui
         if [ $? -eq 0 ]; then
 #                ../../size.sh
-		dialog --print-maxsize --stdout | awk ' $2<24{print "Your display is not enough,please run setupall.sh -c"} $3<78{print "Your display is not enough,please run setupall.sh -c"} $2<24{exit 1} $3<78{exit 1} '
+		dialog --print-maxsize --stdout | awk ' $2<35{print "Your display is not enough,please run setupall.sh -c"} $3<89{print "Your display is not enough,please run setupall.sh -c"} $2<35{exit 1} $3<89{exit 1} '
 		#echo "Installation begins with graphical environment";
 		#awk ' {exit 1} '
 		awkstatus=$?
