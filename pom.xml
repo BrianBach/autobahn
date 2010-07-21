@@ -249,7 +249,6 @@
 		<module>TP-Base</module>
 		<module>IDC-Proxy</module>
 		<module>Clients</module>
-		<module>TP-PIONIER</module>
 	</modules>
 	
 	<dependencies>
