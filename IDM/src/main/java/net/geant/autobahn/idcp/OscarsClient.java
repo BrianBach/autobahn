@@ -22,7 +22,7 @@ import net.geant.autobahn.idcp.PathInfo;
 import net.geant.autobahn.idcp.ResDetails;
 import net.geant.autobahn.idcp.VlanTag;
 import net.geant.autobahn.network.Link;
-import net.geant.autobahn.proxy.ReservationInfo;
+import net.geant.autobahn.reservation.Reservation;
 
 import net.geant.autobahn.idcp.OSCARS;
 import net.geant.autobahn.idcp.OSCARS_Service;
@@ -61,16 +61,16 @@ public class OscarsClient {
 	}
 	
 
-	public List<ReservationInfo> getReservationList() throws AAAFaultMessage, BSSFaultMessage {
+	public List<Reservation> getReservationList() throws AAAFaultMessage, BSSFaultMessage {
 
 		ListRequest lreq = new ListRequest();
 		ListReply lrep = rc.listReservations(lreq);
 
-        List<ReservationInfo> resinfo = new ArrayList<ReservationInfo>();
+        List<Reservation> resinfo = new ArrayList<Reservation>();
 		if (lrep != null) {
 			List<ResDetails> res = lrep.getResDetails();
 			for (ResDetails rd : res) {
-				ReservationInfo ri = new ReservationInfo();
+				Reservation ri = new Reservation();
 				ri.setBodID(rd.getGlobalReservationId());
 				ri.setDescription(rd.getDescription());
 				ri.setCapacity(rd.getBandwidth());
@@ -116,7 +116,7 @@ public class OscarsClient {
 	 * @return Integer - number of VLAN tag selected for the reservation
 	 * @throws RemoteException
 	 */
-	public ReservationInfo scheduleReservation(ReservationInfo reservation,
+	public Reservation scheduleReservation(Reservation reservation,
 			String src, String dest, String vlans) throws RemoteException {
 
 		final String resID = reservation.getBodID();
@@ -147,9 +147,6 @@ public class OscarsClient {
 
 		Holder <PathInfo> pathInfo = new Holder<PathInfo>(pinfo);
 
-		ReservationInfo result = new ReservationInfo();
-		result.setBodID(reservation.getBodID());
-		
 		Holder<String> token = new Holder<String>();
 		Holder<String> status = new Holder<String>();
 		try {
@@ -158,11 +155,12 @@ public class OscarsClient {
 			
 		} catch (Exception e) {
 			System.out.println("Error when schedule oscars: " + e.getMessage());
-			result.setDescription(e.getMessage());
+			reservation.setDescription(e.getMessage());
 			
-			return result;
+			return reservation;
 		}
-		
+
+		/*
 		if (ST_PENDING.equals(status)) {
 			// Read and return vlan
 			
@@ -170,9 +168,9 @@ public class OscarsClient {
 					.getLayer2Info().getSrcVtag().getValue());
 			
 			result.setCalculatedConstraints("" + sel_vlan);
-		}
+		}*/
 		
-		return result;
+		return reservation;
 	}
 
 	public String cancelReservation(String resID) throws RemoteException {
@@ -203,7 +201,7 @@ public class OscarsClient {
 		}
 	}
 	
-	public ResDetails modifyReservation(ReservationInfo reservation, String src, String dest, String vlans) throws RemoteException {
+	public ResDetails modifyReservation(Reservation reservation, String src, String dest, String vlans) throws RemoteException {
 
 		final String resID = reservation.getBodID();
 		
@@ -231,16 +229,12 @@ public class OscarsClient {
 		
 		pinfo.setLayer2Info(l2);
 
-        ReservationInfo result = new ReservationInfo();
-        result.setBodID(reservation.getBodID());
-
         ResDetails resD = null;
         try {
             resD = rc.modifyReservation(globalReservationId, startTime, endTime, bandwidth, description, pinfo);
         
         } catch (Exception e) {
-            result.setDescription(e.getMessage());
-
+            throw new RemoteException(e.getMessage(), e.getCause());
         }
         /*
         if (ST_PENDING.equals(status)) {
@@ -255,7 +249,7 @@ public class OscarsClient {
         return resD;
     }
 	
-	public ReservationInfo queryReservation(String resID) throws RemoteException {
+	public Reservation queryReservation(String resID) throws RemoteException {
 
 		GlobalReservationId gid = new GlobalReservationId();
 		gid.setGri(resID);
@@ -309,7 +303,7 @@ public class OscarsClient {
         
         String bodId = globalReservationId.value;
         
-        ReservationInfo resInfo = new ReservationInfo();
+        Reservation resInfo = new Reservation();
         
         src = src.substring(src.indexOf(":link=") + 6);
         dest = dest.substring(dest.indexOf(":link=") + 6);
@@ -319,9 +313,10 @@ public class OscarsClient {
 		resInfo.setCapacity(bandwidth.value);
 		resInfo.setStartTime(start);
         resInfo.setEndTime(end);
-        resInfo.setStartPort(src);
-        resInfo.setEndPort(dest);
-        resInfo.setUserVlans(vlans);		
+        // TODO: Properly handle start/end ports and vlans
+        //resInfo.setStartPort(src);
+        //resInfo.setEndPort(dest);
+        //resInfo.setUserVlans(vlans);		
 		
 		return resInfo;
 	}

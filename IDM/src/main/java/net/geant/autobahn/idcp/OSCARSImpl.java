@@ -19,8 +19,8 @@ import net.geant.autobahn.idcp.ResCreateContent;
 import net.geant.autobahn.idcp.ResDetails;
 import net.geant.autobahn.idcp.TeardownPathContent;
 import net.geant.autobahn.network.Link;
-import net.geant.autobahn.proxy.Oscars2Autobahn;
-import net.geant.autobahn.proxy.ReservationInfo;
+import net.geant.autobahn.reservation.HomeDomainReservation;
+import net.geant.autobahn.reservation.Reservation;
 
 import org.apache.log4j.Logger;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneDomainContent;
@@ -46,7 +46,7 @@ public class OSCARSImpl implements OSCARS {
 
     private Logger log = Logger.getLogger(this.getClass());
 
-    private ReservationInfo makeReservation(
+    private HomeDomainReservation makeReservation(
             javax.xml.ws.Holder<java.lang.String> globalReservationId,
             long startTime,
             long endTime,
@@ -80,22 +80,13 @@ public class OSCARSImpl implements OSCARS {
         CtrlPlaneHopContent srcHop = hops[hops.length - 2];
         String src = srcHop.getLinkIdRef();
         String resID = globalReservationId.value;
-        ReservationInfo resInfo = new ReservationInfo();
         //src = src.substring(src.indexOf(":link=") + 6);
         //dest = dest.substring(dest.indexOf(":link=") + 6);
 
-        resInfo.setBodID(resID);
-        resInfo.setCapacity(capacity);
-        resInfo.setStartTime(start);
-        resInfo.setEndTime(end);
-        resInfo.setStartPort(src);
-        resInfo.setEndPort(dest);
-        resInfo.setUserVlans(vlans);
-        
         // TODO vlans, port, bodID?
         Oscars2Autobahn autobahn = new Oscars2Autobahn();
-        ReservationInfo resp = null;
-        resp = autobahn.createReservation(resInfo);
+        HomeDomainReservation resp = null;
+        resp = autobahn.createReservation(resID, capacity, start, end, src, dest, vlans);
 
         return resp;
     }
@@ -132,9 +123,8 @@ public class OSCARSImpl implements OSCARS {
             javax.xml.ws.Holder<java.lang.String> token,
             javax.xml.ws.Holder<java.lang.String> status) throws AAAFaultMessage , BSSFaultMessage    { 
 
-        ReservationInfo resInfo = null;
         try {
-            resInfo = makeReservation(globalReservationId,startTime,endTime,bandwidth,description,pathInfo,token,status);
+            makeReservation(globalReservationId,startTime,endTime,bandwidth,description,pathInfo,token,status);
         } catch (Exception e) {
             System.out.println("Exception makeReservation! " + e.getMessage());
             throw new BSSFaultMessage(e.getMessage(), e);
@@ -167,7 +157,7 @@ public class OSCARSImpl implements OSCARS {
         try {
             // find reservation
             Oscars2Autobahn autobahn = new Oscars2Autobahn();
-            ReservationInfo resInfo = autobahn.queryReservation(resId);
+            Reservation resInfo = autobahn.queryReservation(resId);
 
             if (resInfo != null) {
                 log.debug("found res: " + resId);
@@ -259,7 +249,7 @@ public class OSCARSImpl implements OSCARS {
             java.lang.String description,
             net.geant.autobahn.idcp.PathInfo pathInfo) throws AAAFaultMessage , BSSFaultMessage    { 
 
-        ReservationInfo resInfo = new ReservationInfo();
+        Reservation resInfo = new Reservation();
         resInfo.setBodID(globalReservationId);
         resInfo.setCapacity(bandwidth);
         resInfo.setDescription(description);
@@ -320,7 +310,7 @@ public class OSCARSImpl implements OSCARS {
         TeardownPathContent teardownPath = payload.getTeardownPath();
 
         if (createReservation != null) {
-            ReservationInfo res = null;
+            HomeDomainReservation res = null;
 
             try {
                 res = makeReservation(new javax.xml.ws.Holder<String>(createReservation.globalReservationId),
@@ -382,7 +372,7 @@ public class OSCARSImpl implements OSCARS {
 
         log.debug("listReservations.begin");
 
-        List<ReservationInfo> reservations = new ArrayList<ReservationInfo>();
+        List<Reservation> reservations = new ArrayList<Reservation>();
 
         try {
             Oscars2Autobahn autobahn = new Oscars2Autobahn();
@@ -393,7 +383,7 @@ public class OSCARSImpl implements OSCARS {
         ResDetails[] resDetails = new ResDetails[reservations.size()];
         int index = 0;
 
-        for (ReservationInfo ri : reservations) {
+        for (Reservation ri : reservations) {
 
             ResDetails rd = new ResDetails();
             rd.setBandwidth((int) ri.getCapacity());
@@ -404,7 +394,6 @@ public class OSCARSImpl implements OSCARS {
             rd.setStartTime(ri.getStartTime().getTimeInMillis());
             rd.setEndTime(ri.getEndTime().getTimeInMillis());
             resDetails[index++] = rd;
-
         }
 
         ListReply list = new ListReply();

@@ -36,7 +36,6 @@ import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.LinkIdentifiers;
 import net.geant.autobahn.network.Port;
 import net.geant.autobahn.network.StateOper;
-import net.geant.autobahn.proxy.ProxyImpl;
 import net.geant.autobahn.reservation.AutobahnReservation;
 import net.geant.autobahn.reservation.HomeDomainReservation;
 import net.geant.autobahn.reservation.Reservation;

@@ -12,11 +12,11 @@ import org.mortbay.log.Log;
 
 import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.constraints.GlobalConstraints;
+import net.geant.autobahn.idcp.Autobahn2OscarsConverter;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
 import net.geant.autobahn.idm2dm.OversubscribedException;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.Path;
-import net.geant.autobahn.proxy.Autobahn2OscarsConverter;
 import net.geant.autobahn.reservation.HomeDomainReservation;
 import net.geant.autobahn.reservation.ReservationErrors;
 

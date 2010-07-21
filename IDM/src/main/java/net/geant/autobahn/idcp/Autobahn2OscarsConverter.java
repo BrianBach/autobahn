@@ -1,21 +1,14 @@
 /**
  * 
  */
-package net.geant.autobahn.proxy;
+package net.geant.autobahn.idcp;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.geant.autobahn.idcp.ResDetails;
-import net.geant.autobahn.constraints.ConstraintsNames;
-import net.geant.autobahn.constraints.RangeConstraint;
-import net.geant.autobahn.idcp.AAAFaultMessage;
-import net.geant.autobahn.idcp.BSSFaultMessage;
-import net.geant.autobahn.idcp.OscarsClient;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.reservation.AutobahnReservation;
 import net.geant.autobahn.reservation.Reservation;
@@ -25,7 +18,7 @@ import net.geant.autobahn.reservation.ReservationStatusListener;
 import org.apache.log4j.Logger;
 
 /**
- * Client to proxy client
+ * AutoBAHN to OSCARS client facade
  * @author Michal
  */
 public class Autobahn2OscarsConverter implements ReservationStatusListener {
@@ -46,44 +39,25 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
         vlans.put("10.14.32.2", "3207"); //GAR
     }
 
-	
-	/* (non-Javadoc)
-	 * @see net.geant.autobahn.interdomain.Interdomain#cancelReservation(java.lang.String)
-	 */
 	public void cancelReservation(String resID) {
 		
 		try {
 			OscarsClient oscars = new OscarsClient();
 			oscars.cancelReservation(resID);
 		} catch (IOException e) { 
-			log.error("ProxyClientConverter: cancelReservation Error: + " + e.getMessage());
+			log.error("Autobahn2OscarsConverter: cancelReservation Error: + " + e.getMessage());
 		}
 	}
 	
-	/* (non-Javadoc)
-     * @see net.geant.autobahn.proxy.Proxy#getTopology()
-     */
     public List<Link> getTopology() throws Exception {
-    	// If the list is empty, XML will return null.
-        // So we need to make sure that in that case an empty list is returned.
         OscarsClient oscars = new OscarsClient();
-        List<Link> res = oscars.getTopology();
-        if (res==null) {
-            res = new ArrayList<Link>();
-        }
-        return res;
-            
+        return oscars.getTopology();
     }
     
-    /* (non-Javadoc)
-     * @see net.geant.autobahn.proxy.Proxy#listReservations()
-     */
-    public List<ReservationInfo> listReservations() throws IOException {
+    public List<Reservation> listReservations() throws IOException {
         
-        // If the list is empty, XML will return null.
-        // So we need to make sure that in that case an empty list is returned.
         OscarsClient oscars = new OscarsClient();
-    	List<ReservationInfo> res = null;
+    	List<Reservation> res = null;
 		try {
 			res = oscars.getReservationList();
 		} catch (AAAFaultMessage e) {
@@ -93,27 +67,18 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        if (res==null) {
-            res = new ArrayList<ReservationInfo>();
-            //@todo 
-        } 
         return res;
         
     }
     
-    /* (non-Javadoc)
-     * @see net.geant.autobahn.proxy.Proxy#modifyReservation(net.geant.autobahn.proxy.ReservationInfo)
-     */
-    public boolean modifyReservation(ReservationInfo resInfo)
+    public boolean modifyReservation(Reservation resInfo)
             throws IOException {
         
         OscarsClient oscars = new OscarsClient();
         ResDetails resTemp = null;
         
-        String src = "";
-        
-        src = resInfo.getStartPort();
-        String dest = resInfo.getEndPort();        
+        String src = resInfo.getStartPort().getBodID();
+        String dest = resInfo.getEndPort().getBodID();
         String vlan = vlans.get(resInfo.getStartPort());
 
         if (vlan == null) {
@@ -131,18 +96,14 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
         }
         
         return ((resTemp != null) ? true : false);
-
     }
     
-    /* (non-Javadoc)
-     * @see net.geant.autobahn.proxy.Proxy#queryReservation(java.lang.String)
-     */
-    public ReservationInfo queryReservation(String resID) throws IOException {
+    public Reservation queryReservation(String resID) throws IOException {
         
         System.out.println("queryReservation: " + resID);
         OscarsClient oscars = new OscarsClient();
         
-        ReservationInfo response = null;
+        Reservation response = null;
         try {
             response = oscars.queryReservation(resID);
         } catch (RemoteException e) {
@@ -153,28 +114,23 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
         return response;
     }
     
-	/* (non-Javadoc)
-	 * @see net.geant.autobahn.interdomain.Interdomain#scheduleReservation(net.geant.autobahn.reservation.Reservation)
-	 */
 	public int scheduleReservation(AutobahnReservation reservation) {
 		
 		try {
-	        ReservationInfo resInfo = Autobahn2OscarsConverter.convertReservation(reservation);
-			
 			OscarsClient oscars = new OscarsClient();
 	        
 	        String src = "";
 	        
-	        src = resInfo.getStartPort();
-	        String dest = resInfo.getEndPort();        
-	        String vlan = vlans.get(resInfo.getStartPort());
+	        src = reservation.getStartPort().getBodID();
+	        String dest = reservation.getEndPort().getBodID();        
+	        String vlan = vlans.get(src);
 
 	        if (vlan == null) {
 	            System.out.println("Warn - no assigned vlan found");
 	            vlan = "3210";
 	        }
 	        
-	        ReservationInfo res = oscars.scheduleReservation(resInfo, src, dest, vlan);
+	        Reservation res = oscars.scheduleReservation(reservation, src, dest, vlan);
 	        
 			String errorDesc = res.getDescription();
 			
@@ -234,31 +190,4 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
 		}
 */	}
 
-	public static ReservationInfo convertReservation(Reservation res) {
-		ReservationInfo ri = new ReservationInfo();
-		ri.setBidirectional(res.isBidirectional());
-		ri.setBodID(res.getBodID());
-		ri.setCapacity(res.getCapacity());
-		ri.setDescription(res.getDescription());
-		ri.setEndPort(res.getEndPort().getBodID());
-		ri.setEndTime(res.getEndTime());
-		ri.setMaxDelay(res.getMaxDelay());
-		ri.setPriority(res.getPriority());
-		ri.setResiliency(res.getResiliency());
-		ri.setStartPort(res.getStartPort().getBodID());
-		ri.setStartTime(res.getStartTime());
-		ri.setState(res.getState());
-		
-		RangeConstraint rcon = res.getGlobalConstraints()
-				.getDomainConstraints().get(0).getPathConstraints().get(0)
-				.getRangeConstraint(ConstraintsNames.VLANS);
-		
-		if(rcon != null)
-			ri.setCalculatedConstraints("" + rcon.getFirstValue());
-		// set path
-/*		Link[] path = new Link[res.getPath().getLinks().size()];
-		ri.setPath(res.getPath().getLinks().toArray(path));
-*/		
-		return ri;
-	}
 }
