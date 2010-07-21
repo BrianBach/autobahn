@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="Idm2Dm" targetNamespace="http://idm2dm.autobahn.geant.net/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://idm2dm.autobahn.geant.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="constraints.autobahn.geant.net" targetNamespace="reservation.autobahn.geant.net" version="1.0">
+<xs:import namespace="constraints.autobahn.geant.net"/>
+<xs:complexType name="TimeRange">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="startTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="endTime" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ReservationParams">
+    <xs:sequence>
+      <xs:element name="capacity" type="xs:long"/>
+      <xs:element name="maxDelay" type="xs:int"/>
+      <xs:element minOccurs="0" name="resiliency" type="xs:string"/>
+      <xs:element name="bidirectional" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="startTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="endTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="pathConstraints" type="ns1:PathConstraints"/>
+      <xs:element name="userVlanId" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="network.autobahn.geant.net" targetNamespace="network.autobahn.geant.net" version="1.0">
+<xs:complexType name="Link">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+      <xs:element name="kind" type="xs:int"/>
+      <xs:element minOccurs="0" name="startPort" type="tns:Port"/>
+      <xs:element minOccurs="0" name="endPort" type="tns:Port"/>
+      <xs:element name="bidirectional" type="xs:boolean"/>
+      <xs:element name="delay" type="xs:int"/>
+      <xs:element name="manualCost" type="xs:double"/>
+      <xs:element name="monetaryCost" type="xs:double"/>
+      <xs:element name="granularity" type="xs:long"/>
+      <xs:element name="minResCapacity" type="xs:long"/>
+      <xs:element name="maxResCapacity" type="xs:long"/>
+      <xs:element name="capacity" type="xs:long"/>
+      <xs:element minOccurs="0" name="resilience" type="xs:string"/>
+      <xs:element minOccurs="0" name="timestamp" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="localName" type="xs:string"/>
+      <xs:element minOccurs="0" name="type" type="tns:LinkType"/>
+      <xs:element minOccurs="0" name="operationalState" type="tns:StateOper"/>
+      <xs:element minOccurs="0" name="administrativeState" type="tns:StateAdmin"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="Port">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+      <xs:element minOccurs="0" name="address" type="xs:string"/>
+      <xs:element minOccurs="0" name="technology" type="xs:string"/>
+      <xs:element name="bundled" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="node" type="tns:Node"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="Node">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+      <xs:element minOccurs="0" name="type" type="xs:string"/>
+      <xs:element minOccurs="0" name="address" type="xs:string"/>
+      <xs:element minOccurs="0" name="provisioningDomain" type="tns:ProvisioningDomain"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="country" type="xs:string"/>
+      <xs:element minOccurs="0" name="city" type="xs:string"/>
+      <xs:element minOccurs="0" name="institution" type="xs:string"/>
+      <xs:element minOccurs="0" name="longitude" type="xs:string"/>
+      <xs:element minOccurs="0" name="latitude" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ProvisioningDomain">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+      <xs:element minOccurs="0" name="provType" type="xs:string"/>
+      <xs:element minOccurs="0" name="adminDomain" type="tns:AdminDomain"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="AdminDomain">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+      <xs:element minOccurs="0" name="ASID" type="xs:string"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element name="clientDomain" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="LinkType">
+    <xs:sequence>
+      <xs:element name="type" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="StateOper">
+    <xs:sequence>
+      <xs:element name="state" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="StateAdmin">
+    <xs:sequence>
+      <xs:element name="state" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="LinkIdentifiers">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="nodeId" type="xs:string"/>
+      <xs:element minOccurs="0" name="portId" type="xs:string"/>
+      <xs:element minOccurs="0" name="linkId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="reservation.autobahn.geant.net" xmlns:ns2="network.autobahn.geant.net" xmlns:ns3="constraints.autobahn.geant.net" xmlns:tns="http://idm2dm.autobahn.geant.net/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://idm2dm.autobahn.geant.net/">
+  <xs:import namespace="reservation.autobahn.geant.net"/>
+  <xs:import namespace="network.autobahn.geant.net"/>
+  <xs:import namespace="constraints.autobahn.geant.net"/>
+  <xs:element name="addReservation" type="tns:addReservation"/>
+  <xs:element name="addReservationResponse" type="tns:addReservationResponse"/>
+  <xs:element name="checkModification" type="tns:checkModification"/>
+  <xs:element name="checkModificationResponse" type="tns:checkModificationResponse"/>
+  <xs:element name="checkResources" type="tns:checkResources"/>
+  <xs:element name="checkResourcesResponse" type="tns:checkResourcesResponse"/>
+  <xs:element name="getIdentifiers" type="tns:getIdentifiers"/>
+  <xs:element name="getIdentifiersResponse" type="tns:getIdentifiersResponse"/>
+  <xs:element name="modifyReservation" type="tns:modifyReservation"/>
+  <xs:element name="modifyReservationResponse" type="tns:modifyReservationResponse"/>
+  <xs:element name="prepareTopology" type="tns:prepareTopology"/>
+  <xs:element name="prepareTopologyResponse" type="tns:prepareTopologyResponse"/>
+  <xs:element name="removeReservation" type="tns:removeReservation"/>
+  <xs:element name="removeReservationResponse" type="tns:removeReservationResponse"/>
+  <xs:element name="restart" type="tns:restart"/>
+  <xs:element name="restartResponse" type="tns:restartResponse"/>
+  <xs:complexType name="checkModification">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="resID" type="xs:string"/>
+      <xs:element minOccurs="0" name="time" type="ns1:TimeRange"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="checkModificationResponse">
+    <xs:sequence>
+      <xs:element name="modificationPossible" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="addReservation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="resID" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="links" type="ns2:Link"/>
+      <xs:element minOccurs="0" name="params" type="ns1:ReservationParams"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="addReservationResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="modifyReservation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="resID" type="xs:string"/>
+      <xs:element minOccurs="0" name="time" type="ns1:TimeRange"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="modifyReservationResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="checkResources">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="arg0" type="ns2:Link"/>
+      <xs:element minOccurs="0" name="arg1" type="ns1:ReservationParams"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="checkResourcesResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DomainConstraints" type="ns3:DomainConstraints"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="prepareTopology">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="prepareTopologyResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="restart">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="restartResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="removeReservation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="resID" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="removeReservationResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getIdentifiers">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="portName" type="xs:string"/>
+      <xs:element minOccurs="0" name="linkBodId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getIdentifiersResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="ns2:LinkIdentifiers"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConstraintsAlreadyUsedException" type="tns:ConstraintsAlreadyUsedException"/>
+  <xs:complexType name="ConstraintsAlreadyUsedException">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:element name="OversubscribedException" type="tns:OversubscribedException"/>
+  <xs:complexType name="OversubscribedException">
+    <xs:sequence>
+      <xs:element name="failedLink" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="constraints.autobahn.geant.net" targetNamespace="constraints.autobahn.geant.net" version="1.0">
+<xs:complexType name="PathConstraints">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" name="addNames" nillable="true" type="tns:ConstraintsNames"/>
+      <xs:element maxOccurs="unbounded" name="addConstraints" nillable="true" type="tns:AdditiveConstraint"/>
+      <xs:element maxOccurs="unbounded" name="boolNames" nillable="true" type="tns:ConstraintsNames"/>
+      <xs:element maxOccurs="unbounded" name="boolConstraints" nillable="true" type="tns:BooleanConstraint"/>
+      <xs:element maxOccurs="unbounded" name="rangeNames" nillable="true" type="tns:ConstraintsNames"/>
+      <xs:element maxOccurs="unbounded" name="rangeConstraints" nillable="true" type="tns:RangeConstraint"/>
+      <xs:element maxOccurs="unbounded" name="minValNames" nillable="true" type="tns:ConstraintsNames"/>
+      <xs:element maxOccurs="unbounded" name="minValConstraints" nillable="true" type="tns:MinValueConstraint"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="AdditiveConstraint">
+    <xs:complexContent>
+      <xs:extension base="tns:Constraint">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="value" type="xs:double"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+<xs:complexType abstract="true" name="Constraint">
+    <xs:all/>
+  </xs:complexType>
+<xs:complexType name="BooleanConstraint">
+    <xs:complexContent>
+      <xs:extension base="tns:Constraint">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="value" type="xs:boolean"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+<xs:complexType name="RangeConstraint">
+    <xs:complexContent>
+      <xs:extension base="tns:Constraint">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" name="ranges" nillable="true" type="tns:Range"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+<xs:complexType name="Range">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="min" type="xs:int"/>
+      <xs:element minOccurs="0" name="max" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="MinValueConstraint">
+    <xs:complexContent>
+      <xs:extension base="tns:Constraint">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="value" type="xs:double"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+<xs:complexType name="DomainConstraints">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" name="pathConstraints" nillable="true" type="tns:PathConstraints"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:simpleType name="ConstraintsNames">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="VLANS"/>
+      <xs:enumeration value="TIMESLOTS"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getIdentifiers">
+    <wsdl:part name="parameters" element="tns:getIdentifiers">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="removeReservationResponse">
+    <wsdl:part name="parameters" element="tns:removeReservationResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addReservation">
+    <wsdl:part name="parameters" element="tns:addReservation">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getIdentifiersResponse">
+    <wsdl:part name="parameters" element="tns:getIdentifiersResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="checkResourcesResponse">
+    <wsdl:part name="parameters" element="tns:checkResourcesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="restartResponse">
+    <wsdl:part name="parameters" element="tns:restartResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addReservationResponse">
+    <wsdl:part name="parameters" element="tns:addReservationResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="OversubscribedException">
+    <wsdl:part name="OversubscribedException" element="tns:OversubscribedException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="modifyReservationResponse">
+    <wsdl:part name="parameters" element="tns:modifyReservationResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="prepareTopology">
+    <wsdl:part name="parameters" element="tns:prepareTopology">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="prepareTopologyResponse">
+    <wsdl:part name="parameters" element="tns:prepareTopologyResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ConstraintsAlreadyUsedException">
+    <wsdl:part name="ConstraintsAlreadyUsedException" element="tns:ConstraintsAlreadyUsedException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="modifyReservation">
+    <wsdl:part name="parameters" element="tns:modifyReservation">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="removeReservation">
+    <wsdl:part name="parameters" element="tns:removeReservation">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="restart">
+    <wsdl:part name="parameters" element="tns:restart">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="checkModification">
+    <wsdl:part name="parameters" element="tns:checkModification">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="checkModificationResponse">
+    <wsdl:part name="parameters" element="tns:checkModificationResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="checkResources">
+    <wsdl:part name="parameters" element="tns:checkResources">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="Idm2Dm">
+    <wsdl:operation name="checkModification">
+      <wsdl:input name="checkModification" message="tns:checkModification">
+    </wsdl:input>
+      <wsdl:output name="checkModificationResponse" message="tns:checkModificationResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="addReservation">
+      <wsdl:input name="addReservation" message="tns:addReservation">
+    </wsdl:input>
+      <wsdl:output name="addReservationResponse" message="tns:addReservationResponse">
+    </wsdl:output>
+      <wsdl:fault name="ConstraintsAlreadyUsedException" message="tns:ConstraintsAlreadyUsedException">
+    </wsdl:fault>
+      <wsdl:fault name="OversubscribedException" message="tns:OversubscribedException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="modifyReservation">
+      <wsdl:input name="modifyReservation" message="tns:modifyReservation">
+    </wsdl:input>
+      <wsdl:output name="modifyReservationResponse" message="tns:modifyReservationResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="checkResources">
+      <wsdl:input name="checkResources" message="tns:checkResources">
+    </wsdl:input>
+      <wsdl:output name="checkResourcesResponse" message="tns:checkResourcesResponse">
+    </wsdl:output>
+      <wsdl:fault name="OversubscribedException" message="tns:OversubscribedException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="prepareTopology">
+      <wsdl:input name="prepareTopology" message="tns:prepareTopology">
+    </wsdl:input>
+      <wsdl:output name="prepareTopologyResponse" message="tns:prepareTopologyResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="restart">
+      <wsdl:input name="restart" message="tns:restart">
+    </wsdl:input>
+      <wsdl:output name="restartResponse" message="tns:restartResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="removeReservation">
+      <wsdl:input name="removeReservation" message="tns:removeReservation">
+    </wsdl:input>
+      <wsdl:output name="removeReservationResponse" message="tns:removeReservationResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getIdentifiers">
+      <wsdl:input name="getIdentifiers" message="tns:getIdentifiers">
+    </wsdl:input>
+      <wsdl:output name="getIdentifiersResponse" message="tns:getIdentifiersResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="Idm2DmServiceSoapBinding" type="tns:Idm2Dm">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="checkModification">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="checkModification">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="checkModificationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="addReservation">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="addReservation">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="addReservationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ConstraintsAlreadyUsedException">
+        <soap:fault name="ConstraintsAlreadyUsedException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="OversubscribedException">
+        <soap:fault name="OversubscribedException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="modifyReservation">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="modifyReservation">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="modifyReservationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="checkResources">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="checkResources">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="checkResourcesResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="OversubscribedException">
+        <soap:fault name="OversubscribedException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="prepareTopology">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="prepareTopology">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="prepareTopologyResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="restart">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="restart">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="restartResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="removeReservation">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="removeReservation">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="removeReservationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getIdentifiers">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getIdentifiers">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getIdentifiersResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Idm2Dm">
+    <wsdl:port name="Idm2DmPort" binding="tns:Idm2DmServiceSoapBinding">
+      <soap:address location="http://localhost:9090/Idm2DmPort"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
