@@ -4,11 +4,19 @@
 package net.geant.autobahn.proxy;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import net.geant.autobahn.idcp.ResDetails;
 import net.geant.autobahn.constraints.ConstraintsNames;
 import net.geant.autobahn.constraints.RangeConstraint;
+import net.geant.autobahn.idcp.AAAFaultMessage;
+import net.geant.autobahn.idcp.BSSFaultMessage;
+import net.geant.autobahn.idcp.OscarsClient;
+import net.geant.autobahn.network.Link;
 import net.geant.autobahn.reservation.AutobahnReservation;
 import net.geant.autobahn.reservation.Reservation;
 import net.geant.autobahn.reservation.ReservationErrors;
@@ -25,6 +33,18 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
 	private static Logger log = Logger.getLogger(Autobahn2OscarsConverter.class);
 	
 	private Map<String, Reservation> cache = new HashMap<String, Reservation>();
+	
+    private static Map<String, String> vlans = new HashMap<String, String>();
+    
+
+    static {
+        vlans.put("10.12.32.5", "3202"); //HEA
+        vlans.put("10.13.32.4", "3204"); //PIO
+        vlans.put("10.11.32.6", "3203"); //ATH
+        vlans.put("10.11.32.7", "3208"); //CRE
+        vlans.put("10.16.32.2", "3205"); //CAR
+        vlans.put("10.14.32.2", "3207"); //GAR
+    }
 
 	
 	/* (non-Javadoc)
@@ -33,22 +53,129 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
 	public void cancelReservation(String resID) {
 		
 		try {
-			ProxyClient proxy = new ProxyClient();
-			proxy.cancelReservation(resID);
+			OscarsClient oscars = new OscarsClient();
+			oscars.cancelReservation(resID);
 		} catch (IOException e) { 
 			log.error("ProxyClientConverter: cancelReservation Error: + " + e.getMessage());
 		}
 	}
+	
+	/* (non-Javadoc)
+     * @see net.geant.autobahn.proxy.Proxy#getTopology()
+     */
+    public List<Link> getTopology() throws Exception {
+    	// If the list is empty, XML will return null.
+        // So we need to make sure that in that case an empty list is returned.
+        OscarsClient oscars = new OscarsClient();
+        List<Link> res = oscars.getTopology();
+        if (res==null) {
+            res = new ArrayList<Link>();
+        }
+        return res;
+            
+    }
+    
+    /* (non-Javadoc)
+     * @see net.geant.autobahn.proxy.Proxy#listReservations()
+     */
+    public List<ReservationInfo> listReservations() throws IOException {
+        
+        // If the list is empty, XML will return null.
+        // So we need to make sure that in that case an empty list is returned.
+        OscarsClient oscars = new OscarsClient();
+    	List<ReservationInfo> res = null;
+		try {
+			res = oscars.getReservationList();
+		} catch (AAAFaultMessage e) {
+			// TODO Auto-generated catch block 
+			e.printStackTrace();
+		} catch (BSSFaultMessage e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        if (res==null) {
+            res = new ArrayList<ReservationInfo>();
+            //@todo 
+        } 
+        return res;
+        
+    }
+    
+    /* (non-Javadoc)
+     * @see net.geant.autobahn.proxy.Proxy#modifyReservation(net.geant.autobahn.proxy.ReservationInfo)
+     */
+    public boolean modifyReservation(ReservationInfo resInfo)
+            throws IOException {
+        
+        OscarsClient oscars = new OscarsClient();
+        ResDetails resTemp = null;
+        
+        String src = "";
+        
+        src = resInfo.getStartPort();
+        String dest = resInfo.getEndPort();        
+        String vlan = vlans.get(resInfo.getStartPort());
 
+        if (vlan == null) {
+            System.out.println("Warn - no assigned vlan found");
+            vlan = "3210";
+        }
+
+        try {
+            // do not support for now
+            //throw new RemoteException("not implemented");
+        	resTemp = oscars.modifyReservation(resInfo, src, dest, vlan);
+
+        } catch (RemoteException e) {
+        	throw new IOException(e.getMessage());
+        }
+        
+        return ((resTemp != null) ? true : false);
+
+    }
+    
+    /* (non-Javadoc)
+     * @see net.geant.autobahn.proxy.Proxy#queryReservation(java.lang.String)
+     */
+    public ReservationInfo queryReservation(String resID) throws IOException {
+        
+        System.out.println("queryReservation: " + resID);
+        OscarsClient oscars = new OscarsClient();
+        
+        ReservationInfo response = null;
+        try {
+            response = oscars.queryReservation(resID);
+        } catch (RemoteException e) {
+            System.out.println("queryReservation: " + e.getMessage());
+            throw new IOException(e.getMessage());
+        }
+        
+        return response;
+    }
+    
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.interdomain.Interdomain#scheduleReservation(net.geant.autobahn.reservation.Reservation)
 	 */
 	public int scheduleReservation(AutobahnReservation reservation) {
 		
 		try {
-			ProxyClient proxy = new ProxyClient();
-			ReservationInfo res = proxy.createReservation(Autobahn2OscarsConverter.convertReservation(reservation));
+	        ReservationInfo resInfo = Autobahn2OscarsConverter.convertReservation(reservation);
 			
+			OscarsClient oscars = new OscarsClient();
+	        
+	        String src = "";
+	        
+	        src = resInfo.getStartPort();
+	        String dest = resInfo.getEndPort();        
+	        String vlan = vlans.get(resInfo.getStartPort());
+
+	        if (vlan == null) {
+	            System.out.println("Warn - no assigned vlan found");
+	            vlan = "3210";
+	        }
+	        
+	        ReservationInfo res = oscars.scheduleReservation(resInfo, src, dest, vlan);
+	        
 			String errorDesc = res.getDescription();
 			
 			if(errorDesc != null && !errorDesc.equals("")) {
@@ -71,7 +198,8 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
 		
 		return 0;
 	}
-
+	
+	
 	public void reservationActive(String reservationId) {
 		notifyIDC(reservationId);
 	}

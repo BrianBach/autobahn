@@ -43,16 +43,12 @@ import org.apache.log4j.Logger;
  * @author Michal
  */
 
-@WebService(name = "Proxy", serviceName = "ProxyService",
-        portName = "ProxyPort",
-        targetNamespace = "http://proxy.jra3.geant2.net/", 
-        endpointInterface = "net.geant.autobahn.proxy.Proxy")
-public class ProxyImpl implements Proxy, ReservationStatusListener {
+public class Oscars2Autobahn implements ReservationStatusListener {
 
     private Map<String, String> failures = new HashMap<String, String>();
     private Map<String, Reservation> cache = new HashMap<String, Reservation>();
     
-    private static final Logger log = Logger.getLogger(ProxyImpl.class);
+    private static final Logger log = Logger.getLogger(Oscars2Autobahn.class);
     
     /* (non-Javadoc)
      * @see net.geant.autobahn.proxy.Proxy#cancelReservation(java.lang.String)

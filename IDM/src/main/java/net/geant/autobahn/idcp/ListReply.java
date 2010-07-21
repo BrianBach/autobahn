@@ -7,6 +7,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
+import net.geant.autobahn.idcp.ResDetails;
+
 
 /**
  * <p>Java class for listReply complex type.
@@ -89,6 +91,19 @@ public class ListReply {
      */
     public void setTotalResults(Integer value) {
         this.totalResults = value;
+    }
+    
+    
+    /**
+     * Manually added method
+     * 
+     * @param rd
+     */
+    public void setResDetails(ResDetails[] rd) {
+        this.resDetails = new ArrayList<ResDetails>();
+        for (ResDetails rditem : rd) {
+            this.resDetails.add(rditem);
+        }
     }
 
 }

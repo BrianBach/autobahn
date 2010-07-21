@@ -59,6 +59,23 @@ public class CtrlPlaneDomainContent {
     public Lifetime getLifetime() {
         return lifetime;
     }
+    
+    /**
+     * Manually added method
+     * 
+     * @param param org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneNodeContent
+     */
+     public void addNode(org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneNodeContent param){
+         if (node == null) {
+             node = new ArrayList<CtrlPlaneNodeContent>();
+         }
+
+    
+         //update the setting tracker
+        //localNodeTracker = true;
+        node.add(param);
+
+     }
 
     /**
      * Sets the value of the lifetime property.

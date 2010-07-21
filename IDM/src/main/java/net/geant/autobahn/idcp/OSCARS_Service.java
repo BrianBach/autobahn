@@ -22,7 +22,7 @@ import javax.xml.ws.Service;
 
 
 @WebServiceClient(name = "OSCARS", 
-                  wsdlLocation = "file:src/main/resources/wsdl/IDCP/OSCARS.wsdl",
+                  wsdlLocation = "file:etc/wsdl/IDCP/OSCARS.wsdl",
                   targetNamespace = "http://oscars.es.net/OSCARS") 
 public class OSCARS_Service extends Service {
 
@@ -32,9 +32,9 @@ public class OSCARS_Service extends Service {
     static {
         URL url = null;
         try {
-            url = new URL("file:src/main/resources/wsdl/IDCP/OSCARS.wsdl");
+            url = new URL("file:etc/wsdl/IDCP/OSCARS.wsdl");
         } catch (MalformedURLException e) {
-            System.err.println("Can not initialize the default wsdl from file:src/main/resources/wsdl/IDCP/OSCARS.wsdl");
+            System.err.println("Can not initialize the default wsdl from file:etc/wsdl/IDCP/OSCARS.wsdl");
             // e.printStackTrace();
         }
         WSDL_LOCATION = url;

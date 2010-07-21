@@ -68,7 +68,19 @@ public class CtrlPlaneNodeContent {
     public void setLifetime(Lifetime value) {
         this.lifetime = value;
     }
-
+    
+    /**
+     * Manually added method
+     * 
+     * @param portAdd
+     */
+    public void addPort(CtrlPlanePortContent portAdd) {
+        if (port == null) {
+            port = new ArrayList<CtrlPlanePortContent>();
+        }
+        port.add(portAdd);
+    }
+    
     /**
      * Gets the value of the address property.
      * 

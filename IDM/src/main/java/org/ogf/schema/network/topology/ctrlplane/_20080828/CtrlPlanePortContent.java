@@ -70,6 +70,21 @@ public class CtrlPlanePortContent {
     }
 
     /**
+     * Manually added method
+     * @param param org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneLinkContent
+     */
+     public void addLink(org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneLinkContent param){
+         if (link == null) {
+             link = new ArrayList<CtrlPlaneLinkContent>();
+         }
+    
+         //update the setting tracker
+        //localLinkTracker = true;
+    
+
+        link.add(param);
+     }
+    /**
      * Sets the value of the lifetime property.
      * 
      * @param value
