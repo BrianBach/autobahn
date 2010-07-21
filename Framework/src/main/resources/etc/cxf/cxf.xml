@@ -16,11 +16,11 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
     
 	
 	<bean id="OscarsServerPasswordCallback" class="net.geant.autobahn.edugain.ServerPasswordCallback">
-		<constructor-arg type="java.lang.String" value="etc/global/client-sec.properties"/>
+		<constructor-arg type="java.lang.String" value="etc/oscars/client-sec.properties"/>
 	</bean>
 	
 	<bean id="OscarsClientPasswordCallback" class="net.geant.autobahn.edugain.ClientPasswordCallback">
-		<constructor-arg type="java.lang.String" value="etc/global/client-sec.properties"/>	
+		<constructor-arg type="java.lang.String" value="etc/edugain/client-sec.properties"/>	
 	</bean>	
 		
 	<jaxws:endpoint id="oscars" implementor="net.geant.autobahn.idcp.OSCARSImpl" address="http://localhost:8080/autobahn/oscars" wsdlLocation="etc/wsdl/IDCP/OSCARS.wsdl">
