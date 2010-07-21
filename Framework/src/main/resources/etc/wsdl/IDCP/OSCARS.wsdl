@@ -537,7 +537,7 @@
     <wsdl:service name="OSCARS">
         <wsdl:port name="OSCARS" binding="tns:OSCARSSOAP">
             <soap:address
-                location="https://oscars-dev.es.net/axis/services/OSCARS" />
+                location="https://oscars-dev.es.net/axis2/services/OSCARS" />
         </wsdl:port>
     </wsdl:service>
 </wsdl:definitions>
