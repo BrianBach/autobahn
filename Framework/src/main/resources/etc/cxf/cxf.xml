@@ -23,7 +23,7 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
 		<constructor-arg type="java.lang.String" value="etc/edugain/client-sec.properties"/>	
 	</bean>	
 		
-	<jaxws:endpoint id="oscars" implementor="net.geant.autobahn.idcp.OSCARSImpl" address="http://localhost:8080/autobahn/oscars" wsdlLocation="etc/wsdl/IDCP/OSCARS.wsdl">
+	<jaxws:endpoint id="oscars" implementor="net.geant.autobahn.idcp.OSCARSImpl" address="https://localhost:8090/autobahn/oscars" wsdlLocation="etc/wsdl/IDCP/OSCARS.wsdl">
 		<jaxws:properties>
 			<entry key="ws-security.callback-handler">
 				<ref bean="OscarsServerPasswordCallback"/>
@@ -49,31 +49,36 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
     <http:tlsClientParameters disableCNCheck="true" secureSocketProtocol="SSL">
       <sec:trustManagers>
           <sec:keyStore type="JKS" password="password"
-               file="etc/oscars/ssl.jks"/>
+               file="etc/oscars/ssl-client.jks"/>
       </sec:trustManagers>      
     </http:tlsClientParameters>
    </http:conduit>
 
-  <!--http:destination name="{http://oscars.es.net/OSCARS}OSCARS.http-destination">    
+  <http:destination name="{http://oscars.es.net/OSCARS}OSCARS.http-destination">    
   </http:destination>
   
   <httpj:engine-factory>
 	 <httpj:engine port="8090">
-	     <httpj:tlsServerParameters secureSocketProtocol="SSL">
+	     <httpj:tlsServerParameters secureSocketProtocol="TLS">
+         <sec:keyManagers keyPassword="password">
+	     		<sec:keyStore type="JKS" password="password" 
+	             	file="etc/oscars/OSCARS.jks"/>
+	      </sec:keyManagers>
 	      <sec:trustManagers>
-	          <sec:keyStore type="JKS" password="password" file="etc/oscars/ssl.jks"/>
+	      		<sec:keyStore type="JKS" password="bahn2auto"
+		   			file="etc/oscars/ssl-server.ks"/>
 	      </sec:trustManagers>
+
 	      <sec:cipherSuitesFilter>
-	        <sec:include>.*_EXPORT_.*</sec:include>
-	        <sec:include>.*_EXPORT1024_.*</sec:include>
-	        <sec:include>.*_WITH_DES_.*</sec:include>
-	        <sec:include>.*_WITH_NULL_.*</sec:include>
-	        <sec:exclude>.*_DH_anon_.*</sec:exclude>
+	      <sec:include>.*_EXPORT_.*</sec:include>
+		       <sec:include>.*_EXPORT1024_.*</sec:include>
+	           <sec:include>.*_WITH_DES_.*</sec:include>
+	           <sec:include>.*_WITH_NULL_.*</sec:include>
+	           <sec:exclude>.*_DH_anon_.*</sec:exclude>
 	      </sec:cipherSuitesFilter>
 	      <sec:clientAuthentication want="true" required="false"/>
 	    </httpj:tlsServerParameters>
 	  </httpj:engine>
-   </httpj:engine-factory-->
-
+   </httpj:engine-factory>
 
 </beans>
