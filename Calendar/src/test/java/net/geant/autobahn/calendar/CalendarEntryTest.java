@@ -1,7 +1,7 @@
 /*
  * CalendarEntryTest.java
  *
- * 30 Ìבת 2010
+ * 30 May 2010
  */
 package net.geant.autobahn.calendar;
 
