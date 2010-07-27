@@ -548,6 +548,8 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
 		// Get waiting identifiers for the domain that asked
 		String externalDomain = getExternalDomainIdForPort(sport);
 		
+		log.info("Searching for the waiting ids for domain: " + externalDomain);
+		
 		AwaitingIdentifiers wait = waiting.get(externalDomain);
 		if(wait != null && !wait.isEmpty()) {
 			log.info("Domain: " + externalDomain + " is up, retrieving ids...");
