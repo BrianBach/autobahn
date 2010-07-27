@@ -38,6 +38,7 @@
 					</descriptors>
 				</configuration>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>buildnumber-maven-plugin</artifactId>
@@ -54,15 +55,50 @@
 					<doCheck>false</doCheck>
 					<doUpdate>false</doUpdate>
 				</configuration>
-			</plugin>			
+			</plugin>
 		</plugins>
 	</build>
+	
+	<profiles>
+	    <profile>
+	      <id>create-new-env</id>
+	      <build>
+	        <plugins>
+		        <plugin>
+				  <artifactId>maven-antrun-plugin</artifactId>
+				  <executions>
+				    <execution>
+				      <phase>pre-integration-test</phase>
+				      <goals>
+				        <goal>run</goal>
+				      </goals>
+				      <configuration>
+				        <tasks>
+				          <property name="runtime_classpath" refid="maven.runtime.classpath"/>
+
+						  <java classname="net.geant.autobahn.testplatform.configuration.EnvironmentSetup"
+						    		fork="true" dir="${basedir}">
+							<arg value="--create-environment" />
+							<classpath>
+								<pathelement path="${runtime_classpath}" />
+							</classpath>
+						  </java>
+				          
+				        </tasks>
+				      </configuration>
+				    </execution>
+				  </executions>
+				</plugin>
+		      </plugins>
+		    </build>
+		 </profile>
+    </profiles>
  	
  	<dependencies>
     	<dependency>
       		<groupId>junit</groupId>
       		<artifactId>junit</artifactId>
-      		<version>3.8.1</version>
+      		<version>4.0</version>
 	        <scope>test</scope>
     	</dependency>
     	<dependency>
@@ -88,6 +124,11 @@
     	<dependency>
       		<groupId>net.geant.autobahn</groupId>
       		<artifactId>autobahn-ta</artifactId>
+      		<version>0.4.3-SNAPSHOT</version>
+    	</dependency>
+    	<dependency>
+      		<groupId>net.geant.autobahn</groupId>
+      		<artifactId>autobahn-testing-platform</artifactId>
       		<version>0.4.3-SNAPSHOT</version>
     	</dependency>
     	<dependency>
