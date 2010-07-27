@@ -1,7 +1,7 @@
 /*
  * PathTest.java
  *
- * 16 Ιουλ 2010
+ * 16 July 2010
  */
 package net.geant.autobahn.network;
 
