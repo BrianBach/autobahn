@@ -65,7 +65,7 @@ public class IntradomainTopology {
     private List<Node> nodes = null;
 
     // eth specific
-	private List<SpanningTree> sptrees = null;
+	private List<SpanningTree> sptrees = new ArrayList<SpanningTree>();
 	private List<EthPhysicalPort> ethpp = null;
 	private List<VlanPort> vlaps = null;
 
