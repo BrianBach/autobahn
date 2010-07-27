@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+    <session-factory>
+
+        <!-- Database connection settings -->
+        <property name="connection.driver_class">org.postgresql.Driver</property>
+        <property name="connection.url">jdbc:postgresql://localhost:5432/jra3</property>
+        <property name="connection.username">jra3</property>
+        <property name="connection.password">geant</property>
+
+        <!-- JDBC connection pool (use the built-in)
+        <property name="connection.pool_size">5</property> -->
+
+		<!-- configuration pool via c3p0 --> 
+		<property name="c3p0.acquire_increment">1</property> 
+		<property name="c3p0.idle_test_period">60</property>
+		<property name="c3p0.max_statements">0</property> 
+		<property name="c3p0.min_size">3</property>
+		<property name="c3p0.max_size">20</property> 
+		<property name="c3p0.timeout">60</property>
+
+		<!-- JDBC connection pool (use the built-in)  
+        <property name="connection.pool_size">5</property> -->
+
+        <!-- SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+
+        <!-- Enable Hibernate's automatic session context management -->
+        <property name="current_session_context_class">thread</property>
+
+        <!-- Disable the second-level cache  -->
+        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+
+		<property name="transaction.factory_class">
+             org.hibernate.transaction.JDBCTransactionFactory
+        </property>
+
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">false</property>
+
+        <!-- Drop and re-create the database schema on startup
+        <property name="hbm2ddl.auto">update</property>  -->
+
+        <mapping resource="net/geant/autobahn/network/AdminDomain.hbm.xml" />
+        <mapping resource="net/geant/autobahn/network/ProvisioningDomain.hbm.xml" />
+        <mapping resource="net/geant/autobahn/network/Node.hbm.xml" />
+        <mapping resource="net/geant/autobahn/network/Port.hbm.xml" />
+        <mapping resource="net/geant/autobahn/network/StateAdmin.hbm.xml" />
+        <mapping resource="net/geant/autobahn/network/StateOper.hbm.xml" />
+        <mapping resource="net/geant/autobahn/network/LinkType.hbm.xml" />
+        <mapping resource="net/geant/autobahn/network/Link.hbm.xml" />
+        <mapping resource="net/geant/autobahn/network/Path.hbm.xml" />
+        <mapping resource="net/geant/autobahn/network/Role.hbm.xml" />
+
+		<mapping resource="net/geant/autobahn/reservation/User.hbm.xml" />
+        <mapping resource="net/geant/autobahn/reservation/Reservation.hbm.xml" />
+        <mapping resource="net/geant/autobahn/reservation/Service.hbm.xml" />
+		
+		<mapping resource="net/geant/autobahn/constraints/Range.hbm.xml" />	
+		<mapping resource="net/geant/autobahn/constraints/Constraint.hbm.xml" />	
+		<mapping resource="net/geant/autobahn/constraints/PathConstraints.hbm.xml" />					
+		<mapping resource="net/geant/autobahn/constraints/DomainConstraints.hbm.xml" />									
+		<mapping resource="net/geant/autobahn/constraints/GlobalConstraints.hbm.xml" />							
+    </session-factory>
+
+</hibernate-configuration>
