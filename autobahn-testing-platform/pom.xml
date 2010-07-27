@@ -1,0 +1,37 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>autobahn</artifactId>
+    <groupId>net.geant.autobahn</groupId>
+    <version>0.4.3-SNAPSHOT</version>
+  </parent>
+  <groupId>net.geant.autobahn</groupId>
+  <artifactId>autobahn-testing-platform</artifactId>
+  <version>0.4.3-SNAPSHOT</version>
+  <name>Testing Platform</name>
+  
+  <dependencies>
+    	<dependency>
+      		<groupId>junit</groupId>
+      		<artifactId>junit</artifactId>
+      		<version>4.0</version>
+      		<type>jar</type>
+	        <scope>test</scope>
+    	</dependency>
+    	<dependency>
+      		<groupId>net.geant.autobahn</groupId>
+		   	<artifactId>autobahn-dm</artifactId>
+      		<version>0.4.3-SNAPSHOT</version>
+    	</dependency>
+    	<dependency>
+      		<groupId>net.geant.autobahn</groupId>
+      		<artifactId>autobahn-idm</artifactId>
+      		<version>0.4.3-SNAPSHOT</version>
+    	</dependency>
+    	<dependency>
+      		<groupId>net.geant.autobahn</groupId>
+      		<artifactId>autobahn-ta</artifactId>
+      		<version>0.4.3-SNAPSHOT</version>
+    	</dependency>
+    </dependencies>
+</project>
