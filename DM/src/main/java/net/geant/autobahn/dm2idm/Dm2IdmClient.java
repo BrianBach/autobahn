@@ -1,13 +1,9 @@
 package net.geant.autobahn.dm2idm;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.net.MalformedURLException;
 import java.util.List;
-import java.util.Properties;
 
-import net.geant.autobahn.dm2idm.Dm2Idm;
 import net.geant.autobahn.intradomain.AccessPoint;
 import net.geant.autobahn.lookup.LookupService;
 import net.geant.autobahn.lookup.LookupServiceException;
