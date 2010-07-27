@@ -1,0 +1,9 @@
+res1 {
+  sport=10.10.32.5
+  dport=10.11.32.10
+  stime=2min
+  etime=5min
+  processnow=false
+  capacity=1000000000
+  desc=res 1, dom1-dom2
+}
