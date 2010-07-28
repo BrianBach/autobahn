@@ -13,16 +13,17 @@ import net.geant.autobahn.intradomain.IntradomainTopology;
 import net.geant.autobahn.intradomain.common.GenericLink;
 import net.geant.autobahn.intradomain.common.Node;
 import net.geant.autobahn.intradomain.ethernet.EthernetIntradomainPathfinder;
+import net.geant.autobahn.intradomain.topologies.EthTopology3;
 import net.geant.autobahn.utils.IntraTopologyBuilder;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static net.geant.autobahn.intradomain.pathfinder.EthTopology3._10Gb;
-import static net.geant.autobahn.intradomain.pathfinder.EthTopology3._1Gb;
-import static net.geant.autobahn.intradomain.pathfinder.EthTopology3._500Mb;
-import static net.geant.autobahn.intradomain.pathfinder.EthTopology3._100Mb;
+import static net.geant.autobahn.intradomain.topologies.EthTopology3._100Mb;
+import static net.geant.autobahn.intradomain.topologies.EthTopology3._10Gb;
+import static net.geant.autobahn.intradomain.topologies.EthTopology3._1Gb;
+import static net.geant.autobahn.intradomain.topologies.EthTopology3._500Mb;
 
 /**
  * @author <a href="mailto:stamos@cti.gr">Kostas Stamos</a>

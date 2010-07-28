@@ -1,4 +1,4 @@
-package net.geant.autobahn.intradomain.pathfinder;
+package net.geant.autobahn.intradomain.topologies;
 
 import net.geant.autobahn.intradomain.common.GenericInterface;
 import net.geant.autobahn.intradomain.sdh.StmType;

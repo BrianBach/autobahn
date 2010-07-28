@@ -19,14 +19,15 @@ import net.geant.autobahn.intradomain.common.GenericLink;
 import net.geant.autobahn.intradomain.common.Node;
 import net.geant.autobahn.intradomain.sdh.SdhDevice;
 import net.geant.autobahn.intradomain.sdh.SdhIntradomainPathfinder;
+import net.geant.autobahn.intradomain.topologies.SdhTopology1;
 import net.geant.autobahn.utils.IntraTopologyBuilder;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static net.geant.autobahn.intradomain.pathfinder.SdhTopology1._10Gb;
-import static net.geant.autobahn.intradomain.pathfinder.SdhTopology1._1Gb;
+import static net.geant.autobahn.intradomain.topologies.SdhTopology1._10Gb;
+import static net.geant.autobahn.intradomain.topologies.SdhTopology1._1Gb;
 
 
 public class SdhPathfinderTest_Topology1 {

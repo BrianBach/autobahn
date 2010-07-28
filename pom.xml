@@ -166,7 +166,7 @@
 	                              <exclude>**/*TestCase.java</exclude>
 	                              <exclude>**/Test*.java</exclude>
 	                              <exclude>**/TopologyTest.java</exclude>
-	                              <exclude>**/*Topology*.java</exclude>
+	                              <exclude>**/topologies/*.java</exclude>
 					            </excludes>
 					            
 				            </configuration>

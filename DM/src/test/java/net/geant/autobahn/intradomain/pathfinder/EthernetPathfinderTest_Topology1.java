@@ -15,14 +15,15 @@ import net.geant.autobahn.intradomain.IntradomainTopology;
 import net.geant.autobahn.intradomain.common.GenericLink;
 import net.geant.autobahn.intradomain.common.Node;
 import net.geant.autobahn.intradomain.ethernet.EthernetIntradomainPathfinder;
+import net.geant.autobahn.intradomain.topologies.EthTopology1;
 import net.geant.autobahn.utils.IntraTopologyBuilder;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static net.geant.autobahn.intradomain.pathfinder.EthTopology1._10Gb;
-import static net.geant.autobahn.intradomain.pathfinder.EthTopology1._1Gb;
+import static net.geant.autobahn.intradomain.topologies.EthTopology1._10Gb;
+import static net.geant.autobahn.intradomain.topologies.EthTopology1._1Gb;
 
 /**
  * @author <a href="mailto:jaxlucas@man.poznan.pl">Jacek Lukasik</a>
