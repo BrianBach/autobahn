@@ -108,12 +108,17 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<includes>
-						<include>**/*.java</include>
-					</includes>
-					<excludes>
-						<exclude>**/Actions.java</exclude>
-					</excludes>
+					<executions>
+                         <execution>
+				            <id>surefire-test</id>
+				            </execution>
+           					<includes>
+							</includes>
+							<excludes>
+							    <exclude>**/*.java</exclude>
+								<exclude>**/Actions.java</exclude>
+						</excludes>
+			        </executions>
 				</configuration>
 			</plugin>
 			

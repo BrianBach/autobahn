@@ -166,11 +166,9 @@
 	                              <exclude>**/*TestCase.java</exclude>
 	                              <exclude>**/Test*.java</exclude>
 	                              <exclude>**/TopologyTest.java</exclude>
+	                              <exclude>**/*Topology*.java</exclude>
 					            </excludes>
 					            
-		                        <includes>
-		                            <include>**/*Test.java</include>
-		                        </includes>
 				            </configuration>
 				          </execution>
                         
@@ -182,12 +180,12 @@
 				            </goals>
 				            <configuration>
 				              <skip>false</skip>
-				              <excludes>
-				                <exclude>none</exclude>
-				              </excludes>
 				              <includes>
 				                <include>**/itest/AllTests.java</include>
 				              </includes>
+							<excludes>
+								<exclude>**/*$*</exclude>
+							</excludes>
 				            </configuration>
 				          </execution>
 					</executions>
@@ -272,9 +270,37 @@
         	</build>
 		</profile>
 		
-		<!-- Profile for running database tests  -->
+		<!-- Profile for running only the integration tests  -->
 	    <profile>
 	      <id>only-it-tests</id>
+	      <build>
+	        <plugins>
+	          <plugin>
+	            <artifactId>maven-surefire-plugin</artifactId>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <configuration>
+	              <skip>true</skip>
+	            </configuration>
+	            <executions>
+	               <execution>
+		            <id>surefire-test</id>
+		            <phase>test</phase>
+		            <goals>
+		              <goal>test</goal>
+		            </goals>
+		           <configuration>
+		               <skip>true</skip>
+		           </configuration>
+		         </execution>
+	            </executions>
+	          </plugin>
+	        </plugins>
+	      </build>
+	    </profile>
+	    
+	    <!-- Profile for disabling integration tests  -->
+	    <profile>
+	      <id>skip-it-tests</id>
 	      <build>
 	        <plugins>
 	          <plugin>
@@ -289,7 +315,7 @@
 	            </configuration>
 	            <executions>
 	               <execution>
-		            <id>surefire-test</id>
+		            <id>surefire-itest</id>
 		            <phase>test</phase>
 		            <goals>
 		              <goal>test</goal>
