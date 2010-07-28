@@ -189,7 +189,6 @@ var final = testing.value;
 					        date	   : "%Y-%m-%d %H:%M:%S",
 					        dateFormat : "%Y-%m-%dT%H:%M:%S",
 					        minuteStep : 1,
-					        flatCallback : dateChanged,
 					        onSelect   : function(){
 							this.hide();
 						    } 
@@ -215,7 +214,6 @@ var final = testing.value;
 					        animation  : false,
 					        trigger    : "endTime",
 					        inputField : "endTime",
-					        selection  : Calendar.dateToInt(new Date()),
 					        showTime   : true,
 					        date	   : "%Y-%m-%d %H:%M:%S",
 					        dateFormat : "%Y-%m-%dT%H:%M:%S",

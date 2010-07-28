@@ -5,7 +5,7 @@ function init() {
                projection: new OpenLayers.Projection('EPSG:900913'),
                displayProjection: new OpenLayers.Projection('EPSG:4326'),
                units: 'm',
-               numZoomLevels: 10,
+               numZoomLevels: 6,
                maxResolution: 1565143.0339,
                maxExtent: new OpenLayers.Bounds(-20037508, -20037508,
                                                 20037508, 20037508.34)
@@ -27,7 +27,7 @@ function init() {
        var markers = new OpenLayers.Layer.Markers('AutoBAHN IDMs');
        map.addLayer(markers);
        make_all(map);
-       //map.zoomToMaxExtent();        
+
 };
 
 
@@ -81,6 +81,8 @@ function addLines (map, lines){
       var start_lng = parseFloat(lines[i].getAttribute('start-lng'));
       var end_lat = parseFloat(lines[i].getAttribute('end-lat'));
       var end_lng = parseFloat(lines[i].getAttribute('end-lng'));
+
+      
       var color =  lines[i].getAttribute('color');
       var tickness = parseFloat(lines[i].getAttribute('tickness'));
       var style = {
@@ -112,23 +114,31 @@ function addMarkers (map, markersXML){
      for (var i = 0; i < markersXML.length; i++) {
        var lat = parseFloat(markersXML[i].getAttribute('lat'));
        var lng = parseFloat(markersXML[i].getAttribute('lng'));
+    
        var point = new OpenLayers.LonLat(lng,lat).transform(new OpenLayers.Projection('EPSG:4326'), new
        		OpenLayers.Projection('EPSG:900913'));
        var html = markersXML[i].getAttribute('html');
        var label = markersXML[i].getAttribute('label');
        var image  = markersXML[i].getAttribute ('icon'); 
-       //var marker = createMarker(point,label,html,image);
-      
+       
        var size;
        var offset;
        var icon;  		
-   		
+   	
+      
        if (image == '/autobahn-gui/images/autobahnMarker-info.png'){
    			size = new OpenLayers.Size(16,16);
-   			//offset = new OpenLayers.Pixel(-(size.w/2), -size.h);	
-     	}else{	
-     		size = new OpenLayers.Size(32,32);
-     		//offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+   			
+     	}
+       else
+       {	
+    	   if (image == '/autobahn-gui/images/autobahnMarker-reservation-small.png') {
+        	   size = new OpenLayers.Size(10,10);
+           }
+    	   else
+    		 {
+    		   size = new OpenLayers.Size(32,32);
+    		 }
      	}	
         var feature = new OpenLayers.Feature(markers, point, {icon:new OpenLayers.Icon(image,size)}); 
         feature.closeBox = true;
@@ -136,9 +146,10 @@ function addMarkers (map, markersXML){
             "autoSize": false, 
             "minSize": new OpenLayers.Size(300,300)
         });
+        if(html!=null){
         feature.data.popupContentHTML = html;
         feature.data.overflow =  'auto';
-                
+        }        
         var marker = feature.createMarker();
         markers.addMarker(marker);
         marker.events.register('mousedown', feature, onFeatureSelect);
@@ -148,7 +159,6 @@ function addMarkers (map, markersXML){
 }
 
 function refreashMap (map){
- // makeGetRequest();
   var request = GXmlHttp.create();
   var service = gup('service');
   var domain = gup('domain');

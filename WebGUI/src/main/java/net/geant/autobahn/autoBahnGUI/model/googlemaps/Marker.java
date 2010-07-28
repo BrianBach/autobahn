@@ -15,6 +15,7 @@ public class Marker {
 	public static final String DEFAULT_INFO = "/autobahn-gui/images/autobahnMarker-info.png";
 	public static final String DEFAULT_INFO_BIG = "/autobahn-gui/images/autobahnMarker-info-big.png";
 	public static final String DEFAULT_ICON_NOT_MONITORED = "/autobahn-gui/images/autobahnMarker-not-monitored.png";
+	public static final String DEFAULT_ICON_INTERFACE ="/autobahn-gui/images/autobahnMarker-reservation-small.png";
 	/**
      * Geographical latitude
      */
