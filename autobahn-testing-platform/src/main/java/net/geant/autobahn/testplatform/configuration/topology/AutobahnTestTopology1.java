@@ -100,19 +100,5 @@ public class AutobahnTestTopology1 {
         t.addSpanningTree(p2, dom2, 100, 800);
         t.addSpanningTree(p3, cli1, 100, 800);
     }
-    
-	public static void main(String[] args) {
-		
-		
-		DmAdministration client = new DmAdministrationClient(
-				"http://localhost:8080/autobahn/dmadmin").getDmAdministrationPort();
-		
-		IntraTopologyBuilder builder = new IntraTopologyBuilder(false);
-		AutobahnTestTopology1 topo = new AutobahnTestTopology1();
-		topo.domain1(builder);
-		
-		client.setTopology(builder.getIntradomainTopology());
-		
-		System.out.println(" - -- Injected");
-	}
+
 }
