@@ -263,9 +263,9 @@ public class DomainConfiguration {
 	}
 	
 	private Connection connectToDatabase(String dbName) {
-		System.out.println("Using: " + dmProps.getProperty("db.user") + " to connect");
 		
 		Connection connection = null;
+		
 		try {
 	        // Load the JDBC driver
 	        String driverName = "org.postgresql.Driver";
@@ -278,12 +278,14 @@ public class DomainConfiguration {
 	        String username = dmProps.getProperty("db.user");
 	        String password = dmProps.getProperty("db.pass");
 	        
+	        System.out.println("Using: " + username + " to connect");
+	        
 	        connection = DriverManager.getConnection(url, username, password);
 	        
 	    } catch (ClassNotFoundException e) {
 	        // Could not find the database driver
 	    } catch (SQLException e) {
-	    	return null;
+	    	System.out.println("Problem with connecting to db: " + e.getMessage());
 		}
 	    
 	    return connection;
