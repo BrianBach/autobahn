@@ -41,6 +41,8 @@ public class DomainConfiguration {
 		
 		dmProps = new MyProperties(is);
 		dmProps = updateDmProperties(dmProps);
+		
+		System.out.println("Username set to: " + dmProps.getProperty("db.user"));
 	}
 	
 	public void writeConfigurationFiles() throws IOException {
@@ -261,6 +263,8 @@ public class DomainConfiguration {
 	}
 	
 	private Connection connectToDatabase(String dbName) {
+		System.out.println("Using: " + dmProps.getProperty("db.user") + " to connect");
+		
 		Connection connection = null;
 		try {
 	        // Load the JDBC driver
@@ -271,8 +275,8 @@ public class DomainConfiguration {
 	        
 	        String dbPort = dmProps.getProperty("db.port");
 	        String url = "jdbc:postgresql://" + serverName + ":" + dbPort + "/" + dbName;
-	        String username = dmProps.getProperty("db.user");;
-	        String password = dmProps.getProperty("db.pass");;
+	        String username = dmProps.getProperty("db.user");
+	        String password = dmProps.getProperty("db.pass");
 	        
 	        connection = DriverManager.getConnection(url, username, password);
 	        
@@ -336,6 +340,8 @@ public class DomainConfiguration {
 	private MyProperties updateDbProperties(MyProperties props) {
 		if(props == null)
 			return null;
+		
+		System.out.println("Setting the username to: " + defaultConf.getProperty("default.db-user"));
 		
 		props.setProperty("db.host", defaultConf.getProperty("default.db-host"));
 		props.setProperty("db.port", defaultConf.getProperty("default.db-port"));
