@@ -3,7 +3,7 @@
 --
 
 --
--- Name: additive_constraint; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE additive_constraint (
@@ -12,10 +12,10 @@ CREATE TABLE additive_constraint (
 );
 
 
-ALTER TABLE public.additive_constraint OWNER TO jra3;
+
 
 --
--- Name: admin_domain; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE admin_domain (
@@ -26,10 +26,10 @@ CREATE TABLE admin_domain (
 );
 
 
-ALTER TABLE public.admin_domain OWNER TO jra3;
+
 
 --
--- Name: bod_user; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE bod_user (
@@ -39,10 +39,10 @@ CREATE TABLE bod_user (
 );
 
 
-ALTER TABLE public.bod_user OWNER TO jra3;
+
 
 --
--- Name: boolean_constraint; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE boolean_constraint (
@@ -51,10 +51,10 @@ CREATE TABLE boolean_constraint (
 );
 
 
-ALTER TABLE public.boolean_constraint OWNER TO jra3;
+
 
 --
--- Name: domain_constraints; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE domain_constraints (
@@ -64,10 +64,10 @@ CREATE TABLE domain_constraints (
 );
 
 
-ALTER TABLE public.domain_constraints OWNER TO jra3;
+
 
 --
--- Name: domainsids; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE domainsids (
@@ -77,10 +77,10 @@ CREATE TABLE domainsids (
 );
 
 
-ALTER TABLE public.domainsids OWNER TO jra3;
+
 
 --
--- Name: eth_link; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE eth_link (
@@ -92,10 +92,10 @@ CREATE TABLE eth_link (
 );
 
 
-ALTER TABLE public.eth_link OWNER TO jra3;
+
 
 --
--- Name: eth_logical_port; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE eth_logical_port (
@@ -103,10 +103,10 @@ CREATE TABLE eth_logical_port (
 );
 
 
-ALTER TABLE public.eth_logical_port OWNER TO jra3;
+
 
 --
--- Name: eth_physical_port; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE eth_physical_port (
@@ -119,10 +119,10 @@ CREATE TABLE eth_physical_port (
 );
 
 
-ALTER TABLE public.eth_physical_port OWNER TO jra3;
+
 
 --
--- Name: generic_connection; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE generic_connection (
@@ -136,10 +136,10 @@ CREATE TABLE generic_connection (
 );
 
 
-ALTER TABLE public.generic_connection OWNER TO jra3;
+
 
 --
--- Name: generic_interface; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE generic_interface (
@@ -158,10 +158,10 @@ CREATE TABLE generic_interface (
 );
 
 
-ALTER TABLE public.generic_interface OWNER TO jra3;
+
 
 --
--- Name: generic_link; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE generic_link (
@@ -175,10 +175,10 @@ CREATE TABLE generic_link (
 );
 
 
-ALTER TABLE public.generic_link OWNER TO jra3;
+
 
 --
--- Name: glink_to_intrapath; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE glink_to_intrapath (
@@ -188,10 +188,10 @@ CREATE TABLE glink_to_intrapath (
 );
 
 
-ALTER TABLE public.glink_to_intrapath OWNER TO jra3;
+
 
 --
--- Name: global_constraints; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE global_constraints (
@@ -199,10 +199,10 @@ CREATE TABLE global_constraints (
 );
 
 
-ALTER TABLE public.global_constraints OWNER TO jra3;
+
 
 --
--- Name: hasrole; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE hasrole (
@@ -212,10 +212,10 @@ CREATE TABLE hasrole (
 );
 
 
-ALTER TABLE public.hasrole OWNER TO jra3;
+
 
 --
--- Name: ho_vc_group; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE ho_vc_group (
@@ -225,10 +225,10 @@ CREATE TABLE ho_vc_group (
 );
 
 
-ALTER TABLE public.ho_vc_group OWNER TO jra3;
+
 
 --
--- Name: ho_vc_link; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE ho_vc_link (
@@ -243,10 +243,10 @@ CREATE TABLE ho_vc_link (
 );
 
 
-ALTER TABLE public.ho_vc_link OWNER TO jra3;
+
 
 --
--- Name: ho_vc_type; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE ho_vc_type (
@@ -257,10 +257,10 @@ CREATE TABLE ho_vc_type (
 );
 
 
-ALTER TABLE public.ho_vc_type OWNER TO jra3;
+
 
 --
--- Name: interdomain_node; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE interdomain_node (
@@ -277,10 +277,10 @@ CREATE TABLE interdomain_node (
 );
 
 
-ALTER TABLE public.interdomain_node OWNER TO jra3;
+
 
 --
--- Name: interdomain_path; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE interdomain_path (
@@ -290,10 +290,10 @@ CREATE TABLE interdomain_path (
 );
 
 
-ALTER TABLE public.interdomain_path OWNER TO jra3;
+
 
 --
--- Name: interface_type; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE interface_type (
@@ -303,10 +303,10 @@ CREATE TABLE interface_type (
 );
 
 
-ALTER TABLE public.interface_type OWNER TO jra3;
+
 
 --
--- Name: intradomain_path; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE intradomain_path (
@@ -315,10 +315,10 @@ CREATE TABLE intradomain_path (
 );
 
 
-ALTER TABLE public.intradomain_path OWNER TO jra3;
+
 
 --
--- Name: intradomain_reservation; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE intradomain_reservation (
@@ -330,10 +330,10 @@ CREATE TABLE intradomain_reservation (
 );
 
 
-ALTER TABLE public.intradomain_reservation OWNER TO jra3;
+
 
 --
--- Name: link; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE link (
@@ -358,10 +358,10 @@ CREATE TABLE link (
 );
 
 
-ALTER TABLE public.link OWNER TO jra3;
+
 
 --
--- Name: link_to_path; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE link_to_path (
@@ -371,10 +371,10 @@ CREATE TABLE link_to_path (
 );
 
 
-ALTER TABLE public.link_to_path OWNER TO jra3;
+
 
 --
--- Name: link_type; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE link_type (
@@ -382,10 +382,10 @@ CREATE TABLE link_type (
 );
 
 
-ALTER TABLE public.link_type OWNER TO jra3;
+
 
 --
--- Name: location; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE location (
@@ -410,10 +410,10 @@ CREATE TABLE location (
 );
 
 
-ALTER TABLE public.location OWNER TO jra3;
+
 
 --
--- Name: minval_constraint; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE minval_constraint (
@@ -422,10 +422,10 @@ CREATE TABLE minval_constraint (
 );
 
 
-ALTER TABLE public.minval_constraint OWNER TO jra3;
+
 
 --
--- Name: network_constraint; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE network_constraint (
@@ -433,10 +433,10 @@ CREATE TABLE network_constraint (
 );
 
 
-ALTER TABLE public.network_constraint OWNER TO jra3;
+
 
 --
--- Name: node; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE node (
@@ -454,10 +454,10 @@ CREATE TABLE node (
 );
 
 
-ALTER TABLE public.node OWNER TO jra3;
+
 
 --
--- Name: och; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE och (
@@ -467,10 +467,10 @@ CREATE TABLE och (
 );
 
 
-ALTER TABLE public.och OWNER TO jra3;
+
 
 --
--- Name: och_link; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE och_link (
@@ -482,10 +482,10 @@ CREATE TABLE och_link (
 );
 
 
-ALTER TABLE public.och_link OWNER TO jra3;
+
 
 --
--- Name: ops_link; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE ops_link (
@@ -496,10 +496,10 @@ CREATE TABLE ops_link (
 );
 
 
-ALTER TABLE public.ops_link OWNER TO jra3;
+
 
 --
--- Name: path; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE path (
@@ -510,10 +510,10 @@ CREATE TABLE path (
 );
 
 
-ALTER TABLE public.path OWNER TO jra3;
+
 
 --
--- Name: path_constraint; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE path_constraint (
@@ -523,10 +523,10 @@ CREATE TABLE path_constraint (
 );
 
 
-ALTER TABLE public.path_constraint OWNER TO jra3;
+
 
 --
--- Name: pcon_add_constraints; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE pcon_add_constraints (
@@ -536,10 +536,10 @@ CREATE TABLE pcon_add_constraints (
 );
 
 
-ALTER TABLE public.pcon_add_constraints OWNER TO jra3;
+
 
 --
--- Name: pcon_add_names; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE pcon_add_names (
@@ -549,10 +549,10 @@ CREATE TABLE pcon_add_names (
 );
 
 
-ALTER TABLE public.pcon_add_names OWNER TO jra3;
+
 
 --
--- Name: pcon_bool_constraints; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE pcon_bool_constraints (
@@ -562,10 +562,10 @@ CREATE TABLE pcon_bool_constraints (
 );
 
 
-ALTER TABLE public.pcon_bool_constraints OWNER TO jra3;
+
 
 --
--- Name: pcon_bool_names; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE pcon_bool_names (
@@ -575,10 +575,10 @@ CREATE TABLE pcon_bool_names (
 );
 
 
-ALTER TABLE public.pcon_bool_names OWNER TO jra3;
+
 
 --
--- Name: pcon_minval_constraints; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE pcon_minval_constraints (
@@ -588,10 +588,10 @@ CREATE TABLE pcon_minval_constraints (
 );
 
 
-ALTER TABLE public.pcon_minval_constraints OWNER TO jra3;
+
 
 --
--- Name: pcon_minval_names; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE pcon_minval_names (
@@ -601,10 +601,10 @@ CREATE TABLE pcon_minval_names (
 );
 
 
-ALTER TABLE public.pcon_minval_names OWNER TO jra3;
+
 
 --
--- Name: pcon_range_constraints; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE pcon_range_constraints (
@@ -614,10 +614,10 @@ CREATE TABLE pcon_range_constraints (
 );
 
 
-ALTER TABLE public.pcon_range_constraints OWNER TO jra3;
+
 
 --
--- Name: pcon_range_names; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE pcon_range_names (
@@ -627,10 +627,10 @@ CREATE TABLE pcon_range_names (
 );
 
 
-ALTER TABLE public.pcon_range_names OWNER TO jra3;
+
 
 --
--- Name: port; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE port (
@@ -642,10 +642,10 @@ CREATE TABLE port (
 );
 
 
-ALTER TABLE public.port OWNER TO jra3;
+
 
 --
--- Name: provisioning_domain; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE provisioning_domain (
@@ -655,10 +655,10 @@ CREATE TABLE provisioning_domain (
 );
 
 
-ALTER TABLE public.provisioning_domain OWNER TO jra3;
+
 
 --
--- Name: range; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE range (
@@ -670,10 +670,10 @@ CREATE TABLE range (
 );
 
 
-ALTER TABLE public.range OWNER TO jra3;
+
 
 --
--- Name: range_constraint; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE range_constraint (
@@ -681,10 +681,10 @@ CREATE TABLE range_constraint (
 );
 
 
-ALTER TABLE public.range_constraint OWNER TO jra3;
+
 
 --
--- Name: reservation; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE reservation (
@@ -709,10 +709,10 @@ CREATE TABLE reservation (
 );
 
 
-ALTER TABLE public.reservation OWNER TO jra3;
+
 
 --
--- Name: reservation_params; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE reservation_params (
@@ -727,10 +727,10 @@ CREATE TABLE reservation_params (
 );
 
 
-ALTER TABLE public.reservation_params OWNER TO jra3;
+
 
 --
--- Name: sdh_device; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE sdh_device (
@@ -741,10 +741,10 @@ CREATE TABLE sdh_device (
 );
 
 
-ALTER TABLE public.sdh_device OWNER TO jra3;
+
 
 --
--- Name: sdh_domain; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE sdh_domain (
@@ -756,10 +756,10 @@ CREATE TABLE sdh_domain (
 );
 
 
-ALTER TABLE public.sdh_domain OWNER TO jra3;
+
 
 --
--- Name: sdh_port; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE sdh_port (
@@ -769,10 +769,10 @@ CREATE TABLE sdh_port (
 );
 
 
-ALTER TABLE public.sdh_port OWNER TO jra3;
+
 
 --
--- Name: service; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE service (
@@ -783,10 +783,10 @@ CREATE TABLE service (
 );
 
 
-ALTER TABLE public.service OWNER TO jra3;
+
 
 --
--- Name: spanning_tree; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE spanning_tree (
@@ -797,10 +797,10 @@ CREATE TABLE spanning_tree (
 );
 
 
-ALTER TABLE public.spanning_tree OWNER TO jra3;
+
 
 --
--- Name: state_admin; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE state_admin (
@@ -808,10 +808,10 @@ CREATE TABLE state_admin (
 );
 
 
-ALTER TABLE public.state_admin OWNER TO jra3;
+
 
 --
--- Name: state_oper; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE state_oper (
@@ -819,10 +819,10 @@ CREATE TABLE state_oper (
 );
 
 
-ALTER TABLE public.state_oper OWNER TO jra3;
+
 
 --
--- Name: stm_link; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE stm_link (
@@ -833,10 +833,10 @@ CREATE TABLE stm_link (
 );
 
 
-ALTER TABLE public.stm_link OWNER TO jra3;
+
 
 --
--- Name: stm_type; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE stm_type (
@@ -846,10 +846,10 @@ CREATE TABLE stm_type (
 );
 
 
-ALTER TABLE public.stm_type OWNER TO jra3;
+
 
 --
--- Name: version_info; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE version_info (
@@ -863,10 +863,10 @@ CREATE TABLE version_info (
 );
 
 
-ALTER TABLE public.version_info OWNER TO jra3;
+
 
 --
--- Name: vlan; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE vlan (
@@ -878,10 +878,10 @@ CREATE TABLE vlan (
 );
 
 
-ALTER TABLE public.vlan OWNER TO jra3;
+
 
 --
--- Name: vlan_port; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE vlan_port (
@@ -890,10 +890,10 @@ CREATE TABLE vlan_port (
 );
 
 
-ALTER TABLE public.vlan_port OWNER TO jra3;
+
 
 --
--- Name: vlan_tag; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE vlan_tag (
@@ -903,10 +903,10 @@ CREATE TABLE vlan_tag (
 );
 
 
-ALTER TABLE public.vlan_tag OWNER TO jra3;
+
 
 --
--- Name: vtp_domain; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 CREATE TABLE vtp_domain (
@@ -916,7 +916,7 @@ CREATE TABLE vtp_domain (
 );
 
 
-ALTER TABLE public.vtp_domain OWNER TO jra3;
+
 
 --
 -- Name: hibernate_sequence; Type: SEQUENCE; Schema: public; Owner: jra3
@@ -930,7 +930,7 @@ CREATE SEQUENCE hibernate_sequence
     CACHE 1;
 
 
-ALTER TABLE public.hibernate_sequence OWNER TO jra3;
+
 
 --
 -- Name: hibernate_sequence; Type: SEQUENCE SET; Schema: public; Owner: jra3
@@ -1327,7 +1327,7 @@ INSERT INTO state_oper VALUES (3);
 
 
 --
--- Name: additive_constraint_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY additive_constraint
@@ -1335,7 +1335,7 @@ ALTER TABLE ONLY additive_constraint
 
 
 --
--- Name: admin_domain_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY admin_domain
@@ -1343,7 +1343,7 @@ ALTER TABLE ONLY admin_domain
 
 
 --
--- Name: bod_user_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY bod_user
@@ -1351,7 +1351,7 @@ ALTER TABLE ONLY bod_user
 
 
 --
--- Name: boolean_constraint_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY boolean_constraint
@@ -1359,7 +1359,7 @@ ALTER TABLE ONLY boolean_constraint
 
 
 --
--- Name: domain_constraints_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY domain_constraints
@@ -1367,7 +1367,7 @@ ALTER TABLE ONLY domain_constraints
 
 
 --
--- Name: domainsids_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY domainsids
@@ -1375,7 +1375,7 @@ ALTER TABLE ONLY domainsids
 
 
 --
--- Name: eth_link_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY eth_link
@@ -1383,7 +1383,7 @@ ALTER TABLE ONLY eth_link
 
 
 --
--- Name: eth_logical_port_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY eth_logical_port
@@ -1391,7 +1391,7 @@ ALTER TABLE ONLY eth_logical_port
 
 
 --
--- Name: eth_physical_port_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY eth_physical_port
@@ -1399,7 +1399,7 @@ ALTER TABLE ONLY eth_physical_port
 
 
 --
--- Name: generic_connection_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY generic_connection
@@ -1407,7 +1407,7 @@ ALTER TABLE ONLY generic_connection
 
 
 --
--- Name: generic_interface_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY generic_interface
@@ -1415,7 +1415,7 @@ ALTER TABLE ONLY generic_interface
 
 
 --
--- Name: generic_link_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY generic_link
@@ -1423,7 +1423,7 @@ ALTER TABLE ONLY generic_link
 
 
 --
--- Name: glink_to_intrapath_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY glink_to_intrapath
@@ -1431,7 +1431,7 @@ ALTER TABLE ONLY glink_to_intrapath
 
 
 --
--- Name: global_constraints_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY global_constraints
@@ -1439,7 +1439,7 @@ ALTER TABLE ONLY global_constraints
 
 
 --
--- Name: hasrole_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY hasrole
@@ -1447,7 +1447,7 @@ ALTER TABLE ONLY hasrole
 
 
 --
--- Name: ho_vc_group_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY ho_vc_group
@@ -1455,7 +1455,7 @@ ALTER TABLE ONLY ho_vc_group
 
 
 --
--- Name: ho_vc_link_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY ho_vc_link
@@ -1463,7 +1463,7 @@ ALTER TABLE ONLY ho_vc_link
 
 
 --
--- Name: ho_vc_type_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY ho_vc_type
@@ -1471,7 +1471,7 @@ ALTER TABLE ONLY ho_vc_type
 
 
 --
--- Name: interdomain_node_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY interdomain_node
@@ -1479,7 +1479,7 @@ ALTER TABLE ONLY interdomain_node
 
 
 --
--- Name: interdomain_path_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY interdomain_path
@@ -1487,7 +1487,7 @@ ALTER TABLE ONLY interdomain_path
 
 
 --
--- Name: interface_type_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY interface_type
@@ -1495,7 +1495,7 @@ ALTER TABLE ONLY interface_type
 
 
 --
--- Name: intradomain_path_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY intradomain_path
@@ -1503,7 +1503,7 @@ ALTER TABLE ONLY intradomain_path
 
 
 --
--- Name: intradomain_reservation_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY intradomain_reservation
@@ -1511,7 +1511,7 @@ ALTER TABLE ONLY intradomain_reservation
 
 
 --
--- Name: link_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY link
@@ -1519,7 +1519,7 @@ ALTER TABLE ONLY link
 
 
 --
--- Name: link_to_path_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY link_to_path
@@ -1527,7 +1527,7 @@ ALTER TABLE ONLY link_to_path
 
 
 --
--- Name: link_type_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY link_type
@@ -1535,7 +1535,7 @@ ALTER TABLE ONLY link_type
 
 
 --
--- Name: location_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY location
@@ -1543,7 +1543,7 @@ ALTER TABLE ONLY location
 
 
 --
--- Name: minval_constraint_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY minval_constraint
@@ -1551,7 +1551,7 @@ ALTER TABLE ONLY minval_constraint
 
 
 --
--- Name: network_constraint_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY network_constraint
@@ -1559,7 +1559,7 @@ ALTER TABLE ONLY network_constraint
 
 
 --
--- Name: node_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY node
@@ -1567,7 +1567,7 @@ ALTER TABLE ONLY node
 
 
 --
--- Name: och_link_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY och_link
@@ -1575,7 +1575,7 @@ ALTER TABLE ONLY och_link
 
 
 --
--- Name: och_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY och
@@ -1583,7 +1583,7 @@ ALTER TABLE ONLY och
 
 
 --
--- Name: ops_link_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY ops_link
@@ -1591,7 +1591,7 @@ ALTER TABLE ONLY ops_link
 
 
 --
--- Name: path_constraint_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY path_constraint
@@ -1599,7 +1599,7 @@ ALTER TABLE ONLY path_constraint
 
 
 --
--- Name: path_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY path
@@ -1607,7 +1607,7 @@ ALTER TABLE ONLY path
 
 
 --
--- Name: pcon_add_constraints_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY pcon_add_constraints
@@ -1615,7 +1615,7 @@ ALTER TABLE ONLY pcon_add_constraints
 
 
 --
--- Name: pcon_add_names_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY pcon_add_names
@@ -1623,7 +1623,7 @@ ALTER TABLE ONLY pcon_add_names
 
 
 --
--- Name: pcon_bool_constraints_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY pcon_bool_constraints
@@ -1631,7 +1631,7 @@ ALTER TABLE ONLY pcon_bool_constraints
 
 
 --
--- Name: pcon_bool_names_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY pcon_bool_names
@@ -1639,7 +1639,7 @@ ALTER TABLE ONLY pcon_bool_names
 
 
 --
--- Name: pcon_minval_constraints_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY pcon_minval_constraints
@@ -1647,7 +1647,7 @@ ALTER TABLE ONLY pcon_minval_constraints
 
 
 --
--- Name: pcon_minval_names_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY pcon_minval_names
@@ -1655,7 +1655,7 @@ ALTER TABLE ONLY pcon_minval_names
 
 
 --
--- Name: pcon_range_constraints_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY pcon_range_constraints
@@ -1663,7 +1663,7 @@ ALTER TABLE ONLY pcon_range_constraints
 
 
 --
--- Name: pcon_range_names_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY pcon_range_names
@@ -1671,7 +1671,7 @@ ALTER TABLE ONLY pcon_range_names
 
 
 --
--- Name: port_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY port
@@ -1679,7 +1679,7 @@ ALTER TABLE ONLY port
 
 
 --
--- Name: provisioning_domain_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY provisioning_domain
@@ -1687,7 +1687,7 @@ ALTER TABLE ONLY provisioning_domain
 
 
 --
--- Name: range_constraint_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY range_constraint
@@ -1695,7 +1695,7 @@ ALTER TABLE ONLY range_constraint
 
 
 --
--- Name: range_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY range
@@ -1703,7 +1703,7 @@ ALTER TABLE ONLY range
 
 
 --
--- Name: reservation_params_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY reservation_params
@@ -1711,7 +1711,7 @@ ALTER TABLE ONLY reservation_params
 
 
 --
--- Name: reservation_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY reservation
@@ -1719,7 +1719,7 @@ ALTER TABLE ONLY reservation
 
 
 --
--- Name: sdh_device_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY sdh_device
@@ -1727,7 +1727,7 @@ ALTER TABLE ONLY sdh_device
 
 
 --
--- Name: sdh_domain_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY sdh_domain
@@ -1735,7 +1735,7 @@ ALTER TABLE ONLY sdh_domain
 
 
 --
--- Name: sdh_port_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY sdh_port
@@ -1743,7 +1743,7 @@ ALTER TABLE ONLY sdh_port
 
 
 --
--- Name: service_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY service
@@ -1751,7 +1751,7 @@ ALTER TABLE ONLY service
 
 
 --
--- Name: spanning_tree_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY spanning_tree
@@ -1759,7 +1759,7 @@ ALTER TABLE ONLY spanning_tree
 
 
 --
--- Name: state_admin_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY state_admin
@@ -1767,7 +1767,7 @@ ALTER TABLE ONLY state_admin
 
 
 --
--- Name: state_oper_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY state_oper
@@ -1775,7 +1775,7 @@ ALTER TABLE ONLY state_oper
 
 
 --
--- Name: stm_link_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY stm_link
@@ -1783,7 +1783,7 @@ ALTER TABLE ONLY stm_link
 
 
 --
--- Name: stm_type_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY stm_type
@@ -1791,7 +1791,7 @@ ALTER TABLE ONLY stm_type
 
 
 --
--- Name: version_info_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY version_info
@@ -1799,7 +1799,7 @@ ALTER TABLE ONLY version_info
 
 
 --
--- Name: vlan_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY vlan
@@ -1807,7 +1807,7 @@ ALTER TABLE ONLY vlan
 
 
 --
--- Name: vlan_port_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY vlan_port
@@ -1815,7 +1815,7 @@ ALTER TABLE ONLY vlan_port
 
 
 --
--- Name: vlan_tag_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY vlan_tag
@@ -1823,7 +1823,7 @@ ALTER TABLE ONLY vlan_tag
 
 
 --
--- Name: vtp_domain_pkey; Type: CONSTRAINT; Schema: public; Owner: jra3; Tablespace: 
+
 --
 
 ALTER TABLE ONLY vtp_domain
