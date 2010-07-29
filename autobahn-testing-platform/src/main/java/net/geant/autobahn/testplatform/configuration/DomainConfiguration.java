@@ -41,8 +41,6 @@ public class DomainConfiguration {
 		
 		dmProps = new MyProperties(is);
 		dmProps = updateDmProperties(dmProps);
-		
-		System.out.println("Username set to: " + dmProps.getProperty("db.user"));
 	}
 	
 	public void writeConfigurationFiles() throws IOException {
@@ -278,8 +276,6 @@ public class DomainConfiguration {
 	        String username = dmProps.getProperty("db.user");
 	        String password = dmProps.getProperty("db.pass");
 	        
-	        System.out.println("Using: " + username + " to connect");
-	        
 	        connection = DriverManager.getConnection(url, username, password);
 	        
 	    } catch (ClassNotFoundException e) {
@@ -342,8 +338,6 @@ public class DomainConfiguration {
 	private MyProperties updateDbProperties(MyProperties props) {
 		if(props == null)
 			return null;
-		
-		System.out.println("Setting the username to: " + defaultConf.getProperty("default.db-user"));
 		
 		props.setProperty("db.host", defaultConf.getProperty("default.db-host"));
 		props.setProperty("db.port", defaultConf.getProperty("default.db-port"));
