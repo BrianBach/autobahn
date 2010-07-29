@@ -47,9 +47,9 @@ public class PublicIdentifiersMapping {
     }
 
     /**
-     * Returns the real identifier of the port, for specified firendly name.
+     * Returns the real identifier of the port, for specified friendly name.
      * 
-     * @param id String firendly name of the port
+     * @param id String friendly name of the port
      * @return String real identifier
      */
     public String getIdentifierFor(String id) {

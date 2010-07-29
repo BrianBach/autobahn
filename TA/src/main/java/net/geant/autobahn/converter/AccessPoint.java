@@ -1,8 +1,10 @@
 package net.geant.autobahn.converter;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -56,6 +58,7 @@ public final class AccessPoint implements TopologyAbstraction {
             throw new Exception("Could not load app.properties: " + e.getMessage());
         }
 
+        runBeforeInitChecks();
         // Initialization of the module has not been completed, as we
         // yet don't have topology information. Initialization will be
         // performed as soon as DM send IntradomainTopology information
@@ -75,6 +78,12 @@ public final class AccessPoint implements TopologyAbstraction {
         else {
             throw new Exception("No properties provided.");
         }
+        
+        runBeforeInitChecks();
+        // Initialization of the module has not been completed, as we
+        // yet don't have topology information. Initialization will be
+        // performed as soon as DM send IntradomainTopology information
+        // (in the setIntradomainTopology function)
     }
 
     /**
@@ -112,14 +121,14 @@ public final class AccessPoint implements TopologyAbstraction {
     }
     
     /**
-     * Initializes the module:<br/>
-     * - retrieves intradomain topology from DM<br/>
-     * - retrieves intradomain pathfinder from DM<br/>
-     * - retrieves properties from DM<br/>
+     * Initializes the TA module:<br/>
+     * Uses the topology received from DM to
+     * - initialize pathfinder<br/>
+     * - initialize topology converter<br/>
      */
     public void init() throws Exception {
         
-        log.info("===== Topology Abtraction module Initialization =====");
+        log.info("===== Topology Abstraction module Initialization =====");
         long stime = System.currentTimeMillis();
 
         if(!topology.isEmpty()) {
@@ -133,6 +142,9 @@ public final class AccessPoint implements TopologyAbstraction {
 
         float total = (System.currentTimeMillis() - stime) / 1000.0f;
 
+        // Run some checks now that we are done
+        runAfterInitChecks();
+        
         log.info("===== End of initialization - " + total + " secs =====");
     }
     
@@ -239,5 +251,80 @@ public final class AccessPoint implements TopologyAbstraction {
             return ((EthernetTopologyConverter) converter).getAllEdgeLinks();
         
         return null;
+    }
+    
+    /**
+     * Performs checks before initialization has taken place
+     */
+    public void runBeforeInitChecks() {
+        log.info("===== Pre-initialization check for Topology Abstraction module. Watch out for any messages below... =====");
+        
+        // Check properties
+        
+        String id_nodes = properties.getProperty("id.nodes");
+        if (id_nodes == null || id_nodes.equals("none") || id_nodes.equals("")) {
+            log.info("id.nodes is empty, please check ta.properties file.");
+        }
+        String id_ports = properties.getProperty("id.ports");
+        if (id_ports == null || id_ports.equals("none") || id_ports.equals("")) {
+            log.info("id.ports is empty, please check ta.properties file.");
+        }
+        String id_links = properties.getProperty("id.links");
+        if (id_links == null || id_links.equals("none") || id_links.equals("")) {
+            log.info("id.links is empty, please check ta.properties file.");
+        }
+        
+        String lookuphost = properties.getProperty("lookuphost");
+        if (lookuphost == null || lookuphost.equals("none") || lookuphost.equals("")) {
+            log.info("lookuphost is empty. Database entries for interdomain links will have to contain" +
+            		"both local and remote port names as the remote port name will not be recovered through the LS.");
+        }
+        
+        log.info("===== Pre-initialization check for Topology Abstraction module is complete. =====");
+    }
+    
+    /**
+     * Performs checks after initialization has taken place
+     */
+    public void runAfterInitChecks() {
+        log.info("===== Post-initialization check for Topology Abstraction module. Watch out for any messages below... =====");
+        
+        // Check public.ids
+        
+        FileInputStream fis = null;
+        Properties public_ids = new Properties();
+        try {
+            fis = new FileInputStream(properties.getProperty("public.ids.file"));
+            public_ids.load(fis);
+            fis.close();
+        } catch (IOException e) {
+            log.info("public.ids.file property points to a non-existing or non-accessible file:");
+            log.info(e.getMessage());
+            log.info("It will not be possible to map public to private names of local ports of interdomain links.");
+        }
+        
+        // Check whether the public.ids in the file correspond to ports in the topology
+        List<GenericLink> glinks = topology.getGenericLinks();
+        boolean found = false;
+        for (Enumeration e = public_ids.propertyNames() ; e.hasMoreElements() ;) {
+            String portName_key = (String) e.nextElement();
+            String portName_value = public_ids.getProperty(portName_key);
+            found = false;
+            for (GenericLink gl : glinks) {
+                if (portName_key.equals(gl.getStartInterface().getName()) ||
+                        portName_key.equals(gl.getEndInterface().getName()) ||
+                        portName_value.equals(gl.getStartInterface().getName()) ||
+                        portName_value.equals(gl.getEndInterface().getName()) ) {
+                    log.debug("Check OK: Entry " + portName_key + "=" + portName_value + " from public.ids file exists in DB.");
+                    found = true;
+                    break;  // No need to go through all GenericLinks
+                }
+            }
+            if (!found) {
+                log.info("Entry " + portName_key + "=" + portName_value + " from public.ids file does not exist in DB." +
+                		"This will almost certainly create problems! Please check for mis-typed port names.");
+            }
+        }
+        log.info("===== Post-initialization check for Topology Abstraction module is complete. =====");
     }
 }
