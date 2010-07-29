@@ -37,6 +37,10 @@ public abstract class InterdomainPathfinderAbstractImpl implements InterdomainPa
         
         List<AdminDomain> neighbors = new ArrayList<AdminDomain>();
         
+        if (domain == null) {
+            return neighbors;
+        }
+        
         try {
             // Retrieve the links and nodes from the topology object
             List<Link> links = topology.getLinks();

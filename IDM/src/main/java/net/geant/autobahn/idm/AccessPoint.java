@@ -4,6 +4,8 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -30,6 +32,7 @@ import net.geant.autobahn.interdomain.NoSuchReservationException;
 import net.geant.autobahn.interdomain.pathfinder.InterdomainPathfinder;
 import net.geant.autobahn.interdomain.pathfinder.InterdomainPathfinderImplDFS;
 import net.geant.autobahn.interdomain.pathfinder.TopologyImpl;
+import net.geant.autobahn.intradomain.common.GenericLink;
 import net.geant.autobahn.lookup.*;
 import net.geant.autobahn.network.AdminDomain;
 import net.geant.autobahn.network.Link;
@@ -100,12 +103,6 @@ public final class AccessPoint implements UserAccessPoint,
     
     private IdmDAOFactory daos = null;
     
-    /**
-     * Entry point for application:
-     * reads properties from app.properties (some properties can be changed later
-     * via monitoring interface), sets ssl properties, calls <code>init</code> method
-     * @throws Exception when one of the submodules could not be initialized
-     */
 	private AccessPoint() throws Exception {
 	}
 
@@ -129,8 +126,7 @@ public final class AccessPoint implements UserAccessPoint,
 	}
 	
 	/**
-     * Initializes sub modules:
-     * Most sub modules can be configured through app.properties
+     * Initializes IDM module
      */
 	public void init() {
 		Properties properties = new Properties();
@@ -144,9 +140,9 @@ public final class AccessPoint implements UserAccessPoint,
 		} catch (IOException e) {
 			log.info("Could not load app.properties: " + e.getMessage());
 		}
-	        
+	    
 	    init(properties);
-	 }
+	}
 	
 	/**
 	 * Initializes the instance using given properties. 
@@ -158,12 +154,19 @@ public final class AccessPoint implements UserAccessPoint,
 		
         state = State.RESTARTING;
 		
+        runBeforeInitChecks();
+        
         log.info("===== Initialization =====");
         
         long stime = System.currentTimeMillis();
         
 		domainURL = properties.getProperty("domain");
 		domainName = properties.getProperty("domainName");
+		if (domainName == null || domainName.equals("none") || domainName.equals("")) {
+		    log.info("domainName property does not exist. Will try to use domain property" +
+		    		"(" + domainURL + ") both as the IDM URL and as the domain name.");
+		    domainName = domainURL;
+		}
 
 		try {
 	        IdmHibernateUtil.configure(properties.getProperty("db.host"), 
@@ -235,6 +238,8 @@ public final class AccessPoint implements UserAccessPoint,
         
         float total = (System.currentTimeMillis() - stime) / 1000.0f;
         log.info("===== End of initialization - " + total + " secs =====");
+        
+        runAfterInitChecks();
 	}
 	
 	 /**
@@ -1015,4 +1020,57 @@ public final class AccessPoint implements UserAccessPoint,
 		st.setNeighbors(nbors);
 		return st;
 	}
+	
+    /**
+     * Performs checks before initialization has taken place
+     */
+    public void runBeforeInitChecks() {
+        log.info("===== Pre-initialization check for IDM module. Watch out for any messages below... =====");
+        
+        // Check properties
+        
+        String domain = properties.getProperty("domain");
+        if (domain == null || domain.equals("none") || domain.equals("")) {
+            log.info("domain field is empty, please check idm.properties file.");
+        }
+        // Check if it is a proper URL
+        try {
+            new URL(domain);
+        } catch (MalformedURLException e) {
+            log.info("domain field is not a proper URL:");
+            log.info(e.getMessage());
+        }
+        
+        String domainName = properties.getProperty("domainName");
+        if (domainName == null || domainName.equals("none") || domainName.equals("")) {
+            log.info("domainName field is empty, please check idm.properties file." +
+            		"The system will assume the IDM URL (" + domainURL + ") is also the domain name");
+            domainName = domainURL;
+        }
+        
+        String lookuphost = properties.getProperty("lookuphost");
+        if (lookuphost == null || lookuphost.equals("none") || lookuphost.equals("")) {
+            log.info("lookuphost is empty. IDM will not be able to register itself at the LS." +
+            		"This will only work if other IDMs already have the URL of this IDM as the " +
+            		"domain name in their DBs.");
+        }
+        
+        log.info("===== Pre-initialization check for IDM module is complete. =====");
+    }
+    
+    /**
+     * Performs checks after initialization has taken place
+     */
+    public void runAfterInitChecks() {
+        log.info("===== Post-initialization check for IDM module. Watch out for any messages below... =====");
+        
+        // Check if the domainName exists in the database
+        if (daos.getAdminDomainDAO().getByBodID(domainName) == null) {
+            log.info("The domain " + domainName + " does not exist in the DB. " +
+                    "This is almost certainly a problem. Please check the idm.properties " +
+                    "and the admin domains in the DB.");
+        }
+        
+        log.info("===== Post-initialization check for IDM module is complete. =====");
+    }
 }
