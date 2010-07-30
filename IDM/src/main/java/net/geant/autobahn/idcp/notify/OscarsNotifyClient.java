@@ -18,7 +18,7 @@ import org.oasis_open.docs.wsn.b_2.TopicExpressionType;
 /**
  * Used to send messages(events) to OSCARSNotify web service
  * Only Notify method is supported as others are not needed by Autobahn
- * @author Micha³
+ * @author Michal
  *
  */
 public class OscarsNotifyClient {
