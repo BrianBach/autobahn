@@ -2,6 +2,8 @@ package net.geant.autobahn.calendar;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -129,15 +131,21 @@ public final class AccessPoint implements ResourcesReservationCalendar {
      */
     public void init() throws Exception {
         
-        log.info("===== Resources Reservation module Initialization =====");
+        runBeforeInitChecks();
+        
+        log.info("===== ResourcesReservationCalendar module Initialization =====");
         long stime = System.currentTimeMillis();
         
         float total = (System.currentTimeMillis() - stime) / 1000.0f;
         
-        log.info("===== End of initialization - " + total + " secs =====");
-    
+        String type = properties.getProperty("db.type");
+        if (type != null) {
+            type = type.toLowerCase();
+        }
+        else {
+            throw new Exception("db.type property can not be empty!");
+        }
         
-        String type = properties.getProperty("db.type").toLowerCase();
     	if(type.equals("eth") || type.equals("ethernet")) {
     		this.constraintsCalendar = new EthConstraintsReservationCalendar();	
     	} else if(type.equals("sdh")) {
@@ -146,6 +154,10 @@ public final class AccessPoint implements ResourcesReservationCalendar {
     	
     	this.setupTime = Integer.valueOf(properties.getProperty("tool.time.setup"));
     	this.teardownTime = Integer.valueOf(properties.getProperty("tool.time.teardown"));
+    	
+        log.info("===== End of ResourcesReservationCalendar module initialization - " + total + " secs =====");
+        
+    	runAfterInitChecks();
 	}
     
     /* (non-Javadoc)
@@ -246,4 +258,34 @@ public final class AccessPoint implements ResourcesReservationCalendar {
         log.debug("List of links that do not have capacity:"+result);
 		return result;
 	}
+    
+    /**
+     * Performs checks before initialization has taken place
+     */
+    public void runBeforeInitChecks() {
+        log.info("===== Pre-initialization check for ResourcesReservationCalendar module. Watch out for any messages below... =====");
+        
+        // Check properties
+        
+        String db_type = properties.getProperty("db.type");
+        if (db_type == null || db_type.equals("none") || db_type.equals("")) {
+            log.info("db.type property is empty, please check calendar.properties file.");
+        }
+        else if (!db_type.equals("ethernet") && !db_type.equals("eth") && !db_type.equals("sdh")) {
+            log.info("db.type property currently supports either ethernet (or eth) or sdh value");
+        }
+        
+        log.info("===== Pre-initialization check for ResourcesReservationCalendar module is complete. =====");
+    }
+    
+    /**
+     * Performs checks after initialization has taken place
+     */
+    public void runAfterInitChecks() {
+        log.info("===== Post-initialization check for ResourcesReservationCalendar module. Watch out for any messages below... =====");
+
+        // Add any checks here
+        
+        log.info("===== Post-initialization check for ResourcesReservationCalendar module is complete. =====");
+    }
 }
