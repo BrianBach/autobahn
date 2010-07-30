@@ -119,10 +119,9 @@ public class DomainConfiguration {
 				dstLibDir.mkdir();
 				
 				File libDir = new File(src, "lib");
-				for(File lib : libDir.listFiles()) {
-					if(lib.isFile())
-						copy(lib, new File(dstLibDir, lib.getName()));
-				}
+
+				copy(libDir, dstLibDir);
+				copy(new File(src, "etc"), new File(dest, "etc"));
 				
 				copy(new File(src, "start.bat"), 
 						new File(dest, "start.bat"));
@@ -289,6 +288,18 @@ public class DomainConfiguration {
 	
 	
     public static void copy(File src, File dst) throws IOException {
+    	
+    	if(src.isDirectory()) {
+    		if(!dst.exists())
+    			dst.mkdir();
+    		
+    		for(File f : src.listFiles()) {
+    			copy(f, new File(dst, f.getName()));
+    		}
+    		
+    		return;
+    	}
+    	
         InputStream in = new FileInputStream(src);
         OutputStream out = new FileOutputStream(dst);
     
