@@ -54,7 +54,7 @@ import org.hibernate.Transaction;
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(name="IntradomainTopology", namespace="intradomain.autobahn.geant.net", propOrder={
         "genericLinks", "nodes", "sptrees", "ethpp", "vlaps",
-        "stmLinks", "sdhDevices", "type", "domainAddress"
+        "stmLinks", "sdhDevices", "type", "domainName"
 })
 public class IntradomainTopology {
 
