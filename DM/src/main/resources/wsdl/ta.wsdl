@@ -141,7 +141,7 @@
       <xs:element maxOccurs="unbounded" minOccurs="0" name="stmLinks" nillable="true" type="ns3:StmLink"/>
       <xs:element maxOccurs="unbounded" minOccurs="0" name="sdhDevices" nillable="true" type="ns3:SdhDevice"/>
       <xs:element minOccurs="0" name="type" type="tns:Type"/>
-      <xs:element minOccurs="0" name="domainAddress" type="xs:string"/>
+      <xs:element minOccurs="0" name="domainName" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 <xs:simpleType name="Type">
