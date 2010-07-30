@@ -168,8 +168,8 @@ function setup_database {
                                 rm -f tempdbname.tmp
                                 dbuser=`cat $path_only/tempdbuser.tmp`
                                 rm -f tempdbuser.tmp
-				psql $dbname -U $dbuser < $FILE
-				log "psql $path_only/$dbname -U $dbuser < $FILE returned $?"
+				sudo -u postgres psql $dbname < $FILE
+				log "sudo -u postgres psql $path_only/$dbname < $FILE returned $?"
 			fi
 				  ;;
 			255) val_sql=1;;
@@ -416,7 +416,7 @@ function delete_all_tunnels {
 }
 
 function property_editor {
-	$path_only/self-check.sh -f
+	source $path_only/self-check.sh -f
 }
 
 readonly -f install_tunnels
@@ -500,8 +500,8 @@ function setup_database_c {
                                 rm -f tempdbuser.tmp
 
 				val_sql=1
-                psql $dbname -U $dbuser < $FILE
-				log "I ran psql $dbname -U $dbuser < $FILE, if unsuccessful either psql doesn't exist or the user doesn't have the appropriate permissions"
+                sudo -u postgres psql $dbname < $FILE
+				log "I ran sudo -u postgres psql $dbname < $FILE, if unsuccessful either psql doesn't exist or the user doesn't have the appropriate permissions"
 			fi
 				  ;;
 		esac	
@@ -711,15 +711,18 @@ declare -t main_loop_with_gui
 readonly -f simple_ui
 declare -t simple_ui
 
+#reset arguments for getopts
+OPTIND=1
+
 #Manages command-line options
 while getopts "ncbxCialLhfDpted:A:" flag; do
 	case $flag in
 		n )enterui=no;
 		if [ "$graphics" == "no" ]; then
-		   $path_only/self-check.sh -c
+		   source $path_only/self-check.sh -c
 		else
 		   graphics=no
-		   $path_only/self-check.sh
+		   source $path_only/self-check.sh ""
 		fi
 		;;
 		c ) graphics=no
@@ -749,7 +752,7 @@ while getopts "ncbxCialLhfDpted:A:" flag; do
 		;;
 		L ) enterui=no;graphics=no; echo;echo "I - already installed tunnel";
 					    echo "U - to-be-installed tunnel";echo
-					    $path_only/mark-tunnels.sh $path_only/routing.conf
+					    source $path_only/mark-tunnels.sh $path_only/routing.conf
 		;;
 		d)  enterui=no;graphics=no;ip tunnel del $OPTARG
 		    echo "Tunnel $OPTARG was deleted!"
@@ -769,13 +772,13 @@ while getopts "ncbxCialLhfDpted:A:" flag; do
 	
 		;;
 		e ) enterui=no;graphics=no
-			$path_only/setupall.sh
+			source $path_only/setupall.sh ""
 		;;
 		f ) enterui=no;graphics=no
-			$path_only/self-check.sh -f
+			source $path_only/self-check.sh -f
 		;;
 		p ) enterui=no;graphics=no
-			$path_only/self-check.sh -p
+	        	source $path_only/self-check.sh -p
 		;;
 		t ) enterui=no;graphics=no
 			tunnel_editor

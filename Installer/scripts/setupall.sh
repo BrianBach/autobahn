@@ -16,17 +16,17 @@ function check_ui {
 while getopts "c" flag; do
         case $flag in
 		c )	
-		$path_only/self-check.sh $@ 
-		$path_only/setup.sh $@
+		source $path_only/self-check.sh $@
+		source $path_only/setup.sh $@
 		exit 1
 		;;
 	esac
 done
-
+	
 check_ui
         if [ $? -eq 0 ]; then
 #                ../../size.sh
-		dialog --print-maxsize --stdout | awk ' $2<35{print "Your display is not enough,please run setupall.sh -c"} $3<89{print "Your display is not enough,please run setupall.sh -c"} $2<35{exit 1} $3<89{exit 1} '
+	        dialog --print-maxsize --stdout | sed 's/,//' | awk ' $2<35{print "Your display is not enough,please run setupall.sh -c"} $3<89{print "Your display is not enough,please run setupall.sh -c"} $2<35{exit 1} $3<89{exit 1} '
 		#echo "Installation begins with graphical environment";
 		#awk ' {exit 1} '
 		awkstatus=$?
@@ -34,16 +34,16 @@ check_ui
 		if [ $awkstatus -eq 0 ]; then
 			echo "Installation begins with graphical environment";
 			#exit 0
-			$path_only/self-check.sh $@ 
-			$path_only/setup.sh $@
+			source $path_only/self-check.sh $@ 
+			source $path_only/setup.sh $@
 		else
 			echo "Exiting installation"
 			exit 1
 		fi
         else
                 echo "Installation begins";
-		$path_only/self-check.sh $@ 
-		$path_only/setup.sh $@
+		source $path_only/self-check.sh $@ 
+		source $path_only/setup.sh $@
         fi
 
 

@@ -27,7 +27,7 @@ fi
 # may check the args to see if dbname
 # was provided
 # dbname=test
- cmd="psql template1  -c \"create database $dbname\" -t > /dev/null 2>&1"
+ cmd="sudo -u postgres psql template1  -c \"create database $dbname with owner $dbuser\" -t > /dev/null 2>&1"
 # echo "Return value: $?"
  eval $cmd
  if [ $? -ne 0 ]; then

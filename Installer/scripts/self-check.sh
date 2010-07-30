@@ -91,9 +91,9 @@ function perform_checks {
 
 	if test ! -x "$psql"; then
    		pushlog "$SCRIPT:$LINENO: PostgresSQL not found! Please install PostgreSQL 8.x or higher and retry!\n" >&2
-	popecholog
-	finalize
-   	exit 192
+		popecholog
+		finalize
+		exit 192
 	fi
 
 
@@ -864,7 +864,7 @@ echolog "Exported dbname=$dbname"
           export dbuser="$3"
 echolog "Exported dbuser $dbuser"
           sudo -u postgres createuser --superuser $dbuser
-          cmd="sudo -u postgres psql template1  -c \"create database $dbname\" -t > /dev/null 2>&1"
+          cmd="sudo -u postgres psql template1  -c \"create database $dbname with owner $dbuser\" -t > /dev/null 2>&1"
      echolog "Create dbuser performed."
           eval $cmd
           if [ $? -ne 0 ]; then
@@ -873,6 +873,10 @@ echolog "Exported dbuser $dbuser"
                 echolog "Database $dbname was created."
 		echolog "Proceeding to create the db structure..."
 		sudo -u postgres psql $dbname < $path_only/create_db.sql
+		
+		sudo -u postgres psql < $path_only/temp.sql
+		
+		rm -f $path_only/temp.sql
 		if [ $? -ne 0 ]; then
 			echolog "An error occured while creating the  database structure! Please make sure that the user running this program has the permissions to modify $dbname and try again or run manually create_db.sql!"
 		fi
@@ -972,6 +976,9 @@ function print_help {
 ################### M A I N  P R O G R A M ####################
 ###############################################################
 
+#reset arguments for getopts
+OPTIND=1
+	    
 #Manage command line arguments
 while getopts "cChpf" flag; do
 	case $flag in
