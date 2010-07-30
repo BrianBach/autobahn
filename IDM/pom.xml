@@ -223,11 +223,6 @@
 			<version>0.4.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>net.geant.autobahn</groupId>
-			<artifactId>autobahn-dm</artifactId>
-			<version>0.4.3-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.14</version>
