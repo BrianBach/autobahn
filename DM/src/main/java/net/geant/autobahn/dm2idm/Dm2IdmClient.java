@@ -27,7 +27,7 @@ public class Dm2IdmClient implements Dm2Idm {
 	/**
 	 * Creates an instance sending requests to a given endpoint.
 	 * 
-	 * @param endPoint URL address of an IDM
+	 * @param endPoint URL address of an IDM (dm2idm interface)
 	 */
 	public Dm2IdmClient(String endPoint) {
 		if("none".equals(endPoint)) {
@@ -44,7 +44,7 @@ public class Dm2IdmClient implements Dm2Idm {
 		if (host != null && host != "") {
 	        LookupService lookup = new LookupService(host);
 	        try {
-	            // The IDM endpoint is the /interdomain interface. Here we need
+	            // The IDM endpoint is the /interdomain interface. Here we have
 	            // the /dm2idm interface, so we have to modify the connection URL
 	            String interdomainEndpoint = endPoint.replaceFirst("/autobahn/dm2idm", "/autobahn/interdomain");
 	        	idmLocation = lookup.QueryIdmLocation(interdomainEndpoint);

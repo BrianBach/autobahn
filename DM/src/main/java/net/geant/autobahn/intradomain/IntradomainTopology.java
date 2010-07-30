@@ -1,5 +1,7 @@
 package net.geant.autobahn.intradomain;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -74,7 +76,7 @@ public class IntradomainTopology {
 	private List<SdhDevice> sdhDevices = null;
     
 	private Type type;
-	private String domainAddress;
+	private String domainName;
 
     // A public default constructor is required for JAX-RPC marshalling
     public IntradomainTopology(){}
@@ -86,7 +88,7 @@ public class IntradomainTopology {
 	 *            String url of the cNIS service, if it's "none" or null then
 	 *            database is used
 	 * @param domainId
-	 *            String url of the domain - url of the Autobahn service
+	 *            String name of the domain
 	 * @param topologyType
 	 *            String type of the topology, "eth" or "sdh"
 	 */
@@ -96,8 +98,8 @@ public class IntradomainTopology {
     	else  if(topologyType.startsWith("eth"))
     		type = Type.ETH;
 
-    	domainAddress = domainId.replace("dm2idm", "interdomain");
-    	
+        domainName = domainId;
+
     	// cNIS is not going to be used (even if it is available), in case
     	// the database is not empty, because this might create consistency problems.
     	// For example, the cNIS topology could been updated while our database
@@ -167,7 +169,7 @@ public class IntradomainTopology {
     public String TopologyString() {
         StringBuffer sb = new StringBuffer("\n----Intradomain Topology: "+this.toString());
         try {
-            sb.append("\n|-domainaddress:"+domainAddress);
+            sb.append("\n|-domainaddress:"+domainName);
             sb.append("\n|-genericLinks:");
             if (genericLinks!=null) {
                 sb.append(" size:"+genericLinks.size()+"\n");
@@ -261,7 +263,7 @@ public class IntradomainTopology {
 					
 					port.setInterfaceId(0);
 					port.setNode(node);
-					port.setDomainId(domainAddress);
+					port.setDomainId(domainName);
 					port.setClientPort(false);
 					port.setName(p.getName());
 					
@@ -370,7 +372,7 @@ public class IntradomainTopology {
 					port.setInterfaceId(0);
 					port.setNode(node);
 					port.setBandwidth(p.getBandwidth().longValue());
-					port.setDomainId(domainAddress);
+					port.setDomainId(domainName);
 					port.setClientPort(false);
 					port.setName(p.getName());
 					
@@ -691,12 +693,12 @@ public class IntradomainTopology {
         this.type = type;
     }
     
-    public void setDomainAddress(String domainAddress) {
-        this.domainAddress = domainAddress;
+    public void setDomainName(String domainName) {
+        this.domainName = domainName;
     }
     
-    public String getDomainAddress() {
-        return domainAddress;
+    public String getDomainName() {
+        return domainName;
     }
     
     public List<SpanningTree> getSptrees() {

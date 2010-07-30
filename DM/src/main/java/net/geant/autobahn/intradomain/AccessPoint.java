@@ -2,6 +2,8 @@ package net.geant.autobahn.intradomain;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -118,6 +120,8 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
     public void init() throws Exception {
         state = State.RESTARTING;
 
+        runBeforeInitChecks();
+        
         log.info("===== Initialization =====");
         long stime = System.currentTimeMillis();
         
@@ -180,6 +184,8 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
 
         float total = (System.currentTimeMillis() - stime) / 1000.0f;
         log.info("===== End of initialization - " + total + " secs =====");
+        
+        runAfterInitChecks();
     }
         
     /**
@@ -367,4 +373,63 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
             log.error("Error while init", e);
         }
 	}
+    
+    /**
+     * Performs checks before initialization has taken place
+     */
+    public void runBeforeInitChecks() {
+        log.info("===== Pre-initialization check for DM module. Watch out for any messages below... =====");
+        
+        // Check properties
+        
+        String domainName = properties.getProperty("domainName");
+        if (domainName == null || domainName.equals("none") || domainName.equals("")) {
+            log.info("domainName field is empty, please check dm.properties file.");
+        }
+        
+        String lookuphost = properties.getProperty("lookuphost");
+        if (lookuphost == null || lookuphost.equals("none") || lookuphost.equals("")) {
+            log.info("lookuphost is empty. The DM may need the LS in order to communicate with the IDM.");
+        }
+        
+        String idm_address = properties.getProperty("idm.address");
+        try {
+            new URL(idm_address);
+        } catch (MalformedURLException e) {
+            log.info("idm.address field is not a proper URL:");
+            log.info(e.getMessage());
+            log.info("Please check dm.properties file.");
+        }
+        
+        String topologyabstraction_address = properties.getProperty("topologyabstraction.address");
+        try {
+            new URL(topologyabstraction_address);
+        } catch (MalformedURLException e) {
+            log.info("topologyabstraction.address field is not a proper URL:");
+            log.info(e.getMessage());
+            log.info("Please check dm.properties file.");
+        }
+        
+        String resourcesreservationcalendar_address = properties.getProperty("resourcesreservationcalendar.address");
+        try {
+            new URL(resourcesreservationcalendar_address);
+        } catch (MalformedURLException e) {
+            log.info("resourcesreservationcalendar.address field is not a proper URL:");
+            log.info(e.getMessage());
+            log.info("Please check dm.properties file.");
+        }
+        
+        log.info("===== Pre-initialization check for DM module is complete. =====");
+    }
+    
+    /**
+     * Performs checks after initialization has taken place
+     */
+    public void runAfterInitChecks() {
+        log.info("===== Post-initialization check for DM module. Watch out for any messages below... =====");
+
+        // Add any checks here
+        
+        log.info("===== Post-initialization check for DM module is complete. =====");
+    }
 }
