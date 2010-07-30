@@ -142,10 +142,10 @@ public final class AccessPoint implements TopologyAbstraction {
 
         float total = (System.currentTimeMillis() - stime) / 1000.0f;
 
-        // Run some checks now that we are done
-        runAfterInitChecks();
-        
         log.info("===== End of initialization - " + total + " secs =====");
+        
+        // Run some checks now that we are done
+        runAfterInitChecks();        
     }
     
     /* (non-Javadoc)
