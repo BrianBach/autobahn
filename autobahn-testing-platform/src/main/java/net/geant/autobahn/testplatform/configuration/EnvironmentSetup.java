@@ -79,10 +79,10 @@ public class EnvironmentSetup {
 			String os = System.getProperty("os.name").toLowerCase();
 			
 			AutobahnManagement domain = null;
-			if(os.indexOf("windows") > 0) {
+			if(os.indexOf("windows") >= 0) {
 				domain = factory.createWindowsInstance(conf.getHome(), 
 						conf.buildAutobahnUrl(""));
-			} else if(os.indexOf("nix") > 0 || os.indexOf("nux") > 0) {
+			} else if(os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0) {
 				domain = factory.createLinuxInstance(conf.getHome(), 
 						conf.buildAutobahnUrl(""));
 			}
