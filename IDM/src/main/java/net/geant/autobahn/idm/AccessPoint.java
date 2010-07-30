@@ -1045,7 +1045,6 @@ public final class AccessPoint implements UserAccessPoint,
         if (domainName == null || domainName.equals("none") || domainName.equals("")) {
             log.info("domainName field is empty, please check idm.properties file." +
             		"The system will assume the IDM URL (" + domainURL + ") is also the domain name");
-            domainName = domainURL;
         }
         
         String lookuphost = properties.getProperty("lookuphost");
