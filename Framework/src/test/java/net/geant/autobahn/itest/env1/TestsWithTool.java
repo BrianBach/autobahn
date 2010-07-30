@@ -155,7 +155,7 @@ public class TestsWithTool {
 	@AfterClass
 	public static void cleanup() {
         try {
-        	Thread.sleep(10 * 1000);
+        	Thread.sleep(20 * 1000);
         } catch(Exception e) {
         }
         observer.stop();
@@ -164,6 +164,10 @@ public class TestsWithTool {
 		domain1.stopInstance();
 		domain2.stopInstance();
 		domain3.stopInstance();
+        try {
+        	Thread.sleep(20 * 1000);
+        } catch(Exception e) {
+        }
 	}
 }
 
