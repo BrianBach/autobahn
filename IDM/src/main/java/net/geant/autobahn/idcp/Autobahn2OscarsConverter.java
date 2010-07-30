@@ -5,6 +5,7 @@ package net.geant.autobahn.idcp;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +53,40 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
     public List<Link> getTopology() throws Exception {
         OscarsClient oscars = new OscarsClient();
         return oscars.getTopology();
+    }
+    
+    public List<Link> getEndpoints() throws Exception {
+    	
+    	List<Link> links = this.getTopology();
+    	List<Link> endpoints = new ArrayList<Link>();
+    	
+    	for (int i=0; i<links.size(); i++) {
+    		
+    		String[] split = links.get(i).getBodID().split(":");
+    		
+    		if (split[6].equals("*")) {
+    			endpoints.add(links.get(i));
+    		}
+    	}
+    	
+    	return endpoints;
+    }
+    
+    public List<Link> getLinks() throws Exception {
+    	
+    	List<Link> links = this.getTopology();
+    	List<Link> oscarsLinks = new ArrayList<Link>();
+    	
+    	for (int i=0; i<links.size(); i++) {
+    		
+    		String[] split = links.get(i).getBodID().split(":");
+    		    		
+    		if (!split[6].equals("*")) {
+    			oscarsLinks.add(links.get(i));
+    		}    		   		
+    	}
+    	
+    	return oscarsLinks;
     }
     
     public List<Reservation> listReservations() throws IOException {
