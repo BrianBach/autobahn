@@ -29,6 +29,8 @@ import net.geant.autobahn.reservation.ReservationStatusListener;
 import net.geant.autobahn.reservation.Service;
 import net.geant.autobahn.reservation.User;
 
+import net.geant.autobahn.idcp.notify.OscarsNotifyClient;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -225,21 +227,21 @@ public class Oscars2Autobahn implements ReservationStatusListener {
      * @see net.geant.autobahn.reservation.ReservationStatusListener#reservationActive(java.lang.String)
      */
     public void reservationActive(String reservationId) {
-        notifyIDC(reservationId);
+        notifyIDC(reservationId, "PATH_SETUP_COMPLETED");
     }
 
     /* (non-Javadoc)
      * @see net.geant.autobahn.reservation.ReservationStatusListener#reservationCancelled(java.lang.String)
      */
     public void reservationCancelled(String reservationId) {
-        notifyIDC(reservationId);
+        notifyIDC(reservationId, "RESERVATION_CANCEL_COMPLETED");
     }
 
     /* (non-Javadoc)
      * @see net.geant.autobahn.reservation.ReservationStatusListener#reservationFinished(java.lang.String)
      */
     public void reservationFinished(String reservationId) {
-        notifyIDC(reservationId);
+        notifyIDC(reservationId, "PATH_TEARDOWN_COMPLETED");
     }
 
     /* (non-Javadoc)
@@ -257,7 +259,7 @@ public class Oscars2Autobahn implements ReservationStatusListener {
             resv.notify();
         }
         
-        notifyIDC(reservationId);
+        notifyIDC(reservationId, "RESERVATION_CREATE_FAILED");
     }
 
     /* (non-Javadoc)
@@ -274,7 +276,7 @@ public class Oscars2Autobahn implements ReservationStatusListener {
             resv.notify();
         }
         
-        notifyIDC(reservationId);
+        notifyIDC(reservationId, "RESERVATION_CREATE_COMPLETED");
     }
 
     public void reservationModified(String reservationId, boolean success) {
@@ -282,13 +284,15 @@ public class Oscars2Autobahn implements ReservationStatusListener {
         
     }
     
-    private void notifyIDC(String reservationId) {
-/*      try {
-            ProxyClient proxy = new ProxyClient();
-            Reservation res = cache.get(reservationId);
-            proxy.Notify(Autobahn2OscarsConverter.convertReservation(res));
-        } catch(IOException e) {
-            log.error("notify error: " + e.getMessage());
-        }
-*/  }
+    /**
+     * This method sends event notifications to an IDCP instance,
+     * every time reservation state changes
+     * @param reservationID reservation ID
+     * @param eventName event name sent to an IDCP instance
+     */
+    private void notifyIDC(String reservationID, String eventName) {
+    	
+    	OscarsNotifyClient oscarsNotify = new OscarsNotifyClient();
+    	oscarsNotify.Notify(cache.get(reservationID), eventName);
+    }
 }

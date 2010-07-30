@@ -75,7 +75,7 @@ public class OSCARSImpl implements OSCARS {
 		for (int i=0; i < pathInfo.value.getPath().getHop().size(); i++) {
 			hops[i] = pathInfo.value.getPath().getHop().get(i);
 		}
-        System.out.println("Hops received: " + hops.length);
+        //System.out.println("Hops received: " + hops.length);
         
         CtrlPlaneHopContent srcHop = hops[hops.length - 2];
         String src = srcHop.getLinkIdRef();
