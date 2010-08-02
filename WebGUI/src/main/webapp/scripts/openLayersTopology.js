@@ -5,7 +5,7 @@ function init() {
                projection: new OpenLayers.Projection('EPSG:900913'),
                displayProjection: new OpenLayers.Projection('EPSG:4326'),
                units: 'm',
-               numZoomLevels: 6,
+               numZoomLevels: 8,
                maxResolution: 1565143.0339,
                maxExtent: new OpenLayers.Bounds(-20037508, -20037508,
                                                 20037508, 20037508.34)
@@ -210,7 +210,7 @@ function onFeatureUnselect(evt) {
 
 function make_all(map){
 if (GBrowserIsCompatible()) {
-    setInterval('refreashMap(map)',15000);
+    setInterval('refreashMap(map)',150000);
     refreashMap(map);
   }else {
     alert('Sorry, the Google Maps API is not compatible with this browser');

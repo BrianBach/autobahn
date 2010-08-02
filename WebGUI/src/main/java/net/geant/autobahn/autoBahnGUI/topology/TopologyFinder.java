@@ -56,6 +56,8 @@ public class TopologyFinder implements TopologyFinderNotifier{
 	 * Topology representation
 	 */
 	private Topology topology = new Topology();
+	
+	private Map<String,InterfaceComponent> map = new HashMap<String, InterfaceComponent>();
   	
 	/**
 	 * Updates topology by analysing manager data
@@ -114,6 +116,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 		InterDomainManager startDomain=null;
 		InterDomainManager endDomain=null;
 		List<String> strings = new ArrayList<String>();
+		String clientDomain = null;
 		LookupService lookup = manager.getLookupServiceObject();
 		
 		try {
@@ -183,6 +186,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 							try {
 								if(link.getEndPort().getNode().getProvisioningDomain().getAdminDomain().isClientDomain()){
 									strings.add(startDomain.getStatus().getDomain());
+									clientDomain = new String(link.getEndPort().getBodID());
 									continue;
 								}
 								String temp = lookup.QueryIdmLocation(link.getEndPort().getNode().getProvisioningDomain().getAdminDomain().getBodID());
@@ -237,17 +241,18 @@ public class TopologyFinder implements TopologyFinderNotifier{
 					top.addLine(line);
 					
 					ic = new InterfaceComponent(startDomain.getStatus().getDomain(),startLatitude,startLongitude,endLatitude,endLongitude,
-							1,reservations.get(i).getState());
+							1,reservations.get(i).getState(),clientDomain);
 					components.add(ic);
 					
 					ic = new InterfaceComponent(endDomain.getStatus().getDomain(),endLatitude,endLongitude,startLatitude,startLongitude,
-							1,reservations.get(i).getState());
+							1,reservations.get(i).getState(),clientDomain);
 					components.add(ic);
 
 					}
 				}	
 			}
 		}
+
 		if(components != null && strings != null)
 			top.addTopology(setInterfaceInReservationTopology(components, strings));
 		
@@ -277,7 +282,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 					biring = biring + 180;
 					List<Double> list = getDestinationPoint(ic.getStartLatitude(),ic.getStartLongitude(),biring, 300);
 						
-						marker = createMarker (ic.getName(),list.get(0),list.get(1),Marker.DEFAULT_ICON_INTERFACE, null);	
+						marker = createMarker (ic.getName(),list.get(0),list.get(1),Marker.DEFAULT_ICON_INTERFACE, createHTMLPortInfo(null));	
 						top.addMarker(marker);
 						
 						line = new Line();
@@ -399,16 +404,20 @@ public class TopologyFinder implements TopologyFinderNotifier{
 							topology.addLine(line);
 							
 							ic = new InterfaceComponent(status.getDomain(), status.getLatitude(), status.getLongitude(), 
-									statusNeighbor.getLatitude(),statusNeighbor.getLongitude(), list.size(), isActive?9:23);
+									statusNeighbor.getLatitude(),statusNeighbor.getLongitude(), list.size(), isActive?9:23, list);
 							interfaceComponents.add(ic);
 					}
 				}
 			}
 			interfaces.put(status.getDomain(),interfaceComponents);
 		}
-		if(interfaces != null)
-			setInterfaceInMainTopology(interfaces);	
+		
+
+			if(interfaces != null)
+				setInterfaceInMainTopology(interfaces);
+
 	}
+
 	@SuppressWarnings("unchecked")
 	public void setInterfaceInMainTopology(Map<String, List<InterfaceComponent>> interfaces){
 
@@ -425,7 +434,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 					for (int i = 0; i < components.size(); i++) {
 						
 						marker = createMarker (components.get(i).getName(),components.get(i).getStartLatitude(),components.get(i).getStartLongitude(),
-						Marker.DEFAULT_ICON_INTERFACE, null);
+						Marker.DEFAULT_ICON_INTERFACE, createHTMLPortInfo(components.get(i).getInterf()));
 						topology.addMarker(marker);
 						
 						line = new Line();
@@ -437,6 +446,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 						line.setTickness("3");
 						line.setOblique(0);
 						topology.addLine(line);
+						
 					}
 				}
 			}
@@ -467,7 +477,8 @@ public class TopologyFinder implements TopologyFinderNotifier{
 			for (int i = 0; i < number; i++) {
 				
 				List<Double> ld = getDestinationPoint(list.get(0).getStartLatitude(),list.get(0).getStartLongitude(),biring,300);
-				interfaceComponent = new InterfaceComponent(list.get(0).getName(),new Float(ld.get(0)), new Float(ld.get(1)));
+				interfaceComponent = new InterfaceComponent(list.get(0).getName(),new Float(ld.get(0)), new Float(ld.get(1)),list.get(0).getList().get(i));
+				map.put(list.get(0).getList().get(i), interfaceComponent);
 				components.add(interfaceComponent);
 				biring = biring + range;			
 			}
@@ -477,13 +488,14 @@ public class TopologyFinder implements TopologyFinderNotifier{
 			max = max - 10;
 			min = min + 10;
 			range = max - min;
-			range = range / number;
+			range = range / (number + 1);
 			double biring = min + range;
 		
 			for (int i = 0; i < number; i++) {
 				
 				List<Double> ld = getDestinationPoint(list.get(0).getStartLatitude(),list.get(0).getStartLongitude(),biring,300);
-				interfaceComponent = new InterfaceComponent(list.get(0).getName(),new Float(ld.get(0)), new Float(ld.get(1)));
+				interfaceComponent = new InterfaceComponent(list.get(0).getName(),new Float(ld.get(0)), new Float(ld.get(1)),list.get(0).getList().get(i));
+				map.put(list.get(0).getList().get(i), interfaceComponent);
 				components.add(interfaceComponent);
 				biring = biring + range;
 			}
@@ -607,6 +619,18 @@ public class TopologyFinder implements TopologyFinderNotifier{
 		buffer.append ("<li><strong>Name:  </strong>").append("grnet.gr").append("</li>");
 		buffer.append ("<li><strong>Latitude:  </strong>").append("37.979741").append("</li>");
 		buffer.append ("<li><strong>Longitude:  </strong>").append("23.715878").append("</li>");
+		buffer.append("</div>");
+		buffer.append("</ul>");	
+		return buffer.toString();
+		
+	}
+	private String createHTMLPortInfo(String name) {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("<h3  valign=\"middle\"><image src=\"").append(Marker.DEFAULT_ICON_INTERFACE).append("\"> Port information:</h3>");
+		buffer.append("<br/><hr/>");
+		buffer.append("<ul>");
+		buffer.append("<div id=\"form\">");
+		buffer.append ("<li><strong>Name:  </strong>").append(name).append("</li>");
 		buffer.append("</div>");
 		buffer.append("</ul>");	
 		return buffer.toString();
