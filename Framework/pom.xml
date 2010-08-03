@@ -74,12 +74,13 @@
 				      </goals>
 				      <configuration>
 				        <tasks>
-				          <property name="runtime_classpath" refid="maven.runtime.classpath" />
+				          <property name="test_classpath" refid="maven.test.classpath"/>
 
-						  <java classname="net.geant.autobahn.testplatform.configuration.EnvironmentSetup" fork="true" dir="${basedir}">
+						  <java classname="net.geant.autobahn.testplatform.configuration.EnvironmentSetup"
+						    		fork="true" dir="${basedir}">
 							<arg value="--create-environment" />
 							<classpath>
-								<pathelement path="${runtime_classpath}" />
+								<pathelement path="${test_classpath}" />
 							</classpath>
 						  </java>
 				          
