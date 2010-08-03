@@ -26,26 +26,16 @@ public class InterfaceComponent {
 		this.state = state;
 		this.list = list;
 	}
+
 	public InterfaceComponent(String name, float startLatitude,
-			float startLongitude, float endLatitude, float endLongitude,
-			int numberOfInterfaces, int state, String interf) {
+			float startLongitude, float endLatitude, float endLongitude, String interf) {
 		this.name = name;
 		this.startLatitude = startLatitude;
 		this.startLongitude = startLongitude;
 		this.endLatitude = endLatitude;
 		this.endLongitude = endLongitude;
-		this.numberOfInterfaces = numberOfInterfaces;
-		this.state = state;
 		this.interf = interf;
 	}
-
-	public InterfaceComponent(String name, float Latitude, float Longitude, String interf ) {
-		this.name = name;
-		this.startLatitude = Latitude;
-		this.startLongitude = Longitude;
-		this.interf = interf;
-	}
-	public InterfaceComponent(){}
 	
 	public String getName() {
 		return name;

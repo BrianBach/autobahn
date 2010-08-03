@@ -162,7 +162,6 @@ function refreashMap (map){
   var request = GXmlHttp.create();
   var service = gup('service');
   var domain = gup('domain');
-  
   if (service==null || service=="")
   	request.open('GET', '/autobahn-gui/portal/secure/topology.xml?service=&domain=', true);
 	  else{
