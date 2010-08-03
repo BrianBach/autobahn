@@ -10,14 +10,14 @@
 	<modelVersion>4.0.0</modelVersion>
     <groupId>net.geant.autobahn</groupId>
     <artifactId>autobahn</artifactId>
-    <version>0.4.3-SNAPSHOT</version>
+    <version>0.5.0</version>
     <name>Autobahn: Automated Bandwith Allocation across Heterogeneous Networks</name>
     <url>http://www.geant.net/server/show/nav.756</url>
     <packaging>pom</packaging>
  
 	<scm>
-		<connection>scm:svn:svn+ssh://svn@svn.geant.net/GEANT/SA2/AutoBAHN/AutoBAHN-base/trunk</connection>
-        <developerConnection>scm:svn:svn+ssh://svn@svn.geant.net/GEANT/SA2/AutoBAHN/AutoBAHN-base/trunk</developerConnection>
+		<connection>scm:svn:svn+ssh://svn@svn.geant.net/GEANT/SA2/AutoBAHN/AutoBAHN-base/tags/autobahn-0.5.0</connection>
+        <developerConnection>scm:svn:svn+ssh://svn@svn.geant.net/GEANT/SA2/AutoBAHN/AutoBAHN-base/tags/autobahn-0.5.0</developerConnection>
     </scm>
 	
 	<repositories>

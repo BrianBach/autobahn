@@ -4,13 +4,13 @@
 	<parent>
 		<artifactId>autobahn</artifactId>
 		<groupId>net.geant.autobahn</groupId>
-		<version>0.4.3-SNAPSHOT</version>
+		<version>0.5.0</version>
 	</parent>
 	
 	<modelVersion>4.0.0</modelVersion>
     <groupId>net.geant.autobahn</groupId>
     <artifactId>autobahn-framework</artifactId>
-    <version>0.4.3-SNAPSHOT</version>
+    <version>0.5.0</version>
     <name>Framework Component</name>
     <packaging>jar</packaging>
 
@@ -74,10 +74,9 @@
 				      </goals>
 				      <configuration>
 				        <tasks>
-				          <property name="runtime_classpath" refid="maven.runtime.classpath"/>
+				          <property name="runtime_classpath" refid="maven.runtime.classpath" />
 
-						  <java classname="net.geant.autobahn.testplatform.configuration.EnvironmentSetup"
-						    		fork="true" dir="${basedir}">
+						  <java classname="net.geant.autobahn.testplatform.configuration.EnvironmentSetup" fork="true" dir="${basedir}">
 							<arg value="--create-environment" />
 							<classpath>
 								<pathelement path="${runtime_classpath}" />
@@ -104,32 +103,32 @@
     	<dependency>
       		<groupId>net.geant.autobahn</groupId>
       		<artifactId>autobahn-common</artifactId>
-      		<version>0.4.3-SNAPSHOT</version>
+      		<version>0.5.0</version>
     	</dependency>
     	<dependency>
       		<groupId>net.geant.autobahn</groupId>
       		<artifactId>autobahn-calendar</artifactId>
-      		<version>0.4.3-SNAPSHOT</version>
+      		<version>0.5.0</version>
     	</dependency>
     	<dependency>
       		<groupId>net.geant.autobahn</groupId>
 		   	<artifactId>autobahn-dm</artifactId>
-      		<version>0.4.3-SNAPSHOT</version>
+      		<version>0.5.0</version>
     	</dependency>
     	<dependency>
       		<groupId>net.geant.autobahn</groupId>
       		<artifactId>autobahn-idm</artifactId>
-      		<version>0.4.3-SNAPSHOT</version>
+      		<version>0.5.0</version>
     	</dependency>
     	<dependency>
       		<groupId>net.geant.autobahn</groupId>
       		<artifactId>autobahn-ta</artifactId>
-      		<version>0.4.3-SNAPSHOT</version>
+      		<version>0.5.0</version>
     	</dependency>
     	<dependency>
       		<groupId>net.geant.autobahn</groupId>
       		<artifactId>autobahn-testing-platform</artifactId>
-      		<version>0.4.3-SNAPSHOT</version>
+      		<version>0.5.0</version>
     	</dependency>
     	<dependency>
     		<groupId>postgresql</groupId>
