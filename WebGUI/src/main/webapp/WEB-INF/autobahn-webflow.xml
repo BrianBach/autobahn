@@ -53,7 +53,12 @@ http://www.springframework.org/schema/webflow-config/spring-webflow-config-2.0.x
 		<property name="viewResolvers" ref="viewResolver"/>
 		<property name="useSpringBeanBinding" value="true"/>
 	</bean>
-		
+
+	<bean id="messageSource"
+	    class="org.springframework.context.support.ResourceBundleMessageSource">
+	    <property name="basename" value="messages" />
+	</bean>
+	
 	<webflow:flow-executor id="flowExecutor"  flow-registry="flowRegistry">
 	</webflow:flow-executor>
 </beans>

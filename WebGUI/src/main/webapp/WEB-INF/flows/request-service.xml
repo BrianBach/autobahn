@@ -27,7 +27,7 @@
 			<evaluate expression="manager.submitServiceAtInterDomainManager(service.userHomeDomain, service)" result="flowScope.serviceId"/>
 			<evaluate expression="manager.getServiceRequestTemplate()"></evaluate>		
 		</transition>
-		<transition on="add" to="add-reservation" bind="true">
+		<transition on="add" to="addReservation" bind="true">
 			<set name="flowScope.home" value="service.userHomeDomain" type="string"/>
 			<evaluate expression="manager.getMappedInterDomainManagerPorts(service.userHomeDomain)" result="flowScope.ports_domain"/>
 			<evaluate expression="manager.getFriendlyInterDomainManagerPorts(service.userHomeDomain)" result="flowScope.friendlyports_domain"/>
@@ -52,7 +52,7 @@
 	<view-state id="request-service-success" view="secure/request-reservation">
 	</view-state>
 	
-	<view-state id="add-reservation" view="secure/request-reservation" model="reservation">
+	<view-state id="addReservation" view="secure/request-reservation" model="reservation">
 		<binder>
 			<binding property="timezone" required="true"/>
 			<binding property="request.startPort" required="true" />
@@ -78,7 +78,7 @@
 		
 		<transition on="cancel" to="request-service"/>
 		
-		<transition on="test" to="add-reservation" bind="true">
+		<transition on="test" to="addReservation" bind="true" validate="true" >
 			<evaluate expression="manager.convertTimeToApplicationTimezone(reservation.timezone,reservation.request)"/>
 			<evaluate expression="manager.demapPortsForReservationRequest(reservation.request)"/>
 			<evaluate expression="manager.convertTimeToTimezone(reservation.timezone,reservation.request)"/>

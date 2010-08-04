@@ -60,7 +60,7 @@ p.error {font-family: Arial, Helvetica, sans; color:red;font-size:9px;text-align
 #pageContent {padding: 0px; margin:0px; text-align:left;width: 1020px; margin: auto; margin-top:0px;position:relative;}
 #header {background: url(header.png) no-repeat; height:80px; padding:0px; margin:0px;}
 
-#inContent   {padding:0px; margin:0px}
+#inContent   {padding:0px; margin:0px; min-height:450px; border-left-width:2px; border-left-style:solid; border-left-color:#000080; border-right-width:2px; border-right-style:solid; border-right-color:#000080;}
 
 #login{padding:0px; text-align:right;font-family: Arial, Helvetica, sans; font-size:11px;color:#caf8f5; background-color:#000080;font-weight: bold}
 

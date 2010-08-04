@@ -3,40 +3,6 @@
 <script type="text/javascript" src="<c:url value="/scripts/jscalendar/js/lang/en.js"/>"></script>
 <script language="javascript">
 
-function beforeSetDateValue(ref_field, target_field, date) {
-  
-  if (date!="") {
-    var startDate=document.forms[0]["startTime"];
-    var endDate=document.forms[0]["endTime"];
-
-    if (target_field==endDate &&
-        checkDate(getDateValue(startDate))==0 &&
-        compareDates(getDateValue(startDate), date)>0) {
-      date=getDateValue(endDate);
-      alert("End Date should not be earlier than Start Date, please select again.");
-    }
-  }
-  return date;
-}
-
-
-function afterSetDateValue(ref_field, target_field, date) {
-	checkDateJohn("start",'',date,'','','','','','');
-  if (date!="") {
-    var startDate=document.forms[0]["startTime"];
-    var endDate=document.forms[0]["endTime"];
-
-    if (target_field==startDate &&
-        checkDate(getDateValue(endDate))==0 &&
-        compareDates(date, getDateValue(endDate))>0) {
-	 setDateValue(endDate, date);
-var john2 = dateOffset(date);//endDate.value);
-setDateValue(endDate, john2);
-      alert("End Date was earlier than Start Date, it's now set to one day after Start Date.");
-    }
-  }
-}
-
 function dateOffset(date) {
 var d=toJSDate(date||"");
   
@@ -47,13 +13,13 @@ var splittaro = mySplitResult[0]+"T23:59:59";
 return splittaro;
 }
 
-function checkDateJohn(date1,date2,date3,date4,date5,date6,date7,date8) {
+function checkDatePast(date1,date2,date3,date4,date5,date6,date7,date8) {
 var today = new Date();
 var d=toCalendarDate(today);
 var mySplitResult1 = d.split("T");
 var mySplitResult2 = date3.split("T");
 	if(mySplitResult2[0]<mySplitResult1[0]){
-		var splittaro = mySplitResult1[0]+"T00:00:00";
+		var splittaro = mySplitResult1[0]+"T23:59:59";
 		if(date1=="start"){
 			document.forms[0]["startTime"].value=splittaro;
 	              alert("The date you selected is old. Your calendar has been reset.");
@@ -181,6 +147,47 @@ var final = testing.value;
 				<td>
 				<form:input path="request.startTime" id="startTime" cssStyle="width:150px;margin-right:0px;"/> 
 				<script type="text/javascript">
+						now = new Date();
+						var month;
+						if(now.getMonth()<10){
+							month = "0" + now.getMonth();
+						} else {
+							month = now.getMonth();
+						}
+						
+						var seconds;
+						if(now.getSeconds()<10){
+							seconds = "0" + now.getSeconds();
+						} else {
+							seconds = now.getSeconds();
+						}
+						
+						var minutes;
+						if(now.getMinutes()<10){
+							minutes= "0" + now.getMinutes();
+						} else {
+							minutes= now.getMinutes();
+						}
+						
+						var day;
+						if(now.getDate()<10){
+							day= "0" + now.getDate();
+						} else {
+							day= now.getDate();
+						}
+						
+						var hour = parseFloat(now.getHours())+1;
+						if(now.getHours()<10){
+							hour= "0" + now.getHours();
+						} else {
+							hour= parseFloat(now.getHours())+1;
+						}
+						
+						var dateString = now.getFullYear() + "-" + month + "-" + day + "T" + hour + ":" + minutes + ":" + seconds;
+
+						
+						document.forms[0]["startTime"].value= dateString;
+						
 					    Calendar.setup({
 					        animation  : false,
 					        trigger    : "startTime",
@@ -191,6 +198,7 @@ var final = testing.value;
 					        minuteStep : 1,
 					        onSelect   : function(){
 							this.hide();
+							checkDatePast('start','',document.forms[0]["startTime"].value,'','','','','');					
 						    } 
 					    });
 					   
@@ -199,7 +207,7 @@ var final = testing.value;
 			</tr>
 		</table>
 	</td>
-	<td><form:errors path="request.startTime"/></td>
+	<td class="error"><form:errors path="request.startTime"/></td>
 </tr>
 <tr>
 	<td class="label"><spring:message code="reservation.endTime"/></td>
@@ -210,6 +218,42 @@ var final = testing.value;
 				<td>
 				<form:input path="request.endTime" id="endTime" cssStyle="width:150px;margin-right:0px;"/> 
 				<script type="text/javascript">
+					now = new Date();
+					var month2;
+					if(now.getMonth()<10){
+						month2 = "0" + now.getMonth();
+					} else {
+						month2 = now.getMonth();
+					}
+					
+					var seconds2;
+					if(now.getSeconds()<10){
+						seconds2 = "0" + now.getSeconds();
+					} else {
+						seconds2 = now.getSeconds();
+					}
+					
+					var minutes2;
+					if(now.getMinutes()<10){
+						minutes2= "0" + now.getMinutes();
+					} else {
+						minutes2= now.getMinutes();
+					}
+					
+					var day2;
+					if(now.getDate()<10){
+						day2= "0" + now.getDate();
+					} else {
+						day2= now.getDate();
+					}
+					var hour2 = parseFloat(now.getHours())+2;
+					if(now.getHours()<10){
+							hour2= "0" + now.getHours();
+						} else {
+							hour2= parseFloat(now.getHours())+1;
+						}		
+					var dateString2 = now.getFullYear() + "-" + month2 + "-" + day2 + "T" + hour2 + ":" + minutes2 + ":" + seconds2;
+					document.forms[0]["endTime"].value= dateString2;						
 					    Calendar.setup({
 					        animation  : false,
 					        trigger    : "endTime",
@@ -219,14 +263,16 @@ var final = testing.value;
 					        dateFormat : "%Y-%m-%dT%H:%M:%S",
 					        minuteStep : 1,
 					        onSelect   : function() { 		
-					        this.hide(); }
+					        this.hide(); 
+					    	checkDatePast('end','',document.forms[0]["endTime"].value,'','','','','');    
+					        }
 					    });
 					</script>
 				</td>
 			</tr>
 		</table>
 	</td>
-	<td><form:errors path="request.endTime"/></td>
+	<td class="error"><form:errors path="request.endTime"/></td>
 </tr>
 
 	<tr>
