@@ -660,7 +660,7 @@
     <wsdl:service name="OSCARSNotify">
         <wsdl:port name="OSCARSNotify" binding="tns:OSCARSNOTIFYSOAP">
             <soap:address
-                location="http://oscars.es.net/axis2/services/OSCARSNotify" />
+                location="https://oscars-dev.es.net/axis2/services/OSCARSNotify" />
         </wsdl:port>
     </wsdl:service>
 </wsdl:definitions>
