@@ -10,7 +10,7 @@
 	<modelVersion>4.0.0</modelVersion>
     <groupId>net.geant.autobahn</groupId>
     <artifactId>autobahn</artifactId>
-    <version>0.5.1</version>
+    <version>0.6.0-SNAPSHOT</version>
     <name>Autobahn: Automated Bandwith Allocation across Heterogeneous Networks</name>
     <url>http://www.geant.net/server/show/nav.756</url>
     <packaging>pom</packaging>
