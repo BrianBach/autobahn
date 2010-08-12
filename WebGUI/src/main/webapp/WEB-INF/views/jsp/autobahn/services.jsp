@@ -15,13 +15,7 @@
 	</td>
 	</tr>
 </table>
-
-<script type="text/javascript">
-			new Ajax.PeriodicalUpdater('servicesList', '<c:url value="/portal/secure/servicesforidm.htm?link=${flowExecutionUrl}&currentIdm=${services.currentIdm}"/>', {
-			method: 'get', frequency: 3, decay: 2
-			});
-		</script>
-		
+	
 <div id="servicesList">
 <c:forEach items="${services.services}" var="element" varStatus="loopStatus">
 	<hr>
@@ -52,7 +46,6 @@
 		</tr>
 	</table>
 	<div id="collection">
-<h3>Service Reservations</h3>
 	<table width="100%">
 		<tr>
 			<th><spring:message code="reservation.state" text="State"/></th>

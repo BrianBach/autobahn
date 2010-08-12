@@ -497,7 +497,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 	 * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getDomainClientPorts()
 	 */
 	public String[] getDomainClientPorts() {
-		logger.info("Getting ports from idm:"+identifier+":"+ports);
+		//logger.info("Getting ports from idm:"+identifier+":"+ports);
 		if (ports != null)
 			return ports;
 		try{

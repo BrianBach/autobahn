@@ -32,6 +32,7 @@ import net.geant.autobahn.administration.Status;
 import net.geant.autobahn.autoBahnGUI.model.LogsFormModel;
 import net.geant.autobahn.autoBahnGUI.model.ReservatiomDepandentOnTimezone;
 import net.geant.autobahn.autoBahnGUI.model.ReservationTest;
+import net.geant.autobahn.autoBahnGUI.model.ServicesComparator;
 import net.geant.autobahn.autoBahnGUI.model.ServicesFormModel;
 import net.geant.autobahn.autoBahnGUI.model.SettingsFormModel;
 import net.geant.autobahn.autoBahnGUI.topology.TopologyFinderNotifier;
@@ -401,7 +402,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	    	ports.add(port);
 	    }
 	    
-	    logger.info (ports);
+	    //logger.info (ports);
 	    return ports;
 	}
 	
@@ -611,7 +612,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 				buffer.append("Reservation"+request.getStartTime()+":"+request.getEndPort());
 			}
 		}
-		logger.info(buffer.toString());
+		//logger.info(buffer.toString());
 	}
 	/*
 	 * (non-Javadoc)
@@ -1059,10 +1060,13 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 		if (idm ==null){
 			serv.setCurrentIdm(managers.get(0));
 			InterDomainManager manager = idms.get(managers.get(0));
+			serv.setComparator(new ServicesComparator());
 			serv.setServices(manager.getServices());
+			
 		} else {
 			InterDomainManager manager = idms.get(idm);
 			List<ServiceType> services = manager.getServices();
+			serv.setComparator(new ServicesComparator());
 			serv.setServices(services);
 			serv.setCurrentIdm(idm);
 		}
@@ -1070,7 +1074,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 		return serv;
 	}
 
-
+	
 	public LogsFormModel getLogsForInterDomainManager(String idm) {
 		LogsFormModel serv =  new LogsFormModel();
 		List<String > managers = 	getAllInterdomainManagers();
