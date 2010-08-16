@@ -153,7 +153,7 @@ public final class AccessPoint implements TopologyAbstraction {
      */
     public void setIntradomainTopology(IntradomainTopology topology, String topologyType) {
         this.topology = topology;
-        log.debug("Received topology, type: "+topologyType);
+        log.debug("Received topology, type: "+topologyType+", topology:" + topology + ", genericLinks:" + topology.getGenericLinks());
         this.topologyType = topologyType;
         //log.debug("Printing topology retrieved from WS..."+topology.TopologyString());
         
@@ -310,15 +310,17 @@ public final class AccessPoint implements TopologyAbstraction {
             String portName_key = (String) e.nextElement();
             String portName_value = public_ids.getProperty(portName_key);
             found = false;
-            for (GenericLink gl : glinks) {
-                if (portName_key.equals(gl.getStartInterface().getName()) ||
-                        portName_key.equals(gl.getEndInterface().getName()) ||
-                        portName_value.equals(gl.getStartInterface().getName()) ||
-                        portName_value.equals(gl.getEndInterface().getName()) ) {
-                    log.debug("Check OK: Entry " + portName_key + "=" + portName_value + " from public.ids file exists in DB.");
-                    found = true;
-                    break;  // No need to go through all GenericLinks
-                }
+            if(glinks != null) {
+	            for (GenericLink gl : glinks) {
+	                if (portName_key.equals(gl.getStartInterface().getName()) ||
+	                        portName_key.equals(gl.getEndInterface().getName()) ||
+	                        portName_value.equals(gl.getStartInterface().getName()) ||
+	                        portName_value.equals(gl.getEndInterface().getName()) ) {
+	                    log.debug("Check OK: Entry " + portName_key + "=" + portName_value + " from public.ids file exists in DB.");
+	                    found = true;
+	                    break;  // No need to go through all GenericLinks
+	                }
+	            }
             }
             if (!found) {
                 log.info("Entry " + portName_key + "=" + portName_value + " from public.ids file does not exist in DB." +

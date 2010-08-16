@@ -21,6 +21,7 @@ import net.geant.autobahn.intradomain.IntradomainTopology;
 public class DomainConfiguration {
 
 	private int port;
+	private int securePort;
 	private String host;
 	
 	private MyProperties defaultConf;
@@ -32,6 +33,7 @@ public class DomainConfiguration {
 			IntraTopologyBuilder builder, IncrementalProperties incremental) {
 		
 		this.port = builder.getDomain().getTcpPort();
+		this.securePort = builder.getDomain().getSecureTcpPort();
 		this.host = builder.getDomain().getHost();
 		this.defaultConf = defaultConf;
 		this.incremental = incremental;
@@ -84,6 +86,7 @@ public class DomainConfiguration {
 				.getResourceAsStream("/default/services.properties");
 		MyProperties services = new MyProperties(is);
 		services.setProperty("server.port", Integer.toString(port));
+		services.setProperty("server.securePort", Integer.toString(securePort));
 		services.save(new File(dir, "services.properties"));
 
 		// Framework properties

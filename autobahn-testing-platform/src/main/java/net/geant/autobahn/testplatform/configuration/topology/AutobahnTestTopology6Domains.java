@@ -18,12 +18,12 @@ public class AutobahnTestTopology6Domains {
     public static long _1Gb = (long) 1 * 1000 * 1000 * 1000;
     public static long _10Gb = (long) 10 * 1000 * 1000 * 1000;
 
-    private final static Domain domain1 = new Domain("domain1", "localhost", 8080);
-    private final static Domain domain2 = new Domain("domain2", "localhost", 8081);
-    private final static Domain domain3 = new Domain("domain3", "localhost", 8082);
-    private final static Domain domain4 = new Domain("domain4", "localhost", 8083);
-    private final static Domain domain5 = new Domain("domain5", "localhost", 8084);
-    private final static Domain domain6 = new Domain("domain6", "localhost", 8085);
+    private final static Domain domain1 = new Domain("domain1", "localhost", 8080, 8090);
+    private final static Domain domain2 = new Domain("domain2", "localhost", 8081, 8091);
+    private final static Domain domain3 = new Domain("domain3", "localhost", 8082, 8092);
+    private final static Domain domain4 = new Domain("domain4", "localhost", 8083, 8093);
+    private final static Domain domain5 = new Domain("domain5", "localhost", 8084, 8094);
+    private final static Domain domain6 = new Domain("domain6", "localhost", 8085, 8095);
 
     
     private final static String hostDomain1 = "http://client-domain.domain1.com";

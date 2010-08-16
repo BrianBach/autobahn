@@ -1,5 +1,6 @@
 package net.geant.autobahn.calendar;
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import junit.framework.TestCase;
@@ -10,7 +11,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ibm.icu.util.Calendar;
 
 public class AdditiveCalendarTest {
 

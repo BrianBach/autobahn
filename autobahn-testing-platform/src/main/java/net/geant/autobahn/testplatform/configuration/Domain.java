@@ -4,13 +4,15 @@ public class Domain {
 
     private String domainId;
     private String host;
-    private int tcpPort;
+	private int tcpPort;
+    private int secureTcpPort;
     
-    public Domain(String domainId, String host, int tcpPort) {
+    public Domain(String domainId, String host, int tcpPort, int secureTcpPort) {
         super();
         this.domainId = domainId;
         this.host = host;
         this.tcpPort = tcpPort;
+        this.secureTcpPort = secureTcpPort;
     }
 
     /**
@@ -54,4 +56,18 @@ public class Domain {
     public void setTcpPort(int tcpPort) {
         this.tcpPort = tcpPort;
     }
+    
+    /**
+	 * @return the secureTcpPort
+	 */
+	public int getSecureTcpPort() {
+		return secureTcpPort;
+	}
+
+	/**
+	 * @param secureTcpPort the secureTcpPort to set
+	 */
+	public void setSecureTcpPort(int secureTcpPort) {
+		this.secureTcpPort = secureTcpPort;
+	}    
 }

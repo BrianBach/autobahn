@@ -163,9 +163,9 @@ public class EnvironmentSetup {
 		createOrGetHomeDir();
 
 		File destDir = new File("dist-temp");
-		if(!destDir.exists()) {
-			destDir.mkdir();
-		}
+		if(destDir.exists())
+			destDir.delete();			
+		destDir.mkdir();
 		
 		Unzipper.unzip(zipFile, destDir);
 		

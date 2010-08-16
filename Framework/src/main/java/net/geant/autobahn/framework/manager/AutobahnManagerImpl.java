@@ -27,14 +27,14 @@ public class AutobahnManagerImpl implements AutobahnManager {
 	 * @see net.geant.autobahn.framework.manager.AutobahnManager#getServices()
 	 */
 	public String[] getServices() {
-		return server.getRegisteresServices();
+		return null;		
 	}
 
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.framework.manager.AutobahnManager#unregisterService(java.lang.String)
 	 */
 	public void unregisterService(String name) {
-		server.unregisterService(name);
+		
 	}
 
 	public void halt() {

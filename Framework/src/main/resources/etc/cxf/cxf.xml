@@ -14,6 +14,402 @@ http://cxf.apache.org/configuration/security http://cxf.apache.org/schemas/confi
 http://cxf.apache.org/transports/http-jetty/configuration http://cxf.apache.org/schemas/configuration/http-jetty.xsd
 http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd">
     
+
+    <bean id="properties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+                <value>etc/services.properties</value>
+            </list>
+        </property>
+       
+        <property name="ignoreResourceNotFound" value="false" />
+    </bean>
+   
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="properties" ref="properties" />
+    </bean>
+    
+	<bean id="ServerPasswordCallback" class="net.geant.autobahn.edugain.ServerPasswordCallback">
+		<constructor-arg type="java.lang.String" value="etc/edugain/server-sec.properties"/>
+	</bean>
+	
+	<bean id="ClientPasswordCallback" class="net.geant.autobahn.edugain.ClientPasswordCallback">
+		<constructor-arg type="java.lang.String" value="etc/edugain/client-sec.properties"/>	
+	</bean>
+	    
+	<bean id="initSecurity" class="net.geant.autobahn.edugain.WSSecurity">
+		<constructor-arg index="0" type="java.lang.String" value="etc/edugain"/>
+	</bean>	
+			
+	<bean id="readProps" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject"><ref bean="initSecurity"/></property>
+		<property name="targetMethod"><value>readProperties</value></property>
+	</bean>
+	
+	<bean id="initEdugain" class="net.geant.autobahn.edugain.Edugain">
+		<constructor-arg index="0" type="java.lang.String" value="etc/edugain/edugain.properties"/>
+	</bean>
+	
+	<bean id="edugainProps" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject"><ref bean="initEdugain"/></property>
+		<property name="targetMethod"><value>getPropsLoader</value></property>
+	</bean>
+
+	<jaxws:endpoint id="idm2dm" implementor="net.geant.autobahn.idm2dm.Idm2DmImpl" address="http://localhost:${server.port}/autobahn/idm2dm">
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+				<constructor-arg>
+					<map>               
+						<entry key="action" value-ref="readProps"/>
+						<entry key="passwordType" value="PasswordDigest"/>
+						<entry key="signaturePropFile" value="etc/edugain/client-sec.properties"/>
+						<entry key="passwordCallbackRef">
+							<ref bean="ClientPasswordCallback"/>
+						</entry>
+						<entry key="decryptionPropFile" value="etc/edugain/server-sec.properties"/>						
+					</map>
+				</constructor-arg>
+			</bean>			
+			<bean class="net.geant.autobahn.edugain.EdugainSupport">
+				<constructor-arg type="java.util.Properties">
+					<ref bean="edugainProps"/>
+				</constructor-arg>
+			</bean>
+		</jaxws:inInterceptors>
+		
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+				<constructor-arg>
+					<map>               
+						<entry key="action" value-ref="readProps"/>
+						<entry key="user" value="autobahn"/>
+						<entry key="signatureKeyIdentifier" value="DirectReference"/>
+						<entry key="signaturePropFile" value="etc/edugain/server-sec.properties"/>
+						<entry key="passwordType" value="PasswordDigest"/>
+						<entry key="passwordCallbackRef">
+							<ref bean="ServerPasswordCallback"/>
+						</entry>
+						<entry key="encryptionPropFile" value="etc/edugain/client-sec.properties"/>
+						<entry key="encryptionUser" value="autobahn"/>
+						<entry key="encryptionSymAlgorithm" value="http://www.w3.org/2001/04/xmlenc#tripledes-cbc"/>
+						<entry key="encryptionParts" value="{Content}{}Body"/>						
+					</map>
+				</constructor-arg>
+			</bean>
+		</jaxws:outInterceptors>	
+	</jaxws:endpoint>
+    
+    
+
+	<jaxws:endpoint id="dm2idm" implementor="net.geant.autobahn.dm2idm.Dm2IdmImpl" address="http://localhost:${server.port}/autobahn/dm2idm">
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+				<constructor-arg>
+					<map>               
+						<entry key="action" value-ref="readProps"/>
+						<entry key="passwordType" value="PasswordDigest"/>
+						<entry key="signaturePropFile" value="etc/edugain/client-sec.properties"/>
+						<entry key="passwordCallbackRef">
+							<ref bean="ClientPasswordCallback"/>
+						</entry>
+						<entry key="decryptionPropFile" value="etc/edugain/server-sec.properties"/>						
+					</map>
+				</constructor-arg>
+			</bean>			
+			<bean class="net.geant.autobahn.edugain.EdugainSupport">
+				<constructor-arg type="java.util.Properties">
+					<ref bean="edugainProps"/>
+				</constructor-arg>
+			</bean>
+		</jaxws:inInterceptors>
+		
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+				<constructor-arg>
+					<map>               
+						<entry key="action" value-ref="readProps"/>
+						<entry key="user" value="autobahn"/>
+						<entry key="signatureKeyIdentifier" value="DirectReference"/>
+						<entry key="signaturePropFile" value="etc/edugain/server-sec.properties"/>
+						<entry key="passwordType" value="PasswordDigest"/>
+						<entry key="passwordCallbackRef">
+							<ref bean="ServerPasswordCallback"/>
+						</entry>
+						<entry key="encryptionPropFile" value="etc/edugain/client-sec.properties"/>
+						<entry key="encryptionUser" value="autobahn"/>
+						<entry key="encryptionSymAlgorithm" value="http://www.w3.org/2001/04/xmlenc#tripledes-cbc"/>
+						<entry key="encryptionParts" value="{Content}{}Body"/>						
+					</map>
+				</constructor-arg>
+			</bean>
+		</jaxws:outInterceptors>		
+	</jaxws:endpoint>
+	
+	<jaxws:endpoint id="dmadmin" implementor="net.geant.autobahn.intradomain.administration.AdministrationImpl" address="http://localhost:${server.port}/autobahn/dmadmin">
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+				<constructor-arg>
+					<map>               
+						<entry key="action" value-ref="readProps"/>
+						<entry key="passwordType" value="PasswordDigest"/>
+						<entry key="signaturePropFile" value="etc/edugain/client-sec.properties"/>
+						<entry key="passwordCallbackRef">
+							<ref bean="ClientPasswordCallback"/>
+						</entry>
+						<entry key="decryptionPropFile" value="etc/edugain/server-sec.properties"/>						
+					</map>
+				</constructor-arg>
+			</bean>			
+			<bean class="net.geant.autobahn.edugain.EdugainSupport">
+				<constructor-arg type="java.util.Properties">
+					<ref bean="edugainProps"/>
+				</constructor-arg>
+			</bean>
+		</jaxws:inInterceptors>
+		
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+				<constructor-arg>
+					<map>               
+						<entry key="action" value-ref="readProps"/>
+						<entry key="user" value="autobahn"/>
+						<entry key="signatureKeyIdentifier" value="DirectReference"/>
+						<entry key="signaturePropFile" value="etc/edugain/server-sec.properties"/>
+						<entry key="passwordType" value="PasswordDigest"/>
+						<entry key="passwordCallbackRef">
+							<ref bean="ServerPasswordCallback"/>
+						</entry>
+						<entry key="encryptionPropFile" value="etc/edugain/client-sec.properties"/>
+						<entry key="encryptionUser" value="autobahn"/>
+						<entry key="encryptionSymAlgorithm" value="http://www.w3.org/2001/04/xmlenc#tripledes-cbc"/>
+						<entry key="encryptionParts" value="{Content}{}Body"/>						
+					</map>
+				</constructor-arg>
+			</bean>
+		</jaxws:outInterceptors>		
+	</jaxws:endpoint>
+	
+	<jaxws:endpoint id="interdomain" implementor="net.geant.autobahn.interdomain.InterdomainImpl" address="http://localhost:${server.port}/autobahn/interdomain">
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+				<constructor-arg>
+					<map>               
+						<entry key="action" value-ref="readProps"/>
+						<entry key="passwordType" value="PasswordDigest"/>
+						<entry key="signaturePropFile" value="etc/edugain/client-sec.properties"/>
+						<entry key="passwordCallbackRef">
+							<ref bean="ClientPasswordCallback"/>
+						</entry>
+						<entry key="decryptionPropFile" value="etc/edugain/server-sec.properties"/>						
+					</map>
+				</constructor-arg>
+			</bean>			
+			<bean class="net.geant.autobahn.edugain.EdugainSupport">
+				<constructor-arg type="java.util.Properties">
+					<ref bean="edugainProps"/>
+				</constructor-arg>
+			</bean>
+		</jaxws:inInterceptors>
+		
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+				<constructor-arg>
+					<map>               
+						<entry key="action" value-ref="readProps"/>
+						<entry key="user" value="autobahn"/>
+						<entry key="signatureKeyIdentifier" value="DirectReference"/>
+						<entry key="signaturePropFile" value="etc/edugain/server-sec.properties"/>
+						<entry key="passwordType" value="PasswordDigest"/>
+						<entry key="passwordCallbackRef">
+							<ref bean="ServerPasswordCallback"/>
+						</entry>
+						<entry key="encryptionPropFile" value="etc/edugain/client-sec.properties"/>
+						<entry key="encryptionUser" value="autobahn"/>
+						<entry key="encryptionSymAlgorithm" value="http://www.w3.org/2001/04/xmlenc#tripledes-cbc"/>
+						<entry key="encryptionParts" value="{Content}{}Body"/>						
+					</map>
+				</constructor-arg>
+			</bean>
+		</jaxws:outInterceptors>		
+	</jaxws:endpoint>
+	
+	<jaxws:endpoint id="topologyabstraction" implementor="net.geant.autobahn.converter.TopologyAbstractionImpl" address="http://localhost:${server.port}/autobahn/topologyabstraction">
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+				<constructor-arg>
+					<map>               
+						<entry key="action" value-ref="readProps"/>
+						<entry key="passwordType" value="PasswordDigest"/>
+						<entry key="signaturePropFile" value="etc/edugain/client-sec.properties"/>
+						<entry key="passwordCallbackRef">
+							<ref bean="ClientPasswordCallback"/>
+						</entry>
+						<entry key="decryptionPropFile" value="etc/edugain/server-sec.properties"/>						
+					</map>
+				</constructor-arg>
+			</bean>			
+			<bean class="net.geant.autobahn.edugain.EdugainSupport">
+				<constructor-arg type="java.util.Properties">
+					<ref bean="edugainProps"/>
+				</constructor-arg>
+			</bean>
+		</jaxws:inInterceptors>
+		
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+				<constructor-arg>
+					<map>               
+						<entry key="action" value-ref="readProps"/>
+						<entry key="user" value="autobahn"/>
+						<entry key="signatureKeyIdentifier" value="DirectReference"/>
+						<entry key="signaturePropFile" value="etc/edugain/server-sec.properties"/>
+						<entry key="passwordType" value="PasswordDigest"/>
+						<entry key="passwordCallbackRef">
+							<ref bean="ServerPasswordCallback"/>
+						</entry>
+						<entry key="encryptionPropFile" value="etc/edugain/client-sec.properties"/>
+						<entry key="encryptionUser" value="autobahn"/>
+						<entry key="encryptionSymAlgorithm" value="http://www.w3.org/2001/04/xmlenc#tripledes-cbc"/>
+						<entry key="encryptionParts" value="{Content}{}Body"/>						
+					</map>
+				</constructor-arg>
+			</bean>
+		</jaxws:outInterceptors>	
+	</jaxws:endpoint>
+		
+	<jaxws:endpoint id="uap" implementor="net.geant.autobahn.useraccesspoint.UserAccessPointImpl" address="http://localhost:${server.port}/autobahn/uap">
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+				<constructor-arg>
+					<map>               
+						<entry key="action" value-ref="readProps"/>
+						<entry key="passwordType" value="PasswordDigest"/>
+						<entry key="signaturePropFile" value="etc/edugain/client-sec.properties"/>
+						<entry key="passwordCallbackRef">
+							<ref bean="ClientPasswordCallback"/>
+						</entry>
+						<entry key="decryptionPropFile" value="etc/edugain/server-sec.properties"/>						
+					</map>
+				</constructor-arg>
+			</bean>			
+			<bean class="net.geant.autobahn.edugain.EdugainSupport">
+				<constructor-arg type="java.util.Properties">
+					<ref bean="edugainProps"/>
+				</constructor-arg>
+			</bean>
+		</jaxws:inInterceptors>
+		
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+				<constructor-arg>
+					<map>               
+						<entry key="action" value-ref="readProps"/>
+						<entry key="user" value="autobahn"/>
+						<entry key="signatureKeyIdentifier" value="DirectReference"/>
+						<entry key="signaturePropFile" value="etc/edugain/server-sec.properties"/>
+						<entry key="passwordType" value="PasswordDigest"/>
+						<entry key="passwordCallbackRef">
+							<ref bean="ServerPasswordCallback"/>
+						</entry>
+						<entry key="encryptionPropFile" value="etc/edugain/client-sec.properties"/>
+						<entry key="encryptionUser" value="autobahn"/>
+						<entry key="encryptionSymAlgorithm" value="http://www.w3.org/2001/04/xmlenc#tripledes-cbc"/>
+						<entry key="encryptionParts" value="{Content}{}Body"/>						
+					</map>
+				</constructor-arg>
+			</bean>
+		</jaxws:outInterceptors>		
+	</jaxws:endpoint>
+	
+<!-- <jaxws:endpoint id="proxy" implementor="net.geant.autobahn.proxy.ProxyImpl" address="http://localhost:8080/autobahn/proxy"/> -->
+
+	<jaxws:endpoint id="administration" implementor="net.geant.autobahn.administration.AdministrationImpl" address="http://localhost:${server.port}/autobahn/administration">
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+				<constructor-arg>
+					<map>               
+						<entry key="action" value-ref="readProps"/>
+						<entry key="passwordType" value="PasswordDigest"/>
+						<entry key="signaturePropFile" value="etc/edugain/client-sec.properties"/>
+						<entry key="passwordCallbackRef">
+							<ref bean="ClientPasswordCallback"/>
+						</entry>
+						<entry key="decryptionPropFile" value="etc/edugain/server-sec.properties"/>						
+					</map>
+				</constructor-arg>
+			</bean>			
+			<bean class="net.geant.autobahn.edugain.EdugainSupport">
+				<constructor-arg type="java.util.Properties">
+					<ref bean="edugainProps"/>
+				</constructor-arg>
+			</bean>
+		</jaxws:inInterceptors>
+		
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+				<constructor-arg>
+					<map>               
+						<entry key="action" value-ref="readProps"/>
+						<entry key="user" value="autobahn"/>
+						<entry key="signatureKeyIdentifier" value="DirectReference"/>
+						<entry key="signaturePropFile" value="etc/edugain/server-sec.properties"/>
+						<entry key="passwordType" value="PasswordDigest"/>
+						<entry key="passwordCallbackRef">
+							<ref bean="ServerPasswordCallback"/>
+						</entry>
+						<entry key="encryptionPropFile" value="etc/edugain/client-sec.properties"/>
+						<entry key="encryptionUser" value="autobahn"/>
+						<entry key="encryptionSymAlgorithm" value="http://www.w3.org/2001/04/xmlenc#tripledes-cbc"/>
+						<entry key="encryptionParts" value="{Content}{}Body"/>						
+					</map>
+				</constructor-arg>
+			</bean>
+		</jaxws:outInterceptors>		
+	</jaxws:endpoint>
+	
+	<jaxws:endpoint id="resourcesreservationcalendar" implementor="net.geant.autobahn.calendar.ResourcesReservationCalendarImpl" address="http://localhost:${server.port}/autobahn/resourcesreservationcalendar">
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+				<constructor-arg>
+					<map>               
+						<entry key="action" value-ref="readProps"/>
+						<entry key="passwordType" value="PasswordDigest"/>
+						<entry key="signaturePropFile" value="etc/edugain/client-sec.properties"/>
+						<entry key="passwordCallbackRef">
+							<ref bean="ClientPasswordCallback"/>
+						</entry>
+						<entry key="decryptionPropFile" value="etc/edugain/server-sec.properties"/>						
+					</map>
+				</constructor-arg>
+			</bean>			
+			<bean class="net.geant.autobahn.edugain.EdugainSupport">
+				<constructor-arg type="java.util.Properties">
+					<ref bean="edugainProps"/>
+				</constructor-arg>
+			</bean>
+		</jaxws:inInterceptors>
+		
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+				<constructor-arg>
+					<map>               
+						<entry key="action" value-ref="readProps"/>
+						<entry key="user" value="autobahn"/>
+						<entry key="signatureKeyIdentifier" value="DirectReference"/>
+						<entry key="signaturePropFile" value="etc/edugain/server-sec.properties"/>
+						<entry key="passwordType" value="PasswordDigest"/>
+						<entry key="passwordCallbackRef">
+							<ref bean="ServerPasswordCallback"/>
+						</entry>
+						<entry key="encryptionPropFile" value="etc/edugain/client-sec.properties"/>
+						<entry key="encryptionUser" value="autobahn"/>
+						<entry key="encryptionSymAlgorithm" value="http://www.w3.org/2001/04/xmlenc#tripledes-cbc"/>
+						<entry key="encryptionParts" value="{Content}{}Body"/>						
+					</map>
+				</constructor-arg>
+			</bean>
+		</jaxws:outInterceptors>	
+	</jaxws:endpoint>	
 	
 	<bean id="OscarsServerPasswordCallback" class="net.geant.autobahn.edugain.ServerPasswordCallback">
 		<constructor-arg type="java.lang.String" value="etc/oscars/client-sec.properties"/>
@@ -23,7 +419,7 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
 		<constructor-arg type="java.lang.String" value="etc/edugain/client-sec.properties"/>	
 	</bean>	
 		
-	<jaxws:endpoint id="oscars" implementor="net.geant.autobahn.idcp.OSCARSImpl" address="https://localhost:8090/autobahn/oscars" wsdlLocation="etc/wsdl/IDCP/OSCARS.wsdl">
+	<jaxws:endpoint id="oscars" implementor="net.geant.autobahn.idcp.OSCARSImpl" address="https://localhost:${server.securePort}/autobahn/oscars" wsdlLocation="etc/wsdl/IDCP/OSCARS.wsdl">
 		<jaxws:properties>
 			<entry key="ws-security.callback-handler">
 				<ref bean="OscarsServerPasswordCallback"/>
@@ -58,7 +454,7 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
   </http:destination>
   
   <httpj:engine-factory>
-	 <httpj:engine port="8090">
+	 <httpj:engine port="${server.securePort}">	 	
 	     <httpj:tlsServerParameters secureSocketProtocol="TLS">
          <sec:keyManagers keyPassword="password">
 	     		<sec:keyStore type="JKS" password="password" 

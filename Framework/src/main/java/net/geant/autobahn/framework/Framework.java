@@ -46,7 +46,6 @@ public class Framework {
 	private boolean shutdown = false;
 
 	private Properties properties;
-	private Map<String, Endpoint> deployedServices = new HashMap<String, Endpoint>();
 		
 	public static Map<String, AutobahnCommand> commands = new HashMap<String, AutobahnCommand>();
 		
@@ -93,9 +92,6 @@ public class Framework {
 	private void init(Properties props) throws Exception {
 		
 		properties = props;
-
-		// Publish webservices
-		startServer();
 		
         // Start Topology Abstraction before DM or IDM
         ta = net.geant.autobahn.converter.AccessPoint.getInstance();
@@ -187,90 +183,7 @@ public class Framework {
 			}
 		}
 	}
-
-	private Server startServer() throws Exception {
-
-		// read properties
-		FileInputStream fis = new FileInputStream("etc/services.properties");
-		Properties props = new Properties();
-		props.load(fis);
-		fis.close();
-
-		String port = props.getProperty("server.port");
-		final String prefix = "http://localhost:" + port + "/autobahn/";
-
-		Server server = null;
-
-		Enumeration<Object> en = props.keys();
-		while (en.hasMoreElements()) {
-
-			String s = en.nextElement().toString();
-			if (!s.contains("service.name"))
-				continue;
-
-			String[] split = s.split("\\.");
-			if (split.length != 3)
-				continue;
-
-			final String sname = split[2];
-			
-			System.out.println("deploying " + sname);
-			String ifaceName = props.getProperty("service.interface."
-					+ sname);
-			String implName = props.getProperty("service.impl." + sname);
-
-			if (ifaceName != null && implName != null) {
-
-				Class impl = null;
-				try {
-					impl = Class.forName(implName);
-				} catch (Exception e) {
-					System.out.println("could not find class for " + sname);
-					continue;
-				}
-				
-				Endpoint point = Endpoint.publish(prefix + sname, impl.newInstance());
-				
-				org.apache.cxf.jaxws.EndpointImpl jaxwsEndpointImpl = (org.apache.cxf.jaxws.EndpointImpl)point;
-				org.apache.cxf.endpoint.Server cxfServer = jaxwsEndpointImpl.getServer();
-				org.apache.cxf.endpoint.Endpoint cxfEndpoint = cxfServer.getEndpoint();
-				
-				WSSecurity security = new WSSecurity("etc/edugain");
-				security.configureSecurity(cxfEndpoint);
-
-				deployedServices.put(sname, point);
-				
-			} else
-				System.out.println("could not find interface or impl for "
-						+ sname);
-		}
-		// Publish the remote manager
-		Endpoint.publish(prefix + "manager", new AutobahnManagerImpl(this));
-		
-		return server;
-	}
-
-	/**
-	 * 
-	 * @param name
-	 */
-	public void unregisterService(String name) {
-		Endpoint endpoint = deployedServices.get(name);
-		
-		if(endpoint != null) {
-			endpoint.stop();
-			deployedServices.remove(name);
-		}
-	}
 	
-	/**
-	 * 
-	 * @return
-	 */
-	public String[] getRegisteresServices() {
-		Set<String> services = deployedServices.keySet();
-		return services.toArray(new String[services.size()]);
-	}
 	
 	static void info() {
 		System.out.println("-------------------------");
