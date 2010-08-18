@@ -8,8 +8,6 @@ package net.geant.autobahn.reservation.states.hd;
 import java.util.Iterator;
 import java.util.List;
 
-import org.mortbay.log.Log;
-
 import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.constraints.GlobalConstraints;
 import net.geant.autobahn.idcp.Autobahn2OscarsConverter;
@@ -141,7 +139,7 @@ public class LocalCheck extends HomeDomainState {
         try {
             res.forwardSchedule();
         } catch (Exception e) {
-            log.error(this + ", scheduling: " + e.getMessage(), e);
+            log.error(this + ", scheduling: " + e.getMessage());
             pathFailed(res, ReservationErrors.COMMUNICATION_ERROR, res.getNextDomainAddress());
             return;
         }

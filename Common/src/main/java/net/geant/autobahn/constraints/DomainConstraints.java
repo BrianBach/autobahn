@@ -153,14 +153,14 @@ public class DomainConstraints implements Serializable {
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-
+        
         for (PathConstraints path : pathConstraints) {
-            sb.append(path);
+            sb.append("{" + path + "}");
             sb.append("\nOR\n");
         }
 
         if (sb.length() > 0) {
-            sb.delete(sb.lastIndexOf("\nOR\n"), sb.lastIndexOf("\nOR\n") + 3);
+            sb.delete(sb.lastIndexOf("\nOR\n"), sb.lastIndexOf("\nOR\n") + 4);
         }
 
         return sb.toString();

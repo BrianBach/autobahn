@@ -277,7 +277,6 @@ public abstract class AutobahnReservation extends Reservation implements Runnabl
         	log.warn(this + " withdraw: No such reservation in the next domain");
         	throw e1;
         } catch (Exception e) {
-            //log.error(this + " withdraw: " + e.getMessage(), e);
             throw new NoSuchReservationException(this + " " + e.getMessage());
         }
     }

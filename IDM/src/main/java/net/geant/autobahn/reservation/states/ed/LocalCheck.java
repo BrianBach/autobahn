@@ -59,7 +59,7 @@ public class LocalCheck extends ExternalDomainState {
         try {
         	res.forwardSchedule();
         } catch (Exception e) {
-            log.error(this + " schedule: " + e.getMessage(), e);
+            log.error(this + " schedule: " + e.getMessage());
             res.fail(ReservationErrors.COMMUNICATION_ERROR, "");
             return;
         }

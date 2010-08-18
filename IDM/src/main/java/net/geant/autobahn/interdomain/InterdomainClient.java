@@ -1,10 +1,7 @@
 package net.geant.autobahn.interdomain;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.net.MalformedURLException;
-import java.util.Properties;
+import java.net.URL;
 
 import net.geant.autobahn.constraints.GlobalConstraints;
 import net.geant.autobahn.idm.AccessPoint;

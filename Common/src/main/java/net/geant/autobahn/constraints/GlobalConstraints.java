@@ -347,8 +347,8 @@ public class GlobalConstraints implements Serializable {
         StringBuffer sb = new StringBuffer();
         
         for(String id : domainsIds) {
-            sb.append("Domain: " + id + "\n");
-            sb.append(getDomainConstraints(id));
+            sb.append("Domain <" + id + ">: ");
+            sb.append(getDomainConstraints(id) + " | ");
         }
         
         return sb.toString();
