@@ -13,6 +13,7 @@ import net.geant.autobahn.useraccesspoint.textclient.RequestParser;
 import org.apache.cxf.common.logging.Log4jLogger;
 import org.apache.cxf.common.logging.LogUtils;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -45,6 +46,11 @@ public class StartingStoppingTests {
 		observer.waitForDomains(domain1, domain2, domain3);
 		
 		System.out.println(" - -- Started");
+	}
+	
+	@Before
+	public void setUp() {
+		AutobahnManagement.cleanOldReservations(domains);
 	}
 	
 	@Test
