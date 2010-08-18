@@ -145,7 +145,8 @@ public class HomeDomainReservation extends AutobahnReservation {
      */
     public void pathFailed(int code, String args) {
         this.addToFailedPaths(this.getPath());    // Keep a list of all paths that were tested and failed
-
+        this.cancelTimeouts();
+        
         String msg = ReservationErrors.getInfo(code, args);
     	
         log.info(this + " PATH FAILURE: " + msg);
