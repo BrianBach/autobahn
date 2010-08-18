@@ -104,6 +104,13 @@ public class EnvironmentSetup {
 			startInstances();
 			
 			injectIntradomainTopology();
+			
+			try {
+				Thread.sleep(10 * 1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
 			shareAbstractTopology();
 			
 			try {
@@ -163,8 +170,9 @@ public class EnvironmentSetup {
 		createOrGetHomeDir();
 
 		File destDir = new File("dist-temp");
-		if(destDir.exists())
-			destDir.delete();			
+		if(destDir.exists()) {
+			DomainConfiguration.deleteDirectory(destDir);
+		}
 		destDir.mkdir();
 		
 		Unzipper.unzip(zipFile, destDir);

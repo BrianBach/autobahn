@@ -107,13 +107,15 @@ public class DomainConfiguration {
 		String toDir = incremental.getHome();
 		File dest = new File(toDir);
 		
-		if(!dest.exists()) {
-			if(!dest.getParentFile().exists())
-				dest.getParentFile().mkdir();
+		if(dest.exists()) {
+			deleteDirectory(dest);
+		}
+		
+		if(!dest.getParentFile().exists())
+			dest.getParentFile().mkdir();
 			
-			boolean success = dest.mkdir();
-			if(!success)
-				throw new IOException("Unable to create directory: " + toDir);
+		if(!dest.mkdir()) {
+			throw new IOException("Unable to create directory: " + toDir);
 		}
 		
 		try {
@@ -289,6 +291,19 @@ public class DomainConfiguration {
 	    return connection;
 	}
 	
+	static public boolean deleteDirectory(File path) {
+		if(path.exists()) {
+			for (File f : path.listFiles()) {
+				if (f.isDirectory()) {
+					deleteDirectory(f);
+				} else {
+					f.delete();
+				}
+			}
+		}
+		
+		return path.delete();
+	}
 	
     public static void copy(File src, File dst) throws IOException {
     	
