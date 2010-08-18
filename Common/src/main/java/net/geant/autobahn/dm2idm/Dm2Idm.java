@@ -46,9 +46,15 @@ public interface Dm2Idm {
 	 * 
 	 * @param links List of abstract links
 	 */
-	@WebMethod 
+	@WebMethod
 	public void injectAbstractLinks(@WebParam(name="links")List<Link> links);
 
+	/**
+	 * 
+	 */
+	@WebMethod
+	public void restorationCompleted();
+	
 	/**
 	 * Asks IDM about identifiers of link, port and node connected to a
 	 * specified port. IDM forwards the request to the specified IDM.

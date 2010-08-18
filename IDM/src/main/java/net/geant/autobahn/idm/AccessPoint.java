@@ -728,23 +728,20 @@ public final class AccessPoint implements UserAccessPoint,
 	 */
 	public LinkIdentifiers getIdentifiers(String domain, String portName, String linkBodId) {
 		
-		Interdomain idm;
-        try {
-            idm = new InterdomainClient(domain);
-        } catch (Exception e1) {
-            log.error(this + " getIdentifiers: " + e1.getMessage(), e1);
-            return null;
-        }
-		
-		int maxTries = 3;
+		final int maxTries = 3;
 		
 		// Try at most 10 times
 		for (int i = 0; i < maxTries; i++) {
+			
 			try {
+				Interdomain idm = new InterdomainClient(domain);
 				return idm.getIdentifiers(portName, linkBodId);
+	        } catch (MalformedURLException e1) {
+	        	log.debug("getIdentifiers failure, try#" + (i + 1) + ": "  + e1.getMessage());
 			} catch (Exception ex) {
-				log.debug("getLinkId, #" + (i + 1) + ": "  + ex.getMessage());
+				log.debug("getIdentifiers failure, try#" + (i + 1) + ": "  + ex.getMessage());
 			}
+			
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
@@ -802,13 +799,17 @@ public final class AccessPoint implements UserAccessPoint,
         	topology.insertLink(l);
         }
         
-        if(startupNotifier != null)
-        	startupNotifier.domainUp(this.domainURL);
-        // Now when DM is ready we can recover reservations
-        //recoverReservations();
+        reservationProcessor.setRestorationMode(true);
 	}
     
-    public boolean saveReservationStatusDB(String res, int st) {
+    @Override
+	public void restorationCompleted() {
+    	reservationProcessor.setRestorationMode(false);
+        if(startupNotifier != null)
+        	startupNotifier.domainUp(this.domainURL);
+	}
+
+	public boolean saveReservationStatusDB(String res, int st) {
         Session session = IdmHibernateUtil.getInstance().currentSession();
         Transaction t = session.beginTransaction();
         IdmDAOFactory daos = HibernateIdmDAOFactory.getInstance();

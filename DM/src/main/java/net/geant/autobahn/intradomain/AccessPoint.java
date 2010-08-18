@@ -205,26 +205,20 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
 	public DomainConstraints checkResources(Link[] arg0, ReservationParams arg1)
 			throws OversubscribedException {
 
-		try {
-			return intradomainManager.checkResources(arg0, arg1);
-		} catch(Exception e) {
-			log.error("Erro when checking resources, ", e);
-		}
-		return null;
+		return intradomainManager.checkResources(arg0, arg1);
 	}
 
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.idm2dm.Idm2Dm#addReservation(java.lang.String, net.geant.autobahn.network.Link[], net.geant.autobahn.reservation.ReservationParams)
 	 */
-	public void addReservation(String arg0, Link[] arg1, ReservationParams arg2)
+	public void addReservation(String resId, Link[] links, ReservationParams params)
 			throws ConstraintsAlreadyUsedException {
 
 		try {
-			intradomainManager.addReservation(arg0, arg1, arg2);
-		} catch(ConstraintsAlreadyUsedException cau_ex) {
-			throw cau_ex;
-		} catch(Exception e) {
-			log.error("Dm - Problem while addingReservation", e);
+			intradomainManager.addReservation(resId, links, params);
+		} catch (OversubscribedException e) {
+			log.warn("Oversubscribed when adding Reservation: " + resId + ", "
+					+ e.getMessage());
 		}
 	}
 
@@ -275,9 +269,11 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
 				if(idmAddress != null && !"".equals(idmAddress)) {
 					Dm2Idm idm = new Dm2IdmClient(idmAddress);
 					idm.injectAbstractLinks(links);
+					
+					intradomainManager.restoreReservations();
+
+					idm.restorationCompleted();
 				}
-				
-				intradomainManager.restoreReservations();
 			}
 		});
 		

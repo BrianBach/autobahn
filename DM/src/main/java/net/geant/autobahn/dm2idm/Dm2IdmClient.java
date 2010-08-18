@@ -107,6 +107,15 @@ public class Dm2IdmClient implements Dm2Idm {
 	}
 
 	/* (non-Javadoc)
+	 * @see net.geant.autobahn.dm2idm.Dm2Idm#restorationCompleted()
+	 */
+	@Override
+	public void restorationCompleted() {
+		if(dm2idm != null)
+			dm2idm.restorationCompleted();
+	}
+
+	/* (non-Javadoc)
 	 * @see net.geant.autobahn.dm2idm.Dm2Idm#getIdentifiers(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	public LinkIdentifiers getIdentifiers(String domain, String portName, String linkBodId) {

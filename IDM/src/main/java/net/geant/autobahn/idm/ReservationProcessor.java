@@ -37,7 +37,8 @@ public class ReservationProcessor {
 	
 	private Idm2Dm domainManager = null;
 	private String domainID;
-	
+    private boolean restorationMode = false;
+
 	public ReservationProcessor(String domainID, Idm2Dm domainManager) {
 		this.domainManager = domainManager;
 		this.domainID = domainID;
@@ -321,6 +322,11 @@ public class ReservationProcessor {
             }
         };
 
+        if(restorationMode) {
+        	command.run();
+        	return;
+        }
+        
         BlockingQueue<Runnable> queue = events.get(resID);
         queue.add(new TransactionTask(command));
 	}
@@ -336,6 +342,11 @@ public class ReservationProcessor {
             }
         };
 
+        if(restorationMode) {
+        	command.run();
+        	return;
+        }
+        
         BlockingQueue<Runnable> queue = events.get(resID);
         queue.add(new TransactionTask(command));
 	}
@@ -411,9 +422,7 @@ public class ReservationProcessor {
 		}
 	}
 
-	public boolean hello() {
-		return false;
+	public void setRestorationMode(boolean mode) {
+		this.restorationMode = mode;
 	}
-
-
 }

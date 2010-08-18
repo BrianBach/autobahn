@@ -101,6 +101,8 @@ public class ResourcesReservation {
 		log.info("DM Recovery - Found: " + reservations.size() + " active reservations");
 		
 		for(IntradomainReservation res : reservations.values()) {
+			prManager.attach(res);
+			
 			Calendar now = Calendar.getInstance();
 			
 			ReservationParams par = res.getParams();
@@ -109,7 +111,7 @@ public class ResourcesReservation {
 			Calendar startTime = par.getStartTime();
 			String resID = res.getReservationId();
 			
-			//Add it to Calendar again if it's not expired
+			//Add it to Calendar again
 			try {
 				calendar.addReservation(res.getReservedPath().getLinks(), 
 					par.getCapacity(), par.getPathConstraints(), 
@@ -118,6 +120,8 @@ public class ResourcesReservation {
 				log.error("Error while restoring DM state", e);
 			}
 
+			hbm.closeSession();
+			
 			log.info("Reservation: " + resID + " tasks:");
 			
 			if(res.isPathCreated()) {
@@ -166,8 +170,6 @@ public class ResourcesReservation {
     			dm2Idm.finish(resID, false);
 			}
 		}
-		
-		hbm.closeSession();
     }
 
 	/**

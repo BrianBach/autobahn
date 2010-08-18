@@ -39,7 +39,11 @@ public class Dm2IdmImpl implements Dm2Idm {
 		AccessPoint.getInstance().injectAbstractLinks(links);
 	}
     
-    public boolean saveReservationStatusDB(String res, int st) {
+	public void restorationCompleted() {
+		AccessPoint.getInstance().restorationCompleted();
+	}
+
+	public boolean saveReservationStatusDB(String res, int st) {
         return AccessPoint.getInstance().saveReservationStatusDB(res, st);
     }
 }
