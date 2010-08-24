@@ -184,6 +184,8 @@ public class EnvironmentSetup {
 				System.out.println("Problem with copying distribution, " + e.getMessage());
 			}
 		}
+		
+		DomainConfiguration.deleteDirectory(destDir);
 	}
 	
 	public void writeConfigurationFiles() {
