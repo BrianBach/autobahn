@@ -754,51 +754,46 @@ public final class AccessPoint implements UserAccessPoint,
 
 	public void injectAbstractLinks(List<Link> links) {
 		
-		if(links == null || links.size() < 1) {
-	        if(startupNotifier != null)
-	        	startupNotifier.domainUp(this.domainURL);
-
-			return;
+		if(links != null && links.size() > 0) {
+			log.info(links.size() + " links retrieved from DM");
+			
+			// Init quagga
+	        if(Boolean.valueOf(properties.getProperty("ospf.use"))) {
+	            String ospfAddress = properties.getProperty("ospf.address");
+	            int ospfPort = Integer.parseInt(properties.getProperty("ospf.port"));
+	            int lsaType = Integer.parseInt(properties.getProperty("ospf.lsaType"));
+	            String ifAddr = properties.getProperty("ospf.ifAddr");
+	            String areaId = properties.getProperty("ospf.areaId");
+	            int opaqueType = Integer.parseInt(properties.getProperty("ospf.opaqueType"));
+	            int opaqueId = Integer.parseInt(properties.getProperty("ospf.opaqueId"));
+	            log.info("Trying to connect to ospf api...");
+	            for (int i=0; i<20; i++) { 
+	                try {
+	                    topology.init(ospfAddress, ospfPort, lsaType, ifAddr,
+	                            areaId, opaqueType, opaqueId); 
+	                    log.info("Connected to ospf api: " + ospfAddress  + ":" + ospfPort);
+	                    break;
+	                } catch (Exception e) {
+	                    if (i == 19) {
+	                        log.error("Connecting to ospf api failed: " + e.getMessage(), e);
+	                    }
+	                }
+	                
+	                try {
+						Thread.sleep(1000 * 5);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+	            }
+	        }
+	        
+	        // Insert link into the topology
+	        for (Link l : links) {
+	        	log.info("Link: " + l + " acquired");
+	        	topology.insertLink(l);
+	        }
 		}
 		
-		log.info(links.size() + " links retrieved from DM");
-		
-		// Init quagga
-        if(Boolean.valueOf(properties.getProperty("ospf.use"))) {
-            String ospfAddress = properties.getProperty("ospf.address");
-            int ospfPort = Integer.parseInt(properties.getProperty("ospf.port"));
-            int lsaType = Integer.parseInt(properties.getProperty("ospf.lsaType"));
-            String ifAddr = properties.getProperty("ospf.ifAddr");
-            String areaId = properties.getProperty("ospf.areaId");
-            int opaqueType = Integer.parseInt(properties.getProperty("ospf.opaqueType"));
-            int opaqueId = Integer.parseInt(properties.getProperty("ospf.opaqueId"));
-            log.info("Trying to connect to ospf api...");
-            for (int i=0; i<20; i++) { 
-                try {
-                    topology.init(ospfAddress, ospfPort, lsaType, ifAddr,
-                            areaId, opaqueType, opaqueId); 
-                    log.info("Connected to ospf api: " + ospfAddress  + ":" + ospfPort);
-                    break;
-                } catch (Exception e) {
-                    if (i == 19) {
-                        log.error("Connecting to ospf api failed: " + e.getMessage(), e);
-                    }
-                }
-                
-                try {
-					Thread.sleep(1000 * 5);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-            }
-        }
-        
-        // Insert link into the topology
-        for (Link l : links) {
-        	log.info("Link: " + l + " acquired");
-        	topology.insertLink(l);
-        }
-        
         reservationProcessor.setRestorationMode(true);
 	}
     
