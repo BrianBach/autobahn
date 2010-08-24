@@ -101,7 +101,6 @@ public class TestsWithTool {
 		
 		// plug the mock to the DM
 		domain2.setDmProperty("tool.address", mock1.getToolAddress());
-		
 		observer.waitForDomains(domain2);
 		
         UserAccessPoint uap = domain1.getUserAccessPoint();  
@@ -117,6 +116,9 @@ public class TestsWithTool {
 
         // should be failed
         assertEquals(ReservationState.FAILED, observer.waitAndGetEvent(sid));
+        
+		domain2.setDmProperty("tool.address", "none");
+		observer.waitForDomains(domain2);
 	}
 
 	@Test
@@ -145,6 +147,10 @@ public class TestsWithTool {
 
         // should be failed
         assertEquals(ReservationState.FAILED, observer.waitAndGetEvent(sid));
+        
+		domain2.setDmProperty("tool.address", "none");
+		domain3.setDmProperty("tool.address", "none");
+		observer.waitForDomains(domain2, domain3);
 	}
 	
 	@After
