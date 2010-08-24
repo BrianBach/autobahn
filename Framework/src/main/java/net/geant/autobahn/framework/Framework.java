@@ -7,14 +7,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
-import javax.xml.ws.Endpoint;
-import net.geant.autobahn.edugain.WSSecurity;
 import net.geant.autobahn.framework.commands.AutobahnCommand;
 import net.geant.autobahn.framework.commands.ClientPortsCommand;
 import net.geant.autobahn.framework.commands.HelpCommand;
@@ -27,9 +23,8 @@ import net.geant.autobahn.framework.commands.ServicesCommand;
 import net.geant.autobahn.framework.commands.ShutdownCommand;
 import net.geant.autobahn.framework.commands.TopologyCommand;
 import net.geant.autobahn.framework.commands.UptimeCommand;
-import net.geant.autobahn.framework.manager.AutobahnManagerImpl;
 
-import org.apache.cxf.endpoint.Server;
+import org.apache.log4j.Logger;
 
 /**
  * @author Michal
@@ -37,6 +32,9 @@ import org.apache.cxf.endpoint.Server;
 
 public class Framework {
 
+	private static final Logger log = Logger.getLogger(Framework.class);
+	public static final String PROMPT = "AutoBahn>";
+	
 	private net.geant.autobahn.intradomain.AccessPoint dm = null;
 	private net.geant.autobahn.idm.AccessPoint idm = null;
     private net.geant.autobahn.converter.AccessPoint ta = null;
@@ -85,7 +83,7 @@ public class Framework {
 			idm = net.geant.autobahn.idm.AccessPoint.getInstance();
 			idm.init(idmProps);
         } catch (Exception e) {
-            System.out.println("Could not start IDM, " + e.getMessage());
+            log.error("Could not start IDM, " + e.getMessage());
         }
 	}
 	
@@ -129,11 +127,9 @@ public class Framework {
 			if (client == null) {
 				client = server.accept();
 				stop = false;
-				if (!allowRemote
-						&& !client.getInetAddress().isLoopbackAddress()) {
+				if (!allowRemote && !client.getInetAddress().isLoopbackAddress()) {
 					client.close();
-					System.out
-							.println("attempt to connect from remote location: "
+					log.warn("attempt to connect from remote location: "
 									+ client.getInetAddress().getHostName());
 					client = null;
 					continue;
@@ -151,7 +147,7 @@ public class Framework {
 			}
 
 			try {
-				out.print("AutoBahn>");
+				out.print(PROMPT);
 				out.flush();
 
 				String line = in.readLine();
@@ -168,11 +164,13 @@ public class Framework {
 					out.println("command not recognized");
 				}
 			} catch (Exception e1) {
-				System.out.println("connection dropped");
+				log.error("connection dropped", e1);
 				client = null;
 			}
 
 			if (stop) {
+				out.close();
+				in.close();
 				client.close();
 				client = null;
 
@@ -231,7 +229,7 @@ public class Framework {
     }
 
 	public void stop(boolean shutdown) {
-		stop = true;
+		this.stop = true;
 		this.shutdown = shutdown;
 	}
 
@@ -250,35 +248,17 @@ public class Framework {
 	
 			Framework autobahn = new Framework();
 			autobahn.init(props);
+
+			log.info("autobahn framework shutdown");
 			
 		} else if ("stop".equals(args[0])){
 			int port = Integer.parseInt(props.getProperty("framework.port"));
-			
-			Socket s = null;
-			PrintWriter out = null;
-			BufferedReader in = null;
-			
-			try {
-				s = new Socket("localhost", port);
-				in = new BufferedReader(new InputStreamReader(
-                        s.getInputStream()));
 
-				int count = 0;
-				while(count++ < "AutoBAHN>".length()) {
-					// Waiting for the 'Autobahn>'
-					in.read();
-				}
-				
-				out = new PrintWriter(s.getOutputStream(), true);
-				out.println("halt");
-				out.flush();
-			} finally {
-				out.close();
-				s.close();
-			}
+			MyTelnetClient cli = new MyTelnetClient("localhost", port);
+			cli.write("halt");
+			cli.disconnect();
 		}
 		
-		System.out.println("autobahn framework shutdown");
 		System.exit(0);
 	}
 }
