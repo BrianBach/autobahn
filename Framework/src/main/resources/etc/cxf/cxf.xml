@@ -55,7 +55,7 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
 		<property name="targetMethod"><value>getPropsLoader</value></property>
 	</bean>
 
-	<jaxws:endpoint id="idm2dm" implementor="net.geant.autobahn.idm2dm.Idm2DmImpl" address="http://localhost:${server.port}/autobahn/idm2dm">
+	<jaxws:endpoint id="idm2dm" implementor="net.geant.autobahn.idm2dm.Idm2DmImpl" address="http://${server.ip}:${server.port}/autobahn/idm2dm">
 		<jaxws:inInterceptors>
 			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
 				<constructor-arg>
@@ -101,7 +101,7 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
     
     
 
-	<jaxws:endpoint id="dm2idm" implementor="net.geant.autobahn.dm2idm.Dm2IdmImpl" address="http://localhost:${server.port}/autobahn/dm2idm">
+	<jaxws:endpoint id="dm2idm" implementor="net.geant.autobahn.dm2idm.Dm2IdmImpl" address="http://${server.ip}:${server.port}/autobahn/dm2idm">
 		<jaxws:inInterceptors>
 			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
 				<constructor-arg>
@@ -145,7 +145,7 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
 		</jaxws:outInterceptors>		
 	</jaxws:endpoint>
 	
-	<jaxws:endpoint id="dmadmin" implementor="net.geant.autobahn.intradomain.administration.AdministrationImpl" address="http://localhost:${server.port}/autobahn/dmadmin">
+	<jaxws:endpoint id="dmadmin" implementor="net.geant.autobahn.intradomain.administration.AdministrationImpl" address="http://${server.ip}:${server.port}/autobahn/dmadmin">
 		<jaxws:inInterceptors>
 			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
 				<constructor-arg>
@@ -189,7 +189,7 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
 		</jaxws:outInterceptors>		
 	</jaxws:endpoint>
 	
-	<jaxws:endpoint id="interdomain" implementor="net.geant.autobahn.interdomain.InterdomainImpl" address="http://localhost:${server.port}/autobahn/interdomain">
+	<jaxws:endpoint id="interdomain" implementor="net.geant.autobahn.interdomain.InterdomainImpl" address="http://${server.ip}:${server.port}/autobahn/interdomain">
 		<jaxws:inInterceptors>
 			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
 				<constructor-arg>
@@ -233,7 +233,7 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
 		</jaxws:outInterceptors>		
 	</jaxws:endpoint>
 	
-	<jaxws:endpoint id="topologyabstraction" implementor="net.geant.autobahn.converter.TopologyAbstractionImpl" address="http://localhost:${server.port}/autobahn/topologyabstraction">
+	<jaxws:endpoint id="topologyabstraction" implementor="net.geant.autobahn.converter.TopologyAbstractionImpl" address="http://${server.ip}:${server.port}/autobahn/topologyabstraction">
 		<jaxws:inInterceptors>
 			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
 				<constructor-arg>
@@ -277,7 +277,7 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
 		</jaxws:outInterceptors>	
 	</jaxws:endpoint>
 		
-	<jaxws:endpoint id="uap" implementor="net.geant.autobahn.useraccesspoint.UserAccessPointImpl" address="http://localhost:${server.port}/autobahn/uap">
+	<jaxws:endpoint id="uap" implementor="net.geant.autobahn.useraccesspoint.UserAccessPointImpl" address="http://${server.ip}:${server.port}/autobahn/uap">
 		<jaxws:inInterceptors>
 			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
 				<constructor-arg>
@@ -321,9 +321,9 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
 		</jaxws:outInterceptors>		
 	</jaxws:endpoint>
 	
-<!-- <jaxws:endpoint id="proxy" implementor="net.geant.autobahn.proxy.ProxyImpl" address="http://localhost:8080/autobahn/proxy"/> -->
+<!-- <jaxws:endpoint id="proxy" implementor="net.geant.autobahn.proxy.ProxyImpl" address="http://${server.ip}:8080/autobahn/proxy"/> -->
 
-	<jaxws:endpoint id="administration" implementor="net.geant.autobahn.administration.AdministrationImpl" address="http://localhost:${server.port}/autobahn/administration">
+	<jaxws:endpoint id="administration" implementor="net.geant.autobahn.administration.AdministrationImpl" address="http://${server.ip}:${server.port}/autobahn/administration">
 		<jaxws:inInterceptors>
 			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
 				<constructor-arg>
@@ -367,7 +367,7 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
 		</jaxws:outInterceptors>		
 	</jaxws:endpoint>
 	
-	<jaxws:endpoint id="resourcesreservationcalendar" implementor="net.geant.autobahn.calendar.ResourcesReservationCalendarImpl" address="http://localhost:${server.port}/autobahn/resourcesreservationcalendar">
+	<jaxws:endpoint id="resourcesreservationcalendar" implementor="net.geant.autobahn.calendar.ResourcesReservationCalendarImpl" address="http://${server.ip}:${server.port}/autobahn/resourcesreservationcalendar">
 		<jaxws:inInterceptors>
 			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
 				<constructor-arg>
