@@ -35,7 +35,7 @@ public class UserAccessPointService{
     
     public UserAccessPointService(String endPoint) {
     	service = Service.create(SERVICE);
-    	service.addPort(UserAccessPointPort, SOAPBinding.SOAP12HTTP_BINDING, endPoint);
+    	service.addPort(UserAccessPointPort, SOAPBinding.SOAP11HTTP_BINDING, endPoint);
     }
     
     /**
