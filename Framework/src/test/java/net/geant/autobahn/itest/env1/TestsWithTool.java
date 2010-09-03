@@ -80,7 +80,7 @@ public class TestsWithTool {
 		UserAccessPoint uap = domain1.getUserAccessPoint();
 		
         ServiceRequest req = RequestParser.createServiceRequest(
-        		"10.10.32.5", "10.11.32.10", 1000000000, "20sec", "40sec", "Test1", false);
+        		"10.10.32.5", "10.11.32.10", 1000000000, "20sec", "40sec", "Tool1", false);
         
         String sid = uap.submitServiceAndRegister(req, callback);
         observer.registerService(sid);
@@ -106,7 +106,7 @@ public class TestsWithTool {
         UserAccessPoint uap = domain1.getUserAccessPoint();  
 
         ServiceRequest req = RequestParser.createServiceRequest(
-        		"10.10.32.5", "10.11.32.10", 1000000000, "20sec", "40sec", "Test1", false);
+        		"10.10.32.5", "10.11.32.10", 1000000000, "20sec", "40sec", "Tool2", false);
         
         String sid = uap.submitServiceAndRegister(req, callback);
         observer.registerService(sid);
@@ -137,7 +137,7 @@ public class TestsWithTool {
         UserAccessPoint uap = domain1.getUserAccessPoint();  
 
         ServiceRequest req = RequestParser.createServiceRequest(
-        		"10.10.32.5", "10.11.32.10", 1000000000, "20sec", "40sec", "Test1", false);
+        		"10.10.32.5", "10.11.32.10", 1000000000, "20sec", "40sec", "Tool3", false);
         
         String sid = uap.submitServiceAndRegister(req, callback);
         observer.registerService(sid);
@@ -161,7 +161,7 @@ public class TestsWithTool {
 	@AfterClass
 	public static void cleanup() {
         try {
-        	Thread.sleep(20 * 1000);
+        	Thread.sleep(5 * 1000);
         } catch(Exception e) {
         }
         observer.stop();
@@ -170,6 +170,7 @@ public class TestsWithTool {
 		domain1.stopInstance();
 		domain2.stopInstance();
 		domain3.stopInstance();
+		
         try {
         	Thread.sleep(20 * 1000);
         } catch(Exception e) {

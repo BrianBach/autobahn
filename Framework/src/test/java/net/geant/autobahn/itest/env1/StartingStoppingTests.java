@@ -176,7 +176,7 @@ public class StartingStoppingTests {
 	@AfterClass
 	public static void cleanup() {
         try {
-        	Thread.sleep(30 * 1000);
+        	Thread.sleep(5 * 1000);
         } catch(Exception e) {
         }
 		observer.stop();

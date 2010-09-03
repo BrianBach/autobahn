@@ -74,6 +74,7 @@ public class AutobahnTest {
 		
         UserAccessPoint uap = domain1.getUserAccessPoint();  
 		ServiceRequest req = parser.readServiceRequest("/requests/request1.txt");
+		req.setJustification("ATest1");
 		
         String sid = uap.submitServiceAndRegister(req, observer.getUrl());
         
@@ -92,6 +93,7 @@ public class AutobahnTest {
 		System.out.println("2");
 		
 		ServiceRequest req = parser.readServiceRequest("/requests/request2.txt");
+		req.setJustification("ATest2");
 		
         UserAccessPoint uap = domain1.getUserAccessPoint();
 
@@ -123,8 +125,10 @@ public class AutobahnTest {
 		observer.waitForDomains(domain2);
 		
 		ServiceRequest req = parser.readServiceRequest("/requests/request2.txt");
+		req.setJustification("ATest3");
+		
         UserAccessPoint uap = domain1.getUserAccessPoint();
-
+        
         String sid = uap.submitServiceAndRegister(req, observer.getUrl());
         
         observer.registerService(sid);
@@ -143,6 +147,7 @@ public class AutobahnTest {
 		System.out.println("4");
 		
 		ServiceRequest req = parser.readServiceRequest("/requests/request1.txt");
+		req.setJustification("ATest4");
 		
         UserAccessPoint uap = domain1.getUserAccessPoint();  
 
@@ -167,7 +172,7 @@ public class AutobahnTest {
 	@AfterClass
 	public static void cleanup() {
         try {
-        	Thread.sleep(20 * 1000);
+        	Thread.sleep(5 * 1000);
         } catch(Exception e) {
         }
 		observer.stop();
