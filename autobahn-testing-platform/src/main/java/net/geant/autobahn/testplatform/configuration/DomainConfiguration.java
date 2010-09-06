@@ -341,6 +341,7 @@ public class DomainConfiguration {
 		props.setProperty("domainName", incremental.getDomainName());
 		props.setProperty("topologyabstraction.address", buildAutobahnUrl("/topologyabstraction"));
 		props.setProperty("resourcesreservationcalendar.address", buildAutobahnUrl("/resourcesreservationcalendar"));
+		props.setProperty("lookuphost", defaultConf.getProperty("lookupservice.address"));
 		props = updateDbProperties(props);
 		
 		return props;
@@ -350,6 +351,7 @@ public class DomainConfiguration {
 		props.setProperty("domain", buildAutobahnUrl("/interdomain"));
 		props.setProperty("domainName", incremental.getDomainName());
 		props.setProperty("dm.address", buildAutobahnUrl("/idm2dm"));
+		props.setProperty("lookuphost", defaultConf.getProperty("lookupservice.address"));
 		props = updateDbProperties(props);
 		
 		return props;
@@ -360,6 +362,7 @@ public class DomainConfiguration {
 		props.setProperty("id.nodes", incremental.getNodesRange());
 		props.setProperty("id.ports", incremental.getPortsRange());
 		props.setProperty("id.links", incremental.getLinksRange());
+		props.setProperty("lookuphost", defaultConf.getProperty("lookupservice.address"));
 		
 		return props;
 	}

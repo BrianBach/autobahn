@@ -3,9 +3,7 @@
  */
 package net.geant.autobahn.testplatform.configuration.topology;
 
-import net.geant.autobahn.intradomain.administration.DmAdministration;
 import net.geant.autobahn.intradomain.common.GenericInterface;
-import net.geant.autobahn.testplatform.clients.DmAdministrationClient;
 import net.geant.autobahn.testplatform.configuration.Domain;
 import net.geant.autobahn.testplatform.configuration.IntraTopologyBuilder;
 

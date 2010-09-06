@@ -1,11 +1,9 @@
 /**
  * 
  */
-package net.geant.autobahn.testplatform.configuration.topology;
+package net.geant.autobahn.itest.env1;
 
-import net.geant.autobahn.intradomain.administration.DmAdministration;
 import net.geant.autobahn.intradomain.common.GenericInterface;
-import net.geant.autobahn.testplatform.clients.DmAdministrationClient;
 import net.geant.autobahn.testplatform.configuration.Domain;
 import net.geant.autobahn.testplatform.configuration.IntraTopologyBuilder;
 
@@ -13,14 +11,14 @@ import net.geant.autobahn.testplatform.configuration.IntraTopologyBuilder;
  * @author jacek
  *
  */
-public class AutobahnTestTopology1 {
+public class AutobahnTestTopology {
 
     public static long _1Gb = (long) 1 * 1000 * 1000 * 1000;
     public static long _10Gb = (long) 10 * 1000 * 1000 * 1000;
 
-    private final static Domain domain1 = new Domain("domain1", "localhost", 8080, 8090);
-    private final static Domain domain2 = new Domain("domain2", "localhost", 8081, 8091);
-    private final static Domain domain3 = new Domain("domain3", "localhost", 8082, 8092);
+    private final static Domain domain1 = new Domain("domain1", "localhost", 28080, 28090);
+    private final static Domain domain2 = new Domain("domain2", "localhost", 28081, 28091);
+    private final static Domain domain3 = new Domain("domain3", "localhost", 28082, 28092);
 
     private final static String hostDomain1 = "http://client-domain.domain1.com";
     private final static String hostDomain2 = "http://client-domain.domain2.com";

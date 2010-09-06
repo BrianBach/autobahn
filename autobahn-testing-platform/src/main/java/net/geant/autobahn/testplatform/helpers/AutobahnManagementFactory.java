@@ -39,6 +39,7 @@ public class AutobahnManagementFactory {
 			MyProperties localProps = new MyProperties(is);
 
 			props.setProperty("default.home", localProps.getProperty("default.home"));
+			props.setProperty("lookupservice.address", localProps.getProperty("lookupservice.address"));
 			props.setProperty("default.db-name-prefix", localProps.getProperty("default.db-name-prefix"));
 			props.setProperty("default.db-host", localProps.getProperty("default.db-host"));
 			props.setProperty("default.db-user", localProps.getProperty("default.db-user"));
