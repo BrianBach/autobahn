@@ -56,6 +56,7 @@
 					<doUpdate>false</doUpdate>
 				</configuration>
 			</plugin>
+			
 		</plugins>
 	</build>
 	
@@ -91,6 +92,51 @@
 		      </plugins>
 		    </build>
 		 </profile>
+		 
+		 <profile>
+	       <id>run-it-tests</id>
+	       <build>
+	       	 <plugins>
+		       <plugin>
+					<groupId>org.codehaus.cargo</groupId>
+					<artifactId>cargo-maven2-plugin</artifactId>
+					<configuration>
+						<wait>false</wait>
+						<container>
+							<containerId>tomcat6x</containerId>
+							<type>installed</type>
+							<home>${ls.tomcat.path}</home>
+							<output>${project.build.directory}/tomcat-ls.log</output>
+						</container>
+						<configuration>
+							<type>existing</type>
+							<home>${ls.tomcat.path}</home>
+							<properties>
+								<cargo.servlet.port>9999</cargo.servlet.port>
+							</properties>
+						</configuration>
+					</configuration>
+					<executions>
+						<execution>
+							<id>start-container</id>
+							<phase>pre-integration-test</phase>
+							<goals>
+								<goal>start</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>stop-container</id>
+							<phase>post-integration-test</phase>
+							<goals>
+								<goal>stop</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+		     </plugins>
+	       </build>
+	     </profile>
+		 
     </profiles>
  	
  	<dependencies>
