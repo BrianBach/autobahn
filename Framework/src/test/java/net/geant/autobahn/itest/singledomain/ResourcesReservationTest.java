@@ -1,4 +1,4 @@
-package net.geant.autobahn.intradomain;
+package net.geant.autobahn.itest.singledomain;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -22,6 +22,9 @@ import net.geant.autobahn.constraints.RangeConstraint;
 import net.geant.autobahn.converter.AccessPoint;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
 import net.geant.autobahn.idm2dm.OversubscribedException;
+import net.geant.autobahn.intradomain.IntradomainTopology;
+import net.geant.autobahn.intradomain.PersistentReservationsManager;
+import net.geant.autobahn.intradomain.ResourcesReservation;
 import net.geant.autobahn.intradomain.common.GenericLink;
 import net.geant.autobahn.intradomain.ethernet.SpanningTree;
 import net.geant.autobahn.intradomain.pathfinder.IntradomainPathfinder;
@@ -85,7 +88,7 @@ public class ResourcesReservationTest extends TestCase {
         taProps.setProperty("id.ports", "10.10.32.0/24");
         taProps.setProperty("id.links", "10.10.64.0/24");
         taProps.setProperty("public.ids.file", "src/test/resources/etc/public_ids.properties");
-        taProps.setProperty("lookuphost","http://150.140.8.15:8080/perfsonar-java-xml-ls/services/LookupService");
+        taProps.setProperty("lookuphost","http://localhost:21080/perfsonar-java-xml-ls/services/LookupService");
 
         calProps = new Properties();
         calProps.setProperty("db.type", "ethernet");

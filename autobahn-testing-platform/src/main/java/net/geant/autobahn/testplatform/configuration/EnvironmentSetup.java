@@ -31,13 +31,13 @@ public class EnvironmentSetup {
 		this.props = props;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void prepareConfiguration() {
 		String className = props.getProperty("topology.class");
 		
 		List<IntraTopologyBuilder> builders = new ArrayList<IntraTopologyBuilder>();
 		
 		try {
+			@SuppressWarnings("rawtypes")
 			Class c = Class.forName(className);
 			Method methods[] = c.getDeclaredMethods();
 			

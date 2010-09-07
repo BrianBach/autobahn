@@ -1,6 +1,7 @@
 package net.geant.autobahn.itest;
 
 import net.geant.autobahn.itest.env1.AllEnv1Tests;
+import net.geant.autobahn.itest.singledomain.ResourcesReservationTest;
 
 import org.apache.cxf.common.logging.Log4jLogger;
 import org.apache.cxf.common.logging.LogUtils;
@@ -11,7 +12,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({
-	AllEnv1Tests.class
+	AllEnv1Tests.class, ResourcesReservationTest.class
 })
 public class AllTests {
 
