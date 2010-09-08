@@ -104,6 +104,35 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+					<forkMode>pertest</forkMode>
+					<argLine>-enableassertions</argLine>
+				</configuration>
+				<executions>
+					<execution>
+						<id>surefire-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<configuration>
+							<skip>false</skip>
+							<includes>
+								<!-- unit tests -->
+								<include>**/*Test.java</include>
+							</includes>
+							<excludes>
+								<exclude>**/itest/**</exclude>
+								<exclude>**/*TestCase.java</exclude>
+								<exclude>**/Test*.java</exclude>
+								<exclude>**/TopologyTest.java</exclude>
+								<exclude>**/TestTopology*.java</exclude>
+								<exclude>**/topologies/*.java</exclude>
+							</excludes>
+						</configuration>
+					</execution>
+				</executions>                
             </plugin>
 			<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -145,36 +174,6 @@
                 
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-			        <configuration>
-			          <skip>true</skip>
-			        </configuration>
-                    <executions>
-                          <execution>
-				            <id>surefire-test</id>
-				            <phase>test</phase>
-				            <goals>
-				              <goal>test</goal>
-				            </goals>
-				            <configuration>
-		                        <forkMode>pertest</forkMode>
-		                        <argLine>-enableassertions</argLine>
-				                <skip>false</skip>
-		                        
-					            <excludes>
-					              <exclude>**/itest/**</exclude>
-	                              <exclude>**/*TestCase.java</exclude>
-	                              <exclude>**/Test*.java</exclude>
-	                              <exclude>**/TopologyTest.java</exclude>
-	                              <exclude>**/topologies/*.java</exclude>
-					            </excludes>
-					            
-				            </configuration>
-				          </execution>
-					</executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-eclipse-plugin</artifactId>
                     <configuration>
                         <downloadSources>true</downloadSources>
@@ -182,7 +181,7 @@
                         <downloadJavadocs>true</downloadJavadocs>
                         <projectNameTemplate>[artifactId]</projectNameTemplate>
                     </configuration>
-                </plugin>			
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -252,100 +251,67 @@
             	</pluginManagement>
         	</build>
 		</profile>
-		
-		<!-- Profile for running only the integration tests  -->
-	    <profile>
-	      <id>only-it-tests</id>
-	      <build>
-	        <plugins>
-	          <plugin>
-	            <artifactId>maven-surefire-plugin</artifactId>
-	            <groupId>org.apache.maven.plugins</groupId>
-	            <configuration>
-	              <skip>true</skip>
-	            </configuration>
-	            <executions>
-	               <execution>
-		            <id>surefire-test</id>
-		            <phase>test</phase>
-		            <goals>
-		              <goal>test</goal>
-		            </goals>
-		           <configuration>
-		               <skip>true</skip>
-		           </configuration>
-		         </execution>
-	            </executions>
-	          </plugin>
-	        </plugins>
-	      </build>
-	    </profile>
 	    
-	    <!-- Profile for running the integration tests  -->
-	    <profile>
-	      <id>run-it-tests</id>
-	      <build>
-	        <plugins>
-	          <plugin>
-	            <artifactId>maven-surefire-plugin</artifactId>
-	            <groupId>org.apache.maven.plugins</groupId>
-	            <configuration>
-	              <skip>true</skip>
-	            </configuration>
-	            <executions>
-				          <execution>
-				            <id>surefire-itest</id>
-				            <phase>integration-test</phase>
-				            <goals>
-				              <goal>test</goal>
-				            </goals>
-				            <configuration>
-				              <skip>false</skip>
-				              <includes>
-				                <include>**/itest/AllTests.java</include>
-				              </includes>
-							<excludes>
-								<exclude>**/*$*</exclude>
-							</excludes>
-				            </configuration>
-				          </execution>
-	            </executions>
-	          </plugin>
-	        </plugins>
-	      </build>
-	    </profile>
-	    
-	    <!-- Profile for disabling integration tests  -->
-	    <profile>
-	      <id>skip-it-tests</id>
-	      <build>
-	        <plugins>
-	          <plugin>
-	            <artifactId>maven-surefire-plugin</artifactId>
-	            <groupId>org.apache.maven.plugins</groupId>
-	            <configuration>
-	              <!--
-	                Skip tests as the other tests have been already executed
-	                in the "test" and "integration-test" phases
-	              -->
-	              <skip>true</skip>
-	            </configuration>
-	            <executions>
-	               <execution>
-		            <id>surefire-itest</id>
-		            <phase>test</phase>
-		            <goals>
-		              <goal>test</goal>
-		            </goals>
-		           <configuration>
-		               <skip>true</skip>
-		           </configuration>
-		         </execution>
-	            </executions>
-	          </plugin>
-	        </plugins>
-	      </build>
-	    </profile>
+		<profile>
+            <id>CI</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.4.3</version>
+                        <configuration>
+				          <skip>true</skip>
+						  <forkMode>pertest</forkMode>
+           				  <argLine>-enableassertions</argLine>
+                        </configuration>
+                        <executions>
+			                <execution>
+					            <id>surefire-test</id>
+					            <phase>test</phase>
+					            <goals>
+					              <goal>test</goal>
+					            </goals>
+					            <configuration>
+					              <skip>false</skip>
+	                              <includes>
+		                              <!-- unit tests-->
+		                              <include>**/*Test.java</include>
+	                              </includes>
+	                              <excludes>
+		                              <exclude>**/itest/**</exclude>
+		                              <exclude>**/*TestCase.java</exclude>
+		                              <exclude>**/Test*.java</exclude>
+		                              <exclude>**/TopologyTest.java</exclude>
+		                              <exclude>**/TestTopology*.java</exclude>
+		                              <exclude>**/topologies/*.java</exclude>
+	                              </excludes>
+	                              
+					            </configuration>
+				        	</execution>
+							<execution>
+					            <id>surefire-itest</id>
+					            <phase>integration-test</phase>
+					            <goals>
+					              <goal>test</goal>
+					            </goals>
+					            <configuration>
+					              <skip>false</skip>
+	                              <excludes>
+		                              <exclude>**/*$*</exclude>
+	                              </excludes>
+	                              <includes>
+		                              <!-- it tests-->
+		                              <include>**/itest/AllTests.java</include>
+	                              </includes>
+					            </configuration>
+				        	</execution>				        	
+			            </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
 	    
 	    <profile>
 	      <id>create-new-env</id>

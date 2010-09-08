@@ -30,7 +30,7 @@ import static net.geant.autobahn.intradomain.topologies.SdhTopology1._10Gb;
 import static net.geant.autobahn.intradomain.topologies.SdhTopology1._1Gb;
 
 
-public class SdhPathfinderTest_Topology1 {
+public class SdhPathfinderTopology1Test {
 
     private Map<String, Node> nodes = null;
     private Map<String, GenericLink> glinks = null;

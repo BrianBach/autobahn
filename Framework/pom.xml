@@ -94,7 +94,7 @@
 		 </profile>
 		 
 		 <profile>
-	       <id>run-it-tests</id>
+	       <id>CI</id>
 	       <build>
 	       	 <plugins>
 		       <plugin>

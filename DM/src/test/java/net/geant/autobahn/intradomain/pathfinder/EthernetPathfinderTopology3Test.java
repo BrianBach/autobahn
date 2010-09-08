@@ -29,7 +29,7 @@ import static net.geant.autobahn.intradomain.topologies.EthTopology3._500Mb;
  * @author <a href="mailto:stamos@cti.gr">Kostas Stamos</a>
  *
  */
-public class EthernetPathfinderTest_Topology3 {
+public class EthernetPathfinderTopology3Test {
 
     private Map<String, Node> nodes = null;
     private Map<String, GenericLink> glinks = null;

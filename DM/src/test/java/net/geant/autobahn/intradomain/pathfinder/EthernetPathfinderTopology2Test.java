@@ -27,7 +27,7 @@ import static net.geant.autobahn.intradomain.topologies.EthTopology1._1Gb;
  * @author <a href="mailto:jaxlucas@man.poznan.pl">Jacek Lukasik</a>
  *
  */
-public class EthernetPathfinderTest_Topology2 {
+public class EthernetPathfinderTopology2Test {
 
     private Map<String, Node> nodes = null;
     private Map<String, GenericLink> glinks = null;
