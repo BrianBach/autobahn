@@ -17,11 +17,9 @@ public class AutobahnManagementFactory {
 		String branch = System.getProperty("launchEnv", "local");
 
 		MyProperties props = null;
-		System.out.println("Reading " + "/" + branch + "/" + path + "/test-env.properties");
 		InputStream is = this.getClass().getResourceAsStream("/" + branch + "/" + path + "/test-env.properties");
 		
 		if(is != null) {
-			System.out.println("Read");
 			props = new MyProperties(is);
 		} else {
 			// Try to load the remote and change the settings to the local environment 

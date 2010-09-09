@@ -104,36 +104,23 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.6</version>
 				<configuration>
-					<skip>true</skip>
 					<forkMode>always</forkMode>
 					<argLine>-enableassertions</argLine>
+
+					<includes>
+						<!-- unit tests -->
+						<include>**/*Test.java</include>
+					</includes>
+					<excludes>
+						<exclude>**/itest/**</exclude>
+						<exclude>**/*TestCase.java</exclude>
+						<exclude>**/Test*.java</exclude>
+						<exclude>**/TopologyTest.java</exclude>
+						<exclude>**/TestTopology*.java</exclude>
+						<exclude>**/topologies/*.java</exclude>
+					</excludes>
 				</configuration>
-				<executions>
-					<execution>
-						<id>default-test</id>
-						<phase>test</phase>
-						<goals>
-							<goal>test</goal>
-						</goals>
-						<configuration>
-							<skip>false</skip>
-							<includes>
-								<!-- unit tests -->
-								<include>**/*Test.java</include>
-							</includes>
-							<excludes>
-								<exclude>**/itest/**</exclude>
-								<exclude>**/*TestCase.java</exclude>
-								<exclude>**/Test*.java</exclude>
-								<exclude>**/TopologyTest.java</exclude>
-								<exclude>**/TestTopology*.java</exclude>
-								<exclude>**/topologies/*.java</exclude>
-							</excludes>
-						</configuration>
-					</execution>
-				</executions>                
             </plugin>
 			<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -257,59 +244,32 @@
             <id>CI</id>
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.6</version>
-                        <configuration>
-				          <skip>true</skip>
-						  <forkMode>pertest</forkMode>
-           				  <argLine>-enableassertions</argLine>
-                        </configuration>
-                        <executions>
-			                <execution>
-					            <id>default-test</id>
-					            <phase>test</phase>
-					            <goals>
-					              <goal>test</goal>
-					            </goals>
-					            <configuration>
-					              <skip>false</skip>
-	                              <includes>
-		                              <!-- unit tests-->
-		                              <include>**/*Test.java</include>
-	                              </includes>
-	                              <excludes>
-		                              <exclude>**/itest/**</exclude>
-		                              <exclude>**/*TestCase.java</exclude>
-		                              <exclude>**/Test*.java</exclude>
-		                              <exclude>**/TopologyTest.java</exclude>
-		                              <exclude>**/TestTopology*.java</exclude>
-		                              <exclude>**/topologies/*.java</exclude>
-	                              </excludes>
-	                              
-					            </configuration>
-				        	</execution>
-				        	
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<version>2.6</version>
+						<configuration>
+							<includes>
+								<include>**/itest/AllTests.java</include>
+							</includes>
+						</configuration>
+						<executions>
 							<execution>
-					            <id>surefire-itest</id>
-					            <phase>integration-test</phase>
-					            <goals>
-					              <goal>test</goal>
-					            </goals>
-					            <configuration>
-					              <skip>false</skip>
-								  <forkMode>always</forkMode>
-								  
-								  <systemPropertyVariables>
-								    <launchEnv>local</launchEnv>
-								  </systemPropertyVariables>
-        		   				  
-								  <test>itest/AllTests</test>
-					            </configuration>
-				        	</execution>				        	
-			            </executions>
-                    </plugin>
+								<id>integration-test</id>
+								<phase>integration-test</phase>
+								<goals>
+									<goal>integration-test</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>verify</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>verify</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
                 </plugins>
             </build>
         </profile>

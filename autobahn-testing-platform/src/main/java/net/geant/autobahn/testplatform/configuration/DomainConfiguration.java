@@ -194,6 +194,7 @@ public class DomainConfiguration {
 
 				sql += "DELETE FROM path_constraint;\n";
 				sql += "DELETE FROM domain_constraints;\n";
+				sql += "DELETE FROM domainsids;\n";
 				sql += "DELETE FROM global_constraints;\n";
 
 		        sql += "DELETE FROM intradomain_path;";
