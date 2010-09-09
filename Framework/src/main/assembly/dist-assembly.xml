@@ -36,6 +36,7 @@
             <excludes>
 				<exclude>antlr:antlr</exclude>
 				<exclude>org.slf4j:slf4j-jdk14</exclude>
+				<exclude>org.slf4j:log4j-over-slf4j</exclude>
    				<exclude>cglib:cglib</exclude>
 			</excludes>
 			<includes>
