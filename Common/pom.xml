@@ -92,6 +92,12 @@
 			<version>2.2.3</version>
 			<type>jar</type>
 			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>log4j-over-slf4j</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>			
 		<dependency>
 			<groupId>dom4j</groupId>

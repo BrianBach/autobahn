@@ -94,7 +94,10 @@ public abstract class LocalAutobahnRunner {
 		File libDir = new File(prefix + "/lib");
 		
 		if(libDir.exists() && libDir.isDirectory()) {
-			return libDir.list(new JarFilter());
+			String[] list = libDir.list(new JarFilter());
+			if(list != null) 
+				Arrays.sort(list);
+			return list;
 		}
 		
 		return null;
