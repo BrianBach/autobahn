@@ -104,9 +104,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.6</version>
 				<configuration>
 					<skip>true</skip>
-					<forkMode>pertest</forkMode>
+					<forkMode>always</forkMode>
 					<argLine>-enableassertions</argLine>
 				</configuration>
 				<executions>
@@ -259,7 +260,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.4.3</version>
+                        <version>2.6</version>
                         <configuration>
 				          <skip>true</skip>
 						  <forkMode>pertest</forkMode>
@@ -289,6 +290,7 @@
 	                              
 					            </configuration>
 				        	</execution>
+				        	
 							<execution>
 					            <id>surefire-itest</id>
 					            <phase>integration-test</phase>
@@ -297,13 +299,13 @@
 					            </goals>
 					            <configuration>
 					              <skip>false</skip>
-	                              <excludes>
-		                              <exclude>**/*$*</exclude>
-	                              </excludes>
-	                              <includes>
-		                              <!-- it tests-->
-		                              <include>**/itest/AllTests.java</include>
-	                              </includes>
+								  <forkMode>always</forkMode>
+								  
+								  <systemPropertyVariables>
+								    <launchEnv>local</launchEnv>
+								  </systemPropertyVariables>
+        		   				  
+								  <test>itest/AllTests</test>
 					            </configuration>
 				        	</execution>				        	
 			            </executions>
