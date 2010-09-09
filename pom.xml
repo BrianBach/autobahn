@@ -252,6 +252,10 @@
 							<includes>
 								<include>**/itest/AllTests.java</include>
 							</includes>
+							<reportsDirectory>
+								<!-- It's a hack to let Hudson see them -->
+								${project.build.directory}/surefire-reports
+							</reportsDirectory>
 						</configuration>
 						<executions>
 							<execution>
