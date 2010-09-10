@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.ws.wsaddressing.W3CEndpointReference;
+import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.w3c.dom.Element;
 
 
@@ -46,7 +46,7 @@ public class Renew {
     @XmlElement(name = "TerminationTime", required = true, nillable = true)
     protected String terminationTime;
     @XmlElement(name = "SubscriptionReference", required = true)
-    protected W3CEndpointReference subscriptionReference;
+    protected EndpointReferenceType subscriptionReference;
     @XmlAnyElement(lax = true)
     protected List<Object> any;
 
@@ -79,10 +79,10 @@ public class Renew {
      * 
      * @return
      *     possible object is
-     *     {@link W3CEndpointReference }
+     *     {@link EndpointReferenceType }
      *     
      */
-    public W3CEndpointReference getSubscriptionReference() {
+    public EndpointReferenceType getSubscriptionReference() {
         return subscriptionReference;
     }
 
@@ -91,10 +91,10 @@ public class Renew {
      * 
      * @param value
      *     allowed object is
-     *     {@link W3CEndpointReference }
+     *     {@link EndpointReferenceType }
      *     
      */
-    public void setSubscriptionReference(W3CEndpointReference value) {
+    public void setSubscriptionReference(EndpointReferenceType value) {
         this.subscriptionReference = value;
     }
 

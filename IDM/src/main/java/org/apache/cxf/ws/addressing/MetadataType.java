@@ -1,30 +1,26 @@
 
-package org.oasis_open.docs.wsn.br_2;
+package org.apache.cxf.ws.addressing;
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.w3c.dom.Element;
 
 
 /**
- * <p>Java class for anonymous complex type.
+ * <p>Java class for MetadataType complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType>
+ * &lt;complexType name="MetadataType">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="PublisherRegistrationReference" type="{http://www.w3.org/2005/08/addressing}EndpointReferenceType"/>
- *         &lt;any processContents='lax' namespace='##other' maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;any processContents='lax' maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -34,41 +30,13 @@ import org.w3c.dom.Element;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "publisherRegistrationReference",
+@XmlType(name = "MetadataType", propOrder = {
     "any"
 })
-@XmlRootElement(name = "DestroyRegistrationResponse")
-public class DestroyRegistrationResponse {
+public class MetadataType {
 
-    @XmlElement(name = "PublisherRegistrationReference", required = true)
-    protected EndpointReferenceType publisherRegistrationReference;
     @XmlAnyElement(lax = true)
     protected List<Object> any;
-
-    /**
-     * Gets the value of the publisherRegistrationReference property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link EndpointReferenceType }
-     *     
-     */
-    public EndpointReferenceType getPublisherRegistrationReference() {
-        return publisherRegistrationReference;
-    }
-
-    /**
-     * Sets the value of the publisherRegistrationReference property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link EndpointReferenceType }
-     *     
-     */
-    public void setPublisherRegistrationReference(EndpointReferenceType value) {
-        this.publisherRegistrationReference = value;
-    }
 
     /**
      * Gets the value of the any property.

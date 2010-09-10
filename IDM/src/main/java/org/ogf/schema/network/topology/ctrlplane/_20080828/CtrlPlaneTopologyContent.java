@@ -75,28 +75,6 @@ public class CtrlPlaneTopologyContent {
     }
 
     /**
-     * Manually added method
-     * 
-     * @param ctrlSigns
-     */
-    public void setDomain(CtrlPlaneDomainContent[] ctrlSigns) {
-        this.domain = new ArrayList<CtrlPlaneDomainContent>();
-        for (CtrlPlaneDomainContent ct : ctrlSigns) {
-            this.domain.add(ct);
-        }
-    }
-    /**
-     * Manually added method
-     * 
-     * @param ctrlSigns
-     */
-    public void setDomainSignature(CtrlPlaneDomainSignatureContent[] ctrlSigns) {
-        this.domainSignature = new ArrayList<CtrlPlaneDomainSignatureContent>();
-        for (CtrlPlaneDomainSignatureContent ct : ctrlSigns) {
-            this.domainSignature.add(ct);
-        }
-    }
-    /**
      * Gets the value of the path property.
      * 
      * <p>

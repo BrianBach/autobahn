@@ -5,7 +5,7 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.namespace.QName;
-import javax.xml.ws.wsaddressing.W3CEndpointReference;
+import org.apache.cxf.ws.addressing.EndpointReferenceType;
 
 
 /**
@@ -56,22 +56,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RegisterPublisher }
-     * 
-     */
-    public RegisterPublisher createRegisterPublisher() {
-        return new RegisterPublisher();
-    }
-
-    /**
-     * Create an instance of {@link ResourceNotDestroyedFaultType }
-     * 
-     */
-    public ResourceNotDestroyedFaultType createResourceNotDestroyedFaultType() {
-        return new ResourceNotDestroyedFaultType();
-    }
-
-    /**
      * Create an instance of {@link PublisherRegistrationFailedFaultType }
      * 
      */
@@ -85,6 +69,22 @@ public class ObjectFactory {
      */
     public DestroyRegistration createDestroyRegistration() {
         return new DestroyRegistration();
+    }
+
+    /**
+     * Create an instance of {@link RegisterPublisher }
+     * 
+     */
+    public RegisterPublisher createRegisterPublisher() {
+        return new RegisterPublisher();
+    }
+
+    /**
+     * Create an instance of {@link ResourceNotDestroyedFaultType }
+     * 
+     */
+    public ResourceNotDestroyedFaultType createResourceNotDestroyedFaultType() {
+        return new ResourceNotDestroyedFaultType();
     }
 
     /**
@@ -141,12 +141,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link W3CEndpointReference }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link EndpointReferenceType }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://docs.oasis-open.org/wsn/br-2", name = "PublisherReference")
-    public JAXBElement<W3CEndpointReference> createPublisherReference(W3CEndpointReference value) {
-        return new JAXBElement<W3CEndpointReference>(_PublisherReference_QNAME, W3CEndpointReference.class, null, value);
+    public JAXBElement<EndpointReferenceType> createPublisherReference(EndpointReferenceType value) {
+        return new JAXBElement<EndpointReferenceType>(_PublisherReference_QNAME, EndpointReferenceType.class, null, value);
     }
 
 }

@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.ws.wsaddressing.W3CEndpointReference;
+import org.apache.cxf.ws.addressing.EndpointReferenceType;
 
 
 /**
@@ -38,19 +38,19 @@ import javax.xml.ws.wsaddressing.W3CEndpointReference;
 public class RegisterPublisherResponse {
 
     @XmlElement(name = "PublisherRegistrationReference", required = true)
-    protected W3CEndpointReference publisherRegistrationReference;
+    protected EndpointReferenceType publisherRegistrationReference;
     @XmlElement(name = "ConsumerReference")
-    protected W3CEndpointReference consumerReference;
+    protected EndpointReferenceType consumerReference;
 
     /**
      * Gets the value of the publisherRegistrationReference property.
      * 
      * @return
      *     possible object is
-     *     {@link W3CEndpointReference }
+     *     {@link EndpointReferenceType }
      *     
      */
-    public W3CEndpointReference getPublisherRegistrationReference() {
+    public EndpointReferenceType getPublisherRegistrationReference() {
         return publisherRegistrationReference;
     }
 
@@ -59,10 +59,10 @@ public class RegisterPublisherResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link W3CEndpointReference }
+     *     {@link EndpointReferenceType }
      *     
      */
-    public void setPublisherRegistrationReference(W3CEndpointReference value) {
+    public void setPublisherRegistrationReference(EndpointReferenceType value) {
         this.publisherRegistrationReference = value;
     }
 
@@ -71,10 +71,10 @@ public class RegisterPublisherResponse {
      * 
      * @return
      *     possible object is
-     *     {@link W3CEndpointReference }
+     *     {@link EndpointReferenceType }
      *     
      */
-    public W3CEndpointReference getConsumerReference() {
+    public EndpointReferenceType getConsumerReference() {
         return consumerReference;
     }
 
@@ -83,10 +83,10 @@ public class RegisterPublisherResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link W3CEndpointReference }
+     *     {@link EndpointReferenceType }
      *     
      */
-    public void setConsumerReference(W3CEndpointReference value) {
+    public void setConsumerReference(EndpointReferenceType value) {
         this.consumerReference = value;
     }
 

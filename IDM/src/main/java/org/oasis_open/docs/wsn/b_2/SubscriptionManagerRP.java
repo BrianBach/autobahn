@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.ws.wsaddressing.W3CEndpointReference;
+import org.apache.cxf.ws.addressing.EndpointReferenceType;
 
 
 /**
@@ -44,7 +44,7 @@ import javax.xml.ws.wsaddressing.W3CEndpointReference;
 public class SubscriptionManagerRP {
 
     @XmlElement(name = "ConsumerReference", required = true)
-    protected W3CEndpointReference consumerReference;
+    protected EndpointReferenceType consumerReference;
     @XmlElement(name = "Filter")
     protected FilterType filter;
     @XmlElement(name = "SubscriptionPolicy")
@@ -58,10 +58,10 @@ public class SubscriptionManagerRP {
      * 
      * @return
      *     possible object is
-     *     {@link W3CEndpointReference }
+     *     {@link EndpointReferenceType }
      *     
      */
-    public W3CEndpointReference getConsumerReference() {
+    public EndpointReferenceType getConsumerReference() {
         return consumerReference;
     }
 
@@ -70,10 +70,10 @@ public class SubscriptionManagerRP {
      * 
      * @param value
      *     allowed object is
-     *     {@link W3CEndpointReference }
+     *     {@link EndpointReferenceType }
      *     
      */
-    public void setConsumerReference(W3CEndpointReference value) {
+    public void setConsumerReference(EndpointReferenceType value) {
         this.consumerReference = value;
     }
 

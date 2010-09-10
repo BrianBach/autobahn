@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.ws.wsaddressing.W3CEndpointReference;
+import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.oasis_open.docs.wsn.b_2.TopicExpressionType;
 import org.w3c.dom.Element;
 
@@ -51,7 +51,7 @@ import org.w3c.dom.Element;
 public class RegisterPublisher {
 
     @XmlElement(name = "PublisherReference")
-    protected W3CEndpointReference publisherReference;
+    protected EndpointReferenceType publisherReference;
     @XmlElement(name = "Topic")
     protected List<TopicExpressionType> topic;
     @XmlElement(name = "Demand", defaultValue = "false")
@@ -67,10 +67,10 @@ public class RegisterPublisher {
      * 
      * @return
      *     possible object is
-     *     {@link W3CEndpointReference }
+     *     {@link EndpointReferenceType }
      *     
      */
-    public W3CEndpointReference getPublisherReference() {
+    public EndpointReferenceType getPublisherReference() {
         return publisherReference;
     }
 
@@ -79,10 +79,10 @@ public class RegisterPublisher {
      * 
      * @param value
      *     allowed object is
-     *     {@link W3CEndpointReference }
+     *     {@link EndpointReferenceType }
      *     
      */
-    public void setPublisherReference(W3CEndpointReference value) {
+    public void setPublisherReference(EndpointReferenceType value) {
         this.publisherReference = value;
     }
 

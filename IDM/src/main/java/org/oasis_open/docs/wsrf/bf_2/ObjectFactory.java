@@ -34,19 +34,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link BaseFaultType }
-     * 
-     */
-    public BaseFaultType createBaseFaultType() {
-        return new BaseFaultType();
-    }
-
-    /**
      * Create an instance of {@link ErrorCodeType }
      * 
      */
     public ErrorCodeType createErrorCodeType() {
         return new ErrorCodeType();
+    }
+
+    /**
+     * Create an instance of {@link BaseFaultType }
+     * 
+     */
+    public BaseFaultType createBaseFaultType() {
+        return new BaseFaultType();
     }
 
     /**

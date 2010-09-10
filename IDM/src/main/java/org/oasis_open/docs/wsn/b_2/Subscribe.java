@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.ws.wsaddressing.W3CEndpointReference;
+import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.w3c.dom.Element;
 
 
@@ -60,7 +60,7 @@ import org.w3c.dom.Element;
 public class Subscribe {
 
     @XmlElement(name = "ConsumerReference", required = true)
-    protected W3CEndpointReference consumerReference;
+    protected EndpointReferenceType consumerReference;
     @XmlElement(name = "Filter")
     protected FilterType filter;
     @XmlElementRef(name = "InitialTerminationTime", namespace = "http://docs.oasis-open.org/wsn/b-2", type = JAXBElement.class)
@@ -75,10 +75,10 @@ public class Subscribe {
      * 
      * @return
      *     possible object is
-     *     {@link W3CEndpointReference }
+     *     {@link EndpointReferenceType }
      *     
      */
-    public W3CEndpointReference getConsumerReference() {
+    public EndpointReferenceType getConsumerReference() {
         return consumerReference;
     }
 
@@ -87,10 +87,10 @@ public class Subscribe {
      * 
      * @param value
      *     allowed object is
-     *     {@link W3CEndpointReference }
+     *     {@link EndpointReferenceType }
      *     
      */
-    public void setConsumerReference(W3CEndpointReference value) {
+    public void setConsumerReference(EndpointReferenceType value) {
         this.consumerReference = value;
     }
 

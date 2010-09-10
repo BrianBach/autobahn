@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.ws.wsaddressing.W3CEndpointReference;
+import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.w3c.dom.Element;
 
 
@@ -48,7 +48,7 @@ import org.w3c.dom.Element;
 public class SubscribeResponse {
 
     @XmlElement(name = "SubscriptionReference", required = true)
-    protected W3CEndpointReference subscriptionReference;
+    protected EndpointReferenceType subscriptionReference;
     @XmlElement(name = "CurrentTime")
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar currentTime;
@@ -63,10 +63,10 @@ public class SubscribeResponse {
      * 
      * @return
      *     possible object is
-     *     {@link W3CEndpointReference }
+     *     {@link EndpointReferenceType }
      *     
      */
-    public W3CEndpointReference getSubscriptionReference() {
+    public EndpointReferenceType getSubscriptionReference() {
         return subscriptionReference;
     }
 
@@ -75,10 +75,10 @@ public class SubscribeResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link W3CEndpointReference }
+     *     {@link EndpointReferenceType }
      *     
      */
-    public void setSubscriptionReference(W3CEndpointReference value) {
+    public void setSubscriptionReference(EndpointReferenceType value) {
         this.subscriptionReference = value;
     }
 

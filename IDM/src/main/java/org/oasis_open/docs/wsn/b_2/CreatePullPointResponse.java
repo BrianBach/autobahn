@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.ws.wsaddressing.W3CEndpointReference;
+import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.w3c.dom.Element;
 
 
@@ -42,7 +42,7 @@ import org.w3c.dom.Element;
 public class CreatePullPointResponse {
 
     @XmlElement(name = "PullPoint", required = true)
-    protected W3CEndpointReference pullPoint;
+    protected EndpointReferenceType pullPoint;
     @XmlAnyElement(lax = true)
     protected List<Object> any;
 
@@ -51,10 +51,10 @@ public class CreatePullPointResponse {
      * 
      * @return
      *     possible object is
-     *     {@link W3CEndpointReference }
+     *     {@link EndpointReferenceType }
      *     
      */
-    public W3CEndpointReference getPullPoint() {
+    public EndpointReferenceType getPullPoint() {
         return pullPoint;
     }
 
@@ -63,10 +63,10 @@ public class CreatePullPointResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link W3CEndpointReference }
+     *     {@link EndpointReferenceType }
      *     
      */
-    public void setPullPoint(W3CEndpointReference value) {
+    public void setPullPoint(EndpointReferenceType value) {
         this.pullPoint = value;
     }
 

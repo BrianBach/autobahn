@@ -26,6 +26,7 @@ import net.geant.autobahn.reservation.Reservation;
 
 import net.geant.autobahn.idcp.OSCARS;
 import net.geant.autobahn.idcp.OSCARS_Service;
+import net.geant.autobahn.idm.AccessPoint;
 
 import org.apache.log4j.Logger;
 import org.oasis_open.docs.wsn.b_2.Notify;
@@ -120,6 +121,7 @@ public class OscarsClient {
 			String src, String dest, String vlans) throws RemoteException {
 
 		final String resID = reservation.getBodID();
+		final int bandwidthScale = 1000000;
 
 		long startTime = reservation.getStartTime().getTimeInMillis() / 1000;
 		long endTime = reservation.getEndTime().getTimeInMillis() / 1000;
@@ -127,16 +129,23 @@ public class OscarsClient {
 		
 		Holder<String> globalReservationId = new Holder<String>(resID);
 		// Bandwidth in Mbps
-		int bandwidth = ((int) (reservation.getCapacity() / 1000000));
+		int bandwidth = ((int) (reservation.getCapacity() / bandwidthScale));
+		if (bandwidth <= 0) { // happens if requested bandwidth is lower than bandwidthScale
+			log.info("Requested bandwidth for " + resID + " within an idcp domain should be greater than zero, assigning 1");
+			bandwidth = 1;
+		}
 		
 		// Path
 		PathInfo pinfo = new PathInfo();
 		pinfo.setPathSetupMode(SIG_AUTO);
 		
 		Layer2Info l2 = new Layer2Info();
-		l2.setSrcEndpoint(src);
-		l2.setDestEndpoint(dest);
-
+				
+		//l2.setSrcEndpoint(src);
+		//l2.setDestEndpoint(dest);
+		l2.setSrcEndpoint(AccessPoint.getInstance().getProperty(src));
+		l2.setDestEndpoint(AccessPoint.getInstance().getProperty(dest));
+		
 		VlanTag vlan = new VlanTag();
 		vlan.setValue(vlans);
 		vlan.setTagged(true);
@@ -149,17 +158,19 @@ public class OscarsClient {
 
 		Holder<String> token = new Holder<String>();
 		Holder<String> status = new Holder<String>();
+		
 		try {
 			
 			rc.createReservation(globalReservationId, startTime, endTime, bandwidth, description, pathInfo, token, status);
 			
 		} catch (Exception e) {
-			System.out.println("Error when schedule oscars: " + e.getMessage());
-			reservation.setDescription(e.getMessage());
-			
+			e.printStackTrace();
+			log.info("IDCP reservation schedule error: " + e.getMessage());
+			//reservation.setDescription(e.getMessage());
+			reservation.setDescription("error");
 			return reservation;
 		}
-
+		
 		/*
 		if (ST_PENDING.equals(status)) {
 			// Read and return vlan
@@ -169,6 +180,7 @@ public class OscarsClient {
 			
 			result.setCalculatedConstraints("" + sel_vlan);
 		}*/
+		// should we trigger something??
 		
 		return reservation;
 	}

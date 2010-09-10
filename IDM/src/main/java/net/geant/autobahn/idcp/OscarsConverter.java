@@ -297,7 +297,7 @@ public class OscarsConverter {
 				port.setGranularity(String.valueOf(l.getGranularity()));
 				port.setMaximumReservableCapacity(String.valueOf(l.getMaxResCapacity()));
 				port.setMinimumReservableCapacity(String.valueOf(l.getMinResCapacity()));
-				port.addLink(link);
+				port.getLink().add(link);
 				CtrlPlaneNodeContent node = new CtrlPlaneNodeContent();
 				node.setId(prefix + ":domain=" + provDomains[i].getAdminDomainID() + ":node=" + l.getStartPort().getNode().getBodID());
 				CtrlPlaneAddressContent addr = new CtrlPlaneAddressContent();
@@ -306,8 +306,8 @@ public class OscarsConverter {
 				addr.setCtrlPlaneAddressContentValue(l.getStartPort().getNode().getAddress());
 				addr.setValue(l.getStartPort().getNode().getAddress());
 				node.setAddress(addr);
-				node.addPort(port);
-				domain.addNode(node);
+				node.getPort().add(port);
+				domain.getNode().add(node);
 				domain.setId(prefix + ":domain=" + provDomains[i].getAdminDomainID());
 				// set end link
 				/*

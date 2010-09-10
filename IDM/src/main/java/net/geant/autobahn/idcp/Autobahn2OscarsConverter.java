@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.geant.autobahn.idcp.notify.OscarsNotifyClient;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.reservation.AutobahnReservation;
 import net.geant.autobahn.reservation.Reservation;
@@ -152,8 +153,7 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
 	public int scheduleReservation(AutobahnReservation reservation) {
 		
 		try {
-			OscarsClient oscars = new OscarsClient();
-	        
+			
 	        String src = "";
 	        
 	        src = reservation.getStartPort().getBodID();
@@ -161,10 +161,13 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
 	        String vlan = vlans.get(src);
 
 	        if (vlan == null) {
-	            System.out.println("Warn - no assigned vlan found");
+	            log.debug("Warn - no assigned vlan found, assigning vlan 3210");
 	            vlan = "3210";
 	        }
 	        
+	        //log.info("OSCARS: src - " + src + ", end: " + dest);
+	        
+	        OscarsClient oscars = new OscarsClient();
 	        Reservation res = oscars.scheduleReservation(reservation, src, dest, vlan);
 	        
 			String errorDesc = res.getDescription();
@@ -174,7 +177,7 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
 	    			return ReservationErrors.CONSTRAINTS_NOT_AGREED;
 	    		} else if (errorDesc.contains("oversubscribed")) {
 	    			return ReservationErrors.NOT_ENOUGH_CAPACITY;
-	    		} else {
+	    		} else if (errorDesc.contains("error")) {
 	    			return ReservationErrors.COMMUNICATION_ERROR;
 	    		}
 			}
@@ -182,8 +185,8 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
 			cache.put(reservation.getBodID(), reservation);
 			reservation.addStatusListener(this);
 			
-		} catch (IOException e) { 
-			log.error("ProxyClientConverter: scheduleReservation Error: " + e.getMessage());
+		} catch (Exception e) { 
+			log.info("IdcpConverter - scheduleReservation error: " + e.getMessage());
 			return ReservationErrors.COMMUNICATION_ERROR;
 		}
 		
@@ -192,15 +195,15 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
 	
 	
 	public void reservationActive(String reservationId) {
-		notifyIDC(reservationId);
+		notifyIDC(reservationId, "PATH_SETUP_COMPLETED");
 	}
 
 	public void reservationCancelled(String reservationId) {
-		notifyIDC(reservationId);
+		notifyIDC(reservationId, "RESERVATION_CANCEL_COMPLETED");
 	}
 
 	public void reservationFinished(String reservationId) {
-		notifyIDC(reservationId);
+		notifyIDC(reservationId, "RESERVATION_CREATE_COMPLETED");
 	}
 
 	public void reservationModified(String reservationId, boolean success) {
@@ -208,21 +211,22 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
 	}
 
 	public void reservationProcessingFailed(String reservationId, String cause) {
-		notifyIDC(reservationId);
+		notifyIDC(reservationId, "RESERVATION_CREATE_FAILED");
 	}
 
 	public void reservationScheduled(String reservationId) {
-		notifyIDC(reservationId);
+		notifyIDC(reservationId, "RESERVATION_CREATE_CONFIRMED");
 	}
 	
-	private void notifyIDC(String reservationId) {
-/*		try {
-			ProxyClient proxy = new ProxyClient();
+	private void notifyIDC(String reservationId, String eventName) {
+		
+		try {
+			
+			OscarsNotifyClient client = new OscarsNotifyClient();
 			Reservation res = cache.get(reservationId);
-			proxy.Notify(convertReservation(res));
-		} catch(IOException e) {
-			log.error("Notify error: " + e.getMessage());
+			client.Notify(res, eventName);
+		} catch(Exception e) {
+			log.info("Notify sending error: " + e.getMessage());
 		}
-*/	}
-
+	}
 }

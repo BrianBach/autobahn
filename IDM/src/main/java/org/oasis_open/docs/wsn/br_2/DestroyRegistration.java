@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.ws.wsaddressing.W3CEndpointReference;
+import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.w3c.dom.Element;
 
 
@@ -42,7 +42,7 @@ import org.w3c.dom.Element;
 public class DestroyRegistration {
 
     @XmlElement(name = "PublisherRegistrationReference", required = true)
-    protected W3CEndpointReference publisherRegistrationReference;
+    protected EndpointReferenceType publisherRegistrationReference;
     @XmlAnyElement(lax = true)
     protected List<Object> any;
 
@@ -51,10 +51,10 @@ public class DestroyRegistration {
      * 
      * @return
      *     possible object is
-     *     {@link W3CEndpointReference }
+     *     {@link EndpointReferenceType }
      *     
      */
-    public W3CEndpointReference getPublisherRegistrationReference() {
+    public EndpointReferenceType getPublisherRegistrationReference() {
         return publisherRegistrationReference;
     }
 
@@ -63,10 +63,10 @@ public class DestroyRegistration {
      * 
      * @param value
      *     allowed object is
-     *     {@link W3CEndpointReference }
+     *     {@link EndpointReferenceType }
      *     
      */
-    public void setPublisherRegistrationReference(W3CEndpointReference value) {
+    public void setPublisherRegistrationReference(EndpointReferenceType value) {
         this.publisherRegistrationReference = value;
     }
 

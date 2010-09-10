@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
-import javax.xml.ws.wsaddressing.W3CEndpointReference;
+import org.apache.cxf.ws.addressing.EndpointReferenceType;
 
 
 /**
@@ -43,8 +43,8 @@ public class ObjectFactory {
     private final static QName _UnableToGetMessagesFault_QNAME = new QName("http://docs.oasis-open.org/wsn/b-2", "UnableToGetMessagesFault");
     private final static QName _MessageContent_QNAME = new QName("http://docs.oasis-open.org/wsn/b-2", "MessageContent");
     private final static QName _TopicExpressionDialectUnknownFault_QNAME = new QName("http://docs.oasis-open.org/wsn/b-2", "TopicExpressionDialectUnknownFault");
-    private final static QName _UnableToDestroySubscriptionFault_QNAME = new QName("http://docs.oasis-open.org/wsn/b-2", "UnableToDestroySubscriptionFault");
     private final static QName _UnrecognizedPolicyRequestFault_QNAME = new QName("http://docs.oasis-open.org/wsn/b-2", "UnrecognizedPolicyRequestFault");
+    private final static QName _UnableToDestroySubscriptionFault_QNAME = new QName("http://docs.oasis-open.org/wsn/b-2", "UnableToDestroySubscriptionFault");
     private final static QName _SubscribeCreationFailedFault_QNAME = new QName("http://docs.oasis-open.org/wsn/b-2", "SubscribeCreationFailedFault");
     private final static QName _ProducerReference_QNAME = new QName("http://docs.oasis-open.org/wsn/b-2", "ProducerReference");
     private final static QName _NoCurrentMessageOnTopicFault_QNAME = new QName("http://docs.oasis-open.org/wsn/b-2", "NoCurrentMessageOnTopicFault");
@@ -71,323 +71,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link FilterType }
-     * 
-     */
-    public FilterType createFilterType() {
-        return new FilterType();
-    }
-
-    /**
-     * Create an instance of {@link MessageType }
-     * 
-     */
-    public MessageType createMessageType() {
-        return new MessageType();
-    }
-
-    /**
-     * Create an instance of {@link GetMessagesResponse }
-     * 
-     */
-    public GetMessagesResponse createGetMessagesResponse() {
-        return new GetMessagesResponse();
-    }
-
-    /**
-     * Create an instance of {@link PauseSubscription }
-     * 
-     */
-    public PauseSubscription createPauseSubscription() {
-        return new PauseSubscription();
-    }
-
-    /**
-     * Create an instance of {@link ResumeSubscription }
-     * 
-     */
-    public ResumeSubscription createResumeSubscription() {
-        return new ResumeSubscription();
-    }
-
-    /**
-     * Create an instance of {@link UnableToCreatePullPointFaultType }
-     * 
-     */
-    public UnableToCreatePullPointFaultType createUnableToCreatePullPointFaultType() {
-        return new UnableToCreatePullPointFaultType();
-    }
-
-    /**
-     * Create an instance of {@link CreatePullPoint }
-     * 
-     */
-    public CreatePullPoint createCreatePullPoint() {
-        return new CreatePullPoint();
-    }
-
-    /**
-     * Create an instance of {@link UnsubscribeResponse }
-     * 
-     */
-    public UnsubscribeResponse createUnsubscribeResponse() {
-        return new UnsubscribeResponse();
-    }
-
-    /**
-     * Create an instance of {@link UnacceptableInitialTerminationTimeFaultType }
-     * 
-     */
-    public UnacceptableInitialTerminationTimeFaultType createUnacceptableInitialTerminationTimeFaultType() {
-        return new UnacceptableInitialTerminationTimeFaultType();
-    }
-
-    /**
-     * Create an instance of {@link SubscriptionManagerRP }
-     * 
-     */
-    public SubscriptionManagerRP createSubscriptionManagerRP() {
-        return new SubscriptionManagerRP();
-    }
-
-    /**
      * Create an instance of {@link UnableToDestroySubscriptionFaultType }
      * 
      */
     public UnableToDestroySubscriptionFaultType createUnableToDestroySubscriptionFaultType() {
         return new UnableToDestroySubscriptionFaultType();
-    }
-
-    /**
-     * Create an instance of {@link Renew }
-     * 
-     */
-    public Renew createRenew() {
-        return new Renew();
-    }
-
-    /**
-     * Create an instance of {@link InvalidMessageContentExpressionFaultType }
-     * 
-     */
-    public InvalidMessageContentExpressionFaultType createInvalidMessageContentExpressionFaultType() {
-        return new InvalidMessageContentExpressionFaultType();
-    }
-
-    /**
-     * Create an instance of {@link UnrecognizedPolicyRequestFaultType }
-     * 
-     */
-    public UnrecognizedPolicyRequestFaultType createUnrecognizedPolicyRequestFaultType() {
-        return new UnrecognizedPolicyRequestFaultType();
-    }
-
-    /**
-     * Create an instance of {@link SubscribeResponse }
-     * 
-     */
-    public SubscribeResponse createSubscribeResponse() {
-        return new SubscribeResponse();
-    }
-
-    /**
-     * Create an instance of {@link DestroyPullPoint }
-     * 
-     */
-    public DestroyPullPoint createDestroyPullPoint() {
-        return new DestroyPullPoint();
-    }
-
-    /**
-     * Create an instance of {@link Notify }
-     * 
-     */
-    public Notify createNotify() {
-        return new Notify();
-    }
-
-    /**
-     * Create an instance of {@link TopicNotSupportedFaultType }
-     * 
-     */
-    public TopicNotSupportedFaultType createTopicNotSupportedFaultType() {
-        return new TopicNotSupportedFaultType();
-    }
-
-    /**
-     * Create an instance of {@link PauseSubscriptionResponse }
-     * 
-     */
-    public PauseSubscriptionResponse createPauseSubscriptionResponse() {
-        return new PauseSubscriptionResponse();
-    }
-
-    /**
-     * Create an instance of {@link InvalidTopicExpressionFaultType }
-     * 
-     */
-    public InvalidTopicExpressionFaultType createInvalidTopicExpressionFaultType() {
-        return new InvalidTopicExpressionFaultType();
-    }
-
-    /**
-     * Create an instance of {@link MultipleTopicsSpecifiedFaultType }
-     * 
-     */
-    public MultipleTopicsSpecifiedFaultType createMultipleTopicsSpecifiedFaultType() {
-        return new MultipleTopicsSpecifiedFaultType();
-    }
-
-    /**
-     * Create an instance of {@link UnableToDestroyPullPointFaultType }
-     * 
-     */
-    public UnableToDestroyPullPointFaultType createUnableToDestroyPullPointFaultType() {
-        return new UnableToDestroyPullPointFaultType();
-    }
-
-    /**
-     * Create an instance of {@link PauseFailedFaultType }
-     * 
-     */
-    public PauseFailedFaultType createPauseFailedFaultType() {
-        return new PauseFailedFaultType();
-    }
-
-    /**
-     * Create an instance of {@link UnableToGetMessagesFaultType }
-     * 
-     */
-    public UnableToGetMessagesFaultType createUnableToGetMessagesFaultType() {
-        return new UnableToGetMessagesFaultType();
-    }
-
-    /**
-     * Create an instance of {@link InvalidProducerPropertiesExpressionFaultType }
-     * 
-     */
-    public InvalidProducerPropertiesExpressionFaultType createInvalidProducerPropertiesExpressionFaultType() {
-        return new InvalidProducerPropertiesExpressionFaultType();
-    }
-
-    /**
-     * Create an instance of {@link Unsubscribe }
-     * 
-     */
-    public Unsubscribe createUnsubscribe() {
-        return new Unsubscribe();
-    }
-
-    /**
-     * Create an instance of {@link NotifyMessageNotSupportedFaultType }
-     * 
-     */
-    public NotifyMessageNotSupportedFaultType createNotifyMessageNotSupportedFaultType() {
-        return new NotifyMessageNotSupportedFaultType();
-    }
-
-    /**
-     * Create an instance of {@link GetCurrentMessage }
-     * 
-     */
-    public GetCurrentMessage createGetCurrentMessage() {
-        return new GetCurrentMessage();
-    }
-
-    /**
-     * Create an instance of {@link ResumeSubscriptionResponse }
-     * 
-     */
-    public ResumeSubscriptionResponse createResumeSubscriptionResponse() {
-        return new ResumeSubscriptionResponse();
-    }
-
-    /**
-     * Create an instance of {@link InvalidFilterFaultType }
-     * 
-     */
-    public InvalidFilterFaultType createInvalidFilterFaultType() {
-        return new InvalidFilterFaultType();
-    }
-
-    /**
-     * Create an instance of {@link DestroyPullPointResponse }
-     * 
-     */
-    public DestroyPullPointResponse createDestroyPullPointResponse() {
-        return new DestroyPullPointResponse();
-    }
-
-    /**
-     * Create an instance of {@link SubscriptionPolicyType }
-     * 
-     */
-    public SubscriptionPolicyType createSubscriptionPolicyType() {
-        return new SubscriptionPolicyType();
-    }
-
-    /**
-     * Create an instance of {@link CreatePullPointResponse }
-     * 
-     */
-    public CreatePullPointResponse createCreatePullPointResponse() {
-        return new CreatePullPointResponse();
-    }
-
-    /**
-     * Create an instance of {@link Subscribe }
-     * 
-     */
-    public Subscribe createSubscribe() {
-        return new Subscribe();
-    }
-
-    /**
-     * Create an instance of {@link NotificationMessageHolderType }
-     * 
-     */
-    public NotificationMessageHolderType createNotificationMessageHolderType() {
-        return new NotificationMessageHolderType();
-    }
-
-    /**
-     * Create an instance of {@link UnsupportedPolicyRequestFaultType }
-     * 
-     */
-    public UnsupportedPolicyRequestFaultType createUnsupportedPolicyRequestFaultType() {
-        return new UnsupportedPolicyRequestFaultType();
-    }
-
-    /**
-     * Create an instance of {@link NoCurrentMessageOnTopicFaultType }
-     * 
-     */
-    public NoCurrentMessageOnTopicFaultType createNoCurrentMessageOnTopicFaultType() {
-        return new NoCurrentMessageOnTopicFaultType();
-    }
-
-    /**
-     * Create an instance of {@link RenewResponse }
-     * 
-     */
-    public RenewResponse createRenewResponse() {
-        return new RenewResponse();
-    }
-
-    /**
-     * Create an instance of {@link TopicExpressionType }
-     * 
-     */
-    public TopicExpressionType createTopicExpressionType() {
-        return new TopicExpressionType();
-    }
-
-    /**
-     * Create an instance of {@link GetMessages }
-     * 
-     */
-    public GetMessages createGetMessages() {
-        return new GetMessages();
     }
 
     /**
@@ -399,11 +87,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetCurrentMessageResponse }
+     * Create an instance of {@link UnacceptableTerminationTimeFaultType }
      * 
      */
-    public GetCurrentMessageResponse createGetCurrentMessageResponse() {
-        return new GetCurrentMessageResponse();
+    public UnacceptableTerminationTimeFaultType createUnacceptableTerminationTimeFaultType() {
+        return new UnacceptableTerminationTimeFaultType();
     }
 
     /**
@@ -415,6 +103,134 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link NotificationMessageHolderType }
+     * 
+     */
+    public NotificationMessageHolderType createNotificationMessageHolderType() {
+        return new NotificationMessageHolderType();
+    }
+
+    /**
+     * Create an instance of {@link SubscriptionManagerRP }
+     * 
+     */
+    public SubscriptionManagerRP createSubscriptionManagerRP() {
+        return new SubscriptionManagerRP();
+    }
+
+    /**
+     * Create an instance of {@link Renew }
+     * 
+     */
+    public Renew createRenew() {
+        return new Renew();
+    }
+
+    /**
+     * Create an instance of {@link UnrecognizedPolicyRequestFaultType }
+     * 
+     */
+    public UnrecognizedPolicyRequestFaultType createUnrecognizedPolicyRequestFaultType() {
+        return new UnrecognizedPolicyRequestFaultType();
+    }
+
+    /**
+     * Create an instance of {@link ResumeSubscriptionResponse }
+     * 
+     */
+    public ResumeSubscriptionResponse createResumeSubscriptionResponse() {
+        return new ResumeSubscriptionResponse();
+    }
+
+    /**
+     * Create an instance of {@link RenewResponse }
+     * 
+     */
+    public RenewResponse createRenewResponse() {
+        return new RenewResponse();
+    }
+
+    /**
+     * Create an instance of {@link UnacceptableInitialTerminationTimeFaultType }
+     * 
+     */
+    public UnacceptableInitialTerminationTimeFaultType createUnacceptableInitialTerminationTimeFaultType() {
+        return new UnacceptableInitialTerminationTimeFaultType();
+    }
+
+    /**
+     * Create an instance of {@link NoCurrentMessageOnTopicFaultType }
+     * 
+     */
+    public NoCurrentMessageOnTopicFaultType createNoCurrentMessageOnTopicFaultType() {
+        return new NoCurrentMessageOnTopicFaultType();
+    }
+
+    /**
+     * Create an instance of {@link MultipleTopicsSpecifiedFaultType }
+     * 
+     */
+    public MultipleTopicsSpecifiedFaultType createMultipleTopicsSpecifiedFaultType() {
+        return new MultipleTopicsSpecifiedFaultType();
+    }
+
+    /**
+     * Create an instance of {@link MessageType }
+     * 
+     */
+    public MessageType createMessageType() {
+        return new MessageType();
+    }
+
+    /**
+     * Create an instance of {@link InvalidTopicExpressionFaultType }
+     * 
+     */
+    public InvalidTopicExpressionFaultType createInvalidTopicExpressionFaultType() {
+        return new InvalidTopicExpressionFaultType();
+    }
+
+    /**
+     * Create an instance of {@link ResumeSubscription }
+     * 
+     */
+    public ResumeSubscription createResumeSubscription() {
+        return new ResumeSubscription();
+    }
+
+    /**
+     * Create an instance of {@link GetCurrentMessage }
+     * 
+     */
+    public GetCurrentMessage createGetCurrentMessage() {
+        return new GetCurrentMessage();
+    }
+
+    /**
+     * Create an instance of {@link UnsubscribeResponse }
+     * 
+     */
+    public UnsubscribeResponse createUnsubscribeResponse() {
+        return new UnsubscribeResponse();
+    }
+
+    /**
+     * Create an instance of {@link Unsubscribe }
+     * 
+     */
+    public Unsubscribe createUnsubscribe() {
+        return new Unsubscribe();
+    }
+
+    /**
+     * Create an instance of {@link DestroyPullPoint }
+     * 
+     */
+    public DestroyPullPoint createDestroyPullPoint() {
+        return new DestroyPullPoint();
+    }
+
+    /**
      * Create an instance of {@link Subscribe.SubscriptionPolicy }
      * 
      */
@@ -423,11 +239,99 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link UnacceptableTerminationTimeFaultType }
+     * Create an instance of {@link InvalidFilterFaultType }
      * 
      */
-    public UnacceptableTerminationTimeFaultType createUnacceptableTerminationTimeFaultType() {
-        return new UnacceptableTerminationTimeFaultType();
+    public InvalidFilterFaultType createInvalidFilterFaultType() {
+        return new InvalidFilterFaultType();
+    }
+
+    /**
+     * Create an instance of {@link UnsupportedPolicyRequestFaultType }
+     * 
+     */
+    public UnsupportedPolicyRequestFaultType createUnsupportedPolicyRequestFaultType() {
+        return new UnsupportedPolicyRequestFaultType();
+    }
+
+    /**
+     * Create an instance of {@link GetCurrentMessageResponse }
+     * 
+     */
+    public GetCurrentMessageResponse createGetCurrentMessageResponse() {
+        return new GetCurrentMessageResponse();
+    }
+
+    /**
+     * Create an instance of {@link TopicNotSupportedFaultType }
+     * 
+     */
+    public TopicNotSupportedFaultType createTopicNotSupportedFaultType() {
+        return new TopicNotSupportedFaultType();
+    }
+
+    /**
+     * Create an instance of {@link PauseSubscription }
+     * 
+     */
+    public PauseSubscription createPauseSubscription() {
+        return new PauseSubscription();
+    }
+
+    /**
+     * Create an instance of {@link SubscribeResponse }
+     * 
+     */
+    public SubscribeResponse createSubscribeResponse() {
+        return new SubscribeResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetMessagesResponse }
+     * 
+     */
+    public GetMessagesResponse createGetMessagesResponse() {
+        return new GetMessagesResponse();
+    }
+
+    /**
+     * Create an instance of {@link CreatePullPointResponse }
+     * 
+     */
+    public CreatePullPointResponse createCreatePullPointResponse() {
+        return new CreatePullPointResponse();
+    }
+
+    /**
+     * Create an instance of {@link PauseFailedFaultType }
+     * 
+     */
+    public PauseFailedFaultType createPauseFailedFaultType() {
+        return new PauseFailedFaultType();
+    }
+
+    /**
+     * Create an instance of {@link Notify }
+     * 
+     */
+    public Notify createNotify() {
+        return new Notify();
+    }
+
+    /**
+     * Create an instance of {@link UnableToDestroyPullPointFaultType }
+     * 
+     */
+    public UnableToDestroyPullPointFaultType createUnableToDestroyPullPointFaultType() {
+        return new UnableToDestroyPullPointFaultType();
+    }
+
+    /**
+     * Create an instance of {@link DestroyPullPointResponse }
+     * 
+     */
+    public DestroyPullPointResponse createDestroyPullPointResponse() {
+        return new DestroyPullPointResponse();
     }
 
     /**
@@ -439,11 +343,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SubscribeCreationFailedFaultType }
+     * Create an instance of {@link UnableToGetMessagesFaultType }
      * 
      */
-    public SubscribeCreationFailedFaultType createSubscribeCreationFailedFaultType() {
-        return new SubscribeCreationFailedFaultType();
+    public UnableToGetMessagesFaultType createUnableToGetMessagesFaultType() {
+        return new UnableToGetMessagesFaultType();
+    }
+
+    /**
+     * Create an instance of {@link FilterType }
+     * 
+     */
+    public FilterType createFilterType() {
+        return new FilterType();
+    }
+
+    /**
+     * Create an instance of {@link Subscribe }
+     * 
+     */
+    public Subscribe createSubscribe() {
+        return new Subscribe();
     }
 
     /**
@@ -452,6 +372,86 @@ public class ObjectFactory {
      */
     public UseRaw createUseRaw() {
         return new UseRaw();
+    }
+
+    /**
+     * Create an instance of {@link SubscribeCreationFailedFaultType }
+     * 
+     */
+    public SubscribeCreationFailedFaultType createSubscribeCreationFailedFaultType() {
+        return new SubscribeCreationFailedFaultType();
+    }
+
+    /**
+     * Create an instance of {@link InvalidProducerPropertiesExpressionFaultType }
+     * 
+     */
+    public InvalidProducerPropertiesExpressionFaultType createInvalidProducerPropertiesExpressionFaultType() {
+        return new InvalidProducerPropertiesExpressionFaultType();
+    }
+
+    /**
+     * Create an instance of {@link PauseSubscriptionResponse }
+     * 
+     */
+    public PauseSubscriptionResponse createPauseSubscriptionResponse() {
+        return new PauseSubscriptionResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetMessages }
+     * 
+     */
+    public GetMessages createGetMessages() {
+        return new GetMessages();
+    }
+
+    /**
+     * Create an instance of {@link UnableToCreatePullPointFaultType }
+     * 
+     */
+    public UnableToCreatePullPointFaultType createUnableToCreatePullPointFaultType() {
+        return new UnableToCreatePullPointFaultType();
+    }
+
+    /**
+     * Create an instance of {@link NotifyMessageNotSupportedFaultType }
+     * 
+     */
+    public NotifyMessageNotSupportedFaultType createNotifyMessageNotSupportedFaultType() {
+        return new NotifyMessageNotSupportedFaultType();
+    }
+
+    /**
+     * Create an instance of {@link CreatePullPoint }
+     * 
+     */
+    public CreatePullPoint createCreatePullPoint() {
+        return new CreatePullPoint();
+    }
+
+    /**
+     * Create an instance of {@link InvalidMessageContentExpressionFaultType }
+     * 
+     */
+    public InvalidMessageContentExpressionFaultType createInvalidMessageContentExpressionFaultType() {
+        return new InvalidMessageContentExpressionFaultType();
+    }
+
+    /**
+     * Create an instance of {@link TopicExpressionType }
+     * 
+     */
+    public TopicExpressionType createTopicExpressionType() {
+        return new TopicExpressionType();
+    }
+
+    /**
+     * Create an instance of {@link SubscriptionPolicyType }
+     * 
+     */
+    public SubscriptionPolicyType createSubscriptionPolicyType() {
+        return new SubscriptionPolicyType();
     }
 
     /**
@@ -473,12 +473,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link W3CEndpointReference }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link EndpointReferenceType }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://docs.oasis-open.org/wsn/b-2", name = "ConsumerReference")
-    public JAXBElement<W3CEndpointReference> createConsumerReference(W3CEndpointReference value) {
-        return new JAXBElement<W3CEndpointReference>(_ConsumerReference_QNAME, W3CEndpointReference.class, null, value);
+    public JAXBElement<EndpointReferenceType> createConsumerReference(EndpointReferenceType value) {
+        return new JAXBElement<EndpointReferenceType>(_ConsumerReference_QNAME, EndpointReferenceType.class, null, value);
     }
 
     /**
@@ -608,21 +608,21 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link UnableToDestroySubscriptionFaultType }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://docs.oasis-open.org/wsn/b-2", name = "UnableToDestroySubscriptionFault")
-    public JAXBElement<UnableToDestroySubscriptionFaultType> createUnableToDestroySubscriptionFault(UnableToDestroySubscriptionFaultType value) {
-        return new JAXBElement<UnableToDestroySubscriptionFaultType>(_UnableToDestroySubscriptionFault_QNAME, UnableToDestroySubscriptionFaultType.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link UnrecognizedPolicyRequestFaultType }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://docs.oasis-open.org/wsn/b-2", name = "UnrecognizedPolicyRequestFault")
     public JAXBElement<UnrecognizedPolicyRequestFaultType> createUnrecognizedPolicyRequestFault(UnrecognizedPolicyRequestFaultType value) {
         return new JAXBElement<UnrecognizedPolicyRequestFaultType>(_UnrecognizedPolicyRequestFault_QNAME, UnrecognizedPolicyRequestFaultType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link UnableToDestroySubscriptionFaultType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://docs.oasis-open.org/wsn/b-2", name = "UnableToDestroySubscriptionFault")
+    public JAXBElement<UnableToDestroySubscriptionFaultType> createUnableToDestroySubscriptionFault(UnableToDestroySubscriptionFaultType value) {
+        return new JAXBElement<UnableToDestroySubscriptionFaultType>(_UnableToDestroySubscriptionFault_QNAME, UnableToDestroySubscriptionFaultType.class, null, value);
     }
 
     /**
@@ -635,12 +635,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link W3CEndpointReference }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link EndpointReferenceType }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://docs.oasis-open.org/wsn/b-2", name = "ProducerReference")
-    public JAXBElement<W3CEndpointReference> createProducerReference(W3CEndpointReference value) {
-        return new JAXBElement<W3CEndpointReference>(_ProducerReference_QNAME, W3CEndpointReference.class, null, value);
+    public JAXBElement<EndpointReferenceType> createProducerReference(EndpointReferenceType value) {
+        return new JAXBElement<EndpointReferenceType>(_ProducerReference_QNAME, EndpointReferenceType.class, null, value);
     }
 
     /**
@@ -761,12 +761,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link W3CEndpointReference }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link EndpointReferenceType }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://docs.oasis-open.org/wsn/b-2", name = "SubscriptionReference")
-    public JAXBElement<W3CEndpointReference> createSubscriptionReference(W3CEndpointReference value) {
-        return new JAXBElement<W3CEndpointReference>(_SubscriptionReference_QNAME, W3CEndpointReference.class, null, value);
+    public JAXBElement<EndpointReferenceType> createSubscriptionReference(EndpointReferenceType value) {
+        return new JAXBElement<EndpointReferenceType>(_SubscriptionReference_QNAME, EndpointReferenceType.class, null, value);
     }
 
     /**

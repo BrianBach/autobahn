@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.ws.wsaddressing.W3CEndpointReference;
+import org.apache.cxf.ws.addressing.EndpointReferenceType;
 
 
 /**
@@ -40,11 +40,11 @@ import javax.xml.ws.wsaddressing.W3CEndpointReference;
 public class NotificationMessageHolderType {
 
     @XmlElement(name = "SubscriptionReference")
-    protected W3CEndpointReference subscriptionReference;
+    protected EndpointReferenceType subscriptionReference;
     @XmlElement(name = "Topic")
     protected TopicExpressionType topic;
     @XmlElement(name = "ProducerReference")
-    protected W3CEndpointReference producerReference;
+    protected EndpointReferenceType producerReference;
     @XmlElement(name = "Message", required = true)
     protected MessageType message;
 
@@ -53,10 +53,10 @@ public class NotificationMessageHolderType {
      * 
      * @return
      *     possible object is
-     *     {@link W3CEndpointReference }
+     *     {@link EndpointReferenceType }
      *     
      */
-    public W3CEndpointReference getSubscriptionReference() {
+    public EndpointReferenceType getSubscriptionReference() {
         return subscriptionReference;
     }
 
@@ -65,10 +65,10 @@ public class NotificationMessageHolderType {
      * 
      * @param value
      *     allowed object is
-     *     {@link W3CEndpointReference }
+     *     {@link EndpointReferenceType }
      *     
      */
-    public void setSubscriptionReference(W3CEndpointReference value) {
+    public void setSubscriptionReference(EndpointReferenceType value) {
         this.subscriptionReference = value;
     }
 
@@ -101,10 +101,10 @@ public class NotificationMessageHolderType {
      * 
      * @return
      *     possible object is
-     *     {@link W3CEndpointReference }
+     *     {@link EndpointReferenceType }
      *     
      */
-    public W3CEndpointReference getProducerReference() {
+    public EndpointReferenceType getProducerReference() {
         return producerReference;
     }
 
@@ -113,10 +113,10 @@ public class NotificationMessageHolderType {
      * 
      * @param value
      *     allowed object is
-     *     {@link W3CEndpointReference }
+     *     {@link EndpointReferenceType }
      *     
      */
-    public void setProducerReference(W3CEndpointReference value) {
+    public void setProducerReference(EndpointReferenceType value) {
         this.producerReference = value;
     }
 

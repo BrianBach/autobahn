@@ -39,11 +39,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Lifetime }
+     * Create an instance of {@link CtrlPlaneAdministrativeGroup }
      * 
      */
-    public Lifetime createLifetime() {
-        return new Lifetime();
+    public CtrlPlaneAdministrativeGroup createCtrlPlaneAdministrativeGroup() {
+        return new CtrlPlaneAdministrativeGroup();
     }
 
     /**
@@ -52,6 +52,14 @@ public class ObjectFactory {
      */
     public CtrlPlaneLinkContent createCtrlPlaneLinkContent() {
         return new CtrlPlaneLinkContent();
+    }
+
+    /**
+     * Create an instance of {@link CtrlPlaneSwitchingCapabilitySpecificInfo }
+     * 
+     */
+    public CtrlPlaneSwitchingCapabilitySpecificInfo createCtrlPlaneSwitchingCapabilitySpecificInfo() {
+        return new CtrlPlaneSwitchingCapabilitySpecificInfo();
     }
 
     /**
@@ -71,6 +79,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Lifetime }
+     * 
+     */
+    public Lifetime createLifetime() {
+        return new Lifetime();
+    }
+
+    /**
      * Create an instance of {@link CtrlPlaneNodeContent }
      * 
      */
@@ -79,11 +95,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CtrlPlaneAdministrativeGroup }
+     * Create an instance of {@link CtrlPlaneHopContent }
      * 
      */
-    public CtrlPlaneAdministrativeGroup createCtrlPlaneAdministrativeGroup() {
-        return new CtrlPlaneAdministrativeGroup();
+    public CtrlPlaneHopContent createCtrlPlaneHopContent() {
+        return new CtrlPlaneHopContent();
+    }
+
+    /**
+     * Create an instance of {@link CtrlPlaneSwcapContent }
+     * 
+     */
+    public CtrlPlaneSwcapContent createCtrlPlaneSwcapContent() {
+        return new CtrlPlaneSwcapContent();
+    }
+
+    /**
+     * Create an instance of {@link CtrlPlanePathContent }
+     * 
+     */
+    public CtrlPlanePathContent createCtrlPlanePathContent() {
+        return new CtrlPlanePathContent();
     }
 
     /**
@@ -92,14 +124,6 @@ public class ObjectFactory {
      */
     public Duration createDuration() {
         return new Duration();
-    }
-
-    /**
-     * Create an instance of {@link CtrlPlaneNextHopContent }
-     * 
-     */
-    public CtrlPlaneNextHopContent createCtrlPlaneNextHopContent() {
-        return new CtrlPlaneNextHopContent();
     }
 
     /**
@@ -119,27 +143,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CtrlPlanePathContent }
-     * 
-     */
-    public CtrlPlanePathContent createCtrlPlanePathContent() {
-        return new CtrlPlanePathContent();
-    }
-
-    /**
      * Create an instance of {@link CtrlPlaneAddressContent }
      * 
      */
     public CtrlPlaneAddressContent createCtrlPlaneAddressContent() {
         return new CtrlPlaneAddressContent();
-    }
-
-    /**
-     * Create an instance of {@link CtrlPlaneSwitchingCapabilitySpecificInfo }
-     * 
-     */
-    public CtrlPlaneSwitchingCapabilitySpecificInfo createCtrlPlaneSwitchingCapabilitySpecificInfo() {
-        return new CtrlPlaneSwitchingCapabilitySpecificInfo();
     }
 
     /**
@@ -151,19 +159,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CtrlPlaneHopContent }
+     * Create an instance of {@link CtrlPlaneNextHopContent }
      * 
      */
-    public CtrlPlaneHopContent createCtrlPlaneHopContent() {
-        return new CtrlPlaneHopContent();
-    }
-
-    /**
-     * Create an instance of {@link CtrlPlaneSwcapContent }
-     * 
-     */
-    public CtrlPlaneSwcapContent createCtrlPlaneSwcapContent() {
-        return new CtrlPlaneSwcapContent();
+    public CtrlPlaneNextHopContent createCtrlPlaneNextHopContent() {
+        return new CtrlPlaneNextHopContent();
     }
 
     /**

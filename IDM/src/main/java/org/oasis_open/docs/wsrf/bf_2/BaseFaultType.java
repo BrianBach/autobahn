@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.ws.wsaddressing.W3CEndpointReference;
+import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.oasis_open.docs.wsn.b_2.InvalidFilterFaultType;
 import org.oasis_open.docs.wsn.b_2.InvalidMessageContentExpressionFaultType;
 import org.oasis_open.docs.wsn.b_2.InvalidProducerPropertiesExpressionFaultType;
@@ -73,8 +73,6 @@ import org.oasis_open.docs.wsrf.r_2.ResourceUnknownFaultType;
     PublisherRegistrationFailedFaultType.class,
     ResourceNotDestroyedFaultType.class,
     PublisherRegistrationRejectedFaultType.class,
-    ResourceUnknownFaultType.class,
-    ResourceUnavailableFaultType.class,
     TopicExpressionDialectUnknownFaultType.class,
     UnableToGetMessagesFaultType.class,
     ResumeFailedFaultType.class,
@@ -94,7 +92,9 @@ import org.oasis_open.docs.wsrf.r_2.ResourceUnknownFaultType;
     NoCurrentMessageOnTopicFaultType.class,
     InvalidFilterFaultType.class,
     TopicNotSupportedFaultType.class,
-    UnacceptableTerminationTimeFaultType.class
+    UnacceptableTerminationTimeFaultType.class,
+    ResourceUnknownFaultType.class,
+    ResourceUnavailableFaultType.class
 })
 public class BaseFaultType {
 
@@ -102,7 +102,7 @@ public class BaseFaultType {
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar timestamp;
     @XmlElement(name = "Originator")
-    protected W3CEndpointReference originator;
+    protected EndpointReferenceType originator;
     @XmlElement(name = "ErrorCode")
     protected ErrorCodeType errorCode;
     @XmlElement(name = "Description")
@@ -139,10 +139,10 @@ public class BaseFaultType {
      * 
      * @return
      *     possible object is
-     *     {@link W3CEndpointReference }
+     *     {@link EndpointReferenceType }
      *     
      */
-    public W3CEndpointReference getOriginator() {
+    public EndpointReferenceType getOriginator() {
         return originator;
     }
 
@@ -151,10 +151,10 @@ public class BaseFaultType {
      * 
      * @param value
      *     allowed object is
-     *     {@link W3CEndpointReference }
+     *     {@link EndpointReferenceType }
      *     
      */
-    public void setOriginator(W3CEndpointReference value) {
+    public void setOriginator(EndpointReferenceType value) {
         this.originator = value;
     }
 
