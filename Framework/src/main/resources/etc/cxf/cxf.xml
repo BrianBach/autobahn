@@ -419,7 +419,19 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
 		<constructor-arg type="java.lang.String" value="etc/edugain/client-sec.properties"/>	
 	</bean>	
 		
-	<jaxws:endpoint id="oscars" implementor="net.geant.autobahn.idcp.OSCARSImpl" address="https://localhost:${server.securePort}/autobahn/oscars" wsdlLocation="etc/wsdl/IDCP/OSCARS.wsdl">
+	<jaxws:endpoint id="oscars" implementor="net.geant.autobahn.idcp.OSCARSImpl" address="https://${server.ip}:${server.securePort}/autobahn/oscars" wsdlLocation="etc/wsdl/IDCP/OSCARS.wsdl">
+		<jaxws:properties>
+			<entry key="ws-security.callback-handler">
+				<ref bean="OscarsServerPasswordCallback"/>
+			</entry>
+			<entry key="ws-security.encryption.properties" value="etc/oscars/server-sec.properties"/>
+			<entry key="ws-security.signature.properties" value="etc/oscars/client-sec.properties"/>
+			<entry key="ws-security.encryption.username" value="guest"/>
+			<entry key="ws-security.signature.username" value="guest"/>
+		</jaxws:properties> 
+	</jaxws:endpoint>
+	
+	<jaxws:endpoint id="oscarsnotify" implementor="net.geant.autobahn.idcp.notify.OSCARSNotifyImpl" address="https://${server.ip}:${server.securePort}/autobahn/oscarsnotify" wsdlLocation="etc/wsdl/IDCP/OSCARS-Notify.wsdl">
 		<jaxws:properties>
 			<entry key="ws-security.callback-handler">
 				<ref bean="OscarsServerPasswordCallback"/>
@@ -440,6 +452,16 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
 			<entry key="ws-security.signature.username" value="autobahn"/>
 		</jaxws:properties>
     </jaxws:client>   
+    
+    <jaxws:client name="{http://oscars.es.net/OSCARS}OSCARSNotify" createdFromAPI="true">
+        <jaxws:properties>
+			<entry key="ws-security.callback-handler" value-ref="OscarsClientPasswordCallback"/>        
+			<entry key="ws-security.encryption.properties" value="etc/edugain/server-sec.properties"/>
+			<entry key="ws-security.signature.properties" value="etc/edugain/client-sec.properties"/>
+			<entry key="ws-security.encryption.username" value="autobahn"/>
+			<entry key="ws-security.signature.username" value="autobahn"/>
+		</jaxws:properties>
+    </jaxws:client>   
 	
 	<http:conduit name="{http://oscars.es.net/OSCARS}OSCARS.http-conduit">
     <http:tlsClientParameters disableCNCheck="true" secureSocketProtocol="SSL">
@@ -449,8 +471,20 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
       </sec:trustManagers>      
     </http:tlsClientParameters>
    </http:conduit>
+   
+   <http:conduit name="{http://oscars.es.net/OSCARS}OSCARSNotify.http-conduit">
+    <http:tlsClientParameters disableCNCheck="true" secureSocketProtocol="SSL">
+      <sec:trustManagers>
+          <sec:keyStore type="JKS" password="password"
+               file="etc/oscars/ssl-client.jks"/>
+      </sec:trustManagers>      
+    </http:tlsClientParameters>
+   </http:conduit>
 
   <http:destination name="{http://oscars.es.net/OSCARS}OSCARS.http-destination">    
+  </http:destination>
+  
+  <http:destination name="{http://oscars.es.net/OSCARS}OSCARSNotify.http-destination">    
   </http:destination>
   
   <httpj:engine-factory>
