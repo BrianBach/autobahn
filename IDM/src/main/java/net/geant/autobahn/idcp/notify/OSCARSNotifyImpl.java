@@ -31,7 +31,7 @@ import net.geant.autobahn.reservation.Reservation;
                       serviceName = "OSCARSNotify",
                       portName = "OSCARSNotify",
                       targetNamespace = "http://oscars.es.net/OSCARS",
-                      wsdlLocation = "file:src/main/resources/wsdl/IDCP/OSCARS-Notify.wsdl",
+                      wsdlLocation = "file:etc/wsdl/IDCP/OSCARS-Notify.wsdl",
                       endpointInterface = "net.geant.autobahn.idcp.notify.OSCARSNotify")
                       
 public class OSCARSNotifyImpl implements OSCARSNotify {
