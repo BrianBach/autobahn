@@ -3,6 +3,10 @@
  */
 package net.geant.autobahn.framework.commands;
 
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.Writer;
 import java.util.List;
 
 import net.geant.autobahn.framework.Framework;
@@ -31,6 +35,13 @@ public class IdcpTopologyCommand implements AutobahnCommand {
 			for (Link link : links)
 				sb.append(link + "\r\n");
 			
+			// also dump content to file
+			Writer output = new BufferedWriter(new FileWriter("idcp.txt"));
+			try {
+				output.write(sb.toString());
+			} finally {
+				output.close();
+			}
 			return sb.toString();
 			
 		} catch (Exception e) {
@@ -44,6 +55,6 @@ public class IdcpTopologyCommand implements AutobahnCommand {
 	@Override
 	public String commandInfo() {
 		
-		return "Displays topology pulled from esnet";
+		return "Displays topology pulled from an idcp domain";
 	}
 }
