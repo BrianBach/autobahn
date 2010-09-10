@@ -8,6 +8,7 @@ package net.geant.autobahn.reservation.states.ld;
 import java.util.Calendar;
 
 import net.geant.autobahn.idcp.Autobahn2OscarsConverter;
+import net.geant.autobahn.idm.AccessPoint;
 import net.geant.autobahn.reservation.LastDomainReservation;
 import net.geant.autobahn.reservation.ReservationStatusListener;
 
@@ -23,17 +24,16 @@ public class Scheduled extends LastDomainState {
 
     @Override
     public void cancel(LastDomainReservation res) {
+    	
+        final String idcpPattern = AccessPoint.getInstance().getProperty("idcp.domain");
         
-        if("http://client-domain.internet2.edu".equals(res.getNextDomainAddress()) || 
-        		res.getNextDomainAddress().contains("oscars-domain")) {
+        if (res.getNextDomainAddress().contains(idcpPattern)) {
         	Autobahn2OscarsConverter client = new Autobahn2OscarsConverter();
         	client.cancelReservation(res.getBodID());
         }
     	
         res.releaseResources();
-
         res.reportCancel("Cancel OK", true);
-        
         res.switchState(LastDomainState.CANCELLED);
     }
 
@@ -43,18 +43,16 @@ public class Scheduled extends LastDomainState {
 	@Override
 	public void withdraw(LastDomainReservation res) {
 		
-        if("http://client-domain.internet2.edu".equals(res.getNextDomainAddress()) || 
-        		res.getNextDomainAddress().contains("oscars-domain")) {
+        final String idcpPattern = AccessPoint.getInstance().getProperty("idcp.domain");
+        
+        if (res.getNextDomainAddress().contains(idcpPattern)) {
         	Autobahn2OscarsConverter client = new Autobahn2OscarsConverter();
         	client.cancelReservation(res.getBodID());
         }
 		
 		res.releaseResources();
-		
         log.info(this + " FAILURE: WITHDRAW");
-
         res.reportWithdraw("WITHDRAW", true);
-        
         res.switchState(LastDomainState.FAILED);
         
         for(ReservationStatusListener listener : res.getStatusListeners()) {

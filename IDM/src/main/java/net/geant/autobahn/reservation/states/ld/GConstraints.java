@@ -7,6 +7,7 @@ package net.geant.autobahn.reservation.states.ld;
 
 import net.geant.autobahn.constraints.GlobalConstraints;
 import net.geant.autobahn.idcp.Autobahn2OscarsConverter;
+import net.geant.autobahn.idm.AccessPoint;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
 import net.geant.autobahn.idm2dm.OversubscribedException;
 import net.geant.autobahn.network.Link;
@@ -52,16 +53,15 @@ public class GConstraints extends LastDomainState {
             return;
         }
         
-        // SEND create reservation TO OSCARS Proxy
-        if("http://client-domain.internet2.edu".equals(res.getNextDomainAddress()) || 
-        		res.getNextDomainAddress().contains("oscars-domain")) {
-        	log.debug("Talking with OSCARS Proxy...");
-        	
+        // create reservation within idcp domain
+        final String idcpPattern = AccessPoint.getInstance().getProperty("idcp.domain");
+        
+        if (res.getNextDomainAddress().contains(idcpPattern)) {
         	Autobahn2OscarsConverter client = new Autobahn2OscarsConverter();
-        	int res_code = client.scheduleReservation(res);
+        	int result = client.scheduleReservation(res);
         	
-        	if(res_code != 0) {
-        		res.fail(res_code, domainID);
+        	if(result != 0) {
+        		res.fail(result, domainID);
         		return;
         	}
         }

@@ -11,6 +11,7 @@ import java.util.List;
 import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.constraints.GlobalConstraints;
 import net.geant.autobahn.idcp.Autobahn2OscarsConverter;
+import net.geant.autobahn.idm.AccessPoint;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
 import net.geant.autobahn.idm2dm.OversubscribedException;
 import net.geant.autobahn.network.Link;
@@ -183,16 +184,14 @@ public class LocalCheck extends HomeDomainState {
 
         res.setGlobalConstraints(constraints);
         
-        // SEND create reservation TO OSCARS Proxy
-        if("http://client-domain.internet2.edu".equals(res.getNextDomainAddress()) || 
-        		res.getNextDomainAddress().contains("oscars-domain")) {
-        	log.debug("Talking with OSCARS Proxy...");
-        	
-        	Autobahn2OscarsConverter client = new Autobahn2OscarsConverter();
-        	int res_code = client.scheduleReservation(res);
-        	
-        	if(res_code != 0) {
-        		res.fail(ReservationErrors.getInfo(res_code, res.getNextDomainAddress()));
+        // create reservation within idcp domain
+        final String idcpPattern = AccessPoint.getInstance().getProperty("idcp.domain");
+        
+        if (res.getNextDomainAddress().contains(idcpPattern)) {
+        	Autobahn2OscarsConverter conv = new Autobahn2OscarsConverter();
+        	int result = conv.scheduleReservation(res);
+        	if (result != 0) {
+        		res.fail(ReservationErrors.getInfo(result, res.getNextDomainAddress()));
         		return;
         	}
         }
@@ -210,7 +209,6 @@ public class LocalCheck extends HomeDomainState {
             res.fail();
             return;
         }
-        
     	res.success("OK");
     }
 }

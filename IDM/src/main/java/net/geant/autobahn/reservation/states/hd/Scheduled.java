@@ -9,6 +9,7 @@ package net.geant.autobahn.reservation.states.hd;
 import java.util.Calendar;
 
 import net.geant.autobahn.idcp.Autobahn2OscarsConverter;
+import net.geant.autobahn.idm.AccessPoint;
 import net.geant.autobahn.interdomain.NoSuchReservationException;
 import net.geant.autobahn.reservation.HomeDomainReservation;
 import net.geant.autobahn.reservation.ReservationStatusListener;
@@ -36,22 +37,20 @@ public class Scheduled extends HomeDomainState {
 
 	@Override
 	public void withdraw(HomeDomainReservation res) {
+		
 		if(res.isLastDomain()) {
-			// FORWARD TO OSCARS
-	        if("http://client-domain.internet2.edu".equals(res.getNextDomainAddress()) || 
-	        		res.getNextDomainAddress().contains("oscars-domain")) {
+			final String idcpPattern = AccessPoint.getInstance().getProperty("idcp.domain");
+			if (res.getNextDomainAddress().contains(idcpPattern)) {
 	        	Autobahn2OscarsConverter client = new Autobahn2OscarsConverter();
 	        	client.cancelReservation(res.getBodID());
 	        }
 			
 	        res.releaseResources();
-
 	        res.fail("Activation failed");
 	        return;
 		}
 		
         res.switchState(HomeDomainState.WITHDRAWING);
-
         boolean self = false;
         
         try {
@@ -71,9 +70,8 @@ public class Scheduled extends HomeDomainState {
     public void cancel(HomeDomainReservation res) {
 
 		if(res.isLastDomain()) {
-			// FORWARD TO OSCARS
-	        if("http://client-domain.internet2.edu".equals(res.getNextDomainAddress()) || 
-	        		res.getNextDomainAddress().contains("oscars-domain")) {
+			final String idcpPattern = AccessPoint.getInstance().getProperty("idcp.domain");
+			if (res.getNextDomainAddress().contains(idcpPattern)) {
 	        	Autobahn2OscarsConverter client = new Autobahn2OscarsConverter();
 	        	client.cancelReservation(res.getBodID());
 	        }
