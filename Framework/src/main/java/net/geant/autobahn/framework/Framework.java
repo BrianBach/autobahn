@@ -23,6 +23,7 @@ import net.geant.autobahn.framework.commands.ServicesCommand;
 import net.geant.autobahn.framework.commands.ShutdownCommand;
 import net.geant.autobahn.framework.commands.TopologyCommand;
 import net.geant.autobahn.framework.commands.UptimeCommand;
+import net.geant.autobahn.framework.commands.IdcpTopologyCommand;
 
 import org.apache.log4j.Logger;
 
@@ -61,6 +62,7 @@ public class Framework {
 		commands.put("shutdown", new ShutdownCommand());
 		commands.put("halt", new ShutdownCommand());
 		commands.put("uptime", new UptimeCommand());
+		commands.put("idcptopo", new IdcpTopologyCommand());
 	}
 
 	public static Properties loadProperties(String filename) throws Exception {
@@ -74,7 +76,14 @@ public class Framework {
 	
 	public void startIdm() {
 		try {
+			
 			Properties idmProps = loadProperties("etc/idm.properties");
+			// try to load idcp.properties, if the file is missing it is ok
+			FileInputStream fis = new FileInputStream("etc/idcp.properties");
+			if (fis != null) {
+				idmProps.load(fis);
+				fis.close();
+			}
 			
 			if(properties.containsKey("startup.notify")) {
 				idmProps.put("startup.notify", properties.getProperty("startup.notify"));
