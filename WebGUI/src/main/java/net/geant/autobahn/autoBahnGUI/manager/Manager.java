@@ -289,5 +289,8 @@ public interface Manager {
 	
 	public String getFriendlyNamefromLS(String identifier);
 	
+	public boolean checkIDMavailability();
+	
+
 }
 

@@ -9,7 +9,6 @@
 		<set name="requestScope.currentIdm" value="requestParameters.idm"></set>
 		<evaluate expression="manager.getSubmitedServicesInIDM(requestScope.currentIdm)" result="flowScope.services"/>
 		<evaluate expression="manager.reservationStates" result="flowScope.reservationStates"/>
-		<evaluate expression="manager.isIdmDisconnected()" result="flowScope.disconnect" />
 	</on-start>
 
 	<decision-state id="check-idm">

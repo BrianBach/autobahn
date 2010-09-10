@@ -209,7 +209,7 @@ function onFeatureUnselect(evt) {
 
 function make_all(map){
 if (GBrowserIsCompatible()) {
-    setInterval('refreashMap(map)',150000);
+    setInterval('refreashMap(map)',30000);
     refreashMap(map);
   }else {
     alert('Sorry, the Google Maps API is not compatible with this browser');

@@ -56,6 +56,8 @@ public class TopologyFinder implements TopologyFinderNotifier{
 	
 	private Map<String,InterfaceComponent> map = new HashMap<String, InterfaceComponent>();
   	
+	public boolean flag = false;
+	
 	/**
 	 * Updates topology by analysing manager data
 	 */
@@ -63,7 +65,8 @@ public class TopologyFinder implements TopologyFinderNotifier{
 		new Thread(new Runnable() {
             public void run() {
             	synchronized (topology) {
-            		createTopology();
+            		if(flag == false || manager.checkIDMavailability())
+            			createTopology();
 				}
             }
         }).start();
@@ -127,7 +130,6 @@ public class TopologyFinder implements TopologyFinderNotifier{
 			if (service!= null){
 				List<Reservation> reservations = new ArrayList<Reservation>(); 
 				reservations.addAll(service.getReservations());
-				
 				if (reservations==null || reservations.isEmpty())
 					return top;
 	
@@ -245,7 +247,6 @@ public class TopologyFinder implements TopologyFinderNotifier{
 	}
 	
 	public Topology setInterfaceTopology(List<String> strings, int state){
-		
 		Line line = null;
 		Topology top = new Topology();
 		Marker marker = null;
@@ -275,7 +276,6 @@ public class TopologyFinder implements TopologyFinderNotifier{
 	 * Creates topology based on manager data
 	 */
 	private void createTopology() {
-		
 		topology.removeAll();
 		Marker marker = null;
 		Line line = null;
@@ -388,10 +388,10 @@ public class TopologyFinder implements TopologyFinderNotifier{
 
 			if(interfaces != null)
 				setInterfaceInMainTopology(interfaces);
-
+			flag = true;
 	}
 
-	@SuppressWarnings("unchecked")
+
 	public void setInterfaceInMainTopology(Map<String, List<InterfaceComponent>> interfaces){
 
 		Line line = null;

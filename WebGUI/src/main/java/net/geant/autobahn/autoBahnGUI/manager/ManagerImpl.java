@@ -21,11 +21,6 @@ import java.util.concurrent.ConcurrentMap;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
-import org.apache.log4j.Logger;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.userdetails.UserDetails;
-
-
 import net.geant.autobahn.administration.KeyValue;
 import net.geant.autobahn.administration.ServiceType;
 import net.geant.autobahn.administration.Status;
@@ -41,7 +36,6 @@ import net.geant.autobahn.gui.ReservationChangedType;
 import net.geant.autobahn.lookup.LookupService;
 import net.geant.autobahn.lookup.LookupServiceException;
 import net.geant.autobahn.reservation.Reservation;
-import net.geant.autobahn.reservation.Service;
 import net.geant.autobahn.useraccesspoint.Priority;
 import net.geant.autobahn.useraccesspoint.ReservationRequest;
 import net.geant.autobahn.useraccesspoint.Resiliency;
@@ -513,20 +507,21 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 			}
 		}
 	}
-	
-	/**
-	 * Checks if an IDM is disconnected 
-	 */
-	public void isIdmDisconnected() {
+	public boolean checkIDMavailability(){
 		
+		boolean flag = false;
 		if (!idms.isEmpty()) {
 			Iterator<String> iterator = idmsTime.keySet().iterator();
 			do 	{
 					String nextElement = iterator.next();
-		            if (System.currentTimeMillis() - idmsTime.get(nextElement) > tearDownTime) 
-		                idms.remove(nextElement);                
+		            if (System.currentTimeMillis() - idmsTime.get(nextElement) > tearDownTime) {
+		            	
+		            	idms.remove(nextElement);
+		            	flag = true;
+		            }		                		            
 	        } while (iterator.hasNext());
         }
+		return flag;
 	}
 	
 	/*
@@ -555,8 +550,9 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 				logger.info (e.getClass().getName()+":"+e.getMessage());
 			}
 		}		
-		if (notifier!= null)
+		if (notifier!= null)	
 				notifier.updateTopology();
+		
 	}
 	/*
 	 * (non-Javadoc)
@@ -996,7 +992,6 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 		logger.info ("Modifing timezone:"+timezone);
 		try {
 			if (timezone == null || timezone.equals("UTC")|| timezone.equals("GMT")|| this.timezone.equals(timezone)) {
-				System.out.println("Wyjscie");
 				return;
 			}
 			TimeZone applicationTimeZone = TimeZone.getTimeZone(this.timezone);
@@ -1014,16 +1009,12 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 				request.setStartTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(startDate).toGregorianCalendar());
 				request.setEndTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(endDate).toGregorianCalendar());
 			} catch (DatatypeConfigurationException e) {
-				System.out.println("Elo ziom - blad");
 				e.printStackTrace();
 			}
 	        
 		} catch (Exception e) {
-			System.out.println("Blad!!!");
 			e.printStackTrace();
 		}
-		
-		System.out.println("Koniec");
 	}
 	
 	public void convertTimeToTimezone(String timezone, ReservationRequest request){	
@@ -1124,6 +1115,5 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
 	
 }
