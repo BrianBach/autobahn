@@ -27,7 +27,7 @@ public class IdcpTopologyCommand implements AutobahnCommand {
 	@Override
 	public String execute(Framework autobahn, String[] args) {
 	
-		OscarsClient oscars = new OscarsClient();
+		OscarsClient oscars = new OscarsClient(args[0]);
 		try {
 			List<Link> links = oscars.getTopology();
 			
