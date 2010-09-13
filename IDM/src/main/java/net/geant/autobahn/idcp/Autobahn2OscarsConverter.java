@@ -12,6 +12,8 @@ import java.util.Map;
 
 import net.geant.autobahn.idcp.notify.OscarsNotifyClient;
 import net.geant.autobahn.network.Link;
+import net.geant.autobahn.network.Path;
+import net.geant.autobahn.network.Port;
 import net.geant.autobahn.reservation.AutobahnReservation;
 import net.geant.autobahn.reservation.Reservation;
 import net.geant.autobahn.reservation.ReservationErrors;
@@ -31,6 +33,7 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
 	
     private static Map<String, String> vlans = new HashMap<String, String>();
     
+    private String idcpServer;
 
     static {
         vlans.put("10.12.32.5", "3202"); //HEA
@@ -41,10 +44,17 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
         vlans.put("10.14.32.2", "3207"); //GAR
     }
 
+    public Autobahn2OscarsConverter(String idcpServer) {
+        this.idcpServer = idcpServer;
+    }
+
+    public Autobahn2OscarsConverter() {
+    }
+
 	public void cancelReservation(String resID) {
 		
 		try {
-			OscarsClient oscars = new OscarsClient();
+			OscarsClient oscars = new OscarsClient(idcpServer);
 			oscars.cancelReservation(resID);
 		} catch (IOException e) { 
 			log.error("Autobahn2OscarsConverter: cancelReservation Error: + " + e.getMessage());
@@ -52,7 +62,7 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
 	}
 	
     public List<Link> getTopology() throws Exception {
-        OscarsClient oscars = new OscarsClient();
+        OscarsClient oscars = new OscarsClient(idcpServer);
         return oscars.getTopology();
     }
     
@@ -92,7 +102,7 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
     
     public List<Reservation> listReservations() throws IOException {
         
-        OscarsClient oscars = new OscarsClient();
+        OscarsClient oscars = new OscarsClient(idcpServer);
     	List<Reservation> res = null;
 		try {
 			res = oscars.getReservationList();
@@ -110,10 +120,19 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
     public boolean modifyReservation(Reservation resInfo)
             throws IOException {
         
-        OscarsClient oscars = new OscarsClient();
+        OscarsClient oscars = new OscarsClient(idcpServer);
         ResDetails resTemp = null;
-        
-        String src = resInfo.getStartPort().getBodID();
+
+        String src;
+        try {
+            src = this.getIdcpIngressPort(resInfo);
+        }
+        catch (Exception e) {
+            //This is supposed to be an IDCP reservation, so this is an error
+            log.debug("Trying to send to IDCP modification for non-IDCP reservation");
+            throw new IOException(e.getMessage());
+        }
+        //String src = resInfo.getStartPort().getBodID();
         String dest = resInfo.getEndPort().getBodID();
         String vlan = vlans.get(resInfo.getStartPort());
 
@@ -137,7 +156,7 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
     public Reservation queryReservation(String resID) throws IOException {
         
         System.out.println("queryReservation: " + resID);
-        OscarsClient oscars = new OscarsClient();
+        OscarsClient oscars = new OscarsClient(idcpServer);
         
         Reservation response = null;
         try {
@@ -156,7 +175,16 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
 			
 	        String src = "";
 	        
-	        src = reservation.getStartPort().getBodID();
+	        try {
+	            src = this.getIdcpIngressPort(reservation);
+	        }
+	        catch (Exception e) {
+                //This is supposed to be an IDCP reservation, so this is an error
+                log.debug("Trying to send to IDCP non-IDCP reservation: " + e.getMessage());
+                return ReservationErrors.WRONG_DOMAIN;
+	        }
+	        
+	        //src = reservation.getStartPort().getBodID();
 	        String dest = reservation.getEndPort().getBodID();        
 	        String vlan = vlans.get(src);
 
@@ -167,7 +195,7 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
 	        
 	        //log.info("OSCARS: src - " + src + ", end: " + dest);
 	        
-	        OscarsClient oscars = new OscarsClient();
+            OscarsClient oscars = new OscarsClient(idcpServer);
 	        Reservation res = oscars.scheduleReservation(reservation, src, dest, vlan);
 	        
 			String errorDesc = res.getDescription();
@@ -228,5 +256,24 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
 		} catch(Exception e) {
 			log.info("Notify sending error: " + e.getMessage());
 		}
+	}
+	
+	private String getIdcpIngressPort(Reservation reservation) throws Exception {
+        // The original reservation defines an AutoBAHN port as source and an
+        // IDCP one as destination. We have to change the source port to the IDCP
+        // ingress port before sending the reservation over to IDCP.
+        Path res_path = reservation.getPath();
+        Link ab2idcp_link = res_path.getIngress(idcpServer);
+        Port srcPort;
+        if (ab2idcp_link.getStartPort().isIdcpPort()) {
+            srcPort = ab2idcp_link.getStartPort();
+        }
+        else if (ab2idcp_link.getEndPort().isIdcpPort()) {
+            srcPort = ab2idcp_link.getEndPort();
+        }
+        else {
+            throw new Exception("This reservation does not include IDCP cloud");
+        }
+        return srcPort.getBodID();
 	}
 }

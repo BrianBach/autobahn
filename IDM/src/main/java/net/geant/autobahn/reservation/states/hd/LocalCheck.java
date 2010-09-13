@@ -130,9 +130,11 @@ public class LocalCheck extends HomeDomainState {
 
         // Check if the homedomain is the only domain
         if(res.isLastDomain()) {
+            log.debug("The HomeDomain is also the only domain in the path, so will self-schedule");
         	selfSchedule(res);
         	return;
         }
+        log.debug("More domains exist in the path, so will transit to Scheduling");
         
         res.switchState(HomeDomainState.SCHEDULING);
         
@@ -183,17 +185,18 @@ public class LocalCheck extends HomeDomainState {
         }
 
         res.setGlobalConstraints(constraints);
-        
-        // create reservation within idcp domain
-        final String idcpPattern = AccessPoint.getInstance().getProperty("idcp.domain");
-        
-        if (res.getNextDomainAddress().contains(idcpPattern)) {
-        	Autobahn2OscarsConverter conv = new Autobahn2OscarsConverter();
-        	int result = conv.scheduleReservation(res);
-        	if (result != 0) {
-        		res.fail(ReservationErrors.getInfo(result, res.getNextDomainAddress()));
-        		return;
-        	}
+
+        // IDCP reservation, send to suitable IDCP server
+        if(res.isAb2IdcpReservation() && (res.getIdcpServer()!=null)) {
+            log.info("Talking with IDCP server... (" + res.getIdcpServer() + ")");
+            
+            Autobahn2OscarsConverter client = new Autobahn2OscarsConverter(res.getIdcpServer());
+            int res_code = client.scheduleReservation(res);
+            
+            if(res_code != 0) {
+                res.fail(ReservationErrors.getInfo(res_code, res.getNextDomainAddress()));
+                return;
+            }
         }
         
         try {

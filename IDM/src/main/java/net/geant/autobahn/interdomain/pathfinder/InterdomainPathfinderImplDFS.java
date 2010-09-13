@@ -105,7 +105,20 @@ public class InterdomainPathfinderImplDFS extends InterdomainPathfinderAbstractI
         // at the start or the end of the path.
         // The simplest solution is to remove from the graph all other
         // links from the start and end node, except the designated ones.
-        edges = trimStartEndNodes(reservation.getStartPort(), reservation.getEndPort(), allEdges);
+        //
+        // However, this assumption does not apply for IDCP nodes, where the 
+        // IDCP node simply models an IDCP cloud that will take care of the reservation 
+        // (see DICE IDCP integration spec at 
+        // https://intranet.geant.net/sites/Services/SA2/T5/AutoBAHN/Pages/AutoBAHNDiceIDCPIntegration.aspx)
+        if (reservation.isAb2IdcpReservation()) {
+            edges = trimNode(reservation.getStartPort(), allEdges);
+        }
+        else if (reservation.isIdcp2AbReservation()) {
+            edges = trimNode(reservation.getEndPort(), allEdges);            
+        }
+        else {
+            edges = trimStartEndNodes(reservation.getStartPort(), reservation.getEndPort(), allEdges);
+        }
 
         log.debug("DFS searching for up to " + limit + " paths, from node " +
                 reservation.getStartPort().getNode() + " to node " +
@@ -234,6 +247,42 @@ public class InterdomainPathfinderImplDFS extends InterdomainPathfinderAbstractI
                 // But do not remove the designated start and end links
                 if (!pid1.equals(sportId) && !pid2.equals(sportId)
                         && !pid1.equals(dportId) && !pid2.equals(dportId)) {
+                    continue;
+                }
+            }
+            trimmedEdges.add(l);
+        }
+        return trimmedEdges;
+    }
+
+    /**
+     * Helper function that removes all other edges attached to 
+     * the node containing chosenPort.
+     * 
+     * @param chosenPort
+     * @param initialEdges
+     * @return List of edges without the removed edges, or null if initialEdges was null
+     */
+    private List<Link> trimNode(Port chosenPort, List<Link> initialEdges) {
+        
+        if (initialEdges == null) {
+            return null;
+        }
+        
+        List<Link> trimmedEdges = new ArrayList<Link>();
+        String chportId = chosenPort.getBodID();
+        String chnodeid = chosenPort.getNode().getBodID();
+        
+        for (Link l : initialEdges) {
+            // Do not add other links at the start or end node
+            String nid1 = l.getStartPort().getNode().getBodID();
+            String nid2 = l.getEndPort().getNode().getBodID();
+            String pid1 = l.getStartPort().getBodID();
+            String pid2 = l.getEndPort().getBodID();
+            
+            if (nid1.equals(chnodeid) || nid2.equals(chnodeid)) {
+                // But do not remove the link attached to the designated port
+                if (!pid1.equals(chportId) && !pid2.equals(chportId)) {
                     continue;
                 }
             }

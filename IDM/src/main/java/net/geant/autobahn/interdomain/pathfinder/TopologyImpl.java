@@ -19,6 +19,7 @@ import net.geant.autobahn.idm.TopologyMerge;
 import net.geant.autobahn.network.AdminDomain;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.Node;
+import net.geant.autobahn.network.ProvisioningDomain;
 import net.geant.autobahn.network.StateOper;
 import net.geant.autobahn.network.dao.LinkDAO;
 import net.geant.autobahn.ospf.Ospf;
@@ -110,6 +111,21 @@ public final class TopologyImpl implements Topology, OspfAsync, Closeable {
             adomains.add(l.getEndPort().getNode().getProvisioningDomain().getAdminDomain());
         }
         return new ArrayList<AdminDomain>(adomains);
+    }
+
+    /* (non-Javadoc)
+     * @see net.geant.autobahn.pathfinder.interdomain.Quagga#getDomains()
+     */
+    public List<ProvisioningDomain> getProvDomains() {
+        
+        List<Link> links = ldao.getValidLinks();
+        Set<ProvisioningDomain> pdomains = new HashSet<ProvisioningDomain>();
+        
+        for (Link l : links) {
+            pdomains.add(l.getStartPort().getNode().getProvisioningDomain());
+            pdomains.add(l.getEndPort().getNode().getProvisioningDomain());
+        }
+        return new ArrayList<ProvisioningDomain>(pdomains);
     }
 
     /* (non-Javadoc)

@@ -117,6 +117,18 @@ public class RequestServiceFormController extends SimpleFormController {
 				}
 				
 				List<String> allPorts = manager.getAllPorts();
+				
+				// Add to allPorts also IDCP ports
+                List<String> allIdcpPorts = manager.getAllIdcpPorts();
+                if (allIdcpPorts!=null) {
+                    if (allPorts!=null) {
+                        allPorts.addAll(allIdcpPorts);
+                    }
+                    else {
+                        allPorts = allIdcpPorts;
+                    }
+                }
+                
 				if (allPorts==null)
 					allPorts= domainPorts;
 				List<String> mappedAllPorts = new ArrayList <String>();

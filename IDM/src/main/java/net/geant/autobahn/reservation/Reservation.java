@@ -392,6 +392,47 @@ public class Reservation implements Serializable {
 		this.fake = fake;
 	}
 
+    /**
+     * Whether this is a Reservation that spans an IDCP cloud
+     * 
+     * @return true if the reservation is an IDCP one, false if it is within AutoBAHN only.
+     */
+    public boolean isIdcpReservation() {
+        return getStartPort().isIdcpPort() || getEndPort().isIdcpPort();
+    }
+
+    /**
+     * Whether this is a Reservation that originates from AutoBAHN and
+     * ends in an IDCP cloud
+     * 
+     * @return true if the reservation is from AutoBAHN to an IDCP cloud, false otherwise
+     */
+    public boolean isAb2IdcpReservation() {
+        return getEndPort().isIdcpPort();
+    }
+
+    /**
+     * Whether this is a Reservation that originates from an IDCP cloud and
+     * ends in AutoBAHN
+     * 
+     * @return true if the reservation is from an IDCP cloud to AutoBAHN, false otherwise
+     */
+    public boolean isIdcp2AbReservation() {
+        return getStartPort().isIdcpPort();
+    }
+
+    /**
+     * Returns the IDCP server where the request should be send, if this
+     * reservation spans an IDCP cloud
+     * 
+     * @return the IDCP server if this is an IDCP reservation, null otherwise
+     */
+    public String getIdcpServer() {
+        String startIdcpServer = getStartPort().getNode().getProvisioningDomain().getAdminDomain().getIdcpServer();
+        String endIdcpServer = getEndPort().getNode().getProvisioningDomain().getAdminDomain().getIdcpServer();
+        return (startIdcpServer==null) ? endIdcpServer : startIdcpServer;
+    }
+
 	/**
 	 * Creates object with reservation parameters needed to reserve proper path
 	 * inside domain.

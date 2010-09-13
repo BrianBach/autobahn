@@ -53,17 +53,16 @@ public class GConstraints extends LastDomainState {
             return;
         }
         
-        // create reservation within idcp domain
-        final String idcpPattern = AccessPoint.getInstance().getProperty("idcp.domain");
-        
-        if (res.getNextDomainAddress().contains(idcpPattern)) {
-        	Autobahn2OscarsConverter client = new Autobahn2OscarsConverter();
-        	int result = client.scheduleReservation(res);
-        	
-        	if(result != 0) {
-        		res.fail(result, domainID);
-        		return;
-        	}
+        // IDCP reservation, send to suitable IDCP server
+        if(res.isAb2IdcpReservation() && (res.getIdcpServer()!=null)) {
+            log.info("Talking with IDCP server... (" + res.getIdcpServer() + ")");
+            
+            Autobahn2OscarsConverter client = new Autobahn2OscarsConverter(res.getIdcpServer());
+            int res_code = client.scheduleReservation(res);
+            if(res_code != 0) {
+                res.fail(res_code, domainID);
+                return;
+            }
         }
         
         try {

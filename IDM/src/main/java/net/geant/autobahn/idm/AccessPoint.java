@@ -24,6 +24,7 @@ import net.geant.autobahn.dao.hibernate.HibernateUtil;
 import net.geant.autobahn.dao.hibernate.IdmHibernateUtil;
 import net.geant.autobahn.dm2idm.Dm2Idm;
 import net.geant.autobahn.gui.GuiNotifier;
+import net.geant.autobahn.idcp.Autobahn2OscarsConverter;
 import net.geant.autobahn.idm2dm.Idm2Dm;
 import net.geant.autobahn.idm2dm.Idm2DmClient;
 import net.geant.autobahn.interdomain.Interdomain;
@@ -37,7 +38,9 @@ import net.geant.autobahn.lookup.LookupServiceException;
 import net.geant.autobahn.network.AdminDomain;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.LinkIdentifiers;
+import net.geant.autobahn.network.Node;
 import net.geant.autobahn.network.Port;
+import net.geant.autobahn.network.ProvisioningDomain;
 import net.geant.autobahn.network.StateOper;
 import net.geant.autobahn.reservation.AutobahnReservation;
 import net.geant.autobahn.reservation.HomeDomainReservation;
@@ -241,6 +244,152 @@ public final class AccessPoint implements UserAccessPoint,
         
         runAfterInitChecks();
 	}
+
+	private void retrieveIdcpTopology() {
+	    List<String> idcpServerList = getPropertiesNames(properties, "idcp.");
+	    for (String idcpServer : idcpServerList) {
+            Autobahn2OscarsConverter client = new Autobahn2OscarsConverter(properties.getProperty(idcpServer));
+            
+            // The IDCP cloud should be already connected with at least one link
+            // to the AutoBAHN topology, and an admin_domain with the server name 
+            // should be present as a client domain
+            ProvisioningDomain idcpProvDomain = this.getProvisioningDomainByAdminId(idcpServer);
+            if (idcpProvDomain == null) {
+                log.info("IDCP server " + idcpServer + " was defined in idm.properties, but it " +
+                		"does not exist in the database. It will therefore be ignored");
+                continue;
+            }
+            
+            // If the corresponding admin domain has already been set as an IDCP cloud
+            // (and therefore has an idcpServer value), it means that this IDCP cloud
+            // has already been contacted and its topology fetched, so skip it
+            if (idcpProvDomain.getAdminDomain().isIdcpCloud()) {
+                log.info("IDCP server " + idcpServer + " has already been contacted and topology " +
+                		"has been fetched, so it is now skipped");
+                continue;
+            }
+            
+            // First time we handle this idcpServer, so set it as an IDCP cloud
+            AdminDomain idcpAdminDom = idcpProvDomain.getAdminDomain();
+            this.saveIdcpServer(idcpAdminDom, idcpServer);
+            
+            List<Port> idcpPorts = new ArrayList<Port>();
+            
+            try {
+                List<Link> links = client.getEndpoints();
+                
+                for (Link l : links) {
+                    log.debug("Retrieving IDCP client ports from link " + l.getBodID());
+
+                    // Set all IDCP ports as part of the IDCP cloud
+                    Port ePort = l.getEndPort();
+                    Port sPort = l.getStartPort();
+                    if (!idcpPorts.contains(ePort)) {
+                        ePort.getNode().setProvisioningDomain(idcpProvDomain);
+                        idcpPorts.add(ePort);
+                        log.debug("Retrieved IDCP end port " + ePort.getBodID());
+                    }
+                    if (!idcpPorts.contains(sPort)) {
+                        sPort.getNode().setProvisioningDomain(idcpProvDomain);
+                        idcpPorts.add(sPort);
+                        log.debug("Retrieved IDCP start port " + sPort.getBodID());
+                    }
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            
+            // Construct dummy IDCP internal links and nodes and insert them in topology
+            if (!idcpPorts.isEmpty()) {
+                
+                // Find the dummy node that is attached to all connections between the
+                // IDCP cloud and AutoBAHN, and which will also be connected to all IDCP ports.
+                Node idcpNode = this.getNodeByAdminId(idcpServer);
+                log.debug("IDCP ports will be linked to node " + idcpNode +
+                        " in provisioning domain " + idcpProvDomain.getBodID());
+                idcpNode.getProvisioningDomain().getAdminDomain().setIdcpServer(idcpServer);
+
+                // Add IDCP ports to AutoBAHN interdomain topology
+                for (Port p : idcpPorts) {
+                    // Create dummy port on idcpNode
+                    Port dummyIdcpPort = new Port();
+                    dummyIdcpPort.setBodID(p.getBodID() + "_dummyPort");
+                    dummyIdcpPort.setNode(idcpNode);
+                    
+                    // Create dummy node to contain the actual idcpPort
+                    Node dummyIdcpNode = new Node();
+                    dummyIdcpNode.setBodID(p.getBodID() + "_dummyNode");
+                    dummyIdcpNode.setProvisioningDomain(idcpProvDomain);
+                    p.setNode(dummyIdcpNode);
+                    
+                    // Create dummy link connecting dummy port to IDCP port and insert it
+                    // into topology
+                    Link dummyLink = Link.createVirtualLink(dummyIdcpPort, p, 0);
+                    dummyLink.setBodID(p.getBodID() + "_dummyLink");
+                    dummyLink.setOperationalState(StateOper.UP);
+                    dummyLink.setCapacity(Long.MAX_VALUE);
+                    
+                    // Check if it already exists
+                    log.debug("Checking if this IDCP link already exists in topology " + dummyLink);
+                    List<Link> topLinks = topology.getLinks();
+                    boolean existing = false;
+                    for (Link existingLink : topLinks) {
+                        if (existingLink.equals(dummyLink)) {
+                            existing = true;
+                        }
+                    }
+                    if (!existing) {
+                        log.debug("Inserting IDCP link in topology " + dummyLink);
+                        
+                        // Make sure DB session is closed so that we have no merging problems
+                        IdmHibernateUtil.getInstance().closeSession();
+                        
+                        topology.insertLink(dummyLink);
+                    }
+                }
+                
+            }
+            
+            // At this point idcpServer information may have been overwritten in the DB
+            // so make sure it is saved
+            IdmHibernateUtil.getInstance().closeSession();
+            this.saveIdcpServer(idcpAdminDom, idcpServer);
+	    }
+	}
+	
+	/**
+	 * Sets the idcpServer for the specified domain and saves the information in the database
+	 * @param idcpAdminDom
+	 * @param idcpServer
+	 */
+	private void saveIdcpServer(AdminDomain idcpAdminDom, String idcpServer) {
+        log.debug("Setting idcpServer " + idcpServer + " for admin domain " + idcpAdminDom.getBodID());
+        idcpAdminDom.setIdcpServer(idcpServer);
+        HibernateUtil hbm = IdmHibernateUtil.getInstance();
+        Transaction t = hbm.beginTransaction();
+        daos.getAdminDomainDAO().update(idcpAdminDom);
+        t.commit();
+        IdmHibernateUtil.getInstance().closeSession();
+	}
+	
+	/**
+	 * Read all properties containing a specified String and store in a string list.
+	 * 
+     * @param props - Properties to read from
+     * @param token - Specified String to search for in property names
+	 * @return List of property names containing the specified String.
+	 */
+	private List<String> getPropertiesNames(Properties props, String token) {
+	    List<String> propNames = new ArrayList<String>();
+	    for (Enumeration e = props.propertyNames(); e.hasMoreElements() ;) {
+	        String name = (String) e.nextElement();
+	        if (name.contains(token)) {
+	            propNames.add(name);
+	        }
+	    }
+	    return propNames;
+	}
 	
 	 /**
      * Clears all submodules
@@ -330,6 +479,10 @@ public final class AccessPoint implements UserAccessPoint,
                 continue;
             }
             
+            if (ad.isIdcpCloud()) {
+                continue;
+            }
+            
             res[i] = ad.getBodID();
         }
         
@@ -347,6 +500,10 @@ public final class AccessPoint implements UserAccessPoint,
             AdminDomain ad = domains.get(i);
             if (ad == null) {
                 log.error("A domain returned from DB is null");
+                continue;
+            }
+            
+            if (ad.isIdcpCloud()) {
                 continue;
             }
             
@@ -372,6 +529,10 @@ public final class AccessPoint implements UserAccessPoint,
                 continue;
             }
             
+            if (lnk.isIdcpLink()) {
+                continue;
+            }
+            
             res[i] = lnk.getBodID();
         }
         
@@ -389,6 +550,10 @@ public final class AccessPoint implements UserAccessPoint,
             Link l = links.get(i);
             if (l == null) {
                 log.error("A link returned from DB is null");
+                continue;
+            }
+            
+            if (l.isIdcpLink()) {
                 continue;
             }
             
@@ -415,6 +580,37 @@ public final class AccessPoint implements UserAccessPoint,
 		return cp;
 	}
 
+    /* (non-Javadoc)
+     * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getAllIdcpPorts()
+     */
+    public String[] getIdcpPorts() {
+        List<Port> cports = daos.getPortDAO().getAll();
+        List<Port> idcpPorts = new ArrayList<Port>();
+
+        for (int i=0; i < cports.size(); i++) {
+            Port p = cports.get(i);
+            
+            // Ignore non-IDCP ports
+            if (!p.isIdcpPort()) {
+                continue;
+            }
+
+            // Ignore non-actual IDCP ports, (dummy ones)
+            // TODO: Change _dummyPort naming convention? (not very safe)
+            if (p.getBodID().contains("_dummyPort")) {
+                continue;
+            }
+            
+            idcpPorts.add(p);
+        }
+        
+        String[] cp = new String[idcpPorts.size()];
+        for (int i=0; i < cp.length; i++) {
+            cp[i] = idcpPorts.get(i).getBodID();
+        }
+        return cp;
+    }
+
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getDomainClientPorts()
 	 */
@@ -426,6 +622,38 @@ public final class AccessPoint implements UserAccessPoint,
 		
 		return cp;
 	}
+
+	/**
+	 * Return the first provisioning domain that is contained in the admin domain
+	 * with this bodID
+	 * @param adminBodId
+	 * @return The first provisioning domain that matches the bodID, null if not found
+	 */
+	public ProvisioningDomain getProvisioningDomainByAdminId(String adminBodId) {
+	    List<ProvisioningDomain> domains = topology.getProvDomains();
+	    for (ProvisioningDomain pd : domains) {
+	        if (pd.getAdminDomainID().equals(adminBodId)) {
+	            return pd;
+	        }
+	    }
+	    return null;
+	}
+
+    /**
+     * Return the first Node that is contained in the admin domain
+     * with this bodID
+     * @param adminBodId
+     * @return The first Node that matches the bodID, null if not found
+     */
+    public Node getNodeByAdminId(String adminBodId) {
+        List<Node> nodes = topology.getNodes();
+        for (Node n : nodes) {
+            if (n.getAdminDomainID().equals(adminBodId)) {
+                return n;
+            }
+        }
+        return null;
+    }
 	
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#queryService(java.lang.String)
@@ -799,6 +1027,8 @@ public final class AccessPoint implements UserAccessPoint,
     
     @Override
 	public void restorationCompleted() {
+        retrieveIdcpTopology();
+        
     	reservationProcessor.setRestorationMode(false);
         if(startupNotifier != null)
         	startupNotifier.domainUp(this.domainURL);
@@ -1062,7 +1292,9 @@ public final class AccessPoint implements UserAccessPoint,
         // Check if the domainName exists in the database
         if (daos.getAdminDomainDAO().getByBodID(domainName) == null) {
             log.info("The domain " + domainName + " does not exist in the DB. " +
-                    "This is almost certainly a problem. Please check the idm.properties " +
+                    "If this is the very first time you are starting the software " +
+                    "this is normal. Otherwise, this is almost certainly a problem" +
+                    "and you need to check the idm.properties " +
                     "and the admin domains in the DB.");
         }
         

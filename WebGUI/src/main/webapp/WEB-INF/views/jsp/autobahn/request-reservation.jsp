@@ -123,7 +123,7 @@ var final = testing.value;
 		<td class="label"><spring:message code="reservation.endPort"/></td>
 		<td class="value">
 			<form:select path="request.endPort">
-				<form:options items="${friendlyports_all}" itemValue="identifier" itemLabel="friendlyName"/>
+				<form:options items="${friendlyAndIDCPports_all}" itemValue="identifier" itemLabel="friendlyName"/>
 			</form:select>
 		</td>
 		<td class="error"><form:errors path="request.endPort"/></td>

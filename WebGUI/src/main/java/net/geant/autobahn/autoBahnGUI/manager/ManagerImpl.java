@@ -218,6 +218,30 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 		return managers;
 	}
 	
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllIdcpPorts()
+     */
+    public List<String> getAllIdcpPorts (){
+        // Parse through IDMs and get the first non-null result
+        for(String idm : idms.keySet()) {
+            InterDomainManager manager = idms.get(idm);
+            String[] temp = manager.getIdcpPorts();
+            
+            List<String> ports = new ArrayList<String>();
+            
+            if(temp != null) {
+                for(String link : temp) {
+                    ports.add(link);
+                }
+                
+                return ports; 
+            }
+        }
+        
+        return null;
+    }
+    
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllPorts()
@@ -257,6 +281,28 @@ public class ManagerImpl implements Manager, ManagerNotifier {
             } else {
                 friendlyPorts.add(new PortMap(p_id, p_id + " (" + friendlyName + ")"));
             }
+        }
+        return friendlyPorts;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllFriendlyAndIdcpPorts()
+     */
+    public List<PortMap> getAllFriendlyAndIdcpPorts () {
+        List<PortMap> friendlyPorts = getAllFriendlyPorts();
+        List<String> idcpPorts = this.getAllIdcpPorts();
+        
+        if (friendlyPorts == null) {
+            friendlyPorts = new ArrayList<PortMap>();
+        }
+        
+        if (idcpPorts == null) {
+            return friendlyPorts;
+        }
+        
+        for (String idcpP : idcpPorts) {
+            friendlyPorts.add(new PortMap(idcpP, idcpP));                
         }
         return friendlyPorts;
     }

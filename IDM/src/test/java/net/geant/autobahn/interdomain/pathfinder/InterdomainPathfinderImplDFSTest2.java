@@ -74,9 +74,9 @@ public class InterdomainPathfinderImplDFSTest2 {
         pd2 = new ProvisioningDomain("2", "PIP", ad2);
         ad3 = new AdminDomain("3", false);
         pd3 = new ProvisioningDomain("3", "PIP", ad3);
-        ad4 = new AdminDomain("4", true);
+        ad4 = new AdminDomain("4", false);
         pd4 = new ProvisioningDomain("4", "PIP", ad4);
-        ad5 = new AdminDomain("5", true);
+        ad5 = new AdminDomain("5", false);
         pd5 = new ProvisioningDomain("5", "PIP", ad5);
         ad6 = new AdminDomain("6", true);   //client
         pd6 = new ProvisioningDomain("6", "PIP", ad6);
@@ -204,6 +204,56 @@ public class InterdomainPathfinderImplDFSTest2 {
         System.out.println("Expected:"+expectedLinks.toString());
         System.out.println("Result:"+resLinks.toString());
         assertEquals(expectedLinks, resLinks);
+    }
+
+    /**
+     * Test method for {@link net.geant.autobahn.interdomain.pathfinder.InterdomainPathfinderImpl#findInterdomainPaths(net.geant.autobahn.reservation.Reservation, java.util.List)}.
+     * 
+     * Tests IPF on a straight topology with reservation with user-included link
+     * End port is not the port attached to the last link, but a different node port
+     */
+    @Test
+    public void testFindInterdomainPaths_straightIncl_AltPort() {
+        System.out.println("---------Straight with User Incl, Alt Port");
+        List<Link> ls = new ArrayList<Link>();
+        ls.add(l1_3); ls.add(l2_3); ls.add(l3_4); ls.add(l3_5); ls.add(l5_6);
+        ls.add(l3_3_1); ls.add(l3_3_2); ls.add(l3_3_3);
+        ls.add(l5_5_1);
+        //
+        //      [n1_1]            [n2_1]
+        //          \               /
+        //           \             /
+        //           [n3_1]---[n3_2]
+        //            /   \      |  
+        //           /     \     | 
+        //          /       \    |
+        //         /         [n3_3]
+        //        /             |
+        //     [n4_1]           |
+        //                      |
+        //                   [n5_1]
+        //                     |
+        //                     |
+        //                   [n5_2]---n[6_1]
+        //
+        topology_straight = new TopologyTest(ads, ls, ns);
+
+        List<Link> pathls = new ArrayList<Link>();
+        pathls.add(l1_3); pathls.add(l3_3_3); pathls.add(l3_5); pathls.add(l5_5_1);
+        // p111---[p311-p314]---[p333-p331]---[p511-p512]---[p522-p521]
+        Path path1 = new Path();
+        path1.setLinks(pathls);
+
+        InterdomainPathfinderImplDFS pf = new InterdomainPathfinderImplDFS(topology_straight);
+        Reservation rsv = new Reservation();
+        rsv.setStartPort(p1_1_1);
+        rsv.setEndPort(p5_2_1);
+        PathInfo userIncl = new PathInfo();
+        userIncl.addLink("l3_3_3");
+        rsv.setUserInclude(userIncl);
+
+        Iterator<Path> pathsres = pf.findInterdomainPaths(rsv, null);
+        assertEquals(false, pathsres.hasNext());
     }
 
     /**

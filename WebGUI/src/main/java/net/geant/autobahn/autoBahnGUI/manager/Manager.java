@@ -109,6 +109,11 @@ public interface Manager {
 	 * @return String log information
 	 */
 	public String getLogsInterDomainManager(String idm, boolean b, boolean c);
+    /**
+     * Gets all IDCP port names in all IDM registered in WEB GUI
+     * @return list of  ports names
+     */
+    public List<String> getAllIdcpPorts ();
 	/**
 	 * Gets all port names in all IDM registered in WEB GUI
 	 * @return list of  ports names
@@ -122,6 +127,14 @@ public interface Manager {
      */
     public List<PortMap> getAllFriendlyPorts ();
     
+    /**
+     * Gets all port names (with associated friendly ones from LS) in all IDM
+     * registered in WEB GUI
+     * Also gets IDCP ports
+     * @return list of ports names with associated friendly ones
+     */
+    public List<PortMap> getAllFriendlyAndIdcpPorts ();
+
     /**
      * Gets all domain names
      * @return list of domains names

@@ -492,6 +492,21 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 		}
 		return null;
 	}
+	
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getIdcpPorts()
+     */
+    public String[] getIdcpPorts() {
+        try{
+        if (isUserAccessPointConnected())
+            return userAccessPoint.getIdcpPorts();
+        }catch (Exception e ){
+            e.printStackTrace();
+        }
+        return null;
+    }
+	
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getDomainClientPorts()

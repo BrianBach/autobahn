@@ -55,9 +55,9 @@ public class OscarsClient {
 
 	private OSCARS rc = null;
 
-	public OscarsClient() {
-        // The OSCARS location will be retrieved from WSDL
-        OSCARS_Service service = new OSCARS_Service();
+	public OscarsClient(String endpoint) {
+	    OSCARS_Service service;
+        service = new OSCARS_Service(endpoint);
         rc = service.getOSCARS();
 	}
 	
