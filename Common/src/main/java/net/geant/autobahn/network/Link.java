@@ -500,11 +500,31 @@ public class Link implements Serializable {
     /**
      * Indicates whether the <code>Link</code> is virtual.
      * 
-     * @return <code>boolean</code> true if the <code>Link</code> os
+     * @return <code>boolean</code> true if the <code>Link</code> is
      *         virtual, false - otherwise
      */
     public boolean isVirtual() {
         return kind == VIRTUAL;
+    }
+    
+    /**
+     * Indicates whether the <code>Link</code> is a link connecting to an IDCP cloud.
+     * 
+     * @return <code>boolean</code> true if the <code>Link</code> is
+     *         connecting to an IDCP cloud, false - otherwise
+     */
+    public boolean isIdcpLink() {
+        return getStartPort().isIdcpPort() || getEndPort().isIdcpPort();
+    }
+    
+    /**
+     * Indicates whether the <code>Link</code> is a dummy link created within an IDCP cloud.
+     * 
+     * @return <code>boolean</code> true if the <code>Link</code> is
+     *         a dummy internal link within an IDCP cloud, false - otherwise
+     */
+    public boolean isDummyIdcpLink() {
+        return getStartPort().isIdcpPort() && getEndPort().isIdcpPort();
     }
     
     /**

@@ -163,7 +163,7 @@ public class Path implements Serializable {
 	 * Returns number of domain on the reservation path. Does not includes
 	 * client domains.
 	 * 
-	 * @return NUmber of domains on the path
+	 * @return Number of domains on the path
 	 */
     public int getDomainCount() {
     	Set<String> domains = new HashSet<String>();
@@ -184,7 +184,7 @@ public class Path implements Serializable {
 	 * Does not include client domains.
 	 * 
 	 * @param domainID identifier of a domain
-	 * @return NUmber od domains after the specified domain
+	 * @return Number of domains after the specified domain
 	 */
     public int getAfterDomainCount(String domainID) {
     	Set<String> domains = new HashSet<String>();
@@ -247,11 +247,25 @@ public class Path implements Serializable {
         if(lastIndex >= 0) {
             Link lastLink = links.get(lastIndex);
             
-            if(!lastLink.getStartPort().isClientPort())
-                return lastLink.getStartDomainID();
+            // Special handling for paths that include IDCP clouds:
+            // In this case, the last AutoBAHN domain may actually be 2 links
+            // away from the destination, since IDCP clouds have internal dummy links
+            if (lastLink.isDummyIdcpLink()) {
+                lastIndex = links.size() - 2;
+                if (lastIndex < 0) {
+                    // There is no last domain in this path, it is a single dummy IDCP link
+                    return null;
+                }
+                lastLink = links.get(lastIndex);
+            }
             
-            if(!lastLink.getEndPort().isClientPort())
+            if(!lastLink.getStartPort().isClientPort()) {
+                return lastLink.getStartDomainID();
+            }
+            
+            if(!lastLink.getEndPort().isClientPort()) {
                 return lastLink.getEndDomainID();
+            }
         }
         
         return null;

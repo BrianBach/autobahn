@@ -12,6 +12,8 @@
 		<property name="name" type="string" />
 		
 		<property name="clientDomain" type="boolean" />
+		
+		<property name="idcpServer" type="string" />
 	</class>
 	
 </hibernate-mapping>

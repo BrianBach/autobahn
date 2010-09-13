@@ -192,6 +192,15 @@ public class Port implements Serializable {
     }
     
     /**
+     * Indicates whether the port is an IDCP port, or not
+     * 
+     * @return boolean true if the port is an IDCP port, false otherwise
+     */
+    public boolean isIdcpPort() {
+        return node.isIdcpNode();
+    }
+    
+    /**
      * Indicates whether the port is an abstract port
      * 
      * @return boolean true if the port is an abstract port, false otherwise

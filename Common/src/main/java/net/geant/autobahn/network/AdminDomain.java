@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="AdminDomain", namespace="network.autobahn.geant.net", propOrder={
-		"bodID", "ASID", "name", "clientDomain"
+		"bodID", "ASID", "name", "clientDomain", "idcpServer"
 })
 public class AdminDomain implements Serializable {
 
@@ -36,6 +36,10 @@ public class AdminDomain implements Serializable {
     private String ASID;
     private String name;
     private boolean clientDomain;
+    
+    // The URL where IDCP cloud server is listening, null if this
+    // AdminDomain is not an IDCP cloud
+    private String idcpServer;
     
     /**
      * Default constructor 
@@ -114,7 +118,39 @@ public class AdminDomain implements Serializable {
     }
 
     /**
-     * Inidcates whether the AdminDomain is a client domain.
+     * Indicates whether the AdminDomain is an IDCP cloud.
+     * 
+     * @return boolean true if the AdminDomain is an IDCP cloud, false otherwise
+     */
+    public boolean isIdcpCloud() {
+        return (idcpServer!=null);
+    }
+
+    /**
+     * Returns idcpServer of an AdminDomain that is IDCP cloud, null otherwise.
+     * 
+     * @return Returns the URL of the IDCP server.
+     */
+    public String getIdcpServer() {
+        return idcpServer;
+    }
+
+    /**
+     * Sets idcpServer property.
+     * 
+     * @param idcpServer
+     */
+    public void setIdcpServer(String idcpServer) {
+        this.idcpServer = idcpServer;
+        
+        // Make sure that IDCP clouds are also client domains
+        if (isIdcpCloud()) {
+            this.clientDomain = true;
+        }
+    }
+
+    /**
+     * Indicates whether the AdminDomain is a client domain.
      * 
      * @return boolean true if the AdminDomain is a client domain, false otherwise
      */

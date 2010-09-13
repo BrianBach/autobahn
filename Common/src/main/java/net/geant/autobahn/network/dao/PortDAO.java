@@ -23,4 +23,6 @@ public interface PortDAO extends GenericDAO<Port, String> {
     public List<Port> getClientPorts();
     
     public List<Port> getDomainClientPorts(String domainID);
+    
+    public List<Port> getIdcpPorts();
 }

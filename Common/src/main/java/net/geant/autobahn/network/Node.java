@@ -227,6 +227,15 @@ public class Node implements Serializable {
     }
     
     /**
+     * Indicates whether the node belongs to an IDCP cloud.
+     * 
+     * @return true if the node belongs to an IDCP cloud, false - otherwise
+     */
+    public boolean isIdcpNode() {
+        return provisioningDomain.getAdminDomain().isIdcpCloud();
+    }
+    
+    /**
      * Indicates whether the node belongs to the same domain that specified
      * node2 does.
      * 

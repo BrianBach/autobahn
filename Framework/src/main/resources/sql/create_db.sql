@@ -22,7 +22,8 @@ CREATE TABLE admin_domain (
     domain_id character varying(255) NOT NULL,
     asid character varying(255),
     name character varying(255),
-    clientdomain boolean
+    clientdomain boolean,
+    idcpserver character varying(255)
 );
 
 

@@ -62,4 +62,18 @@ public class HibernatePortDAO extends HibernateGenericDAO<Port, String> implemen
         
         return q.list();
 	}
+    
+    @SuppressWarnings("unchecked")
+    public List<Port> getIdcpPorts() {
+        
+        Query q = getSession().createQuery("select l.endPort from Link l where " +
+            "l.operationalState=:oper_state AND " +
+            "l.endPort.node.provisioningDomain.adminDomain.idcpServer is not null AND " +
+            "l.endPort.node.provisioningDomain.adminDomain.idcpServer is not empty");
+
+        q.setEntity("oper_state", StateOper.UP);
+        
+        return q.list();
+    }
+
 }
