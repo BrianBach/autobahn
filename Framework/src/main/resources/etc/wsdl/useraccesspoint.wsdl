@@ -76,7 +76,9 @@
   <xs:element name="checkReservationPossibility" type="tns:checkReservationPossibility"/>
   <xs:element name="checkReservationPossibilityResponse" type="tns:checkReservationPossibilityResponse"/>
   <xs:element name="getAllClientPorts" type="tns:getAllClientPorts"/>
+  <xs:element name="getIdcpPorts" type="tns:getIdcpPorts"/>
   <xs:element name="getAllClientPortsResponse" type="tns:getAllClientPortsResponse"/>
+  <xs:element name="getIdcpPortsResponse" type="tns:getIdcpPortsResponse"/>
   <xs:element name="getAllDomains" type="tns:getAllDomains"/>
   <xs:element name="getAllDomainsResponse" type="tns:getAllDomainsResponse"/>
   <xs:element name="getAllDomains_NonClient" type="tns:getAllDomains_NonClient"/>
@@ -121,6 +123,14 @@
     <xs:sequence/>
   </xs:complexType>
   <xs:complexType name="getAllClientPortsResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="Ports" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getIdcpPorts">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getIdcpPortsResponse">
     <xs:sequence>
       <xs:element maxOccurs="unbounded" minOccurs="0" name="Ports" type="xs:string"/>
     </xs:sequence>
@@ -261,6 +271,10 @@
     <wsdl:part name="parameters" element="tns:getAllClientPortsResponse">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="getIdcpPortsResponse">
+    <wsdl:part name="parameters" element="tns:getIdcpPortsResponse">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="modifyReservation">
     <wsdl:part name="parameters" element="tns:modifyReservation">
     </wsdl:part>
@@ -311,6 +325,10 @@
   </wsdl:message>
   <wsdl:message name="getAllClientPorts">
     <wsdl:part name="parameters" element="tns:getAllClientPorts">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getIdcpPorts">
+    <wsdl:part name="parameters" element="tns:getIdcpPorts">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="submitService">
@@ -376,6 +394,12 @@
       <wsdl:input name="getAllClientPorts" message="tns:getAllClientPorts">
     </wsdl:input>
       <wsdl:output name="getAllClientPortsResponse" message="tns:getAllClientPortsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getIdcpPorts">
+      <wsdl:input name="getIdcpPorts" message="tns:getIdcpPorts">
+    </wsdl:input>
+      <wsdl:output name="getIdcpPortsResponse" message="tns:getIdcpPortsResponse">
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getAllLinks">
@@ -464,6 +488,15 @@
         <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="getAllClientPortsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getIdcpPorts">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getIdcpPorts">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getIdcpPortsResponse">
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>

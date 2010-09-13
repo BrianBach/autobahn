@@ -64,6 +64,13 @@ public class UserAccessPointImpl implements UserAccessPoint {
 		return AccessPoint.getInstance().getDomainClientPorts();
 	}
 
+    /* (non-Javadoc)
+     * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getIdcpPorts()
+     */
+    public String[] getIdcpPorts() {
+        return AccessPoint.getInstance().getIdcpPorts();
+    }
+
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#queryService(java.lang.String)
 	 */

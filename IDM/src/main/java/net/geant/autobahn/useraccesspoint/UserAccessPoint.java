@@ -14,21 +14,21 @@ import javax.jws.WebService;
 public interface UserAccessPoint {
 	
     /**
-     * Returns all domains in the global topology
+     * Returns all domains in the global topology (not including IDCP clouds)
      * @return domains
      */
     @WebResult(name = "Domains")
     String[] getAllDomains();
 
     /**
-     * Returns all non-client domains in the global topology
+     * Returns all non-client domains in the global topology (not including IDCP clouds)
      * @return domains
      */
     @WebResult(name = "Domains")
     String[] getAllDomains_NonClient();
 
     /**
-     * Returns all links in the global topology
+     * Returns all links in the global topology (not including links in IDCP clouds)
      * @return links
      */
     @WebResult(name = "Links")
@@ -36,7 +36,7 @@ public interface UserAccessPoint {
 
     /**
      * Returns all links in the global topology that do not attach to 
-     * a client domain
+     * a client domain (not including links in IDCP clouds)
      * @return links
      */
     @WebResult(name = "Links")
@@ -56,6 +56,13 @@ public interface UserAccessPoint {
 	@WebResult(name="Ports")
 	String[] getDomainClientPorts();
 	
+    /**
+     * Returns actual IDCP ports in the global topology
+     * @return IDCP ports
+     */
+    @WebResult(name="Ports")
+    String[] getIdcpPorts();
+    
 	/**
 	 * Submits service
 	 * @param request
