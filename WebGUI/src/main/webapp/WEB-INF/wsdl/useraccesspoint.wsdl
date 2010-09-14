@@ -24,6 +24,7 @@
       <xs:element minOccurs="0" name="userInclude" type="tns:PathInfo"/>
       <xs:element minOccurs="0" name="userExclude" type="tns:PathInfo"/>
       <xs:element name="userVlanId" type="xs:int"/>
+      <xs:element name="mtu" type="xs:int"/>
       <xs:element name="maxDelay" type="xs:int"/>
       <xs:element minOccurs="0" name="resiliency" type="ns1:resiliency"/>
       <xs:element name="bidirectional" type="xs:boolean"/>

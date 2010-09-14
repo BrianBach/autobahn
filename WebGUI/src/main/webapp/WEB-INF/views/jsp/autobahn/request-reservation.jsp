@@ -296,6 +296,13 @@ var final = testing.value;
 		</td>
 		<td class="error"><form:errors path="request.userVlanId"/></td>
 	</tr>
+	<tr>
+		<td class="label"><spring:message code="reservation.mtu"/></td>
+		<td class="value">
+			<form:input path="request.mtu" onblur="checkMinusCapacityVlan('Mtu size','request.mtu')" />
+		</td>
+		<td class="error"><form:errors path="request.mtu"/></td>
+	</tr>
 	<tr><td><br><br></td></tr>
 	<tr>
 		<td class="label" valign="top"><spring:message code="reservation.userInclude"/></td>

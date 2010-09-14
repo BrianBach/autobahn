@@ -104,9 +104,14 @@ public class IntradomainTopology {
     	// the database is not empty, because this might create consistency problems.
     	// For example, the cNIS topology could been updated while our database
     	// contains reservations on the old topology.
-    	if(cnisAddress == null || "none".equals(cnisAddress) || !isDatabaseEmpty()) {
+    	if(cnisAddress == null || "none".equals(cnisAddress)) {
     		// read it from db
+    	    log.info("cNIS address is set to none. Topology will be retrieved from the database.");
 			readFromDatabase();
+    	} else if(!isDatabaseEmpty()) {
+    	    // read it from db
+    	    log.info("Reservations found in the database. Topology will be retrieved from the database and not from cNIS.");
+    	    readFromDatabase();
     	} else {
     		try {
 				readFromCnis(cnisAddress);
@@ -128,10 +133,10 @@ public class IntradomainTopology {
             return false;
         }
     }
-
-	private void readFromDatabase() {
+    
+ 	private void readFromDatabase() {
 		DmDAOFactory daos = HibernateDmDAOFactory.getInstance();
-
+		
 		if(isSDH()) {
 			stmLinks = daos.getStmLinkDAO().getAll();
 			genericLinks = new ArrayList<GenericLink>();
@@ -266,7 +271,13 @@ public class IntradomainTopology {
 					port.setDomainId(domainName);
 					port.setClientPort(false);
 					port.setName(p.getName());
-					
+	                //mtu info added
+                    for (net.geant2.cnis.autobahn.xml.common.Tag tag: p.getTags().getTag()) {
+                        if (tag.getKey().equals("mtu")) {
+                            port.setMtu(Integer.parseInt(tag.getValue()));
+                        }
+                    }
+
 					ports.put(p.getName(), port);
 				}
 				
@@ -375,7 +386,12 @@ public class IntradomainTopology {
 					port.setDomainId(domainName);
 					port.setClientPort(false);
 					port.setName(p.getName());
-					
+					for (net.geant2.cnis.autobahn.xml.common.Tag tag: p.getTags().getTag()) {
+                        if (tag.getKey().equals("mtu")) {
+                            port.setMtu(Integer.parseInt(tag.getValue()));
+                        }
+                    }
+
 					ports.put(p.getName(), port);
 				}
 				

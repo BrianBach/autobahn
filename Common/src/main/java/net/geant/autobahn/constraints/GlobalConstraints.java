@@ -114,6 +114,8 @@ public class GlobalConstraints implements Serializable {
         // select only one VLAN number
         RangeConstraint vlans = selected.get(0).getRangeConstraint(ConstraintsNames.VLANS);
         
+        MinValueConstraint mtu = selected.get(0).getMinValueConstraint(ConstraintsNames.MTU);
+        
         int selectedVlanNumber = vlans != null ? vlans.getFirstValue() : -1;
 
         GlobalConstraints result = new GlobalConstraints();
@@ -133,6 +135,7 @@ public class GlobalConstraints implements Serializable {
         	
         	Constraint rcon = first.getRangeConstraint(ConstraintsNames.VLANS);
         	Constraint mvcon = first.getMinValueConstraint(ConstraintsNames.TIMESLOTS);
+        	Constraint mcon = first.getMinValueConstraint(ConstraintsNames.MTU);
         	
             // Vlans applicable
         	if(rcon != null) {
@@ -142,6 +145,15 @@ public class GlobalConstraints implements Serializable {
                 RangeConstraint vlanCons = new RangeConstraint(selectedVlanNumber, selectedVlanNumber);
                 resPcon.addRangeConstraint(ConstraintsNames.VLANS, vlanCons);
         	}
+        	
+            //mtu info added
+            if(mcon != null) {
+                //MinValueConstraint mtu1 = (MinValueConstraint) mcon;
+                MinValueConstraint mtuCons = new MinValueConstraint(mtu.getValue());
+                resPcon.addMinValueConstraint(ConstraintsNames.MTU, mtuCons);
+            }
+            
+
         	
         	// Timeslots
         	if(mvcon != null) {

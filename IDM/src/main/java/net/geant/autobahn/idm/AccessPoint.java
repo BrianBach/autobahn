@@ -688,7 +688,9 @@ public final class AccessPoint implements UserAccessPoint,
 			resv.setUserInclude(r.getUserInclude());
 			resv.setUserExclude(r.getUserExclude());
 			resv.setUserVlanId(r.getUserVlanId());
-
+			//mtu info has been added
+            resv.setMtu(r.getMtu());
+            
 			// set enums
 			String slabel = r.getStateObject().toString();
 			resv.setState(net.geant.autobahn.useraccesspoint.State.valueOf(slabel));

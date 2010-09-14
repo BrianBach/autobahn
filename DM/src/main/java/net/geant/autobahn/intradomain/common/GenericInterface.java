@@ -37,7 +37,7 @@ public class GenericInterface implements Serializable {
 	private String description; 
 	private long bandwidth; 
 	private String status; 
-	private String mtu; 
+	private int mtu; 
 	private String domainId;
 	//@XmlTransient
 	private boolean clientPort;
@@ -138,7 +138,7 @@ public class GenericInterface implements Serializable {
 	 * 
 	 * @return Returns the MTU of the generic interface
 	 */
-	public String getMtu() {
+	public int getMtu() {
 		return mtu;
 	}
 	
@@ -147,7 +147,7 @@ public class GenericInterface implements Serializable {
 	 * 
 	 * @param mtu the MTU of the generic interface
 	 */
-	public void setMtu(String mtu) {
+	public void setMtu(int mtu) {
 		this.mtu = mtu;
 	}
 	

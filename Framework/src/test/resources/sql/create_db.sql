@@ -152,7 +152,7 @@ CREATE TABLE generic_interface (
     description character varying(255),
     bandwidth bigint,
     status character varying(255),
-    mtu character varying(255),
+    mtu integer NOT NULL,
     domain_id character varying(255),
     client_port boolean
 );

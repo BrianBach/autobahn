@@ -138,7 +138,7 @@ public class EthernetPathfinderTopology1Test {
     @Test
     public void testFindingPathsBetweenGivenLinks() {
         List<IntradomainPath> paths = pf.findPaths(glinks.get("p1.1-cli-port1"), 
-                glinks.get("p1.2-cli-port2"), _1Gb, null, Integer.MAX_VALUE, 0);
+                glinks.get("p1.2-cli-port2"), _1Gb, null, Integer.MAX_VALUE, 0, 0);
 
         TestCase.assertEquals(3, paths.size());
     }
@@ -146,7 +146,7 @@ public class EthernetPathfinderTopology1Test {
     @Test
     public void testFindingPathsBetweenGivenLinksOverGivenCapacity() {
         List<IntradomainPath> paths = pf.findPaths(glinks.get("p1.1-cli-port1"), 
-                glinks.get("p1.2-cli-port2"), _10Gb, null, Integer.MAX_VALUE, 0);
+                glinks.get("p1.2-cli-port2"), _10Gb, null, Integer.MAX_VALUE, 0, 0);
 
         TestCase.assertEquals(0, paths.size());
     }
@@ -158,7 +158,7 @@ public class EthernetPathfinderTopology1Test {
         pcon.addRangeConstraint(ConstraintsNames.VLANS, rcon);
         
         IntradomainPath path = pf.findPath(glinks.get("p1.1-cli-port1"), 
-                glinks.get("p1.2-cli-port2"), _1Gb, pcon, null, 0);
+                glinks.get("p1.2-cli-port2"), _1Gb, pcon, null, 0, 0);
 
         TestCase.assertNotNull(path);
         TestCase.assertNotNull(rcon.intersect(path.getMergedConstraints()
@@ -171,7 +171,7 @@ public class EthernetPathfinderTopology1Test {
         pcon.addRangeConstraint(ConstraintsNames.VLANS, new RangeConstraint(1024, 1024));
         
         IntradomainPath path = pf.findPath(glinks.get("p1.1-cli-port1"), 
-                glinks.get("p1.2-cli-port2"), _1Gb, pcon, null, 0);
+                glinks.get("p1.2-cli-port2"), _1Gb, pcon, null, 0, 0);
 
         TestCase.assertNull(path);
     }

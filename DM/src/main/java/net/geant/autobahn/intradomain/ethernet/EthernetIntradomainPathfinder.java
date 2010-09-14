@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import net.geant.autobahn.constraints.MinValueConstraint;
 import net.geant.autobahn.constraints.ConstraintsNames;
 import net.geant.autobahn.constraints.PathConstraints;
 import net.geant.autobahn.constraints.RangeConstraint;
@@ -30,6 +31,7 @@ public class EthernetIntradomainPathfinder extends GenericIntradomainPathfinder 
     private List<Node> all_nodes = new ArrayList<Node>();
 
     private static final Logger log = Logger.getLogger(EthernetIntradomainPathfinder.class);
+    private final int defaultEthernetMtu = 1514; 
     
     /**
      * Initialize object with given topology.
@@ -57,7 +59,7 @@ public class EthernetIntradomainPathfinder extends GenericIntradomainPathfinder 
 	 * @see net.geant.autobahn.intradomain.pathfinder.GenericIntradomainPathfinder#initGraph(java.util.Collection)
 	 */
 	@Override
-	public GraphSearch initGraph(Collection<GenericLink> excluded, int userVlanId) {
+	public GraphSearch initGraph(Collection<GenericLink> excluded, int userVlanId, int mtu) {
 		
 		List<Node> nodes = all_nodes;
 		List<SpanningTree> sptrees = all_sptrees;
@@ -86,6 +88,32 @@ public class EthernetIntradomainPathfinder extends GenericIntradomainPathfinder 
                 }
             }
             
+            if (mtu > 0){
+                log.debug("User has requested Mtu size " + mtu + ", checking if" +
+                        " ethernet link supports it...");
+                
+                int linkMtu = st.getEthLink().getGenericLink().getStartInterface().getMtu();
+                
+                if (linkMtu<=0) {
+                    linkMtu = this.defaultEthernetMtu;
+                }
+                
+                if (mtu > linkMtu){  
+                    log.debug("Link " + st.getEthLink() + " rejected.");
+                    continue;
+                }
+                
+                linkMtu = st.getEthLink().getGenericLink().getEndInterface().getMtu();
+                
+                if (linkMtu<=0) {
+                    linkMtu = this.defaultEthernetMtu;
+                }
+                
+                if (mtu > linkMtu){
+                    log.debug("Link " + st.getEthLink() + " rejected.");
+                    continue;
+                }
+            }
             GenericLink link = st.getEthLink().getGenericLink();
             
             // Skip excluded generic links
@@ -102,7 +130,18 @@ public class EthernetIntradomainPathfinder extends GenericIntradomainPathfinder 
 					.getLowNumber(), (int)st.getVlan().getHighNumber());
 			PathConstraints pcon = new PathConstraints();
 			pcon.addRangeConstraint(ConstraintsNames.VLANS, rcon);
-
+			
+			//mtu info added
+            MinValueConstraint mcon = null;
+            if ((st.getEthLink().getGenericLink().getStartInterface().getMtu() != 0) && (st.getEthLink().getGenericLink().getEndInterface().getMtu()!= 0)){
+                if (st.getEthLink().getGenericLink().getStartInterface().getMtu() < st.getEthLink().getGenericLink().getEndInterface().getMtu()){
+                    mcon = new MinValueConstraint((double)st.getEthLink().getGenericLink().getStartInterface().getMtu());
+                } else {
+                    mcon = new MinValueConstraint((double)st.getEthLink().getGenericLink().getEndInterface().getMtu());
+                }
+                pcon.addMinValueConstraint(ConstraintsNames.MTU, mcon);
+            }
+			
 			GraphEdge edge = new GraphEdge(sgr, egr, link, pcon);
             sgr.addEdge(edge);
             

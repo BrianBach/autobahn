@@ -44,6 +44,7 @@
       <xs:element minOccurs="0" name="userInclude" type="ns3:PathInfo"/>
       <xs:element minOccurs="0" name="userExclude" type="ns3:PathInfo"/>
       <xs:element name="userVlanId" type="xs:int"/>
+      <xs:element name="mtu" type="xs:int"/>
       <xs:element name="maxDelay" type="xs:int"/>
       <xs:element minOccurs="0" name="resiliency" type="xs:string"/>
       <xs:element name="bidirectional" type="xs:boolean"/>
@@ -338,6 +339,7 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="VLANS"/>
       <xs:enumeration value="TIMESLOTS"/>
+      <xs:enumeration value="MTU"/>
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>

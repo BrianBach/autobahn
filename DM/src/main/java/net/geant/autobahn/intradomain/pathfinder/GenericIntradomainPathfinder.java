@@ -33,9 +33,9 @@ public abstract class GenericIntradomainPathfinder implements
 	 */
 	public List<IntradomainPath> findPaths(GenericLink src, GenericLink dest,
 			long capacity, Collection<GenericLink> excluded, int limit,
-			int userVlanId) {
+			int userVlanId, int mtu) {
 		
-		return findPaths(src, dest, capacity, null, excluded, limit, userVlanId);
+		return findPaths(src, dest, capacity, null, excluded, limit, userVlanId, mtu);
 	}
 
 	/* (non-Javadoc)
@@ -44,7 +44,7 @@ public abstract class GenericIntradomainPathfinder implements
 	public List<IntradomainPath> findPaths(Node start, Node dest,
 			Collection<GenericLink> excluded, int limit) {
 		
-		GraphSearch graph = initGraph(excluded, 0);
+		GraphSearch graph = initGraph(excluded, 0, 0);
 		
 		GraphNode gr_start = grnodes.get(start);
 		GraphNode gr_dest = grnodes.get(dest);
@@ -53,14 +53,15 @@ public abstract class GenericIntradomainPathfinder implements
 		
 		List<IntradomainPath> res = new ArrayList<IntradomainPath>();
 		
-		for(GraphEdge[] path : paths) {
-			IntradomainPath ipath = createIntradomainPath(path);
-
-			if(ipath != null) {
-				res.add(ipath);
-			}
+		if(paths != null){
+    		for(GraphEdge[] path : paths) {
+    			IntradomainPath ipath = createIntradomainPath(path);
+    
+    			if(ipath != null) {
+    				res.add(ipath);
+    			}
+    		}
 		}
-
 		return res;
 	}
 
@@ -69,9 +70,9 @@ public abstract class GenericIntradomainPathfinder implements
 	 */
 	public IntradomainPath findPath(GenericLink src, GenericLink dest,
 			long capacity, PathConstraints pcon, Collection<GenericLink> excluded,
-			int userVlanId) {
+			int userVlanId, int mtu) {
 		
-		List<IntradomainPath> res = findPaths(src, dest, capacity, pcon, excluded, 3, userVlanId);
+		List<IntradomainPath> res = findPaths(src, dest, capacity, pcon, excluded, 3, userVlanId, mtu);
 		
 		if(res == null || res.size() < 1)
 			return null;
@@ -82,8 +83,8 @@ public abstract class GenericIntradomainPathfinder implements
 	private List<IntradomainPath> findPaths(GenericLink src, GenericLink dest,
 			long capacity, PathConstraints pcon,
 			Collection<GenericLink> excluded, int limit,
-			int userVlanId) {
-		GraphSearch graph = initGraph(excluded, userVlanId);
+			int userVlanId, int mtu) {
+		GraphSearch graph = initGraph(excluded, userVlanId, mtu);
 
 		GraphEdge start = gredges.get(src);
 		GraphEdge end = gredges.get(dest);
@@ -158,7 +159,8 @@ public abstract class GenericIntradomainPathfinder implements
 	 * 
 	 * @param excluded List of links not to include in the graph
 	 * @param userVlanId User-required VLAN for the reservation (0 if not supplied)
-	 * @return Graph to be searched
-	 */
-	public abstract GraphSearch initGraph(Collection<GenericLink> excluded, int userVlanId);
+	 * @param mtu 
+     * @return Graph to be searched
+     */
+    public abstract GraphSearch initGraph(Collection<GenericLink> excluded, int userVlanId, int mtu);
 }

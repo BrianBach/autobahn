@@ -36,7 +36,7 @@ import org.apache.log4j.Logger;
 @XmlType(name="AutobahnReservation", namespace="reservation.autobahn.geant.net", propOrder={
 		"bodID", "startPort", "endPort", "startTime", "endTime",
 		"priority", "description", "capacity", 
-	    "userInclude", "userExclude", "userVlanId",
+	    "userInclude", "userExclude", "userVlanId", "mtu",
 	    "maxDelay",
 		"resiliency", "bidirectional", "globalConstraints", "path", "intState", "fake" })
 public abstract class AutobahnReservation extends Reservation implements Runnable,
@@ -333,7 +333,8 @@ public abstract class AutobahnReservation extends Reservation implements Runnabl
         r.setStartPort(src.getStartPort());
         r.setEndPort(src.getEndPort());
         r.setFake(src.isFake());
-        
+        r.setMtu(src.getMtu());
+
         r.setLocalDomainID(domainID);
         r.gotoInitialState();
         

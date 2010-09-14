@@ -29,6 +29,7 @@
 			<th><spring:message code="reservation.endPort" text="End port"/></th>
 			<th><spring:message code="reservation.capacity" text="Capacity"/></th>
 			<th><spring:message code="reservation.userVlanId" text="Vlan"/></th>
+			<th><spring:message code="reservation.mtu" text="Mtu"/></th>
 			<th><spring:message code="reservation.resilience" text="Recielancy"/></th>
 		</tr>  
 		<c:forEach items="${service.reservations.list}" var="item" varStatus="loopStatus">
@@ -40,6 +41,7 @@
 					<td>${item.endPort}</td>
 					<td>${item.capacity}</td>
 					<td>${item.userVlanId}</td>
+					<td>${item.mtu}</td>
 					<td>${item.resilience}</td>
 				</tr>
 		</c:forEach>

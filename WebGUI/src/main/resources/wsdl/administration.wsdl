@@ -311,6 +311,7 @@
         <xs:restriction base="xs:string">
             <xs:enumeration value="TIMESLOTS"/>
             <xs:enumeration value="VLANS"/>
+            <xs:enumeration value="MTU"/>
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>

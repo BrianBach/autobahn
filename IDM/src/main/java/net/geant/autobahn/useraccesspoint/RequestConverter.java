@@ -58,8 +58,14 @@ public class RequestConverter {
         resv.setUserInclude(req.getUserInclude());
         resv.setUserExclude(req.getUserExclude());
         resv.setUserVlanId(req.getUserVlanId());
+        
+        //mtu info
+        resv.setMtu(req.getMtu());
         if (req.getUserVlanId() < 0) {
             throw new UserAccessPointException("reservation user VLAN cannot be negative");
+        }
+        if (req.getMtu() < 0) {
+            throw new UserAccessPointException("reservation user MTU cannot be negative");
         }
         
         return resv;

@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlType;
 		"bodID", "state", "message",
 		"startPort", "endPort", "startTime", "endTime",
 		"priority", "description", "capacity", 
-        "userInclude", "userExclude", "userVlanId",
+        "userInclude", "userExclude", "userVlanId", "mtu",
 		"maxDelay",
 		"resiliency", "bidirectional"
 })
@@ -31,6 +31,7 @@ public class ReservationResponse {
     private PathInfo userInclude;
     private PathInfo userExclude;
     private int userVlanId;
+    private int mtu;
 	private int maxDelay;
 	private Resiliency resiliency;
 	private boolean bidirectional;
@@ -196,7 +197,23 @@ public class ReservationResponse {
     public void setUserVlanId(int value) {
         this.userVlanId = value;
     }
-
+    
+    /**
+     * 
+     * Gets mtu size in bytes
+     */
+    public int getMtu(){
+        return mtu;
+    }
+    
+    /**
+     * 
+     * Sets mtu size in bytes
+     */
+    public void setMtu(int mtu){
+        this.mtu = mtu;
+    }
+    
 	/**
 	 * @return the maxDelay
 	 */

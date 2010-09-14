@@ -31,7 +31,7 @@
         <property name="status" type="string">
             <column name="status" />
         </property>
-        <property name="mtu" type="string">
+        <property name="mtu" type="int">
             <column name="mtu" />
         </property>
         <property name="domainId" type="string">

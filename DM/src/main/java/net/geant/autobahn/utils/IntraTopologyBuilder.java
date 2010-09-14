@@ -128,6 +128,10 @@ public class IntraTopologyBuilder {
     public void addSpanningTree(GenericInterface start, GenericInterface end, int low, int high) {
         
         GenericLink link = new GenericLink();
+        
+        //mtu info
+        start.setMtu(0);
+        end.setMtu(0);
         link.setStartInterface(start);
         link.setEndInterface(end);
         link.setLinkId(counter++);

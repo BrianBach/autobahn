@@ -21,7 +21,7 @@ import net.geant.autobahn.constraints.PathConstraints;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="ReservationParams", namespace="reservation.autobahn.geant.net", propOrder={
 		"capacity", "maxDelay", "resiliency", "bidirectional",
-		"startTime", "endTime", "pathConstraints", "userVlanId"
+		"startTime", "endTime", "pathConstraints", "userVlanId", "mtu"
 })
 public class ReservationParams {
 	@XmlTransient
@@ -38,6 +38,7 @@ public class ReservationParams {
     private PathConstraints pathConstraints;
     
     private int userVlanId;
+    private int mtu;
 
 	public long getId() {
 		return id;
@@ -147,5 +148,19 @@ public class ReservationParams {
      */
     public void setUserVlanId(int userVlanId) {
         this.userVlanId = userVlanId;
+    }
+    
+    /**
+     * @return the userVlanId
+     */
+    public int getMtu() {
+        return mtu;
+    }
+
+    /**
+     * @param userVlanId the userVlanId to set
+     */
+    public void setMtu(int mtu) {
+        this.mtu = mtu;
     }
 }

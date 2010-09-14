@@ -216,8 +216,9 @@ public class ResourcesReservation {
 		// Get paths from PF
 		Set<GenericLink> excluded = new HashSet<GenericLink>();
 		
+		//add mtu info
 		List<IntradomainPath> paths = pathfinder.findPaths(src, dest, 
-				par.getCapacity(), excluded, PATH_LIMIT, par.getUserVlanId());
+				par.getCapacity(), excluded, PATH_LIMIT, par.getUserVlanId(), par.getMtu());
 
 		if (paths==null) {
 		    //TODO: Perhaps use a more fine-grained exception type
@@ -259,7 +260,7 @@ public class ResourcesReservation {
 				}
 				
 				List<IntradomainPath> npaths = pathfinder.findPaths(src, dest, 
-						par.getCapacity(), excluded, newPathsNeeded, par.getUserVlanId());
+						par.getCapacity(), excluded, newPathsNeeded, par.getUserVlanId(), par.getMtu());
 
 				if(npaths != null)
 					npaths.removeAll(paths);
@@ -325,7 +326,7 @@ public class ResourcesReservation {
 		
 		while(!valid) {
 			path = pathfinder.findPath(src, dest, par.getCapacity(), pcon,
-					excluded, par.getUserVlanId());
+					excluded, par.getUserVlanId(), par.getMtu());
 		
 			if(path == null)
 				break;

@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name="ReservationRequest", namespace="useraccesspoint.autobahn.geant.net", propOrder={
 		"startPort", "endPort", "startTime", "endTime",
 		"priority", "description", "capacity",
-		"userInclude", "userExclude", "userVlanId",
+		"userInclude", "userExclude", "userVlanId", "mtu",
 		"maxDelay",
 		"resiliency", "bidirectional", "processNow"
 })
@@ -34,6 +34,7 @@ public class ReservationRequest implements Serializable {
     private PathInfo userInclude;
     private PathInfo userExclude;
     private int userVlanId;
+    private int mtu;
 	private int maxDelay;
 	private Resiliency resiliency;
 	private boolean bidirectional;
@@ -193,7 +194,23 @@ public class ReservationRequest implements Serializable {
     public void setUserVlanId(int value) {
         this.userVlanId = value;
     }
-
+    
+    /**
+     * 
+     * @return mtu size in bytes
+     */
+    public int getMtu(){
+        return mtu;
+    }
+    
+    /**
+     * 
+     * Set mtu value in bytes
+     */
+    public void setMtu(int mtu){
+        this.mtu = mtu;
+    }
+    
     /**
 	 * @return the bidirectional
 	 */

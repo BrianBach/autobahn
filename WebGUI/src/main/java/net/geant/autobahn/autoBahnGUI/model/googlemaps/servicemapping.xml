@@ -45,6 +45,9 @@
         <field name="userVlanId" type="int">
               <bind-xml name="userVlanId" node="element"/>
         </field>
+        <field name="mtu" type="int">
+              <bind-xml name="mtu" node="element"/>
+        </field>
         <field name="userInclude" type="net.geant.autobahn.useraccesspoint.PathInfo">
               <bind-xml name="userInclude"/>
         </field>

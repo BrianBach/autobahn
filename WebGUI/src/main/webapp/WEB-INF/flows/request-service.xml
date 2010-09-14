@@ -62,6 +62,7 @@
 			<binding property="request.delay"  required="true"/>
 			<binding property="request.capacity"  required="true"/>
 			<binding property="request.userVlanId"  required="true"/>
+			<binding property="request.mtu"  required="true"/>
 			<binding property="request.userInclude.domains"/>
 			<binding property="request.userInclude.links"/>
 			<binding property="request.userExclude.domains"/>

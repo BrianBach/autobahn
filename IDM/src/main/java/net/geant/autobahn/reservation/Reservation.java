@@ -30,7 +30,7 @@ import net.geant.autobahn.useraccesspoint.PathInfo;
 @XmlType(name="Reservation", namespace="reservation.autobahn.geant.net", propOrder={
 		"bodID", "startPort", "endPort", "startTime", "endTime",
 		"priority", "description", "capacity", 
-	    "userInclude", "userExclude", "userVlanId",
+	    "userInclude", "userExclude", "userVlanId", "mtu",
 	    "maxDelay",
 		"resiliency", "bidirectional", "globalConstraints", "path", "intState", "fake" })
 public class Reservation implements Serializable {
@@ -51,6 +51,7 @@ public class Reservation implements Serializable {
     protected PathInfo userInclude;
     protected PathInfo userExclude;
     protected int userVlanId;
+    protected int mtu;
     protected int maxDelay;
     protected String resiliency;
     protected boolean bidirectional;
@@ -288,7 +289,23 @@ public class Reservation implements Serializable {
     public void setUserVlanId(int value) {
         this.userVlanId = value;
     }
-
+    
+    /**
+     * 
+     * @return mtu size in bytes
+     */
+    public int getMtu(){
+        return mtu;
+    }
+    
+    /**
+     * 
+     * Set mtu size in bytes
+     */
+    public void setMtu(int mtu){
+        this.mtu = mtu;
+    }
+    
     public StateOper getOperationalStatus() {
 		return operationalStatus;
 	}
@@ -462,6 +479,7 @@ public class Reservation implements Serializable {
         }
         
         par.setUserVlanId(userVlanId);
+        par.setMtu(mtu);
         
         return par;
     }
