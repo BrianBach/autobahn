@@ -153,20 +153,33 @@ public class DomainConfiguration {
 	public void dropDatabase() {
 		String dbName = dmProps.getProperty("db.name");
 		
+		boolean found = true;
+		
+		try {
+			Connection connection = connectToDatabase(dbName);
+			if(connection != null)
+				connection.close();
+		} catch(SQLException e1) {
+			found = false;
+		}
+		
+		if(!found)
+			return;
+		
 		try {
 			Connection connection = connectToDatabase("postgres");
 
-			if(connection != null) {
+			if (connection != null) {
 				Statement stmt = connection.createStatement();
-			    
-		        String sql = "DROP DATABASE IF EXISTS " + dbName + ";";
-		    
-		        stmt.executeUpdate(sql);
-		        stmt.close();
-		        connection.commit();
-		        connection.close();
+
+				String sql = "DROP DATABASE " + dbName + ";";
+
+				stmt.executeUpdate(sql);
+				stmt.close();
+				connection.commit();
+				connection.close();
 			}
-			
+
 		} catch (SQLException e1) {
 			System.out.println("Problem with dropping database: " + dbName
 					+ " " + e1.getMessage());
@@ -214,10 +227,14 @@ public class DomainConfiguration {
 	public void createDatabaseSchema() {
 		String dbName = dmProps.getProperty("db.name");
 		
-		Connection connection;
+		Connection connection = null;
 		try {
 			connection = connectToDatabase(dbName);
-
+		} catch(SQLException e1) {
+			connection = null;
+		}
+		
+		try {
 			if(connection == null) {
 				System.out.println("Database " + dbName + " not found. Creating...");
 				Connection conn = connectToDatabase("postgres");
@@ -265,7 +282,7 @@ public class DomainConfiguration {
 		return sb.toString();
 	}
 	
-	private Connection connectToDatabase(String dbName) {
+	private Connection connectToDatabase(String dbName) throws SQLException {
 		
 		Connection connection = null;
 		
@@ -285,9 +302,7 @@ public class DomainConfiguration {
 	        
 	    } catch (ClassNotFoundException e) {
 	        // Could not find the database driver
-	    } catch (SQLException e) {
-	    	System.out.println("Problem with connecting to db: " + e.getMessage());
-		}
+	    }
 	    
 	    return connection;
 	}

@@ -1017,10 +1017,15 @@ public final class AccessPoint implements UserAccessPoint,
 	            }
 	        }
 	        
-	        // Insert link into the topology
-	        for (Link l : links) {
-	        	log.info("Link: " + l + " acquired");
-	        	topology.insertLink(l);
+	        try {
+		        // Insert link into the topology
+		        for (Link l : links) {
+		        	log.info("Link: " + l + " acquired");
+		        	topology.insertLink(l);
+		        }
+	        
+	        } catch(Exception e) {
+	        	log.error("Error when saving link.", e);
 	        }
 		}
 		
