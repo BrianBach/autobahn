@@ -37,7 +37,7 @@ public class LinkSerializer {
 		NODE_NAME, NODE_COUNTRY, NODE_INSTITUTION,
 		NODE_LONGITUDE, NODE_LATITUDE,
 		PD_ID, PD_TYPE,
-		AD_ID, AD_ASID, AD_NAME, AD_CLIENT_DOMAIN
+		AD_ID, AD_ASID, AD_NAME, AD_CLIENT_DOMAIN, IDCP_SERVER
 	}
 	
 	protected DataOutput output;
@@ -103,6 +103,7 @@ public class LinkSerializer {
 		writeString(OpaqueType.AD_ASID.ordinal(), ad.getASID());
 		writeString(OpaqueType.AD_NAME.ordinal(), ad.getName());
 		writeValue(OpaqueType.AD_CLIENT_DOMAIN.ordinal(), ad.isClientDomain());
+        writeString(OpaqueType.IDCP_SERVER.ordinal(), ad.getIdcpServer());
 	}
 	
 	protected void writeProvisioningDomain(ProvisioningDomain pd) throws IOException {
@@ -253,6 +254,7 @@ public class LinkSerializer {
 		ad.setASID(readString(OpaqueType.AD_ASID.ordinal()));
 		ad.setName(readString(OpaqueType.AD_NAME.ordinal()));
 		ad.setClientDomain((Boolean)readValue(OpaqueType.AD_CLIENT_DOMAIN.ordinal(), ad.isClientDomain()));
+		ad.setIdcpServer(readString(OpaqueType.IDCP_SERVER.ordinal()));
 		return ad;
 	}
 	
