@@ -161,6 +161,8 @@ public final class TopologyImpl implements Topology, OspfAsync, Closeable {
 
     	// Save into db
     	HibernateUtil hbm = IdmHibernateUtil.getInstance();
+    	
+    	hbm.closeSession();
 		Transaction t = hbm.beginTransaction();
 		Link l = topoMerge.merge(link);
 		ldao.update(l);
