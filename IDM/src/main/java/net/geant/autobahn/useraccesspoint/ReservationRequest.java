@@ -267,7 +267,39 @@ public class ReservationRequest implements Serializable {
         		+ getEndTime().getTime() + "\n";
         res += "    Capacity: " + getCapacity() + ", Delay: " + getMaxDelay() 
         				+ ", Resiliency: " + getResiliency() + ", Description: " 
-        				+ getDescription();
+        				+ getDescription() + "\n";
+        res += "    Requested VLAN: " + getUserVlanId() + ", Requested MTU: " + getMtu() + "\n";
+        res += "    Priority: " + getPriority() + "\n";
+        
+        if (getUserInclude() != null) {
+            if (getUserInclude().getDomains() != null) {
+                res += "    User-included domains: " + getUserInclude().getDomains().size() + "\n";
+                for (int i=0; i < getUserInclude().getDomains().size(); i++) {
+                    res += "        " + getUserInclude().getDomains().get(i) + "\n";
+                }
+            }
+            if (getUserInclude().getLinks() != null) {
+                res += "    User-included links: " + getUserInclude().getLinks().size() + "\n";
+                for (int i=0; i < getUserInclude().getLinks().size(); i++) {
+                    res += "        " + getUserInclude().getLinks().get(i) + "\n";
+                }
+            }
+        }
+        
+        if (getUserExclude() != null) {
+            if (getUserExclude().getDomains() != null) {
+                res += "    User-excluded domains: " + getUserExclude().getDomains().size() + "\n";
+                for (int i=0; i < getUserExclude().getDomains().size(); i++) {
+                    res += "        " + getUserExclude().getDomains().get(i) + "\n";
+                }
+            }
+            if (getUserExclude().getLinks() != null) {
+                res += "    User-excluded links: " + getUserExclude().getLinks().size() + "\n";
+                for (int i=0; i < getUserExclude().getLinks().size(); i++) {
+                    res += "        " + getUserExclude().getLinks().get(i) + "\n";
+                }
+            }
+        }
         
         return res;
 	}
