@@ -5,14 +5,14 @@ INSERT INTO node VALUES (4, NULL, NULL, 'DOM1-node-2', NULL, NULL, NULL, NULL, N
 INSERT INTO node VALUES (5, NULL, NULL, 'host-node', NULL, NULL, NULL, NULL, NULL, NULL, 'host-node');
 
 
-INSERT INTO generic_interface VALUES (1, NULL, NULL, NULL, 1, 'p2.1', NULL, 1000000000, NULL, NULL, 'http://150.254.160.216:8081/autobahn/interdomain', false);
-INSERT INTO generic_interface VALUES (2, NULL, NULL, NULL, 1, 'p2.2', NULL, 1000000000, NULL, NULL, 'http://150.254.160.216:8081/autobahn/interdomain', false);
-INSERT INTO generic_interface VALUES (3, NULL, NULL, NULL, 2, 'p2.3', NULL, 10000000000, NULL, NULL, 'http://150.254.160.216:8081/autobahn/interdomain', false);
-INSERT INTO generic_interface VALUES (4, NULL, NULL, NULL, 1, 'p2.4', NULL, 10000000000, NULL, NULL, NULL, false);
-INSERT INTO generic_interface VALUES (5, NULL, NULL, NULL, 2, 'p2.5', NULL, 10000000000, NULL, NULL, NULL, false);
-INSERT INTO generic_interface VALUES (6, NULL, NULL, NULL, 3, 'DOM1-port-1', NULL, 1000000000, NULL, NULL, 'http://150.254.160.216:8080/autobahn/interdomain', false);
-INSERT INTO generic_interface VALUES (7, NULL, NULL, NULL, 4, 'DOM1-port-2', NULL, 1000000000, NULL, NULL, 'http://150.254.160.216:8080/autobahn/interdomain', false);
-INSERT INTO generic_interface VALUES (8, NULL, NULL, NULL, 5, 'host-port', NULL, 10000000000, NULL, NULL, 'http://client-domain.domain2.com', true);
+INSERT INTO generic_interface VALUES (1, NULL, NULL, NULL, 1, 'p2.1', NULL, 1000000000, NULL, 0, 'http://150.254.160.216:8081/autobahn/interdomain', false);
+INSERT INTO generic_interface VALUES (2, NULL, NULL, NULL, 1, 'p2.2', NULL, 1000000000, NULL, 0, 'http://150.254.160.216:8081/autobahn/interdomain', false);
+INSERT INTO generic_interface VALUES (3, NULL, NULL, NULL, 2, 'p2.3', NULL, 10000000000, NULL, 0, 'http://150.254.160.216:8081/autobahn/interdomain', false);
+INSERT INTO generic_interface VALUES (4, NULL, NULL, NULL, 1, 'p2.4', NULL, 10000000000, NULL, 0, NULL, false);
+INSERT INTO generic_interface VALUES (5, NULL, NULL, NULL, 2, 'p2.5', NULL, 10000000000, NULL, 0, NULL, false);
+INSERT INTO generic_interface VALUES (6, NULL, NULL, NULL, 3, 'DOM1-port-1', NULL, 1000000000, NULL, 0, 'http://150.254.160.216:8080/autobahn/interdomain', false);
+INSERT INTO generic_interface VALUES (7, NULL, NULL, NULL, 4, 'DOM1-port-2', NULL, 1000000000, NULL, 0, 'http://150.254.160.216:8080/autobahn/interdomain', false);
+INSERT INTO generic_interface VALUES (8, NULL, NULL, NULL, 5, 'host-port', NULL, 10000000000, NULL, 0, 'http://client-domain.domain2.com', true);
 
 
 INSERT INTO generic_link VALUES (1, NULL, 1, 6, NULL, false, 0);
