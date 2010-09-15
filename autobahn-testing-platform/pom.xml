@@ -3,28 +3,28 @@
   <parent>
     <artifactId>autobahn</artifactId>
     <groupId>net.geant.autobahn</groupId>
-    <version>0.6.0-SNAPSHOT</version>
+    <version>0.6.0</version>
   </parent>
   <groupId>net.geant.autobahn</groupId>
   <artifactId>autobahn-testing-platform</artifactId>
-  <version>0.6.0-SNAPSHOT</version>
+  <version>0.6.0</version>
   <name>Testing Platform</name>
   
   <dependencies>
     	<dependency>
       		<groupId>net.geant.autobahn</groupId>
 		   	<artifactId>autobahn-dm</artifactId>
-      		<version>0.6.0-SNAPSHOT</version>
+      		<version>0.6.0</version>
     	</dependency>
     	<dependency>
       		<groupId>net.geant.autobahn</groupId>
       		<artifactId>autobahn-idm</artifactId>
-      		<version>0.6.0-SNAPSHOT</version>
+      		<version>0.6.0</version>
     	</dependency>
     	<dependency>
       		<groupId>net.geant.autobahn</groupId>
       		<artifactId>autobahn-ta</artifactId>
-      		<version>0.6.0-SNAPSHOT</version>
+      		<version>0.6.0</version>
     	</dependency>
     </dependencies>
 </project>
