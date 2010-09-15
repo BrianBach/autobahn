@@ -32,7 +32,7 @@
             <column name="status" />
         </property>
         <property name="mtu" type="int">
-            <column name="mtu" />
+            <column name="mtu" not-null="true" />
         </property>
         <property name="domainId" type="string">
             <column name="domain_id" />
