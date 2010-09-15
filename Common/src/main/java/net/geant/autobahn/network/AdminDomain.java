@@ -37,7 +37,7 @@ public class AdminDomain implements Serializable {
     private String name;
     private boolean clientDomain;
     
-    // The URL where IDCP cloud server is listening, null if this
+    // The URL where IDCP cloud server is listening, null (or empty) if this
     // AdminDomain is not an IDCP cloud
     private String idcpServer;
     
@@ -85,7 +85,7 @@ public class AdminDomain implements Serializable {
 
     /**
      * Returns the ASID of the AdminDomain, unique identifier of an Autonomous
-     * System represetned by the AdminDomain.
+     * System represented by the AdminDomain.
      * 
      * @return Returns the ASID.
      */
@@ -123,7 +123,7 @@ public class AdminDomain implements Serializable {
      * @return boolean true if the AdminDomain is an IDCP cloud, false otherwise
      */
     public boolean isIdcpCloud() {
-        return (idcpServer!=null);
+        return (idcpServer!=null && !idcpServer.trim().equals(""));
     }
 
     /**
