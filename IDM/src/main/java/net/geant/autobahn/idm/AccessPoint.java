@@ -248,7 +248,8 @@ public final class AccessPoint implements UserAccessPoint,
 	private void retrieveIdcpTopology() {
 	    List<String> idcpServerList = getPropertiesNames(properties, "idcp.");
 	    for (String idcpServer : idcpServerList) {
-            Autobahn2OscarsConverter client = new Autobahn2OscarsConverter(properties.getProperty(idcpServer));
+	    	
+            Autobahn2OscarsConverter client = new Autobahn2OscarsConverter(idcpServer);
             
             // The IDCP cloud should be already connected with at least one link
             // to the AutoBAHN topology, and an admin_domain with the server name 
@@ -374,6 +375,32 @@ public final class AccessPoint implements UserAccessPoint,
 	}
 	
 	/**
+	 * 
+	 * Utility function to remove links associated with an idcp cloud identified by idcpServer
+	 * @param idcpServer
+	 */
+	private void removeIdcpTopology(String idcpServer) {
+		
+		HibernateUtil hbt = IdmHibernateUtil.getInstance();
+		Transaction t = hbt.beginTransaction();
+		
+		daos.getAdminDomainDAO().delete(daos.getAdminDomainDAO().get(idcpServer));
+		t.commit();
+		hbt.closeSession();
+		
+		log.info("topology obtained from " + idcpServer + " has been removed");
+	}
+	
+	/**
+	 * Removes all non-autobahn topologies
+	 */
+	private void removeIdcpTopology() {
+		
+		for (String idcp : getPropertiesNames(properties, "idcp."))
+			removeIdcpTopology(idcp);
+	}
+	
+	/**
 	 * Read all properties containing a specified String and store in a string list.
 	 * 
      * @param props - Properties to read from
@@ -385,7 +412,7 @@ public final class AccessPoint implements UserAccessPoint,
 	    for (Enumeration e = props.propertyNames(); e.hasMoreElements() ;) {
 	        String name = (String) e.nextElement();
 	        if (name.contains(token)) {
-	            propNames.add(name);
+	            propNames.add(props.getProperty(name));
 	        }
 	    }
 	    return propNames;
