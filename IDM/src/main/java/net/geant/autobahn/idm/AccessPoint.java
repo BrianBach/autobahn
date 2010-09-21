@@ -246,7 +246,7 @@ public final class AccessPoint implements UserAccessPoint,
 	}
 
 	private void retrieveIdcpTopology() {
-	    List<String> idcpServerList = getPropertiesNames(properties, "idcp.");
+	    List<String> idcpServerList = getPropertiesSubset(properties, "idcp.");
 	    for (String idcpServer : idcpServerList) {
 	    	
             Autobahn2OscarsConverter client = new Autobahn2OscarsConverter(idcpServer);
@@ -396,7 +396,7 @@ public final class AccessPoint implements UserAccessPoint,
 	 */
 	private void removeIdcpTopology() {
 		
-		for (String idcp : getPropertiesNames(properties, "idcp."))
+		for (String idcp : getPropertiesSubset(properties, "idcp."))
 			removeIdcpTopology(idcp);
 	}
 	
@@ -405,9 +405,9 @@ public final class AccessPoint implements UserAccessPoint,
 	 * 
      * @param props - Properties to read from
      * @param token - Specified String to search for in property names
-	 * @return List of property names containing the specified String.
+	 * @return List of property values whose keys contain the specified String.
 	 */
-	private List<String> getPropertiesNames(Properties props, String token) {
+	private List<String> getPropertiesSubset(Properties props, String token) {
 	    List<String> propNames = new ArrayList<String>();
 	    for (Enumeration e = props.propertyNames(); e.hasMoreElements() ;) {
 	        String name = (String) e.nextElement();
