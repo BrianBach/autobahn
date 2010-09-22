@@ -59,7 +59,7 @@
 			<binding property="request.endPort" required="true"/>
 			<binding property="request.startTime" converter="calendar" required="true"/>
 			<binding property="request.endTime" converter="calendar" required="true"/>
-			<binding property="request.delay"  required="true"/>
+			<binding property="request.maxDelay"  required="true"/>
 			<binding property="request.capacity"  required="true"/>
 			<binding property="request.userVlanId"  required="true"/>
 			<binding property="request.mtu"  required="true"/>
