@@ -2,13 +2,14 @@
 <h2><spring:message code="reservationMap.htitle" text="AutoBAHN Reservations and Reachability Map"/></h2>
 <br/>
 <div id="map" style="float:left;width: 700px; height: 600px"></div>
-<div style="height:600px;overflow:auto">
+<div style="padding-left:20px; height:600px;overflow:auto; border-right:1px dotted #9B9CCE;">
 	<div id="form">
 		<p>To show clear map click link bellow</p>
 		<a  style="background-color: blue; color: white" href="<c:url value="/portal/secure/services-map.htm?service=&domain="/>">Clear map</a>
 		<hr/>
 		<h3>Submitted services</h3>
-		<a   style="background-color: blue; color: white" href="javascript:makeGetRequest()">Refresh</a>
+<br/>
+		<a style="background-color: blue; color: white" href="javascript:makeGetRequest()">Refresh</a>
 		<hr/>
 		<script type="text/javascript">
 			new Ajax.PeriodicalUpdater('services', '<c:url value="/portal/secure/services-list.htm"/>', {

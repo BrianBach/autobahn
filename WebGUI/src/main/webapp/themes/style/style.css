@@ -1,4 +1,4 @@
-html { margin: 0px; background-color: #ffffff; text-align: center;font-size: 11px; font-family: Arial, Helvetica, sans;}
+/*html { margin: 0px; background-color: #ffffff; text-align: center;font-size: 11px; font-family: Arial, Helvetica, sans;}
 
 
 
@@ -27,9 +27,9 @@ hr {width:100%;}
 form {font-family: Arial, Helvetica, sans; font-size:11px;font-weight:normal;margin:0px;color:#000080;}
 form td{font-family: Arial, Helvetica, sans; font-size:11px;font-weight:normal;margin:0px;color:#000080;}
 form select{font-family: Arial, Helvetica, sans; font-size:11px;font-weight:normal;margin:0px;color:#000080;}
-form td.label {font-family: Arial, Helvetica, sans; font-size:11px;font-weight:bold; height:20px;text-align:right;width:150px; }
+form td.label {font-family: Arial, Helvetica, sans; font-size:11px;font-weight:bold; height:20px;text-align:left;width:150px; }
 form td.labelcenter {font-family: Arial, Helvetica, sans; font-size:11px;font-weight:bold; height:20px;text-align:center;width:150px; }
-form td.value {font-family: Arial, Helvetica, sans; text-align:left;width:55%;height:20px;color:#000080;}
+
 form td.valuecenter {font-family: Arial, Helvetica, sans; text-align:center;width:55%;height:20px;color:#000080;}
 form td.error {font-family: Arial, Helvetica, sans; color:red;font-size:9px;text-align:left;width:25%;height:20px;}
 form textarea {font-family: Arial, Helvetica, sans; width: 100%;border:#C9C9C9 1px solid;background-color:#F5F5F5; }
@@ -60,7 +60,7 @@ p.error {font-family: Arial, Helvetica, sans; color:red;font-size:9px;text-align
 #pageContent {padding: 0px; margin:0px; text-align:left;width: 1020px; margin: auto; margin-top:0px;position:relative;}
 #header {background: url(header.png) no-repeat; height:80px; padding:0px; margin:0px;}
 
-#inContent   {padding:0px; margin:0px; min-height:450px; border-left-width:2px; border-left-style:solid; border-left-color:#000080; border-right-width:2px; border-right-style:solid; border-right-color:#000080;}
+#inContent   {padding:0px; margin:0px}
 
 #login{padding:0px; text-align:right;font-family: Arial, Helvetica, sans; font-size:11px;color:#caf8f5; background-color:#000080;font-weight: bold}
 
@@ -71,4 +71,309 @@ p.error {font-family: Arial, Helvetica, sans; color:red;font-size:9px;text-align
 
 #footer {margin:0px; padding:0; height:35px; background: url(footer.png) no-repeat;text-align:center;color:white;font-family: Arial, Helvetica, sans; font-size:10px;}
 #footer p {padding:0px; margin:0px;}
+#footer a {color:white}*/
+form textarea {font-family: Arial, Helvetica, sans; width: 100%; }
+form td.value {font-family: Arial, Helvetica, sans; text-align:left;width:55%;height:20px;color:#000080;}
+
+#collection table {margin:0 0 0 5px;width:100%}
+#collection th {color:#ffffff;border:#000080 1px dotted;background-color:#2d690f;font-size: 11px}
+#collection td {color:#000080;border:#C9C9C9 1px solid;background-color:#F5F5F5;font-size: 10px}
+#collection a {color:#ffffff;border:#000080 1px solid;background-color:#000080;font-size:11px;height:30px}
+
+
+#nav {font-family: Arial, Helvetica, sans; font-size:12px; float:left; width:150px; margin:0px;padding:0px;font-weight: bold;color: #000000; line-height:20px; padding-right:10px; border:none;}
+#nav h2 {padding:5px;font-size: 12px; line-height: 18px; text-align:center;vertical-align:middle; margin:0;  font-weight: bold; border-bottom: 1px #ffffff solid;}
+#nav a {padding-top:5px; padding-left:15px;font-family:  Arial, Helvetica, sans; font-size:11px; display:block; text-decoration:none; color:#3535a4; background-color:#ffffff; border-bottom: 1px solid #000080;}  
+#nav a:hover {padding-left:15px;font-family: Arial, Helvetica, sans; font-size:11px; color:white;font-weight: bold;background-color:#9b9cce;}
+
+#pageContent {padding: 0px; margin:0px; text-align:left;width: 1020px; margin: auto; margin-top:0px;position:relative;}
+#header {background: url(header.png) no-repeat; height:80px; padding:0px; margin:0px;}
+
+#inContent   {padding-top:10px; margin:0px; min-height:450px;}
+
+#login{padding:0px; text-align:right;font-family: Arial, Helvetica, sans; font-size:11px;color:#000080; background-color:#9B9CCE; font-weight: bold}
+
+#content {width:800px; float:left; text-align:left;background:url(images/bg_gray_gradient.jpg) bottom repeat-x;
+	border: 1px solid #cccccc;
+	padding:0px;
+	font-size:10px;
+    text-align:center;}
+#content p{padding:0px 0px 0px 10px}
+
+#clearer {clear:both;}
+#imageMenu {background: url(button.png) no-repeat; float:left; padding-right:25px; margin-top:5px; border:none;}
+#footer {margin-top:20px; padding:0px; height:35px; background: url(footer.png) no-repeat;text-align:center;color:white;font-family: Arial, Helvetica, sans; font-size:10px;}
+#footer p {padding:0px; margin:0px;}
 #footer a {color:white}
+
+body {
+	margin-top: 10px;
+	/*background:#ffffff url(../images/bg_body.jpg) repeat-x; */
+    background:white;
+    font-family: Verdana, Helvetica, Arial, sans-serif;
+
+/*	scrollbar-face-color: #fff;
+	scrollbar-shadow-color: #fff;
+	scrollbar-highlight-color: #fff;
+	scrollbar-3dlight-color: #fff;
+	scrollbar-darkshadow-color: #fff;
+	scrollbar-track-color: #fff;
+	scrollbar-arrow-color: #336699;
+	scrollbar-track-border:0px;
+*/
+
+}
+.h1{
+	font-family: "trebuchet ms";
+	font-size: 20px;
+	font-weight:500;
+	color:#336699;
+	margin:0px;
+}
+H1{
+	font-family: "trebuchet ms";
+	font-size: 20px;
+	font-weight:500;
+	color:#336699;
+	margin:0px;
+}
+H2{
+	font-family: "trebuchet ms";
+	font-size: 15px;
+	font-weight:bold;
+	color: #fff;
+	background:#336699;
+	padding:3px 5px;
+	margin-top:20px;
+}
+h3{
+	font-family: "trebuchet ms";
+	font-size: 16px;
+	font-weight:bold;
+	color:#336699;
+	margin:10px 0px;
+}
+
+.h2{
+	font-family: "trebuchet ms";
+	font-size: 15px;
+	font-weight:bold;
+	color: #fff;
+	background:#336699;
+	padding:3px 5px;
+	margin-top:20px;
+}
+
+.h3{
+	font-family: "trebuchet ms";
+	font-size: 16px;
+	font-weight:bold;
+	color:#336699;
+	margin:10px 0px;
+}
+
+.input {
+    font-family: palatino linotype;
+    font: 10px ;
+  color: #666666;
+  background:#fff url(images/bg_input.jpg) bottom repeat-x;
+  border: 1px solid #999999;
+  padding:2px 3px;
+  margin:1px;
+}
+input {
+    font-family: palatino linotype;
+    font: 10px ;
+  color: #666666;
+  background:#fff url(images/bg_input.jpg) bottom repeat-x;
+  border: 1px solid #999999;
+  padding:2px 3px;
+  margin:1px;width:300px;
+}
+
+.input.odd {
+  font: 10px verdana, arial, sans-serif;
+  color: #666666;
+  background:#ffffff  bottom repeat-x;
+  border: 1px solid #999999;
+  padding:2px 3px;
+  margin:1px;
+}
+
+input.text,
+input.z-datebox-inp,
+textarea,
+select,
+button,input.submit {
+  font: 10px verdana, arial, sans-serif;
+  color: #666666;
+  background:#fff url(images/bg_input.jpg) bottom repeat-x;
+  border: 1px solid #999999;
+  padding:2px 3px;
+  margin:1px;
+}
+
+input.text:hover,
+input.text:focus,
+input.z-datebox-inp:hover,
+input.z-datebox-inp:focus,
+textarea:hover,
+textarea:focus,
+select:hover,
+select:focus
+button:hover,
+button:focus {
+  color: #336699;
+  background: #fff;
+  border: 1px solid #999999;
+  cursor:pointer;
+}
+
+.menubar {
+  font: 11px verdana, arial, sans-serif;
+  color: #666666;
+  background:#fff;
+  border: 0;
+  padding:2px 0px 0px 0px;
+  margin:1px;
+}
+
+/*tr.z-grid-odd td.z-row-inner, tr.z-grid-odd {
+  background-color:#fff;
+}*/
+
+
+
+
+
+
+/* content -------------------------------------------- */
+
+
+
+
+.img {
+	margin:5px 0px;
+}
+
+
+/
+
+
+/* highlighted_box -------------------------------------------- */
+.highlighted_box {
+
+}
+.highlighted_title {
+	font-family: "trebuchet ms";
+	font-size: 15px;
+	font-weight: 600;
+	color: #fff;
+	line-height:14px;
+	padding:5px 10px;
+	background:#ff6600  repeat-x;
+}
+.highlighted_content {
+	background:url(images/bg_gray_gradient.jpg) bottom repeat-x;
+	border: 1px solid #cccccc;
+	padding:10px;
+	font-size:10px;
+    text-align:center;
+}
+.highlighted_content a {
+	color:#336699;
+	text-decoration:none;
+}
+.highlighted_content a:visited {
+	color:#336699;
+	text-decoration:none;
+}
+.highlighted_content a:hover {
+	color:#336699;
+	text-decoration:none;
+	border-bottom:2px solid #336699;
+}
+
+
+/* Forms & Buttons -------------------------------------------- */
+
+
+.form_table {
+	border:#cccccc 1px solid;
+	font-size:10px;
+	padding:3px;
+}
+.form_table td {
+	padding:2px;
+}
+.form_table_title {
+	font-weight:bold;
+	background:#ffffff  right no-repeat;
+	padding-right:15px;
+}
+.results_title {
+	font-weight:bold;
+	color:#FFFFFF;
+	background:#336699;
+}
+
+.notes {
+	font-size:9px;
+	color:#666666;
+}
+
+/* footer ---------------------------------------- */
+.footer {
+	
+	font-size:9px;
+	font-weight:bold;
+	text-decoration: none;
+	color:#666666;
+	text-align:center;
+	padding-top:10px;
+}
+.footer a {
+	color:#666666;
+	text-decoration:none;
+	padding:2px;
+}
+.footer a:visited {
+	color:#666666;
+}
+.footer a:hover {
+	color:#333;
+	border-bottom:2px solid #999999;
+}
+
+.page_footer {
+	padding-top:7px;
+	color: #000;
+	background-color: #fff;
+	font-family: tahoma, arial, sans-serif;
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.
+
+.correct {color:green}
+
+
+form td.label {
+	padding:2px 5px;
+	font-size:10px;
+	font-weight:bold;
+	text-align:left;
+
+}
+
+
+form td.error{
+	padding:2px 5px;
+	font-size:10px;
+	font-weight:bold;
+    color:red;
+}
+
+
+

@@ -5,6 +5,7 @@
         http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
 	<on-start>
 		<evaluate expression="manager.getSettingsForInterDomainManager(null)" result="flowScope.settings" />	
+		<evaluate expression="manager.isIdmDisconnected()" result="flowScope.disconnect" />
 	</on-start>
 	<decision-state id="check-idm">
     	<if test="flowScope.settings.idms== null ||flowScope.settings.idms.size()==0" then="no-idm-regitered" else="settings"/>		
@@ -14,10 +15,7 @@
 			<evaluate expression="manager.setPropertiesForInterDomainManager (flowScope.settings.currentIdm, flowScope.settings.properties)"></evaluate>
 			
 		</transition>
-		<transition on="change" to="settings" bind="true">
-			<evaluate expression="manager.getSettingsForInterDomainManager(flowScope.settings.currentIdm)" result="flowScope.settings" />
-			<evaluate expression="manager.getSettingsForInterDomainManager(settings.currentIdm)" result="flowScope.settings" />
-		</transition>	
+		
 	</view-state>
 
 	<end-state id="no-idm-regitered" view="secure/noIDMRegistered"/>

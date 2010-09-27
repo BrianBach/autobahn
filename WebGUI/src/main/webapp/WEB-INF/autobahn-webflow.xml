@@ -39,7 +39,8 @@ http://www.springframework.org/schema/webflow-config/spring-webflow-config-2.0.x
 	</bean>
 
 	<webflow:flow-registry id="flowRegistry" flow-builder-services="flowBuilderServices" >
-		<webflow:flow-location path="/WEB-INF/flows/settings.xml" id="secure/settings.htm" />
+		<webflow:flow-location path="/WEB-INF/flows/settings_select.xml" id="secure/settings_select.htm" />
+		<!--<webflow:flow-location path="/WEB-INF/flows/settings.xml" id="secure/settings.htm" />-->
 		<webflow:flow-location path="/WEB-INF/flows/logs.xml" id="secure/logs.htm" />
 		<webflow:flow-location path="/WEB-INF/flows/request-service.xml" id="secure/request-service.htm" />
 		<webflow:flow-location path="/WEB-INF/flows/services.xml" id="secure/reservations.htm" />
