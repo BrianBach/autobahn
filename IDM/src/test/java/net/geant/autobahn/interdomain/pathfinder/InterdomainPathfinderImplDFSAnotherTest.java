@@ -31,7 +31,7 @@ import net.geant.autobahn.useraccesspoint.PathInfo;
  * @author kostas
  *
  */
-public class InterdomainPathfinderImplDFSTest2 {
+public class InterdomainPathfinderImplDFSAnotherTest {
 
     Topology topology_straight,topology_multihomed;
     AdminDomain ad1,ad2,ad3,ad4,ad5,ad6;

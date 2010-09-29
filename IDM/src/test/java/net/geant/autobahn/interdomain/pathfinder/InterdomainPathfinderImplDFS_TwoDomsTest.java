@@ -30,7 +30,7 @@ import net.geant.autobahn.reservation.Reservation;
  * @author kostas
  *
  */
-public class InterdomainPathfinderImplDFSTest_TwoDoms {
+public class InterdomainPathfinderImplDFS_TwoDomsTest {
 
     // Topology simulates a testbed with two domains
     Topology topology_straight,topology_multihomed;

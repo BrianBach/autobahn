@@ -21,7 +21,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class InterdomainPathfinderImplDFS_Idcp {
+public class InterdomainPathfinderImplDFS_IdcpTest {
 
     Topology topology_straight,topology_multihomed;
     AdminDomain ad1,ad2,ad3,ad4,ad5;
