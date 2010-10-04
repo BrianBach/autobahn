@@ -79,14 +79,6 @@ public class Framework {
 		try {
 			
 			Properties idmProps = loadProperties("etc/idm.properties");
-			// try to load idcp.properties, if the file is missing it is ok
-			try {
-				FileInputStream fis = new FileInputStream("etc/idcp.properties");
-				if (fis != null) {
-					idmProps.load(fis);
-					fis.close();
-				}
-			} catch (FileNotFoundException e) { }
 			
 			if(properties.containsKey("startup.notify")) {
 				idmProps.put("startup.notify", properties.getProperty("startup.notify"));
