@@ -39,9 +39,9 @@ public class Scheduled extends HomeDomainState {
 	public void withdraw(HomeDomainReservation res) {
 		
 		if(res.isLastDomain()) {
-			final String idcpPattern = AccessPoint.getInstance().getProperty("idcp.domain");
-			if (res.getNextDomainAddress().contains(idcpPattern)) {
-	        	Autobahn2OscarsConverter client = new Autobahn2OscarsConverter();
+
+			if (res.getNextDomainAddress().contains(res.getIdcpServer())) {
+	        	Autobahn2OscarsConverter client = new Autobahn2OscarsConverter(res.getIdcpServer());
 	        	client.cancelReservation(res.getBodID());
 	        }
 			
@@ -70,9 +70,9 @@ public class Scheduled extends HomeDomainState {
     public void cancel(HomeDomainReservation res) {
 
 		if(res.isLastDomain()) {
-			final String idcpPattern = AccessPoint.getInstance().getProperty("idcp.domain");
-			if (res.getNextDomainAddress().contains(idcpPattern)) {
-	        	Autobahn2OscarsConverter client = new Autobahn2OscarsConverter();
+			
+			if (res.getNextDomainAddress().contains(res.getIdcpServer())) {
+	        	Autobahn2OscarsConverter client = new Autobahn2OscarsConverter(res.getIdcpServer());
 	        	client.cancelReservation(res.getBodID());
 	        }
 			

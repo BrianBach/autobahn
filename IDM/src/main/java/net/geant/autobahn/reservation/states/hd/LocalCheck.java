@@ -89,10 +89,22 @@ public class LocalCheck extends HomeDomainState {
         	pathFailed(res, ReservationErrors.PATH_CAPACITY_NOT_ENOUGH, path.toString());
         	return;
         }
-        
+                
         if (!path.isHomeDomain(domainID)) {
-            pathFailed(res, ReservationErrors.WRONG_DOMAIN, domainID);
-            return;
+        	
+        	if (res.isIdcpReservation()) {
+
+        		Autobahn2OscarsConverter client = new Autobahn2OscarsConverter(res.getIdcpServer());
+        		
+                int res_code = client.scheduleReservation(res);
+                
+                if(res_code != 0) {
+                	pathFailed(res, ReservationErrors.WRONG_DOMAIN, domainID);
+                    return;
+                }
+                res.switchState(SCHEDULING);
+        		return;
+        	} 
         }
 
         // Create empty constraints
@@ -186,19 +198,6 @@ public class LocalCheck extends HomeDomainState {
 
         res.setGlobalConstraints(constraints);
 
-        // IDCP reservation, send to suitable IDCP server
-        if(res.isAb2IdcpReservation() && (res.getIdcpServer()!=null)) {
-            log.info("Talking with IDCP server... (" + res.getIdcpServer() + ")");
-            
-            Autobahn2OscarsConverter client = new Autobahn2OscarsConverter(res.getIdcpServer());
-            int res_code = client.scheduleReservation(res);
-            
-            if(res_code != 0) {
-                res.fail(ReservationErrors.getInfo(res_code, res.getNextDomainAddress()));
-                return;
-            }
-        }
-        
         try {
             res.reserveResources();
         } catch (ConstraintsAlreadyUsedException e1) {

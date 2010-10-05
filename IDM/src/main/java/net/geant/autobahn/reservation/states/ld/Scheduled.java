@@ -25,9 +25,7 @@ public class Scheduled extends LastDomainState {
     @Override
     public void cancel(LastDomainReservation res) {
     	
-        final String idcpPattern = AccessPoint.getInstance().getProperty("idcp.domain");
-        
-        if (res.getNextDomainAddress().contains(idcpPattern)) {
+        if (res.getNextDomainAddress().contains(res.getIdcpServer())) {
         	Autobahn2OscarsConverter client = new Autobahn2OscarsConverter();
         	client.cancelReservation(res.getBodID());
         }
@@ -43,9 +41,7 @@ public class Scheduled extends LastDomainState {
 	@Override
 	public void withdraw(LastDomainReservation res) {
 		
-        final String idcpPattern = AccessPoint.getInstance().getProperty("idcp.domain");
-        
-        if (res.getNextDomainAddress().contains(idcpPattern)) {
+        if (res.getNextDomainAddress().contains(res.getIdcpServer())) {
         	Autobahn2OscarsConverter client = new Autobahn2OscarsConverter();
         	client.cancelReservation(res.getBodID());
         }
