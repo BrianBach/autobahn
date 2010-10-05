@@ -130,6 +130,9 @@ public class OSCARSImpl implements OSCARS {
      */
     public void createReservation(javax.xml.ws.Holder<java.lang.String> globalReservationId,long startTime,long endTime,int bandwidth,java.lang.String description,javax.xml.ws.Holder<PathInfo> pathInfo,javax.xml.ws.Holder<java.lang.String> token,javax.xml.ws.Holder<java.lang.String> status) throws AAAFaultMessage , BSSFaultMessage    { 
      
+    	token.value = "none";
+    	status.value = "ACCEPTED";
+    	
     	try {
             makeReservation(globalReservationId,startTime,endTime,bandwidth,description,pathInfo,token,status);
         } catch (Exception e) {

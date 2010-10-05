@@ -39,7 +39,7 @@ public class OscarsConverter {
 	}
 	
 	private static CtrlPlaneFindResults findRemote(String domainId, String nodeId, 
-			String portId, String linkId, CtrlPlaneDomainContent[] domains) {
+			String portId, String linkId, List<CtrlPlaneDomainContent> domains) {
 		
 		if (domains == null)
 			return null;
@@ -75,7 +75,8 @@ public class OscarsConverter {
 		return null;
 	}
 	
-	public static List<Link> getGeantTopology(CtrlPlaneDomainContent[] domains) {
+	//public static List<Link> getGeantTopology(CtrlPlaneDomainContent[] domains) {
+	public static List<Link> getGeantTopology(List<CtrlPlaneDomainContent> domains) {
 		
 		Map<String, AdminDomain> ads = new HashMap<String, AdminDomain>();
 		Map<String, ProvisioningDomain> pds = new HashMap<String, ProvisioningDomain>();
@@ -262,7 +263,7 @@ public class OscarsConverter {
 		if (links == null){
 			return new CtrlPlaneDomainContent[1];
 		}
-		// sort links acording to domain
+		// sort links according to domain
 		Map<ProvisioningDomain, List<Link>> sortLinks = new HashMap<ProvisioningDomain, List<Link>>();
 		for (Link link : links) {
 			ProvisioningDomain provDomain = link.getStartPort().getNode().getProvisioningDomain();

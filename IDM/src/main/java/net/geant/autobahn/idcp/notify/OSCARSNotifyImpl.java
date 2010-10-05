@@ -6,16 +6,11 @@
 
 package net.geant.autobahn.idcp.notify;
 
-import java.util.logging.Logger;
-import javax.jws.Oneway;
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebResult;
-import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
-import javax.xml.bind.annotation.XmlSeeAlso;
 
+
+import org.apache.log4j.Logger;
 import org.oasis_open.docs.wsn.b_2.NotificationMessageHolderType;
+import org.oasis_open.docs.wsn.b_2.RenewResponse;
 
 import net.geant.autobahn.idm.AccessPoint;
 import net.geant.autobahn.reservation.Reservation;
@@ -35,15 +30,16 @@ import net.geant.autobahn.reservation.Reservation;
                       endpointInterface = "net.geant.autobahn.idcp.notify.OSCARSNotify")
                       
 public class OSCARSNotifyImpl implements OSCARSNotify {
-
-    private static final Logger LOG = Logger.getLogger(OSCARSNotifyImpl.class.getName());
+    
+    private Logger log = Logger.getLogger(this.getClass()); 
 
     /* (non-Javadoc)
      * @see net.geant.autobahn.idcp.notify.OSCARSNotify#subscribe(org.oasis_open.docs.wsn.b_2.Subscribe  subscribeRequest )*
      */
-    public org.oasis_open.docs.wsn.b_2.SubscribeResponse subscribe(org.oasis_open.docs.wsn.b_2.Subscribe subscribeRequest) throws InvalidMessageContentExpressionFault , UnsupportedPolicyRequestFault , InvalidProducerPropertiesExpressionFault , UnacceptableInitialTerminationTimeFault , UnrecognizedPolicyRequestFault , ResourceUnknownFault , TopicNotSupportedFault , NotifyMessageNotSupportedFault , InvalidFilterFault , TopicExpressionDialectUnknownFault , AAAFaultMessage , InvalidTopicExpressionFault , SubscribeCreationFailedFault    { 
-        LOG.info("Executing operation subscribe");
-        System.out.println(subscribeRequest);
+    public org.oasis_open.docs.wsn.b_2.SubscribeResponse subscribe(org.oasis_open.docs.wsn.b_2.Subscribe subscribeRequest) throws InvalidMessageContentExpressionFault , UnsupportedPolicyRequestFault , InvalidProducerPropertiesExpressionFault , UnacceptableInitialTerminationTimeFault , UnrecognizedPolicyRequestFault , ResourceUnknownFault , TopicNotSupportedFault , NotifyMessageNotSupportedFault , InvalidFilterFault , TopicExpressionDialectUnknownFault , AAAFaultMessage , InvalidTopicExpressionFault , SubscribeCreationFailedFault    {
+    	
+        log.info("Executing operation subscribe");
+        
         try {
             org.oasis_open.docs.wsn.b_2.SubscribeResponse _return = null;
             return _return;
@@ -69,9 +65,10 @@ public class OSCARSNotifyImpl implements OSCARSNotify {
     /* (non-Javadoc)
      * @see net.geant.autobahn.idcp.notify.OSCARSNotify#resumeSubscription(org.oasis_open.docs.wsn.b_2.ResumeSubscription  resumeSubscriptionRequest )*
      */
-    public org.oasis_open.docs.wsn.b_2.ResumeSubscriptionResponse resumeSubscription(org.oasis_open.docs.wsn.b_2.ResumeSubscription resumeSubscriptionRequest) throws ResourceUnknownFault , ResumeFailedFault , AAAFaultMessage    { 
-        LOG.info("Executing operation resumeSubscription");
-        System.out.println(resumeSubscriptionRequest);
+    public org.oasis_open.docs.wsn.b_2.ResumeSubscriptionResponse resumeSubscription(org.oasis_open.docs.wsn.b_2.ResumeSubscription resumeSubscriptionRequest) throws ResourceUnknownFault , ResumeFailedFault , AAAFaultMessage    {
+    	
+        log.info("Executing operation resumeSubscription");
+        
         try {
             org.oasis_open.docs.wsn.b_2.ResumeSubscriptionResponse _return = null;
             return _return;
@@ -87,9 +84,10 @@ public class OSCARSNotifyImpl implements OSCARSNotify {
     /* (non-Javadoc)
      * @see net.geant.autobahn.idcp.notify.OSCARSNotify#registerPublisher(org.oasis_open.docs.wsn.br_2.RegisterPublisher  registerPublisherRequest )*
      */
-    public org.oasis_open.docs.wsn.br_2.RegisterPublisherResponse registerPublisher(org.oasis_open.docs.wsn.br_2.RegisterPublisher registerPublisherRequest) throws PublisherRegistrationRejectedFault , UnacceptableInitialTerminationTimeFault , ResourceUnknownFault , PublisherRegistrationFailedFault , TopicNotSupportedFault , InvalidTopicExpressionFault    { 
-        LOG.info("Executing operation registerPublisher");
-        System.out.println(registerPublisherRequest);
+    public org.oasis_open.docs.wsn.br_2.RegisterPublisherResponse registerPublisher(org.oasis_open.docs.wsn.br_2.RegisterPublisher registerPublisherRequest) throws PublisherRegistrationRejectedFault , UnacceptableInitialTerminationTimeFault , ResourceUnknownFault , PublisherRegistrationFailedFault , TopicNotSupportedFault , InvalidTopicExpressionFault    {
+    	
+        log.info("Executing operation registerPublisher");
+        
         try {
             org.oasis_open.docs.wsn.br_2.RegisterPublisherResponse _return = null;
             return _return;
@@ -108,9 +106,10 @@ public class OSCARSNotifyImpl implements OSCARSNotify {
     /* (non-Javadoc)
      * @see net.geant.autobahn.idcp.notify.OSCARSNotify#unsubscribe(org.oasis_open.docs.wsn.b_2.Unsubscribe  unsubscribeRequest )*
      */
-    public org.oasis_open.docs.wsn.b_2.UnsubscribeResponse unsubscribe(org.oasis_open.docs.wsn.b_2.Unsubscribe unsubscribeRequest) throws UnableToDestroySubscriptionFault , ResourceUnknownFault , AAAFaultMessage    { 
-        LOG.info("Executing operation unsubscribe");
-        System.out.println(unsubscribeRequest);
+    public org.oasis_open.docs.wsn.b_2.UnsubscribeResponse unsubscribe(org.oasis_open.docs.wsn.b_2.Unsubscribe unsubscribeRequest) throws UnableToDestroySubscriptionFault , ResourceUnknownFault , AAAFaultMessage    {
+    	
+        log.info("Executing operation unsubscribe");
+        
         try {
             org.oasis_open.docs.wsn.b_2.UnsubscribeResponse _return = null;
             return _return;
@@ -126,9 +125,10 @@ public class OSCARSNotifyImpl implements OSCARSNotify {
     /* (non-Javadoc)
      * @see net.geant.autobahn.idcp.notify.OSCARSNotify#pauseSubscription(org.oasis_open.docs.wsn.b_2.PauseSubscription  pauseSubscriptionRequest )*
      */
-    public org.oasis_open.docs.wsn.b_2.PauseSubscriptionResponse pauseSubscription(org.oasis_open.docs.wsn.b_2.PauseSubscription pauseSubscriptionRequest) throws PauseFailedFault , ResourceUnknownFault , AAAFaultMessage    { 
-        LOG.info("Executing operation pauseSubscription");
-        System.out.println(pauseSubscriptionRequest);
+    public org.oasis_open.docs.wsn.b_2.PauseSubscriptionResponse pauseSubscription(org.oasis_open.docs.wsn.b_2.PauseSubscription pauseSubscriptionRequest) throws PauseFailedFault , ResourceUnknownFault , AAAFaultMessage    {
+    	
+        log.info("Executing operation pauseSubscription");
+        
         try {
             org.oasis_open.docs.wsn.b_2.PauseSubscriptionResponse _return = null;
             return _return;
@@ -144,11 +144,19 @@ public class OSCARSNotifyImpl implements OSCARSNotify {
     /* (non-Javadoc)
      * @see net.geant.autobahn.idcp.notify.OSCARSNotify#renew(org.oasis_open.docs.wsn.b_2.Renew  renewRequest )*
      */
-    public org.oasis_open.docs.wsn.b_2.RenewResponse renew(org.oasis_open.docs.wsn.b_2.Renew renewRequest) throws ResourceUnknownFault , UnacceptableTerminationTimeFault , AAAFaultMessage    { 
-        LOG.info("Executing operation renew");
-        System.out.println(renewRequest);
+    public org.oasis_open.docs.wsn.b_2.RenewResponse renew(org.oasis_open.docs.wsn.b_2.Renew renewRequest) throws ResourceUnknownFault , UnacceptableTerminationTimeFault , AAAFaultMessage    {
+    	
+        log.info("Executing operation renew");
+        
         try {
-            org.oasis_open.docs.wsn.b_2.RenewResponse _return = null;
+        	
+        	// prolongate the subscription
+        	String notifier = renewRequest.getSubscriptionReference().getAddress().getValue();
+        	
+        	System.out.println("notifier address: " + notifier);
+        	
+            org.oasis_open.docs.wsn.b_2.RenewResponse _return = new RenewResponse();
+            
             return _return;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -193,8 +201,9 @@ public class OSCARSNotifyImpl implements OSCARSNotify {
     /* (non-Javadoc)
      * @see net.geant.autobahn.idcp.notify.OSCARSNotify#notify(org.oasis_open.docs.wsn.b_2.Notify  notify )*
      */
-    public void notify(org.oasis_open.docs.wsn.b_2.Notify notify) { 
-        LOG.info("Executing operation notify");
+    public void notify(org.oasis_open.docs.wsn.b_2.Notify notify) {
+    	
+        log.info("Executing operation notify");
         
         try {
 
@@ -208,9 +217,7 @@ public class OSCARSNotifyImpl implements OSCARSNotify {
         			String resID = event.getResDetails().getGlobalReservationId();
         			Reservation resv = AccessPoint.getInstance().getReservation(resID);
         	
-        			if (resv == null)
-        				LOG.info("notify: reservation not found: " + resID);
-        			else
+        			if (resv != null)
         				eventToReservationState(resv, event.getResDetails().getStatus());
         		}
         	}
@@ -224,9 +231,10 @@ public class OSCARSNotifyImpl implements OSCARSNotify {
     /* (non-Javadoc)
      * @see net.geant.autobahn.idcp.notify.OSCARSNotify#destroyRegistration(org.oasis_open.docs.wsn.br_2.DestroyRegistration  destroyRegistrationRequest )*
      */
-    public org.oasis_open.docs.wsn.br_2.DestroyRegistrationResponse destroyRegistration(org.oasis_open.docs.wsn.br_2.DestroyRegistration destroyRegistrationRequest) throws ResourceUnknownFault , ResourceNotDestroyedFault , AAAFaultMessage    { 
-        LOG.info("Executing operation destroyRegistration");
-        System.out.println(destroyRegistrationRequest);
+    public org.oasis_open.docs.wsn.br_2.DestroyRegistrationResponse destroyRegistration(org.oasis_open.docs.wsn.br_2.DestroyRegistration destroyRegistrationRequest) throws ResourceUnknownFault , ResourceNotDestroyedFault , AAAFaultMessage    {
+    	
+        log.info("Executing operation destroyRegistration");
+        
         try {
             org.oasis_open.docs.wsn.br_2.DestroyRegistrationResponse _return = null;
             return _return;
@@ -238,5 +246,4 @@ public class OSCARSNotifyImpl implements OSCARSNotify {
         //throw new ResourceNotDestroyedFault("ResourceNotDestroyedFault...");
         //throw new AAAFaultMessage("AAAFaultMessage...");
     }
-
 }

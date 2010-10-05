@@ -5,6 +5,7 @@ package net.geant.autobahn.idcp;
 
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -293,6 +294,8 @@ public class Oscars2Autobahn implements ReservationStatusListener {
     private void notifyIDC(String reservationID, String eventName) {
     	
     	OscarsNotifyClient oscarsNotify = new OscarsNotifyClient();
-    	oscarsNotify.Notify(cache.get(reservationID), eventName);
+    	try {
+    		oscarsNotify.Notify(cache.get(reservationID), eventName);
+    	} catch (RemoteException e) { }
     }
 }

@@ -1,22 +1,16 @@
 package net.geant.autobahn.idcp;
 
+
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+
 import java.util.List;
-import java.util.TimeZone;
 
 import javax.xml.ws.Holder;
 
-import net.geant.autobahn.idcp.AAAFaultMessage;
-import net.geant.autobahn.idcp.BSSFaultMessage;
 import net.geant.autobahn.idcp.GetTopologyContent;
 import net.geant.autobahn.idcp.GetTopologyResponseContent;
 import net.geant.autobahn.idcp.GlobalReservationId;
 import net.geant.autobahn.idcp.Layer2Info;
-import net.geant.autobahn.idcp.ListReply;
-import net.geant.autobahn.idcp.ListRequest;
 import net.geant.autobahn.idcp.OscarsConverter;
 import net.geant.autobahn.idcp.PathInfo;
 import net.geant.autobahn.idcp.ResDetails;
@@ -26,247 +20,131 @@ import net.geant.autobahn.reservation.Reservation;
 
 import net.geant.autobahn.idcp.OSCARS;
 import net.geant.autobahn.idcp.OSCARS_Service;
-import net.geant.autobahn.idm.AccessPoint;
 
 import org.apache.log4j.Logger;
-import org.oasis_open.docs.wsn.b_2.Notify;
-import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneDomainContent;
-import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneHopContent;
-import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneLinkContent;
+
+
 /**
+ * Web Service client for interaction with oscars services
+ * This moreless covers the OSCARS interface
+ * AAAFault and BSSFault messages are represented as RemoteException
  * @author Michal
- * 
  */
 public class OscarsClient {
 
-	private Logger log = Logger.getLogger(this.getClass()); // Path signalling
-															// mode
-	public static final String SIG_DOMAIN = "domain";
-	public static final String SIG_USER = "user-xml";
-	public static final String SIG_AUTO = "timer-automatic"; // Reservation
-																// status
-	public static final String ST_PENDING = "PENDING";
-	public static final String ST_ACTIVE = "ACTIVE";
-	public static final String ST_FINISHED = "FINISHED";
-	public static final String ST_CANCELLED = "CANCELLED";
-	public static final String ST_FAILED = "FAILED";
-	public static final String ST_PENDINGCANCEL = "PENDINGCANCEL";
-	public static final String ST_PRECANCEL = "PRECANCEL";
-
-	private OSCARS rc = null;
-
-	public OscarsClient(String endpoint) {
-	    OSCARS_Service service;
-        service = new OSCARS_Service(endpoint);
-        rc = service.getOSCARS();
-	}
+	private Logger log = Logger.getLogger(this.getClass()); 
+								
+	// scheduling is done automatically, query to find out the reservation's state 
+	private final String PATH_AUTOMATIC = "timer-automatic";
 	
-
-	public List<Reservation> getReservationList() throws AAAFaultMessage, BSSFaultMessage {
-
-		ListRequest lreq = new ListRequest();
-		ListReply lrep = rc.listReservations(lreq);
-
-        List<Reservation> resinfo = new ArrayList<Reservation>();
-		if (lrep != null) {
-			List<ResDetails> res = lrep.getResDetails();
-			for (ResDetails rd : res) {
-				Reservation ri = new Reservation();
-				ri.setBodID(rd.getGlobalReservationId());
-				ri.setDescription(rd.getDescription());
-				ri.setCapacity(rd.getBandwidth());
-				// TODO
-				resinfo.add(ri);
-			}
-		}
-        return resinfo;
-	}
-
-	@SuppressWarnings("deprecation")
-	public List<Link> getTopology() throws Exception {
-		log.debug("getTopology.begin");
-
-        GetTopologyContent content = new GetTopologyContent();
-        content.setTopologyType("all");
-        
-        GetTopologyResponseContent resp = rc.getNetworkTopology(content);
-                
-		List<CtrlPlaneDomainContent> domains = resp.getTopology().getDomain();
-
-		System.out.println("Domains: " + domains.size());
-		
-		CtrlPlaneDomainContent[] ctrlDomains = new CtrlPlaneDomainContent[domains.size()];
-
-		for (int i=0; i < domains.size(); i++) {
-			ctrlDomains[i] = domains.get(i);
-		}
-		
-		//CtrlPlaneDomainContent[] test = (CtrlPlaneDomainContent[]) domains.toArray();
-		List<Link> links = OscarsConverter.getGeantTopology(ctrlDomains);
-		log.debug("getTopology.end");
-		return links;
-	}
+	// scheduling must be followed by CreatePath, user is notified about state changes
+	private final String PATH_MANUAL = "signal-xml";
+	
+	// relies on an idcp domain to figure out the path
+	private final String PATH_LOOSE = "loose";
+	
+	// allows to specify hops for the path
+	private final String PATH_STRICT = "strict";
+	
+	// before sending a reservation, the capacity by must be divided to adjust to OSCARS bandwidth metric(Mbps)
+	private final int BANDWIDTH_SCALE = 1000000;
+	
+	// idcp implementations use seconds
+	private final int TIME_SCALE = 1000;
+	
+	private final OSCARS oscars;
 
 	/**
-	 * Schedules reservation in DRAGON. Returns selected VLAN tag.
-	 * 
-	 * @param reservation
-	 * @param src
-	 * @param dest
-	 * @param vlans
-	 * @return Integer - number of VLAN tag selected for the reservation
-	 * @throws RemoteException
+	 * Creates new instance of OSCARS client
+	 * @param endpoint the address where OSCARS service is listening
 	 */
-	public Reservation scheduleReservation(Reservation reservation,
-			String src, String dest, String vlans) throws RemoteException {
-
-		final String resID = reservation.getBodID();
-		final int bandwidthScale = 1000000;
-
-		long startTime = reservation.getStartTime().getTimeInMillis() / 1000;
-		long endTime = reservation.getEndTime().getTimeInMillis() / 1000;
-		String description = reservation.getDescription();
+	public OscarsClient(String endpoint) {
 		
-		Holder<String> globalReservationId = new Holder<String>(resID);
-		// Bandwidth in Mbps
-		int bandwidth = ((int) (reservation.getCapacity() / bandwidthScale));
-		if (bandwidth <= 0) { // happens if requested bandwidth is lower than bandwidthScale
-			log.info("Requested bandwidth for " + resID + " within an idcp domain should be greater than zero, assigning 1");
+		oscars = new OSCARS_Service(endpoint).getOSCARS();
+	}
+	
+	/**
+	 * Schedules a reservation within an idcp domain
+	 * @param resv the object that was passed as argument
+	 * @param src the source port
+	 * @param dst the destination port
+	 * @param vlan
+	 * @return
+	 * @throws RemoteException 
+	 */
+	public void scheduleReservation(Reservation resv, String src, String dst, String vlan) throws RemoteException {
+		
+		Holder<String> grid = new Holder<String>(resv.getBodID());
+		long startTime = resv.getStartTime().getTimeInMillis() / TIME_SCALE;
+		long endTime = resv.getEndTime().getTimeInMillis() / TIME_SCALE;
+		int bandwidth = ((int) (resv.getCapacity() / BANDWIDTH_SCALE));
+		if (bandwidth <= 0) { // happens if requested bandwidth is lower than BANDWIDTH_SCALE
+			log.info("Requested bandwidth for " + grid.value + " within an idcp domain should be greater than zero, assigning 1");
 			bandwidth = 1;
 		}
-		
-		// Path
-		PathInfo pinfo = new PathInfo();
-		pinfo.setPathSetupMode(SIG_AUTO);
-		
-		Layer2Info l2 = new Layer2Info();
-				
-		//l2.setSrcEndpoint(src);
-		//l2.setDestEndpoint(dest);
-		l2.setSrcEndpoint(AccessPoint.getInstance().getProperty(src));
-		l2.setDestEndpoint(AccessPoint.getInstance().getProperty(dest));
-		
-		VlanTag vlan = new VlanTag();
-		vlan.setValue(vlans);
-		vlan.setTagged(true);
-		l2.setSrcVtag(vlan);
-		l2.setDestVtag(vlan);
-		
-		pinfo.setLayer2Info(l2);
 
-		Holder <PathInfo> pathInfo = new Holder<PathInfo>(pinfo);
+		PathInfo pinfo = new PathInfo();
+		pinfo.setPathSetupMode(PATH_AUTOMATIC);
+		pinfo.setPathType(PATH_LOOSE);
+		Layer2Info layer2 = new Layer2Info();
+		layer2.setSrcEndpoint(src);
+		layer2.setDestEndpoint(dst);
+		VlanTag vlanTag = new VlanTag();
+		vlanTag.setValue(vlan);
+		vlanTag.setTagged(true);
+		layer2.setSrcVtag(vlanTag);
+		layer2.setDestVtag(vlanTag);
+		pinfo.setLayer2Info(layer2);
+		
+		// intentionally no layer3 or mpls info
+		pinfo.setMplsInfo(null);
+		pinfo.setLayer3Info(null);
+		Holder<PathInfo> pathInfo = new Holder<PathInfo>(pinfo);
 
 		Holder<String> token = new Holder<String>();
 		Holder<String> status = new Holder<String>();
 		
 		try {
-			
-			rc.createReservation(globalReservationId, startTime, endTime, bandwidth, description, pathInfo, token, status);
-			
+		
+			oscars.createReservation(grid, startTime, endTime, bandwidth, resv.getDescription(), pathInfo, token, status);
+			// after create ACCEPTED must be returned
+			if (!status.value.equals("ACCEPTED"))
+				throw new RemoteException("reservation " + resv.getBodID() + " returned in wrong state - " + status.value);
+				
+			System.out.println("res " + resv.getBodID() + " ok, token: " + token.value + ", status: " + status.value);
 		} catch (Exception e) {
-			e.printStackTrace();
-			log.info("IDCP reservation schedule error: " + e.getMessage());
-			//reservation.setDescription(e.getMessage());
-			reservation.setDescription("error");
-			return reservation;
-		}
-		
-		/*
-		if (ST_PENDING.equals(status)) {
-			// Read and return vlan
-			
-			Integer sel_vlan = Integer.valueOf(pathInfo.value
-					.getLayer2Info().getSrcVtag().getValue());
-			
-			result.setCalculatedConstraints("" + sel_vlan);
-		}*/
-		// should we trigger something??
-		
-		return reservation;
-	}
-
-	public String cancelReservation(String resID) throws RemoteException {
-
-		GlobalReservationId gid = new GlobalReservationId();
-		gid.setGri(resID);
-		
-		String response = null;
-
-		try {
-			response = rc.cancelReservation(gid);
-		} catch (Exception e) {
-			throw new RemoteException(e.getMessage(), e.getCause());
-		}
-		
-		return response;
-	}
-
-	public String createPath(String resID) throws RemoteException {
-	    Holder<String> globalReservationId = new Holder<String>();
-	    Holder<String> status = new Holder<String>();
-		try {
-			rc.createPath(resID, globalReservationId, status);
-	        return status.value;
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RemoteException(e.getMessage(), e.getCause());
+			e.printStackTrace(); // remove that
+			throw new RemoteException(e.getMessage());
 		}
 	}
 	
-	public ResDetails modifyReservation(Reservation reservation, String src, String dest, String vlans) throws RemoteException {
-
-		final String resID = reservation.getBodID();
+	/**
+	 * Initiates cancellation of reservation with resId
+	 * @param resId
+	 * @return
+	 * @throws RemoteException
+	 */
+	public String cancelReservation(String resId) throws RemoteException { 
 		
-		long startTime = reservation.getStartTime().getTimeInMillis() / 1000;
-		long endTime = reservation.getEndTime().getTimeInMillis() / 1000;
-		String description = reservation.getDescription();
+		GlobalReservationId grid = new GlobalReservationId();
+		grid.setGri(resId);
 		
-		String globalReservationId = resID;
-		// Bandwidth in Mbps
-		int bandwidth = ((int) (reservation.getCapacity() / 1000000));
-		
-		// Path
-		PathInfo pinfo = new PathInfo();
-		pinfo.setPathSetupMode(SIG_AUTO);
-		
-		Layer2Info l2 = new Layer2Info();
-		l2.setSrcEndpoint(src);
-		l2.setDestEndpoint(dest);
-		
-		VlanTag vlan = new VlanTag();
-		vlan.setValue(vlans);
-		vlan.setTagged(true);
-		l2.setSrcVtag(vlan);
-		l2.setDestVtag(vlan);
-		
-		pinfo.setLayer2Info(l2);
-
-        ResDetails resD = null;
-        try {
-            resD = rc.modifyReservation(globalReservationId, startTime, endTime, bandwidth, description, pinfo);
-        
-        } catch (Exception e) {
-            throw new RemoteException(e.getMessage(), e.getCause());
-        }
-        /*
-        if (ST_PENDING.equals(status)) {
-            // Read and return vlan
-            Integer sel_vlan = Integer.valueOf(pathInfo.value
-                    .getLayer2Info().getSrcVtag().getValue());
-
-            result.setCalculatedConstraints("" + sel_vlan);
-        } */
-        //ResDetails temp = null;
-        
-        return resD;
-    }
+		try {
+			return oscars.cancelReservation(grid);
+		} catch (Exception e) {
+			throw new RemoteException(e.getMessage());
+		}
+	}
 	
-	public Reservation queryReservation(String resID) throws RemoteException {
-
-		GlobalReservationId gid = new GlobalReservationId();
-		gid.setGri(resID);
+	/**
+	 * Queries for a reservation by id, returned reservation is a newly created object for informational purposes only
+	 * @param resId
+	 * @return
+	 * @throws RemoteException
+	 */
+	public ResDetails queryReservation(String resId) throws RemoteException {
 		
-		Holder<String> globalReservationId = new Holder<String>();
+		Holder<String> grid = new Holder<String>();
 		Holder<String> login = new Holder<String>();
 		Holder<String> status = new Holder<String>();
 		Holder<Long> startTime = new Holder<Long>();
@@ -275,75 +153,100 @@ public class OscarsClient {
 		Holder<Integer> bandwidth = new Holder<Integer>();
 		Holder<String> description = new Holder<String>();
 		Holder<PathInfo> pathInfo = new Holder<PathInfo>();
-
+		
 		try {
-			rc.queryReservation(resID, globalReservationId, login, status, startTime, endTime, createTime, bandwidth, description, pathInfo);
-		} catch (Exception e) {
-			throw new RemoteException(e.getMessage(), e.getCause());
+			
+			oscars.queryReservation(resId, grid, login, status, startTime, endTime, createTime, bandwidth, description, pathInfo);
+			
+			ResDetails res = new ResDetails();
+			res.setGlobalReservationId(grid.value);
+			res.setLogin(login.value);
+			res.setStatus(status.value);
+			res.setBandwidth(bandwidth.value);
+			res.setDescription(description.value);
+			res.setPathInfo(pathInfo.value);
+			return res;
+			
+		} catch (Exception e){ 
+			throw new RemoteException(e.getMessage());
 		}
-		
-		// Time
-        Calendar start = Calendar.getInstance();
-        start.setTimeInMillis(startTime.value * 1000);
-        
-        Calendar end = Calendar.getInstance();
-        end.setTimeInMillis(endTime.value * 1000);
-        
-        // Ports
-        String dest = pathInfo.value.getLayer2Info().getDestEndpoint();        
-        String src = pathInfo.value.getLayer2Info().getSrcEndpoint();
-        
-        // Vlans
-        String vlans = pathInfo.value.getLayer2Info().getSrcVtag().getValue();
-        
-        //CtrlPlaneHopContent[] hops = (CtrlPlaneHopContent[]) pathInfo.value.getPath().getHop().toArray();
-        CtrlPlaneHopContent[] hops = new CtrlPlaneHopContent[pathInfo.value.getPath().getHop().size()];
-		
-        for (int i=0; i < pathInfo.value.getPath().getHop().size(); i++) {
-			hops[i] = pathInfo.value.getPath().getHop().get(i);
-		}
-		
-        System.out.println("Hops received: " + hops.length);
-        
-        //Original implementation
-        /*
-        CtrlPlaneHopContent srcHop = hops[hops.length - 2];
-        String src = srcHop.getLinkIdRef();
-        CtrlPlaneLinkContent srcLink = hops[hops.length - 2].getLink();
-        String src = srcLink.getId();
-        */
-        
-        String bodId = globalReservationId.value;
-        
-        Reservation resInfo = new Reservation();
-        
-        src = src.substring(src.indexOf(":link=") + 6);
-        dest = dest.substring(dest.indexOf(":link=") + 6);
-        
-		resInfo.setBodID(bodId);
-		resInfo.setDescription(description.value);
-		resInfo.setCapacity(bandwidth.value);
-		resInfo.setStartTime(start);
-        resInfo.setEndTime(end);
-        // TODO: Properly handle start/end ports and vlans
-        //resInfo.setStartPort(src);
-        //resInfo.setEndPort(dest);
-        //resInfo.setUserVlans(vlans);		
-		
-		return resInfo;
 	}
 	
-	public void Notify() throws RemoteException {
+	/**
+	 * Modifies an existing reservation
+	 * @param resv
+	 * @return
+	 * @throws RemoteException
+	 */
+	public ResDetails modifyReservation(Reservation resv) throws RemoteException {
 
-		Notify notify = new Notify();
-		// TODO: Fill the notify message with something useful??
+		long startTime = resv.getStartTime().getTimeInMillis() / TIME_SCALE;
+		long endTime = resv.getEndTime().getTimeInMillis() / TIME_SCALE;
+		int bandwidth = ((int) (resv.getCapacity() / BANDWIDTH_SCALE));
+		if (bandwidth <= 0) { // happens if requested bandwidth is lower than BANDWIDTH_SCALE
+			log.info("Requested bandwidth for " + resv.getBodID() + " within an idcp domain should be greater than zero, assigning 1");
+			bandwidth = 1;
+		}
+		
+		PathInfo pinfo = new PathInfo();
+		pinfo.setPathSetupMode(PATH_AUTOMATIC);
+
+		final String sport = "urn:ogf:network:domain=dev.es.net:node=star-cr1:port=xe-1/1/0:link=*";
+		final String eport = "urn:ogf:network:domain=dev.es.net:node=bnl-mr3:port=xe-7/2/0:link=*";
+		Layer2Info l2 = new Layer2Info();
+		l2.setSrcEndpoint(sport);
+		l2.setDestEndpoint(eport);
+		VlanTag vlan = new VlanTag();
+		vlan.setValue(String.valueOf(resv.getUserVlanId()));
+		vlan.setTagged(true);
+		l2.setSrcVtag(vlan);
+		l2.setDestVtag(vlan);
+		pinfo.setLayer2Info(l2);
+		
+		// intentionally no layer3 nor mpls info
+		pinfo.setMplsInfo(null);
+		pinfo.setLayer3Info(null);
+		
 		try {
+			
+			ResDetails res = oscars.modifyReservation(resv.getBodID(), startTime, endTime, bandwidth, resv.getDescription(), pinfo);
+			return res;
+		} catch (Exception e) { 
+			throw new RemoteException(e.getMessage());
+		}
+	}
+	
+	public void createPath(String resId) throws RemoteException {
 
-			rc.notify(notify);
-
+		Holder<String> grid = new Holder<String>(resId);
+		Holder<String> status = new Holder<String>();
+		
+		try {
+			
+			oscars.createPath(resId, grid, status);
+						
 		} catch (Exception e) {
+			throw new RemoteException(e.getMessage());
+		}
+	}
+	
+	/**
+	 * Reads an idcp topology and converts it into autobahn representation
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("deprecation")
+	public List<Link> getTopology() throws RemoteException {
+		
+		GetTopologyContent request = new GetTopologyContent();
+		request.setTopologyType("all");
 
-			System.out.println("notify exception " + e.getMessage());
+		try {
+			
+			GetTopologyResponseContent response = oscars.getNetworkTopology(request);
+			return OscarsConverter.getGeantTopology(response.getTopology().getDomain());
+		} catch (Exception e) { 
+			throw new RemoteException(e.getMessage());
 		}
 	}
 }
