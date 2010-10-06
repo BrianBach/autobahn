@@ -84,7 +84,11 @@ public class PathInfo implements Serializable {
         return this.domains;
     }
 
-    /**
+    public void setDomains(List<String> domains) {
+		this.domains = domains;
+	}
+
+	/**
      * Gets the value of the links property.
      * 
      * <p>
@@ -113,7 +117,11 @@ public class PathInfo implements Serializable {
         return this.links;
     }
 
-    public void addDomain(String d) {
+    public void setLinks(List<String> links) {
+		this.links = links;
+	}
+
+	public void addDomain(String d) {
         domains.add(d);
     }
 
