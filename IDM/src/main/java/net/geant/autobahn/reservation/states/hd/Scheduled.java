@@ -40,7 +40,7 @@ public class Scheduled extends HomeDomainState {
 		
 		if(res.isLastDomain()) {
 
-			if (res.getNextDomainAddress().contains(res.getIdcpServer())) {
+			if (res.isIdcpReservation() && res.getNextDomainAddress().contains(res.getIdcpServer())) {
 	        	Autobahn2OscarsConverter client = new Autobahn2OscarsConverter(res.getIdcpServer());
 	        	client.cancelReservation(res.getBodID());
 	        }
@@ -71,7 +71,7 @@ public class Scheduled extends HomeDomainState {
 
 		if(res.isLastDomain()) {
 			
-			if (res.getNextDomainAddress().contains(res.getIdcpServer())) {
+			if (res.isIdcpReservation() && res.getNextDomainAddress().contains(res.getIdcpServer())) {
 	        	Autobahn2OscarsConverter client = new Autobahn2OscarsConverter(res.getIdcpServer());
 	        	client.cancelReservation(res.getBodID());
 	        }
