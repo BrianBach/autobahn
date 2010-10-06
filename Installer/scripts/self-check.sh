@@ -872,7 +872,7 @@ echolog "Exported dbuser $dbuser"
 	  else
                 echolog "Database $dbname was created."
 		echolog "Proceeding to create the db structure..."
-		sudo -u postgres psql $dbname < $path_only/create_db.sql
+		sudo -u postgres psql $dbname < $path_only/../sql/create_db.sql
 		
 		sudo -u postgres psql < $path_only/temp.sql
 		
