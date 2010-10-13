@@ -1,0 +1,84 @@
+/* trigger button */
+#download_now {
+	background:transparent url(img/download_new.png) no-repeat scroll 0 0;
+	display:block;
+	height:250px;
+	margin-bottom:30px;
+	overflow:hidden;
+	text-indent:-999em;
+	width:45px;
+	cursor:pointer;
+	
+	position:absolute;  
+	right:10px; 
+	top: 270px;
+	
+}
+
+/* mouseover state */
+#download_now:hover {
+	background-position:-45 0px ;		
+}
+
+/* clicked state */
+#download_now:focus {
+	background-position:-90 0px;
+}
+
+/* tooltip styling */
+.tooltip {
+	display:none;
+	background:url(img/new_black_arrow.png);
+	height:140px;
+	padding:40px 30px 10px 30px;
+	width:330px;
+	font-size:10px;
+	color:#fff;
+	z-index: 2;
+	
+
+}
+
+/* a .label element inside tooltip */
+.tooltip .label {
+	color:yellow;
+	font-size:10px;
+}
+
+.tooltip a {
+	
+	color:#ad4;
+	font-size:10px;
+	font-weight:bold;
+}
+.panel_scroll {
+	width:320px;
+	height:111px;
+	overflow: auto;
+}
+
+.images {
+	/*background:#fff url(h300.png) repeat-x;*/
+	border:1px solid #ccc;
+	position:relative;	
+	height:480px;
+	
+	width:730px;
+	float:left;	
+	margin:30px;
+	cursor:pointer;
+	
+	z-index:1;
+	
+	/* CSS3 tweaks for modern browsers */
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	-moz-box-shadow:0 0 25px #666;
+	-webkit-box-shadow:0 0 25px #666;	
+	do you want new war file or the 
+}
+.map {
+	
+	width: 730px;
+	height: 480px;
+}

@@ -1,6 +1,44 @@
 <%@ include file="../common/includes.jsp"%>
 <h2><spring:message code="service.htitle" text="Request Reservation Service" /></h2>
 
+
+<style>
+.images {
+	/*background:#fff url(h300.png) repeat-x;*/
+	border:1px solid #ccc;
+	position:relative;	
+	height:auto;
+	
+	width:730px;
+	float:left;	
+	margin:30px;
+	cursor:pointer;
+	
+	z-index:1;
+	
+	/* CSS3 tweaks for modern browsers */
+	-moz-border-radius:20px;
+	-webkit-border-radius:20px;
+	-moz-box-shadow:0 0 25px #666;
+	-webkit-box-shadow:0 0 25px #666;	
+	
+	
+
+}
+	.pos1 {	
+	margin:10px;
+	margin-left:10px;
+}
+.wizard {
+border:1px solid #ccc;
+position:relative;	
+cursor:pointer;
+ height: 530px;
+}
+
+</style>
+
+<div class="images">
 <c:if test="${serviceId!=null}">
 	<br style="height: 50px"></br>
 	<h3 style="margin: 20px"><spring:message code="service.submitted.successfully"/></h3>
@@ -8,7 +46,8 @@
 </c:if>
 <c:if test="${serviceId==null}">
 <form:form commandName="service">
-<table>
+<br>
+<table width="100%">
 	<tr>
 		<td class="label"><spring:message code="service.userHomeDomain"/></td>
 		<td class="value">
@@ -41,10 +80,10 @@
 	</tr>
 </table>
 <div id="collection">
-<br>
+
 <h2>Service Reservations <input type="submit" name="_eventId_add" value="<spring:message code="reservation.add"/>"/></h2>
 <br/>		
-	<table>
+	<table width="100%">
 		<tr>
 			<th><spring:message code="service.reservations.action" text="Action" /></th>
 			<th><spring:message code="reservation.startTime" text="Start time"/></th>
@@ -80,8 +119,9 @@
 	</table>
 	</div>
 	<br>
-	<hr/>
-	<table>
+	<hr>
+	<table class="pos1">
+
 	<tr>
 	<td>
 		<input type="submit" name="_eventId_cancel" value="<spring:message code="service.cancel"/>"/>
@@ -91,6 +131,10 @@
 	</td>
 	</tr>
 	</table>
-	<hr/>
 </form:form>
 </c:if>
+</div>
+<div id="wizard">
+
+
+</div>

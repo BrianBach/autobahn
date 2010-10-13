@@ -1,28 +1,69 @@
 <%@ include file="../common/includes.jsp"%>
-<h2><spring:message code="reservationMap.htitle" text="AutoBAHN Reservations and Reachability Map"/></h2>
-<br/>
-<div id="map" style="float:left;width: 700px; height: 600px"></div>
-<div style="padding-left:20px; height:600px;overflow:auto; border-right:1px dotted #9B9CCE;">
-	<div id="form">
-		<p>To show clear map click link bellow</p>
-		<a  style="background-color: blue; color: white" href="<c:url value="/portal/secure/services-map.htm?service=&domain="/>">Clear map</a>
-		<hr/>
-		<h3>Submitted services</h3>
-<br/>
-		<a style="background-color: blue; color: white" href="javascript:makeGetRequest()">Refresh</a>
-		<hr/>
-		<script type="text/javascript">
+<script src="http://cdn.jquerytools.org/1.2.3/full/jquery.tools.min.js"></script>
+<script type="text/javascript" src="<c:url value="/js/jquery/jquery.validate.min.js"/>"></script>
+<link rel="stylesheet" type="text/css" href="<c:url value="/js/jquery/tooltip.css"/>"/>
+<script type="text/javascript" src="<c:url value="/js/jquery/jquery.tools.min.js"/>"></script>
+
+
+<form:form commandName="services">
+
+
+<div class="images">
+
+	<div class="map" id="map"></div>
+		<div align="right" >
+		
+			<a href="<c:url value="/portal/secure/services-map.htm?service=&domain="/>">Clear map</a>
+		
+		</div>
+	
+	</div>
+
+<!--<a style="background-color: blue; color: white" href="javascript:makeGetRequest()">Refresh</a>-->
+	
+<a id="download_now">Download now</a>
+
+<!-- tooltip element -->
+<div class="tooltip" id="tooltip" >
+
+	<div class="panel_scroll" id="panel_scroll" >
+	
+	<table style="margin:0" >
+		
+		 <c:forEach items="${services}" var="service" varStatus="loopStatus">
+		 
+		 	<tr>
+				<td class="label">${loopStatus.count} Reservation:</td>
+				<td><a href="<c:url value="/portal/secure/services-map.htm?service=${service.bodID}&domain=${service.user.homeDomain.bodID}"/>">${service.bodID}</a></td>
+			</tr>
+		 
+		 </c:forEach>
+	
+	</table>
+	</div>
+
+</div>
+
+</form:form>
+	<script type="text/javascript">		
+
+			 jQuery(document).ready(function() {
+				 
+				 $(function() {		
+						
+						$("#download_now").tooltip({ 
+							
+							 position: "center left",
+							 offset: [-18, -313]
+
+						});
+					}); 	 
+			 });
+
+		</script>
+
+
 			new Ajax.PeriodicalUpdater('services', '<c:url value="/portal/secure/services-list.htm"/>', {
 			method: 'get', frequency: 3, decay: 2
 			});
-		</script>
-		
-		<div id="services">
-			<ul>
-				<c:forEach items="${services}" var="service" varStatus="loopStatus">
-				<li><a href="<c:url value="/portal/secure/services-map.htm?service=${service.bodID}&domain=${service.user.homeDomain.bodID}"/>">${service.bodID}</a></li>
-				</c:forEach>
-			</ul>
-		</div>
-</div>
-</div>
+

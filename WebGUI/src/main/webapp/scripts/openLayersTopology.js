@@ -175,7 +175,7 @@ function refreashMap (map){
       var lines = xmlDoc.documentElement.getElementsByTagName('line');            
       var markersXML = xmlDoc.documentElement.getElementsByTagName('marker');
       addLines(map, lines);
-      addMarkers (map, markersXML)
+      addMarkers (map, markersXML);
       }
   	}
   	request.send(null);
