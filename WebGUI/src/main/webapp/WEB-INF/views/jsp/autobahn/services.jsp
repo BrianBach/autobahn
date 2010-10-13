@@ -1,8 +1,11 @@
 <%@ include file="../common/includes.jsp"%>
-<h2><spring:message code="reservations.htitle" text="Submited Services"/></h2>
+<script src="http://cdn.jquerytools.org/1.2.3/full/jquery.tools.min.js"></script>
+<script type="text/javascript" src="<c:url value="/js/jquery/jquery.validate.min.js"/>"></script>
+<link rel="stylesheet" type="text/css" href="<c:url value="/js/jquery/scrollable.css"/>"/>
 
 <form:form commandName="services">
-<input type="hidden" name="action" value="change"/>
+
+<p><input type="hidden" name="action" value="change"/>
 <table>
 	<tr>
 		<td>
@@ -16,10 +19,24 @@
 	</tr>
 </table>
 	
-<div id="servicesList">
-<c:forEach items="${services.services}" var="element" varStatus="loopStatus">
-	<hr>
-	<h3><a name="${element.bodID}">Service: ${element.bodID}</a></h3>
+	
+<div class="images">
+
+	<div id="actions">
+   		<a class="prev">&laquo; BACK</a>
+   		<a class="next">NEXT &raquo;</a>
+	</div>
+
+<!-- root element for scrollable -->
+<div class="scrollable vertical">
+ 
+  <div class="items">
+
+	 <c:forEach items="${services.services}" var="element" varStatus="loopStatus">
+ 
+ 	<div class="item">  
+ 	
+	<h3 align="right">${loopStatus.count} Service: ${element.bodID}</h3>
 	<table>
 		<tr>
 			<td class="label"><spring:message code="action" text="Action" /></td>
@@ -76,7 +93,24 @@
 	</table>
 	</div>
 	<br>
-	<h2>&nbsp;</h2>
-</c:forEach>
+ 	</div>
+	</c:forEach>
+	
+	</div> 	
+   </div>
 </div>
+
 </form:form>
+
+<script>
+
+ jQuery(document).ready(function() {	 
+	 $(function() {		
+			// initialize scrollable with mousewheel support
+			$(".scrollable").scrollable({ vertical: true, mousewheel: true });			
+		}); 	 
+ });
+</script>
+
+
+
