@@ -63,7 +63,3 @@
 		</script>
 
 
-			new Ajax.PeriodicalUpdater('services', '<c:url value="/portal/secure/services-list.htm"/>', {
-			method: 'get', frequency: 3, decay: 2
-			});
-

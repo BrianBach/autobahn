@@ -1,7 +1,7 @@
 <%@ include file="../common/includes.jsp"%>
    <script type="text/javascript" src="<c:url value="/js/jquery/jquery.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/jquery/jquery.form.js"/>"></script>
-
+<link rel="stylesheet" type="text/css" href="<c:url value="/js/jquery/tabs.css"/>"/>
 
 
 
@@ -35,15 +35,15 @@ var options = {
 
 	</script>
 
-<div align="center">
+<div align="center" class="logs_image">
 <form:form commandName="settings" action="" id="settingssearchform">
 <table>
 	<tr><td><h3>Please select an IDM to view and modify its properties</h3></td></tr>
 	<tr>
 	<td>
-		<form:select path="currentIdm">
+		<center><form:select path="currentIdm">
 			<form:options items="${settings.idms}"/>
-		</form:select>
+		</form:select></center>
 	</td>
 	<td style="display:none">
 		<input type="submit"  value="Change IDM" style="width:100px"/>
@@ -51,8 +51,8 @@ var options = {
 	</tr>
 </table>
 </form:form>
-</div>
+
 <hr/>
  <div id="settingsform" style="text-align:center" class="emptydiv">
  </div>
- 
+ </div>

@@ -33,12 +33,14 @@
     <div id="nav">
     <tiles:insertAttribute name="nav"/>
     </div>
-    <div id="content">
-<div id="login">
+    
+    	<div id="login">
     	<security:authorize ifAnyGranted="ROLE_USER"> 
-			Welcome, <security:authentication property="name"/> | <a style="color:red" href='<c:url value="/j_spring_security_logout"/>'>Logout</a>
+			Welcome, <security:authentication property="name"/> | <a style="color:red;" href='<c:url value="/j_spring_security_logout"/>'>Logout</a>
 		</security:authorize>  
     </div>
+    <div id="content">
+
     	<tiles:insertAttribute name="content"/>
     </div>
     <div id="clearer">

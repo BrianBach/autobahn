@@ -2,7 +2,7 @@
 <h2><spring:message code="logs.htitle" text="Domains Logs"/></h2>
 <script type="text/javascript" src="<c:url value="/js/jquery/jquery.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/jquery/jquery.json-1.3.min.js"/>"></script>
-
+<link rel="stylesheet" type="text/css" href="<c:url value="/js/jquery/tabs.css"/>"/>
 <script type="text/javascript" src="<c:url value="/js/jquery/jquery.dateFormat-1.0.js"/>"></script>
 <script type="text/javascript">
 
@@ -62,8 +62,8 @@ setInterval( "updateLogs()", 10000 );
 
 
 </script>
-
-<div align="center" id="values">
+<div class="logs_image">
+<div align="center" id="values" class="panel_scroll">
 
     <form:form commandName="logs"  action="" id="logssearchform">
     <input type="hidden" name="action" value="change"/>
@@ -81,6 +81,7 @@ setInterval( "updateLogs()", 10000 );
                     <%--  <input type="submit" name="_eventId_change" value="Change IDM" style="width:100px"/>--%>
             </td>
         </tr>
+        <tr></tr>
     </table>
     <c:if test="${logs.error!= nul}">
         <h3>${logs.error}</h3>
@@ -92,6 +93,7 @@ setInterval( "updateLogs()", 10000 );
     </div>
     <div id="settingsform" style="text-align:center">
         <form:textarea path="logs" cssStyle="width:100%" rows="20" disabled="true" id="logsview"/>
-        </form:form>
     </div>
+   </form:form>
+</div>
 </div>

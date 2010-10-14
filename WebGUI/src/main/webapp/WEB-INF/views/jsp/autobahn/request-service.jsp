@@ -67,7 +67,7 @@ cursor:pointer;
 	<tr>
 		<td class="label"><spring:message code="service.justification"/></td>
 		<td class="value">
-			<form:textarea rows="8" path="justification"/>
+			<form:textarea rows="8" cols="65" path="justification"/>
 		</td>
 		<td class="error"><form:errors path="justification"/></td>
 	</tr>

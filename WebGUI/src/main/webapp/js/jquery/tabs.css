@@ -307,3 +307,30 @@ button:focus {
 	-moz-box-shadow:0 0 25px #666;
 	-webkit-box-shadow:0 0 25px #666;	
 }
+
+.logs_image {
+	/*background:#fff url(h300.png) repeat-x;*/
+	border:1px solid #ccc;
+	position:relative;
+		
+	height:420px;
+	width:730px;
+	
+	float:left;	
+	margin:30px;
+	cursor:pointer;
+	
+
+	/* CSS3 tweaks for modern browsers */
+	-moz-border-radius:20px;
+	-webkit-border-radius:20px;
+	-moz-box-shadow:0 0 25px #666;
+	-webkit-box-shadow:0 0 25px #666;	
+}
+.panel_scroll{
+	
+	width:720px;
+	
+	
+}
+	
