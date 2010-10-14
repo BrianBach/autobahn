@@ -33,7 +33,7 @@ $("#logssearchform").submit();
     jQuery(document).ready(function() {
         // bind 'myForm' and provide a simple callback function
        $("#ajaxerror").ajaxError(function() {
-            $(this).text('An error occured..please try again.');
+            $(this).text('Cached data are being provided..please try again or wait for real time update.');
         });
 
         $("#logssearchform").submit(function() {
