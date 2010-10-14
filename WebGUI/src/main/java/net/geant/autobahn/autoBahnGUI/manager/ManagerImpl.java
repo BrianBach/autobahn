@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -491,8 +492,8 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 			if (managerServices == null)
 				continue;
 			list.addAll(managerServices);
-		}
-		return list;
+		}		
+		return sortServicesByBodyID(list);
 	}
 	/*
 	 * (non-Javadoc)
@@ -1161,5 +1162,11 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+	public List<ServiceType> sortServicesByBodyID(List<ServiceType> list){
+						
+		Comparator<ServiceType> comparator = new ServicesComparator();
+		Collections.sort(list, comparator);
+
+		return list;
+	}
 }

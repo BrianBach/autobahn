@@ -304,6 +304,7 @@ public interface Manager {
 	
 	public boolean checkIDMavailability();
 	
+	public List<ServiceType> sortServicesByBodyID(List<ServiceType> list);
 
 }
 
