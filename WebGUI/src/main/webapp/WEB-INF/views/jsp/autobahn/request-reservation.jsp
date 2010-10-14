@@ -135,7 +135,10 @@ function dateOffset(date) {
 		<td class="label"><spring:message code="reservation.endPort"/></td>
 		<td class="value">
 			<form:select path="request.endPort">
-				<form:options items="${friendlyAndIDCPports_all}" itemValue="identifier" itemLabel="friendlyName"/>
+				<!--form:options items="${friendlyAndIDCPports_all}" itemValue="identifier" itemLabel="friendlyName"/-->
+				<form:options items="${friendlyports_domain}" itemValue="identifier" itemLabel="friendlyName"/>
+				<option disabled="true" value="IDCP">IDCP</option>
+                <form:options items="${idcpPorts_all}" itemValue="identifier1" itemLabel="friendlyName1"/>
 			</form:select>
 		</td>
 		<td class="error"><form:errors path="request.endPort"/></td>
