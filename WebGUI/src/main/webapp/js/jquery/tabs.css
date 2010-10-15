@@ -294,10 +294,10 @@ button:focus {
 	position:relative;
 		
 	height:160px;
-	width:750px;
+	width:800px;
 	
 	float:left;	
-	margin:30px;
+	margin:5px;
 	
 
 	/* CSS3 tweaks for modern browsers */

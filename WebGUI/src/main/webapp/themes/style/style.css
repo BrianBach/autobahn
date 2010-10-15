@@ -89,16 +89,15 @@ form td.value {font-family: Arial, Helvetica, sans; text-align:left;width:55%;he
 #pageContent {padding: 0px; margin:0px; text-align:left;width: 1030px; margin: auto; margin-top:0px;position:relative;}
 #header {background: url(header.png) no-repeat; height:170px; padding:0px; margin-left:-6px;}
 
-#inContent   {padding-top:10px; margin:0px; min-height:450px;}
+#inContent   {padding-top:10px; margin:0px; min-height:350px;}
 
 #login{padding:0px; text-align:right;font-family: Arial, Helvetica, sans; font-size:11px;color:#25648d; background-color:#ffffff; font-weight: bold; max-width:1000px;}
 
-#content {width:810px; float:left; text-align:left;background:url(images/bg_gray_gradient.jpg) bottom repeat-x;
-	border: 1px solid #cccccc;
+#content {width:810px; float:left; text-align:left;
 	margin-left:25px;
 	font-size:10px;
     text-align:center;
-	min-height:500px;
+	min-height:350px;
 }
 #content p{padding:0px 0px 0px 10px}
 
