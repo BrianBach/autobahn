@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
+import net.geant.autobahn.aai.UserAuthParameters;
 import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.constraints.GlobalConstraints;
 import net.geant.autobahn.constraints.PathConstraints;
@@ -32,7 +33,8 @@ import net.geant.autobahn.useraccesspoint.PathInfo;
 		"priority", "description", "capacity", 
 	    "userInclude", "userExclude", "userVlanId", "mtu",
 	    "maxDelay",
-		"resiliency", "bidirectional", "globalConstraints", "path", "intState", "fake" })
+		"resiliency", "bidirectional", "globalConstraints", "path", "intState", "fake",
+		"authParameters"})
 public class Reservation implements Serializable {
 
 	private static final long serialVersionUID = -98008799451486690L;
@@ -61,9 +63,12 @@ public class Reservation implements Serializable {
     protected int intState;
     
     protected boolean fake;
+
+    private UserAuthParameters authParameters=new UserAuthParameters();
     
     @XmlTransient
     protected StateOper operationalStatus;
+
     
     /**
      * Default constructor
@@ -481,6 +486,8 @@ public class Reservation implements Serializable {
         par.setUserVlanId(userVlanId);
         par.setMtu(mtu);
         
+        par.setAuthParameters(authParameters);
+        
         return par;
     }
 	
@@ -513,5 +520,15 @@ public class Reservation implements Serializable {
     @Override
     public String toString() {
         return bodID;
+    }
+
+
+    public UserAuthParameters getAuthParameters() {
+        return authParameters;
+    }
+
+
+    public void setAuthParameters(UserAuthParameters authParameters) {
+        this.authParameters = authParameters;
     }
 }

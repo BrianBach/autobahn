@@ -12,6 +12,8 @@ import javax.xml.bind.annotation.XmlType;
 
 import net.geant.autobahn.constraints.PathConstraints;
 
+import net.geant.autobahn.aai.UserAuthParameters;
+
 /**
  * Keeps reservation parameters: capacity, start and end time, network
  * constraints and other.
@@ -21,7 +23,8 @@ import net.geant.autobahn.constraints.PathConstraints;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="ReservationParams", namespace="reservation.autobahn.geant.net", propOrder={
 		"capacity", "maxDelay", "resiliency", "bidirectional",
-		"startTime", "endTime", "pathConstraints", "userVlanId", "mtu"
+		"startTime", "endTime", "pathConstraints", "userVlanId", "mtu",
+		"authParameters"
 })
 public class ReservationParams {
 	@XmlTransient
@@ -39,6 +42,8 @@ public class ReservationParams {
     
     private int userVlanId;
     private int mtu;
+    
+    private UserAuthParameters authParameters=new UserAuthParameters();
 
 	public long getId() {
 		return id;
@@ -162,5 +167,13 @@ public class ReservationParams {
      */
     public void setMtu(int mtu) {
         this.mtu = mtu;
+    }
+
+    public UserAuthParameters getAuthParameters() {
+        return authParameters;
+    }
+
+    public void setAuthParameters(UserAuthParameters authParameters) {
+        this.authParameters = authParameters;
     }
 }

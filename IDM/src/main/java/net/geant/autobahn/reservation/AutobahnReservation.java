@@ -38,7 +38,7 @@ import org.apache.log4j.Logger;
 		"priority", "description", "capacity", 
 	    "userInclude", "userExclude", "userVlanId", "mtu",
 	    "maxDelay",
-		"resiliency", "bidirectional", "globalConstraints", "path", "intState", "fake" })
+		"resiliency", "bidirectional", "globalConstraints", "path", "intState", "fake", "authParameters" })
 public abstract class AutobahnReservation extends Reservation implements Runnable,
 		ReservationEvents, ReservationReportEvents {
 
@@ -334,6 +334,7 @@ public abstract class AutobahnReservation extends Reservation implements Runnabl
         r.setEndPort(src.getEndPort());
         r.setFake(src.isFake());
         r.setMtu(src.getMtu());
+        r.setAuthParameters(src.getAuthParameters());
 
         r.setLocalDomainID(domainID);
         r.gotoInitialState();

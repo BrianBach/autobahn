@@ -68,6 +68,8 @@ public class RequestConverter {
             throw new UserAccessPointException("reservation user MTU cannot be negative");
         }
         
+        resv.setAuthParameters(req.getAuthParameters());
+        
         return resv;
 	}
 }

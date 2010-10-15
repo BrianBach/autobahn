@@ -29,6 +29,9 @@ import net.geant.autobahn.tool.ToolClient;
 import net.geant.autobahn.topologyabstraction.TopologyAbstraction;
 import net.geant.autobahn.topologyabstraction.TopologyAbstractionClient;
 
+import net.geant.autobahn.aai.AAIException;
+
+
 import org.apache.log4j.Logger;
 
 /**
@@ -191,6 +194,14 @@ public class ResourcesReservation {
 		final Link ingress = links[0];
 		final Link egress = links[links.length - 1];
 		
+		UserAuthorizer uauthorizer=new UserAuthorizer(par);
+		
+		try {
+		    uauthorizer.checkSimpleParameters();
+		} catch (AAIException aaie) {
+		    //TODO: error handling
+		}
+		
         TopologyAbstraction ta = new TopologyAbstractionClient(taAddress);
 		GenericLink src = ta.getEdgeLink(ingress);
 		GenericLink dest = ta.getEdgeLink(egress);
@@ -275,6 +286,12 @@ public class ResourcesReservation {
 		}
 		
 		if(results.size() > 0) {
+            try {
+                results = uauthorizer.filterPaths(results);
+            } catch (AAIException aaie) {
+                // TODO: error handling
+            }
+		        
 			DomainConstraints dcon = new DomainConstraints();
 			
 			// Filtering Constraints

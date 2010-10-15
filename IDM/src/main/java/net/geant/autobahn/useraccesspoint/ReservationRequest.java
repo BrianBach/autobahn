@@ -7,6 +7,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
+import net.geant.autobahn.aai.UserAuthParameters;
+
 /**
  * Describes single reservation request
  * @author Michal
@@ -18,7 +20,8 @@ import javax.xml.bind.annotation.XmlType;
 		"priority", "description", "capacity",
 		"userInclude", "userExclude", "userVlanId", "mtu",
 		"maxDelay",
-		"resiliency", "bidirectional", "processNow"
+		"resiliency", "bidirectional", "processNow",
+        "authParameters"
 })
 public class ReservationRequest implements Serializable {
 	
@@ -39,7 +42,9 @@ public class ReservationRequest implements Serializable {
 	private Resiliency resiliency;
 	private boolean bidirectional;
 	private boolean processNow;
-	
+
+    private UserAuthParameters authParameters=new UserAuthParameters();
+    
 	public ReservationRequest() {
         this.userInclude = new PathInfo();
         this.userExclude = new PathInfo();
@@ -303,4 +308,12 @@ public class ReservationRequest implements Serializable {
         
         return res;
 	}
+
+    public UserAuthParameters getAuthParameters() {
+        return authParameters;
+    }
+
+    public void setAuthParameters(UserAuthParameters authParameters) {
+        this.authParameters = authParameters;
+    }
 }
