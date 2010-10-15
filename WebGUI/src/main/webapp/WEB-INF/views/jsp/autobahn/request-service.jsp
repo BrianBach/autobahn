@@ -26,8 +26,9 @@
 
 }
 	.pos1 {	
-	margin:10px;
-	margin-left:10px;
+	margin: 10px;
+	margin-left:70px;
+	
 }
 .wizard {
 border:1px solid #ccc;
@@ -117,9 +118,13 @@ cursor:pointer;
 			</spring:bind>
 		</c:forEach>
 	</table>
+	<br>
+	</div>
+	
+	</form:form>
+</c:if>
 	</div>
 	<br>
-	<hr>
 	<table class="pos1">
 
 	<tr>
@@ -131,10 +136,4 @@ cursor:pointer;
 	</td>
 	</tr>
 	</table>
-</form:form>
-</c:if>
-</div>
-<div id="wizard">
 
-
-</div>

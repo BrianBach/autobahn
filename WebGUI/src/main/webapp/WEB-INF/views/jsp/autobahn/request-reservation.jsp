@@ -306,7 +306,7 @@ function dateOffset(date) {
         <tr>
             <td class="label"><spring:message code="reservation.description"/></td>
             <td class="value">
-                <form:textarea rows="8" path="request.description" id="rdescription"/>
+                <form:textarea rows="8" cols="65" path="request.description" id="rdescription"/>
             </td>
             <td class="error"><form:errors path="request.description"/></td>
         </tr>

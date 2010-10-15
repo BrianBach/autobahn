@@ -6,6 +6,7 @@
 <form:form commandName="services">
 
 <p><input type="hidden" name="action" value="change"/>
+<center>
 <table>
 	<tr>
 		<td>
@@ -18,7 +19,7 @@
 	</td>
 	</tr>
 </table>
-	
+</center>	
 	
 <div class="images">
 

@@ -292,33 +292,34 @@ public class AutobahnController {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
-
-
     }
 
     //no jsp because json request returns false
-    @RequestMapping("/secure/logs_request.htm")
+    @SuppressWarnings("rawtypes")
+	@RequestMapping("/secure/logs_request.htm")
     public void handleLogsRequest(HttpServletRequest request, HttpServletResponse response){
 
         try {
             Logger.getLogger("autoBAHN controler").info("handle log change");
-            //read json request
-            BufferedReader reader = request.getReader();
+            
             StringBuilder sb = new StringBuilder();
-            String line = reader.readLine();
-            while (line != null) {
-                sb.append(line + "\n");
-                line = reader.readLine();
-            }
-            reader.close();
-            String data = sb.toString();
+            
+            @SuppressWarnings("unchecked")
+			java.util.Enumeration<String> paramEnum = request.getParameterNames();
+			
+            	while(paramEnum.hasMoreElements())
+            	{
+            		String paramName = (String)paramEnum.nextElement();
+            		sb.append(paramName + "\n");
+            	}
+		
+            	String data = sb.toString();
+            	JSONObject jsonObject = (JSONObject) JSONSerializer.toJSON(data);
+            	
+            	@SuppressWarnings("unchecked")
+            	LinkedHashSet propkeys=new LinkedHashSet(jsonObject.keySet());
 
-            JSONObject jsonObject = (JSONObject) JSONSerializer.toJSON(data);
-            LinkedHashSet propkeys=new LinkedHashSet(jsonObject.keySet());
-
-
-            //Logger.getLogger("autoBAHN controler").info(data);
-            //parse
+            Logger.getLogger("autoBAHN controler").info(data);
 
             String currentIDm=null;
 
@@ -333,8 +334,6 @@ public class AutobahnController {
                 }
 
             }
-
-
 
             //saving
             response.setContentType("text/x-json;charset=UTF-8");
@@ -355,6 +354,7 @@ public class AutobahnController {
             }
              jsonRes.write(response.getWriter());
         } catch (IOException e) {
+        	System.out.println("10");
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 

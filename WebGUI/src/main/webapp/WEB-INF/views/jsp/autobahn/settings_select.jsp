@@ -6,7 +6,7 @@
 
 
 <h2><spring:message code="settings.htitle" text="Domains Settings" /></h2>
-<br/>
+
  <!-- generally javascript should go in a separate file -->
     <script type="text/javascript">
 
