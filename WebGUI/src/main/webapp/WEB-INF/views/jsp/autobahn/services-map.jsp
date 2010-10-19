@@ -18,18 +18,26 @@
 		</div>
 	
 	</div>
-
-<!--<a style="background-color: blue; color: white" href="javascript:makeGetRequest()">Refresh</a>-->
 	
 <a id="download_now">Download now</a>
 
 <!-- tooltip element -->
 <div class="tooltip" id="tooltip" >
+	
+
+	<img src="<c:url value="/js/jquery/img/close2.PNG"/>"/ id="close_tooltip">
 
 	<div class="panel_scroll" id="panel_scroll" >
 	
 	<table style="margin:0" >
+	
+		<c:if test="${services == null}">
 		
+			<tr>
+				<td class="label"> No reservation available </td>
+			</tr>
+			
+		</c:if>
 		 <c:forEach items="${services}" var="service" varStatus="loopStatus">
 		 
 		 	<tr>
@@ -48,15 +56,36 @@
 	<script type="text/javascript">		
 
 			 jQuery(document).ready(function() {
-				 
+
 				 $(function() {		
 						
-						$("#download_now").tooltip({ 
+					 $("#download_now").tooltip({ 
 							
 							 position: "center left",
-							 offset: [-18, -313]
+							 offset: [-18, -320],
+							
+							 events: {
+					                def: "click, ''",
+					                tooltip: "'','mouseout'"},
+					            onShow: function(){
+					               var tip = this.getTip();
+					               tip.show();
+					            }
+					        })
+					        .dynamic({
+					            top: { direction: 'up' } 
+					    });
 
-						});
+						
+					 	$('#close_tooltip').click(function() { 
+					        $(this).parent().hide();        
+					    });
+					    
+					    $('#download_now').click(function() { 
+					        $(this).next().show();
+					    });
+
+						 
 					}); 	 
 			 });
 

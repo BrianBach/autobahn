@@ -1,3 +1,6 @@
+
+.trigger {
+}
 /* trigger button */
 #download_now {
 	background:transparent url(img/download_new.png) no-repeat scroll 0 0;
@@ -15,28 +18,33 @@
 	
 }
 
-/* mouseover state */
-#download_now:hover {
-	background-position:-45 0px ;		
-}
-
-/* clicked state */
-#download_now:focus {
-	background-position:-90 0px;
-}
 
 /* tooltip styling */
 .tooltip {
 	display:none;
 	background:url(img/new_black_arrow.png);
 	height:140px;
-	padding:40px 30px 10px 30px;
+	padding: 18px 30px 30px 20px;
 	width:330px;
 	font-size:10px;
 	color:#fff;
 	z-index: 2;
+	text-align: right;
 	
+	
+}
+#close_tooltip {
+	width: 15px ;
+	height: 15px;
+	margin: 3px 0px 0 0;
+	padding: 0px;
+}
 
+
+.tooltip .close {
+    float: right;
+    margin: 0px 10px 0 0;
+    cursor: pointer;
 }
 
 /* a .label element inside tooltip */
@@ -55,6 +63,7 @@
 	width:320px;
 	height:111px;
 	overflow: auto;
+	margin: 5px;
 }
 
 .images {
@@ -75,10 +84,10 @@
 	-webkit-border-radius:5px;
 	-moz-box-shadow:0 0 25px #666;
 	-webkit-box-shadow:0 0 25px #666;	
-	do you want new war file or the 
 }
 .map {
 	
 	width: 730px;
 	height: 480px;
 }
+

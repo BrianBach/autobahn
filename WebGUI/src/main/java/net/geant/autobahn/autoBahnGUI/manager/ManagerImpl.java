@@ -465,6 +465,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
                 friendlyPorts.add(new PortMap(p_id, p_id + " (" + friendlyName + ")"));
             }
         }
+        System.out.println("ZZZ "+friendlyPorts.size());
         return friendlyPorts;
     }
 	
@@ -492,8 +493,10 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 			if (managerServices == null)
 				continue;
 			list.addAll(managerServices);
-		}		
-		return sortServicesByBodyID(list);
+		}	
+		if (list.size() == 0) return null;
+		else
+			return sortServicesByBodyID(list);
 	}
 	/*
 	 * (non-Javadoc)
