@@ -11,7 +11,6 @@ import java.util.List;
 import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.constraints.GlobalConstraints;
 import net.geant.autobahn.idcp.Autobahn2OscarsConverter;
-import net.geant.autobahn.idm.AccessPoint;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
 import net.geant.autobahn.idm2dm.OversubscribedException;
 import net.geant.autobahn.network.Link;
@@ -91,22 +90,10 @@ public class LocalCheck extends HomeDomainState {
         }
                 
         if (!path.isHomeDomain(domainID)) {
-        	
-        	if (res.isIdcpReservation()) {
-
-        		Autobahn2OscarsConverter client = new Autobahn2OscarsConverter(res.getIdcpServer());
-        		
-                int res_code = client.scheduleReservation(res);
-                
-                if(res_code != 0) {
-                	pathFailed(res, ReservationErrors.WRONG_DOMAIN, domainID);
-                    return;
-                }
-                res.switchState(SCHEDULING);
-        		return;
-        	} 
+        	 pathFailed(res, ReservationErrors.WRONG_DOMAIN, domainID);
+             return; 
         }
-
+        
         // Create empty constraints
         GlobalConstraints globalConstraints = new GlobalConstraints();
         res.setGlobalConstraints(globalConstraints);
@@ -197,6 +184,16 @@ public class LocalCheck extends HomeDomainState {
         }
 
         res.setGlobalConstraints(constraints);
+     
+        if (res.isIdcpReservation() && res.getNextDomainAddress().equals(res.getIdcpServer())) {
+        	
+     	   	Autobahn2OscarsConverter client = new Autobahn2OscarsConverter(res.getIdcpServer());
+     	   	int code = client.scheduleReservation(res);
+     	   	if (code != 0) {
+     	   		res.fail(ReservationErrors.getInfo(code, res.getNextDomainAddress()));
+     	   		return;
+     	   	}
+        } 
 
         try {
             res.reserveResources();
