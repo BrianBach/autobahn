@@ -90,6 +90,21 @@ public class LocalCheck extends HomeDomainState {
         }
                 
         if (!path.isHomeDomain(domainID)) {
+        	
+        	 // see if this is an idcp-only reservation, if so pass the reservation to its idcp server
+        	 if (res.isIdcp2AbReservation() && res.isAb2IdcpReservation() && res.getIdcpServer() != null) {
+        		 
+       			 Autobahn2OscarsConverter client = new Autobahn2OscarsConverter(res.getIdcpServer());
+   	     	   	 int code = client.scheduleReservation(res);
+       	     	 if (code != 0) {
+       	     		 res.fail(ReservationErrors.getInfo(code, res.getIdcpServer()));
+       	     	 	 return;
+   	     	   	} else {
+   	     	   		res.success("OK");
+   	     	   		return;
+        		 }
+        	 }
+        	
         	 pathFailed(res, ReservationErrors.WRONG_DOMAIN, domainID);
              return; 
         }
