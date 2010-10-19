@@ -55,6 +55,7 @@ public class ReservationErrors {
         infos.put(PATH_CAPACITY_NOT_ENOUGH, "Path can't guarantee enough capacity");
         infos.put(CONSTRAINTS_NOT_AGREED, "Global constraints not fulfilled on path");
         infos.put(CONSTRAINTS_ALREADY_IN_USE, "Calculated constraints are already in use");
+        infos.put(RESERVATION_NOTSUPPORTED, "Reservations idcp->autobahn are not supported");
     }
 
     /**
