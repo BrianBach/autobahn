@@ -33,6 +33,7 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
     private static Map<String, String> vlans = new HashMap<String, String>();
     private String idcpServer;
 
+    private static final String DEFAULT_VLAN = "3210";  
     static {
         vlans.put("10.12.32.5", "3202"); //HEA
         vlans.put("10.13.32.4", "3204"); //PIO
@@ -50,6 +51,11 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
     
     public int scheduleReservation(AutobahnReservation reservation) {
 		
+    	// reservations starting at idcp and terminating at autobahn cannot be supported as idcp side does not have autobahn topology
+	    // we should schedule it and catch an exception, unfortunately it is not much descriptive so we quit here
+	    if (reservation.isIdcp2AbReservation() && !reservation.isAb2IdcpReservation())
+	    	return ReservationErrors.RESERVATION_NOTSUPPORTED;
+    	
         String src = "";
         
         try {
@@ -65,10 +71,11 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
 
 	    // if this is an idcp reservation, we need to strip off dummyPort part and assembly the original identifiers
         if (reservation.isIdcpReservation() && src.endsWith("_dummyPort")) {
+        	
         	src = src.substring(0, src.indexOf("_dummyPort"));
         
         	try {
-        		// this is slow and painful way
+        		// this is slow and painful way as we call getTopology on idcp domain
         		for (Link l : this.getLinks()) { 
         			
         			if (l.getBodID().contains(src))
@@ -84,19 +91,15 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
         	}
         }
 	    	    
-        log.info("PATH - src: " + src + ", dst: " + dest);
-        
 	    String vlan = vlans.get(src);
-
 	    if (vlan == null) {
-	    	log.debug("Warn - no assigned vlan found, assigning vlan 3210");
-	        vlan = "3210";
+	    	log.debug("Warn - no assigned vlan found, assigning default vlan " + DEFAULT_VLAN);
+	        vlan = DEFAULT_VLAN;
 	    }
-	        
-        OscarsClient oscars = new OscarsClient(idcpServer);
-        
+	    
         try {
-        	
+        
+        	OscarsClient oscars = new OscarsClient(idcpServer);
         	oscars.scheduleReservation(reservation, src, dest, vlan);
             cache.put(reservation.getBodID(), reservation);
             reservation.addStatusListener(this);

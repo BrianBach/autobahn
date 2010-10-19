@@ -26,6 +26,7 @@ public class ReservationErrors {
     public static final int LOCAL_COMMUNICATION_ERROR = 3;
     public static final int NEGATIVE_DELAY = 4;
     public static final int DOMAIN_RESERVATION_ERROR = 5;
+    public static final int RESERVATION_NOTSUPPORTED = 6;
     
     // constraints errors
     public static final int CONSTRAINTS_NOT_CORRECT = 11;
