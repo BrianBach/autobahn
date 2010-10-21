@@ -39,12 +39,13 @@ $("#logssearchform").submit();
         $("#logssearchform").submit(function() {
             
 var aa = $.toJSON($("values").serializeObject());
-
+//alert(aa);
             jQuery.getJSON("logs_request.htm", aa,
                     function(data) {
                         //alert(data);
-                        $("#ajaxsuccess").html("Showing logs for <font color='blue'>"+$("#currentIdm").val()+"</font><br/>"+(new Date()).format("r")+"<br>The contents will update every 10 seconds");
-                        $("#logsview").text(data);
+				//alert(data.result);
+                        $("#ajaxsuccess").html("Showing logs for <font color='blue'>"+$("#currentIdm").val()+"</font><br/>"+(new Date()).format("r")+"<br>The contents will update every 30 seconds");
+                        $("#logsview").text(data.result);
 
                     }, "json");
             return false;
@@ -57,7 +58,7 @@ var aa = $.toJSON($("values").serializeObject());
         });
 
         $("#logssearchform").submit();
-setInterval( "updateLogs()", 10000 );
+setInterval( "updateLogs()", 30000 );
     });
 
 

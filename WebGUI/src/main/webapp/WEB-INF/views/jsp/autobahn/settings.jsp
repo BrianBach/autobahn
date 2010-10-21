@@ -1,42 +1,92 @@
 <%@ include file="../common/includes.jsp"%>
-<h2><spring:message code="settings.htitle" text="Domains Settings" /></h2>
-<br/>
 
-<form:form commandName="settings">
-<table>
-	<tr>
-	<td>
-		<form:select path="currentIdm">
-			<form:options items="${settings.idms}"/>
-		</form:select>
-	</td>
-	<td>
-		<input type="submit" name="_eventId_change" value="Change IDM" style="width:100px"/>
-	</td>
-	</tr>
-</table>
-</form:form>
-<form:form commandName="settings">
-<c:if test="${settings.prop != null}" >
-<table>
+<br/>
+<link rel="stylesheet" type="text/css" href="<c:url value="/js/jquery/jquery.autocomplete.css"/>" />
+
+<script type="text/javascript" src="<c:url value="/js/jquery/jquery.json-1.3.min.js"/>"></script>
+ <script type="text/javascript" src="<c:url value="/js/jquery/jquery.autocomplete.min.js"/>"></script>
+ <script type="text/javascript" src="<c:url value="/js/jquery/jquery.bgiframe.min.js"/>"></script>
+ <script type="text/javascript" src="<c:url value="/js/jquery/autocomplete-data.js"/>"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    
+$("#gui\\.address").autocomplete(gui,{
+		matchContains: true,
+		minChars: 0
+	});
+$("#ospf\\.areaId").autocomplete(areaid, {
+		matchContains: true,
+		minChars: 0
+	});
+
+});
+
+$("#ajaxerror").ajaxError(function() {
+  $(this).text('An error occured..please try again.');
+});
+
+$.fn.serializeObject = function()
+{
+    var o = {};
+    var a = $(":input").serializeArray();
+   // alert(a);
+    jQuery.each(a, function() {
+        if (o[this.name]) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || "");
+        } else {
+            o[this.name] = this.value || "";
+        }
+    });
+    return o;
+};
+
+$("#settingssaveform").submit(function() {
+    var aa=$.toJSON($("values").serializeObject());
+    //alert(aa);
+    $.post("settings_save.htm", aa,
+   function(data){
+   //alert(2);
+    $("#ajaxsuccess").text("Your action was completed");
+
+   },"json");
+    return false;
+});
+
+
+</script>
+<div align="center">
+<div id="ajaxerror" style="color:red">
+</div>
+<div id="ajaxsuccess" style="color:green">
+</div>
+<form:form id="settingssaveform" action="" >
+
+<c:if test="${settings != null}" >
+<table width="600px">
 <thead>
-	<tr><th style="background-color: blue; color:white;" colspan="2">Inter Domain Manager settings</th></tr>
+	<tr width="600px"><th style="background-color: blue; color:white;" colspan="2">Inter Domain Manager settings</th></tr>
 </thead>
 <tbody>
-<c:forEach items="${settings.prop}" var="property">
+<div id="values">
+<c:forEach items="${settings}" var="property">
 <tr>
-	<td class="label">${property.key}</td>
-	<td width="300px" class="value"><form:input path="prop[${property.key}]"/></td>	
+	<td class="label" style="text-align:left">${property.key}</td>
+	<td width="300px" class="value"><input name="${property.key}" value="${property.value}" id="${property.key}"/></td>
 </tr>
 </c:forEach>
+</div>
 </tbody>
-<tfoot>
-	<tr style="background-color: blue; color:white;"><td>&nbsp;</td><td><input width="300px" type="submit" name="_eventId_restart" value="Set Properties" style="width:100px"/></td></tr>
+<tfoot >
+	<tr width="600px" style="background-color: blue; color:white;" ><td colspan="2" style="text-align:center"> <input  width="600px" type="submit" name="_eventId_restart" value="Set Properties" style="width:600px"/></td></tr>
 </tfoot>
 </table>
 </c:if>
-<c:if test="${settings.prop == null}" >
+<c:if test="${settings== null}" >
 	Cannot retrieve settings. Cannot connect to IDM.
-</c:if>	
+</c:if>
 
 </form:form>
+</div>

@@ -16,9 +16,9 @@
 		<binder>
 			<binding property="currentIdm"/>
 		</binder>
-	<!--	<transition on="change" to="logs" bind="true">
+		<!-- transition on="change" to="logs" bind="true">
 			<evaluate expression="manager.getLogsForInterDomainManager(logs.currentIdm)" result="flowScope.logs" />
-		</transition>	-->
+		</transition-->	
 	</view-state>
 
 	<end-state id="no-idm-regitered" view="secure/noIDMRegistered"/>

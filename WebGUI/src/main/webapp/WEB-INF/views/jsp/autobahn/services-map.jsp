@@ -3,8 +3,20 @@
 <script type="text/javascript" src="<c:url value="/js/jquery/jquery.validate.min.js"/>"></script>
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/jquery/tooltip.css"/>"/>
 <script type="text/javascript" src="<c:url value="/js/jquery/jquery.tools.min.js"/>"></script>
+<script>
+     jQuery.noConflict();
+     
+     // Use jQuery via jQuery(...)
+     //jQuery(document).ready(function(){
+     //  jQuery("div").hide();
+     //});
+     
+     // Use Prototype with $(...), etc.
+     //$('someid').hide();
+   </script>
 
-
+<h2><spring:message code="reservationMap.htitle" text="AutoBAHN Reservations and Reachability Map"/></h2>
+<br/>
 <form:form commandName="services">
 
 
@@ -57,12 +69,12 @@
 
 			 jQuery(document).ready(function() {
 
-				 $(function() {		
+				jQuery(function() {		
 						
-					 $("#download_now").tooltip({ 
+					 jQuery("#download_now").tooltip({ 
 							
-							 position: "center left",
-							 offset: [-18, -320],
+							 position: "center right",
+							 offset: [-20, 140],
 							
 							 events: {
 					                def: "click, ''",
@@ -77,12 +89,12 @@
 					    });
 
 						
-					 	$('#close_tooltip').click(function() { 
-					        $(this).parent().hide();        
+					 	jQuery('#close_tooltip').click(function() { 
+					        jQuery(this).parent().hide();        
 					    });
 					    
-					    $('#download_now').click(function() { 
-					        $(this).next().show();
+					    jQuery('#download_now').click(function() { 
+					        jQuery(this).next().show();
 					    });
 
 						 

@@ -12,7 +12,7 @@
 	width:730px;
 	float:left;	
 	margin:30px;
-	cursor:pointer;
+	cursor:hand;
 	
 	z-index:1;
 	

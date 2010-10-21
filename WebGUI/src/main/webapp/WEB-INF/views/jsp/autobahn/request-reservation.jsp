@@ -136,9 +136,9 @@ function dateOffset(date) {
 		<td class="value">
 			<form:select path="request.endPort">
 				<!--form:options items="${friendlyAndIDCPports_all}" itemValue="identifier" itemLabel="friendlyName"/-->
-				<form:options items="${friendlyports_domain}" itemValue="identifier" itemLabel="friendlyName"/>
+				<form:options items="${friendlyports_all}" itemValue="identifier" itemLabel="friendlyName"/>
 				<option disabled="true" value="IDCP">IDCP</option>
-                <form:options items="${idcpPorts_all}" itemValue="identifier1" itemLabel="friendlyName1"/>
+                <form:options items="${idcpPorts_all}" />
 			</form:select>
 		</td>
 		<td class="error"><form:errors path="request.endPort"/></td>
@@ -460,7 +460,7 @@ function dateOffset(date) {
 
     <c:if test="${test!= null}">
         <c:if test="${test.status==true}">
-            <h3 style="color:red">Reservation test succeeded</h3>
+            <h3 style="color:green">Reservation test succeeded</h3>
         </c:if> 
         <c:if test="${test.status==false}">
             <h3 style="color:red">Reservation test failed</h3>

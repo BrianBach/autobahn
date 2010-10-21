@@ -47,7 +47,7 @@
 /* active tab uses a class name "current". it's highlight is also done by moving the background image. */
 .tabs .current, .tabs .current:hover, .tabs li.current a {
 	background-position: -652px -62px;		
-	cursor:default !important; 
+	cursor:hand; 
 	color:#000 !important;
 }
 
@@ -105,7 +105,7 @@
 	width:700px;
 	float:left;	
 	margin:30px;
-	cursor:pointer;
+	cursor:hand;
 	margin-bottom:70px;
 	
 	-moz-border-radius:20px;
@@ -129,12 +129,12 @@
 	/*background:#fff url(h300.png) repeat-x;*/
 	border:1px solid #ccc;
 	position:relative;	
-	height:440px;
+	min-height:440px;
 	
 	width:650px;
 	float:left;	
 	margin:30px;
-	cursor:pointer;
+	cursor:hand;
 	
 	/* CSS3 tweaks for modern browsers */
 	-moz-border-radius:5px;
@@ -293,7 +293,7 @@ button:focus {
 	border:1px solid #ccc;
 	position:relative;
 		
-	height:160px;
+	min-height:160px;
 	width:800px;
 	
 	float:left;	
@@ -312,12 +312,12 @@ button:focus {
 	border:1px solid #ccc;
 	position:relative;
 		
-	height:420px;
+	min-height:440px;
 	width:730px;
 	
 	float:left;	
 	margin:30px;
-	cursor:pointer;
+	cursor:hand;
 	
 
 	/* CSS3 tweaks for modern browsers */

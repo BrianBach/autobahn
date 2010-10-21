@@ -47,7 +47,7 @@ textarea {font-family: Arial, Helvetica, sans;font-size:11px;width: 100%;border:
 p.error {font-family: Arial, Helvetica, sans; color:red;font-size:9px;text-align:left;width:25%;height:20px;}
 
 #collection table {margin:0 0 0 5px;width:100%}
-#collection th {color:#ffffff;border:#000080 1px dotted;background-color:#2d690f;font-size: 11px}
+#collection th {color:#ffffff;border:#000080 1px dotted;background-color:#25648d;font-size: 11px}
 #collection td {color:#000080;border:#C9C9C9 1px solid;background-color:#F5F5F5;font-size: 10px}
 #collection a {color:#ffffff;border:#000080 1px solid;background-color:#000080;font-size:11px;height:30px}
 
@@ -76,7 +76,7 @@ form textarea {font-family: Arial, Helvetica, sans; max-width: 805px; min-width:
 form td.value {font-family: Arial, Helvetica, sans; text-align:left;width:55%;height:20px;color:#000080;}
 
 #collection table {margin:0 0 0 0px;width:100%}
-#collection th {color:#ffffff;border:#000080 1px dotted;background-color:#336699;font-size: 11px}
+#collection th {color:#ffffff;border:#000080 1px dotted;background-color:#25648d;font-size: 11px}
 #collection td {color:#000080;border:#C9C9C9 1px solid;background-color:#F5F5F5;font-size: 10px}
 #collection a {color:#ffffff;border:#000080 1px solid;background-color:#000080;font-size:11px;height:30px}
 
@@ -144,9 +144,9 @@ H2{
 	font-size: 15px;
 	font-weight:bold;
 	color: #fff;
-	background:#336699;
+	background:#25648d;
 	padding:3px 5px;
-	margin-top:20px;
+	margin-top:5px;
 }
 h3{
 	font-family: "trebuchet ms";
@@ -161,7 +161,7 @@ h3{
 	font-size: 15px;
 	font-weight:bold;
 	color: #fff;
-	background:#336699;
+	background:#25648d;
 	padding:3px 5px;
 	margin-top:20px;
 }
@@ -213,6 +213,7 @@ button,input.submit {
   border: 1px solid #999999;
   padding:2px 3px;
   margin:1px;
+  cursor:hand;
 }
 
 input.text:hover,
@@ -228,7 +229,7 @@ button:focus {
   color: #336699;
   background: #fff;
   border: 1px solid #999999;
-  cursor:pointer;
+  cursor:hand;
 }
 
 .menubar {
