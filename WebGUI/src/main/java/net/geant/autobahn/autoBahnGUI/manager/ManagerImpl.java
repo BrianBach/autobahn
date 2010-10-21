@@ -465,7 +465,6 @@ public class ManagerImpl implements Manager, ManagerNotifier {
                 friendlyPorts.add(new PortMap(p_id, p_id + " (" + friendlyName + ")"));
             }
         }
-        System.out.println("ZZZ "+friendlyPorts.size());
         return friendlyPorts;
     }
 	
@@ -672,6 +671,15 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 		if (request.getReservations()== null || request.getReservations().isEmpty()){
 			throw new ManagerException(ManagerException.SERVICE_WITHOUT_RESERVATIONS, "Empty service submitted");
 		}
+		
+        //TODO: These parameters should be retrieved using AAI framework
+        for (int i=0; i<request.getReservations().size(); i++) {
+            request.getReservations().get(i).getAuthParameters().setIdentifier(request.getUserName());
+            request.getReservations().get(i).getAuthParameters().setOrganization(request.getUserHomeDomain());
+            request.getReservations().get(i).getAuthParameters().setProjectMembership("AutoBahn");
+            request.getReservations().get(i).getAuthParameters().setProjectRole(request.getJustification());
+        }
+        
 		logger.info("Verified");
 		logServiceRequest(request);
 		InterDomainManager manager = idms.get(idm);
@@ -680,7 +688,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 		logger.info("Verified");
 		synchronized (manager) {
 			String  id = manager.submitService(request);
-			logger.info ("sumitted");
+			logger.info ("submitted");
 			return id;	
 		}
 	}
@@ -693,10 +701,21 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 		InterDomainManager manager = idms.get(idm);
 		logger.info ("check reservation possibility"+ manager== null);
 		ReservationTest test = new ReservationTest();
-		if (manager == null)
+		if (manager == null) {
 			test.setStatus(false);
-		else
+		}
+		else {
+	        //TODO: These parameters should be retrieved using AAI framework
+		    String[] authParams = request.getDescription().split("\\|");
+		    if (authParams.length >= 4) {
+                request.getAuthParameters().setIdentifier(authParams[0]);
+                request.getAuthParameters().setOrganization(authParams[1]);
+                request.getAuthParameters().setProjectMembership(authParams[2]);
+                request.getAuthParameters().setProjectRole(authParams[3]);
+		    }
+
 			test.setStatus(manager.checkReservationPossibility(request));
+		}
 		return test;	
 	}
 	

@@ -2,6 +2,7 @@ package net.geant.autobahn.idm2dm;
 
 import javax.jws.WebService;
 
+import net.geant.autobahn.aai.AAIException;
 import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
 import net.geant.autobahn.idm2dm.Idm2Dm;
@@ -37,7 +38,7 @@ public class Idm2DmImpl implements Idm2Dm {
 	 * @see net.geant.autobahn.idm2dm.Idm2Dm#checkResources(net.geant.autobahn.network.Link[], net.geant.autobahn.reservation.ReservationParams)
 	 */
 	public DomainConstraints checkResources(Link[] arg0, ReservationParams arg1)
-			throws OversubscribedException {
+			throws OversubscribedException, AAIException {
 
 		return AccessPoint.getInstance().checkResources(arg0, arg1);
 	}

@@ -306,6 +306,13 @@ public class ReservationRequest implements Serializable {
             }
         }
         
+        if (getAuthParameters() != null) {
+            res += "    User identifier: " + getAuthParameters().getIdentifier() + "\n";
+            res += "    User organization: " + getAuthParameters().getOrganization() + "\n";
+            res += "    User project membership: " + getAuthParameters().getProjectMembership() + "\n";
+            res += "    User project role: " + getAuthParameters().getProjectRole() + "\n";
+        }
+        
         return res;
 	}
 

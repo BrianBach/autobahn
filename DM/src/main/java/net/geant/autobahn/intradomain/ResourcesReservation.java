@@ -187,20 +187,18 @@ public class ResourcesReservation {
 	 *         of possible paths, null if the given links are not correct.
 	 * @throws OversubscribedException
 	 *             When domain do not have enough resources in the given period
+	 * @throws AAIException
+	 *             Authorization not granted  
 	 */
 	public DomainConstraints checkResources(Link[] links,
-			ReservationParams par) throws OversubscribedException {
+			ReservationParams par) throws OversubscribedException, AAIException {
 		
 		final Link ingress = links[0];
 		final Link egress = links[links.length - 1];
 		
 		UserAuthorizer uauthorizer=new UserAuthorizer(par);
-		
-		try {
-		    uauthorizer.checkSimpleParameters();
-		} catch (AAIException aaie) {
-		    //TODO: error handling
-		}
+		// Throws AAIException if check fails
+	    uauthorizer.checkSimpleParameters();
 		
         TopologyAbstraction ta = new TopologyAbstractionClient(taAddress);
 		GenericLink src = ta.getEdgeLink(ingress);
@@ -286,11 +284,8 @@ public class ResourcesReservation {
 		}
 		
 		if(results.size() > 0) {
-            try {
-                results = uauthorizer.filterPaths(results);
-            } catch (AAIException aaie) {
-                // TODO: error handling
-            }
+	        // Throws AAIException if check fails
+            results = uauthorizer.filterPaths(results);
 		        
 			DomainConstraints dcon = new DomainConstraints();
 			

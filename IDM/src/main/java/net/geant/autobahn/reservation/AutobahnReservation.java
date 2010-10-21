@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
+import net.geant.autobahn.aai.AAIException;
 import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
 import net.geant.autobahn.idm2dm.Idm2Dm;
@@ -138,8 +139,9 @@ public abstract class AutobahnReservation extends Reservation implements Runnabl
 	 * 
 	 * @return
 	 * @throws OversubscribedException
+	 * @throws AAIException 
 	 */
-	public DomainConstraints checkResources() throws OversubscribedException {
+	public DomainConstraints checkResources() throws OversubscribedException, AAIException {
         Link[] links = path.getLinksForDomain(localDomainID);
         ReservationParams params = getReservationParameters(localDomainID);
         

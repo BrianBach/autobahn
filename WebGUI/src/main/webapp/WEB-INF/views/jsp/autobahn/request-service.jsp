@@ -61,7 +61,7 @@ cursor:pointer;
 	<tr>
 		<td class="label"><spring:message code="service.userName"/></td>
 		<td class="value">
-			<form:input path="userName" disabled="true"/>
+			<form:input path="userName" disabled="false"/>
 		</td>
 		<td class="error"><form:errors path="userName"/></td>
 	</tr>

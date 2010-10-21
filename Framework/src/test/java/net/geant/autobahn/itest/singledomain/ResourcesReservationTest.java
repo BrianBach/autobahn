@@ -15,6 +15,7 @@ import java.util.Properties;
 import javax.xml.ws.Endpoint;
 
 import junit.framework.TestCase;
+import net.geant.autobahn.aai.AAIException;
 import net.geant.autobahn.constraints.ConstraintsNames;
 import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.constraints.PathConstraints;
@@ -164,7 +165,7 @@ public class ResourcesReservationTest extends TestCase {
         Calpoint.stop();
     }
 
-    public void testCheckingEmpty() throws OversubscribedException {
+    public void testCheckingEmpty() throws OversubscribedException, AAIException {
         System.out.println("---testCheckingEmpty");
         Link[] links = new Link[] {
                 all_links.get("10.13.64.3"), 
@@ -178,7 +179,7 @@ public class ResourcesReservationTest extends TestCase {
     }
     
     public void testReservingAll() throws OversubscribedException,
-            ConstraintsAlreadyUsedException {
+            ConstraintsAlreadyUsedException, AAIException {
         System.out.println("---testReservingAll");
         Link[] links = new Link[] {
                 all_links.get("10.13.64.3"), 
@@ -200,7 +201,7 @@ public class ResourcesReservationTest extends TestCase {
         assertEquals(1, dcon.getPathConstraints().size());
     }
     
-    public void testReservingPartOfCapacity() throws ConstraintsAlreadyUsedException, OversubscribedException {
+    public void testReservingPartOfCapacity() throws ConstraintsAlreadyUsedException, OversubscribedException, AAIException {
         System.out.println("---testReservingPartOfCapacity");
         Link[] links = new Link[] {
                 all_links.get("10.13.64.3"), 
@@ -220,7 +221,7 @@ public class ResourcesReservationTest extends TestCase {
     }
     
     public void testNotOverlapping() throws ConstraintsAlreadyUsedException,
-            OversubscribedException {
+            OversubscribedException, AAIException {
         System.out.println("---testNotOverlapping");
         Link[] links = new Link[] {
                 all_links.get("10.13.64.3"), 
@@ -244,7 +245,7 @@ public class ResourcesReservationTest extends TestCase {
     }
     
     public void testReservingSameConstraints() throws OversubscribedException,
-            ConstraintsAlreadyUsedException {
+            ConstraintsAlreadyUsedException, AAIException {
         System.out.println("---testReservingSameConstraints");
         Link[] links = new Link[] {
                 all_links.get("10.13.64.3"), 
@@ -267,7 +268,7 @@ public class ResourcesReservationTest extends TestCase {
     }
 
     public void testReservingOverlapping() throws OversubscribedException,
-            ConstraintsAlreadyUsedException {
+            ConstraintsAlreadyUsedException, AAIException {
         System.out.println("---testReservingOverlapping");
         Link[] links = new Link[] { 
                 all_links.get("10.13.64.3"),
@@ -284,7 +285,7 @@ public class ResourcesReservationTest extends TestCase {
     }
     
     public void testReservingOverlappingSetupTime() throws OversubscribedException,
-            ConstraintsAlreadyUsedException {
+            ConstraintsAlreadyUsedException, AAIException {
         System.out.println("---testReservingOverlappingSetupTime");
         
         props.setProperty("tool.time.setup", "60");
@@ -311,7 +312,7 @@ public class ResourcesReservationTest extends TestCase {
     }
 
     public void testReservingAndRemoving()
-            throws ConstraintsAlreadyUsedException, OversubscribedException {
+            throws ConstraintsAlreadyUsedException, OversubscribedException, AAIException {
         System.out.println("---testReservingAndRemoving");
         Link[] links = new Link[] { 
                 all_links.get("10.13.64.3"),
@@ -337,7 +338,7 @@ public class ResourcesReservationTest extends TestCase {
     
     public void testReservingAndFinishing()
             throws ConstraintsAlreadyUsedException, InterruptedException,
-            OversubscribedException {
+            OversubscribedException, AAIException {
         System.out.println("---testReservingAndFinishing");
         
         Link[] links = new Link[] { 
@@ -370,7 +371,7 @@ public class ResourcesReservationTest extends TestCase {
     
     // ---------------- MODIFICATION ----------------------
     public void testSuccessfullModifying()
-            throws ConstraintsAlreadyUsedException, OversubscribedException {
+            throws ConstraintsAlreadyUsedException, OversubscribedException, AAIException {
         System.out.println("---testSuccessfullModifying");
         Link[] links = new Link[] { 
                 all_links.get("10.13.64.3"),
@@ -396,7 +397,7 @@ public class ResourcesReservationTest extends TestCase {
         } catch (OversubscribedException e) { }
     }
     
-    public void testModifyingConfilictingReservation() throws ConstraintsAlreadyUsedException, OversubscribedException {
+    public void testModifyingConfilictingReservation() throws ConstraintsAlreadyUsedException, OversubscribedException, AAIException {
         System.out.println("---testModifyingConfilictingReservation");
         Link[] links = new Link[] { 
                 all_links.get("10.13.64.3"),
@@ -422,7 +423,7 @@ public class ResourcesReservationTest extends TestCase {
 
     public void testModifyingActiveReservation()
             throws ConstraintsAlreadyUsedException, InterruptedException,
-            OversubscribedException {
+            OversubscribedException, AAIException {
         System.out.println("---testModifyingActiveReservation");
         Link[] links = new Link[] { 
                 all_links.get("10.13.64.3"),
@@ -467,7 +468,7 @@ public class ResourcesReservationTest extends TestCase {
     
     // -------------------- HELPERS -----------------
     public DomainConstraints check(Link[] links, long capacity, Calendar start,
-            Calendar end) throws OversubscribedException {
+            Calendar end) throws OversubscribedException, AAIException {
         
         ReservationParams params = new ReservationParams();
         
@@ -479,7 +480,7 @@ public class ResourcesReservationTest extends TestCase {
     }
 
     public DomainConstraints check(Link[] links, long capacity, String sdate,
-            String edate) throws OversubscribedException {
+            String edate) throws OversubscribedException, AAIException {
 
         return check(links, capacity, cal(sdate), cal(edate));
     }

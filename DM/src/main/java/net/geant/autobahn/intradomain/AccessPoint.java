@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import net.geant.autobahn.aai.AAIException;
 import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.dao.hibernate.DmHibernateUtil;
 import net.geant.autobahn.dm2idm.Dm2Idm;
@@ -203,7 +204,7 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
 	 * @see net.geant.autobahn.idm2dm.Idm2Dm#checkResources(net.geant.autobahn.network.Link[], net.geant.autobahn.reservation.ReservationParams)
 	 */
 	public DomainConstraints checkResources(Link[] arg0, ReservationParams arg1)
-			throws OversubscribedException {
+			throws OversubscribedException, AAIException {
 
 		return intradomainManager.checkResources(arg0, arg1);
 	}

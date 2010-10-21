@@ -8,6 +8,7 @@ import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 
+import net.geant.autobahn.aai.AAIException;
 import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.LinkIdentifiers;
@@ -36,11 +37,14 @@ public interface Idm2Dm {
 	 * @throws OversubscribedException
 	 *             When reservation cannot be done due to exceeding capacity in
 	 *             the given time period
+     * @throws AAIException
+     *             When authorization for reservation cannot be granted
+	 *         
 	 */
 	@WebMethod
 	@WebResult(name="DomainConstraints")
 	DomainConstraints checkResources(Link[] links,
-			ReservationParams params) throws OversubscribedException;
+			ReservationParams params) throws OversubscribedException, AAIException;
 
 	/**
 	 * Reserves capacity of link identified by linkId. Reservation of required
