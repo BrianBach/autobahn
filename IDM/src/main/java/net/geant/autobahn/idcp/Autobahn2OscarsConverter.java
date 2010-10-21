@@ -4,20 +4,19 @@
 package net.geant.autobahn.idcp;
 
 
+
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.geant.autobahn.idcp.notify.OscarsNotifyClient;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.Path;
 import net.geant.autobahn.network.Port;
 import net.geant.autobahn.reservation.AutobahnReservation;
 import net.geant.autobahn.reservation.Reservation;
 import net.geant.autobahn.reservation.ReservationErrors;
-import net.geant.autobahn.reservation.ReservationStatusListener;
 
 import org.apache.log4j.Logger;
 
@@ -25,11 +24,10 @@ import org.apache.log4j.Logger;
  * AutoBAHN to OSCARS client facade
  * @author Michal
  */
-public class Autobahn2OscarsConverter implements ReservationStatusListener {
+public class Autobahn2OscarsConverter { 
 		
 	private static Logger log = Logger.getLogger(Autobahn2OscarsConverter.class);
 	
-	private Map<String, Reservation> cache = new HashMap<String, Reservation>();
     private static Map<String, String> vlans = new HashMap<String, String>();
     private String idcpServer;
 
@@ -52,8 +50,8 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
     public int scheduleReservation(AutobahnReservation reservation) {
 		
     	// reservations starting at idcp and terminating at autobahn cannot be supported as idcp side does not have autobahn topology
-	    // we should schedule it and catch an exception, unfortunately it is not much descriptive so we quit here
-	    if (reservation.isIdcp2AbReservation() && !reservation.isAb2IdcpReservation())
+	    // we should schedule it though and catch an exception, unfortunately the exception is not much descriptive so we quit here
+	    if (reservation.isIdcp2AbReservation() && !reservation.isAb2IdcpReservation()) 
 	    	return ReservationErrors.RESERVATION_NOTSUPPORTED;
     	
         String src = "";
@@ -101,8 +99,6 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
         
         	OscarsClient oscars = new OscarsClient(idcpServer);
         	oscars.scheduleReservation(reservation, src, dest, vlan);
-            cache.put(reservation.getBodID(), reservation);
-            reservation.addStatusListener(this);
             return 0;
         	
         } catch (RemoteException e) {
@@ -150,8 +146,8 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
 		String vlan = vlans.get(reservation.getStartPort());
 
 		if (vlan == null) {
-			System.out.println("Warn - no assigned vlan found");
-			vlan = "3210";
+			log.debug("Warn - no assigned vlan found, assigning default vlan " + DEFAULT_VLAN);
+	        vlan = DEFAULT_VLAN;
 		}
 
 		ResDetails res;
@@ -216,6 +212,8 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
         // ingress port before sending the reservation over to IDCP.
         Path res_path = reservation.getPath();
         Link ab2idcp_link = res_path.getIngress(idcpServer);
+        
+        System.out.println("LINK - " + ab2idcp_link);
         Port srcPort;
         if (ab2idcp_link.getStartPort().isIdcpPort()) {
             srcPort = ab2idcp_link.getStartPort();
@@ -227,45 +225,5 @@ public class Autobahn2OscarsConverter implements ReservationStatusListener {
             throw new Exception("This reservation does not include IDCP cloud");
         }
         return srcPort.getBodID();
-	}
-    
-	public void reservationActive(String reservationId) {
-		notifyIDC(reservationId, "PATH_SETUP_COMPLETED");
-	}
-
-	public void reservationCancelled(String reservationId) {
-		notifyIDC(reservationId, "RESERVATION_CANCEL_COMPLETED");
-	}
-
-	public void reservationFinished(String reservationId) {
-		notifyIDC(reservationId, "RESERVATION_CREATE_COMPLETED");
-	}
-
-	public void reservationModified(String reservationId, boolean success) {
-		//not implemented
-	}
-
-	public void reservationProcessingFailed(String reservationId, String cause) {
-		notifyIDC(reservationId, "RESERVATION_CREATE_FAILED");
-	}
-
-	public void reservationScheduled(String reservationId) {
-		notifyIDC(reservationId, "RESERVATION_CREATE_CONFIRMED");
-	}
-	
-	private void notifyIDC(String reservationId, String eventName) {
-		
-		Reservation res = cache.get(reservationId);
-		if (res != null) { 
-			  
-			OscarsNotifyClient client = new OscarsNotifyClient(res.getIdcpServer() + "Notify");
-			
-			try {
-			
-				client.Notify(res, eventName);
-			} catch(Exception e) {
-				log.info("Notify sending error: " + e.getMessage());
-			}
-		}
 	}
 }
