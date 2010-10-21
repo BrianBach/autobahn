@@ -120,11 +120,7 @@ cursor:pointer;
 	</table>
 	<br>
 	</div>
-	
-	</form:form>
-</c:if>
-	</div>
-	<br>
+	  <br>
 	<table class="pos1">
 
 	<tr>
@@ -136,4 +132,8 @@ cursor:pointer;
 	</td>
 	</tr>
 	</table>
+	</form:form>
+</c:if>
+	</div>
+	
 
