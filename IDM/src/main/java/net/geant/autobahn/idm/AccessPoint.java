@@ -1050,6 +1050,8 @@ public final class AccessPoint implements UserAccessPoint,
 		        	log.info("Link: " + l + " acquired");
 		        	topology.insertLink(l);
 		        }
+		        // Also insert IDCP topology information
+		        retrieveIdcpTopology();
 	        
 	        } catch(Exception e) {
 	        	log.error("Error when saving link.", e);
@@ -1061,8 +1063,6 @@ public final class AccessPoint implements UserAccessPoint,
     
     @Override
 	public void restorationCompleted() {
-        retrieveIdcpTopology();
-        
     	reservationProcessor.setRestorationMode(false);
         if(startupNotifier != null)
         	startupNotifier.domainUp(this.domainURL);
@@ -1171,6 +1171,8 @@ public final class AccessPoint implements UserAccessPoint,
 					log.info("Link: " + l + " acquired from external source");
 					topology.insertLink(l);
 				}
+                // Also insert IDCP topology information
+                retrieveIdcpTopology();
 			}
 		} catch(Exception e) {
 			log.error("Problem z set topo, ", e);
