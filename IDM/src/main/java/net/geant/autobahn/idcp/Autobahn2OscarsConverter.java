@@ -5,11 +5,15 @@ package net.geant.autobahn.idcp;
 
 
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.Path;
@@ -30,6 +34,7 @@ public class Autobahn2OscarsConverter {
 	
     private static Map<String, String> vlans = new HashMap<String, String>();
     private String idcpServer;
+    private Properties portsMapping;
 
     private static final String DEFAULT_VLAN = "3210";  
     static {
@@ -41,19 +46,18 @@ public class Autobahn2OscarsConverter {
         vlans.put("10.14.32.2", "3207"); //GAR
     }
 
-    public Autobahn2OscarsConverter() { }
-    
     public Autobahn2OscarsConverter(String idcpServer) {
         this.idcpServer = idcpServer;
+        this.portsMapping = loadAutobahn2IdcpPorts();
     }
     
     public int scheduleReservation(AutobahnReservation reservation) {
 		
-    	// reservations starting at idcp and terminating at autobahn cannot be supported as idcp side does not have autobahn topology
-	    // we should schedule it though and catch an exception, unfortunately the exception is not much descriptive so we quit here
+    	// Reservations starting from an idcp domain and terminating at autobahn domain cannot be supported as the idcp side is not aware of autobahn 
+    	// topology. Still we should allow this kind of reservations, however exceptions thrown by the idcp is less than descriptive so we quit here  
 	    if (reservation.isIdcp2AbReservation() && !reservation.isAb2IdcpReservation()) 
 	    	return ReservationErrors.RESERVATION_NOTSUPPORTED;
-    	
+
         String src = "";
         
         try {
@@ -88,12 +92,21 @@ public class Autobahn2OscarsConverter {
         		return ReservationErrors.COMMUNICATION_ERROR;
         	}
         }
-	    	    
+                	    	    
 	    String vlan = vlans.get(src);
 	    if (vlan == null) {
 	    	log.debug("Warn - no assigned vlan found, assigning default vlan " + DEFAULT_VLAN);
 	        vlan = DEFAULT_VLAN;
 	    }
+	    
+        for (Enumeration e = portsMapping.keys(); e.hasMoreElements(); ) {
+        	
+        	String abEgress = (String)e.nextElement();
+        	if (src.equals(abEgress)) { 
+        		src = portsMapping.getProperty(((String)e.nextElement())); // found idcp ingress
+        		break;
+        	}
+        }
 	    
         try {
         
@@ -225,5 +238,26 @@ public class Autobahn2OscarsConverter {
             throw new Exception("This reservation does not include IDCP cloud");
         }
         return srcPort.getBodID();
+	}
+    
+    private Properties loadAutobahn2IdcpPorts() {
+		
+    	/*
+    	Idcp servers are defined in idm.properties file as strings that begin with idcp. sequence.
+    	Try to find for each idcp server its property file according to the following pattern:
+    	if idm.properties has idcp.oscars property, then look for idcp.oscars.properties file
+    	*/
+		Properties properties = new Properties();
+        
+		try {
+			InputStream is = getClass().getClassLoader().getResourceAsStream("etc/" + idcpServer + ".properties");
+			properties.load(is);
+			is.close();
+			log.debug(properties.size() + " autobahn<->idcp ports loaded");
+			
+		} catch (IOException e) {
+			log.debug("Autobahn2Idcp ports for " + idcpServer + " could not be loaded: " + e.getMessage());
+		}
+		return properties;
 	}
 }
