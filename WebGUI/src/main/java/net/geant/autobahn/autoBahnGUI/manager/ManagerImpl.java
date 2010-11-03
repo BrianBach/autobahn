@@ -277,10 +277,11 @@ public class ManagerImpl implements Manager, ManagerNotifier {
         
         for (String p_id : ports) {
             String friendlyName = getFriendlyNamefromLS(p_id);
-            if (friendlyName == null || friendlyName.trim().equals("")) {
+            if (friendlyName == null || friendlyName.trim().equals("") 
+                    || friendlyName.trim().equals("null")) {
                 friendlyPorts.add(new PortMap(p_id, p_id));                
             } else {
-                friendlyPorts.add(new PortMap(p_id, p_id + " (" + friendlyName + ")"));
+                friendlyPorts.add(new PortMap(p_id, friendlyName.trim() + " (" + p_id + ")"));
             }
         }
         return friendlyPorts;
@@ -449,7 +450,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	
     /*
      * (non-Javadoc)
-     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllFriendlyPorts()
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getFriendlyInterDomainManagerPorts()
      */
     public List<PortMap> getFriendlyInterDomainManagerPorts(String idmIdentifier) {
         List<String> ports = getInterDomainManagerPorts(idmIdentifier);
@@ -459,10 +460,11 @@ public class ManagerImpl implements Manager, ManagerNotifier {
         }
         for (String p_id : ports) {
             String friendlyName = getFriendlyNamefromLS(p_id);
-            if (friendlyName == null || friendlyName.trim().equals("")) {
+            if (friendlyName == null || friendlyName.trim().equals("")
+                    || friendlyName.trim().equals("null")) {
                 friendlyPorts.add(new PortMap(p_id, p_id));                
             } else {
-                friendlyPorts.add(new PortMap(p_id, p_id + " (" + friendlyName + ")"));
+                friendlyPorts.add(new PortMap(p_id, friendlyName.trim() + " (" + p_id + ")"));
             }
         }
         return friendlyPorts;
