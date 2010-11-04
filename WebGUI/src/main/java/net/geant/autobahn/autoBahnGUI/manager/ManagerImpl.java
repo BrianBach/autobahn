@@ -511,20 +511,25 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	}
 	
 	/**
-	 * Make actions needed when  new IDM appear for first time  
-	 * @param idm
+	 * Make actions needed when  new IDM appear for first time
+	 * 
+     * @param idmName - Unique Name of the IDM domain, e.g. Geant
+	 * @param idmUrl - URL where the IDM is listening
 	 * @return
 	 */
-	public InterDomainManager newInterDomainManagerConnected (String idm){
-		int index = idm.indexOf("/interdomain");
+	public InterDomainManager newInterDomainManagerConnected(String idmName, String idmUrl) {
+		int index = idmUrl.indexOf("/interdomain");
 		String url;
-		if (index > 0)
-			url = idm.substring(0, index);
-		else
-			url=idm;
-		InterDomainManager manager = new InterDomainManager (idm, url);
-		if (manager != null)
-			idms.put(idm, manager);
+		if (index > 0) {
+			url = idmUrl.substring(0, index);
+		}
+		else {
+			url = idmUrl;
+		}
+		InterDomainManager manager = new InterDomainManager(idmName, url);
+		if (manager != null) {
+			idms.put(idmName, manager);
+		}
 		return manager;
 	}
 	/*
@@ -577,12 +582,13 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	
 	/*
 	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.ManagerNotifier#statusUpdated(java.lang.String, net.geant.autobahn.administration.Status)
+	 * @see net.geant.autobahn.autoBahnGUI.manager.ManagerNotifier#statusUpdated(java.lang.String, java.lang.String, net.geant.autobahn.administration.Status)
 	 */
-	public void statusUpdated(String idm, Status status) {
+	public void statusUpdated(String idm, String idmUrl, Status status) {
 		InterDomainManager manager = idms.get(idm);
-		if (manager == null)
-			manager= newInterDomainManagerConnected(idm);
+		if (manager == null) {
+			manager = newInterDomainManagerConnected(idm, idmUrl);
+		}
 		
 		manager.setStatus(status);
 		

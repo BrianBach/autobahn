@@ -16,7 +16,9 @@ import net.geant.autobahn.administration.Status;
 @WebService(targetNamespace = "http://gui.autobahn.geant.net/", name = "Gui")
 public interface Gui {
 	
-	void statusUpdated(@WebParam(name="idm")String idm, @WebParam(name="status")Status status);
+	void statusUpdated(@WebParam(name="idmName")String idmName, 
+	        @WebParam(name="idmUrl")String idmUrl, 
+	        @WebParam(name="status")Status status);
 	
 	void reservationChanged(@WebParam(name="idm")String idm, 
 			@WebParam(name="serviceId")String serviceId, @WebParam(name="resID")String resID,

@@ -17,7 +17,8 @@ public class GuiNotifier implements Runnable, ReservationStatusListener {
 	
 	private Gui gui;
 	private int update;
-	private String domainId;
+	private String domainName;
+	private String domainUrl;
 	private Thread t;
 	private boolean quit;
 	
@@ -25,7 +26,8 @@ public class GuiNotifier implements Runnable, ReservationStatusListener {
 		
 		gui = new GuiClient(guiAddress);
 		this.update = update;
-		this.domainId = AccessPoint.getInstance().getLocalDomainURL();
+		this.domainName = AccessPoint.getInstance().getLocalDomain();
+        this.domainUrl = AccessPoint.getInstance().getLocalDomainURL();		
 		t = new Thread(this);
 		t.start();
 	}
@@ -46,7 +48,7 @@ public class GuiNotifier implements Runnable, ReservationStatusListener {
 		while (!quit) {
 						
 			Status status = AccessPoint.getInstance().getStatus();
-			gui.statusUpdated(domainId, status);
+			gui.statusUpdated(domainName, domainUrl, status);
 			
 			try {
 				Thread.sleep(update * 1000);
@@ -67,7 +69,7 @@ public class GuiNotifier implements Runnable, ReservationStatusListener {
 	 */
 	public void reservationActive(String reservationId) {
 
-		gui.reservationChanged(domainId, getServiceId(reservationId), reservationId, 
+		gui.reservationChanged(domainName, getServiceId(reservationId), reservationId, 
 				ReservationChangedType.ACTIVE, "ACTIVE");
 	}
 
@@ -76,7 +78,7 @@ public class GuiNotifier implements Runnable, ReservationStatusListener {
 	 */
 	public void reservationCancelled(String reservationId) {
 
-		gui.reservationChanged(domainId, getServiceId(reservationId), reservationId, 
+		gui.reservationChanged(domainName, getServiceId(reservationId), reservationId, 
 				ReservationChangedType.CANCELLED, "CANCELLED");
 	}
 
@@ -85,7 +87,7 @@ public class GuiNotifier implements Runnable, ReservationStatusListener {
 	 */
 	public void reservationFinished(String reservationId) {
 		
-		gui.reservationChanged(domainId, getServiceId(reservationId), reservationId, 
+		gui.reservationChanged(domainName, getServiceId(reservationId), reservationId, 
 				ReservationChangedType.FINISHED, "FINISHED");
 	}
 
@@ -94,7 +96,7 @@ public class GuiNotifier implements Runnable, ReservationStatusListener {
 	 */
 	public void reservationProcessingFailed(String reservationId, String cause) {
 
-		gui.reservationChanged(domainId, getServiceId(reservationId), reservationId, 
+		gui.reservationChanged(domainName, getServiceId(reservationId), reservationId, 
 				ReservationChangedType.FAILED, "FAILED - " + cause);
 	}
 
@@ -103,7 +105,7 @@ public class GuiNotifier implements Runnable, ReservationStatusListener {
 	 */
 	public void reservationScheduled(String reservationId) {
 
-		gui.reservationChanged(domainId, getServiceId(reservationId), reservationId, 
+		gui.reservationChanged(domainName, getServiceId(reservationId), reservationId, 
 				ReservationChangedType.SCHEDULED, "SCHEDULED");
 	}
 	

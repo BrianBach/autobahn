@@ -209,7 +209,7 @@
 								<phase>compile</phase>
 								<configuration>
 									<className>net.geant.autobahn.gui.Gui</className>
-									<outputFile>src/main/webapp/wsdl/gui.wsdl</outputFile>
+									<outputFile>src/main/webapp/WEB-INF/wsdl/gui.wsdl</outputFile>
 									<genWsdl>true</genWsdl>
 									<serviceName>GuiService</serviceName>
 									<verbose>true</verbose>

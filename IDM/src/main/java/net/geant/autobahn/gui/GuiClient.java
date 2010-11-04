@@ -47,12 +47,12 @@ public class GuiClient implements Gui {
 	}
 
 	/* (non-Javadoc)
-	 * @see net.geant.autobahn.gui.Gui#statusUpdated(net.geant.autobahn.gui.Status)
+	 * @see net.geant.autobahn.gui.Gui#statusUpdated(java.lang.String, java.lang.String, net.geant.autobahn.gui.Status)
 	 */
-	public void statusUpdated(String idm, Status status) {
+	public void statusUpdated(String idmName, String idmUrl, Status status) {
 	
 		try {
-			gui.statusUpdated(idm, status);
+			gui.statusUpdated(idmName, idmUrl, status);
 		} catch (Exception e) {
 			log.debug("cannot update gui(status) - " + endPoint);
 		}

@@ -17,10 +17,11 @@ import net.geant.autobahn.gui.ReservationChangedType;
 public interface ManagerNotifier {
 	/**
 	 * Notifies on status update in specified IDM 
-	 * @param idm identifier of IDM 
+	 * @param idmName Unique name identifier of IDM 
+     * @param idmUrl URL of IDM 
 	 * @param status just updated status
 	 */
-	public void statusUpdated (String idm, Status status);
+	public void statusUpdated (String idmName, String idmUrl, Status status);
 	/**
 	 * Notifies on new event appearance in specified JR3 IDM
 	 *  

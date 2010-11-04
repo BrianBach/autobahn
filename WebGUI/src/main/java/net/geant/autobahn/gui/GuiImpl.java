@@ -34,11 +34,11 @@ public class GuiImpl implements Gui {
 	}
 
 	/* (non-Javadoc)
-     * @see net.geant.autobahn.gui.Gui#statusUpdated(java.lang.String  idm ,)net.geant.autobahn.administration.Status  status )*
+     * @see net.geant.autobahn.gui.Gui#statusUpdated(java.lang.String idmName, java.lang.String idmUrl, net.geant.autobahn.administration.Status  status)*
      */
-    public void statusUpdated(java.lang.String idm,net.geant.autobahn.administration.Status status) { 
+    public void statusUpdated(String idmName, String idmUrl, net.geant.autobahn.administration.Status status) { 
         try {
-        	notifier.statusUpdated(idm, status);
+        	notifier.statusUpdated(idmName, idmUrl, status);
         } catch (Exception ex) {
             ex.printStackTrace();
             ///throw new RuntimeException(ex);

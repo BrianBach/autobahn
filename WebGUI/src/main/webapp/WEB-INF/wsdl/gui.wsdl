@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="Gui" targetNamespace="http://gui.autobahn.geant.net/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://gui.autobahn.geant.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+<wsdl:definitions name="GuiService" targetNamespace="http://gui.autobahn.geant.net/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://gui.autobahn.geant.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
   <wsdl:types>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="network.autobahn.geant.net" targetNamespace="network.autobahn.geant.net" version="1.0">
 <xs:complexType name="Link">
@@ -60,6 +60,7 @@
       <xs:element minOccurs="0" name="ASID" type="xs:string"/>
       <xs:element minOccurs="0" name="name" type="xs:string"/>
       <xs:element name="clientDomain" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="idcpServer" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="LinkType">
@@ -100,7 +101,8 @@
   </xs:complexType>
 <xs:complexType name="statusUpdated">
     <xs:sequence>
-      <xs:element minOccurs="0" name="idm" type="xs:string"/>
+      <xs:element minOccurs="0" name="idmName" type="xs:string"/>
+      <xs:element minOccurs="0" name="idmUrl" type="xs:string"/>
       <xs:element minOccurs="0" name="status" type="ns1:Status"/>
     </xs:sequence>
   </xs:complexType>
