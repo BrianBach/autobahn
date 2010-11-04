@@ -10,7 +10,9 @@ import java.util.Properties;
 
 import net.geant.autobahn.aai.AAIException;
 import net.geant.autobahn.constraints.DomainConstraints;
+import net.geant.autobahn.dao.DmDAOFactory;
 import net.geant.autobahn.dao.hibernate.DmHibernateUtil;
+import net.geant.autobahn.dao.hibernate.HibernateDmDAOFactory;
 import net.geant.autobahn.dm2idm.Dm2Idm;
 import net.geant.autobahn.dm2idm.Dm2IdmClient;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
@@ -18,6 +20,7 @@ import net.geant.autobahn.idm2dm.Idm2Dm;
 import net.geant.autobahn.idm2dm.OversubscribedException;
 import net.geant.autobahn.intradomain.administration.DmAdministration;
 import net.geant.autobahn.intradomain.administration.KeyValue;
+import net.geant.autobahn.intradomain.common.GenericInterface;
 import net.geant.autobahn.intradomain.ethernet.EthMonitoring;
 import net.geant.autobahn.intradomain.pathfinder.IntradomainPathfinder;
 import net.geant.autobahn.intradomain.pathfinder.IntradomainPathfinderFactory;
@@ -425,8 +428,24 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
     public void runAfterInitChecks() {
         log.info("===== Post-initialization check for DM module. Watch out for any messages below... =====");
 
-        // Add any checks here
-        
+        // Check if the client ports have descriptions
+        DmDAOFactory daos = HibernateDmDAOFactory.getInstance();
+        List<GenericInterface> giList = daos.getGenericInterfaceDAO().getAll();
+        for (GenericInterface gi : giList) {
+            if (gi.isClientPort()) {
+                if (gi.getDescription() == null || 
+                        gi.getDescription().trim().equals("") || 
+                        gi.getDescription().trim().equals("null")) {
+                    log.info("The client port \"" + gi.getName() + "\" does not have a description " +
+                    		"that can be used as a user-friendly name. Please make sure that " +
+                    		"the relevant description field is filled in cNIS or other " +
+                    		"topology source. Otherwise the port will be displayed to the " +
+                    		"end user with only its internal id.");
+                    
+                }
+            }
+        }
+                
         log.info("===== Post-initialization check for DM module is complete. =====");
     }
 }
