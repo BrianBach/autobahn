@@ -123,6 +123,7 @@ public interface Manager {
     /**
      * Gets all port names (with associated friendly ones from LS) in all IDM
      * registered in WEB GUI
+     * Does not include any IDCP ports
      * @return list of ports names with associated friendly ones
      */
     public List<PortMap> getAllFriendlyPorts ();

@@ -600,10 +600,24 @@ public final class AccessPoint implements UserAccessPoint,
 	public String[] getAllClientPorts() {
 		
 		List<Port> cports = daos.getPortDAO().getClientPorts();
-		String[] cp = new String[cports.size()];
-		for (int i=0; i < cp.length; i++) 
-			cp[i] = cports.get(i).getBodID();
+        List<Port> clientPorts = new ArrayList<Port>();
+        
+		for (int i=0; i < cports.size(); i++) {
+		    Port p = cports.get(i);
+		    
+            // Ignore IDCP ports
+            if (p.isIdcpPort()) {
+                continue;
+            }
+            
+            clientPorts.add(p);
+		}
 		
+        String[] cp = new String[clientPorts.size()];
+        for (int i=0; i < cp.length; i++) {
+            cp[i] = clientPorts.get(i).getBodID();
+        }
+
 		return cp;
 	}
 

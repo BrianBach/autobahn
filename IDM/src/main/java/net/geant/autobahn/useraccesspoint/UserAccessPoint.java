@@ -44,6 +44,7 @@ public interface UserAccessPoint {
 
 	/**
      * Returns all client ports in the global topology
+     * Does not include IDCP ports
      * @return client ports
      */
 	@WebResult(name="Ports")
