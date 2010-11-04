@@ -187,20 +187,6 @@
 									<goal>java2ws</goal>
 								</goals>
 							</execution>
-							<execution>
-								<id>wsdl-proxy</id>
-								<phase>compile</phase>
-								<configuration>
-									<className>net.geant.autobahn.proxy.Proxy</className>
-									<outputFile>src/main/resources/wsdl/proxy.wsdl</outputFile>
-									<genWsdl>true</genWsdl>
-									<serviceName>Proxy</serviceName>
-									<verbose>true</verbose>
-								</configuration>
-								<goals>
-									<goal>java2ws</goal>
-								</goals>
-							</execution>
 						</executions>
 					</plugin>
 				</plugins>
