@@ -30,9 +30,8 @@ public class HibernateServiceDAO extends HibernateGenericDAO<Service, String>
 	}
 
 	public String generateNextId() {
-        String domain = AccessPoint.getInstance().getProperty("domain");
-        domain = domain.replaceAll("http(s?)://", "");
-        domain = domain.substring(0, domain.indexOf("/"));
+        String domain = AccessPoint.getInstance().getProperty("domainName");
+        domain = domain.trim().replaceAll("[\\W]", "_");
         
         return domain + "@" + System.currentTimeMillis(); 
     }
