@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wsdl:definitions name="Idm2Dm" targetNamespace="http://idm2dm.autobahn.geant.net/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://idm2dm.autobahn.geant.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
   <wsdl:types>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="constraints.autobahn.geant.net" targetNamespace="reservation.autobahn.geant.net" version="1.0">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="constraints.autobahn.geant.net" xmlns:ns2="aai.autobahn.geant.net" targetNamespace="reservation.autobahn.geant.net" version="1.0">
 <xs:import namespace="constraints.autobahn.geant.net"/>
+<xs:import namespace="aai.autobahn.geant.net"/>
 <xs:complexType name="TimeRange">
     <xs:sequence>
       <xs:element minOccurs="0" name="startTime" type="xs:dateTime"/>
@@ -19,6 +20,8 @@
       <xs:element minOccurs="0" name="endTime" type="xs:dateTime"/>
       <xs:element minOccurs="0" name="pathConstraints" type="ns1:PathConstraints"/>
       <xs:element name="userVlanId" type="xs:int"/>
+      <xs:element name="mtu" type="xs:int"/>
+      <xs:element minOccurs="0" name="authParameters" type="ns2:UserAuthParameters"/>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>
@@ -81,6 +84,7 @@
       <xs:element minOccurs="0" name="ASID" type="xs:string"/>
       <xs:element minOccurs="0" name="name" type="xs:string"/>
       <xs:element name="clientDomain" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="idcpServer" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="LinkType">
@@ -210,6 +214,10 @@
       <xs:element name="failedLink" nillable="true" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
+  <xs:element name="AAIException" type="tns:AAIException"/>
+  <xs:complexType name="AAIException">
+    <xs:sequence/>
+  </xs:complexType>
 </xs:schema>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="constraints.autobahn.geant.net" targetNamespace="constraints.autobahn.geant.net" version="1.0">
 <xs:complexType name="PathConstraints">
@@ -278,8 +286,19 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="VLANS"/>
       <xs:enumeration value="TIMESLOTS"/>
+      <xs:enumeration value="MTU"/>
     </xs:restriction>
   </xs:simpleType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="aai.autobahn.geant.net" version="1.0">
+<xs:complexType name="UserAuthParameters">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="identifier" type="xs:string"/>
+      <xs:element minOccurs="0" name="organization" type="xs:string"/>
+      <xs:element minOccurs="0" name="projectMembership" type="xs:string"/>
+      <xs:element minOccurs="0" name="projectRole" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
 </xs:schema>
   </wsdl:types>
   <wsdl:message name="getIdentifiers">
@@ -346,6 +365,10 @@
     <wsdl:part name="parameters" element="tns:checkModification">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="AAIException">
+    <wsdl:part name="AAIException" element="tns:AAIException">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="checkModificationResponse">
     <wsdl:part name="parameters" element="tns:checkModificationResponse">
     </wsdl:part>
@@ -383,6 +406,8 @@
       <wsdl:output name="checkResourcesResponse" message="tns:checkResourcesResponse">
     </wsdl:output>
       <wsdl:fault name="OversubscribedException" message="tns:OversubscribedException">
+    </wsdl:fault>
+      <wsdl:fault name="AAIException" message="tns:AAIException">
     </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="prepareTopology">
@@ -455,6 +480,9 @@
       </wsdl:output>
       <wsdl:fault name="OversubscribedException">
         <soap:fault name="OversubscribedException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AAIException">
+        <soap:fault name="AAIException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="prepareTopology">

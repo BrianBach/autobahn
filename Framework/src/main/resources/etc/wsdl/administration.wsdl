@@ -9,48 +9,40 @@
     </xs:sequence>
   </xs:complexType>
 </xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://administration.autobahn.geant.net/" xmlns:ns2="network.autobahn.geant.net" xmlns:ns3="useraccesspoint.autobahn.geant.net" xmlns:ns4="constraints.autobahn.geant.net" xmlns:tns="reservation.autobahn.geant.net" targetNamespace="reservation.autobahn.geant.net" version="1.0">
-<xs:import namespace="http://administration.autobahn.geant.net/"/>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="network.autobahn.geant.net" xmlns:ns2="useraccesspoint.autobahn.geant.net" xmlns:ns3="constraints.autobahn.geant.net" xmlns:ns4="aai.autobahn.geant.net" targetNamespace="reservation.autobahn.geant.net" version="1.0">
 <xs:import namespace="network.autobahn.geant.net"/>
 <xs:import namespace="useraccesspoint.autobahn.geant.net"/>
 <xs:import namespace="constraints.autobahn.geant.net"/>
-<xs:complexType name="Service">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="state" type="ns1:state"/>
-      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
-      <xs:element minOccurs="0" name="justification" type="xs:string"/>
-      <xs:element name="priority" type="xs:int"/>
-      <xs:element minOccurs="0" name="user" type="tns:User"/>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="reservations" nillable="true" type="ns1:autobahnReservation"/>
-    </xs:sequence>
-  </xs:complexType>
+<xs:import namespace="aai.autobahn.geant.net"/>
 <xs:complexType name="User">
     <xs:sequence>
       <xs:element minOccurs="0" name="name" type="xs:string"/>
-      <xs:element minOccurs="0" name="homeDomain" type="ns2:AdminDomain"/>
+      <xs:element minOccurs="0" name="homeDomain" type="ns1:AdminDomain"/>
       <xs:element minOccurs="0" name="email" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="Reservation">
     <xs:sequence>
       <xs:element minOccurs="0" name="bodID" type="xs:string"/>
-      <xs:element minOccurs="0" name="startPort" type="ns2:Port"/>
-      <xs:element minOccurs="0" name="endPort" type="ns2:Port"/>
+      <xs:element minOccurs="0" name="startPort" type="ns1:Port"/>
+      <xs:element minOccurs="0" name="endPort" type="ns1:Port"/>
       <xs:element minOccurs="0" name="startTime" type="xs:dateTime"/>
       <xs:element minOccurs="0" name="endTime" type="xs:dateTime"/>
       <xs:element name="priority" type="xs:int"/>
       <xs:element minOccurs="0" name="description" type="xs:string"/>
       <xs:element name="capacity" type="xs:long"/>
-      <xs:element minOccurs="0" name="userInclude" type="ns3:PathInfo"/>
-      <xs:element minOccurs="0" name="userExclude" type="ns3:PathInfo"/>
+      <xs:element minOccurs="0" name="userInclude" type="ns2:PathInfo"/>
+      <xs:element minOccurs="0" name="userExclude" type="ns2:PathInfo"/>
       <xs:element name="userVlanId" type="xs:int"/>
+      <xs:element name="mtu" type="xs:int"/>
       <xs:element name="maxDelay" type="xs:int"/>
       <xs:element minOccurs="0" name="resiliency" type="xs:string"/>
       <xs:element name="bidirectional" type="xs:boolean"/>
-      <xs:element minOccurs="0" name="globalConstraints" type="ns4:GlobalConstraints"/>
-      <xs:element minOccurs="0" name="path" type="ns2:Path"/>
+      <xs:element minOccurs="0" name="globalConstraints" type="ns3:GlobalConstraints"/>
+      <xs:element minOccurs="0" name="path" type="ns1:Path"/>
       <xs:element name="intState" type="xs:int"/>
       <xs:element name="fake" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="authParameters" type="ns4:UserAuthParameters"/>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>
@@ -61,6 +53,7 @@
       <xs:element minOccurs="0" name="ASID" type="xs:string"/>
       <xs:element minOccurs="0" name="name" type="xs:string"/>
       <xs:element name="clientDomain" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="idcpServer" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="Port">
@@ -139,10 +132,10 @@
     </xs:sequence>
   </xs:complexType>
 </xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="reservation.autobahn.geant.net" xmlns:ns2="network.autobahn.geant.net" xmlns:ns3="administration.autobahn.geant.net" xmlns:tns="http://administration.autobahn.geant.net/" elementFormDefault="unqualified" targetNamespace="http://administration.autobahn.geant.net/" version="1.0">
-<xs:import namespace="reservation.autobahn.geant.net"/>
-<xs:import namespace="network.autobahn.geant.net"/>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="administration.autobahn.geant.net" xmlns:ns2="network.autobahn.geant.net" xmlns:ns3="reservation.autobahn.geant.net" xmlns:tns="http://administration.autobahn.geant.net/" elementFormDefault="unqualified" targetNamespace="http://administration.autobahn.geant.net/" version="1.0">
 <xs:import namespace="administration.autobahn.geant.net"/>
+<xs:import namespace="network.autobahn.geant.net"/>
+<xs:import namespace="reservation.autobahn.geant.net"/>
 <xs:element name="cancelAllServices" type="tns:cancelAllServices"/>
 <xs:element name="cancelAllServicesResponse" type="tns:cancelAllServicesResponse"/>
 <xs:element name="getLog" type="tns:getLog"/>
@@ -170,15 +163,8 @@
   </xs:complexType>
 <xs:complexType name="getServiceResponse">
     <xs:sequence>
-      <xs:element minOccurs="0" name="service" type="ns1:Service"/>
+      <xs:element minOccurs="0" name="service" type="ns1:ServiceType"/>
     </xs:sequence>
-  </xs:complexType>
-<xs:complexType abstract="true" name="autobahnReservation">
-    <xs:complexContent>
-      <xs:extension base="ns1:Reservation">
-        <xs:sequence/>
-      </xs:extension>
-    </xs:complexContent>
   </xs:complexType>
 <xs:complexType name="setTopology">
     <xs:sequence>
@@ -193,7 +179,7 @@
   </xs:complexType>
 <xs:complexType name="getStatusResponse">
     <xs:sequence>
-      <xs:element minOccurs="0" name="status" type="ns3:Status"/>
+      <xs:element minOccurs="0" name="status" type="ns1:Status"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="getProperties">
@@ -201,7 +187,7 @@
   </xs:complexType>
 <xs:complexType name="getPropertiesResponse">
     <xs:sequence>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="Properties" type="ns3:KeyValue"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="Properties" type="ns1:KeyValue"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="getTopology">
@@ -224,7 +210,7 @@
   </xs:complexType>
 <xs:complexType name="setProperties">
     <xs:sequence>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="properties" type="ns3:KeyValue"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="properties" type="ns1:KeyValue"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="setPropertiesResponse">
@@ -241,7 +227,7 @@
   </xs:complexType>
 <xs:complexType name="getServicesResponse">
     <xs:sequence>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="serivces" type="ns1:Service"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="serivces" type="ns1:ServiceType"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="getReservation">
@@ -251,19 +237,9 @@
   </xs:complexType>
 <xs:complexType name="getReservationResponse">
     <xs:sequence>
-      <xs:element minOccurs="0" name="Reservation" type="ns1:Reservation"/>
+      <xs:element minOccurs="0" name="Reservation" type="ns3:Reservation"/>
     </xs:sequence>
   </xs:complexType>
-<xs:simpleType name="state">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="SCHEDULING"/>
-      <xs:enumeration value="SCHEDULED"/>
-      <xs:enumeration value="FAILED"/>
-      <xs:enumeration value="CANCELLING"/>
-      <xs:enumeration value="CANCELLED"/>
-      <xs:enumeration value="FINISHED"/>
-    </xs:restriction>
-  </xs:simpleType>
 </xs:schema>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="constraints.autobahn.geant.net" targetNamespace="constraints.autobahn.geant.net" version="1.0">
 <xs:complexType name="GlobalConstraints">
@@ -338,11 +314,22 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="VLANS"/>
       <xs:enumeration value="TIMESLOTS"/>
+      <xs:enumeration value="MTU"/>
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="network.autobahn.geant.net" xmlns:tns="administration.autobahn.geant.net" targetNamespace="administration.autobahn.geant.net" version="1.0">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="reservation.autobahn.geant.net" xmlns:ns2="network.autobahn.geant.net" xmlns:tns="administration.autobahn.geant.net" targetNamespace="administration.autobahn.geant.net" version="1.0">
+<xs:import namespace="reservation.autobahn.geant.net"/>
 <xs:import namespace="network.autobahn.geant.net"/>
+<xs:complexType name="ServiceType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+      <xs:element minOccurs="0" name="justification" type="xs:string"/>
+      <xs:element name="priority" type="xs:int"/>
+      <xs:element minOccurs="0" name="user" type="ns1:User"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="reservations" nillable="true" type="ns1:Reservation"/>
+    </xs:sequence>
+  </xs:complexType>
 <xs:complexType name="Status">
     <xs:sequence>
       <xs:element minOccurs="0" name="domain" type="xs:string"/>
@@ -354,13 +341,23 @@
 <xs:complexType name="Neighbor">
     <xs:sequence>
       <xs:element minOccurs="0" name="domain" type="xs:string"/>
-      <xs:element minOccurs="0" name="link" type="ns1:Link"/>
+      <xs:element minOccurs="0" name="link" type="ns2:Link"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="KeyValue">
     <xs:sequence>
       <xs:element minOccurs="0" name="key" type="xs:string"/>
       <xs:element minOccurs="0" name="value" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="aai.autobahn.geant.net" version="1.0">
+<xs:complexType name="UserAuthParameters">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="identifier" type="xs:string"/>
+      <xs:element minOccurs="0" name="organization" type="xs:string"/>
+      <xs:element minOccurs="0" name="projectMembership" type="xs:string"/>
+      <xs:element minOccurs="0" name="projectRole" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>

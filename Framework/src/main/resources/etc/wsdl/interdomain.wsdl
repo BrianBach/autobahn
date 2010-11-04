@@ -9,10 +9,11 @@
     </xs:sequence>
   </xs:complexType>
 </xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="network.autobahn.geant.net" xmlns:ns2="useraccesspoint.autobahn.geant.net" xmlns:ns3="constraints.autobahn.geant.net" targetNamespace="reservation.autobahn.geant.net" version="1.0">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="network.autobahn.geant.net" xmlns:ns2="useraccesspoint.autobahn.geant.net" xmlns:ns3="constraints.autobahn.geant.net" xmlns:ns4="aai.autobahn.geant.net" targetNamespace="reservation.autobahn.geant.net" version="1.0">
 <xs:import namespace="network.autobahn.geant.net"/>
 <xs:import namespace="useraccesspoint.autobahn.geant.net"/>
 <xs:import namespace="constraints.autobahn.geant.net"/>
+<xs:import namespace="aai.autobahn.geant.net"/>
 <xs:complexType name="TimeRange">
     <xs:sequence>
       <xs:element minOccurs="0" name="startTime" type="xs:dateTime"/>
@@ -32,6 +33,7 @@
       <xs:element minOccurs="0" name="userInclude" type="ns2:PathInfo"/>
       <xs:element minOccurs="0" name="userExclude" type="ns2:PathInfo"/>
       <xs:element name="userVlanId" type="xs:int"/>
+      <xs:element name="mtu" type="xs:int"/>
       <xs:element name="maxDelay" type="xs:int"/>
       <xs:element minOccurs="0" name="resiliency" type="xs:string"/>
       <xs:element name="bidirectional" type="xs:boolean"/>
@@ -39,6 +41,7 @@
       <xs:element minOccurs="0" name="path" type="ns1:Path"/>
       <xs:element name="intState" type="xs:int"/>
       <xs:element name="fake" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="authParameters" type="ns4:UserAuthParameters"/>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>
@@ -86,6 +89,7 @@
       <xs:element minOccurs="0" name="ASID" type="xs:string"/>
       <xs:element minOccurs="0" name="name" type="xs:string"/>
       <xs:element name="clientDomain" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="idcpServer" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="Path">
@@ -355,8 +359,19 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="VLANS"/>
       <xs:enumeration value="TIMESLOTS"/>
+      <xs:enumeration value="MTU"/>
     </xs:restriction>
   </xs:simpleType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="aai.autobahn.geant.net" version="1.0">
+<xs:complexType name="UserAuthParameters">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="identifier" type="xs:string"/>
+      <xs:element minOccurs="0" name="organization" type="xs:string"/>
+      <xs:element minOccurs="0" name="projectMembership" type="xs:string"/>
+      <xs:element minOccurs="0" name="projectRole" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
 </xs:schema>
   </wsdl:types>
   <wsdl:message name="getIdentifiersResponse">

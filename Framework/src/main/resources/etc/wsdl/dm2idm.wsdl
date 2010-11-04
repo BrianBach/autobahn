@@ -60,6 +60,7 @@
       <xs:element minOccurs="0" name="ASID" type="xs:string"/>
       <xs:element minOccurs="0" name="name" type="xs:string"/>
       <xs:element name="clientDomain" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="idcpServer" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="LinkType">
@@ -95,6 +96,8 @@
 <xs:element name="getIdentifiersResponse" type="tns:getIdentifiersResponse"/>
 <xs:element name="injectAbstractLinks" type="tns:injectAbstractLinks"/>
 <xs:element name="injectAbstractLinksResponse" type="tns:injectAbstractLinksResponse"/>
+<xs:element name="restorationCompleted" type="tns:restorationCompleted"/>
+<xs:element name="restorationCompletedResponse" type="tns:restorationCompletedResponse"/>
 <xs:element name="saveReservationStatusDB" type="tns:saveReservationStatusDB"/>
 <xs:element name="saveReservationStatusDBResponse" type="tns:saveReservationStatusDBResponse"/>
 <xs:complexType name="activate">
@@ -112,6 +115,12 @@
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="injectAbstractLinksResponse">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="restorationCompleted">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="restorationCompletedResponse">
     <xs:sequence/>
   </xs:complexType>
 <xs:complexType name="getIdentifiers">
@@ -156,6 +165,10 @@
     <wsdl:part name="parameters" element="tns:getIdentifiers">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="restorationCompleted">
+    <wsdl:part name="parameters" element="tns:restorationCompleted">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="injectAbstractLinksResponse">
     <wsdl:part name="parameters" element="tns:injectAbstractLinksResponse">
     </wsdl:part>
@@ -166,6 +179,10 @@
   </wsdl:message>
   <wsdl:message name="saveReservationStatusDBResponse">
     <wsdl:part name="parameters" element="tns:saveReservationStatusDBResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="restorationCompletedResponse">
+    <wsdl:part name="parameters" element="tns:restorationCompletedResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="activate">
@@ -199,6 +216,12 @@
       <wsdl:input name="injectAbstractLinks" message="tns:injectAbstractLinks">
     </wsdl:input>
       <wsdl:output name="injectAbstractLinksResponse" message="tns:injectAbstractLinksResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="restorationCompleted">
+      <wsdl:input name="restorationCompleted" message="tns:restorationCompleted">
+    </wsdl:input>
+      <wsdl:output name="restorationCompletedResponse" message="tns:restorationCompletedResponse">
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getIdentifiers">
@@ -237,6 +260,15 @@
         <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="injectAbstractLinksResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="restorationCompleted">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="restorationCompleted">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="restorationCompletedResponse">
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
