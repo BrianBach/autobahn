@@ -168,16 +168,16 @@ label {
         
         <tr>
         	<td></td>
-        	<td style="text-align:left"><input id="logbutton" name="Login" value="Log in" type="submit" class="btnsize"/></td>
+        	<td style="text-align:left"><input id="logbutton" name="Login" value="Log in" type="submit" class="btnsize"/><input id="cancel" name="Cancel" value="Cancel" type="submit" class="btnsize" onclick="window.location='../portal/home.htm'" /></td>
         </tr>
       </table>
      
  </form>
 
-		<!-- yes/no buttons -->
+		<!-- yes/no buttons >
 		<p style="text-align:right">
 			<button class="close"> Cancel </button>
-		</p>
+		</p-->
 	</div>
 
 </div>

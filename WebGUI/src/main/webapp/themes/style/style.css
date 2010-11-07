@@ -378,5 +378,12 @@ form td.error{
     color:red;
 }
 
+.error{
+	padding:2px 5px;
+	font-size:10px;
+	font-weight:bold;
+    color:red;
+}
+
 
 

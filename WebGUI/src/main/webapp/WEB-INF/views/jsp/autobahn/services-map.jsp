@@ -66,13 +66,41 @@
 
 </form:form>
 	<script type="text/javascript">		
+if((screen.width>=1281) && (screen.height>=801)){
+	jQuery(document).ready(function() {
+		jQuery(function() {		
+			jQuery("#download_now").tooltip({ 		
+				 position: "center right",
+				 offset: [-20, 640],
+				
+				 events: {
+			            def: "click, ''",
+			            tooltip: "'','mouseout'"},
+			        onShow: function(){
+			           var tip = this.getTip();
+			           tip.show();
+			        }
+			    })
+			    .dynamic({
+			        top: { direction: 'up' } 
+			});
+			
+			
+			jQuery('#close_tooltip').click(function() { 
+			    jQuery(this).parent().hide();        
+			});
+			
+			jQuery('#download_now').click(function() { 
+			    jQuery(this).next().show();
+			});
 
-			 jQuery(document).ready(function() {
-
-				jQuery(function() {		
-						
-					 jQuery("#download_now").tooltip({ 
-							
+						 
+		}); 	 
+	});													
+} else {
+	jQuery(document).ready(function() {
+		jQuery(function() {						
+			jQuery("#download_now").tooltip({ 				
 							 position: "center right",
 							 offset: [-20, 140],
 							
@@ -99,7 +127,11 @@
 
 						 
 					}); 	 
-			 });
+			 });							
+}
+
+			 
+
 
 </script>
 

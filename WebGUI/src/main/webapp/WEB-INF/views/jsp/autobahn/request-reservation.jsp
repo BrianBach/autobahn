@@ -154,7 +154,7 @@ function dateOffset(date) {
 	</tr>
 
 	<tr>
-	<td class="label"><spring:message code="reservation.startTime"/></td>
+	<td class="label" style="min-width:150px"><spring:message code="reservation.startTime"/><br /><span class="error"><form:errors path="request.startTime"/></span></td>
 	<td class="value">
 		<table style="margin:0px;border:0px; text-align:left">
 			<tr>
@@ -221,10 +221,10 @@ function dateOffset(date) {
 			</tr>
 		</table>
 	</td>
-	<td class="error"><form:errors path="request.startTime"/></td>
+	<td class="error"></td>
 </tr>
 <tr>
-	<td class="label"><spring:message code="reservation.endTime"/></td>
+	<td class="label" style="min-width:150px"><spring:message code="reservation.endTime"/><br /><span class="error"><form:errors path="request.endTime"/></span></td>
 	<td class="value">
 		<table style="margin:0px;border:0px; text-align:left">
 			<tr>
@@ -286,7 +286,7 @@ function dateOffset(date) {
 			</tr>
 		</table>
 	</td>
-	<td class="error"><form:errors path="request.endTime"/></td>
+	<td class="error"></td>
 </tr>
         <tr>
             <td class="label"><spring:message code="reservation.maxDelay"/></td>
@@ -304,11 +304,11 @@ function dateOffset(date) {
             <td class="error"><form:errors path="request.capacity"/></td>
         </tr>
         <tr>
-            <td class="label"><spring:message code="reservation.description"/></td>
+            <td class="label" style="min-width:150px"><spring:message code="reservation.description"/><br /><span class="error"><form:errors path="request.description"/></span></td>
             <td class="value">
                 <form:textarea rows="8" cols="65" path="request.description" id="rdescription"/>
             </td>
-            <td class="error"><form:errors path="request.description"/></td>
+            <td class="error"></td>
         </tr>
 
     </table>

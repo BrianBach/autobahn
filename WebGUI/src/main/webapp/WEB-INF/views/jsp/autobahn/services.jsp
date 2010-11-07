@@ -23,8 +23,8 @@
 	
 <div class="images">
 
-	<div id="actions">
-   		<a class="prev">&laquo; BACK</a>
+	<div id="actions" style="padding-left:15px">
+   		<a class="prev" style="position: relative; float: left;">&laquo; BACK</a>
    		<a class="next">NEXT &raquo;</a>
 	</div>
 

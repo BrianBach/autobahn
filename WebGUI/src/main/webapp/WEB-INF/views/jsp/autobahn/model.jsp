@@ -10,6 +10,7 @@
   <head>
     <title><spring:message code="${htitle}" text=""/></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="<c:url value="/themes/style/favicon.ico"/>" />
    	<link rel="stylesheet" href="<c:url value="/themes/style/style.css"/>" type="text/css" />
   	<link rel="stylesheet" href="<c:url value="/scripts/x2/css/xc2_default.css"/>" type="text/css" />
   	<link rel="stylesheet" type="text/css" media="all" href="<c:url value="/scripts/jscalendar/css/jscal2.css"/>" />

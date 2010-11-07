@@ -77,7 +77,7 @@
 			<evaluate expression="service.getReservations().add(reservation.request)"/>
 		</transition>
 		
-		<transition on="cancel" to="request-service"/>
+		<transition on="cancel" to="request-service" bind="false"/>
 		
 		<transition on="test" to="addReservation" bind="true" validate="true" >
 			<evaluate expression="manager.convertTimeToApplicationTimezone(reservation.timezone,reservation.request)"/>

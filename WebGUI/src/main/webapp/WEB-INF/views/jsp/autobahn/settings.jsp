@@ -74,13 +74,14 @@ $("#settingssaveform").submit(function() {
 <c:forEach items="${settings}" var="property">
 <tr>
 	<td class="label" style="text-align:left">${property.key}</td>
-	<td width="300px" class="value"><input name="${property.key}" value="${property.value}" id="${property.key}"/></td>
+	<td width="300px" class="value"><input style="border:2px solid #999999" name="${property.key}" value="${property.value}" id="${property.key}"/></td>
 </tr>
 </c:forEach>
 </div>
 </tbody>
+<br />
 <tfoot >
-	<tr width="600px" style="background-color: blue; color:white;" ><td colspan="2" style="text-align:center"> <input  width="600px" type="submit" name="_eventId_restart" value="Set Properties" style="width:600px"/></td></tr>
+	<tr width="200px" style="color:white;" ><td colspan="2" style="text-align:center"> <input  width="200px" type="submit" name="_eventId_restart" value="Set Properties" style="width:200px"/></td></tr>
 </tfoot>
 </table>
 </c:if>
