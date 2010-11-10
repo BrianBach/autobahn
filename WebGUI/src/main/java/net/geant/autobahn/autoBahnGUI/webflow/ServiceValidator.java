@@ -17,7 +17,6 @@ public class ServiceValidator  extends AbstractAction implements MessageSourceAw
 	@Override
 	protected Event doExecute(RequestContext context) throws Exception {
 		ServiceRequest request =(ServiceRequest)context.getFlowScope().get("service");
-		System.out.println("Elo");
 		if (request == null){
 			context.getFlowScope().put("error", messages.getMessage("service.not.provided", null, Locale.getDefault()));
 			return error();

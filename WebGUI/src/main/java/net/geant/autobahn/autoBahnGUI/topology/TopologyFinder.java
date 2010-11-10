@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 import net.geant.autobahn.administration.Neighbor;
-import net.geant.autobahn.administration.ServiceType;
 import net.geant.autobahn.administration.Status;
 import net.geant.autobahn.autoBahnGUI.manager.InterDomainManager;
 import net.geant.autobahn.autoBahnGUI.manager.Manager;
@@ -17,8 +16,6 @@ import net.geant.autobahn.autoBahnGUI.model.googlemaps.InterfaceComponent;
 import net.geant.autobahn.autoBahnGUI.model.googlemaps.Line;
 import net.geant.autobahn.autoBahnGUI.model.googlemaps.Marker;
 import net.geant.autobahn.autoBahnGUI.model.googlemaps.Topology;
-import net.geant.autobahn.lookup.LookupService;
-import net.geant.autobahn.lookup.LookupServiceException;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.Path;
 import net.geant.autobahn.reservation.Reservation;
@@ -96,113 +93,74 @@ public class TopologyFinder implements TopologyFinderNotifier{
 		top.getMarkers().removeAll();
 		Marker marker = null;
 		InterDomainManager idm = null;
+		InterDomainManager startDomain=null;
+		InterDomainManager endDomain=null;
+		List<String> strings = new ArrayList<String>();
 		List<String> idmsNames = manager.getAllInterdomainManagers();
 		long currentTime = System.currentTimeMillis();
+		
 		for (int i = 0; i < idmsNames.size(); i++) {
+			
 			idm = manager.getInterDomainManager(idmsNames.get(i));
 			Status status = idm.getStatus();
 			
 			if (status != null)
 			{
-				boolean isActive = currentTime-idm.getLastStatusUpdateInMillis()<manager.getTearDownTime();
+				boolean isActive = currentTime-idm.getLastStatusUpdateInMillis() < manager.getTearDownTime();
 				marker = createMarker (status.getDomain(),status.getLatitude(),status.getLongitude(),(isActive?Marker.DEFAULT_ICON_ACTIVE:Marker.DEFAULT_ICON_DEACTIVE), createHTMLNodeInfo(idm.getIdentifier(),status));			
 				top.addMarker(marker);
 			}
 		}
-		InterDomainManager startDomain=null;
-		InterDomainManager endDomain=null;
-		List<String> strings = new ArrayList<String>();
-		LookupService lookup = manager.getLookupServiceObject();
+	
 		int state = 0;
-		try {
-			String temp = lookup.QueryIdmLocation(domain);
-			String replace = temp.replace("\n",""); //Without escape characters included
-			idm = manager.getInterDomainManager(replace);
-			
-		} catch (LookupServiceException e) {
-			logger.info("Lookup query failed: " + e.getMessage());
-		}
-		if (idm==null)
-			return top;
-		if (serviceId !=null)
-		{
-			ServiceType service = idm.getService(serviceId);
-			if (service!= null){
-				List<Reservation> reservations = new ArrayList<Reservation>(); 
-				reservations.addAll(service.getReservations());
-				if (reservations==null || reservations.isEmpty())
-					return top;
-	
-				Line line = null;
-				int lenght = reservations.size();
-				for (int i=0;i<lenght;i++){
-					Path path = reservations.get(i).getPath();
-					if (path == null)
-						continue;
-					List<Link> links= path.getLinks();
-					if (links==null)
-						continue;
-					int linkLenght = links.size();
-					Link link =null;
-					for (int j=0;j<linkLenght;j++)
-					{			
-						link = links.get(j);
-						if (link == null)
-							continue;
-						
-						float startLatitude =0;
-						float startLongitude =0;
-						float endLatitude = 0;
-						float endLongitude = 0;
-
-						try {
-							String temp = lookup.QueryIdmLocation(link.getStartPort().getNode().getProvisioningDomain().getAdminDomain().getBodID());
-							String replace = temp.replace("\n",""); 
-							startDomain = manager.getInterDomainManager(replace);
-								
-						} catch (LookupServiceException e) {
-							logger.info("Lookup query failed: " + e.getMessage());
-						}
-	
-							if (startDomain== null){
-								if (link.getStartPort().getBodID().equals("10.10.32.23")||link.getStartPort().getBodID().equals("10.10.32.22")){
-									startLatitude=(float)40.722580;
-									startLongitude=(float)-74.006310;
-								}
-								else
-									continue;
-							}else{
-								
-							startLatitude = startDomain.getStatus().getLatitude();
-							startLongitude = startDomain.getStatus().getLongitude();
-
-							}
-							try {
-								if(link.getEndPort().getNode().getProvisioningDomain().getAdminDomain().isClientDomain()){
-									strings.add(link.getEndPort().getBodID());
-									continue;
-								}
-								String temp = lookup.QueryIdmLocation(link.getEndPort().getNode().getProvisioningDomain().getAdminDomain().getBodID());
-								String replace = temp.replace("\n",""); 
-								endDomain = manager.getInterDomainManager(replace);
-								
-							} catch (LookupServiceException e) {
-								logger.info("Lookup query failed: " + e.getMessage());
-							}
 		
-							if (endDomain == null ){
-								if (link.getEndPort().getBodID().equals("10.10.32.23")||link.getEndPort().getBodID().equals("10.10.32.22")){
-									endLatitude=(float)40.722580;
-									endLongitude=(float)-74.006310;
-								}
-								else
-									continue;
-								
-							}else
-							{
-								endLatitude = endDomain.getStatus().getLatitude();
-								endLongitude = endDomain.getStatus().getLongitude();
-							}
+		idm = manager.getInterDomainManager(domain);
+
+		if (idm == null)
+			return top;
+		
+		if (serviceId !=null){
+			
+			Reservation reservations = idm.getReservation(serviceId);
+			Line line = null;
+			Path path = reservations.getPath();
+			List<Link> links= path.getLinks();
+			
+			int linkLenght = links.size();
+			Link link =null;
+
+				for (int j=0;j<linkLenght;j++){			
+					
+					link = links.get(j);
+					
+					if (link == null)
+						continue;
+						
+					float startLatitude =0;
+					float startLongitude =0;
+					float endLatitude = 0;
+					float endLongitude = 0;
+						
+					startDomain = manager.getInterDomainManager(link.getStartPort().getNode().getProvisioningDomain().getAdminDomain().getBodID());
+					
+					if(startDomain == null)
+						continue;
+						
+					startLatitude = startDomain.getStatus().getLatitude();
+					startLongitude = startDomain.getStatus().getLongitude();
+						
+					if(link.getEndPort().getNode().getProvisioningDomain().getAdminDomain().isClientDomain()){
+						strings.add(link.getEndPort().getBodID());
+						continue;
+					}
+						
+					endDomain = manager.getInterDomainManager(link.getEndPort().getNode().getProvisioningDomain().getAdminDomain().getBodID());
+					
+					if(endDomain == null)
+						continue;
+						
+					endLatitude = endDomain.getStatus().getLatitude();
+					endLongitude = endDomain.getStatus().getLongitude();
 		
 					if(startLatitude == endLatitude && startLongitude == endLongitude)
 						continue;
@@ -211,6 +169,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 					double longitude_midle = (Math.abs(startLongitude-endLongitude))/2+	Math.min(startLongitude,endLongitude);		
 					
 					marker = createMarker(link.getBodID(), lattitude_midle, longitude_midle, Marker.DEFAULT_INFO, createHTMLLinkInfo(link));
+									
 					top.addMarker(marker);
 							
 					line = new Line();
@@ -218,7 +177,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 					line.setStartLongitude(""+startLongitude);
 					line.setEndLattitude(""+lattitude_midle);
 					line.setEndLongitude(""+longitude_midle);
-					line.setColor(Line.getReservationLineColor(reservations.get(i).getState()));
+					line.setColor(Line.getReservationLineColor(reservations.getState()));
 					line.setTickness("5");
 					line.setOblique(0);
 					top.addLine(line);
@@ -228,16 +187,13 @@ public class TopologyFinder implements TopologyFinderNotifier{
 					line.setStartLongitude(""+longitude_midle);
 					line.setEndLattitude(""+endLatitude);
 					line.setEndLongitude(""+endLongitude);
-					line.setColor(Line.getReservationLineColor(reservations.get(i).getState()));
+					line.setColor(Line.getReservationLineColor(reservations.getState()));
 					line.setTickness("5");
 					line.setOblique(0);
 					top.addLine(line);
 					
 					}
-					state = reservations.get(i).getState();
-				}	
-				
-			}
+					state = reservations.getState();
 		}
 
 		if(strings != null)
@@ -247,6 +203,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 	}
 	
 	public Topology setInterfaceTopology(List<String> strings, int state){
+		
 		Line line = null;
 		Topology top = new Topology();
 		Marker marker = null;
@@ -281,23 +238,30 @@ public class TopologyFinder implements TopologyFinderNotifier{
 		Line line = null;
 		String name=null;
 		 List<String> list = null;
-		if (manager==null){
+		
+		 if (manager==null){
 			return;
 		}
+		
 		Map<String, List<InterfaceComponent>> interfaces = new HashMap<String, List<InterfaceComponent>>();		
 		List<String> strings = new ArrayList<String>();
 		InterfaceComponent ic = null;
+		
 		List<String> idmsNames = manager.getAllInterdomainManagers();
+		
 		if (idmsNames == null)
 			return;
+		
 		int length = idmsNames.size();
 		InterDomainManager idm = null;
 		InterDomainManager neighbourIdm=null;
 		long currentTime = System.currentTimeMillis();
+		
 		for (int i=0;i<length;i++){
 			idm = manager.getInterDomainManager(idmsNames.get(i));
 			List<InterfaceComponent> interfaceComponents = new ArrayList<InterfaceComponent>();
 			Status status = idm.getStatus();
+			
 			if (status != null)
 			{			
 				boolean isActive = currentTime-idm.getLastStatusUpdateInMillis()<manager.getTearDownTime();
@@ -309,39 +273,23 @@ public class TopologyFinder implements TopologyFinderNotifier{
 				List<Neighbor> neighbors = status.getNeighbors();
 				if (neighbors==null || neighbors.isEmpty())
 					continue;				
+				
 				int lengthN = neighbors.size();
-		        
-				LookupService lookup = manager.getLookupServiceObject();
 				
 				Status statusNeighbor;
-				for (int j=0;j<lengthN;j++){
 				
-				    String idmLocation = "";
-				    if (lookup != null) {
-    					try {
-    						String temp = lookup.QueryIdmLocation(neighbors.get(j).getDomain());
-    						idmLocation = temp.replace("\n",""); //Without escape characters included
-					
-    					} catch (LookupServiceException e) {
-    						logger.info("Lookup query failed: " + e.getMessage());
-    					}
-			        }
-					
-			        if (idmLocation != null && !idmLocation.equals("")) {
-	                    neighbourIdm = manager.getInterDomainManager(idmLocation);               
-			        }
-			        else {
-			            logger.debug("IDM location could not be obtained from Lookup, falling back to direct contact");
-	                    neighbourIdm = manager.getInterDomainManager(neighbors.get(j).getDomain());
-			        }
-			        
+				for (int j=0;j<lengthN;j++){
+			      
+	             neighbourIdm = manager.getInterDomainManager(neighbors.get(j).getDomain());               
+			 
 					if (neighbourIdm==null)
 						continue;
 					
 				statusNeighbor = neighbourIdm.getStatus();
 				
 				list = manager.getMappedInterDomainManagerPorts(idmsNames.get(i));
-					isActive = currentTime-neighbourIdm.getLastStatusUpdateInMillis()<manager.getTearDownTime();
+				isActive = currentTime-neighbourIdm.getLastStatusUpdateInMillis()<manager.getTearDownTime();
+					
 					if (statusNeighbor!= null){
 							
 							Link link =neighbors.get(j).getLink();

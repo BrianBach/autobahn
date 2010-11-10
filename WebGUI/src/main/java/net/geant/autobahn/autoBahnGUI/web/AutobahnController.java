@@ -98,12 +98,13 @@ public class AutobahnController {
      */
     @RequestMapping("/secure/services-map.htm")
     public void mapHandler (@RequestParam String  service,@RequestParam String  domain, Map<String, Object> model){
-        logger.info("Requesting map with params");
+
+    	logger.info("Requesting map with params");
         String[] linkStatusColor = {Line.DEFAULT_COLOR_ACTIVE,Line.DEFAULT_COLOR_DEACTIVE};
         String[] linkStatusName = {"Up","Down"};
         model.put("linkColors",linkStatusColor);
         model.put("linkStates",linkStatusName);
-        List<ServiceType> services = manager.getServicesForAllInterDomainManagers();
+        Map<String,String> services = manager.getServicesForAllInterDomainManagers();
         model.put ("services", services);
         if (service!=null && service.length()>0){
             model.put("reservationLinkColors",Line.reservationsStates);
@@ -123,7 +124,7 @@ public class AutobahnController {
      }*/
     @RequestMapping("/secure/services-list.htm")
     public void mapServicesListHandler ( Map<String, Object> model){
-        List<ServiceType> services = manager.getServicesForAllInterDomainManagers();
+        Map<String, String> services = manager.getServicesForAllInterDomainManagers();
         model.put ("services", services);
     }
 
@@ -170,8 +171,10 @@ public class AutobahnController {
     public void handleTopologyXML(@RequestParam String service,@RequestParam String domain, Map<String, Object> model){
         logger.debug("handle topology xml");
         Topology topology=null;
-        if (service !=null && service.length()>0)
-            topology=topologyFinder.getGoogleTopology(domain,service);
+        if (service !=null && service.length()>0){
+        	System.out.println("XXX "+domain);
+        	System.out.println("YYY "+service);
+            topology=topologyFinder.getGoogleTopology(domain,service);}
         else
             topology=topologyFinder.getGoogleTopology();
         model.put("topology", topology);
@@ -354,7 +357,6 @@ public class AutobahnController {
             }
              jsonRes.write(response.getWriter());
         } catch (IOException e) {
-        	System.out.println("10");
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 

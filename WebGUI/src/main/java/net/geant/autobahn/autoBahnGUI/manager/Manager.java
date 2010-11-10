@@ -1,5 +1,6 @@
 package net.geant.autobahn.autoBahnGUI.manager;
 import java.util.List;
+import java.util.Map;
 
 import net.geant.autobahn.administration.KeyValue;
 import net.geant.autobahn.administration.ServiceType;
@@ -36,10 +37,10 @@ public interface Manager {
 	 */
 	public List<String> getAllInterdomainManagers ();
 	/**
-	 * Gets list of all services from all IDMs registered in WEB GUI
-	 * @return list of Service objects  
+	 * Gets map of homeDomainID and reservationID from all IDMs registered in WEB GUI
+	 * @return map of reservationID and homeDomainID  
 	 */
-	public List<ServiceType> getServicesForAllInterDomainManagers();
+	public Map<String, String> getServicesForAllInterDomainManagers();
 	/**
 	 * Gets list of all IDMs registered in WEB GUI
 	 * @return list of InterDomain  types members 

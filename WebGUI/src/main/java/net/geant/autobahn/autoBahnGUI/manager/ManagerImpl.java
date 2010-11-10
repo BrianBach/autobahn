@@ -12,10 +12,14 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.TimeZone;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -480,8 +484,8 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 		return manager.getService(identifier);		
 	}*/
 	
-	
-	public List<ServiceType> getServicesForAllInterDomainManagers(){
+	public Map<String,String> getServicesForAllInterDomainManagers(){
+		
 		List<ServiceType> list = new ArrayList<ServiceType>(); 
 		InterDomainManager manager = null;
 		List<ServiceType> managerServices =null;
@@ -495,10 +499,70 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 				continue;
 			list.addAll(managerServices);
 		}	
-		if (list.size() == 0) return null;
-		else
-			return sortServicesByBodyID(list);
+		Map<String,String> map = new HashMap<String, String>();		
+		
+		for (int i = 0; i < list.size(); i++) {
+						
+			List<Reservation> res = list.get(i).getReservations();
+			for (int j = 0; j < res.size(); j++) {
+				
+				String bodyID = res.get(j).getBodID();
+				String homeID = res.get(j).getPath().getHomeDomainID();
+		
+				map.put(bodyID,homeID);
+			}
+		}
+	
+		return sortMapByKey(map);
+		
 	}
+	
+	public static <K, V> LinkedHashMap<K, V> sortMapByKey(final Map<K, V> map) {
+       
+		Comparator<Map.Entry<K, V>> comparator = new Comparator<Entry<K,V>>() {
+          
+			public int compare(Entry<K, V> o1, Entry<K, V> o2) {
+                 return comparableCompare(o1.getKey(), o2.getKey());
+            }
+        
+		};
+        
+		return sortMap(map, comparator);
+	}
+	
+	public static <K, V> LinkedHashMap<K, V> sortMap(final Map<K, V> map, final Comparator<Map.Entry<K, V>> comparator) {
+   
+        List<Map.Entry<K, V>> mapEntries = new LinkedList<Map.Entry<K, V>>(map.entrySet());
+
+        Collections.sort(mapEntries, comparator);
+
+        LinkedHashMap<K, V> result = new LinkedHashMap<K, V>(map.size() + (map.size() / 20));
+       
+        for(Map.Entry<K, V> entry : mapEntries) {
+        	
+                result.put(entry.getKey(), entry.getValue());
+        }
+
+        return result;
+}
+	
+	private static <T> int comparableCompare(T o1, T o2) {
+        
+    	int start1 = ((String) o1).indexOf("@");
+    	int end1 = ((String) o1).indexOf("_");
+    	
+    	int start2 = ((String) o2).indexOf("@");
+    	int end2 = ((String) o2).indexOf("_");
+    	
+    	String str1 = ((String) o1).substring(start1, end1);
+    	String str2 = ((String) o2).substring(start2, end2);
+		
+		@SuppressWarnings("unchecked")
+		int compare = ((Comparable<T>)str1).compareTo((T) str2);
+
+        return (-1) * compare;
+}
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllInterdomainManagers()
