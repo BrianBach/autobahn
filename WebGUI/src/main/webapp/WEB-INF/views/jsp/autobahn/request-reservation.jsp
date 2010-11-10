@@ -115,8 +115,9 @@ function dateOffset(date) {
 <!-- tabs -->
 
 <ul class="tabs">
-    <li><a href="#" class="w2">Required Properties</a></li>
-    <li><a href="#" class="w2">Optional Properties</a></li>
+    <li><a href="#" class="w2">Tab 1</a></li>
+    <li><a href="#" class="w2">Tab 2</a></li>
+    <li><a href="#" class="w2">Tab 3</a></li>
 </ul>
 <div class="panes">
 
@@ -288,13 +289,7 @@ function dateOffset(date) {
 	</td>
 	<td class="error"></td>
 </tr>
-        <tr>
-            <td class="label"><spring:message code="reservation.maxDelay"/></td>
-            <td class="value">
-                <form:input path="request.maxDelay" id="rdelay"/>
-            </td>
-            <td class="error"><form:errors path="request.maxDelay" id="rdelay"/></td>
-        </tr>
+      
         <tr>
             <td class="label"><spring:message code="reservation.capacity"/></td>
             <td class="value">
@@ -303,6 +298,15 @@ function dateOffset(date) {
             </td>
             <td class="error"><form:errors path="request.capacity"/></td>
         </tr>
+        
+        <tr>
+            <td class="label"><spring:message code="reservation.processNow"/></td>
+            <td class="value">
+                <form:checkbox path="request.processNow"/>
+            </td>
+            <td class="error"><form:errors path="request.processNow"/></td>
+        </tr>
+        
         <tr>
             <td class="label" style="min-width:150px"><spring:message code="reservation.description"/><br /><span class="error"><form:errors path="request.description"/></span></td>
             <td class="value">
@@ -314,7 +318,7 @@ function dateOffset(date) {
     </table>
     <br>
 
-	<table class="pos1">
+	<table class="pos">
         <tr>
            <td>
                 <input type="submit" name="_eventId_submit" onmouseover="this.style='background-color: #FFF;'"  
@@ -343,7 +347,13 @@ function dateOffset(date) {
             </td>
             <td class="error"><form:errors path="request.userVlanId"/></td>
         </tr>
-       
+         <tr>
+            <td class="label"><spring:message code="reservation.maxDelay"/></td>
+            <td class="value">
+                <form:input path="request.maxDelay" id="rdelay"/>
+            </td>
+            <td class="error"><form:errors path="request.maxDelay" id="rdelay"/></td>
+        </tr>
        <tr>
 		<td class="label"><spring:message code="reservation.mtu"/></td>
 		<td class="value">
@@ -352,64 +362,7 @@ function dateOffset(date) {
 		<td class="error"><form:errors path="request.mtu"/></td>
     	</tr>
        
-        <tr>
-            <td class="label" valign="top"><spring:message code="reservation.userInclude"/></td>
-            <td>
-                <table>
-                    <tr>
-                        <td class="labelcenter"><spring:message code="reservation.userIncludeDomains"/></td>
-                        <td class="labelcenter"><spring:message code="reservation.userIncludeLinks"/></td>
-                    </tr>
-                    <tr>
-                        <td class="valuecenter">
-                            <form:select path="request.userInclude.domains" multiple="true">
-                                <form:options items="${domains_all}"/>
-                            </form:select>
-                        </td>
-
-                        <td class="valuecenter">
-                            <form:select path="request.userInclude.links" multiple="true">
-                                <form:options items="${links_all}"/>
-                            </form:select>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-            <td class="error">
-                <form:errors path="request.userInclude.domains"/><br>
-                <form:errors path="request.userInclude.links"/>
-            </td>
-        </tr>
-   
-        <tr>
-            <td class="label" valign="top"><spring:message code="reservation.userExclude"/></td>
-            <td>
-                <table>
-                    <tr>
-                        <td class="labelcenter"><spring:message code="reservation.userExcludeDomains"/></td>
-                        <td class="labelcenter"><spring:message code="reservation.userExcludeLinks"/></td>
-                    </tr>
-                    <tr>
-                        <td class="valuecenter">
-                            <form:select path="request.userExclude.domains" multiple="true">
-                                <form:options items="${domains_all}"/>
-                            </form:select>
-                        </td>
-
-                        <td class="valuecenter">
-                            <form:select path="request.userExclude.links" multiple="true">
-                                <form:options items="${links_all}"/>
-                            </form:select>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-            <td class="error">
-                <form:errors path="request.userExclude.domains"/><br>
-                <form:errors path="request.userExclude.links"/>
-            </td>
-        </tr>
- 
+        
         <tr>
             <td class="label"><spring:message code="reservation.resiliency"/></td>
             <td class="value">
@@ -428,17 +381,11 @@ function dateOffset(date) {
             </td>
             <td class="error"><form:errors path="request.priority"/></td>
         </tr>
-        <tr>
-            <td class="label"><spring:message code="reservation.processNow"/></td>
-            <td class="value">
-                <form:checkbox path="request.processNow"/>
-            </td>
-            <td class="error"><form:errors path="request.processNow"/></td>
-        </tr>
+        
 
     </table>
 
-	<table class="pos2">
+	<table class="pos">
         <tr>
            <td>
                 <input type="submit" name="_eventId_submit" 
@@ -454,6 +401,100 @@ function dateOffset(date) {
             </td>
          </tr>
    
+    </table>
+
+</div>
+
+<div>
+<table>
+		<tr>
+            <td class="label" valign="top"><spring:message code="reservation.userInclude"/></td>
+            <td>
+                <table>
+                    <tr>
+                        <td class="labelcenter"><spring:message code="reservation.userIncludeDomains"/></td>
+                        <td class="label"></td>
+                        <td class="label"></td>
+                        <td class="labelcenter"><spring:message code="reservation.userIncludeLinks"/></td>
+                    </tr>
+                    <tr>
+                        <td class="value">
+                            <form:select path="request.userInclude.domains" >
+                                <form:options items="${domains_all}"/>
+                            </form:select>
+                        </td>
+                        <td class="value"></td>
+						<td class="value"></td>
+                        <td class="value">
+                            <form:select path="request.userInclude.links" >
+                                <form:options items="${links_all}"/>
+                            </form:select>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td class="error">
+                <form:errors path="request.userInclude.domains"/><br>
+                <form:errors path="request.userInclude.links"/>
+            </td>
+            
+        </tr>
+   
+        <tr>
+            <td class="label" valign="top"><spring:message code="reservation.userExclude"/></td>
+            <td>
+                <table>
+                    <tr>
+                        <td class="labelcenter"><spring:message code="reservation.userExcludeDomains"/></td>
+                        <td class="label"></td>
+                        <td class="label"></td>
+                        <td class="labelcenter"><spring:message code="reservation.userExcludeLinks"/></td>
+                        
+                    </tr>
+                    <tr>
+                        <td class="value">
+                            <form:select path="request.userExclude.domains" >
+                                <form:options items="${domains_all}"/>
+                            </form:select>
+                        </td>
+                        
+						<td class="value"></td>
+						<td class="value"></td>
+						
+                        <td c class="value">
+                            <form:select path="request.userExclude.links" >
+                                <form:options items="${links_all}"/>
+                            </form:select>
+                        </td>
+                        
+                        
+                        
+                    </tr>
+                </table>
+            </td>
+            <td class="error">
+                <form:errors path="request.userExclude.domains"/><br>
+                <form:errors path="request.userExclude.links"/>
+            </td>
+        </tr>
+
+	</table>
+
+	<table class="pos">
+        <tr>
+           <td>
+                <input type="submit" name="_eventId_submit" 
+                 style="height: 25px; width: 220px"   value="<spring:message code="reservation.submit"/>"/>
+           </td>
+           <td>
+                <input type="submit" name="_eventId_test" 
+                	style="height: 25px; width: 220px"  value="<spring:message code="reservation.test"/>"/>
+            </td>
+            <td>
+                <input type="submit" name="_eventId_cancel"  
+                	style="height: 25px; width: 220px"    value="<spring:message code="reservation.cancel"/>"/>
+            </td>
+         </tr>   
     </table>
 
 </div>

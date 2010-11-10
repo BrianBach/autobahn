@@ -73,7 +73,7 @@ p.error {font-family: Arial, Helvetica, sans; color:red;font-size:9px;text-align
 #footer p {padding:0px; margin:0px;}
 #footer a {color:white}*/
 form textarea {font-family: Arial, Helvetica, sans; max-width: 805px; min-width:500px; }
-form td.value {font-family: Arial, Helvetica, sans; text-align:left;width:55%;height:20px;color:#000080;}
+form td.value {font-family: Arial, Helvetica, sans; text-align:left;width:62%;height:20px;color:#000080;}
 
 #collection table {margin:0 0 0 0px;width:100%}
 #collection th {color:#ffffff;border:#000080 1px dotted;background-color:#25648d;font-size: 11px}
@@ -367,7 +367,6 @@ form td.label {
 	font-size:10px;
 	font-weight:bold;
 	text-align:left;
-
 }
 
 

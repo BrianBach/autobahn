@@ -6,7 +6,7 @@
 	overflow:hidden;	
 
 	/* vertical scrollers have typically larger height than width */	
-	height: 540px;	 
+	height:auto; 
 	width: 730px;
 	border-top:1px solid #ddd;
 	cursor:hand;	
@@ -26,14 +26,14 @@
 	
 	padding:15px;
 	font-size:12px;
-	height:230px;
+	height:auto;
 }
 
 /* elements inside single item */
 .item img {
 	float:left;
 	margin-right:20px;
-	height:80px;
+	height:auto;
 	width:240px;
 }
 
@@ -72,8 +72,7 @@
 	/*background:#fff url(h300.png) repeat-x;*/
 	border:1px solid #ccc;
 	position:relative;	
-	height:590px;
-	
+	height:auto;
 	width:730px;
 	float:left;	
 	margin:30px;

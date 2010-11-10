@@ -262,14 +262,14 @@ button:focus {
 	/* http://www.quirksmode.org/css/forms.html */
 	#inputs label, #inputs input, #inputs textarea, #inputs select {
 		display: block;
-		width: 150px;
+		width: 70px;
 		float: left;
 		margin-bottom: 20px;
 	}
 	
 	#inputs label {
 		text-align: right;
-		width: 75px;
+		width: 50px;
 		padding-right: 20px;
 	}
 	
@@ -277,17 +277,12 @@ button:focus {
 		clear: left;
 	}
 	
-	.pos1 {	
+	.pos {	
 	position:absolute;
 	left:10px;
 	top: 420px;
 	}
 	
-	.pos2 {	
-	position:absolute;
-	left:10px;
-	top: 420px;
-	}
 .home_image {
 	/*background:#fff url(h300.png) repeat-x;*/
 	border:1px solid #ccc;

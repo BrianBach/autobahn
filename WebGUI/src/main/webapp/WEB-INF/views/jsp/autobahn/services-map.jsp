@@ -38,9 +38,12 @@
 	
 
 	<img src="<c:url value="/js/jquery/img/close2.PNG"/>"/ id="close_tooltip">
+	
+	<div class="label_reserv"> Reservations: </div>
 
 	<div class="panel_scroll" id="panel_scroll" >
 	
+	<div align="center">
 	<table style="margin:0" >
 	
 		<c:if test="${services == null}">
@@ -50,23 +53,26 @@
 			</tr>
 			
 		</c:if>
+		
+		
 		 <c:forEach items="${services}" var="service" varStatus="loopStatus">
-		 
-		 	<tr>
-				<td class="label">${loopStatus.count} Reservation:</td>
-				<td><a href="<c:url value="/portal/secure/services-map.htm?service=${service.bodID}&domain=${service.user.homeDomain.bodID}"/>">${service.bodID}</a></td>
+		 	
+		 	<tr >
+		 		<td class="label">${loopStatus.count}#</td>
+				<td ><a href="<c:url value="/portal/secure/services-map.htm?service=${service.key}&domain=${service.value}"/>">${service.key}</a></td>
 			</tr>
 		 
 		 </c:forEach>
-	
-	</table>
+		
+		</table>
+		</div>
 	</div>
 
 </div>
 
 </form:form>
 	<script type="text/javascript">		
-if((screen.width>=1281) && (screen.height>=801)){
+	if((screen.width>=1280) && (screen.height>=800) && (screen.width < 1680)){
 	jQuery(document).ready(function() {
 		jQuery(function() {		
 			jQuery("#download_now").tooltip({ 		
@@ -97,7 +103,74 @@ if((screen.width>=1281) && (screen.height>=801)){
 						 
 		}); 	 
 	});													
-} else {
+}
+
+if((screen.width>=1680) && (screen.height>=1050) && screen.width < 1920 ){
+	jQuery(document).ready(function() {
+		jQuery(function() {		
+			jQuery("#download_now").tooltip({ 		
+				 position: "center right",
+				 offset: [-20, 320],
+				
+				 events: {
+			            def: "click, ''",
+			            tooltip: "'','mouseout'"},
+			        onShow: function(){
+			           var tip = this.getTip();
+			           tip.show();
+			        }
+			    })
+			    .dynamic({
+			        top: { direction: 'up' } 
+			});
+			
+			
+			jQuery('#close_tooltip').click(function() { 
+			    jQuery(this).parent().hide();        
+			});
+			
+			jQuery('#download_now').click(function() { 
+			    jQuery(this).next().show();
+			});
+
+						 
+		}); 	 
+	});													
+}
+if((screen.width>=1920) && (screen.height>=1080) && screen.width < 2048 ){
+
+	jQuery(document).ready(function() {
+		jQuery(function() {		
+			jQuery("#download_now").tooltip({ 		
+				 position: "center right",
+				 offset: [-20, 440],
+				
+				 events: {
+			            def: "click, ''",
+			            tooltip: "'','mouseout'"},
+			        onShow: function(){
+			           var tip = this.getTip();
+			           tip.show();
+			        }
+			    })
+			    .dynamic({
+			        top: { direction: 'up' } 
+			});
+			
+			
+			jQuery('#close_tooltip').click(function() { 
+			    jQuery(this).parent().hide();        
+			});
+			
+			jQuery('#download_now').click(function() { 
+			    jQuery(this).next().show();
+			});
+
+						 
+		}); 	 
+	});													
+}
+else {
 	jQuery(document).ready(function() {
 		jQuery(function() {						
 			jQuery("#download_now").tooltip({ 				
@@ -129,9 +202,6 @@ if((screen.width>=1281) && (screen.height>=801)){
 					}); 	 
 			 });							
 }
-
-			 
-
 
 </script>
 
