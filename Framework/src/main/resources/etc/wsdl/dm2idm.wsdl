@@ -27,7 +27,7 @@
 <xs:complexType name="Port">
     <xs:sequence>
       <xs:element minOccurs="0" name="bodID" type="xs:string"/>
-      <xs:element minOccurs="0" name="address" type="xs:string"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
       <xs:element minOccurs="0" name="technology" type="xs:string"/>
       <xs:element name="bundled" type="xs:boolean"/>
       <xs:element minOccurs="0" name="node" type="tns:Node"/>
