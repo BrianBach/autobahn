@@ -83,16 +83,16 @@ public class InterdomainPathfinderImplDFSTest {
         n3_2 = new Node("PSC", "n3_2", "n3_2", pd3);
         n4_1 = new Node("PSC", "n4_1", "n4_1", pd4);
         
-        p1_1_1 = new Port("p1_1_1", "p1_1_1", "IP", false, n1_1);
-        p2_1_1 = new Port("p2_1_1", "p2_1_1", "IP", false, n2_1);
-        p2_1_2 = new Port("p2_1_2", "p2_1_2", "IP", false, n2_1);
-        p2_2_1 = new Port("p2_2_1", "p2_2_1", "IP", false, n2_2);
-        p2_2_2 = new Port("p2_2_2", "p2_2_2", "IP", false, n2_2);
-        p3_1_1 = new Port("p3_1_1", "p3_1_1", "IP", false, n3_1);
-        p3_1_2 = new Port("p3_1_2", "p3_1_2", "IP", false, n3_1);
-        p3_2_1 = new Port("p3_2_1", "p3_2_1", "IP", false, n3_2);
-        p3_2_2 = new Port("p3_2_2", "p3_2_2", "IP", false, n3_2);
-        p4_1_1 = new Port("p4_1_1", "p4_1_1", "IP", false, n4_1);
+        p1_1_1 = new Port("p1_1_1", "IP", false, n1_1);
+        p2_1_1 = new Port("p2_1_1", "IP", false, n2_1);
+        p2_1_2 = new Port("p2_1_2", "IP", false, n2_1);
+        p2_2_1 = new Port("p2_2_1", "IP", false, n2_2);
+        p2_2_2 = new Port("p2_2_2", "IP", false, n2_2);
+        p3_1_1 = new Port("p3_1_1", "IP", false, n3_1);
+        p3_1_2 = new Port("p3_1_2", "IP", false, n3_1);
+        p3_2_1 = new Port("p3_2_1", "IP", false, n3_2);
+        p3_2_2 = new Port("p3_2_2", "IP", false, n3_2);
+        p4_1_1 = new Port("p4_1_1", "IP", false, n4_1);
         
         l1_2 = Link.createInterDomainLink(p1_1_1, p2_1_1, 1000000000);
         l1_2.setBodID("l1_2");
@@ -111,20 +111,20 @@ public class InterdomainPathfinderImplDFSTest {
         ns.add(n1_1); ns.add(n2_1); ns.add(n2_2); ns.add(n3_1); ns.add(n3_2); ns.add(n4_1);
 
         // Additional multi-homed link at the beginning
-        p1_1_2 = new Port("p1_1_2", "p1_1_2", "IP", false, n1_1);
-        p2_1_3 = new Port("p2_1_3", "p2_1_3", "IP", false, n2_1);
+        p1_1_2 = new Port("p1_1_2", "IP", false, n1_1);
+        p2_1_3 = new Port("p2_1_3", "IP", false, n2_1);
         l1_2_2 = Link.createInterDomainLink(p1_1_2, p2_1_3, 1000000000);
         l1_2_2.setBodID("l1_2_2");
         
         // Additional multi-homed link at the end
-        p3_2_3 = new Port("p3_2_3", "p3_2_3", "IP", false, n3_2);
-        p4_1_2 = new Port("p4_1_2", "p4_1_2", "IP", false, n4_1);
+        p3_2_3 = new Port("p3_2_3", "IP", false, n3_2);
+        p4_1_2 = new Port("p4_1_2", "IP", false, n4_1);
         l3_4_2 = Link.createInterDomainLink(p3_2_3, p4_1_2, 1000000000);
         l3_4_2.setBodID("l3_4_2");
         
         // Additional multi-homed link at the middle
-        p2_2_3 = new Port("p2_2_3", "p2_2_3", "IP", false, n2_2);
-        p3_1_3 = new Port("p3_1_3", "p3_1_3", "IP", false, n3_1);
+        p2_2_3 = new Port("p2_2_3", "IP", false, n2_2);
+        p3_1_3 = new Port("p3_1_3", "IP", false, n3_1);
         l2_3_2 = Link.createInterDomainLink(p2_2_3, p3_1_3, 1000000000);
         l2_3_2.setBodID("l2_3_2");
     }

@@ -256,7 +256,7 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
     		String sportname = gl.getStartInterface().getName();
     		String nodename = gl.getStartInterface().getNode().getName();
     		String bodID = internalIds.generatePortID();
-    		Port sport = new Port(bodID, bodID, "Ethernet", false, absNodes.get(nodename));
+    		Port sport = new Port(bodID, "Ethernet", false, absNodes.get(nodename));
 
     		info.add("Mapping port " + sportname + "\t to " + bodID);
     		
@@ -375,7 +375,7 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
 
 		//Create abs port
 		String dportBodId = identifiers.getPortId();
-		Port dport = new Port(dportBodId, dportBodId, "Ethernet", false, dnode);
+		Port dport = new Port(dportBodId, "Ethernet", false, dnode);
 		absPorts.put(dportname, dport);
 		info.add("Mapping port " + dportname + "\t to " + dportBodId);
 
@@ -409,7 +409,11 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
         		String dname = glink.getEndInterface().getName();
         		String dnode = glink.getEndInterface().getNode().getName();
     			String bodID = internalIds.generatePortID();
-            	Port eport = new Port(bodID, bodID, "Ethernet", false, absNodes.get(dnode));
+    			String ddesc = glink.getEndInterface().getDescription();
+    			if (ddesc == null || ddesc.equals("") || ddesc.equals("null")) {
+    			    ddesc = bodID;
+    			}
+            	Port eport = new Port(bodID, "Ethernet", false, absNodes.get(dnode), ddesc);
             	
         		info.add("Mapping client port " + dname + "\t to " + bodID);
     		    
@@ -474,12 +478,12 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
             	}
             	
             	String portname = internalIds.generatePortID();
-            	Port sport = new Port(portname, portname, "Ethernet", false, absNodes.get(snode.getName()));
+            	Port sport = new Port(portname, "Ethernet", false, absNodes.get(snode.getName()));
 
         		info.add("Mapping port " + snode.getName() + "\t to " + portname);
             	
             	portname = internalIds.generatePortID();
-            	Port eport = new Port(portname, portname, "Ethernet", false, absNodes.get(dnode.getName()));
+            	Port eport = new Port(portname, "Ethernet", false, absNodes.get(dnode.getName()));
             	
             	info.add("Mapping port " + dnode.getName() + "\t to " + portname);
             	

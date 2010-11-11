@@ -6,16 +6,11 @@ INSERT INTO node VALUES (2, NULL, NULL, 'client-node1', NULL, NULL, NULL, NULL, 
 INSERT INTO node VALUES (3, NULL, NULL, 'client-node2', NULL, NULL, NULL, NULL, NULL, NULL, 'client-node2');
 INSERT INTO node VALUES (4, NULL, NULL, 'idcp-node', NULL, NULL, NULL, NULL, NULL, NULL, 'idcp-node');
 
-INSERT INTO generic_interface VALUES (1, NULL, NULL, NULL, 1, 'p1', NULL, 1000000000, NULL, 0, 
-'http://localhost:8080/autobahn/interdomain', false);
-INSERT INTO generic_interface VALUES (2, NULL, NULL, NULL, 2, 'host-port1', NULL, 1000000000, NULL, 0, 
-'http://client-domain1.com', true);
-INSERT INTO generic_interface VALUES (3, NULL, NULL, NULL, 3, 'host-port2', NULL, 1000000000, NULL, 0, 
-'http://client-domain2.com', true);
-INSERT INTO generic_interface VALUES (4, NULL, NULL, NULL, 4, 'idcp-port1', NULL, 1000000000, NULL, 0,
-'http://client-domain.controlplane.net/oscars', true);
-INSERT INTO generic_interface VALUES (5, NULL, NULL, NULL, 4, 'idcp-port2', NULL, 1000000000, NULL, 0,
-'http://client-domain.controlplane.net/oscars', true);
+INSERT INTO generic_interface VALUES (1, NULL, NULL, NULL, 1, 'p1', NULL, 1000000000, NULL, 0, 'http://localhost:8080/autobahn/interdomain', false);
+INSERT INTO generic_interface VALUES (2, NULL, NULL, NULL, 2, 'host-port1', 'A host port 1', 1000000000, NULL, 0, 'http://client-domain1.com', true);
+INSERT INTO generic_interface VALUES (3, NULL, NULL, NULL, 3, 'host-port2', 'A host port 2', 1000000000, NULL, 0, 'http://client-domain2.com', true);
+INSERT INTO generic_interface VALUES (4, NULL, NULL, NULL, 4, 'idcp-port1', 'IDCP port 1', 1000000000, NULL, 0, 'http://client-domain.controlplane.net/oscars', true);
+INSERT INTO generic_interface VALUES (5, NULL, NULL, NULL, 4, 'idcp-port2', 'IDCP port 2', 1000000000, NULL, 0, 'http://client-domain.controlplane.net/oscars', true);
 
 INSERT INTO generic_link VALUES (1, NULL, 1, 2, NULL, false, 0);
 INSERT INTO generic_link VALUES (2, NULL, 1, 3, NULL, false, 0);

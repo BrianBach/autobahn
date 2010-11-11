@@ -636,7 +636,7 @@ CREATE TABLE pcon_range_names (
 
 CREATE TABLE port (
     port_id character varying(255) NOT NULL,
-    address character varying(255),
+    description character varying(255),
     technology character varying(255),
     bundled boolean,
     node character varying(255) NOT NULL

@@ -32,7 +32,7 @@ public class LinkSerializer {
 		LINK_CAPACITY, LINK_RESILIENCY,
 		LINK_TIMESTAMP, LINK_LOCALNAME, LINK_TYPE,
 		LINK_OPER_STATE, LINK_ADMIN_STATE,
-		PORT_ID, PORT_ADDRESS, PORT_TECHNOLOGY, PORT_BUNDLED, 
+		PORT_ID, PORT_DESCRIPTION, PORT_TECHNOLOGY, PORT_BUNDLED, 
 		NODE_ID, NODE_TYPE, NODE_ADDRESS, 
 		NODE_NAME, NODE_COUNTRY, NODE_INSTITUTION,
 		NODE_LONGITUDE, NODE_LATITUDE,
@@ -136,7 +136,7 @@ public class LinkSerializer {
 			throw new IllegalArgumentException("Port cannot null");
 		
 		writeString(OpaqueType.PORT_ID.ordinal(), port.getBodID());
-		writeString(OpaqueType.PORT_ADDRESS.ordinal(), port.getAddress());
+		writeString(OpaqueType.PORT_DESCRIPTION.ordinal(), port.getDescription());
 		writeString(OpaqueType.PORT_TECHNOLOGY.ordinal(), port.getTechnology());
 		writeValue(OpaqueType.PORT_BUNDLED.ordinal(), port.isBundled());
 	}
@@ -284,7 +284,7 @@ public class LinkSerializer {
 		
 		Port port = new Port();
 		port.setBodID(readString(OpaqueType.PORT_ID.ordinal()));
-		port.setAddress(readString(OpaqueType.PORT_ADDRESS.ordinal()));
+		port.setDescription(readString(OpaqueType.PORT_DESCRIPTION.ordinal()));
 		port.setTechnology(readString(OpaqueType.PORT_TECHNOLOGY.ordinal()));
 		port.setBundled((Boolean)readValue(OpaqueType.PORT_BUNDLED.ordinal(), port.isBundled()));
 		return port;
@@ -403,7 +403,7 @@ public class LinkSerializer {
 		node.setName("node");
 		node.setProvisioningDomain(pd);
 		Port port = new Port();
-		port.setAddress("port address");
+		port.setDescription("port description");
 		port.setBodID("port id");
 		port.setTechnology("tech");
 		port.setNode(node);

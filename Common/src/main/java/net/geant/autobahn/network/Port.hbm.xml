@@ -7,7 +7,7 @@
 	<class name="Port" table="PORT" lazy="false">
 		<id name="bodID" column="port_id" type="string" />
 
-		<property name="address" type="string" />
+		<property name="description" type="string" />
 		
 		<property name="technology" type="string" />
 		

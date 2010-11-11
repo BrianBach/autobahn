@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="Port", namespace="network.autobahn.geant.net", propOrder={
-		"bodID", "address", "technology", "bundled", "node"
+		"bodID", "description", "technology", "bundled", "node"
 })
 public class Port implements Serializable {
 
@@ -40,7 +40,7 @@ public class Port implements Serializable {
 
     private String bodID;
     
-    private String address;
+    private String description;
     private String technology;
     private boolean bundled;
     
@@ -56,43 +56,61 @@ public class Port implements Serializable {
     /**
      * Creates the Port object, assigned to the specific Node
      * 
-     * @param address
-     *            String address of the port
      * @param bodAddress
      *            String address used by Autobahn system
      * @param technology
      *            String technology of the port {Fibre | WDM | SDH | SONET |
      *            Ethernet | IP}
      * @param bundled
-     *            boolean whteher the port is to be bundled
+     *            boolean whether the port is to be bundled
      * @param node
      *            Node node object that the port belongs to
+     * @param description
+     *            String user-friendly description of the port. If no description is
+     *            supplied, the bodAddress will be used
      */
-    public Port(String address, String bodAddress, String technology, boolean bundled, Node node) {
+    public Port(String bodAddress, String technology, boolean bundled, Node node, String description) {
         this();
-        this.address = address;
         this.bodID = bodAddress;
         this.technology = technology;
         this.bundled = bundled;
         this.node = node;
+        this.description = (description != null) ? description : bodAddress;
     }
 
     /**
-     * The address that is used to access the port.
+     * Creates the Port object, assigned to the specific Node
      * 
-     * @return Returns the address.
+     * @param bodAddress
+     *            String address used by Autobahn system
+     * @param technology
+     *            String technology of the port {Fibre | WDM | SDH | SONET |
+     *            Ethernet | IP}
+     * @param bundled
+     *            boolean whether the port is to be bundled
+     * @param node
+     *            Node node object that the port belongs to
      */
-    public String getAddress() {
-        return address;
+    public Port(String bodAddress, String technology, boolean bundled, Node node) {
+        this(bodAddress, technology, bundled, node, null);
     }
 
     /**
-     * Sets the address that is used to access the port.
+     * The description of the port.
      * 
-     * @param address The address to set.
+     * @return Returns the description.
      */
-    public void setAddress(String address) {
-        this.address = address;
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Sets the description of the port.
+     * 
+     * @param description The description to set.
+     */
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     /**
@@ -205,9 +223,9 @@ public class Port implements Serializable {
      * 
      * @return boolean true if the port is an abstract port, false otherwise
      */
-    public boolean isAbstract() {
+/*    public boolean isAbstract() {
         return "abstract".equals(address);
-    }
+    }*/
     
     /**
      * Indicates whether the port belongs to the same domain that port2 does

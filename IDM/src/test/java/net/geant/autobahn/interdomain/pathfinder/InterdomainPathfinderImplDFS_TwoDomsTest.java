@@ -78,16 +78,16 @@ public class InterdomainPathfinderImplDFS_TwoDomsTest {
         n10_0_1 = new Node("PSC", "n10_0_1", "n10_0_1", pd818);
         n10_0_0 = new Node("PSC", "n10_0_0", "n10_0_0", pd818);
         
-        p10_32_4 = new Port("p10_32_4", "p10_32_4", "IP", false, n10_0_2);  // client port
-        p20_32_4 = new Port("p20_32_4", "p20_32_4", "IP", false, n20_0_2);  // client port
-        p10_32_3 = new Port("p10_32_3", "p10_32_3", "IP", false, n10_0_1);
-        p10_32_1 = new Port("p10_32_1", "p10_32_1", "IP", false, n10_0_1);
-        p10_32_0 = new Port("p10_32_0", "p10_32_0", "IP", false, n10_0_0);
-        p10_32_2 = new Port("p10_32_2", "p10_32_2", "IP", false, n10_0_0);
-        p20_32_0 = new Port("p20_32_0", "p20_32_0", "IP", false, n20_0_0);
-        p20_32_2 = new Port("p20_32_2", "p20_32_2", "IP", false, n20_0_0);
-        p20_32_3 = new Port("p20_32_3", "p20_32_3", "IP", false, n20_0_1);
-        p20_32_1 = new Port("p20_32_1", "p20_32_1", "IP", false, n20_0_1);
+        p10_32_4 = new Port("p10_32_4", "IP", false, n10_0_2);  // client port
+        p20_32_4 = new Port("p20_32_4", "IP", false, n20_0_2);  // client port
+        p10_32_3 = new Port("p10_32_3", "IP", false, n10_0_1);
+        p10_32_1 = new Port("p10_32_1", "IP", false, n10_0_1);
+        p10_32_0 = new Port("p10_32_0", "IP", false, n10_0_0);
+        p10_32_2 = new Port("p10_32_2", "IP", false, n10_0_0);
+        p20_32_0 = new Port("p20_32_0", "IP", false, n20_0_0);
+        p20_32_2 = new Port("p20_32_2", "IP", false, n20_0_0);
+        p20_32_3 = new Port("p20_32_3", "IP", false, n20_0_1);
+        p20_32_1 = new Port("p20_32_1", "IP", false, n20_0_1);
         
         l10_64_1 = Link.createInterDomainLink(p10_32_3, p10_32_4, 1000000000);
         l10_64_1.setBodID("l10_64_1");

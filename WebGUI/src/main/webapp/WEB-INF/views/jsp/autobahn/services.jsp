@@ -83,8 +83,8 @@
 					<td>${item.startTime.time}</td>
 					<td>${item.endTime.time}</td>
 					<td>${item.priority}</td>
-					<td>${item.startPort.bodID}</td>
-					<td>${item.endPort.bodID}</td>
+					<td>${item.startPort.description} (${item.startPort.bodID})</td>
+					<td>${item.endPort.description} (${item.startPort.bodID})</td>
 					<td>${item.capacity/1000000}</td>
 					<td>${item.userVlanId}</td>
 					<td>${item.mtu}</td>
