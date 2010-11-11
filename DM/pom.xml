@@ -149,8 +149,8 @@
 								<id>wsdl-dmadmin</id>
 								<phase>compile</phase>
 								<configuration>
-									<className>net.geant.autobahn.intradomain.administration.Administration</className>
-									<outputFile>src/main/resources/wsdl/administration.wsdl</outputFile>
+									<className>net.geant.autobahn.intradomain.administration.DmAdministration</className>
+									<outputFile>src/main/resources/wsdl/dmadministration.wsdl</outputFile>
 									<genWsdl>true</genWsdl>
 									<serviceName>Administration</serviceName>
 									<verbose>true</verbose>

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wsdl:definitions name="Tool" targetNamespace="http://tool.autobahn.geant.net/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://tool.autobahn.geant.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
   <wsdl:types>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="constraints.autobahn.geant.net" targetNamespace="reservation.autobahn.geant.net" version="1.0">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="constraints.autobahn.geant.net" xmlns:ns2="aai.autobahn.geant.net" targetNamespace="reservation.autobahn.geant.net" version="1.0">
 <xs:import namespace="constraints.autobahn.geant.net"/>
+<xs:import namespace="aai.autobahn.geant.net"/>
 <xs:complexType name="ReservationParams">
     <xs:sequence>
       <xs:element name="capacity" type="xs:long"/>
@@ -13,6 +14,8 @@
       <xs:element minOccurs="0" name="endTime" type="xs:dateTime"/>
       <xs:element minOccurs="0" name="pathConstraints" type="ns1:PathConstraints"/>
       <xs:element name="userVlanId" type="xs:int"/>
+      <xs:element name="mtu" type="xs:int"/>
+      <xs:element minOccurs="0" name="authParameters" type="ns2:UserAuthParameters"/>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>
@@ -126,6 +129,7 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="VLANS"/>
       <xs:enumeration value="TIMESLOTS"/>
+      <xs:enumeration value="MTU"/>
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>
@@ -163,7 +167,7 @@
       <xs:element minOccurs="0" name="description" type="xs:string"/>
       <xs:element name="bandwidth" type="xs:long"/>
       <xs:element minOccurs="0" name="status" type="xs:string"/>
-      <xs:element minOccurs="0" name="mtu" type="xs:string"/>
+      <xs:element name="mtu" type="xs:int"/>
       <xs:element minOccurs="0" name="domainId" type="xs:string"/>
       <xs:element name="clientPort" type="xs:boolean"/>
     </xs:sequence>
@@ -210,6 +214,16 @@
       <xs:element minOccurs="0" name="type" type="xs:string"/>
       <xs:element minOccurs="0" name="zone" type="xs:string"/>
       <xs:element name="altitude" type="xs:double"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="aai.autobahn.geant.net" version="1.0">
+<xs:complexType name="UserAuthParameters">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="identifier" type="xs:string"/>
+      <xs:element minOccurs="0" name="organization" type="xs:string"/>
+      <xs:element minOccurs="0" name="projectMembership" type="xs:string"/>
+      <xs:element minOccurs="0" name="projectRole" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>

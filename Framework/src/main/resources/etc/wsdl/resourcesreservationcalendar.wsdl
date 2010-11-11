@@ -153,6 +153,7 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="VLANS"/>
       <xs:enumeration value="TIMESLOTS"/>
+      <xs:enumeration value="MTU"/>
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>
@@ -190,7 +191,7 @@
       <xs:element minOccurs="0" name="description" type="xs:string"/>
       <xs:element name="bandwidth" type="xs:long"/>
       <xs:element minOccurs="0" name="status" type="xs:string"/>
-      <xs:element minOccurs="0" name="mtu" type="xs:string"/>
+      <xs:element name="mtu" type="xs:int"/>
       <xs:element minOccurs="0" name="domainId" type="xs:string"/>
       <xs:element name="clientPort" type="xs:boolean"/>
     </xs:sequence>
