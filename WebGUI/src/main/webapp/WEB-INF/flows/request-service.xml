@@ -57,6 +57,8 @@
 			<binding property="timezone" required="true"/>
 			<binding property="request.startPort" required="true" />
 			<binding property="request.endPort" required="true"/>
+			<binding property="request.startPortFriendlyName" />
+			<binding property="request.endPortFriendlyName" />
 			<binding property="request.startTime" converter="calendar" required="true"/>
 			<binding property="request.endTime" converter="calendar" required="true"/>
 			<binding property="request.maxDelay"  required="true"/>

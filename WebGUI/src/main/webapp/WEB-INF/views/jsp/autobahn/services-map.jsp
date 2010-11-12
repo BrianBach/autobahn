@@ -72,7 +72,7 @@
 
 </form:form>
 	<script type="text/javascript">		
-	if((screen.width>=1280) && (screen.height>=800) && (screen.width < 1680)){
+	if((screen.width>=1281) && (screen.height>=801) && (screen.width < 1680)){
 	jQuery(document).ready(function() {
 		jQuery(function() {		
 			jQuery("#download_now").tooltip({ 		

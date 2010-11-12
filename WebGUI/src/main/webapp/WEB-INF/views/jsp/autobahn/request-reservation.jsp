@@ -7,6 +7,27 @@
 <script type="text/javascript" src="<c:url value="/js/jquery/jquery.validate.min.js"/>"></script>
 <script language="javascript">
 
+function passPort(){
+	//alert(document.getElementById('request.startPort').options[document.getElementById('request.startPort').options.selectedIndex].text);
+setStartFriendlyName(document.getElementById('request.startPort').options[document.getElementById('request.startPort').options.selectedIndex].text);
+setEndFriendlyName(document.getElementById('request.endPort').options[document.getElementById('request.endPort').options.selectedIndex].text);
+
+//setEndFriendlyName(document.getElementById('request.endPort').value)
+}
+
+function setStartFriendlyName(path){
+	//alert(path);
+	document.getElementById('request.startPortFriendlyName').value=path;
+//alert(document.getElementById('endPortFriendlyName').value);
+}
+
+function setEndFriendlyName(path){
+//alert(path);
+	document.getElementById('request.endPortFriendlyName').value=path;
+//alert(document.getElementById('endPortFriendlyName').value);
+}
+
+
 function dateOffset(date) {
 	var d=toJSDate(date||"");
 	  
@@ -103,7 +124,7 @@ function dateOffset(date) {
 		}
 	}
 </script>
-
+<body onload="passPort()">
 <form:form commandName="reservation" id="reservationform">
 <div id="form">
 
@@ -126,22 +147,24 @@ function dateOffset(date) {
        <tr>
 		<td class="label"><spring:message code="reservation.startPort"/></td>
 		<td class="value">
-			<form:select path="request.startPort">
-				<form:options items="${friendlyports_domain}" itemValue="identifier" itemLabel="friendlyName"/>
+			<form:select path="request.startPort" onchange="setStartFriendlyName(this.options[this.options.selectedIndex].text)">
+				<form:options items="${friendlyports_domain}" itemValue="identifier" itemLabel="friendlyName"/>	
 			</form:select>
 		</td>
+		<form:hidden path="request.startPortFriendlyName" />
 		<td class="error"><form:errors path="request.startPort"/></td>
 	</tr>
 	<tr>
 		<td class="label"><spring:message code="reservation.endPort"/></td>
 		<td class="value">
-			<form:select path="request.endPort">
+			<form:select path="request.endPort" onchange="setEndFriendlyName(this.options[this.options.selectedIndex].text)">
 				<!--form:options items="${friendlyAndIDCPports_all}" itemValue="identifier" itemLabel="friendlyName"/-->
 				<form:options items="${friendlyports_all}" itemValue="identifier" itemLabel="friendlyName"/>
 				<option disabled="true" value="IDCP">IDCP</option>
                 <form:options items="${idcpPorts_all}" />
 			</form:select>
 		</td>
+		<form:hidden path="request.endPortFriendlyName" />
 		<td class="error"><form:errors path="request.endPort"/></td>
 	</tr>
 	<tr>
@@ -543,4 +566,4 @@ function dateOffset(date) {
 
 </script>
 
-
+</body>

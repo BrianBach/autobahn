@@ -21,46 +21,55 @@
 </table>
 </center>	
 	
-<div class="images">
+<div class="images" style="min-height:700px">
 
 	<div id="actions" style="padding-left:15px">
-   		<a class="prev" style="position: relative; float: left;">&laquo; BACK</a>
-   		<a class="next">NEXT &raquo;</a>
+   		<!--a class="prev" style="position: relative; float: left;" >&laquo; BACK</a>
+   		<a class="next">NEXT &raquo;</a-->
 	</div>
 
 <!-- root element for scrollable -->
-<div class="scrollable vertical">
+<div class="scrollable vertical" style="height:620px;overflow:auto;">
  
   <div class="items">
-
+<c:if test="${services.services==null}">
+        <h3>No submitted services available.</h3>
+    </c:if>
 	 <c:forEach items="${services.services}" var="element" varStatus="loopStatus">
- 
- 	<div class="item">  
+<%
+int iVariable=220;
+%>		
+<c:forEach items="${element.reservations}" var="item" varStatus="loopStatus">
+<%
+iVariable=iVariable+50;
+%>
+		</c:forEach>
+<!--div '<%=iVariable%>'></div-->
+ 	<div class="item" style="min-height:<%=iVariable%>px;">  
  	
-	<h3 align="right">${loopStatus.count} Service: ${element.bodID}</h3>
+	<h3 align="center" style="padding-bottom:10px;"><b>Service: ${element.bodID}</b></h3>
 	<table>
 		<tr>
-			<td class="label"><spring:message code="action" text="Action" /></td>
-			<td>
-				<a href="${flowExecutionUrl}&_eventId=cancel&id=${element.bodID}">Cancel</a>
-				<a href="<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}">View map</a>
-			</td>
+			<!--td class="label"><spring:message code="action" text="Action" /></td-->
+			<!--td>
+				
+			</td-->
 		</tr>
 		<tr>
 			<td class="label"><spring:message code="service.user.homeDoamin" text="Home Domain" /></td>
-			<td class="value">${element.user.homeDomain.name}</td>
+			<td class="value" style="padding-left:20px;width:400px">${element.user.homeDomain.name}</td>
 		</tr>
 		<tr>
 			<td class="label"><spring:message code="service.user.name" text="User" /></td>
-			<td class="value">${element.user.name} ${element.user.email}</td>
+			<td class="value" style="padding-left:20px;width:400px">${element.user.name} ${element.user.email}</td>
 		</tr>
 		<tr>
 			<td class="label"><spring:message code="service.jastification" text="Justification" /></td>
-			<td class="value">${element.justification}</td>
+			<td class="value" style="padding-left:20px;width:400px">${element.justification}</td>
 		</tr>
 		<tr>
 			<td class="label"><spring:message code="service.priority" text="Priority" /></td>
-			<td class="value">${element.priority}</td>
+			<td class="value" style="padding-left:20px;width:400px">${element.priority}</td>
 		</tr>
 	</table>
 	<div id="collection">
@@ -92,6 +101,12 @@
 				</tr>
 		</c:forEach>
 	</table>
+<div style="position:relative;float:left;padding-top:20px"><a style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;" href="${flowExecutionUrl}&_eventId=cancel&id=${element.bodID}"><input id="cancel" name="Cancel" value="Cancel" type="submit" style="width:100px;" onclick="window.location='${flowExecutionUrl}&_eventId=cancel&id=${element.bodID}'" /></a>
+				<!--a class="btnsize" href="${flowExecutionUrl}&_eventId=cancel&id=${element.bodID}">Cancel</a-->
+				<a style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"  href="<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}">
+<input id="view" name="view" value="View map" type="submit" style="width:100px" onclick="window.location='<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}'" /></a>
+				<!--a href="<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}">View map</a--></div>
+<!--a class="test" href="#" style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;">123</a-->
 	</div>
 	<br>
  	</div>
@@ -108,7 +123,9 @@
  jQuery(document).ready(function() {	 
 	 $(function() {		
 			// initialize scrollable with mousewheel support
-			$(".scrollable").scrollable({ vertical: true, mousewheel: true });			
+			$(".scrollable").scrollable({ vertical: true, mousewheel: false });
+			//$(".scrollable").scroll();
+			//$(".scrollable").scrollbar();			
 		}); 	 
  });
 </script>

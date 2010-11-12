@@ -45,7 +45,10 @@ var aa = $.toJSON($("values").serializeObject());
                         //alert(data);
 				//alert(data.result);
                         $("#ajaxsuccess").html("Showing logs for <font color='blue'>"+$("#currentIdm").val()+"</font><br/>"+(new Date()).format("r")+"<br>The contents will update every 5 seconds");
-                        $("#logsview").text(data.result);
+                        if($("#logsview").text()!=data.result){
+							$("#logsview").text(data.result);
+						}
+						$("#logsview").animate({ scrollTop: $("#logsview").attr("scrollHeight") - $('#logsview').height() }, 1);
 
                     }, "json");
             return false;
@@ -84,7 +87,7 @@ setInterval( "updateLogs()", 5000 );
         </tr>
         <tr></tr>
     </table>
-    <c:if test="${logs.error!= nul}">
+    <c:if test="${logs.error!= null}">
         <h3>${logs.error}</h3>
     </c:if>
     <hr/>

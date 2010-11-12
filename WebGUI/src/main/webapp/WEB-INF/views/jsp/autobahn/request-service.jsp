@@ -107,8 +107,8 @@ cursor:pointer;
 					<td>${item.startTime.time}</td>
 					<td>${item.endTime.time}</td>
 					<td>${item.priority}</td>
-					<td>${item.startPort}</td>
-					<td>${item.endPort}</td>
+					<td>${item.startPortFriendlyName}</td>
+					<td>${item.endPortFriendlyName}</td>
 					<td>${item.maxDelay}</td>
 					<td>${item.capacity/1000000}</td>
 					<td>${item.userVlanId}</td>
