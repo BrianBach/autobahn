@@ -5,6 +5,7 @@ import java.util.Calendar;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import net.geant.autobahn.aai.UserAuthParameters;
@@ -42,6 +43,12 @@ public class ReservationRequest implements Serializable {
 	private Resiliency resiliency;
 	private boolean bidirectional;
 	private boolean processNow;
+	//fields added for passing friendly names between the webpages of client portal
+	//no need to be serialized and passed through the web service interface
+	@XmlTransient
+	private String startPortFriendlyName;
+	@XmlTransient
+    private String endPortFriendlyName;
 
     private UserAuthParameters authParameters=new UserAuthParameters();
     
@@ -253,6 +260,36 @@ public class ReservationRequest implements Serializable {
 		this.resiliency = resiliency;
 	}
 	/**
+     * @return the startPortDescription
+     */
+	@XmlTransient
+    public String getStartPortFriendlyName() {
+        return startPortFriendlyName;
+    }
+
+    /**
+     * @param startPortDescription the startPortDescription to set
+     */
+    public void setStartPortFriendlyName(String startPortFriendlyName) {
+        this.startPortFriendlyName = startPortFriendlyName;
+    }
+
+    /**
+     * @return the endPortDescription
+     */
+    @XmlTransient
+    public String getEndPortFriendlyName() {
+        return endPortFriendlyName;
+    }
+
+    /**
+     * @param endPortDescription the endPortDescription to set
+     */
+    public void setEndPortFriendlyName(String endPortFriendlyName) {
+        this.endPortFriendlyName = endPortFriendlyName;
+    }
+
+    /**
 	 * @return the processNow
 	 */
 	public boolean isProcessNow() {
