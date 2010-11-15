@@ -13,6 +13,7 @@ import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.dao.DmDAOFactory;
 import net.geant.autobahn.dao.hibernate.DmHibernateUtil;
 import net.geant.autobahn.dao.hibernate.HibernateDmDAOFactory;
+import net.geant.autobahn.dao.hibernate.HibernateUtil;
 import net.geant.autobahn.dm2idm.Dm2Idm;
 import net.geant.autobahn.dm2idm.Dm2IdmClient;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
@@ -198,6 +199,7 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
     public void dispose() {
         
         log.info("===== Disposing =====");
+        DmHibernateUtil.getInstance().closeSession();
         intradomainManager.dispose();
         intradomainManager = null;
         log.info("===== Disposed =====");
@@ -223,6 +225,8 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
 		} catch (OversubscribedException e) {
 			log.warn("Oversubscribed when adding Reservation: " + resId + ", "
 					+ e.getMessage());
+		} catch (Exception e) {
+			log.error("ERROR when adding reservation: " + resId + ", ", e);
 		}
 	}
 
@@ -445,6 +449,7 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
                 }
             }
         }
+        DmHibernateUtil.getInstance().closeSession();
                 
         log.info("===== Post-initialization check for DM module is complete. =====");
     }
