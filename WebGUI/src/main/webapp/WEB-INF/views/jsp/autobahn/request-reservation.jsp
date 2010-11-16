@@ -136,9 +136,9 @@ function dateOffset(date) {
 <!-- tabs -->
 
 <ul class="tabs">
-    <li><a href="#" class="w2">Tab 1</a></li>
-    <li><a href="#" class="w2">Tab 2</a></li>
-    <li><a href="#" class="w2">Tab 3</a></li>
+    <li><a href="#" class="w2">Basic parameters </a></li>
+    <li><a href="#" class="w2">Optional parameters</a></li>
+    <li><a href="#" class="w2">Path constraints</a></li>
 </ul>
 <div class="panes">
 
@@ -435,21 +435,21 @@ function dateOffset(date) {
             <td>
                 <table>
                     <tr>
-                        <td class="labelcenter"><spring:message code="reservation.userIncludeDomains"/></td>
+                        <td class="label"><spring:message code="reservation.userIncludeDomains"/></td>
                         <td class="label"></td>
                         <td class="label"></td>
-                        <td class="labelcenter"><spring:message code="reservation.userIncludeLinks"/></td>
+                        <td class="label"><spring:message code="reservation.userIncludeLinks"/></td>
                     </tr>
                     <tr>
                         <td class="value">
-                            <form:select path="request.userInclude.domains" >
+                            <form:select size="3" path="request.userInclude.domains" >
                                 <form:options items="${domains_all}"/>
                             </form:select>
                         </td>
                         <td class="value"></td>
 						<td class="value"></td>
                         <td class="value">
-                            <form:select path="request.userInclude.links" >
+                            <form:select size="3" path="request.userInclude.links" >
                                 <form:options items="${links_all}"/>
                             </form:select>
                         </td>
@@ -468,15 +468,15 @@ function dateOffset(date) {
             <td>
                 <table>
                     <tr>
-                        <td class="labelcenter"><spring:message code="reservation.userExcludeDomains"/></td>
+                        <td class="label"><spring:message code="reservation.userExcludeDomains"/></td>
                         <td class="label"></td>
                         <td class="label"></td>
-                        <td class="labelcenter"><spring:message code="reservation.userExcludeLinks"/></td>
+                        <td class="label"><spring:message code="reservation.userExcludeLinks"/></td>
                         
                     </tr>
                     <tr>
                         <td class="value">
-                            <form:select path="request.userExclude.domains" >
+                            <form:select size="3" path="request.userExclude.domains" >
                                 <form:options items="${domains_all}"/>
                             </form:select>
                         </td>
@@ -484,8 +484,8 @@ function dateOffset(date) {
 						<td class="value"></td>
 						<td class="value"></td>
 						
-                        <td c class="value">
-                            <form:select path="request.userExclude.links" >
+                        <td class="value">
+                            <form:select size="3" path="request.userExclude.links" >
                                 <form:options items="${links_all}"/>
                             </form:select>
                         </td>

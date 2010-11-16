@@ -35,7 +35,6 @@ function myclick(i) {
 function refreashMap (){
   	// Read the data from example.xml
   // create the map
-  //window.alert("Dupa");
   mgr.clearMarkers();
   var request = GXmlHttp.create();
 
