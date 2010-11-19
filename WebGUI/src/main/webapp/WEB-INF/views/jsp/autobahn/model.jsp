@@ -36,7 +36,7 @@
     </div>
     
     	<div id="login">
-    	<security:authorize ifAnyGranted="ROLE_USER"> 
+    	<security:authorize ifAnyGranted="ROLE_USER,ROLE_ADMINISTRATOR"> 
 			Welcome, <security:authentication property="name"/> | <a style="color:red;" href='<c:url value="/j_spring_security_logout"/>'>Logout</a>
 		</security:authorize>  
     </div>

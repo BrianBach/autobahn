@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<userdetails>
+	<users>
+		<user>
+			<USERNAME>dmarchal</USERNAME>
+			<PASSWORD>30969d351e44c86a98d44313100c67b3</PASSWORD>
+			<ENABLED>1</ENABLED>
+		</user>
+		<user>
+			<USERNAME>rod</USERNAME>
+			<PASSWORD>a564de63c2d0da68cf47586ee05984d7</PASSWORD>
+			<ENABLED>1</ENABLED>
+		</user>
+	</users>
+	<authorities>
+		<authority>
+			<USERNAME>dmarchal</USERNAME>
+			<AUTHORITY>ROLE_ADMINISTRATOR</AUTHORITY>
+		</authority>
+		<authority>
+			<USERNAME>dmarchal</USERNAME>
+			<AUTHORITY>ORG_ORGANIZATION</AUTHORITY>
+		</authority>
+		<authority>
+			<USERNAME>dmarchal</USERNAME>
+			<AUTHORITY>PM_AutoBahn</AUTHORITY>
+		</authority>
+		<authority>
+			<USERNAME>rod</USERNAME>
+			<AUTHORITY>ROLE_USER</AUTHORITY>
+		</authority>
+		<authority>
+			<USERNAME>rod</USERNAME>
+			<AUTHORITY>ORG_GRNET</AUTHORITY>
+		</authority>
+		<authority>
+			<USERNAME>rod</USERNAME>
+			<AUTHORITY>PM_AutoBahn</AUTHORITY>
+		</authority>
+	</authorities>
+</userdetails>

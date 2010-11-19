@@ -1,6 +1,7 @@
 package net.geant.autobahn.aai;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -14,9 +15,26 @@ public class UserAuthParameters implements Serializable {
     private static final long serialVersionUID = 7565000373455342687L;
     
     private String identifier;
+    
     private String organization;
     private String projectMembership;
     private String projectRole;
+    
+    public UserAuthParameters() {}
+    
+    public UserAuthParameters(String name, Set<String> authorities) {
+    	this.setIdentifier(name);
+    	
+    	for(String authority: authorities) {
+    		if(authority.startsWith("ROLE_")) {
+    			this.setProjectRole(authority.replaceFirst("ROLE_", ""));
+    		} else if(authority.startsWith("ORG_")) {
+    			this.setOrganization(authority.replaceFirst("ORG_", ""));
+    		} else if(authority.startsWith("PM_")) {
+    			this.setProjectMembership(authority.replaceFirst("PM_", ""));
+    		}
+    	}
+    }
 
     public String getIdentifier() {
         return identifier;

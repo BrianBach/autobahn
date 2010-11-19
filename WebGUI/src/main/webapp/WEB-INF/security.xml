@@ -1,36 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <beans:beans xmlns="http://www.springframework.org/schema/security"
-    xmlns:beans="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
                         http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.1.xsd">
 
-	<global-method-security secured-annotations="disabled"/>
+	<global-method-security secured-annotations="disabled" />
 
-    <http auto-config="true">
-    	<intercept-url pattern="/portal/login.htm" filters="none"/>
-    	<intercept-url pattern="/portal/home.htm" filters="none"/>
-		<intercept-url pattern="/portal/secure/servicesforidm.htm" filters="none"/>
-		<intercept-url pattern="/portal/secure/**" access="ROLE_USER,IS_AUTHENTICATED_REMEMBERED"/>
-        <form-login login-page='/portal/login.htm' default-target-url="/portal/home.htm"/>
-        <logout logout-success-url="/portal/home.htm"/> 
-        <logout invalidate-session="true"/>
-     </http>  
-    
+	<http auto-config="true" access-denied-page="/portal/login.htm">
+		<intercept-url pattern="/portal/login.htm" filters="none" />
+		<intercept-url pattern="/portal/home.htm" filters="none" />
+		<intercept-url pattern="/portal/secure/servicesforidm.htm"
+			filters="none" />
+		<intercept-url pattern="/portal/secure/logs.htm"
+			access="ROLE_ADMINISTRATOR" />		
+		<intercept-url pattern="/portal/secure/settings_select.htm"
+			access="ROLE_ADMINISTRATOR" />
+		<intercept-url pattern="/portal/secure/**"
+			access="ROLE_USER,ROLE_ADMINISTRATOR" />
+		<form-login login-page='/portal/login.htm'
+			default-target-url="/portal/home.htm" />
+		<logout logout-success-url="/portal/home.htm" />
+		<logout invalidate-session="true" />
+	</http>
 
-    <authentication-provider>
-        <user-service>
-            <user name="dmarchal" password="auto123" authorities="ROLE_USER" />
-            <user name="groberts" password="auto123" authorities="ROLE_USER" />
-			<user name="csharkey" password="auto123" authorities="ROLE_USER" />
-            <user name="rkrzywania" password="auto123" authorities="ROLE_USER" />
-            <user name="jlukasik" password="auto123" authorities="ROLE_USER" />
-            <user name="mbalcerkiewicz" password="auto123" authorities="ROLE_USER" />
-            <user name="ldolata" password="auto123" authorities="ROLE_USER" />
-            <user name="jhrb" password="auto123" authorities="ROLE_USER" />
-            <user name="asevasti" password="auto123" authorities="ROLE_USER" />
-	    </user-service>
+	<beans:bean id="xmlService"
+		class="net.geant.security.xml.userdetails.XmlUserDetailsService">
+		
+		<!-- TODO: change to relative path if aa-framework updated -->
+		<beans:constructor-arg value="webapps/autobahn-gui/WEB-INF/userdetails.xml" />
+	</beans:bean>
+
+	<authentication-provider user-service-ref="xmlService">
+		<password-encoder hash="md5" />
 	</authentication-provider>
 
+	<!--
+	dmarchal/auto123 : ROLE_ADMINISTRATOR
+	rod/koala : ROLE_USER
+	-->
 </beans:beans>

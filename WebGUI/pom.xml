@@ -458,6 +458,17 @@
             <version>2.2.3</version>
             <classifier>jdk15</classifier>
         </dependency>
+        <dependency>
+			<groupId>net.geant.security</groupId>
+			<artifactId>aa-framework</artifactId>
+			<version>1.4</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.ws.commons</groupId>
+					<artifactId>XmlSchema</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
   
  </dependencies>
  <repositories>

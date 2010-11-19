@@ -1,4 +1,6 @@
 <%@ include file="../common/includes.jsp" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
 
 <h1><span style="margin-left:50px;">&nbsp;</span></h1>
 <fmt:message key="lnk.home" var="lnk"/>
@@ -10,14 +12,18 @@
 <fmt:message key="lnk.reservations" var="lnk"/>
 <a href="<c:url value="/${lnk}"/>"><fmt:message key="nav.reservations"/></a>
   
-  <fmt:message key="lnk.reservationsMap" var="lnk"/>
+<fmt:message key="lnk.reservationsMap" var="lnk"/>
 <a href="<c:url value="/${lnk}"/>"><fmt:message key="nav.reservationsMap"/></a>
-	
+
+<sec:authorize ifAllGranted="ROLE_ADMINISTRATOR">
   <fmt:message key="lnk.domainSettings" var="lnk"/>
-<a href="<c:url value="/${lnk}"/>"><fmt:message key="nav.domainSettings"/></a>	
+  <a href="<c:url value="/${lnk}"/>"><fmt:message key="nav.domainSettings"/></a>	
+</sec:authorize>
  
+<sec:authorize ifAllGranted="ROLE_ADMINISTRATOR">
   <fmt:message key="lnk.domainLogs" var="lnk"/>
-<a href="<c:url value="/${lnk}"/>"><fmt:message key="nav.domainLogs"/></a>	  
+  <a href="<c:url value="/${lnk}"/>"><fmt:message key="nav.domainLogs"/></a>	  
+</sec:authorize>
 
 <%@ include file="../common/endnav.jsp" %>
 

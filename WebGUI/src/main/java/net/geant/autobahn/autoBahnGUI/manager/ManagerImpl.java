@@ -16,16 +16,17 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.TimeZone;
-import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
+import net.geant.autobahn.aai.UserAuthParameters;
 import net.geant.autobahn.administration.KeyValue;
 import net.geant.autobahn.administration.ServiceType;
 import net.geant.autobahn.administration.Status;
@@ -48,8 +49,10 @@ import net.geant.autobahn.useraccesspoint.ServiceRequest;
 import net.geant.autobahn.useraccesspoint.UserAccessPointException;
 
 import org.apache.log4j.Logger;
+import org.springframework.security.Authentication;
 import org.springframework.security.context.SecurityContextHolder;
 import org.springframework.security.userdetails.UserDetails;
+import org.springframework.security.util.AuthorityUtils;
 
 /**
  * Manager is responsible for communication and managing of IDMs registered in WEB GUI
@@ -744,12 +747,12 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 			throw new ManagerException(ManagerException.SERVICE_WITHOUT_RESERVATIONS, "Empty service submitted");
 		}
 		
-        //TODO: These parameters should be retrieved using AAI framework
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    	Set<String> authorities = AuthorityUtils.authorityArrayToSet(auth.getAuthorities());
+    	UserAuthParameters authParameters = new UserAuthParameters(auth.getName(), authorities);
+        
         for (int i=0; i<request.getReservations().size(); i++) {
-            request.getReservations().get(i).getAuthParameters().setIdentifier(request.getUserName());
-            request.getReservations().get(i).getAuthParameters().setOrganization(request.getUserHomeDomain());
-            request.getReservations().get(i).getAuthParameters().setProjectMembership("AutoBahn");
-            request.getReservations().get(i).getAuthParameters().setProjectRole(request.getJustification());
+        	request.getReservations().get(i).setAuthParameters(authParameters);
         }
         
 		logger.info("Verified");
@@ -777,14 +780,10 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 			test.setStatus(false);
 		}
 		else {
-	        //TODO: These parameters should be retrieved using AAI framework
-		    String[] authParams = request.getDescription().split("\\|");
-		    if (authParams.length >= 4) {
-                request.getAuthParameters().setIdentifier(authParams[0]);
-                request.getAuthParameters().setOrganization(authParams[1]);
-                request.getAuthParameters().setProjectMembership(authParams[2]);
-                request.getAuthParameters().setProjectRole(authParams[3]);
-		    }
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    	Set<String> authorities = AuthorityUtils.authorityArrayToSet(auth.getAuthorities());
+	    	UserAuthParameters authParameters = new UserAuthParameters(auth.getName(), authorities);
+	        request.setAuthParameters(authParameters);
 
 			test.setStatus(manager.checkReservationPossibility(request));
 		}
@@ -1026,7 +1025,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 		if (username == null)
 			username= "test";
 		//service.setUserEmail("test.user@test.domain");
-		service.setUserName("testUser");
+		service.setUserName(username);
 		List<String> idms = getAllInterdomainManagers();
 		if (idms!= null && !idms.isEmpty())
 			service.setUserHomeDomain(idms.get(0));
@@ -1201,6 +1200,30 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 			serv.setComparator(new ServicesComparator());
 			serv.setServices(services);
 			serv.setCurrentIdm(idm);
+		}
+	
+		
+		//Filtering submitted services		
+		boolean isAdmin=AuthorityUtils.userHasAuthority("ROLE_ADMINISTRATOR");
+		
+		if(!isAdmin && serv.getServices()!=null) {
+			//Filtering by username
+			List<ServiceType> filteredServices=new ArrayList<ServiceType>();
+			
+			//TODO: consider using the same way that getServiceRequestTemplate gets the username
+			String contextUsername=SecurityContextHolder.getContext().getAuthentication().getName();
+			
+			for (ServiceType servType: serv.getServices()) {
+				//Get the username of the first reservation as username
+				String servUsername=servType.getUser().getName();
+				if(servUsername==null) continue;
+			
+				if(servUsername.equals(contextUsername)) {
+					filteredServices.add(servType);
+				}
+			}
+			
+			serv.setServices(filteredServices);
 		}
 		
 		return serv;
