@@ -43,7 +43,8 @@ cursor:pointer;
 <c:if test="${serviceId!=null}">
 	<br style="height: 50px"></br>
 	<h3 style="margin: 20px"><spring:message code="service.submitted.successfully"/></h3>
-	<p style="margin:20px"><spring:message code="service.submitted.view"/><a href="<c:url value="/portal/secure/reservations.htm?idm=${service.userHomeDomain}#${serviceId}"/>"><spring:message code="service.submitted.goto"/></a></p>
+	<!--p style="margin:20px"><spring:message code="service.submitted.view"/><a href="<c:url value="/portal/secure/reservations.htm?idm=${service.userHomeDomain}#${serviceId}"/>"><spring:message code="service.submitted.goto"/></a></p-->
+	<p style="margin:20px"><spring:message code="service.submitted.view"/><a href="<c:url value="/portal/secure/reservations_select.htm?idm=${service.userHomeDomain}#${serviceId}"/>"><spring:message code="service.submitted.goto"/></a></p>
 </c:if>
 <c:if test="${serviceId==null}">
 <form:form commandName="service">

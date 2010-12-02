@@ -54,15 +54,19 @@
         <put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/request-service-success.jsp"/>
     </definition>
 
-  	<definition name="secure/services" extends="template.main">
-        <put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/services.jsp"/>
+  	<definition name="secure/services_select" extends="template.main">
+        	<put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/services_select.jsp"/>
+   	 </definition>
+	<definition name="secure/servicesforidm" template="/WEB-INF/views/jsp/autobahn/services.jsp">
+
     </definition>
+
 
 	<definition name="secure/services-list" template="/WEB-INF/views/jsp/autobahn/services-list.jsp">
 	</definition>
 
-	<definition name="secure/servicesforidm" template="/WEB-INF/views/jsp/autobahn/servicesforidm.jsp">
-	</definition>
+	<!-- definition name="secure/servicesforidm" template="/WEB-INF/views/jsp/autobahn/servicesforidm.jsp">
+	</definition-->
 
 	<definition name="notfound" extends="template.main">
 		<put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/notfound.jsp"/>

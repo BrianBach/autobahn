@@ -1,32 +1,17 @@
 <%@ include file="../common/includes.jsp"%>
-<script src="http://cdn.jquerytools.org/1.2.3/full/jquery.tools.min.js"></script>
+<!--script src="http://cdn.jquerytools.org/1.2.3/full/jquery.tools.min.js"></script-->
 <script type="text/javascript" src="<c:url value="/js/jquery/jquery.validate.min.js"/>"></script>
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/jquery/scrollable.css"/>"/>
-<h2><spring:message code="reservations.htitle" text="Submitted Reservation Services"/></h2>
-<form:form commandName="services">
+<!--h2><spring:message code="reservations.htitle" text="Submitted Reservation Services"/></h2-->
+<!--form:form commandName="services"-->
 
-<p><input type="hidden" name="action" value="change"/>
-<center>
-<table>
-	<tr>
-		<td>
-			<form:select path="currentIdm">
-				<form:options items="${services.idms}"/>	
-			</form:select>
-		</td>
-	<td>
-		<input type="submit" name="_eventId_change" value="Change IDM" style="width:100px"/>
-	</td>
-	</tr>
-</table>
-</center>	
-	
-<div class="images" style="min-height:700px">
 
-	<div id="actions" style="padding-left:15px">
+<!--div class="images" style="min-height:700px"-->
+
+	<!--div id="actions" style="padding-left:15px"-->
    		<!--a class="prev" style="position: relative; float: left;" >&laquo; BACK</a>
    		<a class="next">NEXT &raquo;</a-->
-	</div>
+	<!--/div-->
 
 <!-- root element for scrollable -->
 <div class="scrollable vertical" style="height:620px;overflow:auto;">
@@ -114,9 +99,9 @@ iVariable=iVariable+50;
 	
 	</div> 	
    </div>
-</div>
+<!--/div-->
 
-</form:form>
+<!--/form:form-->
 
 <script>
 

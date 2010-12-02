@@ -535,6 +535,10 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
 		
 		String sport = idMappings.getIdentifierFor((portName==null) ? null : portName.trim());
 		
+		if (sport ==  null) {
+		    log.warn("Public identifiers mapping: No identifier could be found for " + portName);
+		}
+		
 		Link l = tmpLinks.get(sport);
 		
 		if(l == null) {

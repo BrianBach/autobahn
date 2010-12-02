@@ -9,9 +9,8 @@
 
 	<http auto-config="true" access-denied-page="/portal/login.htm">
 		<intercept-url pattern="/portal/login.htm" filters="none" />
-		<intercept-url pattern="/portal/home.htm" filters="none" />
-		<intercept-url pattern="/portal/secure/servicesforidm.htm"
-			filters="none" />
+		<intercept-url pattern="/portal/home.htm" />
+		
 		<intercept-url pattern="/portal/secure/logs.htm"
 			access="ROLE_ADMINISTRATOR" />		
 		<intercept-url pattern="/portal/secure/settings_select.htm"

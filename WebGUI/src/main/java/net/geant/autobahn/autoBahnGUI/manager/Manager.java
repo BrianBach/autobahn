@@ -82,6 +82,7 @@ public interface Manager {
 	 * @return list of Service objects  
 	 */
 	public List<ServiceType> getServicesFromInterDomainManager (String idm);
+	public ServicesFormModel getSubmitedServicesInIDM(String idm);
 	/**
 	 * Gets specified service from specified IDM registered in WEB GUI
 	 * 

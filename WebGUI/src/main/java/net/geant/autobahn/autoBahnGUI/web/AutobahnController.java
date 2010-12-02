@@ -11,6 +11,7 @@ import net.geant.autobahn.administration.KeyValue;
 import net.geant.autobahn.autoBahnGUI.manager.Manager;
 import net.geant.autobahn.autoBahnGUI.model.googlemaps.Line;
 import net.geant.autobahn.autoBahnGUI.model.googlemaps.Topology;
+import net.geant.autobahn.autoBahnGUI.model.ServicesFormModel;
 import net.geant.autobahn.autoBahnGUI.model.SettingsFormModel;
 import net.geant.autobahn.autoBahnGUI.topology.TopologyFinder;
 import net.sf.json.JSONSerializer;
@@ -183,16 +184,17 @@ public class AutobahnController {
 
 
     @RequestMapping("/secure/servicesforidm.htm")
-    public void handleServicesForIdm(@RequestParam String link, @RequestParam String currentIdm,Map<String, Object> model){
+    //@RequestParam String link,
+    public void handleServicesForIdm(@RequestParam String currentIdm,Map<String, Object> model){
         logger.debug("getting services for idm");
-        List<ServiceType> services=null;
+        ServicesFormModel services=null;
         String[] reservationStates=null;
         if (currentIdm  !=null){
-            services = manager.getServicesFromInterDomainManager(currentIdm);
+            services = manager.getSubmitedServicesInIDM(currentIdm);
             reservationStates=manager.getReservationStates();
         }
-        model.put("link", link);
-        model.put("serv", services);
+        //model.put("link", link);
+        model.put("services", services);
         model.put("reservationStates", reservationStates);
     }
 
