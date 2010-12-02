@@ -20,6 +20,12 @@ public class AutobahnTestTopology {
     private final static Domain domain2 = new Domain("domain2", "localhost", 28081, 28091);
     private final static Domain domain3 = new Domain("domain3", "localhost", 28082, 28092);
 
+    static {
+    	 domain1.setLongitude(-1.17); domain1.setLatitude(34.00);
+    	 domain2.setLongitude(5.17); domain2.setLatitude(14.00);
+    	 domain3.setLongitude(20.17); domain3.setLatitude(22.00);
+    }
+    
     private final static String hostDomain1 = "http://client-domain.domain1.com";
     private final static String hostDomain2 = "http://client-domain.domain2.com";
     private final static String hostDomain3 = "http://client-domain.domain3.com";
@@ -39,7 +45,7 @@ public class AutobahnTestTopology {
         // Remote interfaces
         GenericInterface dom2 = t.createExternalRouterIf("dom2-node1", "dom2-port1", domain2.getDomainId(), _1Gb);
         GenericInterface dom3 = t.createExternalRouterIf("dom3-node", "dom3-port1", domain3.getDomainId(), _1Gb);
-        GenericInterface cli1 = t.createClientIf("cli-node", "cli-port", hostDomain1, _10Gb);
+        GenericInterface cli1 = t.createClientIf("cli-node", "cli-port", hostDomain1, _10Gb, "Enpoint in Poznan");
         
         // Links
         t.addSpanningTree(p1, dom2, 100, 200);
@@ -67,8 +73,8 @@ public class AutobahnTestTopology {
         // Remote interfaces
         GenericInterface dom1 = t.createExternalRouterIf("dom1-node", "dom1-port1", domain1.getDomainId(), _1Gb);
         GenericInterface dom3 = t.createExternalRouterIf("dom3-node", "dom3-port2", domain3.getDomainId(), _1Gb);
-        GenericInterface cli1 = t.createClientIf("cli-node1", "cli-port1", hostDomain2, _1Gb);
-        GenericInterface cli2 = t.createClientIf("cli-node2", "cli-port2", hostDomain2, _1Gb);
+        GenericInterface cli1 = t.createClientIf("cli-node1", "cli-port1", hostDomain2, _1Gb, "Enpoint in Dublin - sigma");
+        GenericInterface cli2 = t.createClientIf("cli-node2", "cli-port2", hostDomain2, _1Gb, "Enpoint in Dublin - pi");
 
         // Links
         t.addSpanningTree(p1, dom1, 100, 200);
@@ -91,7 +97,7 @@ public class AutobahnTestTopology {
         // Remote interfaces
         GenericInterface dom1 = t.createExternalRouterIf("dom1-node", "dom1-port2", domain1.getDomainId(), _1Gb);
         GenericInterface dom2 = t.createExternalRouterIf("dom2-node2", "dom2-port2", domain2.getDomainId(), _1Gb);
-        GenericInterface cli1 = t.createClientIf("cli-node", "cli-port", hostDomain3, _1Gb);
+        GenericInterface cli1 = t.createClientIf("cli-node", "cli-port", hostDomain3, _1Gb, "Calculation cluster - CERN");
         
         // Links
         t.addSpanningTree(p1, dom1, 100, 800);
