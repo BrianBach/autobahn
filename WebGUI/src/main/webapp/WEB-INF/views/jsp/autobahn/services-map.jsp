@@ -49,11 +49,10 @@
 		<c:if test="${services == null}">
 		
 			<tr>
-				<td class="label"> No reservation available </td>
+				<td class="label" style="color: white;"># No reservation available # </td>
 			</tr>
 			
 		</c:if>
-		
 		
 		 <c:forEach items="${services}" var="service" varStatus="loopStatus">
 		 	

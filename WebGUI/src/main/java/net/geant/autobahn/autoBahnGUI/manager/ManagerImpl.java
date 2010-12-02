@@ -19,7 +19,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.SortedSet;
 import java.util.TimeZone;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -31,6 +33,7 @@ import net.geant.autobahn.administration.KeyValue;
 import net.geant.autobahn.administration.ServiceType;
 import net.geant.autobahn.administration.Status;
 import net.geant.autobahn.autoBahnGUI.model.LogsFormModel;
+import net.geant.autobahn.autoBahnGUI.model.MapKeySetComparator;
 import net.geant.autobahn.autoBahnGUI.model.ReservatiomDepandentOnTimezone;
 import net.geant.autobahn.autoBahnGUI.model.ReservationTest;
 import net.geant.autobahn.autoBahnGUI.model.ServicesComparator;
@@ -506,65 +509,35 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 		
 		for (int i = 0; i < list.size(); i++) {
 						
-			List<Reservation> res = list.get(i).getReservations();
+			List<Reservation> res = list.get(i).getReservations();	
 			for (int j = 0; j < res.size(); j++) {
-				
+
 				String bodyID = res.get(j).getBodID();
 				String homeID = res.get(j).getPath().getHomeDomainID();
 		
 				map.put(bodyID,homeID);
 			}
 		}
-	
-		return sortMapByKey(map);
+		if (map.size() == 0) return null;
+		else 
+			return sortMapByKey(map);
 		
 	}
 	
-	public static <K, V> LinkedHashMap<K, V> sortMapByKey(final Map<K, V> map) {
-       
-		Comparator<Map.Entry<K, V>> comparator = new Comparator<Entry<K,V>>() {
-          
-			public int compare(Entry<K, V> o1, Entry<K, V> o2) {
-                 return comparableCompare(o1.getKey(), o2.getKey());
-            }
-        
-		};
-        
-		return sortMap(map, comparator);
-	}
 	
-	public static <K, V> LinkedHashMap<K, V> sortMap(final Map<K, V> map, final Comparator<Map.Entry<K, V>> comparator) {
-   
-        List<Map.Entry<K, V>> mapEntries = new LinkedList<Map.Entry<K, V>>(map.entrySet());
-
-        Collections.sort(mapEntries, comparator);
-
-        LinkedHashMap<K, V> result = new LinkedHashMap<K, V>(map.size() + (map.size() / 20));
-       
-        for(Map.Entry<K, V> entry : mapEntries) {
-        	
-                result.put(entry.getKey(), entry.getValue());
-        }
-
-        return result;
-}
-	
-	private static <T> int comparableCompare(T o1, T o2) {
-        
-    	int start1 = ((String) o1).indexOf("@");
-    	int end1 = ((String) o1).indexOf("_");
-    	
-    	int start2 = ((String) o2).indexOf("@");
-    	int end2 = ((String) o2).indexOf("_");
-    	
-    	String str1 = ((String) o1).substring(start1, end1);
-    	String str2 = ((String) o2).substring(start2, end2);
+public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map){
 		
-		@SuppressWarnings("unchecked")
-		int compare = ((Comparable<T>)str1).compareTo((T) str2);
-
-        return (-1) * compare;
-}
+		TreeSet<String> treeset= new TreeSet<String>(new MapKeySetComparator());
+		treeset.addAll(map.keySet());
+		
+		LinkedHashMap<String, String> result = new LinkedHashMap<String, String>();
+		 
+		for(String str : treeset) {
+			result.put(str, map.get(str));
+		}
+			
+			return result;
+	}
 
 	/*
 	 * (non-Javadoc)
