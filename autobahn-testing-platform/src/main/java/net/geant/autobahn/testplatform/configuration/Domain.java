@@ -6,6 +6,8 @@ public class Domain {
     private String host;
 	private int tcpPort;
     private int secureTcpPort;
+    private double longitude;
+    private double latitude;
     
     public Domain(String domainId, String host, int tcpPort, int secureTcpPort) {
         super();
@@ -69,5 +71,21 @@ public class Domain {
 	 */
 	public void setSecureTcpPort(int secureTcpPort) {
 		this.secureTcpPort = secureTcpPort;
-	}    
+	}
+
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+
+	public double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
 }

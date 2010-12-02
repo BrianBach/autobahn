@@ -368,6 +368,8 @@ public class DomainConfiguration {
 		props.setProperty("domainName", incremental.getDomainName());
 		props.setProperty("dm.address", buildAutobahnUrl("/idm2dm"));
 		props.setProperty("lookuphost", defaultConf.getProperty("lookupservice.address"));
+		props.setProperty("longitude", Double.toString(builder.getDomain().getLongitude()));
+		props.setProperty("latitude", Double.toString(builder.getDomain().getLatitude()));
 		props = updateDbProperties(props);
 		
 		return props;

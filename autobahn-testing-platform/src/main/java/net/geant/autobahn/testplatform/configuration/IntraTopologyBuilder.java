@@ -49,7 +49,7 @@ public class IntraTopologyBuilder {
     	this.useDb = useDb;
     }
 
-    private GenericInterface createRouterIf(String nodeID, String interfaceID, String domainId, boolean client, long bandwidth) {
+    private GenericInterface createRouterIf(String nodeID, String interfaceID, String domainId, boolean client, long bandwidth, String description) {
 
         GenericInterface gi = gifs.get(interfaceID);
         
@@ -79,6 +79,7 @@ public class IntraTopologyBuilder {
             if(domainId != null)
             	gi.setDomainId(domainId);
             gi.setName(interfaceID);
+        	gi.setDescription(description);
             gi.setClientPort(client);
             
             gifs.put(gi.getName(), gi);
@@ -90,23 +91,22 @@ public class IntraTopologyBuilder {
         return gi;
     }
 
-    public GenericInterface createClientIf(String nodeID, String interfaceID, String domainId, long bandwidth) {
-    	return createRouterIf(nodeID, interfaceID, domainId, true, bandwidth);
+    public GenericInterface createClientIf(String nodeID, String interfaceID, String domainId, long bandwidth, String description) {
+    	return createRouterIf(nodeID, interfaceID, domainId, true, bandwidth, description);
     }
     
     public GenericInterface createRouterIf(String nodeID, String interfaceID, String publicId, long bandwidth) {
     	registerPublicId(interfaceID, publicId);
-    	return createRouterIf(nodeID, interfaceID, domain.getDomainId(), false, bandwidth);
+    	return createRouterIf(nodeID, interfaceID, domain.getDomainId(), false, bandwidth, null);
     }
 
     public GenericInterface createExternalRouterIf(String nodeID, String interfaceID, String domainId, long bandwidth) {
-    	return createRouterIf(nodeID, interfaceID, domainId, false, bandwidth);
+    	return createRouterIf(nodeID, interfaceID, domainId, false, bandwidth, null);
     }
 
     
     public GenericInterface createNodeIf(String nodeID, String interfaceID, long bandwidth) {
-
-    	return createRouterIf(nodeID, interfaceID, null, false, bandwidth);
+    	return createRouterIf(nodeID, interfaceID, null, false, bandwidth, null);
     }
     
     public void addStmLink(GenericInterface start, GenericInterface end, StmType type) {
