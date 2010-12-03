@@ -3,7 +3,7 @@
 	
 	/* required settings */
 	position:relative;
-	overflow:hidden;	
+
 
 	/* vertical scrollers have typically larger height than width */	
 	height:auto; 
@@ -67,7 +67,23 @@
 
 .next {
 	float:right;
-}	
+	color: white;
+}
+
+#actions .navi a {
+  padding: 2px;
+  border: solid 1px grey;
+  text-decoration: none;
+  margin-right: 6px;
+  font-weight: bold;
+}
+
+#actions .navi a.active {
+  border: solid 1px grey;
+  background-color: #25648d;
+  color: white;  
+}
+
 .images {
 	/*background:#fff url(h300.png) repeat-x;*/
 	border:1px solid #ccc;
