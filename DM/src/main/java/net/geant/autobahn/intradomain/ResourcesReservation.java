@@ -3,6 +3,7 @@ package net.geant.autobahn.intradomain;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.TimerTask;
 
+import net.geant.autobahn.aai.AAIException;
 import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.constraints.PathConstraints;
 import net.geant.autobahn.dao.hibernate.DmHibernateUtil;
@@ -28,9 +30,6 @@ import net.geant.autobahn.tool.Tool;
 import net.geant.autobahn.tool.ToolClient;
 import net.geant.autobahn.topologyabstraction.TopologyAbstraction;
 import net.geant.autobahn.topologyabstraction.TopologyAbstractionClient;
-
-import net.geant.autobahn.aai.AAIException;
-
 
 import org.apache.log4j.Logger;
 
@@ -103,7 +102,10 @@ public class ResourcesReservation {
 		reservations = prManager.loadReservations();
 		log.info("DM Recovery - Found: " + reservations.size() + " active reservations");
 		
-		for(IntradomainReservation res : reservations.values()) {
+		Collection<IntradomainReservation> reservationsToRestore = new ArrayList<IntradomainReservation>();
+		reservationsToRestore.addAll(reservations.values());
+		
+		for(IntradomainReservation res : reservationsToRestore) {
 			prManager.attach(res);
 			
 			Calendar now = Calendar.getInstance();
