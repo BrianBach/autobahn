@@ -279,6 +279,7 @@ public class EnvironmentSetup {
 	public void createEnvironment() {
 		copyDistributions();
 		writeConfigurationFiles();
+		dropDatabases();
 		createDatabasesSchema();
 		
 		startInstances();
