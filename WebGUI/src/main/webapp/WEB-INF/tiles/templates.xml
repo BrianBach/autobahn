@@ -26,7 +26,7 @@
         <put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/tools.jsp"/>
     </definition>
 
-    <definition name="secure/settings_select" extends="template.main">
+    <definition name="secure/settings_out" extends="template.main">
         <put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/settings_select.jsp"/>
     </definition>
     <definition name="secure/settings" template="/WEB-INF/views/jsp/autobahn/settings.jsp">
@@ -54,7 +54,7 @@
         <put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/request-service-success.jsp"/>
     </definition>
 
-  	<definition name="secure/services_select" extends="template.main">
+  	<definition name="secure/services" extends="template.main">
         	<put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/services_select.jsp"/>
    	 </definition>
 	<definition name="secure/servicesforidm" template="/WEB-INF/views/jsp/autobahn/services.jsp">

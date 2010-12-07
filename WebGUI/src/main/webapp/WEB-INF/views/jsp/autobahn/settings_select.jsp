@@ -1,20 +1,21 @@
 <%@ include file="../common/includes.jsp"%>
 <script type="text/javascript" src="<c:url value="/js/jquery/jquery.min.js"/>"></script>
+<script src="http://cdn.jquerytools.org/1.2.3/full/jquery.tools.min.js"></script>
 <script type="text/javascript" src="<c:url value="/js/jquery/jquery.form.js"/>"></script>
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/jquery/tabs.css"/>"/>
 
 
 
-<h2><spring:message code="settings.htitle" text="Domains Settings" /></h2>
+<h2><spring:message code="services.htitle" text="Submitted Reservation Services" /></h2>
 
  <!-- generally javascript should go in a separate file -->
     <script type="text/javascript">
 
 var options = {
-    target:     "#settingsform",
-    url:        "settings.htm",
+    target:     "#servicesform",
+    url:        "servicesforidm.htm",
     success:    function(data) {
-        //alert(1);
+        //alert(2);
     }
 };
 
@@ -22,13 +23,15 @@ var options = {
             // bind 'myForm' and provide a simple callback function
 
            // alert(1);
-            $("#settingssearchform").ajaxForm(options);
+            $("#servicessearchform").ajaxForm(options);
 
              $("#currentIdm").change(function(){
-              $("#settingssearchform").submit();
+              $("#servicessearchform").submit();
+		//$("#servicessearchform").ajaxForm(options);
+		//alert(1);
              });
             //alert(11);
-            $("#settingssearchform").submit();
+            $("#servicessearchform").submit();
         });
 
 
@@ -36,13 +39,13 @@ var options = {
 	</script>
 
 <div align="center" class="logs_image">
-<form:form commandName="settings" action="" id="settingssearchform">
+<form:form commandName="services" action="" id="servicessearchform">
 <table>
 	<tr><td><h3>Please select an IDM to view and modify its properties</h3></td></tr>
 	<tr>
 	<td>
 		<center><form:select path="currentIdm">
-			<form:options items="${settings.idms}"/>
+			<form:options items="${services.idms}"/>
 		</form:select></center>
 	</td>
 	<td style="display:none">
@@ -53,6 +56,6 @@ var options = {
 </form:form>
 
 <hr/>
- <div id="settingsform" style="text-align:center" class="emptydiv">
+ <div id="servicesform" style="text-align:center" class="emptydiv">
  </div>
  </div>

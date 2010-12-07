@@ -521,8 +521,8 @@ public class TopologyFinder implements TopologyFinderNotifier{
 		buffer.append ("<li><strong>Name:  </strong>").append(state.getDomain()).append("</li>");
 		buffer.append ("<li><strong>Latitude:  </strong>").append(state.getLatitude()).append("</li>");
 		buffer.append ("<li><strong>Longitude:  </strong>").append(state.getLongitude()).append("</li>");
-		buffer.append ("<li><strong>Show services:  </strong>").append("<a href=\"reservations.htm?domain=").append(name).append("\">services</a>").append("</li>");
-		buffer.append ("<li><strong>Show settings:  </strong>").append("<a href=\"settings.htm?domain=").append(name).append("\">info</a>").append("</li>");
+		buffer.append ("<li><strong>Show services:  </strong>").append("<a href=\"reservations_select.htm?domain=").append(name).append("\">services</a>").append("</li>");
+		buffer.append ("<li><strong>Show settings:  </strong>").append("<a href=\"settings_select.htm?domain=").append(name).append("\">info</a>").append("</li>");
 		buffer.append ("<li><strong>Show logs:  </strong>").append("<a href=\"logs.htm?domain=").append(name).append("\">logs</a>").append("</li>");
 		buffer.append("</div>");
 		buffer.append("</ul>");	

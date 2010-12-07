@@ -9,7 +9,7 @@
 	<decision-state id="check-idm">
     	<if test="flowScope.settings.idms== null ||flowScope.settings.idms.size()==0" then="no-idm-regitered" else="settings"/>		
 	</decision-state>
-	<view-state id="settings" view="secure/settings" model="settings">
+	<view-state id="settings" view="secure/settings_out" model="settings">
 		<transition on="restart" to="settings" bind="true">
 			<evaluate expression="manager.setPropertiesForInterDomainManager (flowScope.settings.currentIdm, flowScope.settings.properties)"></evaluate>
 			

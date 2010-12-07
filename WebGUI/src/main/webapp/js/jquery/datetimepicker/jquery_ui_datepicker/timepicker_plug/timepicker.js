@@ -66,7 +66,7 @@ jQuery.fn.datetime = function() {
 						htmlins += '</li>';
 						htmlins += '<li>';
 						htmlins += '<div id="timepicker">';
-						htmlins += '<h3 id="tpSelectedTime">';
+						htmlins += '<h3 id="tpSelectedTime" style="font-size:0.8em;">';
 						htmlins += '	<span id="text_time"></span>';
 						htmlins += '	<span class="selHrs" >00</span>';
 						htmlins += '	<span class="delim" >:</span>';
@@ -75,11 +75,11 @@ jQuery.fn.datetime = function() {
 						htmlins += '</h3>';			
 						htmlins += '<ul id="sliderContainer">';	
 						htmlins += '	<li>';
-						htmlins += '        <h4 id="text_hour"></h4>';
+						htmlins += '        <h3 id="text_hour" style="font-size:0.8em;"></h3>';
 						htmlins += '        <div id="hourSlider" class="slider"></div>';
 						htmlins += '	</li>';
 						htmlins += '	<li>';
-						htmlins += '        <h4 id="text_minute"></h4>';				
+						htmlins += '        <h3 id="text_minute" style="font-size:0.8em;"></h3>';				
 						htmlins += '        <div id="minuteSlider" class="slider"></div>';
 						htmlins += '	</li>';
 						htmlins += '</ul>';

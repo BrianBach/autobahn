@@ -92,6 +92,6 @@
 	
 	<end-state id="no-idm-regitered" view="secure/noIDMRegistered"/>
 	 <end-state id="services" 
-         view="externalRedirect:contextRelative:/portal/secure/reservations.htm">
+         view="externalRedirect:contextRelative:/portal/secure/reservations_select.htm">
       </end-state>  
 </flow>

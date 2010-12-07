@@ -89,7 +89,8 @@
            	#timepicker {
            		border:1px solid #aaa;           		
            		background:#fff;
-           		min-width:120px;
+           		min-width:110px;
+           		max-height:180px
            	}
            	#timepicker ul {
            		overflow:hidden;
