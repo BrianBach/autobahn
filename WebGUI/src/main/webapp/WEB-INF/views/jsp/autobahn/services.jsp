@@ -289,18 +289,29 @@
    	</div>
   </div>	
 
-
-
-
 <script>
 
- jQuery(document).ready(function() {	 
+jQuery(document).ready(function() {	 
 	 $(function() {		
 		
-			//$(".scrollable").scrollable({ vertical: true, mousewheel: true });
-			$(".scrollable").scrollable({ vertical: true, mousewheel: false }).navigator();
+			$(".scrollable").scrollable({ 
+				vertical: true,
+				mousewheel: false,
+				
+				onSeek: function()  {  
+
+				      //index = this.getIndex();
+				      //alert("koniec =" + index);
+				     // alert("input =" + document.getElementById("index").value);
+				    } 	
+			
+			}).navigator();
+			
+			var api = $(".scrollable").data("scrollable");
+			//api.seekTo(document.getElementById("index").getAttribute("value"));
+			
 		}); 	 
- });
+});
 </script>
 
 

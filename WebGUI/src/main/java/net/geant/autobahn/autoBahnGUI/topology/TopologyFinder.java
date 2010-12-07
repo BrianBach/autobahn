@@ -344,6 +344,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 
 		Line line = null;
 		Marker marker = null;
+		if(interfaces.size() > 0) {
 
 			Set set = interfaces.entrySet();
 			Iterator it = set.iterator();
@@ -371,7 +372,8 @@ public class TopologyFinder implements TopologyFinderNotifier{
 							
 						}
 					}
-				}		
+				}			
+		}
 
 	}
 	public List<InterfaceComponent> setInterface(List<InterfaceComponent> list){
@@ -384,7 +386,8 @@ public class TopologyFinder implements TopologyFinderNotifier{
 			doblist.add(getBearingBetween2Points(list.get(i).getStartLatitude(),list.get(i).getStartLongitude(),
 					list.get(i).getEndLatitude(),list.get(i).getEndLongitude()));
 		}
-	
+		if(doblist.size() > 0){
+			
 		double max = Collections.max(doblist);
 		double min = Collections.min(doblist);
 		double range = 0;
@@ -424,6 +427,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 				biring = biring + range;
 			}
 		}
+	}
 		return components;
 	}
 	public Double getBearingBetween2Points(double lat1, double lon1, double lat2, double lon2){
