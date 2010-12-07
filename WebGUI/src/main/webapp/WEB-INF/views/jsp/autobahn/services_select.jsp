@@ -1,5 +1,6 @@
 <%@ include file="../common/includes.jsp"%>
 <script type="text/javascript" src="<c:url value="/js/jquery/jquery.min.js"/>"></script>
+<script src="http://cdn.jquerytools.org/1.2.3/full/jquery.tools.min.js"></script>
 <script type="text/javascript" src="<c:url value="/js/jquery/jquery.form.js"/>"></script>
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/jquery/tabs.css"/>"/>
 
