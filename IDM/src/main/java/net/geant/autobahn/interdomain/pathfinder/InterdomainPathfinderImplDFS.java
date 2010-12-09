@@ -31,19 +31,30 @@ public class InterdomainPathfinderImplDFS extends InterdomainPathfinderAbstractI
 
     private final Logger log = Logger.getLogger(InterdomainPathfinderImplDFS.class);
     
-    public final int MAX_ITERATIONS = 30;
+    public final int MAX_ITERATIONS = 10;
     
     // Global variables used by search
     int limit = MAX_ITERATIONS;
     List<Path> foundPaths;
     List<Link> edges;
-
+    int recursion_limit;
+    
     /**
      * Initalizes Interdomain Pathfinder
      * @param topology
      */
     public InterdomainPathfinderImplDFS(Topology topology) {
         super(topology);
+    }
+
+    /**
+     * Initalizes Interdomain Pathfinder
+     * @param topology
+     * @param limit - set limit of paths found to a different value than MAX_ITERATIONS
+     */
+    public InterdomainPathfinderImplDFS(Topology topology, int limit) {
+        super(topology);
+        this.limit = limit;
     }
 
     public Iterator<Path> findInterdomainPaths(Reservation reservation, List<Link> excludedLinks) {
@@ -125,6 +136,8 @@ public class InterdomainPathfinderImplDFS extends InterdomainPathfinderAbstractI
                 reservation.getEndPort().getNode());
         Stack<String> pathDomains = new Stack<String>();
         pathDomains.add(reservation.getStartPort().getNode().getAdminDomainID());
+        recursion_limit = topology.getLinks().size() * topology.getNodes().size();
+        log.debug("Recursion limit set at " + recursion_limit);
         search(reservation.getStartPort().getNode(), reservation.getEndPort().getNode(), new Stack<Link>(), pathDomains);
         
         if (reservation.getUserInclude() != null) {
@@ -302,8 +315,16 @@ public class InterdomainPathfinderImplDFS extends InterdomainPathfinderAbstractI
      */
     private void search(Node start, Node dest, Stack<Link> currentPath, Stack<String> pathDomains) {
 
-        if (limit == 0)
+        if (recursion_limit <= 0 && limit < MAX_ITERATIONS) {
+            log.debug("DFS Algorithm recursion limit reached.");
             return;
+        }
+        recursion_limit--;
+        log.debug("recursion limit: "+recursion_limit);
+        
+        if (limit == 0) {
+            return;
+        }
         
         List<Link> nodeEdges = getNodeEdges(start, edges);
         log.debug(start + " has " + nodeEdges.size() + " edges.");
