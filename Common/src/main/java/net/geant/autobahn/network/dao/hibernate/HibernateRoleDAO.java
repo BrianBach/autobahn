@@ -3,7 +3,6 @@ package net.geant.autobahn.network.dao.hibernate;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.geant.autobahn.dao.hibernate.HibernateUtil;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.Node;
 import net.geant.autobahn.network.Role;

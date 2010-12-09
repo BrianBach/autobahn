@@ -1,13 +1,11 @@
 package net.geant.autobahn.administration;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.jws.WebService;
 
 import net.geant.autobahn.idm.AccessPoint;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.reservation.Reservation;
-import net.geant.autobahn.reservation.Service;
 
 /**
  * @author Michal

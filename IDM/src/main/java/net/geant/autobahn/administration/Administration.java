@@ -8,8 +8,6 @@ import java.util.List;
 
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.reservation.Reservation;
-import net.geant.autobahn.reservation.Service;
-
 
 /**
  * @author Michal

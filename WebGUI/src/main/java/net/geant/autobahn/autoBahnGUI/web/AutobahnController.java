@@ -6,7 +6,6 @@ import java.util.LinkedHashSet;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import net.geant.autobahn.administration.ServiceType;
 import net.geant.autobahn.administration.KeyValue;
 import net.geant.autobahn.autoBahnGUI.manager.Manager;
 import net.geant.autobahn.autoBahnGUI.model.googlemaps.Line;

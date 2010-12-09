@@ -1,7 +1,5 @@
 package net.geant.autobahn.useraccesspoint;
 
-import javax.jws.WebResult;
-
 import net.geant.autobahn.idm.AccessPoint;
 
 /**

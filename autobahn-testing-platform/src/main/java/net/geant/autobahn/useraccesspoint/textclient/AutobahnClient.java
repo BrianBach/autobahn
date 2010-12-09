@@ -1,7 +1,5 @@
 package net.geant.autobahn.useraccesspoint.textclient;
 
-import java.io.IOException;
-
 import net.geant.autobahn.testplatform.clients.UserAccessPointClient;
 import net.geant.autobahn.useraccesspoint.ServiceRequest;
 import net.geant.autobahn.useraccesspoint.UserAccessPoint;
@@ -10,8 +8,7 @@ public class AutobahnClient {
 
 	/**
 	 * @param args
-	 * @throws IOException 
-	 * @throws IllegalStateException 
+	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
 

@@ -2,8 +2,6 @@ package net.geant.autobahn.calendar;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -17,7 +15,6 @@ import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
 import net.geant.autobahn.intradomain.IntradomainPath;
 import net.geant.autobahn.intradomain.common.GenericLink;
 import net.geant.autobahn.resourcesreservationcalendar.ResourcesReservationCalendar;
-import net.geant.autobahn.resourcesreservationcalendar.ResourcesReservationCalendarClient;
 
 /**
  * Implementation of web services. Singleton design pattern.

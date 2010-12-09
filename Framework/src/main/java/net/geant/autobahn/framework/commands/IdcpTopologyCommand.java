@@ -4,7 +4,6 @@
 package net.geant.autobahn.framework.commands;
 
 import java.io.BufferedWriter;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.Writer;
 import java.util.List;

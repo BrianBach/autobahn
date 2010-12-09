@@ -17,8 +17,6 @@ import net.geant.edugain.validation.ValidationException;
 import net.geant.edugain.validation.Validator;
 
 import org.apache.log4j.Logger;
-import org.opensaml.common.SignableSAMLObject;
-
 
 /**
  * This the EduGAIN module provided with the cNIS Web Services Framework.

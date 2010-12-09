@@ -5,7 +5,6 @@
  */
 package net.geant.autobahn.reservation;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -141,7 +140,6 @@ public class HomeDomainReservation extends AutobahnReservation {
      * Performs operations that has to be done when one of paths fails.
      * 
      * @param msg <code>String</code> paths failure message
-     * @throws RemoteException 
      */
     public void pathFailed(int code, String args) {
         this.addToFailedPaths(this.getPath());    // Keep a list of all paths that were tested and failed

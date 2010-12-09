@@ -7,7 +7,6 @@ package net.geant.autobahn.reservation.states.ld;
 
 import net.geant.autobahn.constraints.GlobalConstraints;
 import net.geant.autobahn.idcp.Autobahn2OscarsConverter;
-import net.geant.autobahn.idm.AccessPoint;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
 import net.geant.autobahn.idm2dm.OversubscribedException;
 import net.geant.autobahn.network.Link;

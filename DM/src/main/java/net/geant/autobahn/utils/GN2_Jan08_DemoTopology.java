@@ -1,10 +1,7 @@
 package net.geant.autobahn.utils;
 
 import net.geant.autobahn.dao.hibernate.DmHibernateUtil;
-import net.geant.autobahn.dao.hibernate.HibernateUtil;
 import net.geant.autobahn.intradomain.common.GenericInterface;
-
-import org.hibernate.Transaction;
 
 public class GN2_Jan08_DemoTopology {
 

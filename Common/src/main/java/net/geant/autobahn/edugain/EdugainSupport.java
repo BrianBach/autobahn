@@ -11,11 +11,9 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Properties;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
-import javax.xml.stream.XMLStreamException;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -39,7 +37,6 @@ import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.util.Base64;
 
 import org.w3c.dom.Document;
-
 
 /**
  * Works in cooperation with {@link DOMInHandler}.
@@ -155,18 +152,20 @@ public class EdugainSupport extends AbstractSoapInterceptor {
 		
 		//log.debug("Edugain Validation finished succesfully!");
 	}
-    	
-	 /**
-	 * Extracts the DOM representation of the SOAP message from the
-	 * MessageContext object. XFire internally keeps the message as an
-	 * XMLStreamReader entity. To get the DOM document the conversion is needed.
-	 * 
-	 * @param context
-	 * @return
-	 * @throws XMLStreamException
-	 * @throws ParserConfigurationException
-	 */
-	 public Document toDocument(SoapMessage soapMsg)throws TransformerConfigurationException,
+    
+    /**
+     * Extracts the DOM representation of the SOAP message from the
+     * MessageContext object. XFire internally keeps the message as an
+     * XMLStreamReader entity. To get the DOM document the conversion is needed.
+     * 
+     * @param soapMsg
+     * @return
+     * @throws TransformerConfigurationException
+     * @throws TransformerException
+     * @throws SOAPException
+     * @throws IOException
+     */
+    public Document toDocument(SoapMessage soapMsg)throws TransformerConfigurationException,
   	  	TransformerException, SOAPException, IOException {
 
 		 	SOAPMessage SOAPMsg = soapMsg.getContent(SOAPMessage.class);

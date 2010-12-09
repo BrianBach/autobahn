@@ -6,7 +6,6 @@ import java.util.Calendar;
 import org.springframework.binding.message.MessageBuilder;
 import org.springframework.binding.message.MessageContext;
 import org.springframework.binding.validation.ValidationContext;
-import org.springframework.validation.Errors;
 import net.geant.autobahn.useraccesspoint.ReservationRequest;
 
 

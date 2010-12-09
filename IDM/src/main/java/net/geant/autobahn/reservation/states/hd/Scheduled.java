@@ -9,7 +9,6 @@ package net.geant.autobahn.reservation.states.hd;
 import java.util.Calendar;
 
 import net.geant.autobahn.idcp.Autobahn2OscarsConverter;
-import net.geant.autobahn.idm.AccessPoint;
 import net.geant.autobahn.interdomain.NoSuchReservationException;
 import net.geant.autobahn.reservation.HomeDomainReservation;
 import net.geant.autobahn.reservation.ReservationStatusListener;

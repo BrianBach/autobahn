@@ -3,7 +3,6 @@
  */
 package net.geant.autobahn.reservation;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -152,7 +151,6 @@ public abstract class AutobahnReservation extends Reservation implements Runnabl
      * 
      * @throws ConstraintsAlreadyUsedException 
      * @throws OversubscribedException 
-     * @throws RemoteException 
      */
     public void reserveResources() throws ConstraintsAlreadyUsedException,
     		OversubscribedException {
@@ -166,7 +164,6 @@ public abstract class AutobahnReservation extends Reservation implements Runnabl
      * Releases resources reserved by the reservation. Released resources are
      * capacity on the links, as well as other network resources such as
      * reserved VLAN identifiers.
-     * @throws RemoteException 
      */
     public void releaseResources() {
         try {

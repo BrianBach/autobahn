@@ -13,7 +13,6 @@ import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.dao.DmDAOFactory;
 import net.geant.autobahn.dao.hibernate.DmHibernateUtil;
 import net.geant.autobahn.dao.hibernate.HibernateDmDAOFactory;
-import net.geant.autobahn.dao.hibernate.HibernateUtil;
 import net.geant.autobahn.dm2idm.Dm2Idm;
 import net.geant.autobahn.dm2idm.Dm2IdmClient;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;

@@ -1,7 +1,5 @@
 package net.geant.autobahn.useraccesspoint.callback;
 
-import java.net.MalformedURLException;
-
 import net.geant.autobahn.reservation.ReservationStatusListener;
 
 public class UapCallbackClient implements UapCallback, ReservationStatusListener {
@@ -11,7 +9,6 @@ public class UapCallbackClient implements UapCallback, ReservationStatusListener
 	/**
 	 * 
 	 * @param endPoint
-	 * @throws MalformedURLException
 	 */
 	public UapCallbackClient(String endPoint) {
 		UapCallbackService service = new UapCallbackService(endPoint);

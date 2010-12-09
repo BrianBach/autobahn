@@ -10,10 +10,6 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import javax.xml.namespace.QName;
-import javax.jws.WebMethod;
-import javax.jws.WebResult;
-import javax.xml.ws.RequestWrapper;
-import javax.xml.ws.ResponseWrapper;
 
 import net.geant.autobahn.aai.AAIException;
 
