@@ -93,7 +93,7 @@ public class ResourcesReservationCalendarClient implements ResourcesReservationC
 			PathConstraints pcon, Calendar start, Calendar end){
 		if(rc != null)
              rc.removeReservation( glinks, capacity,
-        			 pcon,  start,  end);;
+        			 pcon,  start,  end);
 	}
 
 }
