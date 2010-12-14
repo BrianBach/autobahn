@@ -314,6 +314,11 @@ public class ReservationProcessor {
 	public void activate(String resID, final boolean success) {
 		final AutobahnReservation res = reservations.get(resID);
 
+		if(res == null) {
+			log.info("Activate: Reservation " + resID + " already finished");
+			return;
+		}
+		
         Runnable command = new Runnable() {
             public void run() {
                 rdao.update(res);
@@ -334,6 +339,11 @@ public class ReservationProcessor {
 	public void finish(String resID, final boolean success) {
 		final AutobahnReservation res = reservations.get(resID);
 
+		if(res == null) {
+			log.info("Finish: Reservation " + resID + " already finished");
+			return;
+		}
+		
         Runnable command = new Runnable() {
             public void run() {
             	rdao.update(res);
