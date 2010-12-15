@@ -251,7 +251,13 @@ public class Autobahn2OscarsConverter {
         
 		try {
 			InputStream is = getClass().getClassLoader().getResourceAsStream("etc/" + idcpServer + ".properties");
-			properties.load(is);
+
+			try {
+				properties.load(is);
+			} catch (Exception ex) {
+				// it gets here, if input stream is null although it should throw declared IOException
+				return properties;
+			}
 			is.close();
 			log.debug(properties.size() + " autobahn<->idcp ports loaded");
 			
