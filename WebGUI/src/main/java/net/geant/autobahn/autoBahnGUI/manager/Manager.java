@@ -305,9 +305,12 @@ public interface Manager {
 	
 	public String getFriendlyNamefromLS(String identifier);
 	
-	public boolean checkIDMavailability();
+	public void checkIDMavailability();
 	
 	public List<ServiceType> sortServicesByBodyID(List<ServiceType> list);
-
+	
+	public String setParameter(String param);
+	
+	public int getNumberOfAvailableIDMs();
 }
 

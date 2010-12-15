@@ -13,10 +13,13 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.SortedSet;
 import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
@@ -137,18 +140,20 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	private LookupService lookupService;
 	
 	public ManagerImpl(){
-		Properties properties = new Properties();
-        try {
-            InputStream is = getClass().getClassLoader().getResourceAsStream(
-                        "../etc/webgui.properties");
-            properties.load(is);
-            is.close();
-            logger.debug(properties.size() + " properties loaded");
-        } catch (IOException e) {
-            logger.info("Could not load lookuphost properties: " + e.getMessage());
-        }
-        String host = properties.getProperty("lookuphost");
-        lookupService = new LookupService(host);
+//		Properties properties = new Properties();
+//        try {
+//            InputStream is = getClass().getClassLoader().getResourceAsStream(
+//                        "../etc/webgui.properties");
+//            properties.load(is);
+//            is.close();
+//            logger.debug(properties.size() + " properties loaded");
+//        } catch (IOException e) {
+//            logger.info("Could not load lookuphost properties: " + e.getMessage());
+//        }
+//        String host = properties.getProperty("lookuphost");
+//        lookupService = new LookupService(host);
+		
+		
 	}
 	
 	public LookupService getLookupServiceObject(){
@@ -600,21 +605,23 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 			}
 		}
 	}
-	public boolean checkIDMavailability(){
-		
-		boolean flag = false;
+	public void checkIDMavailability(){
 		if (!idms.isEmpty()) {
 			Iterator<String> iterator = idmsTime.keySet().iterator();
 			do 	{
 					String nextElement = iterator.next();
-		            if (System.currentTimeMillis() - idmsTime.get(nextElement) > tearDownTime) {
-		            	
-		            	idms.remove(nextElement);
-		            	flag = true;
-		            }		                		            
+           	
+		            	if (System.currentTimeMillis() - idmsTime.get(nextElement) > tearDownTime) {
+			            	logger.info("IDM tear down "+nextElement);
+			            	idms.remove(nextElement);
+			            	
+			            }
+					                		            
 	        } while (iterator.hasNext());
         }
-		return flag;
+		else
+			logger.info("IDMs not availabale ");
+
 	}
 	
 	/*
@@ -622,6 +629,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.ManagerNotifier#statusUpdated(java.lang.String, java.lang.String, net.geant.autobahn.administration.Status)
 	 */
 	public void statusUpdated(String idm, String idmUrl, Status status) {
+		
 		InterDomainManager manager = idms.get(idm);
 		if (manager == null) {
 			manager = newInterDomainManagerConnected(idm, idmUrl);
@@ -646,7 +654,6 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		}		
 		if (notifier!= null)	
 				notifier.updateTopology();
-		
 	}
 	/*
 	 * (non-Javadoc)
@@ -804,16 +811,18 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 	 */
 	public void cancelServiceInInterDomainManager(String idm,
 			String serviceID) throws UserAccessPointException {
-		
+				
 		if (idm==null || serviceID == null)
 			return;
 		InterDomainManager manager= idms.get(idm);
-		if (manager != null){
-			logger.info("Canceling service:"+idm+":"+serviceID);
-			manager.cancelService(serviceID);
-			manager.getServices();
-		}
 		
+		if ((manager != null) && ( manager.getService(serviceID) != null )){
+			
+			logger.info("Canceling service: "+idm+":"+serviceID);
+			manager.cancelService(serviceID);
+		}
+		else
+			logger.info("Service can not be canceled: "+idm+":"+serviceID);
 	}
 	/*
 	 * (non-Javadoc)
@@ -1153,19 +1162,19 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 	public ServicesFormModel getSubmitedServicesInIDM(String idm) {
 		ServicesFormModel serv = new ServicesFormModel();
 		List<String> managers = getAllInterdomainManagers();
-		
+		InterDomainManager manager = null;
 		logger.info("managers:"+managers);
 		if (managers== null || managers.size()==0)
 			return serv;
 		serv.setIdms(managers);
 		if (idm ==null){
 			serv.setCurrentIdm(managers.get(0));
-			InterDomainManager manager = idms.get(managers.get(0));
+			manager = idms.get(managers.get(0));
 			serv.setComparator(new ServicesComparator());
 			serv.setServices(manager.getServices());
 			
-		} else {
-			InterDomainManager manager = idms.get(idm);
+		} else { 
+			manager = idms.get(idm);
 			List<ServiceType> services = manager.getServices();
 			serv.setComparator(new ServicesComparator());
 			serv.setServices(services);
@@ -1184,6 +1193,10 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 			String contextUsername=SecurityContextHolder.getContext().getAuthentication().getName();
 			
 			for (ServiceType servType: serv.getServices()) {
+				
+				String serviceID = servType.getBodID();
+				if(manager.getService(serviceID) == null)
+					continue;
 				//Get the username of the first reservation as username
 				String servUsername=servType.getUser().getName();
 				if(servUsername==null) continue;
@@ -1255,5 +1268,14 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		Collections.sort(list, comparator);
 
 		return list;
+	}
+	public String setParameter(String param){	
+		return param;
+	}
+	public int getNumberOfAvailableIDMs(){
+		if(idms == null)
+			return -1;		
+		
+		return idms.size();
 	}
 }

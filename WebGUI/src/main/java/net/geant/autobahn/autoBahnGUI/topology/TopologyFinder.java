@@ -2,11 +2,14 @@ package net.geant.autobahn.autoBahnGUI.topology;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import net.geant.autobahn.administration.Neighbor;
 import net.geant.autobahn.administration.Status;
@@ -44,7 +47,9 @@ public class TopologyFinder implements TopologyFinderNotifier{
 	/**
 	 * Time after which the IDM is mark as not accessible
 	 */
-	public static final long DEFAULT_DOWN_TIME = 10000;
+	public static final long DEFAULT_DOWN_TIME = 70000;
+	
+	public int numberOfIDMs = 0;
 	
 	/**
 	 * Topology representation
@@ -53,17 +58,40 @@ public class TopologyFinder implements TopologyFinderNotifier{
 	
 	private Map<String,InterfaceComponent> map = new HashMap<String, InterfaceComponent>();
   	
-	public boolean flag = false;
+	private Timer timer = new Timer();
 	
+	private Object timerLock = new Object();
+	
+	public TopologyFinder(){
+		
+		timer.schedule(new NoIDMAvailableTimeout(), DEFAULT_DOWN_TIME);
+	}
+	
+	class NoIDMAvailableTimeout extends TimerTask {
+
+		public void run() {
+			
+			manager.checkIDMavailability();
+			createTopology();
+		}	
+	}
 	/**
 	 * Updates topology by analysing manager data
 	 */
-	public synchronized void updateTopology (){
+	public synchronized void updateTopology() {
 		new Thread(new Runnable() {
             public void run() {
             	synchronized (topology) {
-            		if(flag == false || manager.checkIDMavailability())
+
+            		manager.checkIDMavailability();
+            		
+            		if(numberOfIDMs != manager.getNumberOfAvailableIDMs())
             			createTopology();
+				}
+            	synchronized (timerLock) {
+            		timer.cancel();
+            		timer = new Timer();
+            		timer.schedule(new NoIDMAvailableTimeout(), DEFAULT_DOWN_TIME);
 				}
             }
         }).start();
@@ -240,6 +268,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 		 List<String> list = null;
 		
 		 if (manager==null){
+			 logger.info("manager = null ");
 			return;
 		}
 		
@@ -247,11 +276,14 @@ public class TopologyFinder implements TopologyFinderNotifier{
 		List<String> strings = new ArrayList<String>();
 		InterfaceComponent ic = null;
 		
+		numberOfIDMs = manager.getNumberOfAvailableIDMs();
+		
 		List<String> idmsNames = manager.getAllInterdomainManagers();
 		
-		if (idmsNames == null)
+		if (idmsNames == null){
+			 logger.info("No IDMs available "+idmsNames);
 			return;
-		
+		}
 		int length = idmsNames.size();
 		InterDomainManager idm = null;
 		InterDomainManager neighbourIdm=null;
@@ -336,7 +368,6 @@ public class TopologyFinder implements TopologyFinderNotifier{
 
 			if(interfaces != null)
 				setInterfaceInMainTopology(interfaces);
-			flag = true;
 	}
 
 

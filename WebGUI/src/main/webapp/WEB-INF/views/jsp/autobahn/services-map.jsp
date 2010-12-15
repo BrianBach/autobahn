@@ -19,7 +19,6 @@
 <br/>
 <form:form commandName="services">
 
-
 <div class="images">
 
 	<div class="map" id="map"></div>
@@ -70,7 +69,11 @@
 </div>
 
 </form:form>
-	<script type="text/javascript">		
+	<script type="text/javascript">
+	
+	//map will be refreshed every 30 seconds
+	setTimeout( "refresh()", 30*1000 );
+
 	if((screen.width>=1281) && (screen.height>=801) && (screen.width < 1680)){
 	jQuery(document).ready(function() {
 		jQuery(function() {		
@@ -200,6 +203,13 @@ else {
 						 
 					}); 	 
 			 });							
+}
+
+var sURL = location.href;
+
+function refresh()
+{
+    window.location.href = sURL;
 }
 
 </script>
