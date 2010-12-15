@@ -140,18 +140,18 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	private LookupService lookupService;
 	
 	public ManagerImpl(){
-//		Properties properties = new Properties();
-//        try {
-//            InputStream is = getClass().getClassLoader().getResourceAsStream(
-//                        "../etc/webgui.properties");
-//            properties.load(is);
-//            is.close();
-//            logger.debug(properties.size() + " properties loaded");
-//        } catch (IOException e) {
-//            logger.info("Could not load lookuphost properties: " + e.getMessage());
-//        }
-//        String host = properties.getProperty("lookuphost");
-//        lookupService = new LookupService(host);
+		Properties properties = new Properties();
+        try {
+            InputStream is = getClass().getClassLoader().getResourceAsStream(
+                        "../etc/webgui.properties");
+            properties.load(is);
+            is.close();
+            logger.debug(properties.size() + " properties loaded");
+        } catch (IOException e) {
+            logger.info("Could not load lookuphost properties: " + e.getMessage());
+        }
+        String host = properties.getProperty("lookuphost");
+        lookupService = new LookupService(host);
 		
 		
 	}
