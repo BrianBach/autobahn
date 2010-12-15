@@ -513,10 +513,11 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 						
 			List<Reservation> res = list.get(i).getReservations();	
 			for (int j = 0; j < res.size(); j++) {
-
+				
+				if(res.get(j).getPath() == null)
+					continue;
 				String bodyID = res.get(j).getBodID();
 				String homeID = res.get(j).getPath().getHomeDomainID();
-		
 				map.put(bodyID,homeID);
 			}
 		}
