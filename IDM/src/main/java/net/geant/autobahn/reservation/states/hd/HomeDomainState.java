@@ -17,20 +17,20 @@ import net.geant.autobahn.reservation.states.State;
  */
 public abstract class HomeDomainState extends State {
 
-    public static HomeDomainState ACCEPTED = new Accepted(1, "ACCEPTED");
-    public static HomeDomainState PATHFINDING = new Pathfinding(2, "PATHFINDING");
-    public static HomeDomainState LOCAL_CHECK = new LocalCheck(3, "LOCAL_CHECK");
-    public static HomeDomainState SCHEDULING = new Scheduling(4, "SCHEDULING");
-    public static HomeDomainState SCHEDULED = new Scheduled(5, "SCHEDULED");
-    public static HomeDomainState CANCELLING = new Cancelling(6, "CANCELLING");
-    public static HomeDomainState DEFERRED_CANCEL = new DeferredCancel(7, "DEFERRED_CANCEL");
-    public static HomeDomainState WITHDRAWING = new Withdrawing(8, "WITHDRAWING");
-    public static HomeDomainState ACTIVATING = new Activating(9, "ACTIVATING");
-    public static HomeDomainState ACTIVE = new Active(10, "ACTIVE");
-    public static HomeDomainState FINISHING = new Finishing(11, "FINISHING");
-    public static HomeDomainState FINISHED = new FinalState(21, "FINISHED");
-    public static HomeDomainState CANCELLED = new FinalState(22, "CANCELLED");
-    public static HomeDomainState FAILED = new FinalState(23, "FAILED");
+    public static final HomeDomainState ACCEPTED = new Accepted(1, "ACCEPTED");
+    public static final HomeDomainState PATHFINDING = new Pathfinding(2, "PATHFINDING");
+    public static final HomeDomainState LOCAL_CHECK = new LocalCheck(3, "LOCAL_CHECK");
+    public static final HomeDomainState SCHEDULING = new Scheduling(4, "SCHEDULING");
+    public static final HomeDomainState SCHEDULED = new Scheduled(5, "SCHEDULED");
+    public static final HomeDomainState CANCELLING = new Cancelling(6, "CANCELLING");
+    public static final HomeDomainState DEFERRED_CANCEL = new DeferredCancel(7, "DEFERRED_CANCEL");
+    public static final HomeDomainState WITHDRAWING = new Withdrawing(8, "WITHDRAWING");
+    public static final HomeDomainState ACTIVATING = new Activating(9, "ACTIVATING");
+    public static final HomeDomainState ACTIVE = new Active(10, "ACTIVE");
+    public static final HomeDomainState FINISHING = new Finishing(11, "FINISHING");
+    public static final HomeDomainState FINISHED = new FinalState(21, "FINISHED");
+    public static final HomeDomainState CANCELLED = new FinalState(22, "CANCELLED");
+    public static final HomeDomainState FAILED = new FinalState(23, "FAILED");
 
     private static HomeDomainState[] states = {
         ACCEPTED, PATHFINDING, LOCAL_CHECK, SCHEDULING, SCHEDULED,

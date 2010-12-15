@@ -86,21 +86,21 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	/**
 	 * Reservation states
 	 */
-	public static int UNKNOWN = 0;
-	public static int ACCEPTED = 1;
-    public static int PATHFINDING = 2;
-    public static int LOCAL_CHECK = 3;
-    public static int SCHEDULING =4;
-    public static int SCHEDULED = 5;
-    public static int CANCELLING = 6;
-    public static int DEFERRED_CANCEL = 7;
-    public static int WITHDRAWING = 8;
-    public static int ACTIVATING = 9;
-    public static int ACTIVE = 10;
-    public static int FINISHING = 11;
-    public static int FINISHED = 21;
-    public static int CANCELLED = 22;
-    public static int FAILED = 23; 
+	public static final int UNKNOWN = 0;
+	public static final int ACCEPTED = 1;
+    public static final int PATHFINDING = 2;
+    public static final int LOCAL_CHECK = 3;
+    public static final int SCHEDULING =4;
+    public static final int SCHEDULED = 5;
+    public static final int CANCELLING = 6;
+    public static final int DEFERRED_CANCEL = 7;
+    public static final int WITHDRAWING = 8;
+    public static final int ACTIVATING = 9;
+    public static final int ACTIVE = 10;
+    public static final int FINISHING = 11;
+    public static final int FINISHED = 21;
+    public static final int CANCELLED = 22;
+    public static final int FAILED = 23; 
 	
     /**
 	 * Reservations states names

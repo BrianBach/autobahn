@@ -43,7 +43,7 @@ public abstract class AutobahnReservation extends Reservation implements Runnabl
 		ReservationEvents, ReservationReportEvents {
 
 	@XmlTransient
-    protected static Logger log = Logger.getLogger(AutobahnReservation.class);
+    protected static final Logger log = Logger.getLogger(AutobahnReservation.class);
     
     @XmlTransient
     protected List<ReservationStatusListener> statusListeners = new ArrayList<ReservationStatusListener>();

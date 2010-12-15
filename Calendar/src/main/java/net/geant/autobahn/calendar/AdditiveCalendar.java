@@ -17,9 +17,9 @@ public class AdditiveCalendar {
 
     /**
      * Preciseness of link reservations. Indicates minimal time unit that
-     * seperates one reservation from another.
+     * separates one reservation from another.
      */
-    public static int PRECISENESS = Calendar.MILLISECOND;
+    public static final int PRECISENESS = Calendar.MILLISECOND;
 
     private SortedMap<Calendar, Long> usage = null;
 

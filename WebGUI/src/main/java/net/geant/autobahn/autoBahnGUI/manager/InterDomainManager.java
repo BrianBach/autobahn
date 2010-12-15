@@ -74,7 +74,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 	/**
 	 * Logs information
 	 */
-	public static Logger logger = Logger.getLogger("IDMsManager");
+	public static final Logger logger = Logger.getLogger("IDMsManager");
 	
 	/**
 	 * Creates InterDomainManager object

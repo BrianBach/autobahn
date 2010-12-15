@@ -51,23 +51,23 @@ public class Link implements Serializable {
     /**
      * real link connecting neighbouring ports
      */
-    public static int REGULAR = 0;
+    public static final int REGULAR = 0;
     
     /**
      * connection between two non-neighbouring nodes belonging to the same
      * domain, representing intra-domain path as a link at inter-domain level
      */
-    public static int VIRTUAL = 1;
+    public static final int VIRTUAL = 1;
     
     /**
      * represents the union of two or more contiguous local links
      */
-    public static int COMPOSITE = 2;
+    public static final int COMPOSITE = 2;
     
     /**
      * connecting two nodes belonging to different domains
      */
-    public static int INTER_DOMAIN = 3;
+    public static final int INTER_DOMAIN = 3;
     
     private String bodID;
     
