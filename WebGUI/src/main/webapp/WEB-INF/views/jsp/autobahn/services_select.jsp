@@ -9,30 +9,46 @@
 <h2><spring:message code="services.htitle" text="Submitted Reservation Services" /></h2>
 
  <!-- generally javascript should go in a separate file -->
-    <script type="text/javascript">
-
-var options = {
-    target:     "#servicesform",
-    url:        "servicesforidm.htm",
-    success:    function(data) {
-        //alert(2);
-    }
+<script type="text/javascript">
+var dataG;
+var options = 
+{
+    //target:     "#servicesform"	,
+    url:        "servicesforidm.htm"	,
+    success:    function(data) 
+    {	 
+	  if(dataG!=data)
+	  {
+	       $("#servicesform").html(data);
+	       dataG=data;
+	  }
+   }
 };
 
-	   jQuery(document).ready(function() {
-            // bind 'myForm' and provide a simple callback function
 
-           // alert(1);
-            $("#servicessearchform").ajaxForm(options);
 
-             $("#currentIdm").change(function(){
-              $("#servicessearchform").submit();
-		//$("#servicessearchform").ajaxForm(options);
-		//alert(1);
-             });
-            //alert(11);
-            $("#servicessearchform").submit();
-        });
+function updateStates()
+{
+	$("#servicessearchform").submit();
+}
+
+
+jQuery(document).ready(function() 
+{
+     // bind 'myForm' and provide a simple callback function
+           
+     $("#servicessearchform").ajaxForm(options);
+
+     $("#currentIdm").change(function()
+     {
+	  $("#servicessearchform").submit();
+	  //$("#servicessearchform").ajaxForm(options);
+	  //alert(1);
+     });
+
+     $("#servicessearchform").submit();
+     setInterval( "updateStates()", 5000 );       
+});
 
 
 
@@ -56,6 +72,7 @@ var options = {
 </form:form>
 
 <hr/>
+<%--   <div id="servicesform" style="text-align:center" class="e" >  --%>
  <div id="servicesform" style="text-align:center" class="emptydiv">
  </div>
  </div>

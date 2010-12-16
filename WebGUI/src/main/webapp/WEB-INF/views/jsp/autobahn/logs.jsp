@@ -7,8 +7,8 @@
 <script type="text/javascript">
 
 
-    $.fn.serializeObject = function()
-    {
+$.fn.serializeObject = function()
+{
         var o = {};
         var a = $(":input").serializeArray();
 
@@ -27,42 +27,47 @@
  
 function updateLogs()
 {
-$("#logssearchform").submit();
+     $("#logssearchform").submit();
 }
 
-    jQuery(document).ready(function() {
+var counter=true;
+jQuery(document).ready(function() 
+{
         // bind 'myForm' and provide a simple callback function
-       $("#ajaxerror").ajaxError(function() {
-            $(this).text('Cached data are being provided..please try again or wait for real time update.');
-        });
+     $("#ajaxerror").ajaxError(function() 
+     {
+	  $(this).text('Cached data are being provided..please try again or wait for real time update.');
+     });
 
-        $("#logssearchform").submit(function() {
-            
-var aa = $.toJSON($("values").serializeObject());
-//alert(aa);
-            jQuery.getJSON("logs_request.htm", aa,
-                    function(data) {
-                        //alert(data);
-				//alert(data.result);
-                        $("#ajaxsuccess").html("Showing logs for <font color='blue'>"+$("#currentIdm").val()+"</font><br/>"+(new Date()).format("r")+"<br>The contents will update every 5 seconds");
-                        if($("#logsview").text()!=data.result){
-							$("#logsview").text(data.result);
-						}
-						$("#logsview").animate({ scrollTop: $("#logsview").attr("scrollHeight") - $('#logsview').height() }, 1);
-
+     $("#logssearchform").submit(function() 
+     {            
+	  var aa = $.toJSON($("values").serializeObject());
+          jQuery.getJSON("logs_request.htm", aa,
+                    function(data) 
+		    {                    
+			 $("#ajaxsuccess").html("Showing logs for <font color='blue'>"+$("#currentIdm").val()+"</font><br/>"+(new Date()).format("r")+"<br>The contents will update every 5 seconds");
+			 if($("#logsview").text()!=data.result)
+			 {
+			      $("#logsview").text(data.result);
+			      $("#logsview").animate({ scrollTop: $("#logsview").attr("scrollHeight") - $('#logsview').height() }, 1);
+			 } 
                     }, "json");
-            return false;
-        });
-
-        $("#currentIdm").change(function() {
-
+	  if(counter)
+	  {
+	       $("#logsview").animate({ scrollTop: $("#logsview").attr("scrollHeight") - $('#logsview').height() }, 1);
+	       counter=false;
+	  }
+          return false;
+     });     
+   
+     $("#currentIdm").change(function() 
+     {
            $("#logssearchform").submit();
-
-        });
-
-        $("#logssearchform").submit();
-setInterval( "updateLogs()", 5000 );
-    });
+     });
+     
+     $("#logssearchform").submit();
+     setInterval( "updateLogs()", 5000 );
+});  
 
 
 </script>

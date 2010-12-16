@@ -115,7 +115,8 @@
 //alert($("#currentIdm").val());
 </script>
 <!--div style="position:relative;float:left;padding-top:20px"><a style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;" href="#" onclick="window.top.location=location.href + '&_eventId=cancel&id=${element.bodID}&currentIdm2=' + $('#currentIdm').val()"><input id="cancel" name="Cancel" value="Cancel" type="submit" style="width:100px;" onclick="window.top.location=location.href + '&_eventId=cancel&id=${element.bodID}&currentIdm2=' + $('#currentIdm').val()" /></a-->
-<div style="position:relative;float:left;padding-top:20px"><span style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"><input id="cancel" name="Cancel" value="Cancel" type="submit" style="width:100px;" onclick="window.top.location=location.href + '&_eventId=cancel&id=${element.bodID}&currentIdm2=' + $('#currentIdm').val()" /></span>
+<div style="position:relative;float:left;padding-top:20px"><span style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"><input id="cancel" name="Cancel" value="Cancel" type="submit" style="width:100px;" onclick="jQuery.post(location.href + '&_eventId=cancel&id=${element.bodID}&currentIdm2=' + $('#currentIdm').val() )" /></span>
+
 <!--div style="position:relative;float:left;padding-top:20px"><a style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;" href="reservations_select.htm?execution=e10s1&_eventId=cancel&id=${element.bodID}"><input id="cancel" name="Cancel" value="Cancel" type="submit" style="width:100px;" onclick="window.top.location='reservations_select.htm?execution=e10s1&_eventId=cancel&id=${element.bodID}'" /></a-->
 
 				<a style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"  href="<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}">
@@ -191,7 +192,7 @@
 		</c:forEach>
 	</table>
 <!--div style="position:relative;float:left;padding-top:20px"><a style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;" href="${flowExecutionUrl}&_eventId=cancel&id=${element.bodID}"><input id="cancel" name="Cancel" value="Cancel" type="submit" style="width:100px;" onclick="window.top.location='${flowExecutionUrl}&_eventId=cancel&id=${element.bodID}'" /></a-->
-<div style="position:relative;float:left;padding-top:20px"><span style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"><input id="cancel" name="Cancel" value="Cancel" type="submit" style="width:100px;" onclick="window.top.location=location.href + '&_eventId=cancel&id=${element.bodID}&currentIdm2=' + $('#currentIdm').val()" /></span>
+<div style="position:relative;float:left;padding-top:20px"><span style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"><input id="cancel" name="Cancel" value="Cancel" type="submit" style="width:100px;" onclick="jQuery.post(location.href + '&_eventId=cancel&id=${element.bodID}&currentIdm2=' + $('#currentIdm').val() )" /></span>
 
 				<a style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"  href="<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}">
 <input id="view" name="view" value="View map" type="submit" style="width:100px" onclick="window.top.location='<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}'" /></a>
@@ -260,7 +261,8 @@
 				</tr>
 		</c:forEach>
 	</table>
-<div style="position:relative;float:left;padding-top:20px"><span style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"><input id="cancel" name="Cancel" value="Cancel" type="submit" style="width:100px;" onclick="window.top.location=location.href + '&_eventId=cancel&id=${element.bodID}&currentIdm2=' + $('#currentIdm').val()" /></span>
+<div style="position:relative;float:left;padding-top:20px"><span style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"><input id="cancel" name="Cancel" value="Cancel" type="submit" style="width:100px;" onclick="jQuery.post(location.href + '&_eventId=cancel&id=${element.bodID}&currentIdm2=' + $('#currentIdm').val() )" /></span>
+
 	<a style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"  href="<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}">
 <input id="view" name="view" value="View map" type="submit" style="width:100px" onclick="window.top.location='<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}'" /></a>
 				
