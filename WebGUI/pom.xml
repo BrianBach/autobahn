@@ -461,7 +461,7 @@
         <dependency>
 			<groupId>net.geant.security</groupId>
 			<artifactId>aa-framework</artifactId>
-			<version>1.4</version>
+			<version>1.6-SNAPSHOT</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.apache.ws.commons</groupId>
@@ -475,6 +475,10 @@
         <repository>
             <id>json-lib</id>
             <url>http://json-lib.sf.net/m2/repo/release/</url>
+        </repository>
+        <repository>
+		    <id>geant-repo</id>
+		    <url>http://maven.geant.net/snapshots-repo</url>
         </repository>
 
     </repositories>

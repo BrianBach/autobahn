@@ -26,8 +26,7 @@
 	<beans:bean id="xmlService"
 		class="net.geant.security.xml.userdetails.XmlUserDetailsService">
 		
-		<!-- TODO: change to relative path if aa-framework updated -->
-		<beans:constructor-arg value="webapps/autobahn-gui/WEB-INF/userdetails.xml" />
+		<beans:constructor-arg value="classpath:../userdetails.xml" />
 	</beans:bean>
 
 	<authentication-provider user-service-ref="xmlService">
