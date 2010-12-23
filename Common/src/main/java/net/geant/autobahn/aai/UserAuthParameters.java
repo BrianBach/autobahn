@@ -35,6 +35,15 @@ public class UserAuthParameters implements Serializable {
     		}
     	}
     }
+    
+    public String[] parametersToAuthorities() {
+        String authorities[]=new String[3];
+        authorities[0]="ROLE_" + getProjectRole();
+        authorities[1]="ORG_" + getOrganization();
+        authorities[2]="PM_" + getProjectMembership();
+        
+        return authorities;
+    }
 
     public String getIdentifier() {
         return identifier;

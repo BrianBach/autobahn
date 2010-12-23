@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.TimerTask;
 
 import net.geant.autobahn.aai.AAIException;
+import net.geant.autobahn.aai.DmUserAuthorizer;
 import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.constraints.PathConstraints;
 import net.geant.autobahn.dao.hibernate.DmHibernateUtil;
@@ -32,6 +33,15 @@ import net.geant.autobahn.topologyabstraction.TopologyAbstraction;
 import net.geant.autobahn.topologyabstraction.TopologyAbstractionClient;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.security.AccessDeniedException;
+import org.springframework.security.Authentication;
+import org.springframework.security.GrantedAuthority;
+import org.springframework.security.context.SecurityContextHolder;
+import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
+import org.springframework.security.util.AuthorityUtils;
 
 /**
  * Main class of the Domain Manager.<br/>
@@ -198,9 +208,42 @@ public class ResourcesReservation {
 		final Link ingress = links[0];
 		final Link egress = links[links.length - 1];
 		
-		UserAuthorizer uauthorizer=new UserAuthorizer(par);
-		// Throws AAIException if check fails
-	    uauthorizer.checkSimpleParameters();
+		//Authority check		
+		AccessPoint ap = AccessPoint.getInstance();
+		String authEnabled = ap.getProperty("authorization.enabled");
+        
+		
+		if (authEnabled != null && authEnabled.equals("true") ) {
+		    try {
+                ApplicationContext context = new ClassPathXmlApplicationContext(
+                        "classpath:etc/dm_security.xml");
+
+                GrantedAuthority[] authorities = AuthorityUtils.stringArrayToAuthorityArray(
+                        par.getAuthParameters().parametersToAuthorities());
+                
+                // Creation of dummy authentication object from user auth parameters, because
+                // we trust webgui authentication
+                Authentication newAuthentication = new UsernamePasswordAuthenticationToken(
+                        par.getAuthParameters().getIdentifier(), "pass", authorities);
+
+                SecurityContextHolder.getContext().setAuthentication(newAuthentication);
+                
+                DmUserAuthorizer uauthorizer = (DmUserAuthorizer) context.getBean("uauthorizer");
+
+                if (uauthorizer == null) {
+                    throw new RuntimeException("UserAuthorizer could not be found.  Tried beanId='uauthorizer'");
+                }
+
+                // Will throw AccessDeniedException if authorization fails
+                uauthorizer.authorize();
+	        
+	        } catch (BeansException ex) {
+	            log.info("BeanException: " + ex.toString());
+	        } catch (AccessDeniedException ex) {
+                log.info("Access denied: " + ex.toString());
+                throw new AAIException("ex.toString()");
+            }
+		}
 		
         TopologyAbstraction ta = new TopologyAbstractionClient(taAddress);
 		GenericLink src = ta.getEdgeLink(ingress);
@@ -285,10 +328,7 @@ public class ResourcesReservation {
 			}
 		}
 		
-		if(results.size() > 0) {
-	        // Throws AAIException if check fails
-            results = uauthorizer.filterPaths(results);
-		        
+		if(results.size() > 0) {		        
 			DomainConstraints dcon = new DomainConstraints();
 			
 			// Filtering Constraints
