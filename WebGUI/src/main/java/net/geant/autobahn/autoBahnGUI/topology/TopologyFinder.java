@@ -224,7 +224,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 					state = reservations.getState();
 		}
 
-		if(strings != null)
+		if(strings.size() != 0)
 			top.addTopology(setInterfaceTopology(strings,state));
 		
 		return top;
@@ -303,8 +303,9 @@ public class TopologyFinder implements TopologyFinderNotifier{
 				strings.add(status.getDomain());
 				
 				List<Neighbor> neighbors = status.getNeighbors();
+				
 				if (neighbors==null || neighbors.isEmpty())
-					continue;				
+					continue;	
 				
 				int lengthN = neighbors.size();
 				
@@ -314,9 +315,9 @@ public class TopologyFinder implements TopologyFinderNotifier{
 			      
 	             neighbourIdm = manager.getInterDomainManager(neighbors.get(j).getDomain());               
 			 
-					if (neighbourIdm==null)
-						continue;
-					
+				if (neighbourIdm==null)
+					continue;
+						
 				statusNeighbor = neighbourIdm.getStatus();
 				
 				list = manager.getMappedInterDomainManagerPorts(idmsNames.get(i));
@@ -366,7 +367,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 		}
 		
 
-			if(interfaces != null)
+			if(interfaces.size() != 0)
 				setInterfaceInMainTopology(interfaces);
 	}
 
@@ -418,49 +419,95 @@ public class TopologyFinder implements TopologyFinderNotifier{
 					list.get(i).getEndLatitude(),list.get(i).getEndLongitude()));
 		}
 		if(doblist.size() > 0){
+
+			List<Double> result = findBestAngle(doblist);
+
+			double number = list.get(0).getNumberOfInterfaces();	
+			double start = result.get(0);
+			double end = result.get(1);
+			double range = result.get(2);
+			double biring = 0.0;
+			start = start + 5;
+			end = end - 5;
 			
-		double max = Collections.max(doblist);
-		double min = Collections.min(doblist);
-		double range = 0;
-		double number = list.get(0).getNumberOfInterfaces();
-		if( max - min <= 180){
+			if(range == 0.0){
+				
+				biring = 180 + start;
+			}
+			else {
+				
+				range  = range / (number +1);
+				biring = start + range;
+			}
 			
-			max = max + 10;
-			min = min - 10;
-			range = 360 - (max - min);
-			range = range / (number+1);
-			double biring = max + range;
-		
+			InterfaceComponent ic = list.get(0);
+			
 			for (int i = 0; i < number; i++) {
 				
-				List<Double> ld = getDestinationPoint(list.get(0).getStartLatitude(),list.get(0).getStartLongitude(),biring,300);
-				interfaceComponent = new InterfaceComponent(list.get(0).getName(),list.get(0).getStartLatitude(),list.get(0).getStartLongitude(),
-						new Float(ld.get(0)), new Float(ld.get(1)),list.get(0).getList().get(i));
-				map.put(list.get(0).getList().get(i), interfaceComponent);
+				List<Double> ld = getDestinationPoint(ic.getStartLatitude(),ic.getStartLongitude(),biring,300);
+				
+				double lat = ld.get(0);
+				double lon = ld.get(1);
+				
+				interfaceComponent = new InterfaceComponent(ic.getName(),ic.getStartLatitude(),ic.getStartLongitude(),
+						new Float(lat), new Float(lon),ic.getList().get(i));
+				
+				map.put(ic.getList().get(i), interfaceComponent);
+				
 				components.add(interfaceComponent);
+				
 				biring = biring + range;			
 			}
-		}
-		else {
-			max = max - 10;
-			min = min + 10;
-			range = max - min;
-			range = range / (number + 1);
-			double biring = min + range;
-		
-			for (int i = 0; i < number; i++) {
-				
-				List<Double> ld = getDestinationPoint(list.get(0).getStartLatitude(),list.get(0).getStartLongitude(),biring,300);
-				interfaceComponent = new InterfaceComponent(list.get(0).getName(),list.get(0).getStartLatitude(),list.get(0).getStartLongitude(),
-						new Float(ld.get(0)), new Float(ld.get(1)),list.get(0).getList().get(i));
-				map.put(list.get(0).getList().get(i), interfaceComponent);
-				components.add(interfaceComponent);
-				biring = biring + range;
-			}
-		}
+
 	}
 		return components;
 	}
+	public List<Double> findBestAngle(List<Double> list){
+		
+		Collections.sort(list);
+		
+		double max = Collections.max(list);
+		double min = Collections.min(list);
+		
+		List<Double> result = new ArrayList<Double>();
+		double res = 0.0;
+		int size = list.size();
+		
+		if(size == 1){
+			result.add(max);
+			result.add(min);
+			result.add(0.0);
+			
+			return result;
+		}
+
+		for (int i = size-1; i >= 0; i--) {
+			
+			double between = 0.0;
+			if(i != 0){
+				between = list.get(i) - list.get(i-1);
+				if(between > res){
+					res = between;
+					result.clear();
+					result.add(list.get(i-1));
+					result.add(list.get(i));
+					result.add(between);
+				}
+			}	
+			else{
+				between = 360 - max + min;
+				if(between > res){
+					 res = between;
+					 result.clear();
+					 result.add(max);
+					 result.add(min);
+					 result.add(between);
+				}	
+			}
+		}	
+		return result;
+	}
+
 	public Double getBearingBetween2Points(double lat1, double lon1, double lat2, double lon2){
 		 
 		 double Latitude1 = Math.toRadians(lat1);
