@@ -100,9 +100,12 @@ public class Autobahn2OscarsConverter {
 	    }
 	    
 	    // first assume that mapping has been provided by cnis, if not then try to look at idcp.properties
-	    String idcpLink = reservation.getEndPort().getDescription();
-	    if (idcpLink != null && idcpLink.contains("idcplink")) {
-	    	src = idcpLink.split("=")[1];	    	
+	    String desc = reservation.getEndPort().getDescription();
+	    if (desc != null && desc.contains("idcplink")) {
+	    	
+	    	String idcpLink = desc.substring(desc.indexOf("idcplink"));
+	    	src = idcpLink.split("=")[1];
+	    	
 	    } else {
 	    
 	    	for (Enumeration e = portsMapping.keys(); e.hasMoreElements(); ) {
