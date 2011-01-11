@@ -324,6 +324,13 @@ public class IntradomainTopology {
 				dport.setDescription(getExternalDomainDescription(l.getExternalDomain()));
 
 				glink.setEndInterface(dport);
+				
+				String idcpLink = getIdcpLink(l.getExternalDomain());
+				if (idcpLink != null) { 
+					// restore the original link identifier as cnis gui does not allow multiple '=' 
+					idcpLink = idcpLink.replace("!", "=");
+					dport.setDescription("idcplink=" + idcpLink);
+				}
 
 				genericLinks.add(glink);
 			}
