@@ -449,6 +449,13 @@ public class IntradomainTopology {
 				
 				glink.setEndInterface(dport);
 				
+				String idcpLink = getIdcpLink(l.getExternalDomain());
+				if (idcpLink != null) { 
+					// restore the original link identifier as cnis gui does not allow multiple '=' 
+					idcpLink = idcpLink.replace("!", "=");
+					dport.setDescription("idcplink=" + idcpLink);
+				}
+				
 				SpanningTree st = new SpanningTree();
 				st.setEthLink(new EthLink(glink, "", false, true, 1));
 				st.setVlan(new Vlan(id++, "vlan-ext", 0, 4096));
@@ -561,6 +568,25 @@ public class IntradomainTopology {
 		}
 		return null;
     }
+    
+    /**
+     * Helper method that retrieves idcp link mapping for idcp link
+     * Link mapping should be provided in a form of:
+     * idcplink=identifier of the link that is directed towards autobahn (this identifier must be provided by idcp side)
+     * @param d
+     * @return
+     */
+    private String getIdcpLink(net.geant2.cnis.autobahn.xml.common.Domain d) {
+    	
+    	net.geant2.cnis.autobahn.xml.common.Tags dTags = d.getTags();
+		for (net.geant2.cnis.autobahn.xml.common.Tag tag: dTags.getTag()) {
+			if (tag.getKey().contains("idcplink")) {
+				return tag.getValue();
+			}
+		}
+		return null;
+    }
+
     
 	/**
 	 * Helper method useful for clearing from the database all the information
