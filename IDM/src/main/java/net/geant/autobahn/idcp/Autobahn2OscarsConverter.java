@@ -99,15 +99,22 @@ public class Autobahn2OscarsConverter {
 	        vlan = DEFAULT_VLAN;
 	    }
 	    
-        for (Enumeration e = portsMapping.keys(); e.hasMoreElements(); ) {
-        	
-        	String abEgress = (String)e.nextElement();
-        	if (src.equals(abEgress)) { 
-        		src = portsMapping.getProperty(((String)e.nextElement())); // found idcp ingress
-        		break;
-        	}
-        }
+	    // first assume that mapping has been provided by cnis, if not then try to look at idcp.properties
+	    String idcpLink = reservation.getEndPort().getDescription();
+	    if (idcpLink != null && idcpLink.contains("idcplink")) {
+	    	src = idcpLink.split("=")[1];	    	
+	    } else {
 	    
+	    	for (Enumeration e = portsMapping.keys(); e.hasMoreElements(); ) {
+        	
+	    		String abEgress = (String)e.nextElement();
+	    		if (src.equals(abEgress)) { 
+	    			src = portsMapping.getProperty(((String)e.nextElement())); // found idcp ingress
+	    			break;
+	    		}
+	    	}
+        }
+        
         try {
         
         	OscarsClient oscars = new OscarsClient(idcpServer);
