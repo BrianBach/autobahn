@@ -326,11 +326,8 @@ public class IntradomainTopology {
 				glink.setEndInterface(dport);
 				
 				String idcpLink = getIdcpLink(l.getExternalDomain());
-				if (idcpLink != null) { 
-					// restore the original link identifier as cnis gui does not allow multiple '=' 
-					idcpLink = idcpLink.replace("!", "=");
-					dport.setDescription("idcplink=" + idcpLink);
-				}
+				if (idcpLink != null) 
+					dport.setDescription(dport.getDescription() + "\n" + "idcplink=" + idcpLink);
 
 				genericLinks.add(glink);
 			}
@@ -457,11 +454,8 @@ public class IntradomainTopology {
 				glink.setEndInterface(dport);
 				
 				String idcpLink = getIdcpLink(l.getExternalDomain());
-				if (idcpLink != null) { 
-					// restore the original link identifier as cnis gui does not allow multiple '=' 
-					idcpLink = idcpLink.replace("!", "=");
-					dport.setDescription("idcplink=" + idcpLink);
-				}
+				if (idcpLink != null) 
+					dport.setDescription(dport.getDescription() + "\n" + "idcplink=" + idcpLink);
 				
 				SpanningTree st = new SpanningTree();
 				st.setEthLink(new EthLink(glink, "", false, true, 1));
@@ -588,7 +582,7 @@ public class IntradomainTopology {
     	net.geant2.cnis.autobahn.xml.common.Tags dTags = d.getTags();
 		for (net.geant2.cnis.autobahn.xml.common.Tag tag: dTags.getTag()) {
 			if (tag.getKey().contains("idcplink")) {
-				return tag.getValue();
+				return tag.getValue().replace("!", "="); // we must restore original identifier as cnis gui does not allow multiple '='
 			}
 		}
 		return null;
