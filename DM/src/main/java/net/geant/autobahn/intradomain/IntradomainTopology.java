@@ -27,6 +27,7 @@ import net.geant.autobahn.intradomain.ethernet.VlanPort;
 import net.geant.autobahn.intradomain.ethernet.dao.EthLinkDAO;
 import net.geant.autobahn.intradomain.ethernet.dao.SpanningTreeDAO;
 import net.geant.autobahn.intradomain.ethernet.dao.VlanDAO;
+import net.geant.autobahn.intradomain.mpls.MplsLink;
 import net.geant.autobahn.intradomain.sdh.SdhDevice;
 import net.geant.autobahn.intradomain.sdh.StmLink;
 import net.geant.autobahn.intradomain.sdh.StmType;
@@ -52,14 +53,14 @@ import org.hibernate.Transaction;
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(name="IntradomainTopology", namespace="intradomain.autobahn.geant.net", propOrder={
         "genericLinks", "nodes", "sptrees", "ethpp", "vlaps",
-        "stmLinks", "sdhDevices", "type", "domainName"
+        "stmLinks", "sdhDevices", "mplsLinks", "type", "domainName"
 })
 public class IntradomainTopology {
 
 	private final Logger log = Logger.getLogger(IntradomainTopology.class);
 
 	@XmlType(name="Type", namespace="intradomain.autobahn.geant.net")
-	public enum Type {ETH, SDH};
+	public enum Type {ETH, SDH, MPLS};
 
     private List<GenericLink> genericLinks = null;
     private List<Node> nodes = null;
@@ -72,6 +73,9 @@ public class IntradomainTopology {
 	// sdh specific
 	private List<StmLink> stmLinks = null;
 	private List<SdhDevice> sdhDevices = null;
+	
+	// mpls specific
+	private List<MplsLink> mplsLinks = null;
     
 	private Type type;
 	private String domainName;
@@ -88,13 +92,15 @@ public class IntradomainTopology {
 	 * @param domainId
 	 *            String name of the domain
 	 * @param topologyType
-	 *            String type of the topology, "eth" or "sdh"
+	 *            String type of the topology, "eth" or "sdh" or "mpls"
 	 */
     public IntradomainTopology(String cnisAddress, String domainId, String topologyType) {
     	if("sdh".equals(topologyType))
     		type = Type.SDH;
-    	else  if(topologyType.startsWith("eth"))
+    	else if (topologyType.startsWith("eth"))
     		type = Type.ETH;
+    	else if (topologyType.equals("mpls"))
+    		type = Type.MPLS;
 
         domainName = domainId;
 
@@ -160,6 +166,16 @@ public class IntradomainTopology {
 			nodes = daos.getNodeDAO().getAll();
 			ethpp = daos.getEthPhysicalPortDAO().getAll();
 			vlaps = daos.getVlanPortDAO().getAll();
+		} else if (isMpls()) {
+			
+			mplsLinks = daos.getMplsLinkDAO().getAll();
+			genericLinks = new ArrayList<GenericLink>();
+			
+			for (MplsLink ml : mplsLinks) {
+				genericLinks.add(ml.getLink());
+			}
+			
+			nodes = daos.getNodeDAO().getAll();
 		}
 	}
 
@@ -231,6 +247,15 @@ public class IntradomainTopology {
                     }
                 }
                 //sb.append("\n**"+ethpp.toString()+vlaps.toString()+sptrees.toString()+"**\n");
+            }
+            if (isMpls()) {
+                sb.append("\n|-Is MPLS.\n|-mplsLinks:");
+                if (mplsLinks != null) {
+                    sb.append(" size: " + mplsLinks.size() + "\n");
+                    for (MplsLink ml: mplsLinks) {
+                        sb.append(ml.toString() + "\n");
+                    }
+                }
             }
         }
         catch (NullPointerException ne) {
@@ -476,6 +501,11 @@ public class IntradomainTopology {
 			saveTopology();
 			
 	    	t.commit();
+	    	
+		} else if (isMpls()) {  
+			
+			// TODO when cnis wsdl with mpls support is ready
+			
 		}
     }
 
@@ -585,7 +615,7 @@ public class IntradomainTopology {
 				return tag.getValue().replace("!", "="); // we must restore original identifier as cnis gui does not allow multiple '='
 			}
 		}
-		return null;
+		;return null;
     }
 
     
@@ -605,6 +635,8 @@ public class IntradomainTopology {
 
     	daos.getStmLinkDAO().deleteAll();
     	daos.getSdhDeviceDAO().deleteAll();
+    	
+    	daos.getMplsLinkDAO().deleteAll();
     	
     	st_dao.deleteAll();
     	eth_dao.deleteAll();
@@ -672,6 +704,14 @@ public class IntradomainTopology {
 	public List<SdhDevice> getSdhDevices() {
 		return sdhDevices;
 	}
+	
+	/**
+	 * 
+	 * @return List of all MplsLink of the domain - only mpls
+	 */
+	public List<MplsLink> getMplsLinks() {
+		return mplsLinks;
+	}
     
 	/**
 	 * 
@@ -689,11 +729,21 @@ public class IntradomainTopology {
     	return type == Type.SDH;
     }
     
+    /**
+     * 
+     * @return True if the topology is of mpls type
+     */
+    public boolean isMpls() {
+    	return type == Type.MPLS;
+    }
+    
     public boolean isEmpty() {
     	if(isEthernet()) {
     		return getSpanningTrees() == null || getSpanningTrees().size() == 0;
     	} else if(isSDH()) {
     		return getSdhDevices() == null || getSdhDevices().size() == 0;
+    	} else if (isMpls()) {
+    		return getMplsLinks() == null || getMplsLinks().size() == 0;
     	}
     	
     	return true;
