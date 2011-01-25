@@ -8,6 +8,7 @@ import net.geant.autobahn.intradomain.ethernet.dao.EthPhysicalPortDAO;
 import net.geant.autobahn.intradomain.ethernet.dao.SpanningTreeDAO;
 import net.geant.autobahn.intradomain.ethernet.dao.VlanDAO;
 import net.geant.autobahn.intradomain.ethernet.dao.VlanPortDAO;
+import net.geant.autobahn.intradomain.mpls.dao.MplsLinkDAO;
 import net.geant.autobahn.intradomain.sdh.dao.SdhDeviceDAO;
 import net.geant.autobahn.intradomain.sdh.dao.StmLinkDAO;
 import net.geant.autobahn.network.dao.LinkDAO;
@@ -45,4 +46,6 @@ public interface DmDAOFactory {
     public net.geant.autobahn.intradomain.common.dao.NodeDAO getNodeDAO();
     
     public IntradomainReservationDAO getIntradomainReservationDAO();
+    
+    public MplsLinkDAO getMplsLinkDAO();
 }

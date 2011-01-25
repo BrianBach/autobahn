@@ -20,6 +20,8 @@ import net.geant.autobahn.intradomain.ethernet.dao.hibernate.HibernateEthPhysica
 import net.geant.autobahn.intradomain.ethernet.dao.hibernate.HibernateSpanningTreeDAO;
 import net.geant.autobahn.intradomain.ethernet.dao.hibernate.HibernateVlanDAO;
 import net.geant.autobahn.intradomain.ethernet.dao.hibernate.HibernateVlanPortDAO;
+import net.geant.autobahn.intradomain.mpls.dao.MplsLinkDAO;
+import net.geant.autobahn.intradomain.mpls.dao.hibernate.HibernateMplsLinkDAO;
 import net.geant.autobahn.intradomain.sdh.dao.SdhDeviceDAO;
 import net.geant.autobahn.intradomain.sdh.dao.StmLinkDAO;
 import net.geant.autobahn.intradomain.sdh.dao.hibernate.HibernateSdhDeviceDAO;
@@ -51,6 +53,7 @@ public class HibernateDmDAOFactory implements DmDAOFactory {
     private StmLinkDAO stm_link_dao = new HibernateStmLinkDAO(hbm);
     private SdhDeviceDAO sdh_device_dao = new HibernateSdhDeviceDAO(hbm);
     private IntradomainReservationDAO intra_res_dao = new HibernateIntradomainReservationDAO(hbm);
+    private MplsLinkDAO mldao = new HibernateMplsLinkDAO(hbm);
     
     private HibernateDmDAOFactory() {
     }
@@ -150,5 +153,12 @@ public class HibernateDmDAOFactory implements DmDAOFactory {
      */
 	public IntradomainReservationDAO getIntradomainReservationDAO() {
 		return intra_res_dao;
+	}
+	
+	/**
+	 * Returns MplsLinkDAO
+	 */
+	public MplsLinkDAO getMplsLinkDAO() { 
+		return mldao;
 	}
 }
