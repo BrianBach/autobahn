@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import net.geant.autobahn.converter.ethernet.EthernetTopologyConverter;
+import net.geant.autobahn.converter.mpls.MplsTopologyConverter;
 import net.geant.autobahn.converter.sdh.SdhTopologyConverter;
 import net.geant.autobahn.intradomain.IntradomainTopology;
 import net.geant.autobahn.intradomain.pathfinder.IntradomainPathfinder;
@@ -41,6 +42,8 @@ public class TopologyConverterFactory {
             return new EthernetTopologyConverter(topology, pathfinder, internal, mapping, lookuphost);
         else if (topology.isSDH())
             return new SdhTopologyConverter(topology, pathfinder, internal, mapping, lookuphost);
+        else if (topology.isMpls())
+        	return new MplsTopologyConverter(topology, pathfinder, internal, mapping, lookuphost);
         else
         	throw new IllegalArgumentException(
 				"Topology converter for topology type cannot be found!");
