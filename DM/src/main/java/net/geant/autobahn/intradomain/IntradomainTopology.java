@@ -780,6 +780,10 @@ public class IntradomainTopology {
         this.sdhDevices = sdhDevices;
     }
     
+    public void setMplsLinks(List<MplsLink> mplsLinks) { 
+    	this.mplsLinks = mplsLinks;
+    }
+    
     public void setType(Type type) {
         this.type = type;
     }
