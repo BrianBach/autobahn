@@ -29,6 +29,7 @@ import net.geant.autobahn.reservation.ReservationParams;
 import net.geant.autobahn.resourcesreservationcalendar.ResourcesReservationCalendarClient;
 import net.geant.autobahn.tool.Tool;
 import net.geant.autobahn.tool.ToolClient;
+import net.geant.autobahn.tool.intradomain.common.WsdlConverter;
 import net.geant.autobahn.topologyabstraction.TopologyAbstraction;
 import net.geant.autobahn.topologyabstraction.TopologyAbstractionClient;
 
@@ -590,7 +591,7 @@ public class ResourcesReservation {
         // Release in Tool
 		if(removeInTP) {
 	        try {
-				tool.removeReservation(resID, path.getLinks(), par);
+				tool.removeReservation(resID, WsdlConverter.convert(path.getLinks()), par);
 			} catch (Exception e) {
 				log.error("Problem while removing reservation from a Tool", e);
 				return false;
@@ -624,7 +625,7 @@ public class ResourcesReservation {
 	/**
 	 * Task performs resources reservation operation when reservation is to be
 	 * activated. Task is executed some amount of time before the exact start time
-	 * (configurable). TP is requested to build specified curcuit.
+	 * (configurable). TP is requested to build specified circuit.
 	 * 
 	 * @author <a href="mailto:jaxlucas@man.poznan.pl">Jacek Lukasik</a>
 	 */
@@ -650,7 +651,7 @@ public class ResourcesReservation {
    			prManager.save(reservation);
    			
             try {
-    	        tool.addReservation(resID, glinks, par);
+    	        tool.addReservation(resID, WsdlConverter.convert(glinks), par);
     		} catch (Exception e) {
     			success = false;
     			log.error("Problem while adding reservation to a Tool", e);

@@ -5,7 +5,7 @@ import java.util.List;
 import net.geant.autobahn.aai.AAIException;
 import net.geant.autobahn.constraints.ConstraintsNames;
 import net.geant.autobahn.constraints.RangeConstraint;
-import net.geant.autobahn.intradomain.common.GenericLink;
+import net.geant.autobahn.tool.intradomain.common.GenericLink;
 import net.geant.autobahn.reservation.ReservationParams;
 
 public class ToolImpl implements Tool {

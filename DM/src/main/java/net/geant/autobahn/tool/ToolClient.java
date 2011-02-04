@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.geant.autobahn.aai.AAIException;
-import net.geant.autobahn.intradomain.common.GenericLink;
+import net.geant.autobahn.tool.intradomain.common.GenericLink;
 import net.geant.autobahn.reservation.ReservationParams;
 
 import org.apache.log4j.Logger;
@@ -24,7 +24,6 @@ public class ToolClient implements Tool {
 	
 	private Tool tool;
 	private Map<String, ToolState> states = new HashMap<String, ToolState>();
-	
 	
 	/**
 	 * 
@@ -61,7 +60,7 @@ public class ToolClient implements Tool {
 		log.info("DM -> Tool: Adding reservation " + resID + " begin");
 		if(tool != null) {
 			try {
-				tool.addReservation(secureId(resID), links, params);
+	            tool.addReservation(secureId(resID), links, params);			        
 			} catch(AAIException e) {
 				releaseLock(resID, false);
 				throw e;

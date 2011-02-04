@@ -5,7 +5,7 @@ import java.util.List;
 import javax.jws.WebService;
 
 import net.geant.autobahn.aai.AAIException;
-import net.geant.autobahn.intradomain.common.GenericLink;
+import net.geant.autobahn.tool.intradomain.common.GenericLink;
 import net.geant.autobahn.reservation.ReservationParams;
 import net.geant.autobahn.tool.RequestException;
 import net.geant.autobahn.tool.ReservationNotFoundException;
