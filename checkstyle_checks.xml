@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.2//EN" "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+ 
+<!--
+Based on:
+    Document   : checkstyle_checks.xml
+    Created on : 16 marzec 2010, 10:58
+    Author     : szymonk
+    Description:
+        This is first version of I-SHARe checkstyle configuration based on:
+-->
+ 
+<!--
+        A Checkstyle configuration used to analyze the Qualipso A5 toolset.
+        Authors: Klaus P. Berg, Anja Hentschel; Siemens AG, Munich, Germany.
+-->
+<module name="Checker">
+        <!-- set default language to English -->
+        <property name="localeCountry" value="EN" />
+        <property name="localeLanguage" value="en" />
+        <!-- set default severity to warnig to stay compatible -->
+        <property name="severity" value="warning"/>
+ 
+        <module name="TreeWalker">
+ 
+                <!-- Checks for Naming Conventions.                  -->
+                <!-- See http://checkstyle.sf.net/config_naming.html -->
+                <module name="TypeName">
+                        <property name="severity" value="error"/>
+                </module>
+                <module name="MethodName">
+                        <property name="severity" value="error"/>
+                </module>
+                <module name="PackageName">
+                        <property name="severity" value="error"/>
+                </module>
+                <module name="ConstantName">
+                        <property name="severity" value="error"/>
+                </module>
+ 
+ 
+                <!-- Coding style                                    -->
+                <!-- See http://checkstyle.sf.net/config_blocks.html -->
+                <module name="NeedBraces">
+                        <property name="severity" value="info"/>
+                </module>
+                <module name="AvoidNestedBlocks"/>
+ 
+ 
+                <!-- Checks for Javadoc comments.                     -->
+                <!-- See http://checkstyle.sf.net/config_javadoc.html -->
+                <module name="JavadocType"/>
+                <module name="JavadocVariable">
+                        <property name="scope" value="public"/>
+                </module>
+                <module name="JavadocMethod">
+                        <property name="scope" value="protected"/>
+                        <property name="allowMissingPropertyJavadoc" value="true"/>
+                        <property name="allowUndeclaredRTE" value="true"/>
+                </module>
+                <module name="JavadocStyle">
+                        <property name="severity" value="info"/>
+                </module>
+                <module name="TodoComment">
+                        <property name="severity" value="info"/>
+                </module>
+ 
+ 
+                <!-- Checks for declaration and definition issues -->
+                <module name="ModifierOrder">
+                        <property name="severity" value="info"/>
+                </module>
+                <module name="UpperEll">
+                        <property name="severity" value="info"/>
+                </module>
+                <module name="FinalParameters">
+                        <property name="severity" value="info"/>
+                </module>
+                <module name="ParameterAssignment">
+                        <property name="severity" value="error"/>
+                </module>
+ 
+ 
+                <!-- Checks for import violations -->
+                <module name="AvoidStarImport"/>
+                <module name="IllegalImport"/>
+                <!-- defaults to sun.* packages -->
+                <module name="RedundantImport">
+                        <property name="severity" value="info"/>
+                </module>
+                <module name="UnusedImports">
+                        <property name="severity" value="info"/>
+                </module>
+ 
+ 
+                <!-- Checks for Size Violations.                    -->
+                <!-- See http://checkstyle.sf.net/config_sizes.html -->
+               <!-- begin: sk
+                <module name="FileLength">
+                        <property name="max" value="2000"/>
+                </module>
+                end: sk-->
+                <module name="LineLength">
+                        <!-- Extended to 122: Eclipse uses exactly 120 chars, checkstyle however also counts CR/LF -->
+                        <property name="max" value="122"/>
+                        <!-- one pattern to exclude @see, @throws, @link in javadoc and import statements -->
+                        <property name="ignorePattern" value="^\s*\*.*@(see|throws|link|return) .*$|^import"/>
+                        <property name="severity" value="info"/>
+                </module>
+                <module name="MethodLength">
+                        <property name="max" value="150"/>
+                </module>
+                <module name="ParameterNumber">
+                        <property name="max" value="7"/>
+                </module>
+ 
+ 
+                <!-- Checks for possible coding problems             -->
+                <!-- See http://checkstyle.sf.net/config_coding.html -->
+                <!--module name="AvoidInlineConditionals"/-->
+                <module name="DoubleCheckedLocking">
+                        <property name="severity" value="error"/>
+                </module>
+                <module name="EqualsHashCode">
+                        <property name="severity" value="error"/>
+                </module>
+                <module name="IllegalInstantiation">
+                        <property name="classes" value="java.lang.Boolean,java.lang.String"/>
+                </module>
+                <module name="InnerAssignment"/>
+                <module name="MissingSwitchDefault">
+                        <property name="severity" value="error"/>
+                </module>
+                <module name="FallThrough">
+                        <property name="reliefPattern" value="fallthru|falls? ?through|FALLTHROUGH"/>
+                        <property name="severity" value="error"/>
+                </module>
+                <module name="StringLiteralEquality">
+                        <property name="severity" value="error"/>
+                </module>
+ 
+                <!-- Checks for error handling                      -->
+                <module name="RedundantThrows"/>
+                <module name="IllegalCatch"/>
+                <module name="EmptyBlock">
+                        <property name="option" value="text"/>
+                        <property name="tokens" value="LITERAL_CATCH"/>
+                        <property name="severity" value="error"/>
+                </module>
+ 
+ 
+                <!-- Checks for class design                         -->
+                <!-- See http://checkstyle.sf.net/config_design.html -->
+                <module name="FinalClass"/>
+                <module name="InterfaceIsType">
+                        <property name="severity" value="info"/>
+                </module>
+                <module name="HideUtilityClassConstructor">
+                        <property name="severity" value="info"/>
+                </module>
+                <module name="VisibilityModifier"/>
+                <module name="HiddenField">
+                        <property name="ignoreConstructorParameter" value="true"/>
+                        <property name="ignoreSetter" value="true"/>
+                        <property name="severity" value="error"/>
+                </module>
+ 
+ 
+        </module> <!-- END of TreeWalker -->
+ 
+        <!-- Look for duplicated code fragements where a minimum of 15 lines are equal
+        <module name="StrictDuplicateCode">
+                <property name="min" value="15"/>
+                <property name="severity" value="info"/>
+        </module> -->
+        <!--
+        <module name="au.com.redhillconsulting.simian.SimianCheck"/>
+        <property name="language" value="java"/>
+    <module/> -->
+ 
+        <!--  A special filter to suppress Checkstyle false positives error messages
+          in conjunction with custom exception classes.  -->
+         <!-- begin: sk
+        <module name="CSRuntimeBugFilter"/>
+        end: sk-->
+ 
+ 
+        <!-- The following configuration directs the Checker to not report audit events with severity level info:  -->
+        <!-- <module name="SeverityMatchFilter">
+                <property name="severity" value="info"/>
+                <property name="acceptOnMatch" value="false"/>
+        </module>  -->
+ 
+</module>

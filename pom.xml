@@ -289,17 +289,10 @@
 	                            </execution>
 	                        </executions>
 	                    </plugin>
-	                    <!-- plugin>
+	                    <plugin>
 	                        <groupId>org.apache.maven.plugins</groupId>
 	                        <artifactId>maven-checkstyle-plugin</artifactId>
 	                        <version>2.5</version>
-	                        <dependencies>
-	                        	<dependency>
-	                            	<groupId>net.geant.ishare.common</groupId>
-	                                <artifactId>ishare-common-tools</artifactId>
-	                                <version>1.0-beta-SNAPSHOT</version>
-	                            </dependency>
-	                        </dependencies>
 	                        <executions>
 	                            <execution>
 	                                <goals>
@@ -311,7 +304,7 @@
 	                        <configuration>
 	                            <configLocation>checkstyle_checks.xml</configLocation>
 	                        </configuration>
-	                    </plugin -->
+	                    </plugin>
                 	</plugins>
             	</pluginManagement>
         	</build>
