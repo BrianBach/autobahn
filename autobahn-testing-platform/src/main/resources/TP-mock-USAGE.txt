@@ -1,0 +1,42 @@
+Use server.sh script to launch multiple instances of Mock Technology Proxy.
+
+Example:
+
+server.sh 1 8080
+
+Launches 1 instance of TechnologyProxy listening on port 8080.
+URLs of TP service is:
+http://localhost:8080/autobahn/tool1
+You may program the behaviour of TP remotely to simulate a network problem. URL is:
+http://localhost:8080/autobahn/programmer1
+
+Example2:
+server.sh 3 9090
+
+Launches 3 instances of TechnologyProxy listening on port 9090.
+
+URLs of TP services are:
+http://localhost:9090/autobahn/tool1
+http://localhost:9090/autobahn/tool2
+http://localhost:9090/autobahn/tool3
+
+You may program the behaviour of TP remotely to simulate a network problem. URLs are:
+http://localhost:9090/autobahn/programmer1
+http://localhost:9090/autobahn/programmer2
+http://localhost:9090/autobahn/programmer3
+
+
+All the incoming requests and operations are displayed on console.
+-----------------------------
+
+Programming mock tool:
+Launch client.sh script to program desired TP instance.
+Example:
+client.sh http://localhost:8082/autobahn/programmer1 REQ_EX 20
+
+Tells the TP instance (programmer1 controls tool1) to throw REQuest_EXception after 20 seconds after addReservation method was called for the TP.
+
+Valid messages are:
+OK - success
+REQ_EX - RequestException
+SYS_EX - SystemException
