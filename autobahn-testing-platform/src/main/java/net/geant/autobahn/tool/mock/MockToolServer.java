@@ -26,6 +26,8 @@ public class MockToolServer {
 			public void run() {
 
 				for(MockTool mock : mocks) {
+					System.out.println("Starting MockTP: " + mock.getToolAddress() + " Programmer: " + mock.getProgrammerAddress());
+					
 					Endpoint e1 = Endpoint.publish(mock.getProgrammerAddress(), mock.getProgrammer());	
 					Endpoint e2 = Endpoint.publish(mock.getToolAddress(), mock.getTool());
 					published.add(e1);
@@ -58,4 +60,23 @@ public class MockToolServer {
 		}
 	}
 
+	public static void main(String[] args) {
+		
+		if(args.length < 2) {
+			System.out.println("Wrong usage");
+			return;
+		}
+		
+		int num = Integer.valueOf(args[0]);
+		int port_num = Integer.valueOf(args[1]);
+		
+		MockToolServer serv = new MockToolServer(port_num);
+		
+		for(int i = 1; i < num + 1; i++) {
+			MockTool tool = new MockTool("tool" + i, "programmer" + i);
+			serv.addMockTool(tool);
+		}
+		
+		serv.start(false);
+	}
 }

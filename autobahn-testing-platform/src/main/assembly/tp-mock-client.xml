@@ -1,0 +1,42 @@
+<assembly
+	xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+	<id>tp-mock</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<includeBaseDirectory>true</includeBaseDirectory>
+	<includeSiteDirectory>false</includeSiteDirectory>
+
+	<fileSets>
+		<fileSet>
+			<directory>src/main/resources</directory>
+			<outputDirectory>/</outputDirectory>
+			<includes>
+				<include>*.bat</include>
+				<include>*.sh</include>
+				<include>*.txt</include>
+			</includes>
+		</fileSet>
+	</fileSets>
+
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>lib</outputDirectory>
+
+			<includes>
+				<include>net.geant.autobahn:autobahn-testing-platform</include>
+				<include>net.geant.autobahn:autobahn-dm</include>
+				<include>net.geant.autobahn:autobahn-common</include>
+				<include>org.apache.cxf:cxf-bundle</include>
+				<include>log4j:log4j</include>
+				<include>org.mortbay.jetty:jetty</include>
+				<include>org.mortbay.jetty:jetty-util</include>
+				<include>org.apache.geronimo.specs:geronimo-servlet_2.5_spec</include>
+				<include>wsdl4j:wsdl4j</include>
+				<include>org.apache.ws.commons.schema:XmlSchema</include>
+			</includes>
+		</dependencySet>
+	</dependencySets>
+</assembly>
