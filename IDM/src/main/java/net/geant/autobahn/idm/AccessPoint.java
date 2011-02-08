@@ -42,6 +42,8 @@ import net.geant.autobahn.network.Node;
 import net.geant.autobahn.network.Port;
 import net.geant.autobahn.network.ProvisioningDomain;
 import net.geant.autobahn.network.StateOper;
+import net.geant.autobahn.network.StatisticsEntry;
+import net.geant.autobahn.network.dao.StatisticsEntryDAO;
 import net.geant.autobahn.reservation.AutobahnReservation;
 import net.geant.autobahn.reservation.HomeDomainReservation;
 import net.geant.autobahn.reservation.Reservation;
@@ -63,7 +65,6 @@ import net.geant.autobahn.useraccesspoint.callback.UapCallbackClient;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 
 /**
  * This class is responsible for creating and managing the BoD system.
@@ -1350,4 +1351,25 @@ public final class AccessPoint implements UserAccessPoint,
         
         log.info("===== Post-initialization check for IDM module is complete. =====");
     }
+
+    /**
+     * Saves a statistics entry in the database.
+     * 
+     * @param se
+     */
+    public static synchronized void saveStatisticsEntry(StatisticsEntry se) {
+        HibernateUtil hbm = IdmHibernateUtil.getInstance();
+        if(hbm == null) {
+            return;
+        }
+        
+        StatisticsEntryDAO dao = HibernateIdmDAOFactory.getInstance().getStatisticsEntryDAO();
+        
+        Transaction t = hbm.beginTransaction();
+        dao.update(se);
+        t.commit();
+        
+        hbm.closeSession();
+    }
+
 }

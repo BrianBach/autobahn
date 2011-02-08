@@ -56,6 +56,7 @@
         <mapping resource="net/geant/autobahn/network/Link.hbm.xml" />
         <mapping resource="net/geant/autobahn/network/Path.hbm.xml" />
         <mapping resource="net/geant/autobahn/network/Role.hbm.xml" />
+        <mapping resource="net/geant/autobahn/network/StatisticsEntry.hbm.xml" />
 
 		<mapping resource="net/geant/autobahn/reservation/User.hbm.xml" />
         <mapping resource="net/geant/autobahn/reservation/Reservation.hbm.xml" />

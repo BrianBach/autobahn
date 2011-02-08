@@ -55,6 +55,7 @@
         <mapping resource="net/geant/autobahn/network/Link.hbm.xml" />
         <mapping resource="net/geant/autobahn/network/Path.hbm.xml" />
         <mapping resource="net/geant/autobahn/network/Role.hbm.xml" />
+        <mapping resource="net/geant/autobahn/network/StatisticsEntry.hbm.xml" />
         
 		<mapping resource="net/geant/autobahn/constraints/Range.hbm.xml" />	
 		<mapping resource="net/geant/autobahn/constraints/Constraint.hbm.xml" />	

@@ -12,6 +12,7 @@ import net.geant.autobahn.intradomain.mpls.dao.MplsLinkDAO;
 import net.geant.autobahn.intradomain.sdh.dao.SdhDeviceDAO;
 import net.geant.autobahn.intradomain.sdh.dao.StmLinkDAO;
 import net.geant.autobahn.network.dao.LinkDAO;
+import net.geant.autobahn.network.dao.StatisticsEntryDAO;
 
 /**
  * Interface for obtaining DAO objects needed in the DM.
@@ -48,4 +49,6 @@ public interface DmDAOFactory {
     public IntradomainReservationDAO getIntradomainReservationDAO();
     
     public MplsLinkDAO getMplsLinkDAO();
+    
+    public StatisticsEntryDAO getStatisticsEntryDAO();
 }

@@ -12,12 +12,14 @@ import net.geant.autobahn.network.dao.LinkDAO;
 import net.geant.autobahn.network.dao.PathDAO;
 import net.geant.autobahn.network.dao.PortDAO;
 import net.geant.autobahn.network.dao.ProvisioningDomainDAO;
+import net.geant.autobahn.network.dao.StatisticsEntryDAO;
 import net.geant.autobahn.network.dao.hibernate.HibernateAdminDomainDAO;
 import net.geant.autobahn.network.dao.hibernate.HibernateIDMNodeDAO;
 import net.geant.autobahn.network.dao.hibernate.HibernateLinkDAO;
 import net.geant.autobahn.network.dao.hibernate.HibernatePathDAO;
 import net.geant.autobahn.network.dao.hibernate.HibernatePortDAO;
 import net.geant.autobahn.network.dao.hibernate.HibernateProvisioningDomainDAO;
+import net.geant.autobahn.network.dao.hibernate.HibernateStatisticsEntryDAO;
 import net.geant.autobahn.reservation.dao.ReservationDAO;
 import net.geant.autobahn.reservation.dao.ServiceDAO;
 import net.geant.autobahn.reservation.dao.UserDAO;
@@ -40,6 +42,7 @@ public class HibernateIdmDAOFactory implements IdmDAOFactory {
     private PortDAO pdao = new HibernatePortDAO(hbm);
     private LinkDAO ldao = new HibernateLinkDAO(hbm);
     private PathDAO pth_dao = new HibernatePathDAO(hbm);
+    private StatisticsEntryDAO sedao = new HibernateStatisticsEntryDAO(hbm);
     
     private ReservationDAO rdao = new HibernateReservationDAO(hbm);
     private ServiceDAO sdao = new HibernateServiceDAO(hbm);
@@ -70,6 +73,13 @@ public class HibernateIdmDAOFactory implements IdmDAOFactory {
      */
     public ServiceDAO getServiceDAO() {
         return sdao;
+    }
+
+    /* (non-Javadoc)
+     * @see net.geant.autobahn.dao.DAOFactory#getStatisticsEntryDAO()
+     */
+    public StatisticsEntryDAO getStatisticsEntryDAO() {
+        return sedao;
     }
 
     /* (non-Javadoc)

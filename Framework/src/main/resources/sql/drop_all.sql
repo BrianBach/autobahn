@@ -66,3 +66,5 @@ DROP TABLE glink_to_intrapath CASCADE;
 DROP TABLE intradomain_path CASCADE;
 DROP TABLE intradomain_reservation CASCADE;
 DROP TABLE reservation_params CASCADE;
+
+DROP TABLE statistics;

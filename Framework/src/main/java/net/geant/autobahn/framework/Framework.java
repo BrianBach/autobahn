@@ -21,6 +21,7 @@ import net.geant.autobahn.framework.commands.ReservationsCommand;
 import net.geant.autobahn.framework.commands.RestartCommand;
 import net.geant.autobahn.framework.commands.ServicesCommand;
 import net.geant.autobahn.framework.commands.ShutdownCommand;
+import net.geant.autobahn.framework.commands.StatisticsCommand;
 import net.geant.autobahn.framework.commands.TopologyCommand;
 import net.geant.autobahn.framework.commands.UptimeCommand;
 import net.geant.autobahn.framework.commands.IdcpTopologyCommand;
@@ -63,6 +64,7 @@ public class Framework {
 		commands.put("halt", new ShutdownCommand());
 		commands.put("uptime", new UptimeCommand());
 		commands.put("idcptopo", new IdcpTopologyCommand());
+        commands.put("statistics", new StatisticsCommand());
 	}
 
 	public static Properties loadProperties(String filename) throws Exception {
@@ -229,6 +231,10 @@ public class Framework {
 
     public net.geant.autobahn.converter.AccessPoint getTopologyAbstraction() {
         return ta;
+    }
+
+    public net.geant.autobahn.calendar.AccessPoint getCalendar() {
+        return cal;
     }
 
 	public void stop(boolean shutdown) {

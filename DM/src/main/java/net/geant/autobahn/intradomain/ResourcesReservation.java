@@ -1,6 +1,5 @@
 package net.geant.autobahn.intradomain;
 
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -17,6 +16,8 @@ import net.geant.autobahn.aai.DmUserAuthorizer;
 import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.constraints.PathConstraints;
 import net.geant.autobahn.dao.hibernate.DmHibernateUtil;
+import net.geant.autobahn.dao.hibernate.HibernateDmDAOFactory;
+import net.geant.autobahn.dao.hibernate.HibernateUtil;
 import net.geant.autobahn.dm2idm.Dm2Idm;
 import net.geant.autobahn.dm2idm.Dm2IdmClient;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
@@ -25,6 +26,8 @@ import net.geant.autobahn.intradomain.common.GenericLink;
 import net.geant.autobahn.intradomain.pathfinder.IntradomainPathfinder;
 import net.geant.autobahn.intradomain.timer.EventsTimer;
 import net.geant.autobahn.network.Link;
+import net.geant.autobahn.network.StatisticsEntry;
+import net.geant.autobahn.network.dao.StatisticsEntryDAO;
 import net.geant.autobahn.reservation.ReservationParams;
 import net.geant.autobahn.resourcesreservationcalendar.ResourcesReservationCalendarClient;
 import net.geant.autobahn.tool.Tool;
@@ -34,6 +37,7 @@ import net.geant.autobahn.topologyabstraction.TopologyAbstraction;
 import net.geant.autobahn.topologyabstraction.TopologyAbstractionClient;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Transaction;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -650,12 +654,17 @@ public class ResourcesReservation {
     		reservation.setPathCreated(true);
    			prManager.save(reservation);
    			
+   			long beforeTime = System.currentTimeMillis();
             try {
     	        tool.addReservation(resID, WsdlConverter.convert(glinks), par);
     		} catch (Exception e) {
     			success = false;
     			log.error("Problem while adding reservation to a Tool", e);
     		}
+            long afterTime = System.currentTimeMillis();
+            long setUpTime = afterTime - beforeTime;    // Measured in milliseconds
+            StatisticsEntry se = new StatisticsEntry(resID, true, setUpTime);
+            ResourcesReservation.saveStatisticsEntry(se);
 
     		if(success) {
     			reservation = reservations.get(resID);
@@ -793,4 +802,25 @@ public class ResourcesReservation {
     public ReservationParams getResvParams(String resID) {
     	return reservations.get(resID).getParams();
     }
+    
+    /**
+     * Saves a statistics entry in the database.
+     * 
+     * @param se
+     */
+    public static void saveStatisticsEntry(StatisticsEntry se) {
+        HibernateUtil hbm = DmHibernateUtil.getInstance();
+        if(hbm == null) {
+            return;
+        }
+        
+        StatisticsEntryDAO dao = HibernateDmDAOFactory.getInstance().getStatisticsEntryDAO();
+        
+        Transaction t = hbm.beginTransaction();
+        dao.update(se);
+        t.commit();
+        
+        hbm.closeSession();
+    }
+
 }

@@ -6,6 +6,7 @@ import net.geant.autobahn.network.dao.LinkDAO;
 import net.geant.autobahn.network.dao.PathDAO;
 import net.geant.autobahn.network.dao.PortDAO;
 import net.geant.autobahn.network.dao.ProvisioningDomainDAO;
+import net.geant.autobahn.network.dao.StatisticsEntryDAO;
 import net.geant.autobahn.reservation.dao.ReservationDAO;
 import net.geant.autobahn.reservation.dao.ServiceDAO;
 import net.geant.autobahn.reservation.dao.UserDAO;
@@ -30,4 +31,5 @@ public interface IdmDAOFactory {
     
     public ProvisioningDomainDAO getProvisioningDomainDAO();
     
+    public StatisticsEntryDAO getStatisticsEntryDAO();
 }

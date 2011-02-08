@@ -44,6 +44,7 @@ public class RequestConverter {
         HomeDomainReservation resv = new HomeDomainReservation(start, end,
                 req.getStartTime(), req.getEndTime(), req.getPriority().ordinal());
         
+        resv.setProcessNow(req.isProcessNow());
         resv.setDescription(req.getDescription());
         resv.setCapacity(req.getCapacity());
         if (req.getCapacity() <= 0) {

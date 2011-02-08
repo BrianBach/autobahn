@@ -28,6 +28,8 @@ import net.geant.autobahn.intradomain.sdh.dao.hibernate.HibernateSdhDeviceDAO;
 import net.geant.autobahn.intradomain.sdh.dao.hibernate.HibernateStmLinkDAO;
 import net.geant.autobahn.network.dao.LinkDAO;
 import net.geant.autobahn.network.dao.hibernate.HibernateLinkDAO;
+import net.geant.autobahn.network.dao.StatisticsEntryDAO;
+import net.geant.autobahn.network.dao.hibernate.HibernateStatisticsEntryDAO;
 
 /**
  * Factory class for obtaining DAO objects for the persistent entities of the
@@ -50,6 +52,7 @@ public class HibernateDmDAOFactory implements DmDAOFactory {
     private GenericInterfaceDAO gidao = new HibernateGenericInterfaceDAO(hbm);
     private NodeDAO ndao = new HibernateNodeDAO(hbm);
     private LinkDAO ldao = new HibernateLinkDAO(hbm);
+    private StatisticsEntryDAO sedao = new HibernateStatisticsEntryDAO(hbm);
     private StmLinkDAO stm_link_dao = new HibernateStmLinkDAO(hbm);
     private SdhDeviceDAO sdh_device_dao = new HibernateSdhDeviceDAO(hbm);
     private IntradomainReservationDAO intra_res_dao = new HibernateIntradomainReservationDAO(hbm);
@@ -132,6 +135,13 @@ public class HibernateDmDAOFactory implements DmDAOFactory {
      */
     public LinkDAO getLinkDAO() {
         return ldao;
+    }
+
+    /**
+     * @return StatisticsEntryDAO instance
+     */
+    public StatisticsEntryDAO getStatisticsEntryDAO() {
+        return sedao;
     }
 
     /**

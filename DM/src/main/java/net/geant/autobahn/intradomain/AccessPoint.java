@@ -28,6 +28,7 @@ import net.geant.autobahn.intradomain.sdh.SdhMonitoring;
 import net.geant.autobahn.intradomain.topology.TopologyFileReader;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.LinkIdentifiers;
+import net.geant.autobahn.network.StatisticsEntry;
 import net.geant.autobahn.reservation.ReservationParams;
 import net.geant.autobahn.reservation.TimeRange;
 import net.geant.autobahn.topologyabstraction.TopologyAbstraction;
@@ -452,4 +453,25 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
                 
         log.info("===== Post-initialization check for DM module is complete. =====");
     }
+    
+    public List<StatisticsEntry> getStatistics() {
+        DmDAOFactory daos = HibernateDmDAOFactory.getInstance();
+        return daos.getStatisticsEntryDAO().getAll();
+    }
+    
+    public StatisticsEntry getStatistics(String resId) {
+        DmDAOFactory daos = HibernateDmDAOFactory.getInstance();
+        return daos.getStatisticsEntryDAO().getByResId(resId);
+    }
+    
+    public List<StatisticsEntry> getStatisticsIntra() {
+        DmDAOFactory daos = HibernateDmDAOFactory.getInstance();
+        return daos.getStatisticsEntryDAO().getIntradomainEntries();
+    }
+
+    public List<StatisticsEntry> getStatisticsInter() {
+        DmDAOFactory daos = HibernateDmDAOFactory.getInstance();
+        return daos.getStatisticsEntryDAO().getInterdomainEntries();
+    }
+
 }

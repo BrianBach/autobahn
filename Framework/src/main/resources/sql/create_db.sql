@@ -924,6 +924,20 @@ CREATE TABLE vtp_domain (
 
 
 --
+-- Name: statistics; Type: TABLE; Schema: public; Owner: jra3; Tablespace: 
+--
+
+CREATE TABLE statistics (
+    id serial PRIMARY KEY,
+    reservation_id character varying(255),
+    intradomain boolean,
+    setup_time bigint
+);
+
+
+
+
+--
 -- Name: hibernate_sequence; Type: SEQUENCE; Schema: public; Owner: jra3
 --
 

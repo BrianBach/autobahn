@@ -7,6 +7,8 @@ package net.geant.autobahn.reservation.states.hd;
 
 import java.util.Calendar;
 
+import net.geant.autobahn.idm.AccessPoint;
+import net.geant.autobahn.network.StatisticsEntry;
 import net.geant.autobahn.reservation.HomeDomainReservation;
 import net.geant.autobahn.reservation.ReservationStatusListener;
 
@@ -30,6 +32,10 @@ public class Active extends HomeDomainState {
         long msec = endTime.getTimeInMillis() - now.getTimeInMillis();
         
         log.info("Reservation [" + res + "] is now active, " + (msec / 1000) + " seconds left to finish");
+        
+        // Calculate time from submission to activation and save in DB statistics
+        long setuptime = now.getTimeInMillis() - res.getStartTime().getTimeInMillis();
+        AccessPoint.saveStatisticsEntry(new StatisticsEntry(res.getBodID(), false, setuptime));
         
 		for(ReservationStatusListener listener : res.getStatusListeners()) {
 			listener.reservationActive(res.getBodID());
