@@ -23,11 +23,18 @@ public class ClientPortsCommand implements AutobahnCommand {
 				ports = autobahn.getIdm().getAllClientPorts();
 			else if("domain".equals(args[1]))
 				ports = autobahn.getIdm().getDomainClientPorts();
+			else {
+			    return "Error in command";
+			}
 		} else {
 			// Default behaviour
 			ports = autobahn.getIdm().getDomainClientPorts();
 		}
 
+		if (ports == null) {
+		    return "No ports found";
+		}
+		
 		StringBuffer sb = new StringBuffer();
 		sb.append("Client ports, found: " + ports.length + "\n");
 		for(String port : ports) {
