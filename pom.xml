@@ -11,13 +11,12 @@
     	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   	</properties>
 	
-	
 	<modelVersion>4.0.0</modelVersion>
     <groupId>net.geant.autobahn</groupId>
     <artifactId>autobahn</artifactId>
     <version>1.0.0RC-SNAPSHOT</version>
     <name>Autobahn: Automated Bandwith Allocation across Heterogeneous Networks</name>
-    <url>http://www.geant.net/server/show/nav.756</url>
+    <url>https://forge.geant.net/forge/display/autobahn/Home</url>
     <packaging>pom</packaging>
  
 	<scm>
@@ -182,11 +181,11 @@
                 </executions>
             </plugin>
             <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
                 <version>2.3</version>
                 <configuration>
-                <targetJdk>1.5</targetJdk>
+                    <targetJdk>1.5</targetJdk>
                 </configuration>
                 <executions>
                     <execution>
@@ -197,6 +196,22 @@
                         <phase>verify</phase>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>checkstyle</goal>
+                        </goals>
+                        <phase>verify</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <configLocation>checkstyle_checks.xml</configLocation>
+                </configuration>
             </plugin>
         </plugins>
 		
@@ -292,7 +307,7 @@
 	                    <plugin>
 	                        <groupId>org.apache.maven.plugins</groupId>
 	                        <artifactId>maven-checkstyle-plugin</artifactId>
-	                        <version>2.5</version>
+	                        <version>2.6</version>
 	                        <executions>
 	                            <execution>
 	                                <goals>
