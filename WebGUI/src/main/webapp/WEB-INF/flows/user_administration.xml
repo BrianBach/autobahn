@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+
+	<on-start>
+		<evaluate expression="xmlUserDetailsAdmin.loadUsers()" />
+		<evaluate expression="xmlUserDetailsAdmin.usersParameters" result="flowScope.users" />
+	</on-start>
+
+	<view-state id="view-users" view="secure/view-users" model="xmlUserDetailsAdmin">
+		<!-- binder>
+		 	<binding property="username" required="true"/>
+            <binding property="organization" required="true"/>    
+            <binding property="membership" required="true"/>    
+            <binding property="role" required="true"/>    
+            <binding property="password" required="true"/>    
+    	</binder-->
+    	
+		<transition on="remove" to="view-users" bind="false">
+			<set name="requestScope.username" value="requestParameters.username"
+				type="string" />
+				
+			<evaluate expression="xmlUserDetailsAdmin.deleteUser(username)" />
+			<evaluate expression="xmlUserDetailsAdmin.loadUsers()" />
+			<evaluate expression="xmlUserDetailsAdmin.usersParameters" result="flowScope.users" />
+		</transition>
+
+		<transition on="add" to="view-users" bind="true">
+			<set name="requestScope.username" value="requestParameters.username"
+				type="string" />
+			<set name="requestScope.password" value="requestParameters.password"
+				type="string" />
+			<set name="requestScope.organization" value="requestParameters.organization"
+				type="string" />
+			<set name="requestScope.role" value="requestParameters.role"
+				type="string" />
+			<set name="requestScope.membership" value="requestParameters.membership"
+				type="string" />
+				
+			<evaluate expression="xmlUserDetailsAdmin.createUserFromUserParameters(username, organization, membership, role, password)" />
+			<evaluate expression="xmlUserDetailsAdmin.loadUsers()" />
+			<evaluate expression="xmlUserDetailsAdmin.usersParameters" result="flowScope.users" />
+		</transition>
+		
+		<transition on-exception="java.lang.Exception" to="view-users"> 
+			<evaluate expression="exceptionTranslator.translateException(flowRequestContext, flowExecutionException)"/>
+		</transition>
+	</view-state>
+
+</flow>

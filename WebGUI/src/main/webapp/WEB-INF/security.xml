@@ -23,13 +23,13 @@
 		<logout invalidate-session="true" />
 	</http>
 
-	<beans:bean id="xmlService"
-		class="net.geant.security.xml.userdetails.XmlUserDetailsService">
+	<beans:bean id="xmlUserDetailsAdmin"
+		class="net.geant.security.xml.userdetails.XmlUserDetailsAdmin">
 		
 		<beans:constructor-arg value="classpath:../userdetails.xml" />
 	</beans:bean>
 
-	<authentication-provider user-service-ref="xmlService">
+	<authentication-provider user-service-ref="xmlUserDetailsAdmin">
 		<password-encoder hash="md5" />
 	</authentication-provider>
 

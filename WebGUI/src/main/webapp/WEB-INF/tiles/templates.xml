@@ -71,5 +71,9 @@
 	<definition name="notfound" extends="template.main">
 		<put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/notfound.jsp"/>
 	</definition>
+	
+	<definition name="secure/view-users" extends="template.main">
+        <put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/xmlusers-admin.jsp"/>
+    </definition>
 
 </tiles-definitions> 

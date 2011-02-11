@@ -44,6 +44,7 @@ http://www.springframework.org/schema/webflow-config/spring-webflow-config-2.0.x
 		<webflow:flow-location path="/WEB-INF/flows/logs.xml" id="secure/logs.htm" />
 		<webflow:flow-location path="/WEB-INF/flows/request-service.xml" id="secure/request-service.htm" />
 		<webflow:flow-location path="/WEB-INF/flows/services.xml" id="secure/reservations_select.htm" />
+		<webflow:flow-location path="/WEB-INF/flows/user_administration.xml" id="secure/view-users.htm" />
 	</webflow:flow-registry>
 	
 	<!-- Plugs in a custom creator for Web Flow views -->
