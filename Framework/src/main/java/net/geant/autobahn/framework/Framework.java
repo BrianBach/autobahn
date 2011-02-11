@@ -149,6 +149,18 @@ public class Framework {
 				out.println("  quit - to quit");
 				out.println("  help - to display help");
 				out.println("-------------------------");
+				
+				/*
+				 * Password check
+				 */
+				out.println("Give password:");
+				String line = in.readLine();
+				if(!line.equals(properties.getProperty("framework.password"))) {
+                    client.close();
+                    log.warn("wrong password");
+                    client = null;
+                    continue;
+				}
 			}
 
 			try {

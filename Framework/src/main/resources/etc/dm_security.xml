@@ -14,7 +14,7 @@
                 -->
                 <protect-pointcut
                         expression="execution(* net.geant.autobahn.aai.DmUserAuthorizer.authorize(..))"
-                        access="ROLE_USER ORG_RNET,ROLE_ADMINISTRATOR" />
+                        access="ROLE_USER ORG_GRNET,ROLE_ADMINISTRATOR" />
         </global-method-security>
 
         <beans:bean id="authenticationManager"
