@@ -15,6 +15,10 @@
 			
 		</transition>
 		
+		<transition on-exception="java.lang.Exception" to="settings"> 
+			<evaluate expression="exceptionTranslator.translateException(flowRequestContext, flowExecutionException)"/>
+		</transition>
+		
 	</view-state>
 
 	<end-state id="no-idm-regitered" view="secure/noIDMRegistered"/>

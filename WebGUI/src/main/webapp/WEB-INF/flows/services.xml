@@ -27,6 +27,10 @@
 			<evaluate expression="manager.cancelServiceInInterDomainManager(flowScope.services.currentIdm,requestScope.id)"/>	 
 		</transition>
 		
+		<transition on-exception="java.lang.Exception" to="services"> 
+			<evaluate expression="exceptionTranslator.translateException(flowRequestContext, flowExecutionException)"/>
+		</transition>
+		
 	</view-state>
 	
 	<end-state id="no-idm-regitered" view="secure/noIDMRegistered"/>

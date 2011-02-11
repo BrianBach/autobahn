@@ -43,6 +43,9 @@
 		<transition on-exception="net.geant.autobahn.autoBahnGUI.manager.ManagerException"  to="request-service"> 
 			<evaluate expression="exceptionTranslator.translateException(flowRequestContext, flowExecutionException)"/>
 		</transition>	
+		<transition on-exception="java.lang.Exception" to="request-service"> 
+			<evaluate expression="exceptionTranslator.translateException(flowRequestContext, flowExecutionException)"/>
+		</transition>	
 		<transition on="remove" to="request-service">
 			<set name="requestScope.id" value="requestParameters.id" type="int"/>
 			<evaluate expression="service.getReservations().remove(id)"/>
@@ -87,6 +90,9 @@
 			<evaluate expression="manager.convertTimeToTimezone(reservation.timezone,reservation.request)"/>
 			<evaluate expression="manager.checkReservationPossibility(flowScope.home,reservation.request)" result="flashScope.test"/>		
 			<evaluate expression="manager.mapPortsForReservationRequest(reservation.request)"/>
+		</transition>
+		<transition on-exception="java.lang.Exception" to="addReservation"> 
+			<evaluate expression="exceptionTranslator.translateException(flowRequestContext, flowExecutionException)"/>
 		</transition>
 	</view-state> 
 	
