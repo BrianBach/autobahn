@@ -25,6 +25,14 @@ public class AdministrationImpl implements Administration {
 		return AccessPoint.getInstance().getLog(all);
 	}
 
+    /* (non-Javadoc)
+     * @see net.geant.autobahn.administration.Administration#getStatistics(boolean)
+     */
+    public StatisticsType getStatistics(boolean all) {
+
+        return AccessPoint.getInstance().getStatistics(all);
+    }
+
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.administration.Administration#getProperties()
 	 */

@@ -10,6 +10,7 @@ import net.geant.autobahn.administration.Administration;
 import net.geant.autobahn.administration.AdministrationService;
 import net.geant.autobahn.administration.KeyValue;
 import net.geant.autobahn.administration.ServiceType;
+import net.geant.autobahn.administration.StatisticsType;
 import net.geant.autobahn.administration.Status;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.reservation.Reservation;
@@ -71,6 +72,11 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 	 */
 	private String logs;
 	
+    /**
+     * IDM statistical data
+     */
+    private StatisticsType statistics;
+    
 	/**
 	 * Logs information
 	 */
@@ -165,6 +171,20 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 		}
 		return null;
 	}
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.administration.Administration#getStatistics(boolean)
+     */
+    public StatisticsType getStatistics(boolean all) {
+        if (isAdmnistrationConnected()) {
+            try {
+                return administration.getStatistics(all);
+            } catch (Exception e) {
+                logger.error("Cannot retrieve statistics from idm:"+e.getClass().getName()+":"+e.getMessage());
+            }
+        }
+        return null;
+    }
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.administration.Administration#getProperties()
@@ -334,12 +354,12 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 	/**
 	 * Gets logs from IDM
 	 * 
-	 * @param refreash
+	 * @param refresh
 	 * @param all
 	 * @return
 	 */
-	public String getLog (boolean refreash, boolean all){
-		if (refreash){
+	public String getLog (boolean refresh, boolean all){
+		if (refresh){
 			if (isAdmnistrationConnected())
 				try{
 				    logs = administration.getLog(all);
@@ -351,6 +371,30 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 		}
 		return logs;
 	}
+    /**
+     * Gets statistics from IDM
+     * 
+     * @param refresh
+     * @param all
+     * @return
+     */
+    public StatisticsType getStatistics(boolean refresh, boolean all){
+        if (refresh) {
+            if (isAdmnistrationConnected()) {
+                try {
+                    statistics = administration.getStatistics(all);
+                } catch (Exception e) {
+                    logger.error("Cannot retrieve statistical data. Cannot connect to IDM " + 
+                        identifier + " at url " + url);
+                    return null;
+                }
+            }
+            else {
+                return null;
+            }
+        }
+        return statistics;
+    }
 	/**
 	 * Check if UserAccessPoint web service interface is connected IDM
 	 * 
@@ -411,6 +455,20 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 	public void setLogs(String logs) {
 		this.logs = logs;
 	}
+    /**
+     * Gets statistics from IDM
+     * @return statistics  from IDM
+     */
+    public StatisticsType getStatistics() {
+        return statistics;
+    }
+    /**
+     * Sets statistics from IDM
+     * @param statistics  from IDM
+     */
+    public void setStatistics(StatisticsType statistics) {
+        this.statistics = statistics;
+    }
 	/** 
 	 * Sets ports managed by IDM
 	 * @ports 

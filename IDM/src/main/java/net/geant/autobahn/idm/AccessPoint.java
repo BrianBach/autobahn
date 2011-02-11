@@ -15,6 +15,7 @@ import net.geant.autobahn.administration.Administration;
 import net.geant.autobahn.administration.KeyValue;
 import net.geant.autobahn.administration.Neighbor;
 import net.geant.autobahn.administration.ServiceType;
+import net.geant.autobahn.administration.StatisticsType;
 import net.geant.autobahn.administration.Status;
 import net.geant.autobahn.administration.Translator;
 import net.geant.autobahn.constraints.GlobalConstraints;
@@ -1129,6 +1130,17 @@ public final class AccessPoint implements UserAccessPoint,
 			return "erroc ocurred while getting log info";
 		}
 	}
+
+    /* (non-Javadoc)
+     * @see net.geant.autobahn.administration.Administration#getStatistics(boolean)
+     */
+    public StatisticsType getStatistics(boolean all) {
+        StatisticsType st = new StatisticsType();
+        st.setInter(daos.getStatisticsEntryDAO().getInterdomainEntries());
+        st.setIntra(daos.getStatisticsEntryDAO().getIntradomainEntries());
+        
+        return st;
+    }
 
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.administration.Administration#getProperties()

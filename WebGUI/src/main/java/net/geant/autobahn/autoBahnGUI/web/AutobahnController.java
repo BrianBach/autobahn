@@ -7,11 +7,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 import net.geant.autobahn.administration.KeyValue;
+import net.geant.autobahn.administration.StatisticsType;
 import net.geant.autobahn.autoBahnGUI.manager.Manager;
 import net.geant.autobahn.autoBahnGUI.model.googlemaps.Line;
 import net.geant.autobahn.autoBahnGUI.model.googlemaps.Topology;
 import net.geant.autobahn.autoBahnGUI.model.ServicesFormModel;
 import net.geant.autobahn.autoBahnGUI.model.SettingsFormModel;
+import net.geant.autobahn.autoBahnGUI.model.StatisticsFormModel;
 import net.geant.autobahn.autoBahnGUI.topology.TopologyFinder;
 import net.sf.json.JSONSerializer;
 import net.sf.json.JSONObject;
@@ -365,6 +367,18 @@ public class AutobahnController {
      Logger.getLogger("autoBAHN controler").info("Logs request");
     }
 
+    @RequestMapping("/secure/statistics.htm")
+    public void handleStatisticsChange(@RequestParam String currentIdm, Map<String, Object> model){
+
+        Logger.getLogger("autoBAHN controler").info("handle statistics change");
+        StatisticsType st = null;
+        if (currentIdm != null) {
+            StatisticsFormModel fm = manager.getStatisticsForInterDomainManager(currentIdm);
+            st = fm.getStatistics();
+        }
+        model.put("statistics", st);
+    }
+    
     public void doNothing()
     {
 

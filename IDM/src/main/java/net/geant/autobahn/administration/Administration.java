@@ -27,6 +27,9 @@ public interface Administration {
 	@WebResult(name="log")
 	String getLog(@WebParam(name="all")boolean all);
 		
+    @WebResult(name="statistics")
+    StatisticsType getStatistics(@WebParam(name="all")boolean all);
+    
 	@WebResult(name="links")
 	List<Link> getTopology();
 	

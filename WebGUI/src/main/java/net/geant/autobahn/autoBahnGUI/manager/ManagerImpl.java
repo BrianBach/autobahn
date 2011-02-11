@@ -13,13 +13,10 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 import java.util.Properties;
-import java.util.SortedSet;
 import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,6 +36,7 @@ import net.geant.autobahn.autoBahnGUI.model.ReservationTest;
 import net.geant.autobahn.autoBahnGUI.model.ServicesComparator;
 import net.geant.autobahn.autoBahnGUI.model.ServicesFormModel;
 import net.geant.autobahn.autoBahnGUI.model.SettingsFormModel;
+import net.geant.autobahn.autoBahnGUI.model.StatisticsFormModel;
 import net.geant.autobahn.autoBahnGUI.topology.TopologyFinderNotifier;
 import net.geant.autobahn.gui.EventType;
 import net.geant.autobahn.gui.ReservationChangedType;
@@ -660,6 +658,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		if (notifier!= null)	
 				notifier.updateTopology();
 	}
+	
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getLogsInterDomainManager(java.lang.String, boolean, boolean)
@@ -1217,7 +1216,6 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		return serv;
 	}
 
-	
 	public LogsFormModel getLogsForInterDomainManager(String idm) {
 		LogsFormModel serv =  new LogsFormModel();
 		List<String > managers = 	getAllInterdomainManagers();
@@ -1225,7 +1223,6 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		if (managers== null || managers.isEmpty()){
 			serv.setError("There is no log provided");
 			serv.setLogs("");
-			serv.setError("There is no settings provided");
 			return serv;
 		}
 		if (idm ==null){
@@ -1239,6 +1236,27 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		return serv;
 	}
 
+    public StatisticsFormModel getStatisticsForInterDomainManager(String idm) {
+        StatisticsFormModel serv = new StatisticsFormModel();
+        List<String> managers = getAllInterdomainManagers();
+        serv.setIdms(managers);
+        if (managers == null || managers.isEmpty()){
+            serv.setError("No IDM could be found. No statistics provided");
+            return serv;
+        }
+        if (idm == null){
+            idm = managers.get(0);
+        }
+        InterDomainManager manager = idms.get(idm);
+        try {
+            serv.setStatistics(manager.getStatistics(true));
+        } catch (Exception e){
+            logger.error("No statistics could be retrieved.");
+            serv.setStatistics(null);
+        }
+        serv.setCurrentIdm(idm);
+        return serv;
+    }
 
 	public SettingsFormModel getSettingsForInterDomainManager(String idm) {
 		SettingsFormModel serv =  new SettingsFormModel();

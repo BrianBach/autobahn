@@ -4,11 +4,13 @@ import java.util.Map;
 
 import net.geant.autobahn.administration.KeyValue;
 import net.geant.autobahn.administration.ServiceType;
+import net.geant.autobahn.administration.StatisticsType;
 import net.geant.autobahn.autoBahnGUI.model.LogsFormModel;
 import net.geant.autobahn.autoBahnGUI.model.ReservatiomDepandentOnTimezone;
 import net.geant.autobahn.autoBahnGUI.model.ReservationTest;
 import net.geant.autobahn.autoBahnGUI.model.ServicesFormModel;
 import net.geant.autobahn.autoBahnGUI.model.SettingsFormModel;
+import net.geant.autobahn.autoBahnGUI.model.StatisticsFormModel;
 import net.geant.autobahn.lookup.LookupService;
 import net.geant.autobahn.useraccesspoint.ReservationRequest;
 import net.geant.autobahn.useraccesspoint.ServiceRequest;
@@ -111,6 +113,7 @@ public interface Manager {
 	 * @return String log information
 	 */
 	public String getLogsInterDomainManager(String idm, boolean b, boolean c);
+	
     /**
      * Gets all IDCP port names in all IDM registered in WEB GUI
      * @return list of  ports names
@@ -300,6 +303,13 @@ public interface Manager {
 	 * @return LogsFormModel
 	 */
 	public LogsFormModel getLogsForInterDomainManager (String idm);
+	
+    /**
+     * Gets StatisticsFormModel used in IDM setting view
+     * @param idm identifier of IDM
+     * @return  StatisticsFormModel
+     */
+    public StatisticsFormModel getStatisticsForInterDomainManager (String idm);
 	
 	public LookupService getLookupServiceObject();
 	

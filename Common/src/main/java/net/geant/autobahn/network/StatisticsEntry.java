@@ -1,5 +1,7 @@
 package net.geant.autobahn.network;
 
+import java.io.Serializable;
+
 /**
  * A StatisticsEntry class keeps some statistical information.
  * - setup time for a call from DM to the TP (intradomain)
@@ -8,7 +10,9 @@ package net.geant.autobahn.network;
  * @author <a href="mailto:stamos@cti.gr">Kostas Stamos</a>
  * 
  */
-public class StatisticsEntry {
+public class StatisticsEntry implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private int id;
     private String reservation_id;
