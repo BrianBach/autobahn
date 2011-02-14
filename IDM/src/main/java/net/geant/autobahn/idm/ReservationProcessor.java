@@ -374,7 +374,9 @@ public class ReservationProcessor {
 			
 			command.run();
 			
-            t.commit();
+			if (!t.wasCommitted()) {
+			    t.commit();
+			}
             hbm.closeSession();
 		}
 	}

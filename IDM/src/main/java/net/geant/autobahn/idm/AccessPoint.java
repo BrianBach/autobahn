@@ -1379,7 +1379,9 @@ public final class AccessPoint implements UserAccessPoint,
         
         Transaction t = hbm.beginTransaction();
         dao.update(se);
-        t.commit();
+        if (!t.wasCommitted()) {
+            t.commit();
+        }
         
         hbm.closeSession();
     }
