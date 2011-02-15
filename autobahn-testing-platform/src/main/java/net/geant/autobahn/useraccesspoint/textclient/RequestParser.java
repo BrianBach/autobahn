@@ -12,6 +12,8 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import net.geant.autobahn.useraccesspoint.Mode;
+import net.geant.autobahn.useraccesspoint.PortType;
 import net.geant.autobahn.useraccesspoint.Priority;
 import net.geant.autobahn.useraccesspoint.ReservationRequest;
 import net.geant.autobahn.useraccesspoint.Resiliency;
@@ -61,9 +63,13 @@ public class RequestParser {
 				String value = contents[1].trim();
 				
 				if(field.equals("sport")) {
-					rreq.setStartPort(value);
+					PortType port = new PortType();
+					port.setAddress(value);
+					rreq.setStartPort(port);
 				} else if(field.equals("dport")) {
-					rreq.setEndPort(value);
+					PortType port = new PortType();
+					port.setAddress(value);
+					rreq.setEndPort(port);
 				} else if(field.equals("stime")) {
 					rreq.setStartTime(parseDate(value));
 				} else if(field.equals("etime")) {
@@ -101,8 +107,18 @@ public class RequestParser {
         rreq.setPriority(Priority.NORMAL);
         rreq.setResiliency(Resiliency.NONE);
 		
-		rreq.setStartPort(src);
-		rreq.setEndPort(dest);
+        PortType sport = new PortType();
+        sport.setAddress(src);
+        sport.setMode(Mode.UNTAGGED);
+        
+		rreq.setStartPort(sport);
+		
+        PortType eport = new PortType();
+        eport.setAddress(dest);
+        eport.setMode(Mode.UNTAGGED);
+		
+		rreq.setEndPort(eport);
+		
 		try {
 			rreq.setStartTime(parseDate(stime));
 			rreq.setEndTime(parseDate(etime));

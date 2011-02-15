@@ -51,7 +51,7 @@ cursor:pointer;
 <br>
 <table width="100%">
 	<tr>
-		<td class="label" style="min-width:200px"><spring:message code="service.userHomeDomain"/><br /><span class="error"><form:errors path="userHomeDomain"/></span></td>
+		<td class="label" ><spring:message code="service.userHomeDomain"/><br /><span class="error"><form:errors path="userHomeDomain"/></span></td>
 		<td class="value">
 			<form:select path="userHomeDomain">
 				<form:options items="${idms}"/>
@@ -60,14 +60,14 @@ cursor:pointer;
 		<!--td class="error"><form:errors path="userHomeDomain"/></td-->
 	</tr>
 	<tr>
-		<td class="label" style="min-width:200px"><spring:message code="service.userName"/><br /><span class="error"><form:errors path="userName"/></span></td>
+		<td class="label" ><spring:message code="service.userName"/><br /><span class="error"><form:errors path="userName"/></span></td>
 		<td class="value">
 			<form:input path="userName" disabled="false"/>
 		</td>
 		<!--td class="error"><form:errors path="userName"/></td-->
 	</tr>
 	<tr>
-		<td class="label" style="min-width:200px"><spring:message code="service.justification"/><br /><span class="error"><form:errors path="justification"/></span></td>
+		<td class="label" ><spring:message code="service.justification"/><br /><span class="error"><form:errors path="justification"/></span></td>
 		<td class="value">
 			<form:textarea rows="8" cols="65" path="justification"/>
 		</td>

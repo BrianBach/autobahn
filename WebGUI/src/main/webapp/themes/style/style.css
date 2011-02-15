@@ -1,6 +1,13 @@
 
 form textarea {font-family: Arial, Helvetica, sans; max-width: 805px; min-width:500px; }
-form td.value {font-family: Arial, Helvetica, sans; text-align:left;width:62%;height:20px;color:#000080;}
+form td.value {font-family: Arial, Helvetica, sans; text-align:left; height:20px; max-width:250px;}
+
+form td.port {
+		font-family: Arial, Helvetica, sans;
+		text-align:left; 
+		max-width:250px; 
+		height:20px;
+	}
 
 #collection table {margin:0 0 0 0px;width:100%}
 #collection th {color:#ffffff;border:#000080 1px dotted;background-color:#25648d;font-size: 11px}
@@ -281,11 +288,22 @@ button:focus {
 
 form td.label {
 	padding:2px 5px;
-	font-size:10px;
+	font-size:11px;
 	font-weight:bold;
 	text-align:left;
+	font-family:Arial,Helvetica,sans;
+	
 }
+input.enableStartTimeCss{
 
+	width:150px;
+	margin-right:0px;
+}
+input.disableStartTimeCss{
+	color: #fff;
+	width:150px;
+	margin-right:0px;
+}
 
 form td.error{
 	padding:2px 5px;
@@ -301,5 +319,9 @@ form td.error{
     color:red;
 }
 
-
+input.check {
+	width: 10px;
+	height: 10px;
+	margin-left: 10px;
+	}
 

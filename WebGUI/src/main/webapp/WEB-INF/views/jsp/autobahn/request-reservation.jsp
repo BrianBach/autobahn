@@ -10,8 +10,8 @@
 
 function passPort(){
 	//alert(document.getElementById('request.startPort').options[document.getElementById('request.startPort').options.selectedIndex].text);
-setStartFriendlyName(document.getElementById('request.startPort').options[document.getElementById('request.startPort').options.selectedIndex].text);
-setEndFriendlyName(document.getElementById('request.endPort').options[document.getElementById('request.endPort').options.selectedIndex].text);
+setStartFriendlyName(document.getElementById('request.startPort.address').options[document.getElementById('request.startPort.address').options.selectedIndex].text);
+setEndFriendlyName(document.getElementById('request.endPort.address').options[document.getElementById('request.endPort.address').options.selectedIndex].text);
 var now = new Date();
 var month = parseInt(now.getMonth())+1;
 if(month > 12){
@@ -130,6 +130,43 @@ function checkMinusCapacityVlan(field,id){
 			document.forms[0][id].value= final;
 		}
 	}
+//id must be unique
+function checkIfVlanSelected1(selected){
+	
+	if(selected == "VLAN"){
+		document.getElementById('hide1').style.display="";
+		document.getElementById('hide2').style.display="";
+	}
+		
+	else{
+		document.getElementById('hide1').style.display='none';
+		document.getElementById('hide2').style.display='none';
+	}
+		
+}
+//id must be unique
+function checkIfVlanSelected2(selected){
+	
+	if(selected == "VLAN"){
+		document.getElementById('hide3').style.display="";
+		document.getElementById('hide4').style.display="";
+	}
+		
+	else{
+		document.getElementById('hide3').style.display="none";
+		document.getElementById('hide4').style.display="none";
+	}	
+}
+function blockInputStartTime(checked) {
+	if(checked){
+		document.getElementById('startTime').disabled = true;
+		document.getElementById("startTime").className = "disableStartTimeCss";
+	}
+	else {
+		document.getElementById('startTime').disabled = false;
+		document.getElementById("startTime").className = "enableStartTimeCss";	
+	}			
+}
 </script>
 <body onload="passPort()">
 <form:form commandName="reservation" id="reservationform" onsubmit="alerta()">
@@ -154,25 +191,55 @@ function checkMinusCapacityVlan(field,id){
        <tr>
 		<td class="label"><spring:message code="reservation.startPort"/></td>
 		<td class="value">
-			<form:select path="request.startPort" onchange="setStartFriendlyName(this.options[this.options.selectedIndex].text)">
+			<form:select path="request.startPort.address" onchange="setStartFriendlyName(this.options[this.options.selectedIndex].text)">
 				<form:options items="${friendlyports_domain}" itemValue="identifier" itemLabel="friendlyName"/>	
 			</form:select>
 		</td>
 		<form:hidden path="request.startPortFriendlyName" />
-		<td class="error"><form:errors path="request.startPort"/></td>
+		<td class="error"><form:errors path="request.startPort.address"/></td>
+		
+		<td class="label"><spring:message code="reservation.mode"/></td>
+        <td class="value">
+
+            <form:select path="request.startPort.mode" onchange="checkIfVlanSelected1(this.options[this.options.selectedIndex].text)">
+                    <form:options items="${modes}"/>
+                </form:select>
+            </td>
+        <td class="error"><form:errors path="request.startPort.mode"/></td>
+
+        <td class="label" id="hide1"><spring:message code="reservation.vlan"/></td>
+        <td id="hide2" >
+			<form:input path="request.startPort.vlan" maxlength="3" cssStyle="width:21px; height:12px; margin-right:0px;"/> 
+		</td>
+		
 	</tr>
 	<tr>
 		<td class="label"><spring:message code="reservation.endPort"/></td>
 		<td class="value">
-			<form:select path="request.endPort" onchange="setEndFriendlyName(this.options[this.options.selectedIndex].text)">
-				<!--form:options items="${friendlyAndIDCPports_all}" itemValue="identifier" itemLabel="friendlyName"/-->
+			<form:select path="request.endPort.address" onchange="setEndFriendlyName(this.options[this.options.selectedIndex].text)">
 				<form:options items="${friendlyports_all}" itemValue="identifier" itemLabel="friendlyName"/>
 				<option disabled="true" value="IDCP">IDCP</option>
                 <form:options items="${idcpPorts_all}" />
 			</form:select>
 		</td>
 		<form:hidden path="request.endPortFriendlyName" />
-		<td class="error"><form:errors path="request.endPort"/></td>
+		<td class="error"><form:errors path="request.endPort.address"/></td>
+		
+		<td class="label"><spring:message code="reservation.mode"/></td>
+        <td class="value">	
+
+               <form:select path="request.endPort.mode" onchange="checkIfVlanSelected2(this.options[this.options.selectedIndex].text)" >
+                    <form:options items="${modes}"/>
+               </form:select>
+        </td>
+        <td class="error"><form:errors path="request.endPort.mode"/></td>
+
+        <td class="label" id="hide3" ><spring:message code="reservation.vlan"/></td>
+        
+        <td id="hide4"  >
+			<form:input path="request.endPort.vlan" maxlength="3" cssStyle="width:21px; height:12px; margin-right:0px;"/> 
+		</td>
+		
 	</tr>
 	<tr>
 		<td class="label"><spring:message code="reservation.timezone"/></td>
@@ -191,9 +258,17 @@ function checkMinusCapacityVlan(field,id){
 			<tr>
 				<td id="holder">&nbsp;</td>
 				<td>
-				<form:input path="request.startTime" id="startTime" cssStyle="width:150px;margin-right:0px;"/> 
-				
+					<form:input path="request.startTime" id="startTime" cssStyle="width:150px;margin-right:0px;" cssClass="enableStartTimeCss"/> 
 				</td>
+				<td class="label" style="min-width:75px;">
+					<spring:message code="reservation.processNow"/>
+				</td>
+         		<td class="value" style="width:50px;"> 
+               		 <form:checkbox cssClass="check" path="request.processNow" id="processNow" onchange="blockInputStartTime(this.checked)"/>
+           		</td>																			
+          		<td class="error">
+          		  	<form:errors path="request.processNow"/>
+          		</td>
 			</tr>
 		</table>
 	</td>
@@ -223,15 +298,7 @@ function checkMinusCapacityVlan(field,id){
             </td>
             <td class="error"><form:errors path="request.capacity"/></td>
         </tr>
-        
-        <tr>
-            <td class="label"><spring:message code="reservation.processNow"/></td>
-            <td class="value">
-                <form:checkbox path="request.processNow"/>
-            </td>
-            <td class="error"><form:errors path="request.processNow"/></td>
-        </tr>
-        
+
         <tr>
             <td class="label" style="min-width:150px"><spring:message code="reservation.description"/><br /><span class="error"><form:errors path="request.description"/></span></td>
             <td class="value">
@@ -265,7 +332,7 @@ function checkMinusCapacityVlan(field,id){
 <div>
     <table>
         <tr>
-            <td class="label"><spring:message code="reservation.userVlanId"/></td>
+            <td class="label" style="min-width:150px"><spring:message code="reservation.userVlanId"/></td>
             <td class="value">
                 <form:input path="request.userVlanId" id="ruserVladId"
                             onblur="checkMinusCapacityVlan('VLAN identifier','request.userVlanId')"/>
@@ -273,14 +340,14 @@ function checkMinusCapacityVlan(field,id){
             <td class="error"><form:errors path="request.userVlanId"/></td>
         </tr>
          <tr>
-            <td class="label"><spring:message code="reservation.maxDelay"/></td>
+            <td class="label" style="min-width:150px"><spring:message code="reservation.maxDelay"/></td>
             <td class="value">
                 <form:input path="request.maxDelay" id="rdelay"/>
             </td>
             <td class="error"><form:errors path="request.maxDelay" id="rdelay"/></td>
         </tr>
        <tr>
-		<td class="label"><spring:message code="reservation.mtu"/></td>
+		<td class="label" style="min-width:150px"><spring:message code="reservation.mtu"/></td>
 		<td class="value">
 			<form:input path="request.mtu" onblur="checkMinusCapacityVlan('Mtu size','request.mtu')" />
 		</td>
@@ -289,7 +356,7 @@ function checkMinusCapacityVlan(field,id){
        
         
         <tr>
-            <td class="label"><spring:message code="reservation.resiliency"/></td>
+            <td class="label" style="min-width:150px"><spring:message code="reservation.resiliency"/></td>
             <td class="value">
                 <form:select path="request.resiliency">
                     <form:options items="${resiliences}"/>
@@ -298,7 +365,7 @@ function checkMinusCapacityVlan(field,id){
             <td class="error"><form:errors path="request.resiliency"/></td>
         </tr>
         <tr>
-            <td class="label"><spring:message code="reservation.priority"/></td>
+            <td class="label" style="min-width:150px"><spring:message code="reservation.priority"/></td>
             <td class="value">
                 <form:select path="request.priority">
                     <form:options items="${priorities}"/>
@@ -473,11 +540,11 @@ function checkMinusCapacityVlan(field,id){
 		$(function() {
 				  $('#startTime').datetime({
 									userLang	: 'en',
-									americanMode: false,
+									americanMode: false
 								});
 				  $('#endTime').datetime({
 									userLang	: 'en',
-									americanMode: false,
+									americanMode: false
 								});								
 			});
 	/* ]]> */

@@ -48,7 +48,7 @@ import net.geant.autobahn.useraccesspoint.ReservationRequest;
 import net.geant.autobahn.useraccesspoint.Resiliency;
 import net.geant.autobahn.useraccesspoint.ServiceRequest;
 import net.geant.autobahn.useraccesspoint.UserAccessPointException;
-
+import net.geant.autobahn.useraccesspoint.Mode;
 import org.apache.log4j.Logger;
 import org.springframework.security.Authentication;
 import org.springframework.security.context.SecurityContextHolder;
@@ -735,7 +735,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
         for (int i=0; i<request.getReservations().size(); i++) {
         	request.getReservations().get(i).setAuthParameters(authParameters);
         }
-        
+
 		logger.info("Verified");
 		logServiceRequest(request);
 		InterDomainManager manager = idms.get(idm);
@@ -932,8 +932,12 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#demapPortsForReservationRequest(net.geant.autobahn.useraccesspoint.ReservationRequest)
 	 */
 	public void demapPortsForReservationRequest(ReservationRequest reservation) {
-		reservation.setStartPort(demapPort(reservation.getStartPort()));
-		reservation.setEndPort(demapPort(reservation.getEndPort()));
+		
+		reservation.getStartPort().setAddress(demapPort(reservation.getStartPort().getAddress()));
+		reservation.getEndPort().setAddress(demapPort(reservation.getEndPort().getAddress()));
+		
+		//reservation.setStartPort(demapPort(reservation.getStartPort()));
+		//reservation.setEndPort(demapPort(reservation.getEndPort()));
 	}
 
 	/*
@@ -941,9 +945,14 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#demapPortsForsServiceRequest(net.geant.autobahn.useraccesspoint.ServiceRequest)
 	 */
 	public void demapPortsForsServiceRequest(ServiceRequest service) {
-		for(ReservationRequest reservation:service.getReservations()){
-			reservation.setStartPort(demapPort(reservation.getStartPort()));
-			reservation.setEndPort(demapPort(reservation.getEndPort()));
+		for(ReservationRequest reservation : service.getReservations()){
+			
+			reservation.getStartPort().setAddress(demapPort(reservation.getStartPort().getAddress()));			
+			
+			reservation.getEndPort().setAddress(demapPort(reservation.getEndPort().getAddress()));
+			
+		//	reservation.setStartPort(demapPort(reservation.getStartPort()));
+		//	reservation.setEndPort(demapPort(reservation.getEndPort()));
 		}
 	}
 	/**
@@ -1021,9 +1030,11 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 	 */
 	public void mapPortsForReservationRequest(ReservationRequest reservation) {
 		if (reservation.getStartPort()!= null)
-			reservation.setStartPort(mapPort(reservation.getStartPort()));
+			reservation.getStartPort().setAddress(mapPort(reservation.getStartPort().getAddress()));
+			//reservation.setStartPort(mapPort(reservation.getStartPort()));
 		if (reservation.getEndPort()!= null)
-		reservation.setEndPort(mapPort(reservation.getEndPort()));
+			//reservation.setEndPort(mapPort(reservation.getEndPort()));
+		reservation.getEndPort().setAddress(mapPort(reservation.getStartPort().getAddress()));
 	}
 
 	/*
@@ -1087,7 +1098,14 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 			list.add(req.toString());
 		return list;
 	}
-
+	
+	public List<String> getReservationModes() {
+		List<String> list = new ArrayList<String>();
+		for (Mode req : Mode.values())
+			list.add(req.toString());
+		return list;
+	}
+	
 	public List<String> getTimezones() {
 		return timezones;
 	}

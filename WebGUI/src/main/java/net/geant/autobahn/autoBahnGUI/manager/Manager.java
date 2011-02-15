@@ -322,5 +322,7 @@ public interface Manager {
 	public String setParameter(String param);
 	
 	public int getNumberOfAvailableIDMs();
+	
+	public List<String> getReservationModes();
 }
 

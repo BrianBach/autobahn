@@ -39,6 +39,7 @@
 			<evaluate expression="manager.getReservationPriorities()" result="flowScope.priorities"/>
 			<evaluate expression="manager.getReservationResiliencies()" result="flowScope.resiliences"/>
 			<evaluate expression="manager.getTimezones()" result="flowScope.timezones"/>
+			<evaluate expression="manager.getReservationModes()" result="flowScope.modes"/>
 		</transition>
 		<transition on-exception="net.geant.autobahn.autoBahnGUI.manager.ManagerException"  to="request-service"> 
 			<evaluate expression="exceptionTranslator.translateException(flowRequestContext, flowExecutionException)"/>
@@ -58,8 +59,12 @@
 	<view-state id="addReservation" view="secure/request-reservation" model="reservation">
 		<binder>
 			<binding property="timezone" required="true"/>
-			<binding property="request.startPort" required="true" />
-			<binding property="request.endPort" required="true"/>
+			<binding property="request.startPort.address" required="true" />
+			<binding property="request.startPort.mode" converter="reservation-mode" required="true"/>
+			<binding property="request.startPort.vlan" />
+			<binding property="request.endPort.address" required="true"/>
+			<binding property="request.endPort.mode" converter="reservation-mode" required="true" />
+			<binding property="request.endPort.vlan"/>
 			<binding property="request.startPortFriendlyName" />
 			<binding property="request.endPortFriendlyName" />
 			<binding property="request.startTime" converter="calendar" required="true"/>

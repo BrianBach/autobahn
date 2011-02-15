@@ -28,6 +28,7 @@ http://www.springframework.org/schema/webflow-config/spring-webflow-config-2.0.x
 				<entry key="calendar"><bean class="net.geant.autobahn.autoBahnGUI.webflow.CalendarConverter"/></entry>
 				<entry key="reservation-priority"><bean class="net.geant.autobahn.autoBahnGUI.webflow.ReservationPriorityConverter"/></entry>
 				<entry key="reservation-resiliency"><bean class="net.geant.autobahn.autoBahnGUI.webflow.ReservationResiliencyConverter"/></entry>
+				<entry key="reservation-mode"><bean class="net.geant.autobahn.autoBahnGUI.webflow.ReservationModeConverter"/></entry>
 			</map>
 		</property>
 		

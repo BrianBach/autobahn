@@ -227,15 +227,19 @@ public class RequestServiceFormController extends SimpleFormController {
 
 	public void demapPorts (ServiceRequest service){
 		for(ReservationRequest reservation:service.getReservations()){
-			reservation.setStartPort(manager.demapPort(reservation.getStartPort()));
-			reservation.setEndPort(manager.demapPort(reservation.getEndPort()));
+			
+			reservation.getStartPort().setAddress(manager.demapPort(reservation.getStartPort().getAddress()));
+			reservation.getEndPort().setAddress(manager.demapPort(reservation.getEndPort().getAddress()));
+	
 		}
 	}
 	
 	public void mapPorts (ServiceRequest service){
 		for(ReservationRequest reservation:service.getReservations()){
-			reservation.setStartPort(manager.mapPort(reservation.getStartPort()));
-			reservation.setEndPort(manager.mapPort(reservation.getEndPort()));
+			
+			reservation.getStartPort().setAddress(manager.mapPort(reservation.getStartPort().getAddress()));
+			reservation.getEndPort().setAddress(manager.mapPort(reservation.getEndPort().getAddress()));
+			
 		}
 	}
 	

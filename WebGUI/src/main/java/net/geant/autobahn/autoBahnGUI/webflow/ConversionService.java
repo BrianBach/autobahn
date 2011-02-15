@@ -33,6 +33,7 @@ public class ConversionService extends DefaultConversionService {
 		addConverter("calendar", new CalendarConverter());
 		addConverter("reservation-priority", new ReservationPriorityConverter());
 		addConverter("reservation-resiliency", new ReservationResiliencyConverter());
+		addConverter("reservation-mode", new ReservationModeConverter());
 		
 	}
 	
