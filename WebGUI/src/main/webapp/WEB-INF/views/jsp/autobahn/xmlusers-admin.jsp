@@ -29,7 +29,12 @@
                                         <td><input type="text" name="username" style="width:auto" size="10" /></td>
                                         <td><input type="text" name="organization" style="width:auto" size="10" /></td>
                                         <td><input type="text" name="membership" style="width:auto" size="10" /></td>
-                                        <td><input type="text" name="role" style="width:auto" size="10" /></td>
+                                        <td>
+                                        	<select name="role" style="width:auto">
+                                        		<option value="ADMINISTRATOR">ADMINISTRATOR</option>
+                                        		<option value="USER">USER</option>
+                                        	</select>
+                                        </td>
                                         <td>Password:<input type="password" name="password" style="width:auto" size="10" /></td>
                                 </tr>
                                 <tr>    
