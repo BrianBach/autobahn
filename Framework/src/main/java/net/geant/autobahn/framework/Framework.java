@@ -153,7 +153,8 @@ public class Framework {
 				/*
 				 * Password check
 				 */
-				out.println("Give password:");
+				out.print("Give password:");
+				out.flush();
 				String line = in.readLine();
 				if(!line.equals(properties.getProperty("framework.password"))) {
                     client.close();
@@ -275,7 +276,7 @@ public class Framework {
 		} else if ("stop".equals(args[0])){
 			int port = Integer.parseInt(props.getProperty("framework.port"));
 
-			MyTelnetClient cli = new MyTelnetClient("localhost", port);
+			MyTelnetClient cli = new MyTelnetClient("localhost", port, "pass");
 			cli.write("halt");
 			cli.disconnect();
 		}

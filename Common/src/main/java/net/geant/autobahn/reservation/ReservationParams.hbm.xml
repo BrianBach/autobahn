@@ -21,11 +21,12 @@
 		
 		<property name="endTime" type="calendar" />
 		
-		<property name="userVlanId" type="int" />
-		
 		<property name="mtu" type="int" />
 		
-		<many-to-one name="pathConstraints" class="net.geant.autobahn.constraints.PathConstraints" 
+		<many-to-one name="pathConstraintsIngress" class="net.geant.autobahn.constraints.PathConstraints" 
+			not-null="true" cascade="save-update" lazy="false" />
+			
+		<many-to-one name="pathConstraintsEgress" class="net.geant.autobahn.constraints.PathConstraints" 
 			not-null="true" cascade="save-update" lazy="false" />
 	</class>
 	

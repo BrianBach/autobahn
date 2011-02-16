@@ -16,11 +16,9 @@ import javax.xml.bind.annotation.XmlType;
 import net.geant.autobahn.aai.UserAuthParameters;
 import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.constraints.GlobalConstraints;
-import net.geant.autobahn.constraints.PathConstraints;
 import net.geant.autobahn.network.Path;
 import net.geant.autobahn.network.Port;
 import net.geant.autobahn.network.StateOper;
-import net.geant.autobahn.useraccesspoint.PathInfo;
 
 /**
  * @author <a href="mailto:jaxlucas@man.poznan.pl">Jacek Lukasik</a>
@@ -30,9 +28,7 @@ import net.geant.autobahn.useraccesspoint.PathInfo;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="Reservation", namespace="reservation.autobahn.geant.net", propOrder={
 		"bodID", "startPort", "endPort", "startTime", "endTime",
-		"priority", "description", "capacity", 
-	    "userInclude", "userExclude", "userVlanId", "mtu",
-	    "maxDelay",
+		"priority", "description", "capacity", "mtu", "maxDelay",
 		"resiliency", "bidirectional", "globalConstraints", "path", "intState", "fake",
 		"authParameters"})
 public class Reservation implements Serializable {
@@ -50,9 +46,6 @@ public class Reservation implements Serializable {
     protected String description;
     
     protected long capacity;
-    protected PathInfo userInclude;
-    protected PathInfo userExclude;
-    protected int userVlanId;
     protected int mtu;
     protected int maxDelay;
     protected String resiliency;
@@ -64,11 +57,10 @@ public class Reservation implements Serializable {
     
     protected boolean fake;
 
-    private UserAuthParameters authParameters=new UserAuthParameters();
+    private UserAuthParameters authParameters = new UserAuthParameters();
     
     @XmlTransient
     protected StateOper operationalStatus;
-
     
     /**
      * Default constructor
@@ -77,7 +69,6 @@ public class Reservation implements Serializable {
     public Reservation() {
         
     }
-        
 
     /**
      * Creates proper <code>Reservation</code> object and puts it into
@@ -230,71 +221,6 @@ public class Reservation implements Serializable {
         this.capacity = capacity;
     }
 
-    /**
-     * Gets the value of the userInclude property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link PathInfo }
-     *     
-     */
-    public PathInfo getUserInclude() {
-        return userInclude;
-    }
-
-    /**
-     * Sets the value of the userInclude property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link PathInfo }
-     *     
-     */
-    public void setUserInclude(PathInfo value) {
-        this.userInclude = value;
-    }
-
-    /**
-     * Gets the value of the userExclude property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link PathInfo }
-     *     
-     */
-
-    public PathInfo getUserExclude() {
-        return userExclude;
-    }
-
-    /**
-     * Sets the value of the userExclude property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link PathInfo }
-     *     
-     */
-    public void setUserExclude(PathInfo value) {
-        this.userExclude = value;
-    }
-
-    /**
-     * Gets the value of the userVlanId property.
-     * 
-     */
-    public int getUserVlanId() {
-        return userVlanId;
-    }
-
-    /**
-     * Sets the value of the userVlanId property.
-     * 
-     */
-    public void setUserVlanId(int value) {
-        this.userVlanId = value;
-    }
-    
     /**
      * 
      * @return mtu size in bytes
@@ -472,18 +398,25 @@ public class Reservation implements Serializable {
         par.setResiliency(resiliency);
         par.setBidirectional(bidirectional);
         
-        DomainConstraints dcon = globalConstraints.getDomainConstraints(domainID);
-        
+        // Ingress constraints
+        DomainConstraints dcon = globalConstraints.getDomainConstraints(domainID + "-ingress");
         if(dcon != null) {
-	        if(dcon.getPathConstraints().isEmpty())
+	        if(!dcon.isValid())
 	        	throw new IllegalStateException("Domain Constraints empty");
-	        	
-	        PathConstraints pcon = dcon.getPathConstraints().get(0);
-	        
-	        par.setPathConstraints(pcon);
+
+	        par.setPathConstraintsIngress(dcon.getFirstPathConstraints());
+        }
+
+        // Egress constraints
+        dcon = globalConstraints.getDomainConstraints(domainID + "-egress");
+        if(dcon != null) {
+	        if(!dcon.isValid())
+	        	throw new IllegalStateException("Domain Constraints empty");
+
+	        par.setPathConstraintsEgress(dcon.getFirstPathConstraints());
         }
         
-        par.setUserVlanId(userVlanId);
+        //requested VLAN for the domain
         par.setMtu(mtu);
         
         par.setAuthParameters(authParameters);

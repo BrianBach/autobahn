@@ -9,8 +9,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Stack;
 
-import net.geant.autobahn.constraints.PathConstraints;
-
 /**
  * Performs graph path finding between edge nodes (routers)
  * @author <a href="mailto:michalb@man.poznan.pl">Michal Balcerkiewicz</a>
@@ -58,7 +56,7 @@ public class GraphSearch {
      * @return List of graph edge arrays
      */
     public List<GraphEdge[]> findPaths(GraphEdge src, GraphEdge dest,
-			long minCapacity, PathConstraints pcons, int limit) {
+			long minCapacity, int limit) {
 
     	paths.clear();
     	this.minCapacity = minCapacity;
@@ -69,26 +67,10 @@ public class GraphSearch {
 
     	long pathCapacity = Math.min(src.getCapacity(), dest.getCapacity());
     	
-    	if(pcons == null) {
-    		pcons = new PathConstraints();
-    	}
-    	pcons = pcons.intersect(src.getConstraints());
-    	if (pcons != null) {
-    	    pcons = pcons.intersect(dest.getConstraints());
-    	}
-    	
-    	if (pcons == null) {
-    	    // If pcons equals to null, it means that path
-    	    // constraints could not be agreed between src and dest,
-    	    // so we return the empty path List
-    	    return paths;
-    	}
-    	
     	if(src_node.equals(dst_node) && pathCapacity >= minCapacity) {
     		paths.add(new GraphEdge[] {});
     	} else {
-    		search(src_node, dst_node, new Stack<GraphEdge>(), pathCapacity,
-					pcons);
+    		search(src_node, dst_node, new Stack<GraphEdge>(), pathCapacity);
     	}
     	
     	return paths;
@@ -108,14 +90,13 @@ public class GraphSearch {
     	paths.clear();
     	this.limit = limit;
     	
-    	search(start, dest, new Stack<GraphEdge>(), 0, new PathConstraints());
+    	search(start, dest, new Stack<GraphEdge>(), 0);
     	
     	return paths;
     }
     
     private void search(GraphNode start, GraphNode dest,
-			Stack<GraphEdge> currentPath, long pathCapacity,
-			PathConstraints pcons) {
+			Stack<GraphEdge> currentPath, long pathCapacity) {
 
     	if(limit == 0)
     		return;
@@ -140,14 +121,6 @@ public class GraphSearch {
     			continue;
     		}
     		
-    		// Update constraints
-    		PathConstraints merged = pcons.intersect(edge.getConstraints());
-
-    		// Cut off constraints
-    		if(merged == null) {
-    			continue;
-    		}
-
     		if(neighbor.equals(dest)) {
    	    		GraphEdge[] completePath = new GraphEdge[currentPath.size() + 1];
    	    		currentPath.toArray(completePath);
@@ -160,7 +133,7 @@ public class GraphSearch {
     		
     		currentPath.add(edge);
     		
-    		search(neighbor, dest, currentPath, tmp, merged);
+    		search(neighbor, dest, currentPath, tmp);
     		
     		currentPath.pop();
     	}

@@ -19,6 +19,7 @@
 			<key column="con_id" />
 			
 			<property name="value" type="boolean" />
+			<property name="logic" type="string" />
 		</joined-subclass>
 
 		<joined-subclass name="MinValueConstraint" table="MINVAL_CONSTRAINT">

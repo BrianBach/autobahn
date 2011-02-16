@@ -23,8 +23,7 @@ import net.geant.autobahn.aai.UserAuthParameters;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="ReservationParams", namespace="reservation.autobahn.geant.net", propOrder={
 		"capacity", "maxDelay", "resiliency", "bidirectional",
-		"startTime", "endTime", "pathConstraints", "userVlanId", "mtu",
-		"authParameters"
+		"startTime", "endTime", "pathConstraintsIngress", "pathConstraintsEgress", "mtu", "authParameters"
 })
 public class ReservationParams {
 	@XmlTransient
@@ -38,12 +37,12 @@ public class ReservationParams {
     private Calendar startTime;
     private Calendar endTime;
 
-    private PathConstraints pathConstraints;
+    private PathConstraints pathConstraintsIngress;
+    private PathConstraints pathConstraintsEgress;
     
-    private int userVlanId;
     private int mtu;
     
-    private UserAuthParameters authParameters=new UserAuthParameters();
+    private UserAuthParameters authParameters = new UserAuthParameters();
 
 	public long getId() {
 		return id;
@@ -125,37 +124,23 @@ public class ReservationParams {
 		this.endTime = endTime;
 	}
 
-	/**
-	 * Returns network constraints for a reservation.
-	 * 
-	 * @return the pathConstraints
-	 */
-	public PathConstraints getPathConstraints() {
-		return pathConstraints;
+    public PathConstraints getPathConstraintsIngress() {
+		return pathConstraintsIngress;
+	}
+
+	public void setPathConstraintsIngress(PathConstraints pathConstraintsIngress) {
+		this.pathConstraintsIngress = pathConstraintsIngress;
+	}
+
+	public PathConstraints getPathConstraintsEgress() {
+		return pathConstraintsEgress;
+	}
+
+	public void setPathConstraintsEgress(PathConstraints pathConstraintsEgress) {
+		this.pathConstraintsEgress = pathConstraintsEgress;
 	}
 
 	/**
-	 * @param pathConstraints the pathConstraints to set
-	 */
-	public void setPathConstraints(PathConstraints pathConstraints) {
-		this.pathConstraints = pathConstraints;
-	}
-
-    /**
-     * @return the userVlanId
-     */
-    public int getUserVlanId() {
-        return userVlanId;
-    }
-
-    /**
-     * @param userVlanId the userVlanId to set
-     */
-    public void setUserVlanId(int userVlanId) {
-        this.userVlanId = userVlanId;
-    }
-    
-    /**
      * @return the userVlanId
      */
     public int getMtu() {

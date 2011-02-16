@@ -34,7 +34,7 @@ public class EnvironmentSetup {
 	public void prepareConfiguration() {
 		String className = props.getProperty("topology.class");
 		
-		List<IntraTopologyBuilder> builders = new ArrayList<IntraTopologyBuilder>();
+		List<IntraTopologyBuilder2> builders = new ArrayList<IntraTopologyBuilder2>();
 		
 		try {
 			@SuppressWarnings("rawtypes")
@@ -45,7 +45,7 @@ public class EnvironmentSetup {
 			
 			for(Method m : methods) {
 				if(m.getName().startsWith("domain")) {
-					IntraTopologyBuilder builder = new IntraTopologyBuilder(false);
+					IntraTopologyBuilder2 builder = new IntraTopologyBuilder2(false);
 					builders.add(builder);
 					
 					m.invoke(instance, builder);
@@ -70,7 +70,7 @@ public class EnvironmentSetup {
 		
 		int index = 0;
 		// Create configuration for each instance
-		for(IntraTopologyBuilder builder : builders) {
+		for(IntraTopologyBuilder2 builder : builders) {
 			IncrementalProperties current = incremental.incrementValues();
 			
 			DomainConfiguration conf = new DomainConfiguration(props, builder, current);

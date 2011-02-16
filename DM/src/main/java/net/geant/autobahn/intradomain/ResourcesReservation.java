@@ -13,11 +13,10 @@ import java.util.TimerTask;
 
 import net.geant.autobahn.aai.AAIException;
 import net.geant.autobahn.aai.DmUserAuthorizer;
+import net.geant.autobahn.aai.UserAuthParameters;
 import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.constraints.PathConstraints;
 import net.geant.autobahn.dao.hibernate.DmHibernateUtil;
-import net.geant.autobahn.dao.hibernate.HibernateDmDAOFactory;
-import net.geant.autobahn.dao.hibernate.HibernateUtil;
 import net.geant.autobahn.dm2idm.Dm2Idm;
 import net.geant.autobahn.dm2idm.Dm2IdmClient;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
@@ -27,17 +26,13 @@ import net.geant.autobahn.intradomain.pathfinder.IntradomainPathfinder;
 import net.geant.autobahn.intradomain.timer.EventsTimer;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.StatisticsEntry;
-import net.geant.autobahn.network.dao.StatisticsEntryDAO;
 import net.geant.autobahn.reservation.ReservationParams;
 import net.geant.autobahn.resourcesreservationcalendar.ResourcesReservationCalendarClient;
-import net.geant.autobahn.tool.Tool;
 import net.geant.autobahn.tool.ToolClient;
-import net.geant.autobahn.tool.intradomain.common.WsdlConverter;
 import net.geant.autobahn.topologyabstraction.TopologyAbstraction;
 import net.geant.autobahn.topologyabstraction.TopologyAbstractionClient;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Transaction;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -62,7 +57,6 @@ public class ResourcesReservation {
 	    
     private static final int PATH_LIMIT = 3; 
     
-//    private TopologyConverter converter = null;
     private String taAddress = null;
     private String calendarAddress = null;
     private IntradomainPathfinder pathfinder = null;
@@ -133,9 +127,7 @@ public class ResourcesReservation {
 			
 			//Add it to Calendar again
 			try {
-				calendar.addReservation(res.getReservedPath().getLinks(), 
-					par.getCapacity(), par.getPathConstraints(), 
-					par.getStartTime(), endTime);
+				calendar.addReservation(res.getReservedPath(), par.getCapacity(), par.getStartTime(), endTime);
 			} catch (ConstraintsAlreadyUsedException e) {
 				log.error("Error while restoring DM state", e);
 			}
@@ -191,7 +183,7 @@ public class ResourcesReservation {
 			}
 		}
     }
-
+    
 	/**
 	 * Checks availability of capacity and other network resources for a
 	 * reservation with given params.
@@ -207,64 +199,14 @@ public class ResourcesReservation {
 	 * @throws AAIException
 	 *             Authorization not granted  
 	 */
-	public DomainConstraints checkResources(Link[] links,
+	public DomainConstraints[] checkResources(Link[] links,
 			ReservationParams par) throws OversubscribedException, AAIException {
+		
+		authorize(par.getAuthParameters());
 		
 		final Link ingress = links[0];
 		final Link egress = links[links.length - 1];
 		
-		//Authority check		
-		AccessPoint ap = AccessPoint.getInstance();
-		String authEnabled = ap.getProperty("authorization.enabled");
-        
-		
-		if (authEnabled != null && authEnabled.equals("true") ) {
-		    try {
-                ApplicationContext context = new ClassPathXmlApplicationContext(
-                        "classpath:etc/dm_security.xml");
-
-                GrantedAuthority[] authorities = AuthorityUtils.stringArrayToAuthorityArray(
-                        par.getAuthParameters().parametersToAuthorities());
-                
-                // Creation of dummy authentication object from user auth parameters, because
-                // we trust webgui authentication
-                Authentication newAuthentication = new UsernamePasswordAuthenticationToken(
-                        par.getAuthParameters().getIdentifier(), "pass", authorities);
-
-                SecurityContextHolder.getContext().setAuthentication(newAuthentication);
-                
-                DmUserAuthorizer uauthorizer = (DmUserAuthorizer) context.getBean("uauthorizer");
-
-                if (uauthorizer == null) {
-                    throw new RuntimeException("UserAuthorizer could not be found.  Tried beanId='uauthorizer'");
-                }
-
-                // Will throw AccessDeniedException if authorization fails
-                uauthorizer.authorize();
-	        
-	        } catch (BeansException ex) {
-	            log.info("BeanException: " + ex.toString());
-	        } catch (AccessDeniedException ex) {
-                log.info("Access denied: " + ex.toString());
-                throw new AAIException("ex.toString()");
-            }
-		}
-		
-        TopologyAbstraction ta = new TopologyAbstractionClient(taAddress);
-		GenericLink src = ta.getEdgeLink(ingress);
-		GenericLink dest = ta.getEdgeLink(egress);
-
-		if (src == null) {
-			log.debug("Edge link not found for source link " + ingress + "!");
-			log.info("checkResources by DM failed!");
-			return null;
-		}
-        if (dest == null) {
-            log.debug("Edge link not found for destination link " + egress + "!");
-            log.info("checkResources by DM failed!");
-            return null;
-        }
-
 		Calendar sTime = par.getStartTime();
 		Calendar eTime = par.getEndTime();
 		
@@ -272,14 +214,18 @@ public class ResourcesReservation {
 		checkEdgeLinkCapacity(ingress, par.getCapacity(), sTime, eTime);
 		checkEdgeLinkCapacity(egress, par.getCapacity(), sTime, eTime);
 		
+		IntradomainPath skel = buildPathSkeleton(ingress, egress, par);
+
+		if(skel == null) {
+			log.info("Intradomain path can't be found. Check resources failed.");
+			return null;
+		}
+		
 		// Get paths from PF
 		Set<GenericLink> excluded = new HashSet<GenericLink>();
-		
-		//add mtu info
-		List<IntradomainPath> paths = pathfinder.findPaths(src, dest, 
-				par.getCapacity(), excluded, PATH_LIMIT, par.getUserVlanId(), par.getMtu());
+		List<IntradomainPath> paths = pathfinder.findPaths(skel, par.getCapacity(), excluded, PATH_LIMIT, par.getMtu());
 
-		if (paths==null) {
+		if (paths == null) {
 		    //TODO: Perhaps use a more fine-grained exception type
 		    throw new OversubscribedException("No suitable paths found", links[1].getBodID());
 		}
@@ -318,8 +264,8 @@ public class ResourcesReservation {
 					}
 				}
 				
-				List<IntradomainPath> npaths = pathfinder.findPaths(src, dest, 
-						par.getCapacity(), excluded, newPathsNeeded, par.getUserVlanId(), par.getMtu());
+				List<IntradomainPath> npaths = pathfinder.findPaths(skel, 
+						par.getCapacity(), excluded, newPathsNeeded, par.getMtu());
 
 				if(npaths != null)
 					npaths.removeAll(paths);
@@ -334,16 +280,17 @@ public class ResourcesReservation {
 		}
 		
 		if(results.size() > 0) {		        
-			DomainConstraints dcon = new DomainConstraints();
+			DomainConstraints dconIngress = new DomainConstraints();
+			DomainConstraints dconEgress = new DomainConstraints();
 			
 			// Filtering Constraints
 			for(IntradomainPath path : results) {
-				PathConstraints res = calendar.getConstraints(path, 
-						sTime, eTime);
-				dcon.addPathConstraints(res);
+				IntradomainPath res = calendar.getConstraints(path, sTime, eTime);
+				dconIngress.addPathConstraints(res.getIngressConstraints());
+				dconEgress.addPathConstraints(res.getEgressConstraints());
 			}
 			
-			return dcon;
+			return new DomainConstraints[] {dconIngress, dconEgress};
 		} else
 			throw new OversubscribedException("Not enough available capacity",
 					links[1].getBodID());
@@ -369,11 +316,8 @@ public class ResourcesReservation {
 			ReservationParams par) throws OversubscribedException, 
 			ConstraintsAlreadyUsedException {
 
-        TopologyAbstraction ta = new TopologyAbstractionClient(taAddress);
-		GenericLink src = ta.getEdgeLink(links[0]);
-		GenericLink dest = ta.getEdgeLink(links[links.length - 1]);
+		IntradomainPath pSkel = buildPathSkeleton(links[0], links[links.length - 1], par);
 		
-		PathConstraints pcon = par.getPathConstraints();
 		Calendar sTime = par.getStartTime();
 		Calendar eTime = par.getEndTime();
 		
@@ -384,9 +328,8 @@ public class ResourcesReservation {
 		boolean valid = false;
 		
 		while(!valid) {
-			path = pathfinder.findPath(src, dest, par.getCapacity(), pcon,
-					excluded, par.getUserVlanId(), par.getMtu());
-		
+			path = pathfinder.findPath(pSkel, par.getCapacity(), excluded, par.getMtu());
+
 			if(path == null)
 				break;
 			
@@ -403,11 +346,11 @@ public class ResourcesReservation {
 		
 		if(valid) {
 	        // Try to reserve vlan
-			calendar.addReservation(path.getLinks(), par.getCapacity(), pcon,
-					sTime, eTime);
+			calendar.addReservation(path, par.getCapacity(), sTime, eTime);
 
 			log.info("Reserving: " + par.getCapacity() + " bps on: \n" + path + "\n" +
-					"Constraints: " + pcon);
+					"Constraints IN:" + path.getIngressConstraints() + "\n" +
+					"            EG:" + path.getEgressConstraints());
 			
 	        // Store reservation information (path, parameters etc.)
 			IntradomainReservation reservation = new IntradomainReservation(resID, path, par);
@@ -426,7 +369,7 @@ public class ResourcesReservation {
 	        }
 		} else {
 			log.error("AddReservation: No paths found");
-			throw new OversubscribedException("Not enough available capacity",
+			throw new OversubscribedException("No path with enough available capacity can be found.",
 					links[1].getBodID());
 		}
 	}
@@ -481,8 +424,7 @@ public class ResourcesReservation {
         }
         
         //Temporarily remove the reservation
-        calendar.removeReservation(path.getLinks(), par.getCapacity(), 
-        		par.getPathConstraints(), sTime, eTime);
+        calendar.removeReservation(path, par.getCapacity(), sTime, eTime);
         
         
         boolean result = false;
@@ -491,15 +433,15 @@ public class ResourcesReservation {
         		par.getCapacity(), nStartTime, nEndTime);
         
         if(failed.isEmpty()) {
-        	PathConstraints pcon = calendar.getConstraints(path, nStartTime, nEndTime);
-        	if(pcon != null)
+        	IntradomainPath checkedPath = calendar.getConstraints(path, nStartTime, nEndTime);
+        	if(checkedPath != null) {
         		result = true;
+        	}
         }
         
         // Restore original reservation
         try {
-			calendar.addReservation(path.getLinks(), par.getCapacity(), 
-					par.getPathConstraints(), sTime, eTime);
+			calendar.addReservation(path, par.getCapacity(), sTime, eTime);
 		} catch (ConstraintsAlreadyUsedException e) {
 			log.warn("Check modification restore: ALREADY IN USE !");
 		}
@@ -535,13 +477,11 @@ public class ResourcesReservation {
 		Calendar eTime = par.getEndTime();
         
         // Remove the old reservation
-        calendar.removeReservation(path.getLinks(), par.getCapacity(), 
-        		par.getPathConstraints(), sTime, eTime);
+        calendar.removeReservation(path, par.getCapacity(), sTime, eTime);
 
         // Add modified reservation
         try {
-			calendar.addReservation(path.getLinks(), par.getCapacity(), 
-					par.getPathConstraints(), nStartTime, nEndTime);
+			calendar.addReservation(path, par.getCapacity(), nStartTime, nEndTime);
 		} catch (ConstraintsAlreadyUsedException e) {
         	log.warn("Modification failed: Constraints in use");
         	return;
@@ -583,11 +523,11 @@ public class ResourcesReservation {
         IntradomainPath path = reservation.getReservedPath();
         
 		log.info("Releasing " + par.getCapacity() + " bps on: \n" + path + "\n" +
-				"Constraints: " + par.getPathConstraints());
+				"Constraints IN: " + path.getIngressConstraints() + "\n" +
+				"            EG: " + path.getEgressConstraints());
         
 		// Remove from Calendar
-		calendar.removeReservation(path.getLinks(), par.getCapacity(), 
-				par.getPathConstraints(), par.getStartTime(), par.getEndTime());
+		calendar.removeReservation(path, par.getCapacity(), par.getStartTime(), par.getEndTime());
 		
 		boolean removeInTP = reservation.isPathCreated();
 		log.debug("Res: " + resID + ", removing in TP: " + removeInTP);
@@ -595,7 +535,7 @@ public class ResourcesReservation {
         // Release in Tool
 		if(removeInTP) {
 	        try {
-				tool.removeReservation(resID, WsdlConverter.convert(path.getLinks()), par);
+				tool.removeReservation(resID, path, par);
 			} catch (Exception e) {
 				log.error("Problem while removing reservation from a Tool", e);
 				return false;
@@ -607,12 +547,58 @@ public class ResourcesReservation {
 		
         return true;
 	}
+
+	/**
+	 * 
+	 * @param authParams
+	 * @throws AAIException
+	 */
+    private void authorize(UserAuthParameters authParams) throws AAIException {
+		//Authority check
+		AccessPoint ap = AccessPoint.getInstance();
+		String authEnabled = ap.getProperty("authorization.enabled");
+        
+		
+		if (authEnabled != null && authEnabled.equals("true") ) {
+		    try {
+                ApplicationContext context = new ClassPathXmlApplicationContext(
+                        "classpath:etc/dm_security.xml");
+
+                GrantedAuthority[] authorities = AuthorityUtils.stringArrayToAuthorityArray(
+                		authParams.parametersToAuthorities());
+                
+                // Creation of dummy authentication object from user auth parameters, because
+                // we trust webgui authentication
+                Authentication newAuthentication = new UsernamePasswordAuthenticationToken(
+                		authParams.getIdentifier(), "pass", authorities);
+
+                SecurityContextHolder.getContext().setAuthentication(newAuthentication);
+                
+                DmUserAuthorizer uauthorizer = (DmUserAuthorizer) context.getBean("uauthorizer");
+
+                if (uauthorizer == null) {
+                    throw new RuntimeException("UserAuthorizer could not be found.  Tried beanId='uauthorizer'");
+                }
+
+                // Will throw AccessDeniedException if authorization fails
+                uauthorizer.authorize();
+	        
+	        } catch (BeansException ex) {
+	            log.info("BeanException: " + ex.toString());
+	        } catch (AccessDeniedException ex) {
+                log.info("Access denied: " + ex.toString());
+                throw new AAIException("ex.toString()");
+            }
+		}
+    }
 	
 	private void checkEdgeLinkCapacity(Link link, long capacity,
 			Calendar sTime, Calendar eTime) throws OversubscribedException {
 		
         TopologyAbstraction ta = new TopologyAbstractionClient(taAddress);
 		GenericLink glink = ta.getEdgeLink(link);
+		
+		System.out.println(link + " [" + glink + "]");
 		
 		List<GenericLink> links = new ArrayList<GenericLink>();
 		links.add(glink);
@@ -647,7 +633,6 @@ public class ResourcesReservation {
         	IntradomainReservation reservation = reservations.get(resID);
         	
     		ReservationParams par = reservation.getParams();
-    		List<GenericLink> glinks = reservation.getReservedPath().getLinks();
 
     		boolean success = true;
     		
@@ -656,7 +641,7 @@ public class ResourcesReservation {
    			
    			long beforeTime = System.currentTimeMillis();
             try {
-    	        tool.addReservation(resID, WsdlConverter.convert(glinks), par);
+    	        tool.addReservation(resID, reservation.getReservedPath(), par);
     		} catch (Exception e) {
     			success = false;
     			log.error("Problem while adding reservation to a Tool", e);
@@ -664,7 +649,7 @@ public class ResourcesReservation {
             long afterTime = System.currentTimeMillis();
             long setUpTime = afterTime - beforeTime;    // Measured in milliseconds
             StatisticsEntry se = new StatisticsEntry(resID, true, setUpTime);
-            ResourcesReservation.saveStatisticsEntry(se);
+            prManager.saveStatisticsEntry(se);
 
     		if(success) {
     			reservation = reservations.get(resID);
@@ -747,7 +732,7 @@ public class ResourcesReservation {
      * Returns the TP endpoint. Used for debugging purposes
      * @return
      */
-    public Tool getTool() {
+    public ToolClient getTool() {
     	return tool;
     }
     
@@ -773,7 +758,40 @@ public class ResourcesReservation {
     public IntradomainPathfinder getPathfinder() {
     	return pathfinder;
     }
-    
+
+	private IntradomainPath buildPathSkeleton(Link ingress, Link egress, ReservationParams par) {
+        TopologyAbstraction ta = new TopologyAbstractionClient(taAddress);
+        
+		GenericLink src = ta.getEdgeLink(ingress);
+		GenericLink dest = ta.getEdgeLink(egress);
+
+		if (src == null) {
+			log.debug("Edge link not found for ingress link " + ingress + "!");
+			return null;
+		}
+        if (dest == null) {
+            log.debug("Edge link not found for egress link " + egress + "!");
+            return null;
+        }
+		
+		IntradomainPath res = new IntradomainPath();
+		
+		// Checking if any particular vlan is requested
+		if(par.getPathConstraintsIngress() != null) {
+			res.addGenericLink(src, par.getPathConstraintsIngress());
+		} else {
+			res.addGenericLink(src, new PathConstraints());
+		}
+
+		if(par.getPathConstraintsEgress() != null) {
+			res.addGenericLink(dest, par.getPathConstraintsEgress());
+		} else {
+			res.addGenericLink(dest, new PathConstraints());
+		}
+		
+		return res;
+	}
+	
     /**
      * Used by EthMonitoring class.
      * @author <a href="mailto:gkamas@cti.gr">Gkamas Apostolos</a>
@@ -801,26 +819,6 @@ public class ResourcesReservation {
      */      
     public ReservationParams getResvParams(String resID) {
     	return reservations.get(resID).getParams();
-    }
-    
-    /**
-     * Saves a statistics entry in the database.
-     * 
-     * @param se
-     */
-    public static void saveStatisticsEntry(StatisticsEntry se) {
-        HibernateUtil hbm = DmHibernateUtil.getInstance();
-        if(hbm == null) {
-            return;
-        }
-        
-        StatisticsEntryDAO dao = HibernateDmDAOFactory.getInstance().getStatisticsEntryDAO();
-        
-        Transaction t = hbm.beginTransaction();
-        dao.update(se);
-        t.commit();
-        
-        hbm.closeSession();
     }
 
 }

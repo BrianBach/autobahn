@@ -5,12 +5,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
-import net.geant.autobahn.constraints.MinValueConstraint;
+import net.geant.autobahn.constraints.BooleanConstraint;
 import net.geant.autobahn.constraints.ConstraintsNames;
+import net.geant.autobahn.constraints.MinValueConstraint;
 import net.geant.autobahn.constraints.PathConstraints;
 import net.geant.autobahn.constraints.RangeConstraint;
+import net.geant.autobahn.intradomain.IntradomainPath;
 import net.geant.autobahn.intradomain.IntradomainTopology;
 import net.geant.autobahn.intradomain.common.GenericLink;
 import net.geant.autobahn.intradomain.common.Node;
@@ -18,6 +18,8 @@ import net.geant.autobahn.intradomain.pathfinder.GenericIntradomainPathfinder;
 import net.geant.autobahn.intradomain.pathfinder.GraphEdge;
 import net.geant.autobahn.intradomain.pathfinder.GraphNode;
 import net.geant.autobahn.intradomain.pathfinder.GraphSearch;
+
+import org.apache.log4j.Logger;
 
 /**
  * Implementation of the intradomain pathfinder for ethernet domains.
@@ -59,7 +61,7 @@ public class EthernetIntradomainPathfinder extends GenericIntradomainPathfinder 
 	 * @see net.geant.autobahn.intradomain.pathfinder.GenericIntradomainPathfinder#initGraph(java.util.Collection)
 	 */
 	@Override
-	public GraphSearch initGraph(Collection<GenericLink> excluded, int userVlanId, int mtu) {
+	public GraphSearch initGraph(Collection<GenericLink> excluded, int mtu) {
 		
 		List<Node> nodes = all_nodes;
 		List<SpanningTree> sptrees = all_sptrees;
@@ -73,20 +75,6 @@ public class EthernetIntradomainPathfinder extends GenericIntradomainPathfinder 
         
         // Determine neighbors of each node
         for (SpanningTree st : sptrees) {
-            
-            // VLANs range from 1-4095, so a zero or negative value means that
-            // the user did not use the VLAN option when creating the reservation
-            //TODO: Verify (and document) that VLAN 0 would never be selected by the user
-            if (userVlanId > 0) {
-                log.debug("User has requested VLAN " + userVlanId 
-                        + ", checking if ethernet link supports it...");
-                // Skip link that does not adhere to user-required VLAN.
-                if (userVlanId < st.getVlan().getLowNumber() || 
-                        userVlanId > st.getVlan().getHighNumber()) {
-                    log.debug("Link " + st.getEthLink() + " rejected.");
-                    continue;
-                }
-            }
             
             if (mtu > 0){
                 log.debug("User has requested Mtu size " + mtu + ", checking if" +
@@ -131,6 +119,12 @@ public class EthernetIntradomainPathfinder extends GenericIntradomainPathfinder 
 			PathConstraints pcon = new PathConstraints();
 			pcon.addRangeConstraint(ConstraintsNames.VLANS, rcon);
 			
+			if(sgr.getInternalNode().isVlanTranslationSupport() || egr.getInternalNode().isVlanTranslationSupport()) {
+				pcon.addBooleanConstraint(ConstraintsNames.SUPPORTS_VLAN_TRANSLATION, new BooleanConstraint(true, "OR"));
+        	} else {
+				pcon.addBooleanConstraint(ConstraintsNames.SUPPORTS_VLAN_TRANSLATION, new BooleanConstraint(false, "OR"));
+        	}
+			
 			//mtu info added
             MinValueConstraint mcon = null;
             if ((st.getEthLink().getGenericLink().getStartInterface().getMtu() != 0) && (st.getEthLink().getGenericLink().getEndInterface().getMtu()!= 0)){
@@ -169,5 +163,79 @@ public class EthernetIntradomainPathfinder extends GenericIntradomainPathfinder 
         }
         
         return grSearch;
+	}
+	
+	@Override
+	public void settleConstraintsValuesForPath(IntradomainPath path) {
+		
+		for(GenericLink gl : path.getLinks()) {
+			PathConstraints pcon = path.getConstraints(gl);
+			
+			// vlans
+			RangeConstraint vlans = pcon.getRangeConstraint(ConstraintsNames.VLANS);
+			int singleValue = vlans.getFirstValue();
+			
+			// replaces it with a single value (first one)
+			RangeConstraint sVlan = new RangeConstraint(singleValue, singleValue);
+			pcon.addRangeConstraint(ConstraintsNames.VLANS, sVlan);
+			
+			path.setPathConstraints(gl, pcon);
+		}
+	}
+	
+	@Override
+	public IntradomainPath createIntradomainPath(GraphEdge[] edges) {
+		if(edges.length < 1) {
+			log.info("Wrong path!");
+		}
+		
+		long capacity = Long.MAX_VALUE;
+		
+		IntradomainPath ipath = new IntradomainPath();
+
+		IntradomainPath[] segments = getPathsSeparatedByTranslatingNodes(edges);
+		
+		for(IntradomainPath seg : segments) {
+			PathConstraints merged = seg.getMergedConstraints();
+			
+			if(merged == null)
+				return null;
+			
+			for(GenericLink glink : seg.getLinks()) {
+				ipath.addGenericLink(glink, merged);
+				
+				capacity = Math.min(capacity, glink.getCapacity());
+			}
+		}
+
+		ipath.setCapacity(capacity);
+		
+		return ipath;
+	}
+	
+	private IntradomainPath[] getPathsSeparatedByTranslatingNodes(GraphEdge[] edges) {
+		List<IntradomainPath> res = new ArrayList<IntradomainPath>();
+		
+		IntradomainPath pth = new IntradomainPath();
+		
+		for(GraphEdge edge : edges) {
+			Node sn = edge.getStartNode().getInternalNode();
+			Node en = edge.getEndNode().getInternalNode();
+			
+			if(en.isVlanTranslationSupport() || (edge.getLink().isInterdomain() && sn.isVlanTranslationSupport())) {
+				pth.addGenericLink(edge.getLink(), edge.getConstraints());
+				
+				res.add(pth);
+				pth = new IntradomainPath();
+			} else {
+				pth.addGenericLink(edge.getLink(), edge.getConstraints());
+			}
+		}
+		
+		if(pth.getSize() > 0 && !res.contains(pth)) {
+			res.add(pth);
+		}
+		
+		return res.toArray(new IntradomainPath[res.size()]);
 	}
 }

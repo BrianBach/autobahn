@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.jws.WebService;
 
-import net.geant.autobahn.constraints.PathConstraints;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
 import net.geant.autobahn.intradomain.IntradomainPath;
 import net.geant.autobahn.intradomain.common.GenericLink;
@@ -58,7 +57,7 @@ public class ResourcesReservationCalendarImpl implements ResourcesReservationCal
 	/* (non-Javadoc)
      * @see net.geant.autobahn.resourcesreservationcalendar.ResourcesReservationCalendar#getConstraints()
      */
-	public PathConstraints getConstraints(IntradomainPath path,
+	public IntradomainPath getConstraints(IntradomainPath path,
 			Calendar start, Calendar end) {
         if (props != null) {
             return AccessPoint.getInstance(props).getConstraints(path, start, end);
@@ -70,25 +69,23 @@ public class ResourcesReservationCalendarImpl implements ResourcesReservationCal
 	/* (non-Javadoc)
      * @see net.geant.autobahn.resourcesreservationcalendar.ResourcesReservationCalendar#addReservation()
      */
-	public void addReservation(List<GenericLink> glinks, long capacity,
-			PathConstraints pcon, Calendar start, Calendar end)
+	public void addReservation(IntradomainPath path, long capacity, Calendar start, Calendar end)
 			throws ConstraintsAlreadyUsedException {
         if (props != null) {
-            AccessPoint.getInstance(props).addReservation(glinks, capacity, pcon, start, end);
+            AccessPoint.getInstance(props).addReservation(path, capacity, start, end);
         } else {
-            AccessPoint.getInstance().addReservation(glinks, capacity, pcon, start, end);
+            AccessPoint.getInstance().addReservation(path, capacity, start, end);
         }
     }
 	
 	/* (non-Javadoc)
      * @see net.geant.autobahn.resourcesreservationcalendar.ResourcesReservationCalendar#removeReservation()
      */
-	public void removeReservation(List<GenericLink> glinks, long capacity,
-			PathConstraints pcon, Calendar start, Calendar end) {
+	public void removeReservation(IntradomainPath path, long capacity, Calendar start, Calendar end) {
         if (props != null) {
-            AccessPoint.getInstance(props).removeReservation(glinks, capacity, pcon, start, end);          
+            AccessPoint.getInstance(props).removeReservation(path, capacity, start, end);          
         } else {
-            AccessPoint.getInstance().removeReservation(glinks, capacity, pcon, start, end);
+            AccessPoint.getInstance().removeReservation(path, capacity, start, end);
         }
     }
    

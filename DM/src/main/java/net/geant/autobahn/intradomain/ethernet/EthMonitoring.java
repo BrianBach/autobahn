@@ -453,7 +453,7 @@ public class EthMonitoring implements Runnable {
 	public int checkReservationStatus(String resID)
 	{
 		int vlan = -1;
-		try
+/*		try
 		{
 			vlan = dm.getResvParams(resID).getPathConstraints().getRangeConstraint(ConstraintsNames.VLANS).getFirstValue();
 		}
@@ -461,7 +461,7 @@ public class EthMonitoring implements Runnable {
 		{
 			System.out.println("EthMonitoring: I cannot export vlan from reservation");
 		}
-		Status status = new Status();
+*/		Status status = new Status();
 		List<GenericLink> gls = dm.getResvMapping(resID);
 
 		for (GenericLink gl: gls)

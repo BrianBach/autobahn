@@ -43,7 +43,7 @@ public interface Idm2Dm {
 	 */
 	@WebMethod
 	@WebResult(name="DomainConstraints")
-	DomainConstraints checkResources(Link[] links,
+	DomainConstraints[] checkResources(Link[] links,
 			ReservationParams params) throws OversubscribedException, AAIException;
 
 	/**

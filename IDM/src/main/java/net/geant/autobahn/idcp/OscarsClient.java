@@ -197,7 +197,8 @@ public class OscarsClient {
 		l2.setSrcEndpoint(sport);
 		l2.setDestEndpoint(eport);
 		VlanTag vlan = new VlanTag();
-		vlan.setValue(String.valueOf(resv.getUserVlanId()));
+		//TODO: set the proper vlan identifier here
+		//vlan.setValue(String.valueOf(resv.getUserVlanId()));
 		vlan.setTagged(true);
 		l2.setSrcVtag(vlan);
 		l2.setDestVtag(vlan);

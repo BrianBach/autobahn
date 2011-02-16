@@ -13,7 +13,7 @@ import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.Node;
 import net.geant.autobahn.network.Path;
 import net.geant.autobahn.network.Port;
-import net.geant.autobahn.reservation.Reservation;
+import net.geant.autobahn.reservation.HomeDomainReservation;
 
 import org.apache.log4j.Logger;
 
@@ -46,7 +46,7 @@ public class InterdomainPathfinderImpl extends InterdomainPathfinderAbstractImpl
      * 
      * @return Returns a list of possible interdomain paths, or null if some error occured.
      */
-    public Iterator<Path> findInterdomainPaths(Reservation reservation, List<Link> excludedLinks) {
+    public Iterator<Path> findInterdomainPaths(HomeDomainReservation reservation, List<Link> excludedLinks) {
 
         List<Path> allPaths = new ArrayList<Path>();
         

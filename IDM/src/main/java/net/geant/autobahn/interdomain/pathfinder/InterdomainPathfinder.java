@@ -5,13 +5,13 @@
  */
 package net.geant.autobahn.interdomain.pathfinder;
 
+import java.util.Iterator;
+import java.util.List;
+
 import net.geant.autobahn.network.AdminDomain;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.Path;
-import net.geant.autobahn.reservation.Reservation;
-
-import java.util.Iterator;
-import java.util.List;
+import net.geant.autobahn.reservation.HomeDomainReservation;
 
 /**
  * <code>InterdomainPathfinder</code> interface provides a list of paths
@@ -34,5 +34,5 @@ public interface InterdomainPathfinder {
      * abstract links.
      * @return
      */
-    public Iterator<Path> findInterdomainPaths(Reservation reservation, List<Link> excludedLinks);
+    public Iterator<Path> findInterdomainPaths(HomeDomainReservation reservation, List<Link> excludedLinks);
 }

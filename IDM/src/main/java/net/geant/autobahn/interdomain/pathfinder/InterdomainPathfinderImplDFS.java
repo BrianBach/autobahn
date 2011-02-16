@@ -16,7 +16,7 @@ import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.Node;
 import net.geant.autobahn.network.Path;
 import net.geant.autobahn.network.Port;
-import net.geant.autobahn.reservation.Reservation;
+import net.geant.autobahn.reservation.HomeDomainReservation;
 
 import org.apache.log4j.Logger;
 
@@ -57,7 +57,7 @@ public class InterdomainPathfinderImplDFS extends InterdomainPathfinderAbstractI
         this.limit = limit;
     }
 
-    public Iterator<Path> findInterdomainPaths(Reservation reservation, List<Link> excludedLinks) {
+    public Iterator<Path> findInterdomainPaths(HomeDomainReservation reservation, List<Link> excludedLinks) {
 
         limit = MAX_ITERATIONS; // Initialize iteration limit
         

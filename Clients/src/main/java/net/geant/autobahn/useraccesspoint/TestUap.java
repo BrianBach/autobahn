@@ -48,8 +48,8 @@ public final class TestUap {
         r1.setCapacity(1000000000);
         r1.setDescription("res1");
         
-        r1.setStartPort("10.10.32.5");
-        r1.setEndPort("10.11.32.10");
+        r1.setStartPort(new PortType("10.10.32.5"));
+        r1.setEndPort(new PortType("10.11.32.10"));
         
         
         GregorianCalendar start = (GregorianCalendar) Calendar.getInstance();

@@ -5,7 +5,7 @@ package net.geant.autobahn.itest.env1;
 
 import net.geant.autobahn.intradomain.common.GenericInterface;
 import net.geant.autobahn.testplatform.configuration.Domain;
-import net.geant.autobahn.testplatform.configuration.IntraTopologyBuilder;
+import net.geant.autobahn.testplatform.configuration.IntraTopologyBuilder2;
 
 /**
  * @author jacek
@@ -31,7 +31,7 @@ public class AutobahnTestTopology {
     private final static String hostDomain3 = "http://client-domain.domain3.com";
 
     
-    public void domain1(IntraTopologyBuilder t) {
+    public void domain1(IntraTopologyBuilder2 t) {
 
     	t.setDomain(domain1);
     	
@@ -54,7 +54,7 @@ public class AutobahnTestTopology {
         t.addSpanningTree(p4, p5, 150, 200);
     }
 
-    public void domain2(IntraTopologyBuilder t) {
+    public void domain2(IntraTopologyBuilder2 t) {
         
     	t.setDomain(domain2);
     	
@@ -86,7 +86,7 @@ public class AutobahnTestTopology {
         t.addSpanningTree(p8, p10, 100, 200);
     }
 
-    public void domain3(IntraTopologyBuilder t) {
+    public void domain3(IntraTopologyBuilder2 t) {
         
     	t.setDomain(domain3);
     	

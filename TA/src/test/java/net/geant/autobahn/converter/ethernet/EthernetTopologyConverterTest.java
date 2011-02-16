@@ -40,7 +40,7 @@ public class EthernetTopologyConverterTest {
 		topo.domain1(builder);
 		
 		IntradomainPathfinder pf = IntradomainPathfinderFactory.getIntradomainPathfinder(
-				builder.getTopology());
+				builder.getIntradomainTopology());
 		
         String nrange = "10.11.0.0/19";
         String prange = "10.11.32.0/19";
@@ -53,7 +53,7 @@ public class EthernetTopologyConverterTest {
         PublicIdentifiersMapping mapping = null;
 		
 		TopologyConverter conv = new EthernetTopologyConverter(builder
-				.getTopology(), pf, internal, mapping);
+				.getIntradomainTopology(), pf, internal, mapping);
 
 		Stats stats = conv.abstractInternalPartOfTopology();
 		
@@ -77,7 +77,7 @@ public class EthernetTopologyConverterTest {
         topo.domain1(builder);
         
         IntradomainPathfinder pf = IntradomainPathfinderFactory.getIntradomainPathfinder(
-                builder.getTopology());
+                builder.getIntradomainTopology());
         
         String nrange = "10.11.0.0/19";
         String prange = "10.11.32.0/19";
@@ -90,7 +90,7 @@ public class EthernetTopologyConverterTest {
         PublicIdentifiersMapping mapping = null;
         
         TopologyConverter conv = new EthernetTopologyConverter(builder
-                .getTopology(), pf, internal, mapping);
+                .getIntradomainTopology(), pf, internal, mapping);
 
         Stats stats = conv.abstractInternalPartOfTopology();
         
@@ -176,7 +176,7 @@ public class EthernetTopologyConverterTest {
 		topo.domain2(builder);
 		
 		IntradomainPathfinder pf = IntradomainPathfinderFactory.getIntradomainPathfinder(
-				builder.getTopology());
+				builder.getIntradomainTopology());
 		
         String nrange = "10.11.0.0/19";
         String prange = "10.11.32.0/19";
@@ -188,7 +188,7 @@ public class EthernetTopologyConverterTest {
         		"./src/test/resources/test_etc/topology2-public-ids.properties");
 		
 		TopologyConverter conv = new EthernetTopologyConverter(builder
-				.getTopology(), pf, internal, mapping);
+				.getIntradomainTopology(), pf, internal, mapping);
 		
 		return conv;
 	}

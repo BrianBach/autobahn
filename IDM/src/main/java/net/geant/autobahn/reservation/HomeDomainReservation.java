@@ -11,14 +11,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 
-import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.constraints.GlobalConstraints;
+import net.geant.autobahn.constraints.PathConstraints;
 import net.geant.autobahn.interdomain.pathfinder.InterdomainPathfinder;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.Path;
 import net.geant.autobahn.network.Port;
 import net.geant.autobahn.reservation.states.State;
 import net.geant.autobahn.reservation.states.hd.HomeDomainState;
+import net.geant.autobahn.useraccesspoint.PathInfo;
 
 /**
  * Subclass of <code>Reservation</code>. Instances of the class are executed
@@ -41,7 +42,11 @@ public class HomeDomainReservation extends AutobahnReservation {
     private Iterator<Path> paths = null;
     private List<Link> excludedLinks = new ArrayList<Link>();
     private List<String> failures = new ArrayList<String>();
-    private DomainConstraints userConstraints = null; 
+    private PathConstraints userIngressConstraints = null; 
+    private PathConstraints userEgressConstraints = null;
+    
+    private PathInfo userInclude;
+    private PathInfo userExclude;
     
     private HomeDomainState stateObject;
     
@@ -252,13 +257,82 @@ public class HomeDomainReservation extends AutobahnReservation {
         this.pathFinder = pathFinder;
     }
 
-    public DomainConstraints getUserConstraints() {
-		return userConstraints;
+	/**
+	 * @return the userIngressConstraints
+	 */
+	public PathConstraints getUserIngressConstraints() {
+		return userIngressConstraints;
 	}
 
-	public void setUserConstraints(DomainConstraints userConstraints) {
-		this.userConstraints = userConstraints;
+	/**
+	 * @param userIngressConstraints the userIngressConstraints to set
+	 */
+	public void setUserIngressConstraints(PathConstraints userIngressConstraints) {
+		this.userIngressConstraints = userIngressConstraints;
 	}
+
+	/**
+	 * @return the userEgressConstraints
+	 */
+	public PathConstraints getUserEgressConstraints() {
+		return userEgressConstraints;
+	}
+
+	/**
+	 * @param userEgressConstraints the userEgressConstraints to set
+	 */
+	public void setUserEgressConstraints(PathConstraints userEgressConstraints) {
+		this.userEgressConstraints = userEgressConstraints;
+	}
+
+	/**
+     * Gets the value of the userInclude property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link PathInfo }
+     *     
+     */
+    public PathInfo getUserInclude() {
+        return userInclude;
+    }
+
+    /**
+     * Sets the value of the userInclude property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link PathInfo }
+     *     
+     */
+    public void setUserInclude(PathInfo value) {
+        this.userInclude = value;
+    }
+
+    /**
+     * Gets the value of the userExclude property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link PathInfo }
+     *     
+     */
+
+    public PathInfo getUserExclude() {
+        return userExclude;
+    }
+
+    /**
+     * Sets the value of the userExclude property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link PathInfo }
+     *     
+     */
+    public void setUserExclude(PathInfo value) {
+        this.userExclude = value;
+    }
 
 	public boolean isProcessNow() {
 		return processNow;
@@ -386,4 +460,25 @@ public class HomeDomainReservation extends AutobahnReservation {
 		timer.cancel();
 		timer = new Timer();
 	}
+
+	@Override
+	public ReservationParams getReservationParameters(String domainID) {
+		ReservationParams params = super.getReservationParameters(domainID);
+		
+		PathConstraints userInCons = getUserIngressConstraints();
+		
+		if(userInCons == null)
+			return params;
+		
+		params.setPathConstraintsIngress(userInCons);
+		
+		PathConstraints userEgCons = getUserEgressConstraints();
+		if(this.isLastDomain() && userEgCons != null) {
+			params.setPathConstraintsIngress(userEgCons);
+		}
+		
+		return params;
+	}
+	
+	
 }

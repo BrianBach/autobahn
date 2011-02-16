@@ -66,7 +66,7 @@ public final class Idm2Dm_Idm2DmPort_Client {
         net.geant.autobahn.network.Link[] _checkResources_arg0 = null;
         net.geant.autobahn.reservation.ReservationParams _checkResources_arg1 = null;
         try {
-            net.geant.autobahn.constraints.DomainConstraints _checkResources__return = port.checkResources(_checkResources_arg0, _checkResources_arg1);
+            net.geant.autobahn.constraints.DomainConstraints[] _checkResources__return = port.checkResources(_checkResources_arg0, _checkResources_arg1);
             System.out.println("checkResources.result=" + _checkResources__return);
 
         } catch (OversubscribedException e) { 

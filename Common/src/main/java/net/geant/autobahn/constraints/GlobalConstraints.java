@@ -105,19 +105,17 @@ public class GlobalConstraints implements Serializable {
      * @return selected GlobalConstraints
      */
     public GlobalConstraints calculateConstraints(ReservationParams par) {
-        
+
+    	removeUserConstraints();
+    	
     	List<PathConstraints> selected = findBest(findPossibilities(), par);
 
     	if(selected == null)
     		return null;
     	
         // select only one VLAN number
-        RangeConstraint vlans = selected.get(0).getRangeConstraint(ConstraintsNames.VLANS);
-        
         MinValueConstraint mtu = selected.get(0).getMinValueConstraint(ConstraintsNames.MTU);
         
-        int selectedVlanNumber = vlans != null ? vlans.getFirstValue() : -1;
-
         GlobalConstraints result = new GlobalConstraints();
         
         // set it for all pathconstraints
@@ -130,8 +128,7 @@ public class GlobalConstraints implements Serializable {
     		resDcon.addPathConstraints(resPcon);
 
     		// Determine which constraints are applicable
-    		DomainConstraints dcon = domainConstraints.get(i);
-        	PathConstraints first = dcon.getPathConstraints().get(0);
+        	PathConstraints first = domainConstraints.get(i).getFirstPathConstraints();
         	
         	Constraint rcon = first.getRangeConstraint(ConstraintsNames.VLANS);
         	Constraint mvcon = first.getMinValueConstraint(ConstraintsNames.TIMESLOTS);
@@ -139,10 +136,9 @@ public class GlobalConstraints implements Serializable {
         	
             // Vlans applicable
         	if(rcon != null) {
-        		RangeConstraint vlans1 = (RangeConstraint) rcon;
+        		RangeConstraint vlans = selected.get(i).getRangeConstraint(ConstraintsNames.VLANS);
         		
-                //RangeConstraint vlanCons = new RangeConstraint(vlans1.getFirstValue(), vlans1.getFirstValue());
-                RangeConstraint vlanCons = new RangeConstraint(selectedVlanNumber, selectedVlanNumber);
+                RangeConstraint vlanCons = new RangeConstraint(vlans.getFirstValue(), vlans.getFirstValue());
                 resPcon.addRangeConstraint(ConstraintsNames.VLANS, vlanCons);
         	}
         	
@@ -152,8 +148,6 @@ public class GlobalConstraints implements Serializable {
                 MinValueConstraint mtuCons = new MinValueConstraint(mtu.getValue());
                 resPcon.addMinValueConstraint(ConstraintsNames.MTU, mtuCons);
             }
-            
-
         	
         	// Timeslots
         	if(mvcon != null) {
@@ -192,7 +186,7 @@ public class GlobalConstraints implements Serializable {
         return result;
     }
     
-    private List<PathConstraints> findBest(
+    private List<PathConstraints> findBestOld(
             List<List<PathConstraints>> possible, ReservationParams par) {
 
         List<PathConstraints> selected = null;
@@ -238,6 +232,144 @@ public class GlobalConstraints implements Serializable {
         return result;
     }
     
+    private List<PathConstraints> findBest(
+            List<List<PathConstraints>> possible, ReservationParams par) {
+
+        List<PathConstraints> selected = null;
+        Map<Integer, PathConstraints> merged = new HashMap<Integer, PathConstraints>();
+        
+        if(possible == null || possible.size() == 0)
+            return null;
+
+        
+        for(List<PathConstraints> path : possible) {
+        	merged.clear();
+        	
+        	// check whether single Vlan is possible for whole e2e path
+        	PathConstraints res = stitchSegment(path);
+        	
+        	if(res != null) {
+        		selected = path;
+        		merged.put(path.size(), res);
+        		break;
+        	}
+        	
+        	// break the e2e to the segments through the vlan translation
+        	List<List<PathConstraints>> segments = getSegmentsWithSingleVlan(path);
+        	if(segments == null)
+        		return null;
+        	
+        	int count = 0;
+        	
+        	for(List<PathConstraints> seg : segments) {
+                // merging the segment constraints
+        		PathConstraints seg_res = stitchSegment(seg);
+        		
+        		if(seg_res == null) {
+        			break;
+        		}
+        		
+        		count += seg.size() - 1;
+        		
+                if(seg_res != null && checkConstraintsAgainst(seg_res, par)) {
+    	            merged.put(count, seg_res);
+                }
+        	}
+
+        	// get first that suits
+        	if(merged.size() == segments.size()) {
+        		selected = path;
+        		break;
+        	}
+        }
+
+        if(selected == null) {
+            log.info("Constraints cannot be agreeded!");
+            return null;
+        }
+        
+        List<PathConstraints> result = new ArrayList<PathConstraints>();
+        int old = 0;
+    	for(int i : merged.keySet()) {
+    		for(int j = old; j <= i; j++) {
+       			result.add(merged.get(i));
+        	}
+    		old = i + 1;
+        }
+    	
+        return result;
+    }
+    
+    private PathConstraints stitchSegment(List<PathConstraints> seg) {
+        // merging the segment constraints
+        PathConstraints first = seg.get(0).copy();
+        List<PathConstraints> pathsLeft = seg.subList(1, seg.size());
+        
+        for(PathConstraints path : pathsLeft) {
+            first = first.intersect(path);
+            
+            if(first == null)
+                return null;
+        }
+        
+        return first;
+    }
+    
+    public List<List<PathConstraints>> getSegmentsWithSingleVlan(List<PathConstraints> pcons) {
+
+        List<List<PathConstraints>> res = new ArrayList<List<PathConstraints>>();
+        List<PathConstraints> curList = new ArrayList<PathConstraints>();
+        
+        PathConstraints merged = null;
+        
+        for(int i = 0; i < pcons.size(); i++) {
+        	PathConstraints pcon = pcons.get(i);
+        	
+        	if(merged != null) {
+        		merged = merged.intersect(pcon);
+        	} else {
+        		merged = pcon;
+        	}
+
+        	if(merged != null) {
+        		curList.add(pcon);
+        		continue;
+        	}
+
+        	// Otherwise - need to go back and check where is the VLAN translation supported
+        	for(int j = i - 1; j >= 0; j--) {
+            	PathConstraints pcon2 = pcons.get(j);
+            	
+           		// need to check whether the VLAN translation is supported
+            	boolean vlanTranslationEnabled = pcon2.getBooleanConstraint(ConstraintsNames.SUPPORTS_VLAN_TRANSLATION).getValue();
+            	
+            	if(vlanTranslationEnabled) {
+            		res.add(curList);
+            		
+            		curList = new ArrayList<PathConstraints>();
+            		curList.add(pcon2);
+            		
+            		merged = pcon2;
+            		i = j;
+            		
+            		break;
+            	} else {
+            		curList.remove(pcon2);
+            	}
+        	}
+        	
+        	if(curList.isEmpty()) {
+        		// No translation possible - path impossible
+        		return null;
+        	}
+        }
+        
+        if(!res.contains(curList))
+        	res.add(curList);
+        
+        return res;
+    }
+    
     private boolean checkConstraintsAgainst(PathConstraints pcon, ReservationParams par) {
 
         if(par == null) {
@@ -258,7 +390,7 @@ public class GlobalConstraints implements Serializable {
         return true;
     }
     
-    private List<List<PathConstraints>> findPossibilities() {
+    public List<List<PathConstraints>> findPossibilities() {
         final int size = domainsIds.size();
         
         if(size < 1)
@@ -267,7 +399,8 @@ public class GlobalConstraints implements Serializable {
         Map<String, List<PathConstraints>> paths = new HashMap<String, List<PathConstraints>>();
         
         for(String id : domainsIds) {
-            paths.put(id, getDomainConstraints(id).getPathConstraints());
+        	if(!id.contains("user-"))
+        		paths.put(id, getDomainConstraints(id).getPathConstraints());
         }
         
         Stack<PathConstraints> stack = new Stack<PathConstraints>();
@@ -332,6 +465,18 @@ public class GlobalConstraints implements Serializable {
         this.domainsIds = domainsIds;
     }
 
+    private void removeUserConstraints() {
+    	
+    	for(String name : new String[] {"user-ingress", "user-egress"}) {
+        	int index = domainsIds.indexOf(name);
+        	
+        	if(index > 0) {
+        		domainsIds.remove(index);
+        		domainConstraints.remove(index);
+        	}
+    	}
+    }
+    
     @Override
     public boolean equals(Object obj) {
         if(this == obj)

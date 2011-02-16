@@ -13,12 +13,12 @@ import java.util.List;
 import java.util.Map;
 
 import net.geant.autobahn.constraints.ConstraintsNames;
-import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.constraints.PathConstraints;
 import net.geant.autobahn.constraints.RangeConstraint;
 import net.geant.autobahn.dao.IdmDAOFactory;
 import net.geant.autobahn.dao.hibernate.HibernateIdmDAOFactory;
 import net.geant.autobahn.dao.hibernate.IdmHibernateUtil;
+import net.geant.autobahn.idcp.notify.OscarsNotifyClient;
 import net.geant.autobahn.idm.AccessPoint;
 import net.geant.autobahn.interdomain.NoSuchReservationException;
 import net.geant.autobahn.network.AdminDomain;
@@ -29,8 +29,6 @@ import net.geant.autobahn.reservation.Reservation;
 import net.geant.autobahn.reservation.ReservationStatusListener;
 import net.geant.autobahn.reservation.Service;
 import net.geant.autobahn.reservation.User;
-
-import net.geant.autobahn.idcp.notify.OscarsNotifyClient;
 
 import org.apache.log4j.Logger;
 
@@ -118,10 +116,9 @@ public class Oscars2Autobahn implements ReservationStatusListener {
             RangeConstraint rcon = new RangeConstraint(vlans);
             PathConstraints pcon = new PathConstraints();
             pcon.addRangeConstraint(ConstraintsNames.VLANS, rcon);
-            DomainConstraints dcon = new DomainConstraints();
-            dcon.addPathConstraints(pcon);
             
-            resv.setUserConstraints(dcon);
+            resv.setUserIngressConstraints(pcon);
+            resv.setUserEgressConstraints(pcon);
         }
         
         resv.addStatusListener(this);

@@ -208,7 +208,7 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.idm2dm.Idm2Dm#checkResources(net.geant.autobahn.network.Link[], net.geant.autobahn.reservation.ReservationParams)
 	 */
-	public DomainConstraints checkResources(Link[] arg0, ReservationParams arg1)
+	public DomainConstraints[] checkResources(Link[] arg0, ReservationParams arg1)
 			throws OversubscribedException, AAIException {
 
 		return intradomainManager.checkResources(arg0, arg1);

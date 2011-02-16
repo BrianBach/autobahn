@@ -16,5 +16,5 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="ConstraintsNames", namespace="constraints.autobahn.geant.net")
 public enum ConstraintsNames implements Serializable {
-	VLANS, TIMESLOTS, MTU
+	VLANS, TIMESLOTS, MTU, SUPPORTS_VLAN_TRANSLATION
 }

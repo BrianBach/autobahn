@@ -2,7 +2,6 @@ package net.geant.autobahn.calendar;
 
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import net.geant.autobahn.constraints.ConstraintsNames;
@@ -34,10 +33,11 @@ public class SdhConstraintsReservationCalendar implements
 	 * @see net.geant.autobahn.intradomain.calendar.ConstraintsReservationCalendar#checkConstraints(net.geant.autobahn.intradomain.pathfinder.IntradomainPath,
 	 *      java.util.Calendar, java.util.Calendar)
 	 */
-	public PathConstraints getConstraints(IntradomainPath ipath,
+	public IntradomainPath getConstraints(IntradomainPath ipath,
 			Calendar startTime, Calendar endTime) {
 		
 		MinValueConstraint av_timeslots = new MinValueConstraint();
+		IntradomainPath res = new IntradomainPath();
 		
 		for(GenericLink glink : ipath.getLinks()) {
 			AdditiveCalendar calendar = timeslotCalendars.get(glink);
@@ -58,13 +58,15 @@ public class SdhConstraintsReservationCalendar implements
 			if(total - usage > 0) {
 				MinValueConstraint tmp = new MinValueConstraint(total - usage);
 				av_timeslots = av_timeslots.intersect(tmp);
+				
+				PathConstraints resPCon = new PathConstraints();
+				resPCon.addMinValueConstraint(ConstraintsNames.TIMESLOTS, av_timeslots);
+				
+				res.addGenericLink(glink, resPCon);
 			} else {
 				return null;
 			}
 		}
-		
-		PathConstraints res = new PathConstraints();
-		res.addMinValueConstraint(ConstraintsNames.TIMESLOTS, av_timeslots);
 		
 		return res;
 	}
@@ -76,20 +78,20 @@ public class SdhConstraintsReservationCalendar implements
 	 *      net.geant.autobahn.constraints.PathConstraints, java.util.Calendar,
 	 *      java.util.Calendar)
 	 */
-	public void releaseResources(List<GenericLink> glinks,
-			PathConstraints pcon, Calendar start, Calendar end) {
+	public void releaseResources(IntradomainPath path, Calendar start, Calendar end) {
 		
-		MinValueConstraint timeslots = pcon.getMinValueConstraint(ConstraintsNames.TIMESLOTS);
-		
-		if(timeslots == null) {
-			log.warn("SDH domain without TIMESLOT constraint!");
-			return;
-		}
+		for(GenericLink gl : path.getLinks()) {
+			PathConstraints pcon = path.getConstraints(gl);
+			MinValueConstraint timeslots = pcon.getMinValueConstraint(ConstraintsNames.TIMESLOTS);
+			
+			if(timeslots == null) {
+				log.warn("SDH domain without TIMESLOT constraint!");
+				return;
+			}
+			
+			long count = Math.round(timeslots.getValue());
 
-		long count = Math.round(timeslots.getValue());
-		
-		for(GenericLink glink : glinks) {
-			AdditiveCalendar calendar = timeslotCalendars.get(glink);
+			AdditiveCalendar calendar = timeslotCalendars.get(gl);
 			
 			if(calendar == null)
 				continue;
@@ -105,27 +107,27 @@ public class SdhConstraintsReservationCalendar implements
 	 *      net.geant.autobahn.constraints.PathConstraints, java.util.Calendar,
 	 *      java.util.Calendar)
 	 */
-	public void reserveResources(List<GenericLink> glinks,
-			PathConstraints pcon, Calendar start, Calendar end)
+	public void reserveResources(IntradomainPath path, Calendar start, Calendar end)
 			throws ConstraintsAlreadyUsedException {
 		
-		MinValueConstraint timeslots = pcon.getMinValueConstraint(ConstraintsNames.TIMESLOTS);
+		for(GenericLink gl : path.getLinks()) {
+			PathConstraints pcon = path.getConstraints(gl);
+			MinValueConstraint timeslots = pcon.getMinValueConstraint(ConstraintsNames.TIMESLOTS);
 		
-		if(timeslots == null) {
-			log.warn("SDH domain without TIMESLOT constraint!");
-			return;
-		}
-		
-		long count = Math.round(timeslots.getValue());
-		
-		for(GenericLink glink : glinks) {
-			AdditiveCalendar calendar = timeslotCalendars.get(glink);
+			if(timeslots == null) {
+				log.warn("SDH domain without TIMESLOT constraint!");
+				return;
+			}
 			
+			long count = Math.round(timeslots.getValue());
+			
+			AdditiveCalendar calendar = timeslotCalendars.get(gl);
+				
 			if(calendar == null) {
 				calendar = new AdditiveCalendar();
-				timeslotCalendars.put(glink, calendar);
+				timeslotCalendars.put(gl, calendar);
 			}
-
+	
 			calendar.addReservation(count, start, end);
 		}
 	}

@@ -1,13 +1,13 @@
 package net.geant.autobahn.resourcesreservationcalendar;
 
+import java.util.Calendar;
+import java.util.List;
+
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
-import java.util.Calendar;
-import java.util.List;
 
-import net.geant.autobahn.constraints.PathConstraints;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
 import net.geant.autobahn.intradomain.IntradomainPath;
 import net.geant.autobahn.intradomain.common.GenericLink;
@@ -66,7 +66,7 @@ public interface ResourcesReservationCalendar {
      */
     @WebMethod()
     @WebResult(name="PathConstraints")
-    public PathConstraints getConstraints(@WebParam(name = "path")IntradomainPath path,
+    public IntradomainPath getConstraints(@WebParam(name = "path")IntradomainPath path,
     		@WebParam(name = "start")Calendar start, @WebParam(name = "end")Calendar end);
 
     /**
@@ -87,9 +87,8 @@ public interface ResourcesReservationCalendar {
      *             reserved for anotheer reservation
      */
     @WebMethod()
-    public void addReservation(@WebParam(name = "glink")List<GenericLink> glinks, long capacity,
-    		@WebParam(name = "pcon")PathConstraints pcon, @WebParam(name = "start")Calendar start, @WebParam(name = "end")Calendar end)
-            throws ConstraintsAlreadyUsedException;
+    public void addReservation(@WebParam(name = "path")IntradomainPath path, long capacity,
+    		@WebParam(name = "start")Calendar start, @WebParam(name = "end")Calendar end) throws ConstraintsAlreadyUsedException;
 
     /**
      * Removes reservation of capacity and other network resources from the
@@ -107,6 +106,6 @@ public interface ResourcesReservationCalendar {
      *            End time
      */
     @WebMethod()
-    public void removeReservation(@WebParam(name = "glink")List<GenericLink> glinks, @WebParam(name = "capacity")long capacity,
-    		@WebParam(name = "pcon")PathConstraints pcon, @WebParam(name = "start")Calendar start, @WebParam(name = "end")Calendar end);
+    public void removeReservation(@WebParam(name = "path")IntradomainPath path, @WebParam(name = "capacity")long capacity,
+    		@WebParam(name = "start")Calendar start, @WebParam(name = "end")Calendar end);
 }

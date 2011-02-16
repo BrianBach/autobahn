@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import net.geant.autobahn.intradomain.IntradomainTopology;
 import net.geant.autobahn.intradomain.common.GenericInterface;
@@ -30,9 +31,12 @@ import org.hibernate.Session;
 public class IntraTopologyBuilder {
 
     private Session session = null;
+    
     private Map<String, Node> nodes = new HashMap<String, Node>();
     private Map<String, GenericInterface> gifs = new HashMap<String, GenericInterface>();
     private List<SpanningTree> strees = new ArrayList<SpanningTree>();
+    
+    private Map<String, String> publicMappings = new HashMap<String, String>();
     
     private List<StmLink> stmLinks = new ArrayList<StmLink>();
     
@@ -43,11 +47,7 @@ public class IntraTopologyBuilder {
     	this.useDb = useDb;
     }
 
-    public void setSession(Session session) {
-        this.session = session;
-    }
-    
-    private GenericInterface createRouterIf(String nodeID, String interfaceID, String domainId, boolean client, long bandwidth) {
+    protected GenericInterface createRouterIf(String nodeID, String interfaceID, String domainId, boolean client, long bandwidth, String description) {
 
         GenericInterface gi = gifs.get(interfaceID);
         
@@ -77,6 +77,7 @@ public class IntraTopologyBuilder {
             if(domainId != null)
             	gi.setDomainId(domainId);
             gi.setName(interfaceID);
+        	gi.setDescription(description);
             gi.setClientPort(client);
             
             gifs.put(gi.getName(), gi);
@@ -89,16 +90,24 @@ public class IntraTopologyBuilder {
     }
 
     public GenericInterface createClientIf(String nodeID, String interfaceID, String domainId, long bandwidth) {
-    	return createRouterIf(nodeID, interfaceID, domainId, true, bandwidth);
+    	return createClientIf(nodeID, interfaceID, domainId, bandwidth, "");
+    }
+    
+    public GenericInterface createClientIf(String nodeID, String interfaceID, String domainId, long bandwidth, String description) {
+    	return createRouterIf(nodeID, interfaceID, domainId, true, bandwidth, description);
     }
     
     public GenericInterface createRouterIf(String nodeID, String interfaceID, String domainId, long bandwidth) {
-    	return createRouterIf(nodeID, interfaceID, domainId, false, bandwidth);
+    	return createRouterIf(nodeID, interfaceID, domainId, false, bandwidth, "");
     }
+
+    public GenericInterface createExternalRouterIf(String nodeID, String interfaceID, String domainId, long bandwidth) {
+    	return createRouterIf(nodeID, interfaceID, domainId, false, bandwidth, null);
+    }
+
     
     public GenericInterface createNodeIf(String nodeID, String interfaceID, long bandwidth) {
-
-    	return createRouterIf(nodeID, interfaceID, null, false, bandwidth);
+    	return createRouterIf(nodeID, interfaceID, null, false, bandwidth, null);
     }
     
     public void addStmLink(GenericInterface start, GenericInterface end, StmType type) {
@@ -128,10 +137,6 @@ public class IntraTopologyBuilder {
     public void addSpanningTree(GenericInterface start, GenericInterface end, int low, int high) {
         
         GenericLink link = new GenericLink();
-        
-        //mtu info
-        start.setMtu(0);
-        end.setMtu(0);
         link.setStartInterface(start);
         link.setEndInterface(end);
         link.setLinkId(counter++);
@@ -194,9 +199,9 @@ public class IntraTopologyBuilder {
     	return new ArrayList<Node>(nodes.values());
     }
     
-    public IntradomainTopology getTopology() {
+    public IntradomainTopology getIntradomainTopology() {
     	IntradomainTopology topo = new IntradomainTopology();
-
+    	
     	if(strees.size() > 0) {
 	    	topo.setSptrees(strees);
 	    	topo.setNodes(getNodes());
@@ -222,4 +227,35 @@ public class IntraTopologyBuilder {
     	
     	return topo;
     }
+    
+    public void registerPublicId(String realName, String publicName) {
+    	publicMappings.put(publicName, realName);
+    }
+    
+    public Properties getPublicIds() {
+    	Properties props = new Properties();
+    	
+    	for(String key : publicMappings.keySet()) {
+    		props.setProperty(key, publicMappings.get(key));	
+    	}
+    	
+    	return props;
+    }
+    
+    public void setSession(Session session) {
+        this.session = session;
+    }
+	
+	public void switchVlanTranslationSupport(boolean val, String... nodeNames) {
+		if(nodeNames.length == 1 && "all".equals(nodeNames[0])) {
+			for(Node n : nodes.values())
+				n.setVlanTranslationSupport(val);
+			return;
+		}
+		
+		for(String name : nodeNames) {
+			nodes.get(name).setVlanTranslationSupport(val);
+		}
+	}
+ 
 }

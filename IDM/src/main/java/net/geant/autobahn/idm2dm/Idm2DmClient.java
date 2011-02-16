@@ -57,7 +57,7 @@ public class Idm2DmClient implements Idm2Dm {
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.idm2dm.Idm2Dm#checkResources(net.geant.autobahn.network.Link[], net.geant.autobahn.reservation.ReservationParams)
 	 */
-	public DomainConstraints checkResources(Link[] links, ReservationParams arg1)
+	public DomainConstraints[] checkResources(Link[] links, ReservationParams arg1)
 			throws OversubscribedException, AAIException {
 		log.info("IDM -> DM: checking resources");
 		return idm2dm.checkResources(links, arg1);

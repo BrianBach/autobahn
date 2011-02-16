@@ -455,7 +455,7 @@ public class PathConstraints implements Serializable {
         StringBuffer sb = new StringBuffer();
 
         if(addConstraints.size() > 0) {
-	        sb.append("Additive:");
+	        sb.append(" Additive:");
 	        for(int i = 0; i < addNames.size(); i++) {
 	        	ConstraintsNames key = addNames.get(i);
 	        	Constraint con = addConstraints.get(i);
@@ -463,11 +463,10 @@ public class PathConstraints implements Serializable {
 	        	sb.append("[" + key + " " + con + "] AND ");
 	        }
 	        sb.delete(sb.lastIndexOf(" AND "), sb.length());
-	        sb.append("\n");
         }
 
         if(boolConstraints.size() > 0) {
-	        sb.append("Boolean:");
+	        sb.append(" Boolean:");
 	        for(int i = 0; i < boolNames.size(); i++) {
 	        	ConstraintsNames key = boolNames.get(i);
 	        	Constraint con = boolConstraints.get(i);
@@ -475,11 +474,10 @@ public class PathConstraints implements Serializable {
 	        	sb.append("[" + key + " " + con + "] AND ");
 	        }
 	        sb.delete(sb.lastIndexOf(" AND "), sb.length());
-	        sb.append("\n");
         }
 
         if(rangeConstraints.size() > 0) {
-	        sb.append("Range:");
+	        sb.append(" Range:");
 	        for(int i = 0; i < rangeNames.size(); i++) {
 	        	ConstraintsNames key = rangeNames.get(i);
 	        	Constraint con = rangeConstraints.get(i);
@@ -490,7 +488,7 @@ public class PathConstraints implements Serializable {
         }
 
         if(minValConstraints.size() > 0) {
-	        sb.append("MinValue:");
+	        sb.append(" MinValue:");
 	        for(int i = 0; i < minValNames.size(); i++) {
 	        	ConstraintsNames key = minValNames.get(i);
 	        	Constraint con = minValConstraints.get(i);
@@ -499,6 +497,8 @@ public class PathConstraints implements Serializable {
 	        }
 	        sb.delete(sb.lastIndexOf(" AND "), sb.length());
         }
+        
+        sb.append(" ");
         
         return sb.toString();
     }

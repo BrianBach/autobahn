@@ -46,7 +46,7 @@ public class SdhPathfinderTopology1Test {
         IntraTopologyBuilder builder = new IntraTopologyBuilder(false);
         topoSrc.domain1(builder);
         
-IntradomainTopology topo = builder.getTopology();
+        IntradomainTopology topo = builder.getIntradomainTopology();
         
         nodes = new HashMap<String, Node>();
         topo.getSdhDevices();
@@ -141,16 +141,22 @@ IntradomainTopology topo = builder.getTopology();
     
     @Test
     public void testFindingPathsBetweenGivenLinks() {
-        List<IntradomainPath> paths = pf.findPaths(glinks.get("p1.1-cli-port1"), 
-                glinks.get("p1.2-cli-port2"), _1Gb, null, Integer.MAX_VALUE, 0, 0);
+        IntradomainPath pSkel = new IntradomainPath();
+    	pSkel.addGenericLink(glinks.get("p1.1-cli-port1"), null);
+    	pSkel.addGenericLink(glinks.get("p1.2-cli-port2"), null);
+    	
+        List<IntradomainPath> paths = pf.findPaths(pSkel, _1Gb, null, Integer.MAX_VALUE, 0);
 
         TestCase.assertEquals(3, paths.size());
     }
     
     @Test
     public void testFindingPathsBetweenGivenLinksOverGivenCapacity() {
-        List<IntradomainPath> paths = pf.findPaths(glinks.get("p1.1-cli-port1"), 
-                glinks.get("p1.2-cli-port2"), _10Gb, null, Integer.MAX_VALUE, 0, 0);
+        IntradomainPath pSkel = new IntradomainPath();
+    	pSkel.addGenericLink(glinks.get("p1.1-cli-port1"), null);
+    	pSkel.addGenericLink(glinks.get("p1.2-cli-port2"), null);
+    	
+        List<IntradomainPath> paths = pf.findPaths(pSkel, _10Gb, null, Integer.MAX_VALUE, 0);
 
         TestCase.assertEquals(0, paths.size());
     }
@@ -161,8 +167,12 @@ IntradomainTopology topo = builder.getTopology();
         MinValueConstraint rcon = new MinValueConstraint(170.0);
         pcon.addMinValueConstraint(ConstraintsNames.TIMESLOTS, rcon);
         
-        IntradomainPath path = pf.findPath(glinks.get("p1.1-cli-port1"), 
-                glinks.get("p1.2-cli-port2"), _1Gb, pcon, null, 0, 0);
+        IntradomainPath pSkel = new IntradomainPath();
+    	pSkel.addGenericLink(glinks.get("p1.1-cli-port1"), pcon);
+    	pSkel.addGenericLink(glinks.get("p1.2-cli-port2"), pcon);
+
+        
+        IntradomainPath path = pf.findPath(pSkel, _1Gb, null, 0);
 
         TestCase.assertNotNull(path);
         
@@ -175,8 +185,11 @@ IntradomainTopology topo = builder.getTopology();
         PathConstraints pcon = new PathConstraints();
         pcon.addMinValueConstraint(ConstraintsNames.TIMESLOTS, new MinValueConstraint(1024.0));
         
-        IntradomainPath path = pf.findPath(glinks.get("p1.1-cli-port1"), 
-                glinks.get("p1.2-cli-port2"), _1Gb, pcon, null, 0, 0);
+        IntradomainPath pSkel = new IntradomainPath();
+    	pSkel.addGenericLink(glinks.get("p1.1-cli-port1"), null);
+    	pSkel.addGenericLink(glinks.get("p1.2-cli-port2"), null);
+        
+        IntradomainPath path = pf.findPath(pSkel, _1Gb, null, 0);
         
         if (path != null)
             path = null;

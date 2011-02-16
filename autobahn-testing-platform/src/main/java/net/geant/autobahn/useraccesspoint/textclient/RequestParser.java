@@ -63,13 +63,9 @@ public class RequestParser {
 				String value = contents[1].trim();
 				
 				if(field.equals("sport")) {
-					PortType port = new PortType();
-					port.setAddress(value);
-					rreq.setStartPort(port);
+					rreq.setStartPort(new PortType(value));
 				} else if(field.equals("dport")) {
-					PortType port = new PortType();
-					port.setAddress(value);
-					rreq.setEndPort(port);
+					rreq.setEndPort(new PortType(value));
 				} else if(field.equals("stime")) {
 					rreq.setStartTime(parseDate(value));
 				} else if(field.equals("etime")) {

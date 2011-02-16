@@ -48,7 +48,8 @@ CREATE TABLE bod_user (
 
 CREATE TABLE boolean_constraint (
     con_id bigint NOT NULL,
-    value boolean
+    value boolean,
+    logic character varying(255)
 );
 
 
@@ -724,11 +725,11 @@ CREATE TABLE reservation_params (
     maxdelay integer,
     resiliency character varying(255),
     bidirectional boolean,
-    userVlanId integer,
 	mtu integer,
     starttime timestamp without time zone,
     endtime timestamp without time zone,
-    pathconstraints bigint NOT NULL
+    pathconstraintsingress bigint NOT NULL,
+    pathconstraintsegress bigint NOT NULL
 );
 
 
@@ -2246,9 +2247,13 @@ ALTER TABLE ONLY bod_user
 --
 
 ALTER TABLE ONLY reservation_params
-    ADD CONSTRAINT fk957f59792a48762a FOREIGN KEY (pathconstraints) REFERENCES path_constraint(pcon_id);
+    ADD CONSTRAINT fk957f59792a48762a FOREIGN KEY (pathconstraintsingress) REFERENCES path_constraint(pcon_id);
 
 
+ALTER TABLE ONLY reservation_params
+    ADD CONSTRAINT fk957f59792a48762b FOREIGN KEY (pathconstraintsegress) REFERENCES path_constraint(pcon_id);
+
+    
 --
 -- Name: fk984c94308b30e16d; Type: FK CONSTRAINT; Schema: public; Owner: jra3
 --

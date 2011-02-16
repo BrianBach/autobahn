@@ -20,12 +20,13 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="BooleanConstraint", namespace="constraints.autobahn.geant.net", propOrder={
-		"value"
+		"value", "logic"
 })
 public class BooleanConstraint extends Constraint {
 
     private Boolean value;
-
+    private String logic = "AND";
+    
     /**
      * Default constructor
      */
@@ -40,8 +41,19 @@ public class BooleanConstraint extends Constraint {
      *            Value of constraint to be set
      */
     public BooleanConstraint(Boolean value) {
+    	this.value = value;
+    }
+    
+    /**
+     * Creates object with specified value.
+     * 
+     * @param value
+     *            Value of constraint to be set
+     */
+    public BooleanConstraint(Boolean value, String logic) {
         super();
         this.value = value;
+        this.logic = logic;
     }
 
     /**
@@ -54,7 +66,15 @@ public class BooleanConstraint extends Constraint {
      */
     public BooleanConstraint intersect(BooleanConstraint bool2) {
     	
-        return new BooleanConstraint(this.value && bool2.value);
+    	boolean res = false;
+    	if("OR".equals(logic)) {
+    		res = this.value || bool2.value;
+    	} else {
+    		// "AND" is default
+    		res = this.value && bool2.value;
+    	}
+    	
+        return new BooleanConstraint(res, this.getLogic());
     }
 
     /**
@@ -71,6 +91,14 @@ public class BooleanConstraint extends Constraint {
     public void setValue(Boolean value) {
         this.value = value;
     }
+    
+	public String getLogic() {
+		return logic;
+	}
+
+	public void setLogic(String logic) {
+		this.logic = logic;
+	}
 
 	@Override
 	public ConstraintsTypes getType() {
@@ -78,7 +106,7 @@ public class BooleanConstraint extends Constraint {
 	}
 
 	public BooleanConstraint copy() {
-		return new BooleanConstraint(value);
+		return new BooleanConstraint(value, logic);
 	}
 	
     /* (non-Javadoc)

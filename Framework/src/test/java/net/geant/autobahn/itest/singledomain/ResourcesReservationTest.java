@@ -1,14 +1,15 @@
 package net.geant.autobahn.itest.singledomain;
 
+import static net.geant.autobahn.itest.singledomain.SingleDomainTestHelper._1Gb;
+import static net.geant.autobahn.itest.singledomain.SingleDomainTestHelper._1Mb;
+import static net.geant.autobahn.itest.singledomain.SingleDomainTestHelper.buildTopology;
+import static net.geant.autobahn.itest.singledomain.SingleDomainTestHelper.cal;
+import static net.geant.autobahn.itest.singledomain.SingleDomainTestHelper.check;
+import static net.geant.autobahn.itest.singledomain.SingleDomainTestHelper.reserve;
+
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -26,12 +27,9 @@ import net.geant.autobahn.idm2dm.OversubscribedException;
 import net.geant.autobahn.intradomain.IntradomainTopology;
 import net.geant.autobahn.intradomain.PersistentReservationsManager;
 import net.geant.autobahn.intradomain.ResourcesReservation;
-import net.geant.autobahn.intradomain.common.GenericLink;
-import net.geant.autobahn.intradomain.ethernet.SpanningTree;
 import net.geant.autobahn.intradomain.pathfinder.IntradomainPathfinder;
 import net.geant.autobahn.intradomain.pathfinder.IntradomainPathfinderFactory;
 import net.geant.autobahn.network.Link;
-import net.geant.autobahn.reservation.ReservationParams;
 import net.geant.autobahn.utils.GN2_Jan08_DemoTopology;
 import net.geant.autobahn.utils.IntraTopologyBuilder;
 
@@ -44,10 +42,6 @@ import org.apache.cxf.common.logging.LogUtils;
  */
 public class ResourcesReservationTest extends TestCase {
 
-    final static long _1Mb = (long) 1000 * 1000;
-    final static long _1Gb = (long) 1 * 1000 * 1000 * 1000;
-    final static long _10Gb = (long) 10 * 1000 * 1000 * 1000;
-    
     private ResourcesReservation dm = null;
     private IntradomainPathfinder pathfinder = null;
     private PersistentReservationsManager prman = null;
@@ -105,18 +99,7 @@ public class ResourcesReservationTest extends TestCase {
 
         ethInit(false);
         
-        // Build topology
-        IntradomainTopology topology = new IntradomainTopology();
-        topology.setNodes(builder.getNodes());
-        topology.setSptrees(builder.getSpanningTrees());
-        List<SpanningTree> sptrees = topology.getSpanningTrees();
-        List<GenericLink> genericLinks = new ArrayList<GenericLink>();
-        for(SpanningTree st: sptrees) {
-            genericLinks.add(st.getEthLink().getGenericLink());
-        }
-        topology.setGenericLinks(genericLinks);
-        topology.setType(IntradomainTopology.Type.ETH);
-        
+        IntradomainTopology topology = buildTopology(builder);
         
         // Init intradomain pathfinder
         pathfinder = IntradomainPathfinderFactory.getIntradomainPathfinder(topology);
@@ -157,9 +140,6 @@ public class ResourcesReservationTest extends TestCase {
     protected void tearDown() throws Exception {
         super.tearDown();
         
-        // Clear all reservations
-        dm.removeReservation("res1");
-        dm.removeReservation("res2");
         dm.dispose();
         TApoint.stop();
         Calpoint.stop();
@@ -172,10 +152,10 @@ public class ResourcesReservationTest extends TestCase {
                 all_links.get("10.10.64.0"), 
                 all_links.get("10.10.64.1")};
         
-        DomainConstraints dcon = check(links, _1Gb, "01-07-2020 13:30:00",
+        DomainConstraints[] dcons = check(dm, links, _1Gb, "01-07-2020 13:30:00",
                 "03-07-2020 13:30:00");
         
-        assertEquals(1, dcon.getPathConstraints().size());
+        assertEquals(1, dcons[0].getPathConstraints().size());
     }
     
     public void testReservingAll() throws OversubscribedException,
@@ -186,19 +166,22 @@ public class ResourcesReservationTest extends TestCase {
                 all_links.get("10.10.64.0"), 
                 all_links.get("10.10.64.1")};
         
-        DomainConstraints dcon = check(links, _1Gb, "01-07-2020 13:30:00",
+        DomainConstraints[] dcons = check(dm, links, _1Gb, "01-07-2020 13:30:00",
                 "03-07-2020 13:30:00");
-        reserve("res1", links, _1Gb, 160, "01-07-2020 13:30:00",
+        assertEquals(1, dcons[0].getPathConstraints().size());
+        
+        reserve(dm, "res1", links, _1Gb, 160, "01-07-2020 13:30:00",
                 "03-07-2020 13:30:00");
         
         try {
-            check(links, _1Gb, "01-07-2020 13:30:00", "03-07-2020 13:30:00");
+            check(dm, links, _1Gb, "01-07-2020 13:30:00", "03-07-2020 13:30:00");
             fail("Oversubsribed should be thrown!");
         } catch(OversubscribedException e) {
             // expected
         }
         
-        assertEquals(1, dcon.getPathConstraints().size());
+        // Clear all reservations
+        dm.removeReservation("res1");
     }
     
     public void testReservingPartOfCapacity() throws ConstraintsAlreadyUsedException, OversubscribedException, AAIException {
@@ -207,17 +190,23 @@ public class ResourcesReservationTest extends TestCase {
                 all_links.get("10.13.64.3"), 
                 all_links.get("10.10.64.0"), 
                 all_links.get("10.10.64.1")};
+
+        check(dm, links, 500 * _1Mb, "01-07-2020 13:30:00", "03-07-2020 13:30:00");
         
-        reserve("res1", links, 500 * _1Mb, 150, "01-07-2020 13:30:00",
+        reserve(dm, "res1", links, 500 * _1Mb, 150, "01-07-2020 13:30:00",
                 "03-07-2020 13:30:00");
-        reserve("res2", links, 500 * _1Mb, 151, "01-07-2020 13:30:00",
+        reserve(dm, "res2", links, 500 * _1Mb, 151, "01-07-2020 13:30:00",
                 "03-07-2020 13:30:00");
 
         try {
-            check(links, 500 * _1Mb, "01-07-2020 13:30:00",
+            check(dm, links, 500 * _1Mb, "01-07-2020 13:30:00",
                     "03-07-2020 13:30:00");
             fail("Oversubsribed should be thrown!");
         } catch (OversubscribedException e) { }
+        
+        // Clear all reservations
+        dm.removeReservation("res1");
+        dm.removeReservation("res2");
     }
     
     public void testNotOverlapping() throws ConstraintsAlreadyUsedException,
@@ -228,20 +217,24 @@ public class ResourcesReservationTest extends TestCase {
                 all_links.get("10.10.64.0"), 
                 all_links.get("10.10.64.1")};
         
-        reserve("res1", links, _1Gb, 150, "01-07-2020 13:30:00",
+        reserve(dm, "res1", links, _1Gb, 150, "01-07-2020 13:30:00",
                 "03-07-2020 13:30:00");
         
-        DomainConstraints dcon = check(links, _1Gb, "05-07-2020 13:30:00", "06-07-2020 13:30:00");
+        DomainConstraints[] dcons = check(dm, links, _1Gb, "05-07-2020 13:30:00", "06-07-2020 13:30:00");
         
-        assertEquals(1, dcon.getPathConstraints().size());
+        assertEquals(1, dcons[0].getPathConstraints().size());
         
-        PathConstraints pcon = dcon.getPathConstraints().get(0);
+        PathConstraints pcon = dcons[0].getPathConstraints().get(0);
         RangeConstraint rcon = pcon.getRangeConstraint(ConstraintsNames.VLANS);
         
         assertEquals(150, rcon.getFirstValue());
         
-        reserve("res2", links, _1Gb, 150, "05-07-2020 13:30:00",
+        reserve(dm, "res2", links, _1Gb, 150, "05-07-2020 13:30:00",
                 "06-07-2020 13:30:00");
+        
+        // Clear all reservations
+        dm.removeReservation("res1");
+        dm.removeReservation("res2");
     }
     
     public void testReservingSameConstraints() throws OversubscribedException,
@@ -252,19 +245,22 @@ public class ResourcesReservationTest extends TestCase {
                 all_links.get("10.10.64.0"), 
                 all_links.get("10.10.64.1")};
         
-        reserve("res1", links, 500 * _1Mb, 150, "01-07-2020 13:30:00",
+        reserve(dm, "res1", links, 500 * _1Mb, 150, "01-07-2020 13:30:00",
                 "03-07-2020 13:30:00");
 
-        DomainConstraints dcon = check(links, _1Gb, "05-07-2020 13:30:00",
+        DomainConstraints[] dcons = check(dm, links, _1Gb, "05-07-2020 13:30:00",
                 "06-07-2020 13:30:00");
 
-        assertEquals(1, dcon.getPathConstraints().size());
+        assertEquals(1, dcons[0].getPathConstraints().size());
         
         try {
-            reserve("res2", links, 500 * _1Mb, 150, "01-07-2020 13:30:00",
+            reserve(dm, "res2", links, 500 * _1Mb, 150, "01-07-2020 13:30:00",
                 "03-07-2020 13:30:00");
             fail("Constraints in use should be thrown!");
         } catch(ConstraintsAlreadyUsedException e) { }
+        
+        // Clear all reservations
+        dm.removeReservation("res1");
     }
 
     public void testReservingOverlapping() throws OversubscribedException,
@@ -275,13 +271,16 @@ public class ResourcesReservationTest extends TestCase {
                 all_links.get("10.10.64.0"), 
                 all_links.get("10.10.64.1") };
 
-        reserve("res1", links, _1Gb, 150, "01-07-2020 13:30:00",
+        reserve(dm, "res1", links, _1Gb, 150, "01-07-2020 13:30:00",
                 "03-07-2020 13:30:00");
 
         try {
-            check(links, _1Gb, "02-07-2020 13:30:00", "06-07-2020 13:30:00");
+            check(dm, links, _1Gb, "02-07-2020 13:30:00", "06-07-2020 13:30:00");
             fail("Oversubscribed should be thrown");
         } catch (OversubscribedException e) { }
+        
+        // Clear all reservations
+        dm.removeReservation("res1");
     }
     
     public void testReservingOverlappingSetupTime() throws OversubscribedException,
@@ -298,17 +297,20 @@ public class ResourcesReservationTest extends TestCase {
                 all_links.get("10.10.64.0"), 
                 all_links.get("10.10.64.1") };
         
-        reserve("res1", links, _1Gb, 150, "01-07-2020 13:30:00",
+        reserve(dm, "res1", links, _1Gb, 150, "01-07-2020 13:30:00",
                 "03-07-2020 13:30:00");
         
         try {
             // Reservation additional time is:
             // 30 sec for tear down and 1 min for setup
-            check(links, _1Gb, "03-07-2020 13:31:10", "05-07-2020 13:30:00");
+            check(dm, links, _1Gb, "03-07-2020 13:31:10", "05-07-2020 13:30:00");
             fail("Oversubscribed should be thrown");
         } catch (OversubscribedException e) { }
         
-        check(links, _1Gb, "03-07-2020 13:33:00", "05-07-2020 13:30:00");
+        check(dm, links, _1Gb, "03-07-2020 13:33:00", "05-07-2020 13:30:00");
+        
+        // Clear all reservations
+        dm.removeReservation("res1");
     }
 
     public void testReservingAndRemoving()
@@ -319,21 +321,24 @@ public class ResourcesReservationTest extends TestCase {
                 all_links.get("10.10.64.0"), 
                 all_links.get("10.10.64.1") };
         
-        reserve("res1", links, _1Gb, 150, "01-07-2020 13:30:00",
+        reserve(dm, "res1", links, _1Gb, 150, "01-07-2020 13:30:00",
                 "03-07-2020 13:30:00");
         
         try {
             // Reservation additional time is:
             // 1 min for tear down and 1 min for setup
-            check(links, _1Gb, "01-07-2020 13:30:00", "03-07-2020 13:30:00");
+            check(dm, links, _1Gb, "01-07-2020 13:30:00", "03-07-2020 13:30:00");
             fail("Oversubscribed should be thrown");
         } catch (OversubscribedException e) { }
         
         dm.removeReservation("res1");
         
-        check(links, _1Gb, "01-07-2020 13:30:00", "03-07-2020 13:30:00");
-        reserve("res1", links, _1Gb, 150, "01-07-2020 13:30:00",
+        check(dm, links, _1Gb, "01-07-2020 13:30:00", "03-07-2020 13:30:00");
+        reserve(dm, "res1", links, _1Gb, 150, "01-07-2020 13:30:00",
             "03-07-2020 13:30:00");
+        
+        // Clear all reservations
+        dm.removeReservation("res1");
     }
     
     public void testReservingAndFinishing()
@@ -351,7 +356,7 @@ public class ResourcesReservationTest extends TestCase {
         Calendar end = Calendar.getInstance();
         end.add(Calendar.SECOND, 30);
         
-        reserve("res1", links, _1Gb, 150, now, end);
+        reserve(dm, "res1", links, _1Gb, 150, 150, now, end);
 
         // check now
         try {
@@ -359,14 +364,14 @@ public class ResourcesReservationTest extends TestCase {
             end = (Calendar) now.clone();
             end.add(Calendar.MINUTE, 30);
             
-            check(links, _1Gb, now, end);
+            check(dm, links, _1Gb, now, end);
             fail("Oversubscribed should be thrown");
         } catch (OversubscribedException e) { }
 
         Thread.sleep(40 * 1000);
 
         end = Calendar.getInstance();
-        check(links, _1Gb, now, end);
+        check(dm, links, _1Gb, now, end);
     }
     
     // ---------------- MODIFICATION ----------------------
@@ -378,7 +383,7 @@ public class ResourcesReservationTest extends TestCase {
                 all_links.get("10.10.64.0"), 
                 all_links.get("10.10.64.1") };
         
-        reserve("res1", links, _1Gb, 150, "01-07-2020 13:30:00",
+        reserve(dm, "res1", links, _1Gb, 150, "01-07-2020 13:30:00",
                 "03-07-2020 13:30:00");
 
         boolean possible = dm.checkModification("res1", cal("01-07-2020 13:30:00"), 
@@ -386,15 +391,18 @@ public class ResourcesReservationTest extends TestCase {
         
         assertTrue(possible);
         
-        check(links, _1Gb, "04-07-2020 13:30:00", "05-07-2020 13:30:00");
+        check(dm, links, _1Gb, "04-07-2020 13:30:00", "05-07-2020 13:30:00");
         
         dm.modifyReservation("res1", cal("01-07-2020 13:30:00"), 
                 cal("05-07-2020 13:30:00"));
         
         try {
-            check(links, _1Gb, "04-07-2020 13:30:00", "05-07-2020 13:30:00");
+            check(dm, links, _1Gb, "04-07-2020 13:30:00", "05-07-2020 13:30:00");
             fail("Should be oversubscribed !");
         } catch (OversubscribedException e) { }
+        
+        // Clear all reservations
+        dm.removeReservation("res1");
     }
     
     public void testModifyingConfilictingReservation() throws ConstraintsAlreadyUsedException, OversubscribedException, AAIException {
@@ -404,10 +412,10 @@ public class ResourcesReservationTest extends TestCase {
                 all_links.get("10.10.64.0"), 
                 all_links.get("10.10.64.1") };
         
-        reserve("res1", links, _1Gb, 150, "01-07-2020 13:30:00",
+        reserve(dm, "res1", links, _1Gb, 150, "01-07-2020 13:30:00",
                 "03-07-2020 13:30:00");
 
-        reserve("res2", links, _1Gb, 150, "04-07-2020 13:30:00",
+        reserve(dm, "res2", links, _1Gb, 150, "04-07-2020 13:30:00",
             "08-07-2020 13:30:00");
         
         boolean possible = dm.checkModification("res1", cal("01-07-2020 13:30:00"), 
@@ -416,9 +424,13 @@ public class ResourcesReservationTest extends TestCase {
         assertFalse(possible);
         
         try {
-            check(links, _1Gb, "01-07-2020 13:30:00", "03-07-2020 13:30:00");
+            check(dm, links, _1Gb, "01-07-2020 13:30:00", "03-07-2020 13:30:00");
             fail("Should be oversubscribed !");
         } catch (OversubscribedException e) { }
+        
+        // Clear all reservations
+        dm.removeReservation("res1");
+        dm.removeReservation("res2");
     }
 
     public void testModifyingActiveReservation()
@@ -435,7 +447,7 @@ public class ResourcesReservationTest extends TestCase {
         Calendar end = (Calendar) now.clone();
         end.add(Calendar.SECOND, 35);
         
-        reserve("res1", links, _1Gb, 150, now, end);
+        reserve(dm, "res1", links, _1Gb, 150, 150, now, end);
         
         // Wait for Active
         Thread.sleep(10 * 1000);
@@ -456,72 +468,13 @@ public class ResourcesReservationTest extends TestCase {
         Calendar tmp = Calendar.getInstance();
         tmp.add(Calendar.MINUTE, 30);
         try {
-            check(links, _1Gb, Calendar.getInstance(), tmp);
+            check(dm, links, _1Gb, Calendar.getInstance(), tmp);
             fail("Should be oversubscribed");
         } catch (OversubscribedException e) { }
         
         // Wait until modified reservation should finish
         Thread.sleep(30 * 1000);
-        check(links, _1Gb, Calendar.getInstance(), tmp);
+        check(dm, links, _1Gb, Calendar.getInstance(), tmp);
     }
     
-    
-    // -------------------- HELPERS -----------------
-    public DomainConstraints check(Link[] links, long capacity, Calendar start,
-            Calendar end) throws OversubscribedException, AAIException {
-        
-        ReservationParams params = new ReservationParams();
-        
-        params.setCapacity(capacity);
-        params.setStartTime(start);
-        params.setEndTime(end);
-            
-        return dm.checkResources(links, params);
-    }
-
-    public DomainConstraints check(Link[] links, long capacity, String sdate,
-            String edate) throws OversubscribedException, AAIException {
-
-        return check(links, capacity, cal(sdate), cal(edate));
-    }
-    
-    public void reserve(String resID, Link[] links, long capacity, int vlan,
-            String sdate, String edate)
-            throws ConstraintsAlreadyUsedException, OversubscribedException {
-
-        reserve(resID, links, capacity, vlan, cal(sdate), cal(edate));
-    }
-
-    public void reserve(String resID, Link[] links, long capacity, int vlan,
-            Calendar start, Calendar end)
-            throws ConstraintsAlreadyUsedException, OversubscribedException {
-        
-        ReservationParams params = new ReservationParams();
-        
-        params.setCapacity(capacity);
-        params.setStartTime(start);
-        params.setEndTime(end);
-        
-        PathConstraints pcon = new PathConstraints();
-        pcon.addRangeConstraint(ConstraintsNames.VLANS, new RangeConstraint(vlan, vlan));
-        params.setPathConstraints(pcon);
-        
-        dm.addReservation(resID, links, params);
-    }
-    
-    private static Calendar cal(String sdate) {
-        DateFormat df = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
-        
-        Date date = null;
-        try {
-            date = df.parse(sdate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } 
-        
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        
-        return cal;
-    }
 }

@@ -10,6 +10,7 @@ import java.util.List;
 import net.geant.autobahn.constraints.ConstraintsNames;
 import net.geant.autobahn.constraints.MinValueConstraint;
 import net.geant.autobahn.constraints.PathConstraints;
+import net.geant.autobahn.intradomain.IntradomainPath;
 import net.geant.autobahn.intradomain.IntradomainTopology;
 import net.geant.autobahn.intradomain.common.GenericLink;
 import net.geant.autobahn.intradomain.common.Node;
@@ -46,7 +47,7 @@ public class SdhIntradomainPathfinder extends GenericIntradomainPathfinder {
 
 
 	@Override
-	public GraphSearch initGraph(Collection<GenericLink> excluded, int userVlanId, int mtu) {
+	public GraphSearch initGraph(Collection<GenericLink> excluded, int mtu) {
 	    // userVlanId parameter is ingored, since an SDH domain does not support this
 		
     	grnodes = new HashMap<Node, GraphNode>();
@@ -140,5 +141,10 @@ public class SdhIntradomainPathfinder extends GenericIntradomainPathfinder {
         }
         
         return grSearch;
+	}
+
+	@Override
+	public void settleConstraintsValuesForPath(IntradomainPath path) {
+		// TODO Auto-generated method stub
 	}
 }

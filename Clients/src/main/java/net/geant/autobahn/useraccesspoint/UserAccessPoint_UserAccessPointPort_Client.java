@@ -74,7 +74,7 @@ public final class UserAccessPoint_UserAccessPointPort_Client {
         // Zagreb
         //r1.setStartPort("10.16.32.2");
         // SCARIE
-        r1.setStartPort("10.10.32.17");
+        r1.setStartPort(new PortType("10.10.32.17"));
         
         // Poznan
         //r1.setEndPort("10.13.32.4");
@@ -87,7 +87,7 @@ public final class UserAccessPoint_UserAccessPointPort_Client {
         // Zagreb
         //r1.setEndPort("10.16.32.2");
         //I2 port A
-        r1.setEndPort("10.10.32.16");
+        r1.setEndPort(new PortType("10.10.32.16"));
         //I2 port B
         //r1.setEndPort("10.10.32.22");
         // Czech
@@ -133,8 +133,8 @@ public final class UserAccessPoint_UserAccessPointPort_Client {
         r1.setCapacity(1000000000);
         r1.setDescription("res1");
 
-        r1.setStartPort("10.10.32.31");
-        r1.setEndPort("10.12.32.5");
+        r1.setStartPort(new PortType("10.10.32.31"));
+        r1.setEndPort(new PortType("10.12.32.5"));
         
         r1.setStartTime(start);
         r1.setEndTime(end);
@@ -147,8 +147,8 @@ public final class UserAccessPoint_UserAccessPointPort_Client {
         r2.setCapacity(1000000000);
         r2.setDescription("res2");
 
-        r2.setStartPort("10.10.32.32");
-        r2.setEndPort("10.16.32.2");
+        r2.setStartPort(new PortType("10.10.32.32"));
+        r2.setEndPort(new PortType("10.16.32.2"));
         
         r2.setStartTime(start);
         r2.setEndTime(end);
@@ -161,8 +161,8 @@ public final class UserAccessPoint_UserAccessPointPort_Client {
         r3.setCapacity(1000000000);
         r3.setDescription("res3");
 
-        r3.setStartPort("10.10.32.33");
-        r3.setEndPort("10.11.32.6");
+        r3.setStartPort(new PortType("10.10.32.33"));
+        r3.setEndPort(new PortType("10.11.32.6"));
         
         r3.setStartTime(start);
         r3.setEndTime(end);
@@ -175,8 +175,8 @@ public final class UserAccessPoint_UserAccessPointPort_Client {
         r4.setCapacity(1000000000);
         r4.setDescription("res4");
 
-        r4.setStartPort("10.10.32.34");
-        r4.setEndPort("10.13.32.4");
+        r4.setStartPort(new PortType("10.10.32.34"));
+        r4.setEndPort(new PortType("10.13.32.4"));
         
         r4.setStartTime(start);
         r4.setEndTime(end);
@@ -212,8 +212,8 @@ public final class UserAccessPoint_UserAccessPointPort_Client {
         r1.setCapacity(1000000000);
         r1.setDescription("res1, AMS - Dublin");
 
-        r1.setStartPort("10.10.32.31");
-        r1.setEndPort("10.12.32.5");
+        r1.setStartPort(new PortType("10.10.32.31"));
+        r1.setEndPort(new PortType("10.12.32.5"));
         
         r1.setStartTime(start);
         r1.setEndTime(end);
@@ -226,8 +226,8 @@ public final class UserAccessPoint_UserAccessPointPort_Client {
         r3.setCapacity(1000000000);
         r3.setDescription("res2, AMS - Czech");
 
-        r3.setStartPort("10.10.32.34");
-        r3.setEndPort("10.10.32.27");
+        r3.setStartPort(new PortType("10.10.32.34"));
+        r3.setEndPort(new PortType("10.10.32.27"));
         
         r3.setStartTime(start);
         r3.setEndTime(end);

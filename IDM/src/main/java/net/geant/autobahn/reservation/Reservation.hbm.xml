@@ -37,8 +37,6 @@
 		
 		<property name="bidirectional" type="boolean"/>
 		
-		<property name="userVlanId" type="int" />
-		
 		<property name="mtu" type="int" />
 		
 		<many-to-one name="operationalStatus" column="State_oper_enum" 

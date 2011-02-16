@@ -2,6 +2,9 @@ package net.geant.autobahn.useraccesspoint;
 
 import java.util.Calendar;
 
+import net.geant.autobahn.constraints.ConstraintsNames;
+import net.geant.autobahn.constraints.PathConstraints;
+import net.geant.autobahn.constraints.RangeConstraint;
 import net.geant.autobahn.dao.IdmDAOFactory;
 import net.geant.autobahn.network.Port;
 import net.geant.autobahn.network.dao.PortDAO;
@@ -32,11 +35,11 @@ public class RequestConverter {
         	throw new UserAccessPointException("wrong reservation time - startTime: " + startTime.getTime() + " >= endTime: " + req.getEndTime().getTime());
 		
         PortDAO pdao = daos.getPortDAO();
-        Port start = pdao.getByBodID(req.getStartPort());
+        Port start = pdao.getByBodID(req.getStartPort().getAddress());
         if (start == null) {
             throw new UserAccessPointException("reservation start port " + req.getStartPort() + " could not be found");
         }
-        Port end = pdao.getByBodID(req.getEndPort());
+        Port end = pdao.getByBodID(req.getEndPort().getAddress());
         if (end == null) {
             throw new UserAccessPointException("reservation end port " + req.getEndPort() + " could not be found");
         }
@@ -58,13 +61,24 @@ public class RequestConverter {
         resv.setBidirectional(req.isBidirectional());
         resv.setUserInclude(req.getUserInclude());
         resv.setUserExclude(req.getUserExclude());
-        resv.setUserVlanId(req.getUserVlanId());
+
+        // Fill in the user constraints fields
+        int inVlan = req.getStartPort().getVlan();
+        if(inVlan > 0) {
+        	PathConstraints pcon = new PathConstraints();
+        	pcon.addRangeConstraint(ConstraintsNames.VLANS, new RangeConstraint(inVlan, inVlan));
+        	resv.setUserIngressConstraints(pcon);
+        }
+        
+        int egVlan = req.getEndPort().getVlan();
+        if(egVlan > 0) {
+        	PathConstraints pcon = new PathConstraints();
+        	pcon.addRangeConstraint(ConstraintsNames.VLANS, new RangeConstraint(egVlan, egVlan));
+        	resv.setUserEgressConstraints(pcon);
+        }
         
         //mtu info
         resv.setMtu(req.getMtu());
-        if (req.getUserVlanId() < 0) {
-            throw new UserAccessPointException("reservation user VLAN cannot be negative");
-        }
         if (req.getMtu() < 0) {
             throw new UserAccessPointException("reservation user MTU cannot be negative");
         }

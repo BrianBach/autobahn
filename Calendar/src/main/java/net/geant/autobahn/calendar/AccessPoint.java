@@ -8,13 +8,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import org.apache.log4j.Logger;
 
-import net.geant.autobahn.constraints.PathConstraints;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
 import net.geant.autobahn.intradomain.IntradomainPath;
 import net.geant.autobahn.intradomain.common.GenericLink;
 import net.geant.autobahn.resourcesreservationcalendar.ResourcesReservationCalendar;
+
+import org.apache.log4j.Logger;
 
 /**
  * Implementation of web services. Singleton design pattern.
@@ -160,8 +160,7 @@ public final class AccessPoint implements ResourcesReservationCalendar {
     /* (non-Javadoc)
      * @see net.geant.autobahn.resourcesreservationcalendar.ResourcesReservationCalendar#addReservation()
      */
-    public void addReservation(List<GenericLink> glinks, long capacity,
-			PathConstraints pcon, Calendar start, Calendar end)
+    public void addReservation(IntradomainPath path, long capacity, Calendar start, Calendar end)
 			throws ConstraintsAlreadyUsedException {
 	
 		// Extend time window
@@ -171,10 +170,10 @@ public final class AccessPoint implements ResourcesReservationCalendar {
 		end.add(Calendar.SECOND, teardownTime);
 		
 		// Reserve constraints
-		constraintsCalendar.reserveResources(glinks, pcon, start, end);
+		constraintsCalendar.reserveResources(path, start, end);
 
         // Add capacity to links calendars
-		for(GenericLink glink : glinks) {
+		for(GenericLink glink : path.getLinks()) {
 			AdditiveCalendar calendar = capacityCalendars.get(glink);
 			if(calendar == null) {
 				calendar = new AdditiveCalendar();
@@ -188,7 +187,7 @@ public final class AccessPoint implements ResourcesReservationCalendar {
     /* (non-Javadoc)
      * @see net.geant.autobahn.resourcesreservationcalendar.ResourcesReservationCalendar#getConstraints()
      */
-    public PathConstraints getConstraints(IntradomainPath ipath,
+    public IntradomainPath getConstraints(IntradomainPath ipath,
 			Calendar start, Calendar end) {
 
 		// Extend time window
@@ -203,8 +202,7 @@ public final class AccessPoint implements ResourcesReservationCalendar {
     /* (non-Javadoc)
      * @see net.geant.autobahn.resourcesreservationcalendar.ResourcesReservationCalendar#removeReservation()
      */
-    public void removeReservation(List<GenericLink> glinks, long capacity,
-			PathConstraints pcon, Calendar start, Calendar end) {
+    public void removeReservation(IntradomainPath path, long capacity, Calendar start, Calendar end) {
 
 		// Extend time window
 		start = (Calendar) start.clone();
@@ -213,7 +211,7 @@ public final class AccessPoint implements ResourcesReservationCalendar {
 		end.add(Calendar.SECOND, teardownTime);
 		
         // Remove capacity from Calendar
-		for(GenericLink glink : glinks) {
+		for(GenericLink glink : path.getLinks()) {
 			AdditiveCalendar calendar = capacityCalendars.get(glink);
 			if(calendar != null) {
 				calendar.removeReservation(capacity, start, end);
@@ -221,7 +219,7 @@ public final class AccessPoint implements ResourcesReservationCalendar {
 		}
 		
         // Remove constraints reservation
-        constraintsCalendar.releaseResources(glinks, pcon, start, end);
+        constraintsCalendar.releaseResources(path, start, end);
 	}
     
     /* (non-Javadoc)
@@ -284,5 +282,9 @@ public final class AccessPoint implements ResourcesReservationCalendar {
         // Add any checks here
         
         log.info("===== Post-initialization check for ResourcesReservationCalendar module is complete. =====");
+    }
+    
+    public ConstraintsReservationCalendar getConstraintsCalendar() {
+    	return constraintsCalendar;
     }
 }

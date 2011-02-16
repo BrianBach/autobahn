@@ -2,6 +2,8 @@ package net.geant.autobahn.idm2dm;
 
 import javax.jws.WebService;
 
+import org.mortbay.log.Log;
+
 import net.geant.autobahn.aai.AAIException;
 import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
@@ -37,7 +39,7 @@ public class Idm2DmImpl implements Idm2Dm {
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.idm2dm.Idm2Dm#checkResources(net.geant.autobahn.network.Link[], net.geant.autobahn.reservation.ReservationParams)
 	 */
-	public DomainConstraints checkResources(Link[] arg0, ReservationParams arg1)
+	public DomainConstraints[] checkResources(Link[] arg0, ReservationParams arg1)
 			throws OversubscribedException, AAIException {
 
 		return AccessPoint.getInstance().checkResources(arg0, arg1);
@@ -48,7 +50,12 @@ public class Idm2DmImpl implements Idm2Dm {
 	 */
 	public void removeReservation(String arg0) {
 
-		AccessPoint.getInstance().removeReservation(arg0);
+		try {
+			AccessPoint.getInstance().removeReservation(arg0);
+		} catch (Exception e) {
+			System.out.println(" ----- >>>>>>> Error when removing !!!");
+			e.printStackTrace();
+		}
 	}
 
 	/* (non-Javadoc)

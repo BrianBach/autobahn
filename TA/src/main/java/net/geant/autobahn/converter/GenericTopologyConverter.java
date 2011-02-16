@@ -511,6 +511,7 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
 	 */
 	public GenericLink getEdgeLink(Link l) {
 		log.debug("Get edge link for link:"+l);
+		
 		return edgeLinks.get(l);
 	}
 

@@ -140,7 +140,7 @@ public abstract class AutobahnReservation extends Reservation implements Runnabl
 	 * @throws OversubscribedException
 	 * @throws AAIException 
 	 */
-	public DomainConstraints checkResources() throws OversubscribedException, AAIException {
+	public DomainConstraints[] checkResources() throws OversubscribedException, AAIException {
         Link[] links = path.getLinksForDomain(localDomainID);
         ReservationParams params = getReservationParameters(localDomainID);
         

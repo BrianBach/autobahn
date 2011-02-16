@@ -1,10 +1,8 @@
 package net.geant.autobahn.calendar;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,34 +30,102 @@ public class EthConstraintsReservationCalendar implements
 	private static final Logger log = Logger.getLogger(EthConstraintsReservationCalendar.class);
 	
 	// VLANS
-    private Map<Node, List<CalendarEntry>> vlanCalendars = new HashMap<Node, List<CalendarEntry>>(); 
+    private Map<Node, Set<CalendarEntry>> vlanCalendars = new HashMap<Node, Set<CalendarEntry>>(); 
     
     
     /* (non-Javadoc)
      * @see net.geant.autobahn.intradomain.calendar.ConstraintsReservationCalendar#reserveResources(java.util.List, net.geant.autobahn.constraints.PathConstraints, java.util.Calendar, java.util.Calendar)
      */
-    public void reserveResources(List<GenericLink> glinks,
-			PathConstraints pcon, Calendar start, Calendar end)
+    public void reserveResources(IntradomainPath path, Calendar start, Calendar end)
 			throws ConstraintsAlreadyUsedException {
+
+		// Checking phase - First we are checking everything
+    	for(GenericLink gl : path.getLinks()) {
+    		CalendarEntry newEntry = createVlanCalendarEntry(path, gl, start, end);
+    		
+    		if(newEntry == null)
+    			continue;
+    		
+    		checkResourcesOnNodes(newEntry, gl.getStartInterface().getNode(), gl.getEndInterface().getNode());
+    	}
     	
-		RangeConstraint vlansToBeReserved = pcon.getRangeConstraint(ConstraintsNames.VLANS);
-		
-		if(vlansToBeReserved == null) {
-			log.warn("Ethernet domain without VLAN constraint!");
-			return;
+    	// Reservation phase
+    	for(GenericLink gl : path.getLinks()) {
+    		CalendarEntry newEntry = createVlanCalendarEntry(path, gl, start, end);
+    		
+    		if(newEntry == null)
+    			continue;
+    		
+    		reserveResourceOnNodes(newEntry, gl.getStartInterface().getNode(), gl.getEndInterface().getNode());
+    	}
+    }
+    
+    /* (non-Javadoc)
+     * @see net.geant.autobahn.intradomain.calendar.ConstraintsReservationCalendar#releaseResources(java.util.List, net.geant.autobahn.constraints.PathConstraints, java.util.Calendar, java.util.Calendar)
+     */
+    public void releaseResources(IntradomainPath path, Calendar start, Calendar end) {
+    	
+    	for(GenericLink gl : path.getLinks()) {
+    		PathConstraints pcon = path.getConstraints(gl);
+    		RangeConstraint vlansToBeReserved = pcon.getRangeConstraint(ConstraintsNames.VLANS);
+    		
+    		// vlan number to reserve
+    		int vlanNumber = vlansToBeReserved.getFirstValue();
+
+    		// Check it in calendar
+    		CalendarEntry entry = new CalendarEntry(start, end, vlanNumber);
+    		
+    		// remove entry from calendar
+    		for(Node n : new Node[] {gl.getStartInterface().getNode(), gl.getEndInterface().getNode()}) {
+    			Set<CalendarEntry> vlanCalendar = vlanCalendars.get(n);
+    			
+    			vlanCalendar.remove(entry);
+    		}
+    	}
+    }
+    
+	/* (non-Javadoc)
+	 * @see net.geant.autobahn.intradomain.calendar.ConstraintsReservationCalendar#getConstraints(net.geant.autobahn.intradomain.IntradomainPath, java.util.Calendar, java.util.Calendar)
+	 */
+	public IntradomainPath getConstraints(IntradomainPath ipath,
+			Calendar start, Calendar end) {
+
+		for(GenericLink gl : ipath.getLinks()) {
+			PathConstraints pcon = ipath.getConstraints(gl);
+			RangeConstraint vlans = pcon.getRangeConstraint(ConstraintsNames.VLANS);
+			
+			checkWithCalendar(gl.getStartInterface().getNode(), vlans, start, end);
+			
+			if(vlans == null || vlans.isEmpty())
+				return null;
+			
+			checkWithCalendar(gl.getEndInterface().getNode(), vlans, start, end);
+			
+			if(vlans == null || vlans.isEmpty())
+				return null;
 		}
+        
+		return ipath;
+	}
 
-		// vlan number to reserve
-		int vlanNumber = vlansToBeReserved.getRanges().get(0).getMin();
-
-		// Check it in calendar
-		CalendarEntry newEntry = new CalendarEntry(start, end, vlanNumber);
-
-		Set<Node> nodes = getNodes(glinks);
-		
-		// Checking phase
+    private void reserveResourceOnNodes(CalendarEntry newEntry, Node... nodes) {
 		for(Node node : nodes) {
-			List<CalendarEntry> vlanCalendar = vlanCalendars.get(node);
+			Set<CalendarEntry> vlanCalendar = vlanCalendars.get(node);
+			
+			if(vlanCalendar == null) {
+				vlanCalendar = new HashSet<CalendarEntry>();
+				vlanCalendars.put(node, vlanCalendar);
+			}
+			
+			vlanCalendar.add(newEntry);
+		}
+    }
+    
+    private void checkResourcesOnNodes(CalendarEntry newEntry, Node... nodes) throws ConstraintsAlreadyUsedException {
+    	final int vlanNumber = newEntry.getVlan();
+    	
+		for(Node node : nodes) {
+			Set<CalendarEntry> vlanCalendar = vlanCalendars.get(node);
 
 			if(vlanCalendar == null)
 				continue;
@@ -72,91 +138,39 @@ public class EthConstraintsReservationCalendar implements
 				}
 			}
 		}
+    }
+	
+    private CalendarEntry createVlanCalendarEntry(IntradomainPath path, GenericLink gl, Calendar start, Calendar end) {
+		PathConstraints pcon = path.getConstraints(gl);
 		
-		// Reservation phase
-		for(Node node : nodes) {
-			List<CalendarEntry> vlanCalendar = vlanCalendars.get(node);
-			
-			if(vlanCalendar == null) {
-				vlanCalendar = new ArrayList<CalendarEntry>();
-				vlanCalendars.put(node, vlanCalendar);
-			}
-			
-			vlanCalendar.add(newEntry);
-		}
+		if(pcon == null)
+			return null;
+		
+		RangeConstraint vlansToBeReserved = pcon.getRangeConstraint(ConstraintsNames.VLANS);
+		
+		if(vlansToBeReserved == null)
+			return null;
+		
+		// vlan number to reserve
+		int vlanNumber = vlansToBeReserved.getFirstValue();
+
+		return new CalendarEntry(start, end, vlanNumber);
     }
     
-    /* (non-Javadoc)
-     * @see net.geant.autobahn.intradomain.calendar.ConstraintsReservationCalendar#releaseResources(java.util.List, net.geant.autobahn.constraints.PathConstraints, java.util.Calendar, java.util.Calendar)
-     */
-    public void releaseResources(List<GenericLink> glinks,
-			PathConstraints pcon, Calendar start, Calendar end) {
-    	
-		RangeConstraint vlansToBeReleased= pcon.getRangeConstraint(ConstraintsNames.VLANS);
+	private void checkWithCalendar(Node n, RangeConstraint rcon, Calendar start, Calendar end) {
+		Set<CalendarEntry> vlanCalendar = vlanCalendars.get(n);
 		
-		if(vlansToBeReleased == null) {
-			log.warn("Ethernet domain without VLAN constraint!");
+		if(vlanCalendar == null)
 			return;
-		}
-
-		int vlanNumber = vlansToBeReleased.getRanges().get(0).getMin();
-
-		CalendarEntry entry = new CalendarEntry(start, end, vlanNumber);
 		
-		// remove entry from calendar
-		for(Node n : getNodes(glinks)) {
-			List<CalendarEntry> vlanCalendar = vlanCalendars.get(n);
-			
-			vlanCalendar.remove(entry);
-		}
-    }
-    
-	/* (non-Javadoc)
-	 * @see net.geant.autobahn.intradomain.calendar.ConstraintsReservationCalendar#getConstraints(net.geant.autobahn.intradomain.IntradomainPath, java.util.Calendar, java.util.Calendar)
-	 */
-	public PathConstraints getConstraints(IntradomainPath ipath,
-			Calendar start, Calendar end) {
-
-		PathConstraints pcon = ipath.getMergedConstraints();
-		
-		// Filter VLANS
-		RangeConstraint rcon = pcon.getRangeConstraint(ConstraintsNames.VLANS);
-		
-		if(rcon == null) {
-			log.warn("Ethernet domain without VLAN constraint!");
-			return pcon;
-		}
-		
-        // Exclude vlans already reserved
-		for(Node n : getNodes(ipath.getLinks())) {
-			List<CalendarEntry> vlanCalendar = vlanCalendars.get(n);
-			
-			if(vlanCalendar == null)
-				continue;
-			
-	        for(CalendarEntry entry : vlanCalendar) {
-	            if(entry.overlaps(start, end)) {
-	                int vlan = entry.getVlan();
-	                rcon.removeRange(vlan, vlan);
-	                
-	                if(rcon.isEmpty())
-	                	return null;
-	            }
-	        }
-		}
+        for(CalendarEntry entry : vlanCalendar) {
+            if(entry.overlaps(start, end)) {
+                int vlan = entry.getVlan();
+                rcon.removeRange(vlan, vlan);
+            }
+        }
         
-		return pcon;
-	}
-    
-	private Set<Node> getNodes(List<GenericLink> glinks) {
-		Set<Node> result = new HashSet<Node>();
-		
-		for(GenericLink glink : glinks) {
-			result.add(glink.getStartInterface().getNode());
-			result.add(glink.getEndInterface().getNode());
-		}
-		
-		return result;
+        return;
 	}
 	
 	@Override

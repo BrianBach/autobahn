@@ -1,17 +1,16 @@
 package net.geant.autobahn.resourcesreservationcalendar;
 
-import java.net.URL;
 import java.net.MalformedURLException;
-import java.util.List;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
-import org.apache.log4j.Logger;
-
-import net.geant.autobahn.constraints.PathConstraints;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
 import net.geant.autobahn.intradomain.IntradomainPath;
 import net.geant.autobahn.intradomain.common.GenericLink;
+
+import org.apache.log4j.Logger;
 
 /**
  * Communicates with a Resources Reservation Calendar instance through web services.
@@ -67,8 +66,7 @@ public class ResourcesReservationCalendarClient implements ResourcesReservationC
 	/* (non-Javadoc)
      * @see net.geant.autobahn.resourcesreservationcalendar.ResourcesReservationCalendar#getConstraints()
      */
-	public PathConstraints getConstraints(IntradomainPath path,
-			Calendar start, Calendar end){
+	public IntradomainPath getConstraints(IntradomainPath path, Calendar start, Calendar end){
 		if(rc != null)
             return rc.getConstraints( path,
 			 start,  end);
@@ -79,21 +77,19 @@ public class ResourcesReservationCalendarClient implements ResourcesReservationC
 	/* (non-Javadoc)
      * @see net.geant.autobahn.resourcesreservationcalendar.ResourcesReservationCalendar#addReservation()
      */
-	public void addReservation(List<GenericLink> glinks, long capacity,
-			PathConstraints pcon, Calendar start, Calendar end)throws ConstraintsAlreadyUsedException{
+	public void addReservation(IntradomainPath path, long capacity,
+			Calendar start, Calendar end) throws ConstraintsAlreadyUsedException {
 		if(rc != null)
-             rc.addReservation( glinks, capacity,
-        			 pcon,  start,  end);
+             rc.addReservation(path, capacity, start, end);
 	}
 	
 	/* (non-Javadoc)
      * @see net.geant.autobahn.resourcesreservationcalendar.ResourcesReservationCalendar#removeReservation()
      */
-	public void removeReservation(List<GenericLink> glinks, long capacity,
-			PathConstraints pcon, Calendar start, Calendar end){
+	public void removeReservation(IntradomainPath path, long capacity,
+			Calendar start, Calendar end) {
 		if(rc != null)
-             rc.removeReservation( glinks, capacity,
-        			 pcon,  start,  end);
+             rc.removeReservation( path, capacity, start,  end);
 	}
 
 }

@@ -12,7 +12,7 @@ import net.geant.autobahn.network.Node;
 import net.geant.autobahn.network.Path;
 import net.geant.autobahn.network.Port;
 import net.geant.autobahn.network.ProvisioningDomain;
-import net.geant.autobahn.reservation.Reservation;
+import net.geant.autobahn.reservation.HomeDomainReservation;
 import net.geant.autobahn.useraccesspoint.PathInfo;
 
 import org.junit.After;
@@ -182,7 +182,7 @@ public class InterdomainPathfinderImplDFS_IdcpTest {
         path1.setLinks(pathls);
 
         InterdomainPathfinderImplDFS pf = new InterdomainPathfinderImplDFS(topology_straight);
-        Reservation rsv = new Reservation();
+        HomeDomainReservation rsv = new HomeDomainReservation();
         rsv.setStartPort(p1_1_1);
         rsv.setEndPort(pIdcp3);
         PathInfo userIncl = new PathInfo();

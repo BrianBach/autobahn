@@ -3,28 +3,27 @@
  */
 package net.geant.autobahn.interdomain.pathfinder;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.Ignore;
-
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ArrayList;
 
-import net.geant.autobahn.interdomain.pathfinder.InterdomainPathfinderImpl;
-import net.geant.autobahn.interdomain.pathfinder.Topology;
 import net.geant.autobahn.network.AdminDomain;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.Node;
 import net.geant.autobahn.network.Path;
 import net.geant.autobahn.network.Port;
 import net.geant.autobahn.network.ProvisioningDomain;
-import net.geant.autobahn.reservation.Reservation;
+import net.geant.autobahn.reservation.HomeDomainReservation;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  * @author kostas
@@ -155,7 +154,7 @@ public class InterdomainPathfinderImplTest {
 
         
         InterdomainPathfinderImpl pf = new InterdomainPathfinderImpl(topology_straight);
-        Reservation rsv = new Reservation();
+        HomeDomainReservation rsv = new HomeDomainReservation();
         rsv.setStartPort(p1_1_1);
         rsv.setEndPort(p4_1_1);
 
@@ -194,7 +193,7 @@ public class InterdomainPathfinderImplTest {
         path.setLinks(pathls);
         
         InterdomainPathfinderImpl pf = new InterdomainPathfinderImpl(topology_multihomed);
-        Reservation rsv = new Reservation();
+        HomeDomainReservation rsv = new HomeDomainReservation();
         rsv.setStartPort(p1_1_1);
         rsv.setEndPort(p4_1_1);
 
@@ -234,7 +233,7 @@ public class InterdomainPathfinderImplTest {
         path.setLinks(pathls);
         
         InterdomainPathfinderImpl pf = new InterdomainPathfinderImpl(topology_multihomed);
-        Reservation rsv = new Reservation();
+        HomeDomainReservation rsv = new HomeDomainReservation();
         rsv.setStartPort(p1_1_2);
         rsv.setEndPort(p4_1_1);
 
@@ -273,7 +272,7 @@ public class InterdomainPathfinderImplTest {
         path.setLinks(pathls);
         
         InterdomainPathfinderImpl pf = new InterdomainPathfinderImpl(topology_multihomed);
-        Reservation rsv = new Reservation();
+        HomeDomainReservation rsv = new HomeDomainReservation();
         rsv.setStartPort(p1_1_1);
         rsv.setEndPort(p4_1_1);
 
@@ -312,7 +311,7 @@ public class InterdomainPathfinderImplTest {
         path.setLinks(pathls);
         
         InterdomainPathfinderImpl pf = new InterdomainPathfinderImpl(topology_multihomed);
-        Reservation rsv = new Reservation();
+        HomeDomainReservation rsv = new HomeDomainReservation();
         rsv.setStartPort(p1_1_1);
         rsv.setEndPort(p4_1_2);
 
@@ -351,7 +350,7 @@ public class InterdomainPathfinderImplTest {
         path.setLinks(pathls);
         
         InterdomainPathfinderImpl pf = new InterdomainPathfinderImpl(topology_multihomed);
-        Reservation rsv = new Reservation();
+        HomeDomainReservation rsv = new HomeDomainReservation();
         rsv.setStartPort(p1_1_1);
         rsv.setEndPort(p4_1_1);
 
@@ -390,7 +389,7 @@ public class InterdomainPathfinderImplTest {
         path.setLinks(pathls);
         
         InterdomainPathfinderImpl pf = new InterdomainPathfinderImpl(topology_multihomed);
-        Reservation rsv = new Reservation();
+        HomeDomainReservation rsv = new HomeDomainReservation();
         rsv.setStartPort(p1_1_2);
         rsv.setEndPort(p4_1_2);
 
@@ -429,7 +428,7 @@ public class InterdomainPathfinderImplTest {
         path.setLinks(pathls);
         
         InterdomainPathfinderImpl pf = new InterdomainPathfinderImpl(topology_multihomed);
-        Reservation rsv = new Reservation();
+        HomeDomainReservation rsv = new HomeDomainReservation();
         rsv.setStartPort(p1_1_1);
         rsv.setEndPort(p4_1_1);
 
@@ -470,7 +469,7 @@ public class InterdomainPathfinderImplTest {
         path.setLinks(pathls);
         
         InterdomainPathfinderImpl pf = new InterdomainPathfinderImpl(topology_multihomed);
-        Reservation rsv = new Reservation();
+        HomeDomainReservation rsv = new HomeDomainReservation();
         rsv.setStartPort(p1_1_1);
         rsv.setEndPort(p4_1_1);
 

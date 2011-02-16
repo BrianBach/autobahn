@@ -105,9 +105,66 @@ public class IntradomainPath implements Comparable<IntradomainPath> {
 	 */
 	public void addGenericLink(GenericLink glink, PathConstraints pcon) {
 		gLinks.add(glink);
-		pcons.put(glink, pcon);
+		if(pcon != null)
+			pcons.put(glink, pcon);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
+	public PathConstraints getIngressConstraints() {
+		if(pcons.size() < 1)
+			return null;
+		
+		return pcons.get(gLinks.get(0));
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public PathConstraints getEgressConstraints() {
+		if(pcons.size() < 1)
+			return null;
+
+		return pcons.get(gLinks.get(gLinks.size() - 1));
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public GenericLink getFirstLink() {
+		if(gLinks.size() < 1)
+			return null;
+
+		return gLinks.get(0);
+		
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public GenericLink getLastLink() {
+		if(gLinks.size() < 1)
+			return null;
+
+		return gLinks.get(gLinks.size() - 1);
+		
+	}
+	
+	/**
+	 * 
+	 * @param gl
+	 * @param pcon
+	 */
+	public void setPathConstraints(GenericLink gl, PathConstraints pcon) {
+		if(pcon != null)
+			pcons.put(gl, pcon);
+	}
+	
 	/**
 	 * Returns merged constraints for the whole path - that means intersection
 	 * of the constraints of all links of the path.
@@ -122,6 +179,9 @@ public class IntradomainPath implements Comparable<IntradomainPath> {
 		PathConstraints pcon = new PathConstraints();
 		
 		for(GenericLink gl : gLinks) {
+			if(pcon == null)
+				return null;
+			
 			pcon = pcon.intersect(pcons.get(gl));
 		}
 		
@@ -141,6 +201,26 @@ public class IntradomainPath implements Comparable<IntradomainPath> {
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public int getSize() {
+		return getLinks().size();
+	}
+	
+	public String getInfo() {
+		StringBuffer res = new StringBuffer();
+		res.append("Links:\n");
+		for(GenericLink glink : getLinks()) {
+			res.append("   " + glink + "; " + pcons.get(glink) + "\n");
+		}
+		
+		res.delete(res.lastIndexOf("\n"), res.length());
+		
+		return res.toString();
 	}
 	
 	@Override

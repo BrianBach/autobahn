@@ -106,6 +106,10 @@ public class GraphEdge {
 		this.pcons = pcons;
 	}
 
+	public void intersect(PathConstraints pcon2) {
+		this.pcons = this.pcons.intersect(pcon2);
+	}
+	
 	/**
 	 * @return Capacity of the link
 	 */

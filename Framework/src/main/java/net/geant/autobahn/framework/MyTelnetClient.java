@@ -7,11 +7,13 @@ import org.apache.commons.net.telnet.TelnetClient;
 
 public class MyTelnetClient {
 
+	public static final String PASSWORD_PROMPT = "Give password:";
+	
 	private TelnetClient telnet = new TelnetClient();
 	private InputStream in;
 	private PrintStream out;
 
-	public MyTelnetClient(String server, int port) {
+	public MyTelnetClient(String server, int port, String pass) {
 		try {
 			// Connect to the specified server
 			telnet.connect(server, port);
@@ -21,6 +23,9 @@ public class MyTelnetClient {
 			out = new PrintStream(telnet.getOutputStream());
 
 			// Advance to a prompt
+			readUntil(PASSWORD_PROMPT);
+			write(pass);
+			
 			readUntil(Framework.PROMPT);
 		} catch (Exception e) {
 			e.printStackTrace();

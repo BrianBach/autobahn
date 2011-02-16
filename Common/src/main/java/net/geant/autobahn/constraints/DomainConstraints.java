@@ -67,6 +67,13 @@ public class DomainConstraints implements Serializable {
         this.pathConstraints = constraints;
     }
 
+    public PathConstraints getFirstPathConstraints() {
+    	if(this.pathConstraints == null || this.pathConstraints.size() < 1)
+    		return null;
+    	
+    	return this.pathConstraints.get(0);
+    }
+    
     /**
      * Limits constraints to intersection between this domain constraints and
      * specified one. The result set of strict reservation parameters is

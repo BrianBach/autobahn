@@ -6,6 +6,8 @@ import java.util.Map;
 import net.geant.autobahn.dao.hibernate.HibernateDmDAOFactory;
 import net.geant.autobahn.dao.hibernate.HibernateUtil;
 import net.geant.autobahn.intradomain.dao.IntradomainReservationDAO;
+import net.geant.autobahn.network.StatisticsEntry;
+import net.geant.autobahn.network.dao.StatisticsEntryDAO;
 
 import org.hibernate.Transaction;
 
@@ -49,6 +51,19 @@ public class PersistentReservationsManager {
 		hbm.closeSession();
 	}
 
+	public void saveStatisticsEntry(StatisticsEntry se) {
+		if(hbm == null)
+			return;
+        
+        StatisticsEntryDAO dao = HibernateDmDAOFactory.getInstance().getStatisticsEntryDAO();
+        
+        Transaction t = hbm.beginTransaction();
+        dao.update(se);
+        t.commit();
+        
+        hbm.closeSession();
+    }
+	
 	/**
 	 * Attached reservation object to the current session.
 	 * 

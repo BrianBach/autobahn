@@ -27,10 +27,10 @@ public class DomainConfiguration {
 	private MyProperties defaultConf;
 	private MyProperties dmProps;
 	private IncrementalProperties incremental;
-	private IntraTopologyBuilder builder = null;
+	private IntraTopologyBuilder2 builder = null;
 	
 	public DomainConfiguration(MyProperties defaultConf,
-			IntraTopologyBuilder builder, IncrementalProperties incremental) {
+			IntraTopologyBuilder2 builder, IncrementalProperties incremental) {
 		
 		this.port = builder.getDomain().getTcpPort();
 		this.securePort = builder.getDomain().getSecureTcpPort();
@@ -94,6 +94,7 @@ public class DomainConfiguration {
 				"/default/framework.properties");
 		MyProperties frame = new MyProperties(is);
 		frame.setProperty("framework.port", incremental.getFrameworkPort());
+		frame.setProperty("framework.password", "pass");
 		frame.save(new File(dir, "framework.properties"));
 
 		// TA properties
@@ -199,6 +200,8 @@ public class DomainConfiguration {
 				String sql = "DELETE FROM domainsids;\n";
 				sql += "DELETE FROM pcon_range_constraints;\n";
 				sql += "DELETE FROM pcon_range_names;\n";
+				sql += "DELETE FROM pcon_bool_constraints;\n";
+				sql += "DELETE FROM pcon_bool_names;\n";
 				sql += "DELETE FROM reservation;\n";
 				sql += "DELETE FROM service;\n";
 		        sql += "DELETE FROM glink_to_intrapath;\n";

@@ -24,6 +24,7 @@ import net.geant.autobahn.network.Node;
 import net.geant.autobahn.network.Path;
 import net.geant.autobahn.network.Port;
 import net.geant.autobahn.network.ProvisioningDomain;
+import net.geant.autobahn.reservation.HomeDomainReservation;
 import net.geant.autobahn.reservation.Reservation;
 
 /**
@@ -1436,7 +1437,7 @@ public class InterdomainPathfinderImplDFS_UfrjTest {
         path1.setLinks(pathls);*/
 
         InterdomainPathfinderImplDFS pf = new InterdomainPathfinderImplDFS(topology_straight);
-        Reservation rsv = new Reservation();
+        HomeDomainReservation rsv = new HomeDomainReservation();
         rsv.setStartPort(p10_20_32_67);
         rsv.setEndPort(p10_20_32_69);
 

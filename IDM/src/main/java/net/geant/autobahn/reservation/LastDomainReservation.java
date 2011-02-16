@@ -7,6 +7,7 @@ package net.geant.autobahn.reservation;
 
 import java.util.Calendar;
 
+import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.network.Port;
 import net.geant.autobahn.reservation.states.State;
 import net.geant.autobahn.reservation.states.ld.LastDomainState;
@@ -151,4 +152,21 @@ public class LastDomainReservation extends ExternalReservation {
 		
 		reportFinish("Late finish", success);
 	}
+
+	/* (non-Javadoc)
+	 * @see net.geant.autobahn.reservation.Reservation#getReservationParameters(java.lang.String)
+	 */
+	@Override
+	public ReservationParams getReservationParameters(String domainID) {
+		ReservationParams params = super.getReservationParameters(domainID);
+
+		DomainConstraints ucons = globalConstraints.getDomainConstraints("user-egress");
+		
+		if(ucons != null) {
+			params.setPathConstraintsEgress(ucons.getFirstPathConstraints());
+		}
+		
+		return params;
+	}
+	
 }

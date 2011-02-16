@@ -39,11 +39,10 @@ public class UserAccessPointSampleClient {
         r1.setCapacity(1000000000); // in bps = 1Gbs
         r1.setDescription("res1");
         //r1.setStartPort("10.10.32.6");
-        r1.setStartPort("10.10.32.5");
+        r1.setStartPort(new PortType("10.10.32.5"));
         //r1.setEndPort("testIdcpPort2");
-        r1.setEndPort("10.20.32.5");
+        r1.setEndPort(new PortType("10.20.32.5"));
         r1.setMaxDelay(2);
-        r1.setUserVlanId(0);
         
         PathInfo exl = new PathInfo();
         exl.addDomain("http://some_domain_8.18:8080/autobahn/interdomain");

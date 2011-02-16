@@ -141,7 +141,7 @@ public class Vlan implements Serializable {
 
     @Override
     public String toString() {
-        return "" + getVlanId();
+        return lowNumber + "-" + highNumber;
     }
 
 	@Override

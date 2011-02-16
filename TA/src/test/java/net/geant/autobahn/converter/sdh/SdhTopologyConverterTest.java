@@ -41,7 +41,7 @@ public class SdhTopologyConverterTest {
         topo.domain1(builder);
         
         IntradomainPathfinder pf = IntradomainPathfinderFactory.getIntradomainPathfinder(
-                builder.getTopology());
+                builder.getIntradomainTopology());
         
         String nrange = "10.11.0.0/19";
         String prange = "10.11.32.0/19";
@@ -54,7 +54,7 @@ public class SdhTopologyConverterTest {
         PublicIdentifiersMapping mapping = null;
 
         TopologyConverter conv = new SdhTopologyConverter(builder
-                .getTopology(), pf, internal, mapping, null);
+                .getIntradomainTopology(), pf, internal, mapping, null);
     
         Stats stats = conv.abstractInternalPartOfTopology();
         
@@ -78,7 +78,7 @@ public class SdhTopologyConverterTest {
         topo.domain1(builder);
         
         IntradomainPathfinder pf = IntradomainPathfinderFactory.getIntradomainPathfinder(
-                builder.getTopology());
+                builder.getIntradomainTopology());
         
         String nrange = "10.11.0.0/19";
         String prange = "10.11.32.0/19";
@@ -91,7 +91,7 @@ public class SdhTopologyConverterTest {
         PublicIdentifiersMapping mapping = null;
         
         TopologyConverter conv = new SdhTopologyConverter(builder
-                .getTopology(), pf, internal, mapping, null);
+                .getIntradomainTopology(), pf, internal, mapping, null);
 
         Stats stats = conv.abstractInternalPartOfTopology();
         
@@ -177,7 +177,7 @@ public class SdhTopologyConverterTest {
         topo.domain2(builder);
         
         IntradomainPathfinder pf = IntradomainPathfinderFactory.getIntradomainPathfinder(
-                builder.getTopology());
+                builder.getIntradomainTopology());
         
         String nrange = "10.11.0.0/19";
         String prange = "10.11.32.0/19";
@@ -189,7 +189,7 @@ public class SdhTopologyConverterTest {
                 "./src/test/resources/test_etc/topology2-public-ids.properties");
 
         TopologyConverter conv = new SdhTopologyConverter(builder
-                .getTopology(), pf, internal, mapping, null);
+                .getIntradomainTopology(), pf, internal, mapping, null);
         
         return conv;
     }

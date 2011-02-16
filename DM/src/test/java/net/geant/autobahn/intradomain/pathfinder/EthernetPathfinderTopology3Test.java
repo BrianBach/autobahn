@@ -1,5 +1,9 @@
 package net.geant.autobahn.intradomain.pathfinder;
 
+import static net.geant.autobahn.intradomain.topologies.EthTopology3._100Mb;
+import static net.geant.autobahn.intradomain.topologies.EthTopology3._10Gb;
+import static net.geant.autobahn.intradomain.topologies.EthTopology3._1Gb;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,11 +24,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static net.geant.autobahn.intradomain.topologies.EthTopology3._100Mb;
-import static net.geant.autobahn.intradomain.topologies.EthTopology3._10Gb;
-import static net.geant.autobahn.intradomain.topologies.EthTopology3._1Gb;
-import static net.geant.autobahn.intradomain.topologies.EthTopology3._500Mb;
-
 /**
  * @author <a href="mailto:stamos@cti.gr">Kostas Stamos</a>
  *
@@ -44,7 +43,7 @@ public class EthernetPathfinderTopology3Test {
         IntraTopologyBuilder builder = new IntraTopologyBuilder(false);
         topoSrc.domain1(builder);
         
-        IntradomainTopology topo = builder.getTopology();
+        IntradomainTopology topo = builder.getIntradomainTopology();
         
         nodes = new HashMap<String, Node>();
         for(Node n : topo.getNodes()) {
@@ -97,8 +96,12 @@ public class EthernetPathfinderTopology3Test {
     @Test
     public void testFindingAllPathsBetweenGivenLinksCli1_Cli3() {
         System.out.println("---testFindingAllPathsBetweenGivenLinksCli1_Cli3");
-        List<IntradomainPath> paths = pf.findPaths(glinks.get("p1_c1-cli-port1"), 
-                glinks.get("p3_c3-cli-port3"), _100Mb, null, Integer.MAX_VALUE, 0, 0);
+        
+        IntradomainPath pSkel = new IntradomainPath();
+    	pSkel.addGenericLink(glinks.get("p1_c1-cli-port1"), null);
+    	pSkel.addGenericLink(glinks.get("p3_c3-cli-port3"), null);
+        
+        List<IntradomainPath> paths = pf.findPaths(pSkel, _100Mb, null, Integer.MAX_VALUE, 0);
         
         TestCase.assertEquals(3, paths.size());
         
@@ -115,8 +118,12 @@ public class EthernetPathfinderTopology3Test {
     @Test
     public void testFindingAllPathsBetweenGivenLinksCli1_Cli3NotEnoughCapacity() {
         System.out.println("---testFindingAllPathsBetweenGivenLinksCli1_Cli3NotEnoughCapacity");
-        List<IntradomainPath> paths = pf.findPaths(glinks.get("p1_c1-cli-port1"), 
-                glinks.get("p3_c3-cli-port3"), _1Gb, null, Integer.MAX_VALUE, 0, 0);
+        
+        IntradomainPath pSkel = new IntradomainPath();
+    	pSkel.addGenericLink(glinks.get("p1_c1-cli-port1"), null);
+    	pSkel.addGenericLink(glinks.get("p3_c3-cli-port3"), null);
+        
+        List<IntradomainPath> paths = pf.findPaths(pSkel, _1Gb, null, Integer.MAX_VALUE, 0);
         
         TestCase.assertEquals(0, paths.size());
     }
@@ -128,8 +135,11 @@ public class EthernetPathfinderTopology3Test {
         RangeConstraint rcon = new RangeConstraint(160, 160);
         pcon.addRangeConstraint(ConstraintsNames.VLANS, rcon);
         
-        IntradomainPath path = pf.findPath(glinks.get("p1_c1-cli-port1"), 
-                glinks.get("p3_c3-cli-port3"), _100Mb, pcon, null, 0, 0);
+        IntradomainPath pSkel = new IntradomainPath();
+    	pSkel.addGenericLink(glinks.get("p1_c1-cli-port1"), pcon);
+    	pSkel.addGenericLink(glinks.get("p3_c3-cli-port3"), pcon);
+        
+        IntradomainPath path = pf.findPath(pSkel, _100Mb, null, 0);
 
         TestCase.assertNotNull(path);
         TestCase.assertNotNull(rcon.intersect(path.getMergedConstraints()
@@ -145,8 +155,11 @@ public class EthernetPathfinderTopology3Test {
         RangeConstraint rcon = new RangeConstraint(160, 160);
         pcon.addRangeConstraint(ConstraintsNames.VLANS, rcon);
         
-        IntradomainPath path = pf.findPath(glinks.get("p1_c1-cli-port1"), 
-                glinks.get("p3_c3-cli-port3"), _1Gb, pcon, null, 0, 0);
+        IntradomainPath pSkel = new IntradomainPath();
+    	pSkel.addGenericLink(glinks.get("p1_c1-cli-port1"), pcon);
+    	pSkel.addGenericLink(glinks.get("p3_c3-cli-port3"), pcon);
+        
+        IntradomainPath path = pf.findPath(pSkel, _1Gb, null, 0);
 
         TestCase.assertNull(path);
     }
@@ -154,9 +167,13 @@ public class EthernetPathfinderTopology3Test {
     
     @Test
     public void testFindingAllPathsBetweenGivenLinksCli2_Cli4() {
-        System.out.println("---testFindingAllPathsBetweenGivenLinksCli2_Cli4");
-        List<IntradomainPath> paths = pf.findPaths(glinks.get("p2_c2-cli-port2"), 
-                glinks.get("p8_c4-cli-port4"), _1Gb, null, Integer.MAX_VALUE, 0, 0);
+        System.out.println("---testFindingAllPathsBeteenGivenLinksCli2_Cli4");
+        
+        IntradomainPath pSkel = new IntradomainPath();
+    	pSkel.addGenericLink(glinks.get("p2_c2-cli-port2"), null);
+    	pSkel.addGenericLink(glinks.get("p8_c4-cli-port4"), null);
+        
+        List<IntradomainPath> paths = pf.findPaths(pSkel, _1Gb, null, Integer.MAX_VALUE, 0);
         
         TestCase.assertEquals(3, paths.size());
         
@@ -173,8 +190,12 @@ public class EthernetPathfinderTopology3Test {
     @Test
     public void testFindingAllPathsBetweenGivenLinksCli2_Cli4NotEnoughCapacity() {
         System.out.println("---testFindingAllPathsBetweenGivenLinksCli2_Cli4NotEnoughCapacity");
-        List<IntradomainPath> paths = pf.findPaths(glinks.get("p2_c2-cli-port2"), 
-                glinks.get("p8_c4-cli-port4"), _10Gb, null, Integer.MAX_VALUE, 0, 0);
+        
+        IntradomainPath pSkel = new IntradomainPath();
+    	pSkel.addGenericLink(glinks.get("p2_c2-cli-port2"), null);
+    	pSkel.addGenericLink(glinks.get("p8_c4-cli-port4"), null);
+        
+        List<IntradomainPath> paths = pf.findPaths(pSkel, _10Gb, null, Integer.MAX_VALUE, 0);
         
         TestCase.assertEquals(0, paths.size());
     }
@@ -186,8 +207,11 @@ public class EthernetPathfinderTopology3Test {
         RangeConstraint rcon = new RangeConstraint(160, 160);
         pcon.addRangeConstraint(ConstraintsNames.VLANS, rcon);
         
-        IntradomainPath path = pf.findPath(glinks.get("p2_c2-cli-port2"), 
-                glinks.get("p8_c4-cli-port4"), _100Mb, pcon, null, 0, 0);
+        IntradomainPath pSkel = new IntradomainPath();
+    	pSkel.addGenericLink(glinks.get("p2_c2-cli-port2"), pcon);
+    	pSkel.addGenericLink(glinks.get("p8_c4-cli-port4"), pcon);
+        
+        IntradomainPath path = pf.findPath(pSkel, _100Mb, null, 0);
 
         TestCase.assertNotNull(path);
         TestCase.assertNotNull(rcon.intersect(path.getMergedConstraints()
@@ -201,8 +225,12 @@ public class EthernetPathfinderTopology3Test {
         RangeConstraint rcon = new RangeConstraint(160, 160);
         pcon.addRangeConstraint(ConstraintsNames.VLANS, rcon);
         
-        IntradomainPath path = pf.findPath(glinks.get("p2_c2-cli-port2"), 
-                glinks.get("p8_c4-cli-port4"), _10Gb, pcon, null, 0, 0);
+        IntradomainPath pSkel = new IntradomainPath();
+    	pSkel.addGenericLink(glinks.get("p2_c2-cli-port2"), pcon);
+    	pSkel.addGenericLink(glinks.get("p8_c4-cli-port4"), pcon);
+
+        
+        IntradomainPath path = pf.findPath(pSkel, _10Gb, null, 0);
 
         TestCase.assertNull(path);
     }

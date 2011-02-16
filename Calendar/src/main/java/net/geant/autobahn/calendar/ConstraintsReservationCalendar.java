@@ -1,12 +1,9 @@
 package net.geant.autobahn.calendar;
 
 import java.util.Calendar;
-import java.util.List;
 
-import net.geant.autobahn.constraints.PathConstraints;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
 import net.geant.autobahn.intradomain.IntradomainPath;
-import net.geant.autobahn.intradomain.common.GenericLink;
 
 /**
  * Interface describes methods useful for resources (vlans, sdh timeslots)
@@ -29,8 +26,7 @@ public interface ConstraintsReservationCalendar {
 	 *            End time
 	 * @return Available network constraints for the path, null if not available
 	 */
-   	public PathConstraints getConstraints(IntradomainPath ipath,
-			Calendar start, Calendar end);
+   	public IntradomainPath getConstraints(IntradomainPath ipath, Calendar start, Calendar end);
 	
    	/**
    	 * Reserves network resources for given time period.
@@ -47,8 +43,7 @@ public interface ConstraintsReservationCalendar {
 	 *             When for some reasons given resources has been already
 	 *             reserved for anotheer reservation
    	 */
-    public void reserveResources(List<GenericLink> glinks,
-			PathConstraints pcon, Calendar start, Calendar end)
+    public void reserveResources(IntradomainPath ipath, Calendar start, Calendar end)
 			throws ConstraintsAlreadyUsedException;
 
     /**
@@ -63,7 +58,6 @@ public interface ConstraintsReservationCalendar {
 	 * @param end
 	 *            End time
      */
-    public void releaseResources(List<GenericLink> glinks,
-			PathConstraints pcon, Calendar start, Calendar end);
+    public void releaseResources(IntradomainPath ipath, Calendar start, Calendar end);
 
 }

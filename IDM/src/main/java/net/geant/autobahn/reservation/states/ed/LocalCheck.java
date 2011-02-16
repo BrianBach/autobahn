@@ -5,6 +5,8 @@
  */
 package net.geant.autobahn.reservation.states.ed;
 
+import static net.geant.autobahn.reservation.states.hd.LocalCheck.areDomainConstraintsValid;
+
 import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.idm2dm.OversubscribedException;
 import net.geant.autobahn.network.Link;
@@ -32,9 +34,9 @@ public class LocalCheck extends ExternalDomainState {
         
         log.info(this + " Acquired path: " + path);
 
-        DomainConstraints dcon = null;
+        DomainConstraints[] dcons = null;
         try {
-            dcon = res.checkResources();
+            dcons = res.checkResources();
         } catch (OversubscribedException e) {
         	Link failedLink = res.getPath().getLink(e.getFailedLink());
         	
@@ -47,9 +49,10 @@ public class LocalCheck extends ExternalDomainState {
 		}
         
         // Add domain constraint to global
-        res.getGlobalConstraints().addDomainConstraints(domainID, dcon);
+        res.getGlobalConstraints().addDomainConstraints(domainID + "-ingress", dcons[0]);
+        res.getGlobalConstraints().addDomainConstraints(domainID + "-egress", dcons[1]);
         
-        if(dcon == null || !dcon.isValid()) {
+        if(areDomainConstraintsValid(dcons)) {
             res.fail(ReservationErrors.CONSTRAINTS_NOT_CORRECT, domainID);
             return;
         }

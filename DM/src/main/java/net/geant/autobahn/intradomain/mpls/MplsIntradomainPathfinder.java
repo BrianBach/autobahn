@@ -7,11 +7,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import net.geant.autobahn.constraints.ConstraintsNames;
 import net.geant.autobahn.constraints.MinValueConstraint;
 import net.geant.autobahn.constraints.PathConstraints;
+import net.geant.autobahn.intradomain.IntradomainPath;
 import net.geant.autobahn.intradomain.IntradomainTopology;
 import net.geant.autobahn.intradomain.common.GenericLink;
 import net.geant.autobahn.intradomain.common.Node;
@@ -19,6 +18,8 @@ import net.geant.autobahn.intradomain.pathfinder.GenericIntradomainPathfinder;
 import net.geant.autobahn.intradomain.pathfinder.GraphEdge;
 import net.geant.autobahn.intradomain.pathfinder.GraphNode;
 import net.geant.autobahn.intradomain.pathfinder.GraphSearch;
+
+import org.apache.log4j.Logger;
 
 /**
  * Calculates paths within mpls domains 
@@ -45,7 +46,7 @@ public class MplsIntradomainPathfinder extends GenericIntradomainPathfinder {
 	}
 	
 	@Override
-	public GraphSearch initGraph(Collection<GenericLink> excluded, int userVlanId, int mtu) {
+	public GraphSearch initGraph(Collection<GenericLink> excluded, int mtu) {
 		
 		if (all_nodes == null || all_nodes.size() == 0) {
 			
@@ -115,5 +116,10 @@ public class MplsIntradomainPathfinder extends GenericIntradomainPathfinder {
             grSearch.addGraphNode(gn);
         
         return grSearch;
+	}
+
+	@Override
+	public void settleConstraintsValuesForPath(IntradomainPath path) {
+		//TODO impl later
 	}
 }

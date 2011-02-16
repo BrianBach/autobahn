@@ -19,17 +19,16 @@ import net.geant.autobahn.aai.UserAuthParameters;
 @XmlType(name="ReservationRequest", namespace="useraccesspoint.autobahn.geant.net", propOrder={
 		"startPort", "endPort", "startTime", "endTime",
 		"priority", "description", "capacity",
-		"userInclude", "userExclude", "userVlanId", "mtu",
-		"maxDelay",
-		"resiliency", "bidirectional", "processNow",
+		"userInclude", "userExclude", "mtu",
+		"maxDelay", "resiliency", "bidirectional", "processNow",
         "authParameters"
 })
 public class ReservationRequest implements Serializable {
 	
 	private static final long serialVersionUID = -612896116488675810L;
 	
-	private String startPort;
-	private String endPort;
+	private PortType startPort;
+	private PortType endPort;
 	private Calendar startTime;
 	private Calendar endTime;
 	private Priority priority;
@@ -37,7 +36,6 @@ public class ReservationRequest implements Serializable {
 	private long capacity;
     private PathInfo userInclude;
     private PathInfo userExclude;
-    private int userVlanId;
     private int mtu;
 	private int maxDelay;
 	private Resiliency resiliency;
@@ -55,32 +53,39 @@ public class ReservationRequest implements Serializable {
 	public ReservationRequest() {
         this.userInclude = new PathInfo();
         this.userExclude = new PathInfo();
+        
+        this.startPort = new PortType();
+        this.endPort = new PortType();
 	}
 	
 	/**
 	 * @return the startPort
 	 */
-	public String getStartPort() {
+	public PortType getStartPort() {
 		return startPort;
 	}
+
 	/**
 	 * @param startPort the startPort to set
 	 */
-	public void setStartPort(String startPort) {
+	public void setStartPort(PortType startPort) {
 		this.startPort = startPort;
 	}
+
 	/**
 	 * @return the endPort
 	 */
-	public String getEndPort() {
+	public PortType getEndPort() {
 		return endPort;
 	}
+
 	/**
 	 * @param endPort the endPort to set
 	 */
-	public void setEndPort(String endPort) {
+	public void setEndPort(PortType endPort) {
 		this.endPort = endPort;
 	}
+
 	/**
 	 * @return the startTime
 	 */
@@ -190,22 +195,6 @@ public class ReservationRequest implements Serializable {
     public void setUserExclude(PathInfo value) {
         this.userExclude = value;
     }
-
-    /**
-     * Gets the value of the userVlanId property.
-     * 
-     */
-    public int getUserVlanId() {
-        return userVlanId;
-    }
-
-    /**
-     * Sets the value of the userVlanId property.
-     * 
-     */
-    public void setUserVlanId(int value) {
-        this.userVlanId = value;
-    }
     
     /**
      * 
@@ -304,13 +293,41 @@ public class ReservationRequest implements Serializable {
 	
 	@Override
 	public String toString() {
-		String res = "    Start port: " + getStartPort() + ", End port: " + getEndPort() + "\n";
+		String res = "";
+		
+		if (getStartPort() != null){
+			if (getStartPort().getAddress() != null) {
+				res += "		 address: 	" + getStartPort().getAddress();
+			}
+			if (getStartPort().getMode() != null) {
+				res += "		StartPort mode: 	" + getStartPort().getMode();
+			}
+
+			String vlan = Integer.toString(getStartPort().getVlan());
+
+			if (vlan != null)
+				res += "		StartPort vlan: 	" + getStartPort().getVlan();
+
+		}
+		if (getEndPort() != null) {
+			if (getEndPort().getAddress() != null) {
+				res += "		EndPort address: 	" + getEndPort().getAddress();
+			}
+			if (getEndPort().getMode() != null) {
+				res += "		EndPort mode: 	" + getEndPort().getMode();
+			}
+
+			String vlan = Integer.toString(getEndPort().getVlan());
+
+			if (vlan != null)
+				res += "		EndPort vlan: 	" + getEndPort().getVlan();
+
+		}
         res += "    Start time: " + getStartTime().getTime() + ", End time: " 
         		+ getEndTime().getTime() + "\n";
         res += "    Capacity: " + getCapacity() + ", Delay: " + getMaxDelay() 
         				+ ", Resiliency: " + getResiliency() + ", Description: " 
         				+ getDescription() + "\n";
-        res += "    Requested VLAN: " + getUserVlanId() + ", Requested MTU: " + getMtu() + "\n";
         res += "    Priority: " + getPriority() + "\n";
         
         if (getUserInclude() != null) {

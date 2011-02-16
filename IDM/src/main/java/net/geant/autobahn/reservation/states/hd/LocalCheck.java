@@ -35,7 +35,6 @@ public class LocalCheck extends HomeDomainState {
         Iterator<Path> paths = res.getPaths();
         
         if(paths == null || !paths.hasNext()) {
-            
             // ask PF one more time
             res.switchState(HomeDomainState.PATHFINDING);
             return;
@@ -114,10 +113,10 @@ public class LocalCheck extends HomeDomainState {
         res.setGlobalConstraints(globalConstraints);
 
         // Create empty constraints
-        DomainConstraints dcon = null;
+        DomainConstraints[] dcons = null;
         
         try {
-            dcon = res.checkResources();
+            dcons = res.checkResources();
         } catch (OversubscribedException e) {
         	Link failedLink = res.getPath().getLink(e.getFailedLink());
         	
@@ -129,18 +128,14 @@ public class LocalCheck extends HomeDomainState {
 			pathFailed(res, ReservationErrors.LOCAL_COMMUNICATION_ERROR, domainID);
 			return;
 		}
-
-        if(res.getUserConstraints() != null && dcon != null && dcon.isValid()) {
-        	DomainConstraints intersection = dcon.intersect(res.getUserConstraints());
-            dcon = intersection;
-        }
         
-        if(dcon == null || !dcon.isValid()) {
+        if(!areDomainConstraintsValid(dcons)) {
             pathFailed(res, ReservationErrors.CONSTRAINTS_NOT_CORRECT, path.toString());
             return;
         }
         
-        globalConstraints.addDomainConstraints(domainID, dcon);
+        globalConstraints.addDomainConstraints(domainID + "-ingress", dcons[0]);
+        globalConstraints.addDomainConstraints(domainID + "-egress", dcons[1]);
 
         // Check if the homedomain is the only domain
         if(res.isLastDomain()) {
@@ -148,7 +143,14 @@ public class LocalCheck extends HomeDomainState {
         	selfSchedule(res);
         	return;
         }
+        
         log.debug("More domains exist in the path, so will transit to Scheduling");
+        
+        // Add the user constraints for the last link of the e2epath
+        DomainConstraints tmp = new DomainConstraints();
+        tmp.addPathConstraints(res.getUserEgressConstraints());
+        
+        globalConstraints.addDomainConstraints("user-egress", tmp);
         
         res.switchState(HomeDomainState.SCHEDULING);
         
@@ -171,6 +173,10 @@ public class LocalCheck extends HomeDomainState {
         res.run();
     }
 
+    public static boolean areDomainConstraintsValid(DomainConstraints[] dcons) {
+    	return dcons != null && dcons[0] != null && dcons[0].isValid() && dcons[1] != null && dcons[1].isValid();
+    }
+    
     private void pathFailed(HomeDomainReservation res, int code, String args) {
         
         Iterator<Path> paths = res.getPaths();

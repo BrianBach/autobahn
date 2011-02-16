@@ -31,6 +31,8 @@ public class GConstraints extends LastDomainState {
         
         GlobalConstraints constraints = res.getGlobalConstraints();
         
+        log.info("GCONS: " + constraints);
+        
         // compute global constraints
         constraints = constraints.calculateConstraints(
         		res.getReservationParameters(domainID));

@@ -20,6 +20,7 @@ import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
 import net.geant.autobahn.intradomain.common.Node;
 
 import net.geant.autobahn.utils.IntraTopologyBuilder;
+import net.geant.autobahn.intradomain.IntradomainPath;
 import net.geant.autobahn.intradomain.IntradomainTopology;
 import net.geant.autobahn.intradomain.common.GenericLink;
 
@@ -38,7 +39,7 @@ public class CalendarTest {
         IntraTopologyBuilder builder = new IntraTopologyBuilder(false);
         topoSrc.domain1(builder);
         
-        IntradomainTopology topo = builder.getTopology();
+        IntradomainTopology topo = builder.getIntradomainTopology();
         
         nodes = new HashMap<String, Node>();
         for(Node n : topo.getNodes()) {
@@ -63,10 +64,11 @@ public class CalendarTest {
         } catch (Exception e1) {
             e1.printStackTrace();
         }
-        Calendar start = Calendar.getInstance();
         
+        Calendar start = Calendar.getInstance();
         Calendar end = Calendar.getInstance();
-        System.out.println("Start at: " + start + "\n  End at: " + end);
+        System.out.println("Start at: " + start.getTime() + "\n  End at: " + end.getTime());
+        
         long capacity = 6;
         PathConstraints pcon = new PathConstraints();
         List<GenericLink> nonUsefulLinks = calendar.checkCapacity(glinks, capacity, start, end);
@@ -75,7 +77,7 @@ public class CalendarTest {
             System.out.println("Links with no Capacity: " + link.getLinkId());
         }
         try {
-            calendar.addReservation(glinks, capacity, pcon, start, end);
+            calendar.addReservation(buildPath(glinks, pcon), capacity, start, end);
         } catch (ConstraintsAlreadyUsedException e) {
             System.out.println("Constraint problem!!!");
             e.printStackTrace();
@@ -87,7 +89,7 @@ public class CalendarTest {
             System.out.println("Links with no Capacity: " + link.getLinkId());
         }
         try {
-            calendar.addReservation(glinks, capacity, pcon, start, end);
+            calendar.addReservation(buildPath(glinks, pcon), capacity, start, end);
         } catch (ConstraintsAlreadyUsedException e) {
             System.out.println("Constraint problem!!!");
             e.printStackTrace();
@@ -112,9 +114,9 @@ public class CalendarTest {
             e1.printStackTrace();
         }
         Calendar start = Calendar.getInstance();
-        
         Calendar end = Calendar.getInstance();
-        System.out.println("Start at: " + start + "\n  End at: " + end);
+        System.out.println("Start at: " + start.getTime() + "\n  End at: " + end.getTime());
+        
         long capacity = 6;
         PathConstraints pcon = new PathConstraints();
         List<RangeConstraint> vlansToBeReserved = new ArrayList<RangeConstraint>();
@@ -143,7 +145,7 @@ public class CalendarTest {
         }
         
         try {
-            calendar.addReservation(glinks, capacity, pcon, start, end);
+            calendar.addReservation(buildPath(glinks, pcon), capacity, start, end);
         } catch (ConstraintsAlreadyUsedException e) {
             System.out.println("Constraint problem!!!");
             e.printStackTrace();
@@ -157,7 +159,25 @@ public class CalendarTest {
         }
 
         // Try an over-subscription
-        calendar.addReservation(glinks, capacity, pcon, start, end);
+        calendar.addReservation(buildPath(glinks, pcon), capacity, start, end);
+    }
+    
+    private IntradomainPath buildPath(List<GenericLink> glinks, PathConstraints... pcons) {
+    	IntradomainPath ipath = new IntradomainPath();
+
+    	int i = 0;
+    	for(GenericLink glink : glinks) {
+    		PathConstraints pcon = null;
+        	if(pcons.length == 1) {
+        		pcon = pcons[0];
+        	} else {
+        		pcon = pcons[i++];
+        	}
+        	
+        	ipath.addGenericLink(glink, pcon);
+    	}
+    	
+    	return ipath;
     }
 
 }
