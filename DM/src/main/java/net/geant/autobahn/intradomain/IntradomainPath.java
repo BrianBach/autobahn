@@ -27,15 +27,15 @@ import net.geant.autobahn.intradomain.common.GenericLink;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="IntradomainPath", namespace="net.geant.autobahn.intradomain.IntradomainPath", propOrder={
-        "gLinks", "pcons", "capacity"
+        "glinks", "pathConstraints", "capacity"
 })
 public class IntradomainPath implements Comparable<IntradomainPath> {
 
 	@XmlTransient
 	private long pathId;
 	
-	private List<GenericLink> gLinks = new ArrayList<GenericLink>();
-	private Map<GenericLink, PathConstraints> pcons = new HashMap<GenericLink, PathConstraints>();
+	private List<GenericLink> glinks = new ArrayList<GenericLink>();
+	private Map<GenericLink, PathConstraints> pathConstraints = new HashMap<GenericLink, PathConstraints>();
 	private long capacity;
 	
 	/**
@@ -63,14 +63,28 @@ public class IntradomainPath implements Comparable<IntradomainPath> {
 	 * @return List of generic links that the path contains
 	 */
 	public List<GenericLink> getLinks() {
-		return gLinks;
+		return glinks;
 	}
 
 	/**
 	 * @param links the list of generic links to set
 	 */
 	public void setLinks(List<GenericLink> links) {
-		gLinks = links;
+		this.glinks = links;
+	}
+
+	/**
+	 * @return the pathConstraints
+	 */
+	public Map<GenericLink, PathConstraints> getPathConstraints() {
+		return pathConstraints;
+	}
+
+	/**
+	 * @param pathConstraints the pathConstraints to set
+	 */
+	public void setPathConstraints(Map<GenericLink, PathConstraints> pathConstraints) {
+		this.pathConstraints = pathConstraints;
 	}
 
 	/**
@@ -94,7 +108,7 @@ public class IntradomainPath implements Comparable<IntradomainPath> {
 	 * @return PathConstraints object with network constraints for given link 
 	 */
 	public PathConstraints getConstraints(GenericLink glink) {
-		return pcons.get(glink);
+		return pathConstraints.get(glink);
 	}
 
 	/**
@@ -104,9 +118,9 @@ public class IntradomainPath implements Comparable<IntradomainPath> {
 	 * @param pcon PathConstraints object - constraints
 	 */
 	public void addGenericLink(GenericLink glink, PathConstraints pcon) {
-		gLinks.add(glink);
+		glinks.add(glink);
 		if(pcon != null)
-			pcons.put(glink, pcon);
+			pathConstraints.put(glink, pcon);
 	}
 
 	/**
@@ -114,10 +128,10 @@ public class IntradomainPath implements Comparable<IntradomainPath> {
 	 * @return
 	 */
 	public PathConstraints getIngressConstraints() {
-		if(pcons.size() < 1)
+		if(pathConstraints.size() < 1)
 			return null;
 		
-		return pcons.get(gLinks.get(0));
+		return pathConstraints.get(glinks.get(0));
 	}
 
 	/**
@@ -125,10 +139,10 @@ public class IntradomainPath implements Comparable<IntradomainPath> {
 	 * @return
 	 */
 	public PathConstraints getEgressConstraints() {
-		if(pcons.size() < 1)
+		if(pathConstraints.size() < 1)
 			return null;
 
-		return pcons.get(gLinks.get(gLinks.size() - 1));
+		return pathConstraints.get(glinks.get(glinks.size() - 1));
 	}
 	
 	/**
@@ -136,10 +150,10 @@ public class IntradomainPath implements Comparable<IntradomainPath> {
 	 * @return
 	 */
 	public GenericLink getFirstLink() {
-		if(gLinks.size() < 1)
+		if(glinks.size() < 1)
 			return null;
 
-		return gLinks.get(0);
+		return glinks.get(0);
 		
 	}
 
@@ -148,10 +162,10 @@ public class IntradomainPath implements Comparable<IntradomainPath> {
 	 * @return
 	 */
 	public GenericLink getLastLink() {
-		if(gLinks.size() < 1)
+		if(glinks.size() < 1)
 			return null;
 
-		return gLinks.get(gLinks.size() - 1);
+		return glinks.get(glinks.size() - 1);
 		
 	}
 	
@@ -162,7 +176,7 @@ public class IntradomainPath implements Comparable<IntradomainPath> {
 	 */
 	public void setPathConstraints(GenericLink gl, PathConstraints pcon) {
 		if(pcon != null)
-			pcons.put(gl, pcon);
+			pathConstraints.put(gl, pcon);
 	}
 	
 	/**
@@ -173,16 +187,16 @@ public class IntradomainPath implements Comparable<IntradomainPath> {
 	 */
 	public PathConstraints getMergedConstraints() {
 		
-		if(pcons.size() < 1)
+		if(pathConstraints.size() < 1)
 			return null;
 		
 		PathConstraints pcon = new PathConstraints();
 		
-		for(GenericLink gl : gLinks) {
+		for(GenericLink gl : glinks) {
 			if(pcon == null)
 				return null;
 			
-			pcon = pcon.intersect(pcons.get(gl));
+			pcon = pcon.intersect(pathConstraints.get(gl));
 		}
 		
 		return pcon;
@@ -196,7 +210,7 @@ public class IntradomainPath implements Comparable<IntradomainPath> {
 	 */
 	public boolean containsAny(Collection<GenericLink> excluded) {
 		for(GenericLink gl : excluded) {
-			if(gLinks.contains(gl))
+			if(glinks.contains(gl))
 				return true;
 		}
 		
@@ -215,7 +229,7 @@ public class IntradomainPath implements Comparable<IntradomainPath> {
 		StringBuffer res = new StringBuffer();
 		res.append("Links:\n");
 		for(GenericLink glink : getLinks()) {
-			res.append("   " + glink + "; " + pcons.get(glink) + "\n");
+			res.append("   " + glink + "; " + pathConstraints.get(glink) + "\n");
 		}
 		
 		res.delete(res.lastIndexOf("\n"), res.length());
@@ -238,14 +252,14 @@ public class IntradomainPath implements Comparable<IntradomainPath> {
 	}
 
 	public int compareTo(IntradomainPath o) {
-		return this.gLinks.size() - o.gLinks.size();
+		return this.glinks.size() - o.glinks.size();
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((gLinks == null) ? 0 : gLinks.hashCode());
+		result = prime * result + ((glinks == null) ? 0 : glinks.hashCode());
 		return result;
 	}
 
@@ -258,10 +272,10 @@ public class IntradomainPath implements Comparable<IntradomainPath> {
 		if (getClass() != obj.getClass())
 			return false;
 		final IntradomainPath other = (IntradomainPath) obj;
-		if (gLinks == null) {
-			if (other.gLinks != null)
+		if (glinks == null) {
+			if (other.glinks != null)
 				return false;
-		} else if (!gLinks.equals(other.gLinks))
+		} else if (!glinks.equals(other.glinks))
 			return false;
 		return true;
 	}

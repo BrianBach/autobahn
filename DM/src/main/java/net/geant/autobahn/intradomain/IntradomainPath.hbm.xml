@@ -17,6 +17,12 @@
 			<many-to-many column="glink_id" class="net.geant.autobahn.intradomain.common.GenericLink" />
 		</list>
 		
+		<map name="pathConstraints" table="PCONS_TO_INTRAPATH" cascade="all">
+            <key column="pathId"/>
+            <index-many-to-many column="glink_map_id" class="net.geant.autobahn.intradomain.common.GenericLink" /> 
+            <many-to-many column="pcon_id" class="net.geant.autobahn.constraints.PathConstraints" />
+        </map>
+		
 	</class>
 	
 </hibernate-mapping>
