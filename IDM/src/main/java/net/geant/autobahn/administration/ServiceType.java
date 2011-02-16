@@ -8,7 +8,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
-import net.geant.autobahn.reservation.Reservation;
 import net.geant.autobahn.reservation.User;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -23,7 +22,7 @@ public class ServiceType implements Serializable {
     private String justification;
     private int priority;
     private User user;
-    private List<Reservation> reservations = new ArrayList<Reservation>();
+    private List<ReservationType> reservations = new ArrayList<ReservationType>();
     
     public ServiceType() {
     	
@@ -67,11 +66,11 @@ public class ServiceType implements Serializable {
 		this.user = user;
 	}
 
-	public List<Reservation> getReservations() {
+	public List<ReservationType> getReservations() {
 		return reservations;
 	}
 
-	public void setReservations(List<Reservation> reservations) {
+	public void setReservations(List<ReservationType> reservations) {
 		this.reservations = reservations;
 	}
 }

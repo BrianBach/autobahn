@@ -1,13 +1,13 @@
 package net.geant.autobahn.administration;
 
-import javax.jws.WebMethod;
-import javax.jws.WebService;
-import javax.jws.WebResult;
-import javax.jws.WebParam;
 import java.util.List;
 
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebResult;
+import javax.jws.WebService;
+
 import net.geant.autobahn.network.Link;
-import net.geant.autobahn.reservation.Reservation;
 
 /**
  * @author Michal
@@ -22,7 +22,7 @@ public interface Administration {
 	void setProperties(@WebParam(name="properties")List<KeyValue> properties);
 		
 	@WebResult(name="Reservation")
-	Reservation getReservation(@WebParam(name="resID")String resID);
+	ReservationType getReservation(@WebParam(name="resID")String resID);
 	
 	@WebResult(name="log")
 	String getLog(@WebParam(name="all")boolean all);

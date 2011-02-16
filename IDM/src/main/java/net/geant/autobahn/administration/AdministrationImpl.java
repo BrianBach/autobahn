@@ -1,11 +1,11 @@
 package net.geant.autobahn.administration;
 
 import java.util.List;
+
 import javax.jws.WebService;
 
 import net.geant.autobahn.idm.AccessPoint;
 import net.geant.autobahn.network.Link;
-import net.geant.autobahn.reservation.Reservation;
 
 /**
  * @author Michal
@@ -44,7 +44,7 @@ public class AdministrationImpl implements Administration {
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.administration.Administration#getReservation(java.lang.String)
 	 */
-	public Reservation getReservation(String resID) {
+	public ReservationType getReservation(String resID) {
 	
 		return AccessPoint.getInstance().getReservation(resID);
 	}

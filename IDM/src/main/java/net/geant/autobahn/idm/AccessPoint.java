@@ -14,6 +14,7 @@ import java.util.Properties;
 import net.geant.autobahn.administration.Administration;
 import net.geant.autobahn.administration.KeyValue;
 import net.geant.autobahn.administration.Neighbor;
+import net.geant.autobahn.administration.ReservationType;
 import net.geant.autobahn.administration.ServiceType;
 import net.geant.autobahn.administration.StatisticsType;
 import net.geant.autobahn.administration.Status;
@@ -1156,16 +1157,28 @@ public final class AccessPoint implements UserAccessPoint,
 		return props;
 	}
 
-	/* (non-Javadoc)
-	 * @see net.geant.autobahn.administration.Administration#getReservation(java.lang.String)
-	 */
-	public Reservation getReservation(String resID) {
+	public Reservation getAutobahnReservation(String resID) {
 		
 		List<Service> services = serviceScheduler.getServices();
 		for (Service serv : services) {
 			for (Reservation resv : serv.getReservations()) {
 				if (resv.getBodID().equals(resID))
 					return resv;
+			}
+		}
+		return null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see net.geant.autobahn.administration.Administration#getReservation(java.lang.String)
+	 */
+	public ReservationType getReservation(String resID) {
+		
+		List<Service> services = serviceScheduler.getServices();
+		for (Service serv : services) {
+			for (AutobahnReservation resv : serv.getReservations()) {
+				if (resv.getBodID().equals(resID))
+					return Translator.convert(resv);
 			}
 		}
 		return null;
