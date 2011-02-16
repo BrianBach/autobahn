@@ -3,8 +3,8 @@
  */
 package net.geant.autobahn.framework.commands;
 
+import net.geant.autobahn.administration.ReservationType;
 import net.geant.autobahn.framework.Framework;
-import net.geant.autobahn.reservation.Reservation;
 
 /**
  * @author jacek
@@ -20,7 +20,7 @@ public class ReservationCommand implements AutobahnCommand {
 		if(args.length < 2)
 			return "You have to specify reservation id!";
 		
-		Reservation r = autobahn.getIdm().getReservation(args[1]);
+		ReservationType r = autobahn.getIdm().getReservation(args[1]);
 		
 		if(r == null)
 			return "Reservation <" + args[1] + "> not found";

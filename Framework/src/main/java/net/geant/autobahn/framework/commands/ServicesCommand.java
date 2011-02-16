@@ -5,9 +5,9 @@ package net.geant.autobahn.framework.commands;
 
 import java.util.List;
 
+import net.geant.autobahn.administration.ReservationType;
 import net.geant.autobahn.administration.ServiceType;
 import net.geant.autobahn.framework.Framework;
-import net.geant.autobahn.reservation.Reservation;
 
 /**
  * @author jacek
@@ -28,10 +28,10 @@ public class ServicesCommand implements AutobahnCommand {
 		
 		for(ServiceType srv : services) {
 			sb.append("Service: " + srv.getBodID() + ", user: " + srv.getUser().getName() + "\n");
-			List<Reservation> reservations = srv.getReservations();
+			List<ReservationType> reservations = srv.getReservations();
 			sb.append("Reservations (" + reservations.size() + "):\n");
-			for(Reservation r : reservations) {
-				sb.append("\t" + r.getBodID() + " [" + r.getStartPort() + " - " + r.getEndPort() + "] " +
+			for(ReservationType r : reservations) {
+				sb.append("\t" + r.getBodID() + " [" + r.getStartPort().getAddress() + " - " + r.getEndPort().getAddress() + "] " +
 						"(" + r.getStartTime().getTime() + " - " + r.getEndTime().getTime() + ") " +
 						r.getCapacity() + " bps | " + r.getState());
 				sb.append("\n");

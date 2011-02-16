@@ -6,9 +6,9 @@ package net.geant.autobahn.framework.commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.geant.autobahn.administration.ReservationType;
 import net.geant.autobahn.administration.ServiceType;
 import net.geant.autobahn.framework.Framework;
-import net.geant.autobahn.reservation.Reservation;
 import net.geant.autobahn.reservation.states.hd.HomeDomainState;
 
 /**
@@ -23,7 +23,7 @@ public class ReservationsCommand implements AutobahnCommand {
 	public String execute(Framework autobahn, String[] args) {
 		StringBuffer sb = new StringBuffer();
 		
-		List<Reservation> reservations = new ArrayList<Reservation>();
+		List<ReservationType> reservations = new ArrayList<ReservationType>();
 
 		int min = 0;
 		int max = 100;
@@ -42,14 +42,14 @@ public class ReservationsCommand implements AutobahnCommand {
 		}
 		
 		for(ServiceType srv : autobahn.getIdm().getServices()) {
-			for(Reservation r : srv.getReservations()) {
+			for(ReservationType r : srv.getReservations()) {
 				if(r.getState() >= min && r.getState() < max)
 					reservations.add(r);
 			}
 		}
 		
 		sb.append("Reservations [showing " + filter + "] (" + reservations.size() + "):\n");
-		for(Reservation r : reservations) {
+		for(ReservationType r : reservations) {
 			sb.append("\t" + r.getInfo() + "\n");
 			sb.append("\n");
 		}
