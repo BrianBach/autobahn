@@ -2,7 +2,6 @@ package net.geant.autobahn.autoBahnGUI.topology;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -12,6 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import net.geant.autobahn.administration.Neighbor;
+import net.geant.autobahn.administration.ReservationType;
 import net.geant.autobahn.administration.Status;
 import net.geant.autobahn.autoBahnGUI.manager.InterDomainManager;
 import net.geant.autobahn.autoBahnGUI.manager.Manager;
@@ -21,7 +21,6 @@ import net.geant.autobahn.autoBahnGUI.model.googlemaps.Marker;
 import net.geant.autobahn.autoBahnGUI.model.googlemaps.Topology;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.Path;
-import net.geant.autobahn.reservation.Reservation;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -149,7 +148,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 		
 		if (serviceId !=null){
 			
-			Reservation reservations = idm.getReservation(serviceId);
+			ReservationType reservations = idm.getReservation(serviceId);
 			Line line = null;
 			Path path = reservations.getPath();
 			List<Link> links= path.getLinks();

@@ -15,8 +15,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Properties;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,6 +27,7 @@ import javax.xml.datatype.DatatypeFactory;
 
 import net.geant.autobahn.aai.UserAuthParameters;
 import net.geant.autobahn.administration.KeyValue;
+import net.geant.autobahn.administration.ReservationType;
 import net.geant.autobahn.administration.ServiceType;
 import net.geant.autobahn.administration.Status;
 import net.geant.autobahn.autoBahnGUI.model.LogsFormModel;
@@ -42,13 +43,13 @@ import net.geant.autobahn.gui.EventType;
 import net.geant.autobahn.gui.ReservationChangedType;
 import net.geant.autobahn.lookup.LookupService;
 import net.geant.autobahn.lookup.LookupServiceException;
-import net.geant.autobahn.reservation.Reservation;
+import net.geant.autobahn.useraccesspoint.Mode;
 import net.geant.autobahn.useraccesspoint.Priority;
 import net.geant.autobahn.useraccesspoint.ReservationRequest;
 import net.geant.autobahn.useraccesspoint.Resiliency;
 import net.geant.autobahn.useraccesspoint.ServiceRequest;
 import net.geant.autobahn.useraccesspoint.UserAccessPointException;
-import net.geant.autobahn.useraccesspoint.Mode;
+
 import org.apache.log4j.Logger;
 import org.springframework.security.Authentication;
 import org.springframework.security.context.SecurityContextHolder;
@@ -513,7 +514,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 		
 		for (int i = 0; i < list.size(); i++) {
 						
-			List<Reservation> res = list.get(i).getReservations();	
+			List<ReservationType> res = list.get(i).getReservations();	
 			for (int j = 0; j < res.size(); j++) {
 				
 				if(res.get(j).getPath() == null)
@@ -592,14 +593,14 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		ServiceType service = manager.getService(serviceId);
 		if (service == null)
 			return;
-		List<Reservation> list = new ArrayList<Reservation>();
+		List<ReservationType> list = new ArrayList<ReservationType>();
 		list.addAll(service.getReservations());
 		int stateOfReservation  = convertReservationTypes(state);
 		if (stateOfReservation==SCHEDULED){
 			manager.forceUpdateService(serviceId);
 		}
 		int length = list.size();
-		Reservation reservation =null;
+		ReservationType reservation = null;
 		for (int i=0;i<length;i++){
 			reservation = list.get(i);
 			if (reservation.getBodID().equals(resID)){

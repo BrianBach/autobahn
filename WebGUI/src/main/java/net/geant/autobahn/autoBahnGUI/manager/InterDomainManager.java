@@ -9,11 +9,11 @@ import java.util.Map;
 import net.geant.autobahn.administration.Administration;
 import net.geant.autobahn.administration.AdministrationService;
 import net.geant.autobahn.administration.KeyValue;
+import net.geant.autobahn.administration.ReservationType;
 import net.geant.autobahn.administration.ServiceType;
 import net.geant.autobahn.administration.StatisticsType;
 import net.geant.autobahn.administration.Status;
 import net.geant.autobahn.network.Link;
-import net.geant.autobahn.reservation.Reservation;
 import net.geant.autobahn.useraccesspoint.ModifyRequest;
 import net.geant.autobahn.useraccesspoint.ReservationRequest;
 import net.geant.autobahn.useraccesspoint.ServiceRequest;
@@ -203,7 +203,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.administration.Administration#getReservation(java.lang.String)
 	 */
-	public Reservation getReservation(String resID) {
+	public ReservationType getReservation(String resID) {
 		if (isAdmnistrationConnected()){
 			try{
 				return administration.getReservation(resID);
