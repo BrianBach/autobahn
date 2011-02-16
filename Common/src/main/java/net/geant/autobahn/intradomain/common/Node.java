@@ -10,7 +10,6 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * This class represents a node
@@ -20,14 +19,14 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="Node", namespace="common.intradomain.autobahn.geant.net", 
-		propOrder={"version", "location", "name", "description",
-		"status", "vendor", "model", "osName", "osVersion", "ipAddress"
+		propOrder={"nodeId", "version", "location", "name", "description",
+		"status", "vendor", "model", "osName", "osVersion", "ipAddress", "vlanTranslationSupport"
 })
 public class Node implements Serializable {
 	
 	private static final long serialVersionUID = 5535332294663547306L;
 
-	@XmlTransient
+	//@XmlTransient
 	private long nodeId;
 	private VersionInfo version;
 	private Location location;
@@ -39,7 +38,7 @@ public class Node implements Serializable {
 	private String osName;
 	private String osVersion;
 	private String ipAddress;
-	
+	private boolean vlanTranslationSupport;
 	
 	/**
 	 * This method returns the description of the node
@@ -221,6 +220,14 @@ public class Node implements Serializable {
 		this.vendor = vendor;
 	}
 	
+	public boolean isVlanTranslationSupport() {
+		return vlanTranslationSupport;
+	}
+
+	public void setVlanTranslationSupport(boolean vlanTranslationSupport) {
+		this.vlanTranslationSupport = vlanTranslationSupport;
+	}
+
 	/**
 	 * This method returns version information of the node
 	 * 

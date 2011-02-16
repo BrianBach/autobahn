@@ -1,12 +1,11 @@
 package net.geant.autobahn.tool;
 
-import java.util.List;
-
 import javax.jws.WebService;
 
 import net.geant.autobahn.aai.AAIException;
-import net.geant.autobahn.intradomain.common.GenericLink;
-import net.geant.autobahn.reservation.ReservationParams;
+import net.geant.autobahn.tool.types.GenericLinkType;
+import net.geant.autobahn.tool.types.IntradomainPathType;
+import net.geant.autobahn.tool.types.ReservationParamsType;
 
 /**
  * @author Michal
@@ -21,12 +20,11 @@ public class ToolImpl implements Tool {
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.tool.Tool#addReservation(java.lang.String, java.util.List, net.geant.autobahn.reservation.ReservationParams)
 	 */
-	public void addReservation(String resID, List<GenericLink> links,
-			ReservationParams params) throws AAIException, RequestException,
+	public void addReservation(String resID, IntradomainPathType path,
+			ReservationParamsType params) throws AAIException, RequestException,
 			SystemException, ResourceNotFoundException {
 		
 		System.out.println("addReservation.begin");
-		
 		
 		System.out.println("ID: " + resID);
 /*		System.out.println("Start: " + params.getStartTime().getTime());
@@ -37,7 +35,7 @@ public class ToolImpl implements Tool {
 		else
 			System.out.println("RCON NULL !");
 */		
-		for (GenericLink gl : links) {
+		for (GenericLinkType gl : path.getLinks()) {
 			
 			System.out.println("gl - " + gl.toString());
 		}
@@ -50,8 +48,8 @@ public class ToolImpl implements Tool {
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.tool.Tool#removeReservation(java.lang.String)
 	 */
-	public void removeReservation(String resID, List<GenericLink> links,
-			ReservationParams params) throws AAIException,
+	public void removeReservation(String resID, IntradomainPathType ipath,
+			ReservationParamsType params) throws AAIException,
 			RequestException, SystemException, ReservationNotFoundException {
 		
 		System.out.println("removeReservation.begin");

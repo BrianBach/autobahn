@@ -10,7 +10,7 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlTransient;
+//import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * This class represents a location
@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="Location", namespace="common.intradomain.autobahn.geant.net", 
-		propOrder={ "name", "description", "country", "institution",
+		propOrder={ "locationId", "name", "description", "country", "institution",
 		"street", "floor", "roomSuite", "row_", "cabinet", "zipCode",
 		"phoneNumber", "eMailAddress", "geoLatitude", "geoLongitude",
 		"type", "zone", "altitude"
@@ -29,7 +29,7 @@ public class Location implements Serializable {
 	
 	private static final long serialVersionUID = 6451104489831796777L;
 	
-	@XmlTransient
+	//@XmlTransient
 	private long locationId; 
 	private String name; 
 	private String description; 

@@ -11,7 +11,7 @@ import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlTransient;
+//import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
@@ -23,13 +23,13 @@ import javax.xml.bind.annotation.XmlTransient;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="VersionInfo", namespace="common.intradomain.autobahn.geant.net", 
-		propOrder={ "startDate", "endDate", "createdBy", "modifiedBy",
+		propOrder={ "versionId", "startDate", "endDate", "createdBy", "modifiedBy",
 		"dateCreated", "dateModified"
 })
 public class VersionInfo implements Serializable {
 	
 	private static final long serialVersionUID = 837509601849111470L;
-	@XmlTransient
+	//@XmlTransient
 	private long versionId;
 	private Date startDate;
 	private Date endDate;

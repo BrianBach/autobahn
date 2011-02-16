@@ -10,8 +10,7 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlTransient;
-
+//import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * This class represents a generic link
@@ -20,15 +19,15 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  */
 
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(name="GenericLink", namespace="common.intradomain.autobahn.geant.net", propOrder={
-		"version", "startInterface", "endInterface", "direction",
+        "linkId", "version", "startInterface", "endInterface", "direction",
 		"protection", "propDelay"
 })
 public class GenericLink implements Serializable {
 	
 	private static final long serialVersionUID = -7857873434490722350L;
-	@XmlTransient
+	//@XmlTransient
 	private long linkId;
 	private VersionInfo version;
 	private GenericInterface startInterface;
@@ -37,6 +36,8 @@ public class GenericLink implements Serializable {
 	private boolean protection;
 	private double propDelay;
 	
+    public GenericLink() { }
+
 	/**
 	 * This method returns the direction of the generic link
 	 * 
@@ -72,12 +73,13 @@ public class GenericLink implements Serializable {
 	public void setEndInterface(GenericInterface endInterface) {
 		this.endInterface = endInterface;
 	}
-	
+
 	/**
 	 * This method returns the id of the generic link
 	 * 
 	 * @return Returns the id of the generic link
 	 */
+	//@XmlTransient
 	public long getLinkId() {
 		return linkId;
 	}

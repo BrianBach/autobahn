@@ -3,14 +3,12 @@
  */
 package net.geant.autobahn.tool;
 
-import java.util.List;
-
-import javax.jws.WebService;
 import javax.jws.WebParam;
+import javax.jws.WebService;
 
 import net.geant.autobahn.aai.AAIException;
-import net.geant.autobahn.intradomain.common.GenericLink;
-import net.geant.autobahn.reservation.ReservationParams;
+import net.geant.autobahn.tool.types.IntradomainPathType;
+import net.geant.autobahn.tool.types.ReservationParamsType;
 
 /**
  * Interface between DomainManager and Network managment proxy to create and
@@ -30,11 +28,7 @@ public interface Tool {
 	 * 
 	 * @param resID
 	 *            String Identifier of the circuit
-	 * @param links
-	 *            List of <code>GenericLink</code> objects that were chosen to
-	 *            be reserved in the domain.
-	 * @param params
-	 *            Reservation parameters (such as capacity in bps)
+	 * @param ipath
 	 * @throws AAIException
 	 *             when Authorization fails
 	 * @throws RequestException
@@ -45,10 +39,10 @@ public interface Tool {
 	 * @throws ResourceNotFoundException
 	 *             When request concerns a device that doesn't exist
 	 */
-	public void addReservation(@WebParam(name="resID")String resID, 
-			@WebParam(name="links")List<GenericLink> links,
-			@WebParam(name="params")ReservationParams params) throws AAIException, RequestException,
-			SystemException, ResourceNotFoundException;
+	public void addReservation(@WebParam(name = "resID") String resID,
+			@WebParam(name = "ipath")IntradomainPathType ipath, @WebParam(name = "params")ReservationParamsType params)
+			throws AAIException, RequestException, SystemException,
+			ResourceNotFoundException;
 
 	/**
 	 * Removes the reservation with given identifier.
@@ -66,8 +60,8 @@ public interface Tool {
 	 *             When reservation with given identifier doesn't exist in the
 	 *             proxy module.
 	 */
-	public void removeReservation(@WebParam(name="resID")String resID, 
-			@WebParam(name="links")List<GenericLink> links,
-			@WebParam(name="params")ReservationParams params) throws AAIException, RequestException,
-			SystemException, ReservationNotFoundException;
+	public void removeReservation(@WebParam(name = "resID") String resID,
+			@WebParam(name = "ipath") IntradomainPathType ipath, @WebParam(name = "params")ReservationParamsType params)
+			throws AAIException, RequestException, SystemException,
+			ReservationNotFoundException;
 }

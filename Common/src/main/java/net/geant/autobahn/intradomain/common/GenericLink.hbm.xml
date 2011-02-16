@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="net.geant.autobahn.intradomain.common">
+    <class name="GenericLink" table="generic_link" schema="public">
+        <id name="LinkId" type="long">
+            <column name="link_id" />
+            <generator class="increment" />
+        </id>
+        <many-to-one name="version" class="VersionInfo" fetch="select" cascade="save-update">
+            <column name="version_id" />
+        </many-to-one>
+        <many-to-one name="startInterface" class="GenericInterface" cascade="all" lazy="false">
+            <column name="start_interface_id" />
+        </many-to-one>
+        <many-to-one name="endInterface" class="GenericInterface" cascade="all" lazy="false">
+            <column name="end_interface_id" />
+        </many-to-one>
+        <property name="direction" type="string">
+            <column name="direction" />
+        </property>
+        <property name="protection" type="boolean">
+            <column name="protection" />
+        </property>
+        <property name="propDelay" type="double">
+            <column name="prop_delay" precision="8" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

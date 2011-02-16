@@ -199,7 +199,12 @@
 			<groupId>net.geant.autobahn</groupId>
 			<artifactId>autobahn-common</artifactId>
 			<version>1.0.0RC-SNAPSHOT</version>
-		</dependency>				
+		</dependency>
+		<dependency>
+			<groupId>net.geant.autobahn</groupId>
+			<artifactId>autobahn-tool</artifactId>
+			<version>1.0.0RC-SNAPSHOT</version>
+		</dependency>			
 		<dependency>
 			<groupId>sshtools</groupId>
 			<artifactId>j2ssh-common</artifactId>

@@ -10,7 +10,7 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlTransient;
+//import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * This class represents an interface type
@@ -21,12 +21,12 @@ import javax.xml.bind.annotation.XmlTransient;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="InterfaceType", namespace="common.intradomain.autobahn.geant.net",
-	propOrder={"switchingType", "dataEncodingType"
+	propOrder={"interfaceTypeId", "switchingType", "dataEncodingType"
 })
 public class InterfaceType implements Serializable {
 	
 	private static final long serialVersionUID = -3760191037619830478L;
-	@XmlTransient
+	//@XmlTransient
 	private long interfaceTypeId;
 	private String switchingType; 
 	private String dataEncodingType;

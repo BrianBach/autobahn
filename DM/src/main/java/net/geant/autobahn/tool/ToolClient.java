@@ -1,13 +1,12 @@
 package net.geant.autobahn.tool;
 
-import java.net.URL;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import net.geant.autobahn.aai.AAIException;
-import net.geant.autobahn.tool.intradomain.common.GenericLink;
+import net.geant.autobahn.intradomain.IntradomainPath;
 import net.geant.autobahn.reservation.ReservationParams;
 
 import org.apache.log4j.Logger;
@@ -18,7 +17,7 @@ import org.apache.log4j.Logger;
  * @author Michal
  *
  */
-public class ToolClient implements Tool {
+public class ToolClient {
 	
 	private final static Logger log = Logger.getLogger(Tool.class);
 	
@@ -50,7 +49,7 @@ public class ToolClient implements Tool {
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.tool.Tool#addReservation(java.lang.String, java.util.List, net.geant.autobahn.reservation.ReservationParams)
 	 */
-	public void addReservation(String resID, List<GenericLink> links,
+	public void addReservation(String resID, IntradomainPath ipath,
 			ReservationParams params) throws AAIException, RequestException,
 			SystemException, ResourceNotFoundException {
 		
@@ -60,7 +59,7 @@ public class ToolClient implements Tool {
 		log.info("DM -> Tool: Adding reservation " + resID + " begin");
 		if(tool != null) {
 			try {
-	            tool.addReservation(secureId(resID), links, params);			        
+	            tool.addReservation(secureId(resID), Converter.convert(ipath), Converter.convert(params));			        
 			} catch(AAIException e) {
 				releaseLock(resID, false);
 				throw e;
@@ -83,7 +82,7 @@ public class ToolClient implements Tool {
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.tool.Tool#removeReservation(java.lang.String, java.util.List, net.geant.autobahn.reservation.ReservationParams)
 	 */
-	public void removeReservation(String resID, List<GenericLink> links,
+	public void removeReservation(String resID, IntradomainPath path,
 			ReservationParams params) throws AAIException,
 			RequestException, SystemException, ReservationNotFoundException {
 		
@@ -111,7 +110,7 @@ public class ToolClient implements Tool {
 		
 		log.info("DM -> Tool: Removing reservation  " + resID + " begin");
 		if(tool != null)
-			tool.removeReservation(secureId(resID), links, params);
+			tool.removeReservation(secureId(resID), Converter.convert(path), Converter.convert(params));
 		log.info("DM -> Tool: Removing reservation  " + resID + " end");		
 	}
 

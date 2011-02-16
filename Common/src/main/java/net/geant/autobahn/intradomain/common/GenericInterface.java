@@ -18,16 +18,16 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author <a href="mailto:alyf@di.uoa.gr">George Alyfantis</a>
  *
  */
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(name="GenericInterface", namespace="common.intradomain.autobahn.geant.net",
-	propOrder={ "version", "interfaceType", "parentInterface", "node",
-		"name", "description", "bandwidth", "status", "mtu", "domainId"
+	propOrder={ "interfaceId", "version", "interfaceType", "parentInterface", "node",
+		"name", "description", "bandwidth", "status", "mtu", "domainId", "clientPort"
 })
 public class GenericInterface implements Serializable {
 	
 	private static final long serialVersionUID = -2122703404093352705L;
 
-	@XmlTransient
+	//@XmlTransient
 	private long interfaceId;
 	private VersionInfo version; 
 	private InterfaceType interfaceType; 
@@ -37,9 +37,9 @@ public class GenericInterface implements Serializable {
 	private String description; 
 	private long bandwidth; 
 	private String status; 
-	private String mtu; 
+	private int mtu; 
 	private String domainId;
-	@XmlTransient
+	//@XmlTransient
 	private boolean clientPort;
 	
 	/**
@@ -101,6 +101,7 @@ public class GenericInterface implements Serializable {
 	 * 
 	 * @return Returns the id of the generic interface
 	 */
+	//@XmlTransient
 	public long getInterfaceId() {
 		return interfaceId;
 	}
@@ -137,7 +138,7 @@ public class GenericInterface implements Serializable {
 	 * 
 	 * @return Returns the MTU of the generic interface
 	 */
-	public String getMtu() {
+	public int getMtu() {
 		return mtu;
 	}
 	
@@ -146,7 +147,7 @@ public class GenericInterface implements Serializable {
 	 * 
 	 * @param mtu the MTU of the generic interface
 	 */
-	public void setMtu(String mtu) {
+	public void setMtu(int mtu) {
 		this.mtu = mtu;
 	}
 	
@@ -243,6 +244,7 @@ public class GenericInterface implements Serializable {
 	/**
 	 * @return the clientPort
 	 */
+	//@XmlTransient
 	public boolean isClientPort() {
 		return clientPort;
 	}

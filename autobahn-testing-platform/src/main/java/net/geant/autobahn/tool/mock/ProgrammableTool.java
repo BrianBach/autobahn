@@ -1,17 +1,15 @@
 package net.geant.autobahn.tool.mock;
 
-import java.util.List;
-
 import javax.jws.WebService;
 
 import net.geant.autobahn.aai.AAIException;
-import net.geant.autobahn.tool.intradomain.common.GenericLink;
-import net.geant.autobahn.reservation.ReservationParams;
 import net.geant.autobahn.tool.RequestException;
 import net.geant.autobahn.tool.ReservationNotFoundException;
 import net.geant.autobahn.tool.ResourceNotFoundException;
 import net.geant.autobahn.tool.SystemException;
 import net.geant.autobahn.tool.Tool;
+import net.geant.autobahn.tool.types.IntradomainPathType;
+import net.geant.autobahn.tool.types.ReservationParamsType;
 
 @WebService(name = "Tool", serviceName = "ToolService",
         portName = "ToolPort",
@@ -42,19 +40,19 @@ public class ProgrammableTool implements Tool {
 		this.remBehaviour = beh;
 	}
 	
-	public void addReservation(String resID, List<GenericLink> links,
-			ReservationParams params) throws AAIException, SystemException, RequestException, ResourceNotFoundException {
+	public void addReservation(String resID, IntradomainPathType path,
+			ReservationParamsType params) throws AAIException, SystemException, RequestException, ResourceNotFoundException {
 
 		System.out.println("Add reservation: " + identifier);
-		tool.addReservation(resID, links, params);
+		tool.addReservation(resID, path, params);
 		produceResult(addBehaviour);
 	}
 
-	public void removeReservation(String resID, List<GenericLink> links,
-			ReservationParams params) throws AAIException, SystemException, ReservationNotFoundException, RequestException {
+	public void removeReservation(String resID, IntradomainPathType path,
+			ReservationParamsType params) throws AAIException, SystemException, ReservationNotFoundException, RequestException {
 		
 		System.out.println("Add reservation: " + identifier);
-		tool.removeReservation(resID, links, params);
+		tool.removeReservation(resID, path, params);
 		produceResult(remBehaviour);
 	}
 

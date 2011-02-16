@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="net.geant.autobahn.intradomain.common">
+    <class name="Path" table="path" schema="public">
+        <id name="pathId" type="long">
+            <column name="path_id" />
+            <generator class="increment" />
+        </id>
+        <many-to-one name="version" class="VersionInfo" fetch="select" cascade="save-update">
+            <column name="version_id" />
+        </many-to-one>
+        <property name="name" type="string">
+            <column name="name" />
+        </property>
+        <property name="status" type="string">
+            <column name="status" />
+        </property>
+    </class>
+</hibernate-mapping>
