@@ -5,7 +5,7 @@ package net.geant.autobahn.testplatform.configuration.topology;
 
 import net.geant.autobahn.intradomain.common.GenericInterface;
 import net.geant.autobahn.testplatform.configuration.Domain;
-import net.geant.autobahn.testplatform.configuration.IntraTopologyBuilder;
+import net.geant.autobahn.testplatform.configuration.IntraTopologyBuilder2;
 
 /**
  * @author jacek
@@ -29,7 +29,7 @@ public class AutobahnTestTopology6Domains {
     private final static String hostDomain3 = "http://client-domain.domain3.com";
     private final static String hostDomain6 = "http://client-domain.domain6.com";
     
-    public void domain1(IntraTopologyBuilder t) {
+    public void domain1(IntraTopologyBuilder2 t) {
 
     	t.setDomain(domain1);
     	
@@ -52,7 +52,7 @@ public class AutobahnTestTopology6Domains {
         t.addSpanningTree(p4, p5, 150, 200);
     }
 
-    public void domain2(IntraTopologyBuilder t) {
+    public void domain2(IntraTopologyBuilder2 t) {
         
     	t.setDomain(domain2);
     	
@@ -90,7 +90,7 @@ public class AutobahnTestTopology6Domains {
         t.addSpanningTree(p8, p10, 100, 200);
     }
 
-    public void domain3(IntraTopologyBuilder t) {
+    public void domain3(IntraTopologyBuilder2 t) {
         
     	t.setDomain(domain3);
     	
@@ -112,7 +112,7 @@ public class AutobahnTestTopology6Domains {
         t.addSpanningTree(p4, cli1, 100, 800);
     }
     
-    public void domain4(IntraTopologyBuilder t) {
+    public void domain4(IntraTopologyBuilder2 t) {
         
     	t.setDomain(domain4);
     	
@@ -135,7 +135,7 @@ public class AutobahnTestTopology6Domains {
         t.addSpanningTree(p4, p5, 100, 800);
     }
     
-    public void domain5(IntraTopologyBuilder t) {
+    public void domain5(IntraTopologyBuilder2 t) {
         
     	t.setDomain(domain5);
     	
@@ -151,7 +151,7 @@ public class AutobahnTestTopology6Domains {
         t.addSpanningTree(p2, dom6, 100, 800);
     }
     
-    public void domain6(IntraTopologyBuilder t) {
+    public void domain6(IntraTopologyBuilder2 t) {
         
     	t.setDomain(domain6);
     	
