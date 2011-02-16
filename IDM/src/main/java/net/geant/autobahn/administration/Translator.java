@@ -71,6 +71,12 @@ public class Translator {
 	}
 	
 	private static int getVlanNumber(GlobalConstraints gcon, String domainId) {
+		
+		if(gcon == null)
+			return -1;
+		if(gcon.getDomainConstraints(domainId) == null)
+			return -1;
+		
 		PathConstraints pcon = gcon.getDomainConstraints(domainId).getFirstPathConstraints();
 		
 		if(pcon != null) {
