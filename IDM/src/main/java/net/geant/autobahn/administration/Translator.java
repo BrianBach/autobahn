@@ -51,20 +51,21 @@ public class Translator {
 		PortType sport = new PortType();
 		sport.setAddress(r.getStartPort().getBodID());
 
-		int sVlan = getVlanNumber(gcon, r.getPath().getHomeDomainID() + "-ingress");
-		if(sVlan > 0)
-			sport.setVlan(sVlan);
-		
-		res.setStartPort(sport);
-		
 		// End port
 		PortType eport = new PortType();
 		eport.setAddress(r.getEndPort().getBodID());
-
-		int eVlan = getVlanNumber(gcon, r.getPath().getLastDomainID() + "-egress");
-		if(eVlan > 0)
-			eport.setVlan(eVlan);
 		
+		if(r.getPath() != null && gcon != null) {
+			int sVlan = getVlanNumber(gcon, r.getPath().getHomeDomainID() + "-ingress");
+			if(sVlan > 0)
+				sport.setVlan(sVlan);
+	
+			int eVlan = getVlanNumber(gcon, r.getPath().getLastDomainID() + "-egress");
+			if(eVlan > 0)
+				eport.setVlan(eVlan);
+		}
+		
+		res.setStartPort(sport);
 		res.setEndPort(eport);
 		
 		return res;
