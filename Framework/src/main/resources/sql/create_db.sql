@@ -761,14 +761,6 @@ CREATE SEQUENCE statistics_id_seq
     NO MINVALUE
     CACHE 1;
 
-
---
--- Name: statistics_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE statistics_id_seq OWNED BY statistics.id;
-
-
 --
 -- Name: stm_link; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
