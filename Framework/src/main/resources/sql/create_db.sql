@@ -743,23 +743,12 @@ CREATE TABLE state_oper (
 --
 
 CREATE TABLE statistics (
-    id integer NOT NULL,
+    id serial PRIMARY KEY,
     reservation_id character varying(255),
     intradomain boolean,
     setup_time bigint
 );
 
-
---
--- Name: statistics_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE statistics_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
 
 --
 -- Name: stm_link; Type: TABLE; Schema: public; Owner: -; Tablespace: 
@@ -869,13 +858,6 @@ INSERT INTO state_admin VALUES (2);
 INSERT INTO state_oper VALUES (0);
 INSERT INTO state_oper VALUES (1);
 INSERT INTO state_oper VALUES (3);
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE statistics ALTER COLUMN id SET DEFAULT nextval('statistics_id_seq'::regclass);
-
 
 --
 -- Name: additive_constraint_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
@@ -1331,14 +1313,6 @@ ALTER TABLE ONLY state_admin
 
 ALTER TABLE ONLY state_oper
     ADD CONSTRAINT state_oper_pkey PRIMARY KEY (state_oper_enum);
-
-
---
--- Name: statistics_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY statistics
-    ADD CONSTRAINT statistics_pkey PRIMARY KEY (id);
 
 
 --
