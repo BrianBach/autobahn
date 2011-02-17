@@ -474,7 +474,7 @@ public class HomeDomainReservation extends AutobahnReservation {
 		
 		PathConstraints userEgCons = getUserEgressConstraints();
 		if(this.isLastDomain() && userEgCons != null) {
-			params.setPathConstraintsIngress(userEgCons);
+			params.setPathConstraintsEgress(userEgCons);
 		}
 		
 		return params;

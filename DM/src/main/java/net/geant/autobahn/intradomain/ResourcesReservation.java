@@ -286,6 +286,12 @@ public class ResourcesReservation {
 			// Filtering Constraints
 			for(IntradomainPath path : results) {
 				IntradomainPath res = calendar.getConstraints(path, sTime, eTime);
+				
+				if(res == null) {
+					log.debug("Constraints not correct or already reserved for path: " + path);
+					continue;
+				}
+				
 				dconIngress.addPathConstraints(res.getIngressConstraints());
 				dconEgress.addPathConstraints(res.getEgressConstraints());
 			}

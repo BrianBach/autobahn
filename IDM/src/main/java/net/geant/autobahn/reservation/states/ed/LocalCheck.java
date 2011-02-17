@@ -52,7 +52,7 @@ public class LocalCheck extends ExternalDomainState {
         res.getGlobalConstraints().addDomainConstraints(domainID + "-ingress", dcons[0]);
         res.getGlobalConstraints().addDomainConstraints(domainID + "-egress", dcons[1]);
         
-        if(areDomainConstraintsValid(dcons)) {
+        if(!areDomainConstraintsValid(dcons)) {
             res.fail(ReservationErrors.CONSTRAINTS_NOT_CORRECT, domainID);
             return;
         }

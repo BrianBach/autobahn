@@ -94,15 +94,17 @@ public class EthConstraintsReservationCalendar implements
 			PathConstraints pcon = ipath.getConstraints(gl);
 			RangeConstraint vlans = pcon.getRangeConstraint(ConstraintsNames.VLANS);
 			
-			checkWithCalendar(gl.getStartInterface().getNode(), vlans, start, end);
+			removeAlreadyReservedResources(gl.getStartInterface().getNode(), vlans, start, end);
 			
-			if(vlans == null || vlans.isEmpty())
+			if(vlans == null || vlans.isEmpty()) {
 				return null;
+			}
 			
-			checkWithCalendar(gl.getEndInterface().getNode(), vlans, start, end);
+			removeAlreadyReservedResources(gl.getEndInterface().getNode(), vlans, start, end);
 			
-			if(vlans == null || vlans.isEmpty())
+			if(vlans == null || vlans.isEmpty()) {
 				return null;
+			}
 		}
         
 		return ipath;
@@ -157,7 +159,7 @@ public class EthConstraintsReservationCalendar implements
 		return new CalendarEntry(start, end, vlanNumber);
     }
     
-	private void checkWithCalendar(Node n, RangeConstraint rcon, Calendar start, Calendar end) {
+	private void removeAlreadyReservedResources(Node n, RangeConstraint rcon, Calendar start, Calendar end) {
 		Set<CalendarEntry> vlanCalendar = vlanCalendars.get(n);
 		
 		if(vlanCalendar == null)
