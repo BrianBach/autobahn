@@ -174,8 +174,6 @@ public class AutobahnController {
         logger.debug("handle topology xml");
         Topology topology=null;
         if (service !=null && service.length()>0){
-        	System.out.println("XXX "+domain);
-        	System.out.println("YYY "+service);
             topology=topologyFinder.getGoogleTopology(domain,service);}
         else
             topology=topologyFinder.getGoogleTopology();
@@ -190,11 +188,12 @@ public class AutobahnController {
         logger.debug("getting services for idm");
         ServicesFormModel services=null;
         String[] reservationStates=null;
+        
+        
         if (currentIdm  !=null){
-            services = manager.getSubmitedServicesInIDM(currentIdm);
+            services = manager.getSubmitedServicesInIDM(currentIdm);   
             reservationStates=manager.getReservationStates();
         }
-        //model.put("link", link);
         model.put("services", services);
         model.put("reservationStates", reservationStates);
     }

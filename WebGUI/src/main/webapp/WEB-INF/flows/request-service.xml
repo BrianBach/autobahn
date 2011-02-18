@@ -36,8 +36,6 @@
 			<evaluate expression="manager.getAllDomains_NonClient()" result="flowScope.domains_all"/>
 			<evaluate expression="manager.getAllLinks_NonClient()" result="flowScope.links_all"/>
 			<evaluate expression="manager.getReservationRequestTemplate()" result="flowScope.reservation"/>
-			<evaluate expression="manager.getReservationPriorities()" result="flowScope.priorities"/>
-			<evaluate expression="manager.getReservationResiliencies()" result="flowScope.resiliences"/>
 			<evaluate expression="manager.getTimezones()" result="flowScope.timezones"/>
 			<evaluate expression="manager.getReservationModes()" result="flowScope.modes"/>
 		</transition>
@@ -71,15 +69,12 @@
 			<binding property="request.endTime" converter="calendar" required="true"/>
 			<binding property="request.maxDelay"  required="true"/>
 			<binding property="request.capacity"  required="true"/>
-			<binding property="request.userVlanId"  required="true"/>
 			<binding property="request.mtu"  required="true"/>
 			<binding property="request.userInclude.domains"/>
 			<binding property="request.userInclude.links"/>
 			<binding property="request.userExclude.domains"/>
 			<binding property="request.userExclude.links"/>
 			<binding property="request.processNow"/>
-			<binding property="request.resiliency" converter="reservation-resiliency" required="true"/>
-			<binding property="request.priority" converter="reservation-priority" required="true"/>
 			<binding property="request.description" required="true"/>
 		</binder>
 		<transition on="submit" to="request-service" bind="true">

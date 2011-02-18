@@ -90,14 +90,16 @@ cursor:pointer;
 			<th><spring:message code="service.reservations.action" text="Action" /></th>
 			<th><spring:message code="reservation.startTime" text="Start time"/></th>
 			<th><spring:message code="reservation.endTime" text="End time"/></th>
-			<th><spring:message code="reservation.priority" text="Priority"/></th>
 			<th><spring:message code="reservation.startPort" text="Start port"/></th>
+			<th><spring:message code="reservation.startMode" text="Start mode"/></th>
+			<th><spring:message code="reservation.startVlan" text="Start vlan"/></th>
 			<th><spring:message code="reservation.endPort" text="End port"/></th>
+			<th><spring:message code="reservation.endMode" text="End mode"/></th>
+			<th><spring:message code="reservation.endVlan" text="End vlan"/></th>
 			<th><spring:message code="reservation.maxDelay" text="Delay [ms]"/></th>
 			<th><spring:message code="reservation.capacity" text="Capacity [Mbits/s]"/></th>
-			<th><spring:message code="reservation.userVlanId" text="Vlan"/></th>
 			<th><spring:message code="reservation.mtu" text="Mtu"/></th>
-			<th><spring:message code="reservation.resilience" text="Resilience"/></th>
+	
 		</tr>  
 		<c:forEach items="${service.reservations}" var="item" varStatus="loop">
 			<spring:bind path="service.reservations">
@@ -107,14 +109,15 @@ cursor:pointer;
         			</td>
 					<td>${item.startTime.time}</td>
 					<td>${item.endTime.time}</td>
-					<td>${item.priority}</td>
 					<td>${item.startPortFriendlyName}</td>
+					<td>VLAN</td>
+					<td>${item.startPort.vlan}</td>
 					<td>${item.endPortFriendlyName}</td>
+					<td>VLAN</td>
+					<td>${item.endPort.vlan}</td>
 					<td>${item.maxDelay}</td>
 					<td>${item.capacity/1000000}</td>
-					<td>${item.userVlanId}</td>
 					<td>${item.mtu}</td>
-					<td>${item.resiliency}</td>
 				</tr>
 			</spring:bind>
 		</c:forEach>

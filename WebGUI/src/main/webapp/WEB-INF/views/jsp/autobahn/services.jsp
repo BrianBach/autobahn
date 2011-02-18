@@ -21,7 +21,7 @@
 
 <c:if test="${size > 2}">
 <div id="actions" style="padding-left:15px; text-align:center">
-   	<a class="prev" style="position: relative; float: left;" >&laquo; BACK</a>
+<!--   	<a class="prev" style="position: relative; float: left;" >&laquo; BACK</a>-->
    	<div class="navi">
    	  <c:forEach begin="1" end="${size}" step="2" var="i">
    	    <c:set var="class" value=""></c:set>
@@ -39,7 +39,7 @@
    	    </c:choose>
    	  </c:forEach>
    	
-   	<a class="next" style="font-weight:normal;border:0px;">NEXT &raquo;</a>
+<!--   	<a class="next" style="font-weight:normal;border:0px;">NEXT &raquo;</a>-->
 </div>
 </div>
 </c:if>
@@ -76,10 +76,6 @@
 			<td class="label"><spring:message code="service.jastification" text="Justification" /></td>
 			<td class="value" style="padding-left:20px;width:400px">${element.justification}</td>
 		</tr>
-		<tr>
-			<td class="label"><spring:message code="service.priority" text="Priority" /></td>
-			<td class="value" style="padding-left:20px;width:400px">${element.priority}</td>
-		</tr>
 	</table>
 	<div id="collection">
 	<table width="100%">
@@ -87,26 +83,28 @@
 			<th><spring:message code="reservation.state" text="State"/></th>
 			<th><spring:message code="reservation.startTime" text="Start time"/></th>
 			<th><spring:message code="reservation.endTime" text="End time"/></th>
-			<th><spring:message code="reservation.priority" text="Priority"/></th>
 			<th><spring:message code="reservation.startPort" text="Start port"/></th>
+			<th><spring:message code="reservation.startMode" text="Start mode"/></th>
+			<th><spring:message code="reservation.startVlan" text="Start vlan"/></th>
 			<th><spring:message code="reservation.endPort" text="End port"/></th>
+			<th><spring:message code="reservation.endMode" text="End mode"/></th>
+			<th><spring:message code="reservation.endVlan" text="End vlan"/></th>
 			<th><spring:message code="reservation.capacity" text="Capacity"/></th>
-			<th><spring:message code="reservation.userVlanId" text="Vlan"/></th>
 			<th><spring:message code="reservation.mtu" text="Mtu"/></th>
-			<th><spring:message code="reservation.resiliency" text="Resiliency"/></th>
 		</tr>  
 		<c:forEach items="${element.reservations}" var="item" varStatus="loopStatus">
 				<tr>
 					<td>${reservationStates[item.state]}(${item.state})</td>
 					<td>${item.startTime.time}</td>
 					<td>${item.endTime.time}</td>
-					<td>${item.priority}</td>
-					<td>${item.startPort.description} (${item.startPort.bodID})</td>
-					<td>${item.endPort.description} (${item.startPort.bodID})</td>
+					<td>${item.startPort.address} </td>
+					<td> VLAN </td>
+					<td>${item.startPort.vlan} </td>
+					<td>${item.endPort.address} </td>
+					<td> VLAN </td>
+					<td>${item.endPort.vlan} </td>
 					<td>${item.capacity/1000000}</td>
-					<td>${item.userVlanId}</td>
 					<td>${item.mtu}</td>
-					<td>${item.resiliency}</td>
 				</tr>
 		</c:forEach>
 	</table>
@@ -117,10 +115,8 @@
 <!--div style="position:relative;float:left;padding-top:20px"><a style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;" href="#" onclick="window.top.location=location.href + '&_eventId=cancel&id=${element.bodID}&currentIdm2=' + $('#currentIdm').val()"><input id="cancel" name="Cancel" value="Cancel" type="submit" style="width:100px;" onclick="window.top.location=location.href + '&_eventId=cancel&id=${element.bodID}&currentIdm2=' + $('#currentIdm').val()" /></a-->
 <div style="position:relative;float:left;padding-top:20px"><span style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"><input id="cancel" name="Cancel" value="Cancel" type="submit" style="width:100px;" onclick="jQuery.post(location.href + '&_eventId=cancel&id=${element.bodID}&currentIdm2=' + $('#currentIdm').val() )" /></span>
 
-<!--div style="position:relative;float:left;padding-top:20px"><a style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;" href="reservations_select.htm?execution=e10s1&_eventId=cancel&id=${element.bodID}"><input id="cancel" name="Cancel" value="Cancel" type="submit" style="width:100px;" onclick="window.top.location='reservations_select.htm?execution=e10s1&_eventId=cancel&id=${element.bodID}'" /></a-->
-
-				<a style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"  href="<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}">
-<input id="view" name="view" value="View map" type="submit" style="width:100px" onclick="window.top.location='<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}'" /></a>
+<!--				<a style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"  href="<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}">-->
+<!--<input id="view" name="view" value="View map" type="submit" style="width:100px" onclick="window.top.location='<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}'" /></a>-->
 				
 	</div>
 	<br><br><br>
@@ -157,10 +153,6 @@
 			<td class="label"><spring:message code="service.jastification" text="Justification" /></td>
 			<td class="value" style="padding-left:20px;width:400px">${element.justification}</td>
 		</tr>
-		<tr>
-			<td class="label"><spring:message code="service.priority" text="Priority" /></td>
-			<td class="value" style="padding-left:20px;width:400px">${element.priority}</td>
-		</tr>
 	</table>
 	<div id="collection">
 	<table width="100%">
@@ -168,34 +160,37 @@
 			<th><spring:message code="reservation.state" text="State"/></th>
 			<th><spring:message code="reservation.startTime" text="Start time"/></th>
 			<th><spring:message code="reservation.endTime" text="End time"/></th>
-			<th><spring:message code="reservation.priority" text="Priority"/></th>
 			<th><spring:message code="reservation.startPort" text="Start port"/></th>
+			<th><spring:message code="reservation.startMode" text="Start mode"/></th>
+			<th><spring:message code="reservation.startVlan" text="Start vlan"/></th>
 			<th><spring:message code="reservation.endPort" text="End port"/></th>
+			<th><spring:message code="reservation.endMode" text="End mode"/></th>
+			<th><spring:message code="reservation.endVlan" text="End vlan"/></th>
 			<th><spring:message code="reservation.capacity" text="Capacity"/></th>
-			<th><spring:message code="reservation.userVlanId" text="Vlan"/></th>
 			<th><spring:message code="reservation.mtu" text="Mtu"/></th>
-			<th><spring:message code="reservation.resiliency" text="Resiliency"/></th>
 		</tr>  
 		<c:forEach items="${element.reservations}" var="item" varStatus="loopStatus">
 				<tr>
 					<td>${reservationStates[item.state]}(${item.state})</td>
 					<td>${item.startTime.time}</td>
 					<td>${item.endTime.time}</td>
-					<td>${item.priority}</td>
-					<td>${item.startPort.description} (${item.startPort.bodID})</td>
-					<td>${item.endPort.description} (${item.startPort.bodID})</td>
+					<td>${item.startPort.address} </td>
+					<td> VLAN </td>
+					<td>${item.startPort.vlan} </td>
+					<td>${item.endPort.address} </td>
+					<td> VLAN </td>
+					<td>${item.endPort.vlan} </td>
 					<td>${item.capacity/1000000}</td>
-					<td>${item.userVlanId}</td>
 					<td>${item.mtu}</td>
-					<td>${item.resiliency}</td>
 				</tr>
 		</c:forEach>
 	</table>
+
 <!--div style="position:relative;float:left;padding-top:20px"><a style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;" href="${flowExecutionUrl}&_eventId=cancel&id=${element.bodID}"><input id="cancel" name="Cancel" value="Cancel" type="submit" style="width:100px;" onclick="window.top.location='${flowExecutionUrl}&_eventId=cancel&id=${element.bodID}'" /></a-->
 <div style="position:relative;float:left;padding-top:20px"><span style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"><input id="cancel" name="Cancel" value="Cancel" type="submit" style="width:100px;" onclick="jQuery.post(location.href + '&_eventId=cancel&id=${element.bodID}&currentIdm2=' + $('#currentIdm').val() )" /></span>
 
-				<a style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"  href="<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}">
-<input id="view" name="view" value="View map" type="submit" style="width:100px" onclick="window.top.location='<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}'" /></a>
+<!--				<a style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"  href="<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}">-->
+<!--<input id="view" name="view" value="View map" type="submit" style="width:100px" onclick="window.top.location='<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}'" /></a>-->
 				
 	</div>
 	<br><br><br>
@@ -227,10 +222,7 @@
 			<td class="label"><spring:message code="service.jastification" text="Justification" /></td>
 			<td class="value" style="padding-left:20px;width:400px">${element.justification}</td>
 		</tr>
-		<tr>
-			<td class="label"><spring:message code="service.priority" text="Priority" /></td>
-			<td class="value" style="padding-left:20px;width:400px">${element.priority}</td>
-		</tr>
+
 	</table>
 	<div id="collection">
 	<table width="100%">
@@ -238,33 +230,36 @@
 			<th><spring:message code="reservation.state" text="State"/></th>
 			<th><spring:message code="reservation.startTime" text="Start time"/></th>
 			<th><spring:message code="reservation.endTime" text="End time"/></th>
-			<th><spring:message code="reservation.priority" text="Priority"/></th>
 			<th><spring:message code="reservation.startPort" text="Start port"/></th>
+			<th><spring:message code="reservation.startMode" text="Start mode"/></th>
+			<th><spring:message code="reservation.startVlan" text="Start vlan"/></th>
 			<th><spring:message code="reservation.endPort" text="End port"/></th>
+			<th><spring:message code="reservation.endMode" text="End mode"/></th>
+			<th><spring:message code="reservation.endVlan" text="End vlan"/></th>
 			<th><spring:message code="reservation.capacity" text="Capacity"/></th>
-			<th><spring:message code="reservation.userVlanId" text="Vlan"/></th>
 			<th><spring:message code="reservation.mtu" text="Mtu"/></th>
-			<th><spring:message code="reservation.resiliency" text="Resiliency"/></th>
 		</tr>  
 		<c:forEach items="${element.reservations}" var="item" varStatus="loopStatus">
 				<tr>
 					<td>${reservationStates[item.state]}(${item.state})</td>
 					<td>${item.startTime.time}</td>
 					<td>${item.endTime.time}</td>
-					<td>${item.priority}</td>
-					<td>${item.startPort.description} (${item.startPort.bodID})</td>
-					<td>${item.endPort.description} (${item.startPort.bodID})</td>
+					<td>${item.startPort.address} </td>
+					<td> VLAN </td>
+					<td>${item.startPort.vlan} </td>
+					<td>${item.endPort.address} </td>
+					<td> VLAN </td>
+					<td>${item.endPort.vlan} </td>
 					<td>${item.capacity/1000000}</td>
-					<td>${item.userVlanId}</td>
 					<td>${item.mtu}</td>
-					<td>${item.resiliency}</td>
 				</tr>
 		</c:forEach>
 	</table>
+
 <div style="position:relative;float:left;padding-top:20px"><span style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"><input id="cancel" name="Cancel" value="Cancel" type="submit" style="width:100px;" onclick="jQuery.post(location.href + '&_eventId=cancel&id=${element.bodID}&currentIdm2=' + $('#currentIdm').val() )" /></span>
 
-	<a style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"  href="<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}">
-<input id="view" name="view" value="View map" type="submit" style="width:100px" onclick="window.top.location='<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}'" /></a>
+<!--	<a style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"  href="<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}">-->
+<!--<input id="view" name="view" value="View map" type="submit" style="width:100px" onclick="window.top.location='<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}'" /></a>-->
 				
 	</div>
 	<br><br><br>

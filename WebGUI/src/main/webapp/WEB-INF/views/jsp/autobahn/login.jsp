@@ -19,7 +19,7 @@
 		display:none;
 
 		/* standard decorations */
-		width:400px;
+		width:435px;
 	/*	border:10px solid #666; */
 
 		/* for modern browsers use semi-transparent color on the border. nice! */
@@ -162,8 +162,8 @@ label {
 		
       <table>
       <tr>&nbsp;</tr>
-        <tr><td class="label" style="text-align:left">Username:</td><td class="value"><input type='text' name='j_username'  pattern="[a-zA-Z ]{5,}" maxlength="30" /></td></tr>
-        <tr><td class="label" style="text-align:left">Password:</td><td  class="value"><input type='password' name='j_password'></td></tr>
+        <tr><td class="label" style="text-align:left">Username:</td><td class="value" style="max-width: 130px;"><input type='text' name='j_username'  pattern="[a-zA-Z ]{5,}" maxlength="30" /></td></tr>
+        <tr><td class="label" style="text-align:left">Password:</td><td  class="value" style="max-width: 130px;"><input type='password' name='j_password'></td></tr>
         <tr><td  colspan="2" style="text-align:center">Don't ask for my password for two weeks<input type="checkbox" name="_spring_security_remember_me" /></td></tr>
         
         <tr>

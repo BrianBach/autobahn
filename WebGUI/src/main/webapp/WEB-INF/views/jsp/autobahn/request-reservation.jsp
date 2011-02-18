@@ -331,14 +331,6 @@ function blockInputStartTime(checked) {
 </div>
 <div>
     <table>
-        <tr>
-            <td class="label" style="min-width:150px"><spring:message code="reservation.userVlanId"/></td>
-            <td class="value">
-                <form:input path="request.userVlanId" id="ruserVladId"
-                            onblur="checkMinusCapacityVlan('VLAN identifier','request.userVlanId')"/>
-            </td>
-            <td class="error"><form:errors path="request.userVlanId"/></td>
-        </tr>
          <tr>
             <td class="label" style="min-width:150px"><spring:message code="reservation.maxDelay"/></td>
             <td class="value">
@@ -354,27 +346,6 @@ function blockInputStartTime(checked) {
 		<td class="error"><form:errors path="request.mtu"/></td>
     	</tr>
        
-        
-        <tr>
-            <td class="label" style="min-width:150px"><spring:message code="reservation.resiliency"/></td>
-            <td class="value">
-                <form:select path="request.resiliency">
-                    <form:options items="${resiliences}"/>
-                </form:select>
-            </td>
-            <td class="error"><form:errors path="request.resiliency"/></td>
-        </tr>
-        <tr>
-            <td class="label" style="min-width:150px"><spring:message code="reservation.priority"/></td>
-            <td class="value">
-                <form:select path="request.priority">
-                    <form:options items="${priorities}"/>
-                </form:select>
-            </td>
-            <td class="error"><form:errors path="request.priority"/></td>
-        </tr>
-        
-
     </table>
 
 	<table class="pos">
