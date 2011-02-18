@@ -36,6 +36,8 @@ public class SdhConstraintsReservationCalendar implements
 	public IntradomainPath getConstraints(IntradomainPath ipath,
 			Calendar startTime, Calendar endTime) {
 		
+		log.info("CAL: got path " + ipath.getInfo());
+		
 		MinValueConstraint av_timeslots = new MinValueConstraint();
 		IntradomainPath res = new IntradomainPath();
 		
@@ -47,8 +49,11 @@ public class SdhConstraintsReservationCalendar implements
 			MinValueConstraint timeslots = pcon.getMinValueConstraint(
 					ConstraintsNames.TIMESLOTS);
 
+			System.out.println("Constraint for link: " + glink + " " + timeslots);
+			
 			if(calendar == null) {
 				av_timeslots = av_timeslots.intersect(timeslots);
+				res.addGenericLink(glink, pcon);
 				continue;
 			}
 			
@@ -64,6 +69,7 @@ public class SdhConstraintsReservationCalendar implements
 				
 				res.addGenericLink(glink, resPCon);
 			} else {
+				log.info("Usage too big (" + total + ") (" + usage + " for link " + glink);
 				return null;
 			}
 		}

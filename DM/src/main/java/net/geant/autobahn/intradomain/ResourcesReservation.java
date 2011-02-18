@@ -279,12 +279,13 @@ public class ResourcesReservation {
 			}
 		}
 		
-		if(results.size() > 0) {		        
+		if(results.size() > 0) {        
 			DomainConstraints dconIngress = new DomainConstraints();
 			DomainConstraints dconEgress = new DomainConstraints();
 			
 			// Filtering Constraints
 			for(IntradomainPath path : results) {
+				log.info("Checking path: " + path.getInfo());
 				IntradomainPath res = calendar.getConstraints(path, sTime, eTime);
 				
 				if(res == null) {
