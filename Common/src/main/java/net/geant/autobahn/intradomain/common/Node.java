@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author <a href="mailto:alyf@di.uoa.gr">George Alyfantis</a>
  *
  */
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(name="Node", namespace="common.intradomain.autobahn.geant.net", 
 		propOrder={"nodeId", "version", "location", "name", "description",
 		"status", "vendor", "model", "osName", "osVersion", "ipAddress", "vlanTranslationSupport"
