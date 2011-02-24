@@ -76,7 +76,7 @@ public class Framework {
 		return properties;
 	}
 	
-	public void startIdm() {
+	public net.geant.autobahn.idm.AccessPoint.State startIdm() {
 		try {
 			
 			Properties idmProps = loadProperties("etc/idm.properties");
@@ -86,9 +86,11 @@ public class Framework {
 			}
 			
 			idm = net.geant.autobahn.idm.AccessPoint.getInstance();
-			idm.init(idmProps);
+			return idm.init(idmProps);
         } catch (Exception e) {
             log.error("Could not start IDM, " + e.getMessage());
+            log.debug("Exception info: ", e);
+            return net.geant.autobahn.idm.AccessPoint.State.ERROR;
         }
 	}
 	
@@ -102,9 +104,15 @@ public class Framework {
         cal = net.geant.autobahn.calendar.AccessPoint.getInstance();
 
 		dm = net.geant.autobahn.intradomain.AccessPoint.getInstance();
-		dm.init();
-		startIdm();
-		
+		if (dm.init() == net.geant.autobahn.intradomain.AccessPoint.State.ERROR) {
+		    log.error("DM did not initialize successfully, shutting framework down");
+		    System.exit(0);
+		}
+
+        if (startIdm() == net.geant.autobahn.idm.AccessPoint.State.ERROR) {
+            log.error("IDM did not initialize successfully, shutting framework down");
+            System.exit(0);
+        }
 		
 		// choose command liner
 		String cmdLiner = properties.getProperty("framework.commandLine");

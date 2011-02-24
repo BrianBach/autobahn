@@ -21,6 +21,7 @@ import net.geant.autobahn.topologyabstraction.FileIdentifiersSource;
 import net.geant.autobahn.topologyabstraction.TopologyAbstraction;
 
 import org.apache.log4j.Logger;
+import org.hibernate.exception.ExceptionUtils;
 
 /**
  * Implementation of web services. Singleton design pattern.
@@ -127,18 +128,38 @@ public final class AccessPoint implements TopologyAbstraction {
      */
     public void init() throws Exception {
         
+        state = State.RESTARTING;
+        
         log.info("===== Topology Abstraction module Initialization =====");
         long stime = System.currentTimeMillis();
 
-        if(!topology.isEmpty()) {
-	        // Init intradomain pathfinder
-	        IntradomainPathfinder pathfinder = IntradomainPathfinderFactory
-	                .getIntradomainPathfinder(topology);
-	        
-	        // Init topologyConverter
-	        converter = TopologyConverterFactory.getTopologyConverter(topology, pathfinder, properties);
+        try {
+            if(!topology.isEmpty()) {
+    	        // Init intradomain pathfinder
+    	        IntradomainPathfinder pathfinder = IntradomainPathfinderFactory
+    	                .getIntradomainPathfinder(topology);
+    	        
+    	        // Init topologyConverter
+    	        converter = TopologyConverterFactory.getTopologyConverter(topology, pathfinder, properties);
+            }
+    
+            state = State.READY;
+            
+        } catch (Exception e) {
+            state = State.ERROR;
+            Throwable thr = ExceptionUtils.getRootCause(e);
+            if (thr instanceof java.net.BindException) {
+                log.error("Error while TA init: " + thr.getMessage() +
+                        "\nPlease check whether another server is running using" +
+                        " the same ports as Autobahn. You can check and edit the" +
+                        " ports used by Autobahn in etc/services.properties.");                
+            }
+            else {
+                log.error("Error while TA init: " + thr.getMessage());
+            }
+            log.debug("Error info: ", e);
         }
-
+        
         float total = (System.currentTimeMillis() - stime) / 1000.0f;
 
         log.info("===== End of initialization - " + total + " secs =====");
@@ -164,7 +185,8 @@ public final class AccessPoint implements TopologyAbstraction {
             state = State.READY;
         } catch (Exception e) {
             state = State.ERROR;
-            log.error("Error while init", e);
+            log.error("Error while init: " + e.getMessage());
+            log.debug("Error info: ", e);
         }
     }
     
@@ -287,6 +309,12 @@ public final class AccessPoint implements TopologyAbstraction {
      */
     public void runAfterInitChecks() {
         log.info("===== Post-initialization check for Topology Abstraction module. Watch out for any messages below... =====");
+        
+        if (state == State.ERROR) {
+            log.error("TA module was not initialized successfully. Please check debug.log for" +
+                    " more information.");
+            return;
+        }
         
         // Check public.ids
         

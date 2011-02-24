@@ -36,6 +36,7 @@ import net.geant.autobahn.topologyabstraction.TopologyAbstractionClient;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Transaction;
+import org.hibernate.exception.ExceptionUtils;
 
 /**
  * Access point implementations of all web services. Singleton design pattern.
@@ -45,7 +46,7 @@ import org.hibernate.Transaction;
 public final class AccessPoint implements Idm2Dm, DmAdministration {
 
 	private static AccessPoint instance;
-	private enum State { READY, PROCESSING, INACTIVE, RESTARTING, ERROR };
+	public static enum State { READY, PROCESSING, INACTIVE, RESTARTING, ERROR };
     private State state;
 	private static final Logger log = Logger.getLogger(AccessPoint.class);
 	private Properties properties;
@@ -118,11 +119,11 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
      * - topology (cNIS or database)<br/>
      * - pathfinder<br/>
      * - TopologyConverter<br/>
-     * - Reseources Reservation<br/>
+     * - Resources Reservation<br/>
      * - Monitoring<br/>
      * Most sub modules can be configured through app.properties
      */
-    public void init() throws Exception {
+    public State init() throws Exception {
         state = State.RESTARTING;
 
         runBeforeInitChecks();
@@ -140,7 +141,7 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
                 properties.getProperty("db.port"), properties.getProperty("db.name"), 
                 properties.getProperty("db.user"), properties.getProperty("db.pass"));
     
-            // Init persisent reservations manager
+            // Init persistent reservations manager
     		PersistentReservationsManager prman = new PersistentReservationsManager(
     				DmHibernateUtil.getInstance());
             
@@ -182,15 +183,40 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
             }
 
             state = State.READY;
+        } catch (org.hibernate.exception.GenericJDBCException e) {
+            state = State.ERROR;
+            log.error("Database error while DM init: " + 
+                    ExceptionUtils.getRootCause(e).getMessage() + 
+                    "\nPlease check the #DB PPOPERTIES section in etc/dm.properties " +
+                    "file and verify the values there.");
+            log.debug("Error info: ", e);
         } catch (Exception e) {
             state = State.ERROR;
-            log.error("Error while init", e);
+            Throwable thr = ExceptionUtils.getRootCause(e);
+            if (thr instanceof java.net.BindException) {
+                log.error("Error while DM init: " + thr.getMessage() +
+                		"\nPlease check whether another server is running using" +
+                		" the same ports as Autobahn. You can check and edit the" +
+                		" ports used by Autobahn in etc/services.properties.");                
+            }
+            else if (thr instanceof java.net.ConnectException) {
+                log.error("Error while DM init: " + thr.getMessage() +
+                        "\nPlease check whether the URL of the rest of the services" +
+                        " (IDM, TA, Calendar) have been properly defined in" +
+                        " etc/dm.properties.");                
+            }
+            else {
+                log.error("Error while DM init: " + thr.getMessage());
+            }
+            log.debug("Error info: ", e);
         }
 
         float total = (System.currentTimeMillis() - stime) / 1000.0f;
         log.info("===== End of initialization - " + total + " secs =====");
         
         runAfterInitChecks();
+        
+        return state;
     }
         
     /**
@@ -308,7 +334,8 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
             state = State.READY;
         } catch (Exception e) {
             state = State.ERROR;
-            log.error("Error while init", e);
+            log.error("Error while init: " + e.getMessage());
+            log.debug("Error info: ", e);
         }
 	}
 
@@ -346,7 +373,8 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
             state = State.READY;
         } catch (Exception e) {
             state = State.ERROR;
-            log.error("Error while init", e);
+            log.error("Error while init: " + e.getMessage());
+            log.debug("Error info: ", e);
         }
 	}
 
@@ -357,16 +385,16 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
 		state = State.RESTARTING;
 		dispose();
 
-	try {
-		Transaction t = DmHibernateUtil.getInstance().beginTransaction();
-		
-		IntradomainTopology.clearIntradomainTopologyDatabase();
-		topology.saveTopology();
-		
-		t.commit();
-    } catch (Exception e) {
-        log.error("Error while saving topology, ", e);
-    }
+    	try {
+    		Transaction t = DmHibernateUtil.getInstance().beginTransaction();
+    		
+    		IntradomainTopology.clearIntradomainTopologyDatabase();
+    		topology.saveTopology();
+    		
+    		t.commit();
+        } catch (Exception e) {
+            log.error("Error while saving topology, ", e);
+        }
 
         try {
             init();
@@ -374,7 +402,8 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
             state = State.READY;
         } catch (Exception e) {
             state = State.ERROR;
-            log.error("Error while init", e);
+            log.error("Error while init: " + e.getMessage());
+            log.debug("Error info: ", e);
         }
 	}
     
@@ -432,6 +461,12 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
     public void runAfterInitChecks() {
         log.info("===== Post-initialization check for DM module. Watch out for any messages below... =====");
 
+        if (state == State.ERROR) {
+            log.error("DM module was not initialized successfully. Please check debug.log for" +
+            		" more information.");
+            return;
+        }
+        
         // Check if the client ports have descriptions
         DmDAOFactory daos = HibernateDmDAOFactory.getInstance();
         List<GenericInterface> giList = daos.getGenericInterfaceDAO().getAll();

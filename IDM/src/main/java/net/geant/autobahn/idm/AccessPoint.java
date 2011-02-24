@@ -67,6 +67,7 @@ import net.geant.autobahn.useraccesspoint.callback.UapCallbackClient;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.exception.ExceptionUtils;
 
 /**
  * This class is responsible for creating and managing the BoD system.
@@ -90,7 +91,7 @@ public final class AccessPoint implements UserAccessPoint,
 	private static AccessPoint instance;
     private static final Logger log = Logger.getLogger(AccessPoint.class);
 
-	private enum State { READY, PROCESSING, INACTIVE, RESTARTING, ERROR };
+	public static enum State { READY, PROCESSING, INACTIVE, RESTARTING, ERROR };
     private State state;
     private int logPosition;
     private Properties properties;
@@ -134,7 +135,7 @@ public final class AccessPoint implements UserAccessPoint,
 	/**
      * Initializes IDM module
      */
-	public void init() {
+	public State init() {
 		Properties properties = new Properties();
 	        
 		try {
@@ -147,7 +148,7 @@ public final class AccessPoint implements UserAccessPoint,
 			log.info("Could not load app.properties: " + e.getMessage());
 		}
 	    
-	    init(properties);
+	    return init(properties);
 	}
 	
 	/**
@@ -155,7 +156,7 @@ public final class AccessPoint implements UserAccessPoint,
 	 * 
 	 * @param props Properties object containing settings
 	 */
-	public void init(Properties props) {
+	public State init(Properties props) {
 		this.properties = props;
 		
         state = State.RESTARTING;
@@ -228,8 +229,9 @@ public final class AccessPoint implements UserAccessPoint,
 	        // call DM to abstract topology
 	        try {
 	        	domainManager.prepareTopology(domainURL.replace("interdomain", "dm2idm"));
-	        } catch(Exception e) {
+	        } catch (Exception e) {
 	        	log.error("Cannot connect to dm... IDM will not be able to process requests properly.");
+	        	log.debug("Exception info: ", e);
 	        }
 	        
 	        // create request converter
@@ -237,15 +239,39 @@ public final class AccessPoint implements UserAccessPoint,
 	        
             state = State.READY;
 	        
-		} catch(Exception e) {
+        } catch (org.hibernate.exception.GenericJDBCException e) {
             state = State.ERROR;
-            log.error("Error while init", e);
-		}
+            log.error("Database error while IDM init: " + 
+                    ExceptionUtils.getRootCause(e).getMessage() + 
+                    "\nPlease check the #DB PPOPERTIES section in etc/idm.properties " +
+                    "file and verify the values there.");
+            log.debug("Error info: ", e);
+        } catch (Exception e) {
+            state = State.ERROR;
+            Throwable thr = ExceptionUtils.getRootCause(e);
+            if (thr instanceof java.net.BindException) {
+                log.error("Error while IDM init: " + thr.getMessage() +
+                        "\nPlease check whether another server is running using" +
+                        " the same ports as Autobahn. You can check and edit the" +
+                        " ports used by Autobahn in etc/services.properties.");                
+            }
+            else if (thr instanceof java.net.ConnectException) {
+                log.error("Error while IDM init: " + thr.getMessage() +
+                        "\nPlease check whether the dm.address and the lookuphost" +
+                        " have been properly defined in etc/idm.properties.");                
+            }
+            else {
+                log.error("Error while IDM init: " + thr.getMessage());
+            }
+            log.debug("Error info: ", e);
+        }
         
         float total = (System.currentTimeMillis() - stime) / 1000.0f;
         log.info("===== End of initialization - " + total + " secs =====");
         
         runAfterInitChecks();
+        
+        return state;
 	}
 
 	private void retrieveIdcpTopology() {
@@ -1361,6 +1387,12 @@ public final class AccessPoint implements UserAccessPoint,
      */
     public void runAfterInitChecks() {
         log.info("===== Post-initialization check for IDM module. Watch out for any messages below... =====");
+        
+        if (state == State.ERROR) {
+            log.error("IDM module was not initialized successfully. Please check debug.log for" +
+                    " more information.");
+            return;
+        }
         
         // Check if the domainName exists in the database
         if (daos.getAdminDomainDAO().getByBodID(domainName) == null) {

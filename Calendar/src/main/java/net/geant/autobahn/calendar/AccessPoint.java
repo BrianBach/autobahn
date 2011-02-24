@@ -15,6 +15,7 @@ import net.geant.autobahn.intradomain.common.GenericLink;
 import net.geant.autobahn.resourcesreservationcalendar.ResourcesReservationCalendar;
 
 import org.apache.log4j.Logger;
+import org.hibernate.exception.ExceptionUtils;
 
 /**
  * Implementation of web services. Singleton design pattern.
@@ -58,7 +59,8 @@ public final class AccessPoint implements ResourcesReservationCalendar {
             state = State.READY;
         } catch (Exception e) {
             state = State.ERROR;
-            log.error("Error while init", e);
+            log.error("Error while init: " + e.getMessage());
+            log.debug("Error info: ", e);
         }
     }
     
@@ -128,30 +130,49 @@ public final class AccessPoint implements ResourcesReservationCalendar {
      */
     public void init() throws Exception {
         
+        state = State.RESTARTING;
+        
         runBeforeInitChecks();
         
         log.info("===== ResourcesReservationCalendar module Initialization =====");
         long stime = System.currentTimeMillis();
         
+        try {
+            String type = properties.getProperty("db.type");
+            if (type != null) {
+                type = type.toLowerCase();
+            }
+            else {
+                throw new Exception("db.type property can not be empty!");
+            }
+            
+        	if(type.equals("eth") || type.equals("ethernet")) {
+        		this.constraintsCalendar = new EthConstraintsReservationCalendar();	
+        	} else if(type.equals("sdh")) {
+        		this.constraintsCalendar = new SdhConstraintsReservationCalendar();
+        	}
+        	
+        	this.setupTime = Integer.valueOf(properties.getProperty("tool.time.setup"));
+        	this.teardownTime = Integer.valueOf(properties.getProperty("tool.time.teardown"));
+
+        	state = State.READY;
+            
+        } catch (Exception e) {
+            state = State.ERROR;
+            Throwable thr = ExceptionUtils.getRootCause(e);
+            if (thr instanceof java.net.BindException) {
+                log.error("Error while Calendar init: " + thr.getMessage() +
+                        "\nPlease check whether another server is running using" +
+                        " the same ports as Autobahn. You can check and edit the" +
+                        " ports used by Autobahn in etc/services.properties.");                
+            }
+            else {
+                log.error("Error while Calendar init: " + thr.getMessage());
+            }
+            log.debug("Error info: ", e);
+        }
+    	
         float total = (System.currentTimeMillis() - stime) / 1000.0f;
-        
-        String type = properties.getProperty("db.type");
-        if (type != null) {
-            type = type.toLowerCase();
-        }
-        else {
-            throw new Exception("db.type property can not be empty!");
-        }
-        
-    	if(type.equals("eth") || type.equals("ethernet")) {
-    		this.constraintsCalendar = new EthConstraintsReservationCalendar();	
-    	} else if(type.equals("sdh")) {
-    		this.constraintsCalendar = new SdhConstraintsReservationCalendar();
-    	}
-    	
-    	this.setupTime = Integer.valueOf(properties.getProperty("tool.time.setup"));
-    	this.teardownTime = Integer.valueOf(properties.getProperty("tool.time.teardown"));
-    	
         log.info("===== End of ResourcesReservationCalendar module initialization - " + total + " secs =====");
         
     	runAfterInitChecks();
@@ -279,6 +300,12 @@ public final class AccessPoint implements ResourcesReservationCalendar {
     public void runAfterInitChecks() {
         log.info("===== Post-initialization check for ResourcesReservationCalendar module. Watch out for any messages below... =====");
 
+        if (state == State.ERROR) {
+            log.error("Calendar module was not initialized successfully. Please check debug.log for" +
+                    " more information.");
+            return;
+        }
+        
         // Add any checks here
         
         log.info("===== Post-initialization check for ResourcesReservationCalendar module is complete. =====");
