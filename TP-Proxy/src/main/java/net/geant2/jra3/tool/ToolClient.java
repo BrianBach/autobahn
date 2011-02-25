@@ -24,7 +24,7 @@ public class ToolClient {
         
         try {
             new URL(endPoint);
-            log.debug("TP location seems a valid URL, trying to connect to it");
+            log.debug("TP location (" + endPoint + ") seems a valid URL, trying to connect to it");
         } catch (MalformedURLException e) {
             log.error("No valid TP location ("+ endPoint +") could be found, TP-Proxy->TP communication impossible");
             return;
