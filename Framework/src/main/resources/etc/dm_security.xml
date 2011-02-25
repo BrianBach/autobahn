@@ -11,6 +11,11 @@
                 <!--
                 access={custom expression}
                 e.g. ROLE_USER ORG_RNET,ROLE_ADMINISTRATOR = (ROLE_USER and ORG_GRNET) or (ROLE_ADMINISTRATOR)
+                
+                Attributes should be prefixed as follows:
+                    Organization: ORG_ (example: ORG_GRNET)
+                    Project Membership: PM_ (example: PM_AUTOBAHN)
+                    Project Role: ROLE_ (example ROLE_ADMINISTRATOR)
                 -->
                 <protect-pointcut
                         expression="execution(* net.geant.autobahn.aai.DmUserAuthorizer.authorize(..))"
