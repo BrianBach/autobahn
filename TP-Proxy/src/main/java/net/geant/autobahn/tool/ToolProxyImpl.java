@@ -16,7 +16,7 @@ import net.geant.autobahn.tool.types.ReservationParamsType;
         portName = "ToolPort",
         targetNamespace = "http://tool.autobahn.geant.net/", 
         endpointInterface = "net.geant.autobahn.tool.Tool")
-public class ToolImpl implements Tool {
+public class ToolProxyImpl implements Tool {
 
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.tool.Tool#addReservation(java.lang.String, java.util.List, net.geant.autobahn.reservation.ReservationParams)
