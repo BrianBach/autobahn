@@ -146,9 +146,14 @@ function configure_file_quagga_c {
 	     newpath=$2
              newpath_john=$3
              while [[ ! -d "$newpath" ]]; do
-                     echo -n "Enter the system folder where $1 is located (e.g. /etc/quagga/): "
-		     read newpath
-	     done
+                    echo -n "Enter the system folder where $1 is located (default: /etc/quagga/): "
+                    read -e t1
+					if [ -n "$t1" ]; then
+						newpath=$t1
+					else
+						newpath="/etc/quagga/"
+					fi
+	     	done
 
 	     add_attribute "$3=$newpath" "$path_only/installer.conf"
 	     source $path_only/installer.conf
@@ -164,8 +169,13 @@ function configure_file_quagga_c {
 	     echolog "Copied ospfd.conf, debian.conf, daemons, zebra.conf to $newpath_path_only"
 	    
 	     while [[ ! -d "$newpath_john" || ( ! -f "$newpath_john/zebra" && ! -f "$newpath_john/quagga" ) ]]; do
-                     echo -n "Please enter the path to start Quagga daemons: " 
-		     read newpath_john
+         	echo -n "Please enter the path to start Quagga daemons (e.g. /etc/init.d/): " 
+            read -e t1
+			if [ -n "$t1" ]; then
+				newpath_john=$t1
+			else
+				newpath_john="/etc/init.d/"
+			fi
 	     done
 		     
 	     echo $newpath_john > startDaemons.tmp
@@ -221,7 +231,12 @@ function file_editor {
       properties=`cat $path_only/temp_editor`
 
       exec 3>&1
-     cmd=$($DIALOG --backtitle "Editing $conf_file" --title "Edit most important attributes"  --form "Use [up] [down] arrows to select input field" 31 80 31  $properties 2>&1 1>&3) 
+     cmd=$($DIALOG --backtitle "Editing $conf_file" --title "Edit most important attributes"  --form "Use [up] [down] arrows to select input field" 31 80 24  $properties 2>&1 1>&3) 
+     if [ $? -ne 0 ]; then
+     	log "Unable to render property editor form"
+	    rm -f cur_properties temp_editor
+        return 1
+     fi
      exec 3>&-
 
 #If user pressed Cancel    
@@ -457,6 +472,8 @@ function get_dm_defaults {
 	lookuphost="http://ls-host:8080/perfsonar-java-xml-ls/services/LookupService"
 	cnis_address="http://cnis-host/abs/Autobahn"
 	monitoring_use=""
+	authorization_enabled="false"
+	
 	log "The dm file is $1"
 	if [ -e "$1" ]; then
 		propfile=`cat $1`
@@ -499,11 +516,13 @@ function get_dm_defaults {
 		   	  ;;
 			  monitoring.use ) monitoring_use=$curval
 		   	  ;;
+		   	  authorization.enabled ) authorization_enabled=$curval
+		   	  ;;
 			esac
 		done
 	fi	
-	log "domainName $domainName db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} tool.time.setup ${tool_time_setup} tool.time.teardown ${tool_time_teardown} lookuphost ${lookuphost} cnis.address ${cnis_address}"| tr -d '\r' 
-	echo -n "domainName $domainName db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} tool.time.setup ${tool_time_setup} tool.time.teardown ${tool_time_teardown} lookuphost ${lookuphost} cnis.address ${cnis_address}"| tr -d '\r' > $path_only/dm_defaults
+	log "domainName $domainName db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} tool.time.setup ${tool_time_setup} tool.time.teardown ${tool_time_teardown} lookuphost ${lookuphost} cnis.address ${cnis_address} authorization.enabled ${authorization_enabled}"| tr -d '\r' 
+	echo -n "domainName $domainName db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} tool.time.setup ${tool_time_setup} tool.time.teardown ${tool_time_teardown} lookuphost ${lookuphost} cnis.address ${cnis_address} authorization.enabled ${authorization_enabled}"| tr -d '\r' > $path_only/dm_defaults
 	poplocalinfo
 }
 
@@ -599,7 +618,8 @@ function get_framework_defaults {
 	pushlocalinfo
 	newlogparagraph "function get_framework_defaults"
 	framework_commandLine=localhost
-	framework_port=5000 
+	framework_port=5000
+	framework_password="abahn"
 	if [ -f $1 ]; then
 		propfile=`cat $1`
 		for line in $propfile; do
@@ -609,12 +629,14 @@ function get_framework_defaults {
 		          framework.commandLine ) framework_commandLine=$curval
 			  ;;
 		          framework.port ) framework_port=$curval
+		      ;;
+		          framework.password ) framework_password=$curval
 			  ;;
 			esac
 		done
 	fi	
-	log "framework.commandLine $framework_commandLine framework.port $framework_port" 
-	echo -n "framework.commandLine $framework_commandLine framework.port $framework_port" | tr -d '\r' > $path_only/framework_defaults
+	log "framework.commandLine $framework_commandLine framework.port $framework_port framework.password $framework_password" 
+	echo -n "framework.commandLine $framework_commandLine framework.port $framework_port framework.password $framework_password" | tr -d '\r' > $path_only/framework_defaults
 	poplocalinfo
 }
 
@@ -648,6 +670,33 @@ function get_ta_defaults {
 	poplocalinfo
 }
 
+function get_services_defaults {
+	pushlocalinfo
+	newlogparagraph "funciton get_services_defaults"
+	server_ip=150.140.8.57
+	server_port=8080
+	server_securePort=8090
+	
+	if [ -f $1 ]; then
+		propfile=`cat $1`
+		for line in $propfile; do
+			curprop=`echo $line | awk -F "=" '{print $1}'`
+			curval=`echo $line |awk -F "=" '{print $2}'`
+			case $curprop in 
+			  server.ip ) server_ip=$curval
+		          ;;
+			  server.port ) server_port=$curval
+		          ;;
+			  server.securePort ) server_securePort=$curval
+		          ;;
+			esac
+		done
+	fi	
+	log "server.ip $server_ip server.port $server_port server.securePort $server_securePort" 
+	echo -n "server.ip $server_ip server.port $server_port server.securePort $server_securePort" > $path_only/services_defaults
+	poplocalinfo
+}
+
 ###The following functions create the relevant configuration files
 ###create_x_properties path_to_property_file
 
@@ -672,6 +721,12 @@ function create_calendar_properties {
 function create_ta_properties {
 	 get_ta_defaults "$1"
 	 all_properties=`cat $path_only/ta_defaults`
+	 change_properties "$1" $all_properties
+}
+
+function create_services_properties {
+	 get_services_defaults "$1"
+	 all_properties=`cat $path_only/services_defaults`
 	 change_properties "$1" $all_properties
 }
 
@@ -792,7 +847,9 @@ function check_configuration_files {
 	CREATE_CONF=create_calendar_properties
 	check_conf_file "$autobahn_folder/etc/calendar.properties"	
 	CREATE_CONF=create_ta_properties
-	check_conf_file "$autobahn_folder/etc/ta.properties"		
+	check_conf_file "$autobahn_folder/etc/ta.properties"	
+	CREATE_CONF=create_services_properties
+	check_conf_file "$autobahn_folder/etc/services.properties"		
 	poplocalinfo
 }
 
@@ -851,37 +908,41 @@ function finalize {
 	if [ "$graphics" == yes ]; then
 		clear
 	fi
-	rm -f retval key value   $path_only/idm_defaults  $path_only/calendar_defaults  $path_only/ta_defaults temp_editor temp_prop ans $path_only/cur_properties $path_only/dm_defaults $path_only/templocalinfostack $path_only/framework_defaults
+	rm -f retval key value   $path_only/idm_defaults  $path_only/calendar_defaults  $path_only/ta_defaults $path_only/services_defaults temp_editor temp_prop ans $path_only/cur_properties $path_only/dm_defaults $path_only/templocalinfostack $path_only/framework_defaults
 }
 
 #init_db
 function init_db {
-	  pushlocalinfo
-	  newlogparagraph "init_db"
-	  export dbname="$1"
-echolog "Exported dbname=$dbname"
-          export PGPASSWORD="$2"
-          export dbuser="$3"
-echolog "Exported dbuser $dbuser"
-          sudo -u postgres createuser --superuser $dbuser
-          cmd="sudo -u postgres psql template1  -c \"create database $dbname with owner $dbuser\" -t > /dev/null 2>&1"
-     echolog "Create dbuser performed."
-          eval $cmd
-          if [ $? -ne 0 ]; then
-	        echolog "Database $dbname already existed."
-	  else
-                echolog "Database $dbname was created."
+	pushlocalinfo
+	newlogparagraph "init_db"
+	export dbname="$1"
+	echolog "Exported dbname=$dbname"
+	export PGPASSWORD="$2"
+	export dbuser="$3"
+	echolog "Exported dbuser $dbuser"
+	
+	echo "" | sudo -u postgres psql 2> /dev/null
+	if [ $? -ne 0 ]; then
+		echolog "Postgres server down!"
+		return 1
+	fi
+				
+    sudo -u postgres createuser --superuser $dbuser
+	cmd="sudo -u postgres psql template1  -c \"create database $dbname with owner $dbuser\" -t > /dev/null 2>&1"
+	echolog "Create dbuser performed."
+	eval $cmd
+	if [ $? -ne 0 ]; then
+		echolog "Database $dbname already existed."
+	else
+        echolog "Database $dbname was created."
 		echolog "Proceeding to create the db structure..."
 		sudo -u postgres psql $dbname < $path_only/../sql/create_db.sql
 		
-		sudo -u postgres psql < $path_only/temp.sql
-		
-		rm -f $path_only/temp.sql
 		if [ $? -ne 0 ]; then
 			echolog "An error occured while creating the  database structure! Please make sure that the user running this program has the permissions to modify $dbname and try again or run manually create_db.sql!"
 		fi
-	  fi
-	  poplocalinfo
+	fi
+	poplocalinfo
 }
 
 #init_ospfd initializes ospfd
@@ -914,10 +975,17 @@ function config_editor {
         autobahn_folder=$AUTOBAHN_FOLDER
 	should_exit=0
 	while [ $should_exit -ne 1 ]; do
-		$DIALOG --clear --backtitle "AutoBAHN configuration files editor" --menu "AutoBAHN configuration files" 15 80 8 "dm.properties" "Sets properties about the Domain Manager" "idm.properties" "Sets properties about the Interdomain Manager" "ta.properties" "Sets properties about the Topology Abstraction" "calendar.properties" "Sets properties about the Calendar" "framework.properties" "Sets properties about the Framework" "Back" "Return to previous menu" 2>ans
+		$DIALOG --clear --backtitle "AutoBAHN configuration files editor" --menu "AutoBAHN configuration files" 15 80 8 \
+		"dm.properties" "Sets properties about the Domain Manager" \
+		"idm.properties" "Sets properties about the Interdomain Manager" \
+		"ta.properties" "Sets properties about the Topology Abstraction" \
+		"services.properties" "Sets properties about the services" \
+		"calendar.properties" "Sets properties about the Calendar" \
+		"framework.properties" "Sets properties about the Framework" \
+		"Back" "Return to previous menu" 2>ans
+		
 		case $? in 
 		    255 ) return 1
-		    should_exit=1
 		    ;;
 		esac
         	choice=`cat ans`
@@ -939,7 +1007,12 @@ function config_editor {
 			   get_ta_defaults "$autobahn_folder/etc/ta.properties"
 			   log "Will call file_editor $autobahn_folder/etc/ta.properties `cat $path_only/ta_defaults`"
 			   file_editor "$autobahn_folder/etc/ta.properties" `cat $path_only/ta_defaults`
-	;;
+		;;
+			"services.properties" )
+			   get_services_defaults "$autobahn_folder/etc/services.properties"
+			   log "Will call file_editor $autobahn_folder/etc/services.properties `cat $path_only/services_defaults`"
+			   file_editor "$autobahn_folder/etc/services.properties" `cat $path_only/services_defaults`
+		;;
 			"calendar.properties" )
 			   get_calendar_defaults "$autobahn_folder/etc/calendar.properties"
 			   log "Will call file_editor $autobahn_folder/etc/calendar.properties `cat $path_only/calendar_defaults`"
@@ -953,7 +1026,7 @@ function config_editor {
 
 ;; 
 			"Back" )
-			   should_exit=1
+		    	return 1
 		 	;;
 	esac
     done
@@ -1013,6 +1086,8 @@ if [ "$enterui" == yes ]; then
 	fi
 	read_db_info_from_dm $autobahn_folder/etc/dm.properties
 	init_db $DBNAME $DBPASS $DBUSER
+	
+	#TODO: not use tmp for resiliency reasons
         echo $DBNAME > tempdbname.tmp
         echo $DBUSER > tempdbuser.tmp
 	init_ospfd

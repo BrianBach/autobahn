@@ -57,7 +57,7 @@ function newlogparagraph {
 function echolog {
 	if [ "$LOGGER_GRAPHICAL" == "yes" ]; then
 		echo "$1" > $path_only/tempmsg
-		$DIALOG --clear --title "System messages" --textbox $path_only/tempmsg 25 78	
+		$DIALOG --clear --title "System messages" --exit-label "Continue" --textbox $path_only/tempmsg 25 78	
 		rm -f $path_only/tempmsg
 	else
 		echo "$1"
@@ -90,7 +90,7 @@ function poplog {
 #Usage popecholog
 function popecholog {
 	if [[ "$LOGGER_GRAPHICAL" == "yes" ]]; then
-		$DIALOG --clear --title "System messages" --textbox $ECHO_LOG 25 78	
+		$DIALOG --clear --title "System messages" --exit-label "Continue" --textbox $ECHO_LOG 25 78	
 	else
 		echo "`cat $ECHO_LOG`"
 	fi	

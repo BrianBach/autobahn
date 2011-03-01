@@ -172,7 +172,9 @@ function setup_database {
 				log "sudo -u postgres psql $path_only/$dbname < $FILE returned $?"
 			fi
 				  ;;
-			255) val_sql=1;;
+				  
+			1) return 1;;
+			255) return 1;;
 		esac	
 	done
 	rm -f ipans
@@ -183,12 +185,12 @@ function setup_database {
 function add_tunnel {
 	pushlocalinfo
 	newlogparagraph "function add_tunnel"
-	$ENTER_IP "Remote instance:" "Remote AutoBAHN instance"
+	$ENTER_IP "Remote instance:" "Remote AutoBAHN instance IP"
 	if [ $? -eq 1 ]; then #escape was pressed
 		return 
 	fi
 	remote_instance=$current_ip
-	$ENTER_IP "Local instance:" "Local AutoBAHN instance"
+	$ENTER_IP "Local instance:" "Local AutoBAHN instance IP"
 	if [ $? -eq 1 ]; then #escape was pressed
 		return
 	fi
@@ -198,7 +200,7 @@ function add_tunnel {
 		return 
 	fi
 	local_subnet=$current_ip
-	$ENTER_IP "Local Router:" "Local Router ID"
+	$ENTER_IP "Local Router:" "Local Router IP"
 	if [ $? -eq 1 ]; then #escape was pressed
 		return 
 	fi
@@ -316,7 +318,7 @@ function tunnel_editor {
 						fi
 						val_ip=0 #true
 						while [ $val_ip -ne 1 ]; do
-						$DIALOG --backtitle "Edit Tunnel" --title "Edit tunnel" --form "Use [up] [down] to select input field" 21 70 18 "Remote IP:" 2 4 "$remoteip" 2 22 20 0 "Local IP:" 4 4 "$localip" 4 22 20 0 "Local Subnet:" 6 4 "$localsubnet" 6 22 20 0 "Local Router ID:" 8 4 "$localrouterid" 8 22 20 0 "Network:" 10 4 "$network" 10 22 20 0 "Area:" 12 4 "$area" 12 22 20 0 2>ans
+						$DIALOG --backtitle "Edit Tunnel" --title "Edit tunnel" --form "Use [up] [down] to select input field" 31 80 24 "Remote IP:" 2 4 "$remoteip" 2 22 20 0 "Local IP:" 4 4 "$localip" 4 22 20 0 "Local Subnet:" 6 4 "$localsubnet" 6 22 20 0 "Local Router ID:" 8 4 "$localrouterid" 8 22 20 0 "Network:" 10 4 "$network" 10 22 20 0 "Area:" 12 4 "$area" 12 22 20 0 2>ans
 							if [ ! $? -eq 0 ]; then #escape was pressed
 								return 1
 							fi
@@ -487,19 +489,25 @@ function setup_database_c {
 	newlogparagraph "function setup_database_c"
 	val_sql=0 #true
 	while [ $val_sql -ne 1 ]; do
+		dbname=`cat $path_only/tempdbname.tmp`
+		#TODO: user should be able to change dbname
+		#printf "Please enter the database name you want to use, default($dbname):"
+		#read dbname
 		printf "Please enter the path of a PSQL dump:"
 		read FILE
 		case $? in
 			0)filename=${FILE##*/}
 			  extension=${filename##*.}
 			if [ $extension = "sql" ]; then
-				dbname=`cat $path_only/tempdbname.tmp`
+				#dbname=`cat $path_only/tempdbname.tmp`
 				echolog "dbname:$dbname path_only:$path_only"
-                                rm -f tempdbname.tmp
-                                dbuser=`cat $path_only/tempdbuser.tmp`
-                                rm -f tempdbuser.tmp
+                                #rm -f tempdbname.tmp
+                                #dbuser=`cat $path_only/tempdbuser.tmp`
+                                #rm -f tempdbuser.tmp
 
 				val_sql=1
+		sudo -u postgres psql $dbname < $path_only/../sql/drop_all.sql
+		sudo -u postgres psql $dbname < $path_only/../sql/create_db.sql
                 sudo -u postgres psql $dbname < $FILE
 				log "I ran sudo -u postgres psql $dbname < $FILE, if unsuccessful either psql doesn't exist or the user doesn't have the appropriate permissions"
 			fi
@@ -513,10 +521,11 @@ declare -t setup_database_c
 
 #Checks if the dialog command exists
 function check_ui {
-	res=`dialog`
+	#was res=`dialog`
+	dialog &>/dev/null
 	if [ $? -ne 0 ]; then
 		return 1
-	fi	
+	fi
 	return 0
 }
 

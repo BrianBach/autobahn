@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 
+if [ $(whoami) != "root" ] ; then
+	echo "Installer requires root privileges"
+	exit 0
+fi
+
 abspath=$(cd ${0%/*} && echo $PWD/${0##*/})
+
+chmod +x *.sh
 
 # to get the path only - not the script name - add
 path_only=`dirname "$abspath"`
