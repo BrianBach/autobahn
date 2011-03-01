@@ -175,7 +175,7 @@ public final class AccessPoint implements TopologyAbstraction {
         this.topology = topology;
         log.debug("Received topology, type: "+topologyType+", topology:" + topology + ", genericLinks:" + topology.getGenericLinks());
         this.topologyType = topologyType;
-        //log.debug("Printing topology retrieved from WS..."+topology.TopologyString());
+        log.debug("Printing topology retrieved from WS..."+topology.TopologyString());
         
         // Since we now have IntradomainTopology information, it is time
         // to complete initialization of the module

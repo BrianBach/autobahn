@@ -215,7 +215,7 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
 			String interName) {
     	
     	String nodeName = gif.getNode().getName();
-        log.debug("Creating abstract node for node " + nodeName + " where generic interface " + gif.getInterfaceId() + " is attached");
+        log.debug("Creating abstract node for node " + nodeName + "(" +gif.getNode().getNodeId() + ") where generic interface " + gif.getInterfaceId() + " is attached");
     	net.geant.autobahn.network.Node res = absNodes.get(nodeName);
     	
     	if(res == null) {

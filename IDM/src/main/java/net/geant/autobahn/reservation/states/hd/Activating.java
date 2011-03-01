@@ -15,7 +15,7 @@ import net.geant.autobahn.reservation.ReservationTimeout;
  */
 public class Activating extends HomeDomainState {
 
-	public static final int MAX_ACTIVATION_TIME = 60 * 1000; //in msec
+	public static final int MAX_ACTIVATION_TIME = 300 * 1000; //in msec
 	
 	public Activating(int code, String label) {
 		super(code, label);
