@@ -10,11 +10,14 @@
 
  <!-- generally javascript should go in a separate file -->
 <script type="text/javascript">
+
+var u = "servicesforidm.htm"+'?valueParam=' +'${result}'; 
+
 var dataG;
 var options = 
 {
     //target:     "#servicesform"	,
-    url:        "servicesforidm.htm"	,
+    url:        u,
     success:    function(data) 
     {	 
 	  if(dataG!=data)
@@ -57,7 +60,7 @@ jQuery(document).ready(function()
 <div align="center" class="logs_image">
 <form:form commandName="services" action="" id="servicessearchform">
 <table>
-	<tr><td><h3>Please select an IDM to view and modify its properties</h3></td></tr>
+	<tr><td><h3>Please select an IDM to view its submitted services</h3></td></tr>
 	<tr>
 	<td>
 		<center><form:select path="currentIdm">

@@ -355,7 +355,9 @@ public class TopologyFinder implements TopologyFinderNotifier{
 							line.setTickness("5");
 							line.setOblique(0);
 							topology.addLine(line);
-							
+							if(list == null){
+							    System.out.println("list is NULL");
+							}
 							ic = new InterfaceComponent(status.getDomain(), status.getLatitude(), status.getLongitude(), 
 									statusNeighbor.getLatitude(),statusNeighbor.getLongitude(), list.size(), isActive?9:23, list);
 							interfaceComponents.add(ic);

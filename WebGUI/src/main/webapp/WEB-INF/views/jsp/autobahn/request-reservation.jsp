@@ -17,6 +17,9 @@ var month = parseInt(now.getMonth())+1;
 if(month > 12){
 	month = 01;
 }
+if(month < 10){
+	month = "0" + month;
+}
 var day;
 if(now.getDate()<10){
 	day= "0" + now.getDate();
@@ -209,7 +212,7 @@ function blockInputStartTime(checked) {
 
         <td class="label" id="hide1"><spring:message code="reservation.vlan"/></td>
         <td id="hide2" >
-			<form:input path="request.startPort.vlan" maxlength="3" cssStyle="width:21px; height:12px; margin-right:0px;"/> 
+			<form:input path="request.startPort.vlan" maxlength="4" cssStyle="width:21px; height:12px; margin-right:0px;"/> 
 		</td>
 		
 	</tr>
@@ -237,7 +240,7 @@ function blockInputStartTime(checked) {
         <td class="label" id="hide3" ><spring:message code="reservation.vlan"/></td>
         
         <td id="hide4"  >
-			<form:input path="request.endPort.vlan" maxlength="3" cssStyle="width:21px; height:12px; margin-right:0px;"/> 
+			<form:input path="request.endPort.vlan" maxlength="4" cssStyle="width:21px; height:12px; margin-right:0px;"/> 
 		</td>
 		
 	</tr>

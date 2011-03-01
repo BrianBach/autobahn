@@ -15,7 +15,7 @@ form td.port {
 #collection a {color:#ffffff;border:#000080 1px solid;background-color:#000080;font-size:11px;height:30px}
 
 
-#nav {background: url(nav.png) no-repeat; width:170px;font-family: Arial, Helvetica, sans; font-size:12px; float:left; margin:0px;padding:0px;font-weight: bold;color:#000000; line-height:20px; border:none; height:190px}
+#nav {background: url(nav.png) no-repeat; width:170px;font-family: Arial, Helvetica, sans; font-size:12px; float:left; margin:0px;padding:0px;font-weight: bold;color:#000000; line-height:20px; border:none; height:260px}
 /*#nav h2 {max-width:120px; margin-left:50px;font-size: 12px; line-height: 18px; text-align:center;vertical-align:middle; font-weight: bold; border-bottom: 1px #ffffff solid;}*/
 #nav a {max-width:120px; padding-top:5px; margin-left:25px;font-family:  Arial, Helvetica, sans; font-size:11px; display:block; text-decoration:none; color:#25648d; background-color:none; border-bottom: 1px solid #000000;}  
 #nav a:hover {padding-left:15px;font-family: Arial, Helvetica, sans; font-size:11px; color:#00227e;font-weight: bold;background-color:none;}

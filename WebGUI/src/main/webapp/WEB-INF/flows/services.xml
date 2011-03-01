@@ -9,6 +9,8 @@
 		<set name="requestScope.currentIdm" value="requestParameters.idm"></set>
 		<evaluate expression="manager.getSubmitedServicesInIDM(requestScope.currentIdm)" result="flowScope.services"/>
 		<evaluate expression="manager.reservationStates" result="flowScope.reservationStates"/>
+		<set name="requestScope.valueParam" value="0" type="string"/>
+		<evaluate expression="manager.setParameter(requestScope.valueParam)" result="flowScope.result"></evaluate>
 	</on-start>
 
 	<decision-state id="check-idm">
@@ -19,12 +21,15 @@
 		<binder>
 			<binding property="currentIdm"/>
 		</binder>
+				
 		<transition on="change" to="services" bind="true">
 			<evaluate expression="manager.getSubmitedServicesInIDM(flowScope.services.currentIdm)" result="services"/>
 		</transition>
 		<transition on="cancel" to="services">
 			<set name="requestScope.id" value="requestParameters.id"/>
+			<set name="requestScope.valueParam" value="requestParameters.valueParam" type="string"></set>
 			<evaluate expression="manager.cancelServiceInInterDomainManager(flowScope.services.currentIdm,requestScope.id)"/>	 
+			<evaluate expression="manager.setParameter(requestScope.valueParam)" result="flowScope.result"></evaluate>
 		</transition>
 		
 		<transition on-exception="java.lang.Exception" to="services"> 

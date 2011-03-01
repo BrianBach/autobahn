@@ -446,11 +446,14 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	public List<String> getInterDomainManagerPorts (String idmIdentifier){
 	    InterDomainManager manager = idms.get(idmIdentifier);
 	    if (manager == null) {
+	        System.out.println("idms.get manager is NULL");
 	    	return null;
 	    }
 	    
     	String[] temp = manager.getDomainClientPorts();
     	if (temp == null) {
+    	    System.out.println("idms manager is" + manager.getIdentifier());
+    	    System.out.println("idms.get client ports is NULL");
     	    return null;
     	}
     	
@@ -458,7 +461,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	    for(String port : temp) {
 	    	ports.add(port);
 	    }
-	    
+	    System.out.println("ports are ok");
 	    //logger.info (ports);
 	    return ports;
 	}
