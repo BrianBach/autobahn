@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
         <artifactId>autobahn</artifactId>
         <groupId>net.geant.autobahn</groupId>
-        <version>1.0.0RC-SNAPSHOT</version>
+        <version>1.0.0RC</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.geant.autobahn</groupId>
     <artifactId>autobahn-tool-proxy</artifactId>
-    <version>1.0.0RC-SNAPSHOT</version>
+    <version>1.0.0RC</version>
     <name>Tool Proxy</name>
     <packaging>jar</packaging>
 
@@ -102,12 +101,12 @@
         <dependency>
             <groupId>net.geant.autobahn</groupId>
             <artifactId>autobahn-common</artifactId>
-            <version>1.0.0RC-SNAPSHOT</version>
+            <version>1.0.0RC</version>
         </dependency>
         <dependency>
             <groupId>net.geant.autobahn</groupId>
             <artifactId>autobahn-tool</artifactId>
-            <version>1.0.0RC-SNAPSHOT</version>
+            <version>1.0.0RC</version>
         </dependency>           
         <dependency>
             <groupId>org.apache.cxf</groupId>
