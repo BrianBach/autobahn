@@ -5,7 +5,7 @@
 <div style="text-align: left;" class="home_image">
 <p>
 AutoBAHN is about the investigation and development of an end-to-end (and therefore multi-domain) 
-"Bandwidth Allocation and Reservation Service" a^€“ in other words a "Bandwidth on Demand" (BoD) service. 
+"Bandwidth Allocation and Reservation Service" in other words a "Bandwidth on Demand" (BoD) service. 
 Sometimes the term "circuit-based" 
 has been used in order to highlight the fact that the bandwidth should be reserved,
 not contended, exhibit some form of deterministic performance and be logically separated

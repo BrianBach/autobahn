@@ -317,7 +317,7 @@ function blockInputStartTime(checked) {
         <tr>
            <td>
                 <input type="submit" name="_eventId_submit" onmouseover="this.style='background-color: #FFF;'"  
-                 style="height: 25px; width: 220px"   value="<spring:message code="reservation.submit"/>"/>
+                 style="height: 25px; width: 220px"   value="<spring:message code="reservation.add"/>"/>
            </td>
            <td>
                 <input type="submit" name="_eventId_test"
@@ -355,7 +355,7 @@ function blockInputStartTime(checked) {
         <tr>
            <td>
                 <input type="submit" name="_eventId_submit" 
-                 style="height: 25px; width: 220px"   value="<spring:message code="reservation.submit"/>"/>
+                 style="height: 25px; width: 220px"   value="<spring:message code="reservation.add"/>"/>
            </td>
            <td>
                 <input type="submit" name="_eventId_test" 
@@ -450,7 +450,7 @@ function blockInputStartTime(checked) {
         <tr>
            <td>
                 <input type="submit" name="_eventId_submit" 
-                 style="height: 25px; width: 220px"   value="<spring:message code="reservation.submit"/>"/>
+                 style="height: 25px; width: 220px"   value="<spring:message code="reservation.add"/>"/>
            </td>
            <td>
                 <input type="submit" name="_eventId_test" 
