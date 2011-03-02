@@ -1398,7 +1398,7 @@ public final class AccessPoint implements UserAccessPoint,
         if (daos.getAdminDomainDAO().getByBodID(domainName) == null) {
             log.info("The domain " + domainName + " does not exist in the DB. " +
                     "If this is the very first time you are starting the software " +
-                    "this is normal. Otherwise, this is almost certainly a problem" +
+                    "this is normal. Otherwise, this is almost certainly a problem " +
                     "and you need to check the idm.properties " +
                     "and the admin domains in the DB.");
         }
