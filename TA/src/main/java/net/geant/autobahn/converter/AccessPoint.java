@@ -155,7 +155,7 @@ public final class AccessPoint implements TopologyAbstraction {
                         " ports used by Autobahn in etc/services.properties.");                
             }
             else {
-                log.error("Error while TA init: " + thr.getMessage());
+                log.error("Error while TA init: " + ((thr == null)?"":thr.getMessage()));
             }
             log.debug("Error info: ", e);
         }

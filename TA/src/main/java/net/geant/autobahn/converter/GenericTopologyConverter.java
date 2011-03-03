@@ -1,5 +1,7 @@
 package net.geant.autobahn.converter;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -293,7 +295,7 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
 
         String sportname = gl.getStartInterface().getName();
         // Register the local (start) port of the interdomain link at the LS
-        if (lookuphost != null) {
+        if (isLSavailable(lookuphost)) {
             LookupService lookup = new LookupService(lookuphost);
 	        try {
 	    		String sportPublicName = idMappings.getIdentifierFor(sportname);
@@ -316,7 +318,7 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
         String dportname = gl.getEndInterface().getName();
         // If Database did not contain the remote (end) port of the 
         // interdomain link port name, try to query it from the LS
-        if (dportname == null && lookuphost != null) {
+        if (dportname == null && isLSavailable(lookuphost)) {
             LookupService lookup = new LookupService(lookuphost);
             ArrayList<String> edgePortIds;
             try {
@@ -417,7 +419,7 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
         		info.add("Mapping client port " + dname + "\t to " + bodID);
     		    
     		    // Register end port to LS
-    			if (lookuphost != null) {
+    			if (isLSavailable(lookuphost)) {
 	    		    String domain = glink.getEndInterface().getDomainId();
 	    		    String friendlyName = glink.getEndInterface().getDescription();
 	    		    LookupService lookup = new LookupService(lookuphost);
@@ -663,6 +665,20 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
 	 */
 	public Node getdNodeLink(Link l) {
 		return dNodetoVLinks.get(l);
+	}
+	
+	private boolean isLSavailable(String ls) {
+	    if ((ls == null) || ls.equals("none") || ls.equals("")) {
+	        return false;
+	    }
+        // Check if it is a proper URL
+        try {
+            new URL(ls);
+        } catch (MalformedURLException e) {
+            log.debug(ls + " is not a proper URL for LS");
+            return false;
+        }
+	    return true;
 	}
 
 	@Override

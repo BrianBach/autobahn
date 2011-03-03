@@ -167,7 +167,7 @@ public final class AccessPoint implements ResourcesReservationCalendar {
                         " ports used by Autobahn in etc/services.properties.");                
             }
             else {
-                log.error("Error while Calendar init: " + thr.getMessage());
+                log.error("Error while Calendar init: " + ((thr == null)?"":thr.getMessage()));
             }
             log.debug("Error info: ", e);
         }

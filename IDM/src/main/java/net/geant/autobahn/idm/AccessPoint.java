@@ -195,13 +195,15 @@ public final class AccessPoint implements UserAccessPoint,
 	        
 	        //Register to Lookup
 	        String host = properties.getProperty("lookuphost");
-	        LookupService lookup = new LookupService(host);
-	        try {
-                lookup.RegisterIdm(domainName, domainURL);
-            } catch (LookupServiceException lse) {
-                log.info("IDM could not register itself to the LS");
-                lse.printStackTrace();
-            }
+	        if (isLSavailable(host)) {
+    	        LookupService lookup = new LookupService(host);
+    	        try {
+                    lookup.RegisterIdm(domainName, domainURL);
+                } catch (LookupServiceException lse) {
+                    log.info("IDM could not register itself to the LS");
+                    lse.printStackTrace();
+                }
+	        }
 	        
 	        neighbors = pathFinder.getNeighbours(admin); 
 	        
@@ -261,7 +263,7 @@ public final class AccessPoint implements UserAccessPoint,
                         " have been properly defined in etc/idm.properties.");                
             }
             else {
-                log.error("Error while IDM init: " + thr.getMessage());
+                log.error("Error while IDM init: " + ((thr == null)?"":thr.getMessage()));
             }
             log.debug("Error info: ", e);
         }
@@ -1375,8 +1377,19 @@ public final class AccessPoint implements UserAccessPoint,
         String lookuphost = properties.getProperty("lookuphost");
         if (lookuphost == null || lookuphost.equals("none") || lookuphost.equals("")) {
             log.info("lookuphost is empty. IDM will not be able to register itself at the LS." +
-            		"This will only work if other IDMs already have the URL of this IDM as the " +
+            		" This will only work if other IDMs already have the URL of this IDM as the " +
             		"domain name in their DBs.");
+        } else {
+            // Check if it is a proper URL
+            try {
+                new URL(lookuphost);
+            } catch (MalformedURLException e) {
+                log.info(lookuphost + " is not a proper URL for LS." +
+                		" IDM will not be able to register itself at the LS." +
+                        " This will only work if other IDMs already have the URL of this IDM as the " +
+                        "domain name in their DBs.");
+                log.info(e.getMessage());
+            }
         }
         
         log.info("===== Pre-initialization check for IDM module is complete. =====");
@@ -1426,6 +1439,20 @@ public final class AccessPoint implements UserAccessPoint,
         }
         
         hbm.closeSession();
+    }
+
+    private boolean isLSavailable(String ls) {
+        if ((ls == null) || ls.equals("none") || ls.equals("")) {
+            return false;
+        }
+        // Check if it is a proper URL
+        try {
+            new URL(ls);
+        } catch (MalformedURLException e) {
+            log.debug(ls + " is not a proper URL for LS");
+            return false;
+        }
+        return true;
     }
 
 }

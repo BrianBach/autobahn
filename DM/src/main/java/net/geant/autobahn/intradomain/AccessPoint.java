@@ -207,7 +207,7 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
                         " etc/dm.properties.");                
             }
             else {
-                log.error("Error while DM init: " + thr.getMessage());
+                log.error("Error while DM init: " + ((thr == null)?"":thr.getMessage()));
             }
             log.debug("Error info: ", e);
         }
@@ -424,6 +424,14 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
         String lookuphost = properties.getProperty("lookuphost");
         if (lookuphost == null || lookuphost.equals("none") || lookuphost.equals("")) {
             log.info("lookuphost is empty. The DM may need the LS in order to communicate with the IDM.");
+        } else {
+            // Check if it is a proper URL
+            try {
+                new URL(lookuphost);
+            } catch (MalformedURLException e) {
+                log.info(lookuphost + " is not a proper URL for LS. " +
+                		"The DM may need the LS in order to communicate with the IDM.");
+            }
         }
         
         String idm_address = properties.getProperty("idm.address");
