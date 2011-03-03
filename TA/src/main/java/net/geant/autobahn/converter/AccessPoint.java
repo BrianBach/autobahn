@@ -298,7 +298,7 @@ public final class AccessPoint implements TopologyAbstraction {
         String lookuphost = properties.getProperty("lookuphost");
         if (lookuphost == null || lookuphost.equals("none") || lookuphost.equals("")) {
             log.info("lookuphost is empty. Database entries for interdomain links will have to contain" +
-            		"both local and remote port names as the remote port name will not be recovered through the LS.");
+            		" both local and remote port names as the remote port name will not be recovered through the LS.");
         }
         
         log.info("===== Pre-initialization check for Topology Abstraction module is complete. =====");
