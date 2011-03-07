@@ -324,5 +324,7 @@ public interface Manager {
 	public int getNumberOfAvailableIDMs();
 	
 	public List<String> getReservationModes();
+	
+	public void convertCapacity(ReservationRequest request);
 }
 

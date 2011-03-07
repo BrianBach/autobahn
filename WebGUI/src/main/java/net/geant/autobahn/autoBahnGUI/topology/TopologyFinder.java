@@ -303,8 +303,13 @@ public class TopologyFinder implements TopologyFinderNotifier{
 				
 				List<Neighbor> neighbors = status.getNeighbors();
 				
-				if (neighbors==null || neighbors.isEmpty())
+				System.out.println("domain name: "+idmsNames.get(i));
+				if (neighbors==null || neighbors.isEmpty()){
+				
+					System.out.println("neighbor == null or list is empty");
 					continue;	
+				}
+				
 				
 				int lengthN = neighbors.size();
 				
@@ -316,7 +321,9 @@ public class TopologyFinder implements TopologyFinderNotifier{
 			 
 				if (neighbourIdm==null)
 					continue;
-						
+				
+				System.out.println("neighbor: "+neighbors.get(j).getDomain());		
+				
 				statusNeighbor = neighbourIdm.getStatus();
 				
 				list = manager.getMappedInterDomainManagerPorts(idmsNames.get(i));

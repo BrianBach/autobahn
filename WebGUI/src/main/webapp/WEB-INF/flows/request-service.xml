@@ -79,6 +79,7 @@
 		</binder>
 		<transition on="submit" to="request-service" bind="true">
 			<evaluate expression="manager.convertTimeToApplicationTimezone(reservation.timezone,reservation.request)"/>
+			<evaluate expression="manager.convertCapacity(reservation.request)"/>
 			<evaluate expression="service.getReservations().add(reservation.request)"/>
 		</transition>
 		

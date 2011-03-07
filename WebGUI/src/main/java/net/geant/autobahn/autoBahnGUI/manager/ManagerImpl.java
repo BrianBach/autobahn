@@ -461,8 +461,6 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	    for(String port : temp) {
 	    	ports.add(port);
 	    }
-	    System.out.println("ports are ok");
-	    //logger.info (ports);
 	    return ports;
 	}
 	
@@ -1322,5 +1320,11 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 			return -1;		
 		
 		return idms.size();
+	}
+	
+	public void convertCapacity(ReservationRequest request){
+		
+		long capacity = request.getCapacity();
+		request.setCapacity(capacity * 1000000 );
 	}
 }

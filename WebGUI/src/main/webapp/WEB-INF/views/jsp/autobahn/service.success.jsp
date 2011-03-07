@@ -43,7 +43,7 @@
 					<td>${item.endPort.address}</td>
 					<td>VLAN</td>
 					<td>${item.endPort.vlan}</td>
-					<td>${item.capacity}</td>
+					<td>${item.capacity/1000000}</td>
 					<td>${item.mtu}</td>
 				</tr>
 		</c:forEach>
