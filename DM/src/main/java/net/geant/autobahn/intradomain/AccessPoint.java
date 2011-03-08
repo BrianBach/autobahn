@@ -155,11 +155,6 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
             log.debug("Send to TA" + topology.TopologyString());
             ta.setIntradomainTopology(topology, topologyType);
             
-            // Reading topology from xml format from Topology Builder 
-            TopologyFileReader topologySource = new TopologyFileReader(properties
-    				.getProperty("topology.file"));
-            topologySource.saveTopology();
-            
             // Init intradomain pathfinder
             pathfinder = IntradomainPathfinderFactory.getIntradomainPathfinder(topology);
             

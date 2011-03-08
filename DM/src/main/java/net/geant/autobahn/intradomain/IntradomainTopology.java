@@ -1,5 +1,7 @@
 package net.geant.autobahn.intradomain;
 
+import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +33,7 @@ import net.geant.autobahn.intradomain.mpls.MplsLink;
 import net.geant.autobahn.intradomain.sdh.SdhDevice;
 import net.geant.autobahn.intradomain.sdh.StmLink;
 import net.geant.autobahn.intradomain.sdh.StmType;
+import net.geant.autobahn.utils.MyProperties;
 import net.geant2.cnis.autobahn.CnisClient;
 import net.geant2.cnis.autobahn.xml.CnisToAutobahnResponse;
 import net.geant2.cnis.autobahn.xml.ethernet.IDLink;
@@ -275,6 +278,12 @@ public class IntradomainTopology {
 		log.info("Connecting to cNIS instance: " + address);
 		CnisToAutobahnResponse resp = cnis.getIntradomainTopology();
 		
+    	InputStream is = getClass().getClassLoader().getResourceAsStream("etc/public_ids.properties");
+    	MyProperties publicIds = null;
+    	if(is != null) {
+    		publicIds = new MyProperties(is);
+    	}
+		
 		if(isSDH()) {
 			nodes = new ArrayList<Node>();
 			
@@ -296,6 +305,13 @@ public class IntradomainTopology {
 					port.setDomainId(domainName);
 					port.setClientPort(false);
 					port.setName(p.getName());
+					
+					String pub = getPublicName(p);
+					if(pub != null) {
+						log.info("Received public identifier from cNIS: " + p.getName() + " " + pub);
+						publicIds.setProperty(p.getName(), pub);
+					}
+					
 	                //mtu info added
                     for (net.geant2.cnis.autobahn.xml.common.Tag tag: p.getTags().getTag()) {
                         if (tag.getKey().equals("mtu")) {
@@ -334,6 +350,9 @@ public class IntradomainTopology {
 				GenericInterface sport = ports.get(l.getStartPort().getName());
 				sport.setBandwidth(l.getBandwidth().longValue());
 				glink.setStartInterface(sport);
+
+				//String publicName = getPublicName(l.getExternalDomain());
+				//System.out.println(publicName);
 				
 				Node dnode = new Node();
 				dnode.setNodeId(0);
@@ -408,6 +427,12 @@ public class IntradomainTopology {
 				
 				for(PhysicalPort p : n.getPhysicalPorts().getPort()) {
 					GenericInterface port = new GenericInterface();
+					
+					String pub = getPublicName(p);
+					if(pub != null) {
+						log.info("Received public identifier from cNIS: " + p.getName() + " " + pub);
+						publicIds.setProperty(p.getName(), pub);
+					}
 					
 					port.setInterfaceId(0);
 					port.setNode(node);
@@ -491,7 +516,6 @@ public class IntradomainTopology {
 				sptrees.add(st);
 			}
 			
-			
 			genericLinks = new ArrayList<GenericLink>();
 			for(SpanningTree st: sptrees) {
 				genericLinks.add(st.getEthLink().getGenericLink());
@@ -505,10 +529,10 @@ public class IntradomainTopology {
 	    	t.commit();
 	    	
 		} else if (isMpls()) {  
-			
 			// TODO when cnis wsdl with mpls support is ready
-			
 		}
+		
+		publicIds.save(new File("etc/public_ids.properties"));
     }
 
     private void mergeTheNodes(List<SpanningTree> sptrees) {
@@ -617,9 +641,46 @@ public class IntradomainTopology {
 				return tag.getValue().replace("!", "="); // we must restore original identifier as cnis gui does not allow multiple '='
 			}
 		}
-		;return null;
+		return null;
     }
 
+    /**
+     * @param d
+     * @return
+     */
+    private String getPublicName(net.geant2.cnis.autobahn.xml.sdh.PhyInterface p) {
+    	net.geant2.cnis.autobahn.xml.common.Tags dTags = p.getTags();
+    	
+    	if(dTags == null)
+    		return null;
+    	
+		for (net.geant2.cnis.autobahn.xml.common.Tag tag: dTags.getTag()) {
+			if(tag.getKey().contains("public-name")) {
+				return tag.getValue();
+			}
+		}
+		
+		return null;
+    }
+    
+    /**
+     * @param d
+     * @return
+     */
+    private String getPublicName(net.geant2.cnis.autobahn.xml.ethernet.PhysicalPort p) {
+    	net.geant2.cnis.autobahn.xml.common.Tags dTags = p.getTags();
+    	
+    	if(dTags == null)
+    		return null;
+    	
+		for (net.geant2.cnis.autobahn.xml.common.Tag tag: dTags.getTag()) {
+			if(tag.getKey().contains("public-name")) {
+				return tag.getValue();
+			}
+		}
+		
+		return null;
+    }
     
 	/**
 	 * Helper method useful for clearing from the database all the information

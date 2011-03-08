@@ -73,6 +73,10 @@ public class Node {
     protected String vendor;
     @XmlAttribute
     protected String model;
+    @XmlAttribute
+    protected Boolean vlanTranslation;
+    @XmlAttribute
+    protected String ipAddress;
 
     /**
      * Gets the value of the location property.
@@ -290,8 +294,35 @@ public class Node {
         this.model = value;
     }
 
-
     /**
+	 * @return the vlanTranslation
+	 */
+	public Boolean getVlanTranslation() {
+		return vlanTranslation;
+	}
+
+	/**
+	 * @param vlanTranslation the vlanTranslation to set
+	 */
+	public void isVlanTranslation(Boolean vlanTranslation) {
+		this.vlanTranslation = vlanTranslation;
+	}
+
+	/**
+	 * @return the ipAddress
+	 */
+	public String getIpAddress() {
+		return ipAddress;
+	}
+
+	/**
+	 * @param ipAddress the ipAddress to set
+	 */
+	public void setIpAddress(String ipAddress) {
+		this.ipAddress = ipAddress;
+	}
+
+	/**
      * <p>Java class for anonymous complex type.
      * 
      * <p>The following schema fragment specifies the expected content contained within this class.
