@@ -701,7 +701,7 @@ function get_services_defaults {
 ###create_x_properties path_to_property_file
 
 function create_dm_properties {
-         get_dm_defaults "$1"
+     get_dm_defaults "$1"
 	 all_properties=`cat $path_only/dm_defaults`
 	 change_properties "$1" $all_properties
 }
@@ -730,6 +730,16 @@ function create_services_properties {
 	 change_properties "$1" $all_properties
 }
 
+function update_server_ip {
+	 get_services_defaults "$autobahn_folder/etc/services.properties"
+
+	 change_property "domain" "http://$server_ip:8080/autobahn/interdomain" "$autobahn_folder/etc/idm.properties"
+	 change_property "dm.address" "http://$server_ip:8080/autobahn/idm2dm" "$autobahn_folder/etc/idm.properties"
+	 
+	 change_property "idm.address" "http://$server_ip:8080/autobahn/dm2idm" "$autobahn_folder/etc/dm.properties"
+	 change_property "topologyabstraction.address" "http://$server_ip:8080/autobahn/topologyabstraction" "$autobahn_folder/etc/dm.properties"
+	 change_property "resourcesreservationcalendar.address" "http://$server_ip:8080/autobahn/resourcesreservationcalendar" "$autobahn_folder/etc/dm.properties"
+}
 
 declare -x CREATE_CONF
 #Checks if a specific configuration file exists and if not
@@ -849,7 +859,8 @@ function check_configuration_files {
 	CREATE_CONF=create_ta_properties
 	check_conf_file "$autobahn_folder/etc/ta.properties"	
 	CREATE_CONF=create_services_properties
-	check_conf_file "$autobahn_folder/etc/services.properties"		
+	check_conf_file "$autobahn_folder/etc/services.properties"
+	update_server_ip		
 	poplocalinfo
 }
 
@@ -1012,6 +1023,7 @@ function config_editor {
 			   get_services_defaults "$autobahn_folder/etc/services.properties"
 			   log "Will call file_editor $autobahn_folder/etc/services.properties `cat $path_only/services_defaults`"
 			   file_editor "$autobahn_folder/etc/services.properties" `cat $path_only/services_defaults`
+			   update_server_ip
 		;;
 			"calendar.properties" )
 			   get_calendar_defaults "$autobahn_folder/etc/calendar.properties"
