@@ -458,7 +458,7 @@ function change_properties {
 function get_dm_defaults {
 	pushlocalinfo
 	newlogparagraph "function get_dm_defaults"	
-	declare db_host db_port db_name db_user db_pass db_type
+	#declare db_host db_port db_name db_user db_pass db_type
 	domainName="http://some_domain:8080/autobahn/interdomain"
 	db_host=localhost
 	db_port=5432
@@ -530,19 +530,13 @@ function get_idm_defaults {
 	pushlocalinfo
 	newlogparagraph "function get_idm_defaults"
 	domain="http://your-host:8080/autobahn/interdomain"
-	domainName="http://some_domain:8080/autobahn/interdomain"
 	latitude="0.000000"
 	longitude="0.000000"
 	ospf_use=true
 	ospf_opaqueType=135
 	ospf_opaqueId=1001
-	db_host=localhost
-	db_port=5432
-	db_name=jra3_1
-	db_user=jra3
-	db_pass="pass"
 	gui_address="http://gui-host:8080/autobahn-gui/service/gui"
-	lookuphost="http://ls-host:8080/perfsonar-java-xml-ls/services/LookupService"
+	
 	if [ -f $1 ]; then
 		propfile=`cat $1`
 		for line in $propfile; do
@@ -554,8 +548,6 @@ function get_idm_defaults {
 			case $curprop in 
 			  domain ) domain=$curval
 			  ;;
-			  domainName ) domainName=$curval
-			  ;;
 			  latitude ) latitude=$curval
 			  ;;
 			  longitude ) longitude=$curval
@@ -566,53 +558,16 @@ function get_idm_defaults {
 		      ;;
 			  ospf.opaqueId ) ospf_opaqueId=$curval
 		      ;;
-			  db.host ) db_host=$curval
-			  ;;
-			  db.port ) db_port=$curval
-			  ;;
-			  db.name ) db_name=$curval
-		      ;;
-			  db.user ) db_user=$curval
-			  ;;
-			  db.pass ) db_pass=$curval
-		   	  ;;
 			  gui.address ) gui_address=$curval
-		      ;;
-			  lookuphost ) lookuphost=$curval
 		      ;;
 			esac
 		done
 	fi	
-	log "domain $domain domainName $domainName latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf_opaqueType ospf.opaqueId $ospf_opaqueId db.host $db_host db.port $db_port db.name $db_name db.user $db_user db.pass $db_pass gui.address $gui_address lookuphost $lookuphost"
-	echo -n "domain $domain domainName $domainName latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf_opaqueType ospf.opaqueId $ospf_opaqueId db.host $db_host db.port $db_port db.name $db_name db.user $db_user db.pass $db_pass gui.address $gui_address lookuphost $lookuphost" | tr -d '\r' > $path_only/idm_defaults
+	log "domain $domain latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf_opaqueType ospf.opaqueId $ospf_opaqueId gui.address $gui_address"
+	echo -n "domain $domain latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf_opaqueType ospf.opaqueId $ospf_opaqueId gui.address $gui_address" | tr -d '\r' > $path_only/idm_defaults
 	poplocalinfo
 }
 
-function get_calendar_defaults {
-	pushlocalinfo
-	newlogparagraph "function get_calendar_defaults"
-	db_type=ethernet
-	tool_time_setup=120
-	tool_time_teardown=60
-	if [ -f $1 ]; then
-		propfile=`cat $1`
-		for line in $propfile; do
-			curprop=`echo $line | awk -F "=" '{print $1}'`
-			curval=`echo $line |awk -F "=" '{print $2}'`
-			case $curprop in 
-			  db.type ) db_type=$curval
-		          ;;
-			  tool.time.setup ) tool_time_setup=$curval
-		          ;;
-			  tool.time.teardown ) tool_time_teardown=$curval
-		          ;;
-			esac
-		done
-	fi	
-	log "db.type $db_type tool.time.setup $tool_time_setup tool.time.teardown $tool_time_teardown" 
-	echo -n "db.type $db_type tool.time.setup $tool_time_setup tool.time.teardown $tool_time_teardown" | tr -d '\r' > $path_only/calendar_defaults
-	poplocalinfo
-}
 
 function get_framework_defaults {
 	pushlocalinfo
@@ -647,7 +602,6 @@ function get_ta_defaults {
 	id_nodes=10.10.0.0/24
 	id_ports=10.10.32.0/24
 	id_links=10.10.64.0/24
-	lookuphost="http://ls-host:8080/perfsonar-java-xml-ls/services/LookupService"
 	if [ -f $1 ]; then
 		propfile=`cat $1`
 		for line in $propfile; do
@@ -660,13 +614,11 @@ function get_ta_defaults {
 		          ;;
 			  id.links ) id_links=$curval
 		          ;;
-			  lookuphost ) lookuphost=$curval
-		          ;;
 			esac
 		done
 	fi	
-	log "id.nodes $id_nodes id.ports $id_ports id.links $id_links lookuphost $lookuphost" 
-	echo -n "id.nodes $id_nodes id.ports $id_ports id.links $id_links lookuphost $lookuphost" > $path_only/ta_defaults
+	log "id.nodes $id_nodes id.ports $id_ports id.links $id_links" 
+	echo -n "id.nodes $id_nodes id.ports $id_ports id.links $id_links" > $path_only/ta_defaults
 	poplocalinfo
 }
 
@@ -712,11 +664,6 @@ function create_idm_properties {
 	 change_properties "$1" $all_properties
 }
 
-function create_calendar_properties {
-	 get_calendar_defaults "$1"
-	 all_properties=`cat $path_only/calendar_defaults`
-	 change_properties "$1" $all_properties
-}
 
 function create_ta_properties {
 	 get_ta_defaults "$1"
@@ -739,6 +686,25 @@ function update_server_ip {
 	 change_property "idm.address" "http://$server_ip:8080/autobahn/dm2idm" "$autobahn_folder/etc/dm.properties"
 	 change_property "topologyabstraction.address" "http://$server_ip:8080/autobahn/topologyabstraction" "$autobahn_folder/etc/dm.properties"
 	 change_property "resourcesreservationcalendar.address" "http://$server_ip:8080/autobahn/resourcesreservationcalendar" "$autobahn_folder/etc/dm.properties"
+}
+
+function deploy_dm_modifications {
+	 get_dm_defaults "$autobahn_folder/etc/dm.properties"
+
+	 change_property "lookuphost" "$lookuphost" "$autobahn_folder/etc/idm.properties"
+	 change_property "lookuphost" "$lookuphost" "$autobahn_folder/etc/ta.properties"
+	 
+	 change_property "db.host" "$db_host" "$autobahn_folder/etc/idm.properties"
+	 change_property "db.port" "$db_port" "$autobahn_folder/etc/idm.properties"
+	 change_property "db.name" "$db_name" "$autobahn_folder/etc/idm.properties"
+	 change_property "db.user" "$db_user" "$autobahn_folder/etc/idm.properties"
+	 change_property "db.pass" "$db_pass" "$autobahn_folder/etc/idm.properties"
+	 
+	 change_property "domainName" "$domainName" "$autobahn_folder/etc/idm.properties"
+	 
+	 change_property "db.type" "$db_type" "$autobahn_folder/etc/calendar.properties"
+	 change_property "tool.time.setup" "$tool_time_setup" "$autobahn_folder/etc/calendar.properties"
+	 change_property "tool.time.teardown" "$tool_time_teardown" "$autobahn_folder/etc/calendar.properties"
 }
 
 declare -x CREATE_CONF
@@ -850,12 +816,11 @@ function check_configuration_files {
 	fi
 
 	CREATE_CONF=create_dm_properties
-	check_conf_file "$autobahn_folder/etc/dm.properties"		
+	check_conf_file "$autobahn_folder/etc/dm.properties"
+	deploy_dm_modifications		
 	#parse dm.properties get dbname and password and run
 	CREATE_CONF=create_idm_properties
 	check_conf_file "$autobahn_folder/etc/idm.properties"		
-	CREATE_CONF=create_calendar_properties
-	check_conf_file "$autobahn_folder/etc/calendar.properties"	
 	CREATE_CONF=create_ta_properties
 	check_conf_file "$autobahn_folder/etc/ta.properties"	
 	CREATE_CONF=create_services_properties
@@ -885,7 +850,7 @@ function main_loop_with_gui {
 		
 	$CONFIGURE_FILE_QUAGGA "ospfd.conf" "tmp_ospfd_dir" "ospfd_conf"
 		
-	$DIALOG --title "AutoBAHN Installer" --keep-window --yesno "Do you want the property wizard to begin(Yes) or the Property Editor(No). If unsure choose Yes." 10 80
+	$DIALOG --title "AutoBAHN Installer" --keep-window --yesno "Do you want to edit configuration properties one by one now? (If you choose No you will be able to select the ones to edit from a list)." 10 80
 	
 	if [ $? -eq 0 ]; then
 		check_configuration_files 
@@ -991,12 +956,13 @@ function config_editor {
 		"idm.properties" "Sets properties about the Interdomain Manager" \
 		"ta.properties" "Sets properties about the Topology Abstraction" \
 		"services.properties" "Sets properties about the services" \
-		"calendar.properties" "Sets properties about the Calendar" \
 		"framework.properties" "Sets properties about the Framework" \
 		"Back" "Return to previous menu" 2>ans
 		
 		case $? in 
 		    255 ) return 1
+		    ;;
+		    1 ) return 1
 		    ;;
 		esac
         	choice=`cat ans`
@@ -1006,7 +972,7 @@ function config_editor {
 			   log "Will call file_editor $autobahn_folder/etc/dm.properties `cat $path_only/dm_defaults`"
 			   dm_def=`cat $path_only/dm_defaults`
 			   file_editor "$autobahn_folder/etc/dm.properties" `cat $path_only/dm_defaults`
-
+			   deploy_dm_modifications
 			;;
 			"idm.properties" )
 		   	   get_idm_defaults "$autobahn_folder/etc/idm.properties"
@@ -1024,12 +990,6 @@ function config_editor {
 			   log "Will call file_editor $autobahn_folder/etc/services.properties `cat $path_only/services_defaults`"
 			   file_editor "$autobahn_folder/etc/services.properties" `cat $path_only/services_defaults`
 			   update_server_ip
-		;;
-			"calendar.properties" )
-			   get_calendar_defaults "$autobahn_folder/etc/calendar.properties"
-			   log "Will call file_editor $autobahn_folder/etc/calendar.properties `cat $path_only/calendar_defaults`"
-		   	   file_editor "$autobahn_folder/etc/calendar.properties" `cat $path_only/calendar_defaults`
-
 		;;
 			"framework.properties" )
 			    get_framework_defaults "$autobahn_folder/etc/framework.properties"

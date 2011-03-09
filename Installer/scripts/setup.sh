@@ -440,7 +440,7 @@ declare -t property_editor
 
 #Shows the main menu
 function show_menu {
-  $DIALOG --clear --backtitle "AutoBAHN Command Line Installer" --menu "AutoBAHN Installer Options" 20 80 9 "Add Tunnel" "Adds new tunnel to routing.conf" "Install Tunnels" "Installs tunnels detailed in routing.conf" "View Tunnels" "Shows existing tunnels"  "Tunnel Editor" "Edit Existing Tunnels" "Delete All Tunnels" "Deletes all existing tunnels" "Setup database" "Sets up a database from a PostgresSQL dump" "Property Editor" "Go back to change properties" "Help"  "Shows Help for the installer" "Exit" "Exits the Installer"  2>ans
+  $DIALOG --clear --cancel-label "Exit" --backtitle "AutoBAHN Command Line Installer" --menu "AutoBAHN Installer Options" 20 80 9 "Add Tunnel" "Adds new tunnel to routing.conf" "Install Tunnels" "Installs tunnels detailed in routing.conf" "View Tunnels" "Shows existing tunnels"  "Tunnel Editor" "Edit Existing Tunnels" "Delete All Tunnels" "Deletes all existing tunnels" "Setup database" "Sets up a database from a PostgresSQL dump" "Property Editor" "Go back to change properties" "Help"  "Shows Help for the installer" "Exit" "Exits the Installer"  2>ans
   return $?
 }
 #Useful functions
