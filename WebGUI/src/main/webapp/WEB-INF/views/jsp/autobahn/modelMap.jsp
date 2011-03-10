@@ -6,8 +6,30 @@
     <title><spring:message code="${htitle}" text=""/></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="<c:url value="/themes/style/style.css"/>" type="text/css" />
-  	<link rel="stylesheet" href="<c:url value="/scripts/x2/css/xc2_default.css"/>" type="text/css" />  	
-  	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<spring:message code="google.maps.key" text="ABQIAAAAIrQkz2e_DN6EeNh-dsy9BBQ3d_ZNG2YFwgHBa0C2TZZTJ80suxTYsIqmNObRGF6j9-0zEfn3YR27HQ"/>"></script> 
+  	<link rel="stylesheet" href="<c:url value="/scripts/x2/css/xc2_default.css"/>" type="text/css" />
+  	<script type="text/javascript">
+		function isIP(url){
+		  var url = url.replace(/^(http:\/\/)(.*)(:\d{4}.*)$/, "$2");
+		  var isIP = url.match(/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(\:\d{4})?$/);
+		  if(isIP){
+		    return true;
+		  }
+		  return false;
+		}
+		
+		var googlekey;
+		if (isIP(window.location.host)) {
+			googlekey = "<spring:message code="google.maps.key.IP"/>";
+		} else {
+		    googlekey = "<spring:message code="google.maps.key"/>";
+		}
+		
+		document.write([
+		                '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='+
+		                googlekey+
+		                '" type="text/javascript"><\/script>'
+		              ].join(''));
+    </script>  	
    	<link rel="stylesheet" href="<c:url value="/scripts/openlayers/theme/default/style.css"/>" type="text/css" />
     <script type="text/javascript" src="<c:url value="/scripts/openlayers/OpenLayers.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/openLayersTopology.js"/>"></script>
