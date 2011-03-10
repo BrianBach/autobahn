@@ -167,7 +167,10 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
     		if(glink.getEndInterface().isClientPort()) {
     			continue;
     		}
-			refreshInterdomainLink(glink);
+			if (refreshInterdomainLink(glink)) {
+			    log.info(glink.getStartInterface().getDomainId() + "-" + 
+			            glink.getEndInterface().getDomainId() + " connectivity successful.");
+			}
 		}
 		
 		return getAbstractLinks();
@@ -325,7 +328,8 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
                 edgePortIds = lookup.QueryEdgePort(externalDomain, homeDomain);
             } catch (LookupServiceException e) {
                 // Can't get identifier for remote edge port (LS is not working)
-                log.info("Add to waiting remote edge port of link: " + gl);
+                log.info("Domain " + externalDomain + " is down, " +
+                		"Add to waiting remote edge port of link: " + gl);
                 AwaitingIdentifiers wait = getWaiting(gl.getEndInterface().getDomainId());
                 wait.addLink(gl);
                 return false;
@@ -333,7 +337,8 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
 
             if (edgePortIds == null || edgePortIds.size() ==0) {
                 // Can't get identifier for remote edge port
-                log.info("Add to waiting remote edge port of link: " + gl);
+                log.info("Domain " + externalDomain + " is down, " +
+                		"Add to waiting remote edge port of link: " + gl);
                 AwaitingIdentifiers wait = getWaiting(gl.getEndInterface().getDomainId());
                 wait.addLink(gl);
                 return false;
@@ -364,8 +369,9 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
 		
 		LinkIdentifiers identifiers = externalIds.getIdentifiers(externalDomain, dportname, l.getBodID());
 		if(identifiers == null) {
-			// Cant get identifier for port or node
-			log.info("Add to waiting: " + gl);
+			// Cannot get identifier for port or node
+			log.info("Domain " + externalDomain + " is down, " +
+					"Add to waiting: " + gl);
 			AwaitingIdentifiers wait = getWaiting(gl.getEndInterface().getDomainId());
 			wait.addLink(gl);
 			return false;
@@ -565,6 +571,12 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
 		if(wait != null && !wait.isEmpty()) {
 			log.info("Domain: " + externalDomain + " is up, retrieving ids...");
 			wait.retry();
+			
+			// If awaiting identifier list for this domain was emptied, we have
+			// successful connection to that domain
+			if (wait.isEmpty()) {
+			    log.info("Domain " + externalDomain + " successfully attached");
+			}
 		}
 		
 		LinkIdentifiers result = new LinkIdentifiers();

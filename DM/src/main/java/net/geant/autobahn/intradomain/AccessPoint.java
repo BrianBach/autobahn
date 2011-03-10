@@ -57,6 +57,8 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
 	
     private IntradomainPathfinder pathfinder;
     
+    private StringBuffer initChecks;
+    
     /**
      * Entry point for application:<br/>
      * reads properties from app.properties (some properties can be changed later
@@ -128,7 +130,7 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
 
         runBeforeInitChecks();
         
-        log.info("===== Initialization =====");
+        log.info("===== DM module Initialization =====");
         long stime = System.currentTimeMillis();
         
         try {
@@ -407,25 +409,26 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
      * Performs checks before initialization has taken place
      */
     public void runBeforeInitChecks() {
-        log.info("===== Pre-initialization check for DM module. Watch out for any messages below... =====");
+        initChecks = new StringBuffer("");
         
         // Check properties
         
         String domainName = properties.getProperty("domainName");
         if (domainName == null || domainName.equals("none") || domainName.equals("")) {
-            log.info("domainName field is empty, please check dm.properties file.");
+            initChecks.append("domainName field is empty, please check dm.properties file.\n");
         }
         
         String lookuphost = properties.getProperty("lookuphost");
         if (lookuphost == null || lookuphost.equals("none") || lookuphost.equals("")) {
-            log.info("lookuphost is empty. The DM may need the LS in order to communicate with the IDM.");
+            initChecks.append("lookuphost is empty. The DM may need the LS in order to " +
+            		"communicate with the IDM.\n");
         } else {
             // Check if it is a proper URL
             try {
                 new URL(lookuphost);
             } catch (MalformedURLException e) {
-                log.info(lookuphost + " is not a proper URL for LS. " +
-                		"The DM may need the LS in order to communicate with the IDM.");
+                initChecks.append(lookuphost + " is not a proper URL for LS. " +
+                		"The DM may need the LS in order to communicate with the IDM.\n");
             }
         }
         
@@ -433,39 +436,35 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
         try {
             new URL(idm_address);
         } catch (MalformedURLException e) {
-            log.info("idm.address field is not a proper URL:");
-            log.info(e.getMessage());
-            log.info("Please check dm.properties file.");
+            initChecks.append("idm.address field is not a proper URL:\n");
+            initChecks.append(e.getMessage()+"\n");
+            initChecks.append("Please check dm.properties file.\n");
         }
         
         String topologyabstraction_address = properties.getProperty("topologyabstraction.address");
         try {
             new URL(topologyabstraction_address);
         } catch (MalformedURLException e) {
-            log.info("topologyabstraction.address field is not a proper URL:");
-            log.info(e.getMessage());
-            log.info("Please check dm.properties file.");
+            initChecks.append("topologyabstraction.address field is not a proper URL:\n");
+            initChecks.append(e.getMessage()+"\n");
+            initChecks.append("Please check dm.properties file.\n");
         }
         
         String resourcesreservationcalendar_address = properties.getProperty("resourcesreservationcalendar.address");
         try {
             new URL(resourcesreservationcalendar_address);
         } catch (MalformedURLException e) {
-            log.info("resourcesreservationcalendar.address field is not a proper URL:");
-            log.info(e.getMessage());
-            log.info("Please check dm.properties file.");
+            initChecks.append("resourcesreservationcalendar.address field is not a proper URL:\n");
+            initChecks.append(e.getMessage()+"\n");
+            initChecks.append("Please check dm.properties file.\n");
         }
-        
-        log.info("===== Pre-initialization check for DM module is complete. =====");
     }
     
     /**
      * Performs checks after initialization has taken place
      */
     public void runAfterInitChecks() {
-        log.info("===== Post-initialization check for DM module. Watch out for any messages below... =====");
-
-        if (state == State.ERROR) {
+        if (state == State.ERROR || initChecks==null) {
             log.error("DM module was not initialized successfully. Please check debug.log for" +
             		" more information.");
             return;
@@ -479,18 +478,24 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
                 if (gi.getDescription() == null || 
                         gi.getDescription().trim().equals("") || 
                         gi.getDescription().trim().equals("null")) {
-                    log.info("The client port \"" + gi.getName() + "\" does not have a description " +
-                    		"that can be used as a user-friendly name. Please make sure that " +
-                    		"the relevant description field is filled in cNIS or other " +
-                    		"topology source. Otherwise the port will be displayed to the " +
-                    		"end user with only its internal id.");
-                    
+                    initChecks.append("The client port \"" + gi.getName() + 
+                            "\" does not have a description " +
+                    		"that can be used as a user-friendly name. " +
+                    		"Please make sure that the relevant description field " +
+                    		"is filled in cNIS or other topology source. " +
+                    		"Otherwise the port will be displayed to the " +
+                    		"end user with only its internal id.\n");
                 }
             }
         }
         DmHibernateUtil.getInstance().closeSession();
-                
-        log.info("===== Post-initialization check for DM module is complete. =====");
+
+        if (initChecks.toString().equals("")) {
+            log.info("DM module was initialized successfully.");
+        } else {
+            log.info("\nDM module initialization reported " +
+            		"the following potential problems:\n"+initChecks.toString());
+        }
     }
     
     public List<StatisticsEntry> getStatistics() {

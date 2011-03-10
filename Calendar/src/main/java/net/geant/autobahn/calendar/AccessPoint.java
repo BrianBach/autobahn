@@ -35,6 +35,8 @@ public final class AccessPoint implements ResourcesReservationCalendar {
     private int setupTime;
     private int teardownTime;
     
+    private StringBuffer initChecks;
+    
     /**
      * Entry point for application:<br/>
      * reads properties from app.properties 
@@ -279,28 +281,26 @@ public final class AccessPoint implements ResourcesReservationCalendar {
      * Performs checks before initialization has taken place
      */
     public void runBeforeInitChecks() {
-        log.info("===== Pre-initialization check for ResourcesReservationCalendar module. Watch out for any messages below... =====");
+        initChecks = new StringBuffer("");
         
         // Check properties
         
         String db_type = properties.getProperty("db.type");
         if (db_type == null || db_type.equals("none") || db_type.equals("")) {
-            log.info("db.type property is empty, please check calendar.properties file.");
+            initChecks.append("db.type property is empty, please check " +
+            		"calendar.properties file.\n");
         }
         else if (!db_type.equals("ethernet") && !db_type.equals("eth") && !db_type.equals("sdh")) {
-            log.info("db.type property currently supports either ethernet (or eth) or sdh value");
+            initChecks.append("db.type property currently supports either " +
+            		"ethernet (or eth) or sdh value\n");
         }
-        
-        log.info("===== Pre-initialization check for ResourcesReservationCalendar module is complete. =====");
     }
     
     /**
      * Performs checks after initialization has taken place
      */
     public void runAfterInitChecks() {
-        log.info("===== Post-initialization check for ResourcesReservationCalendar module. Watch out for any messages below... =====");
-
-        if (state == State.ERROR) {
+        if (state == State.ERROR || initChecks==null) {
             log.error("Calendar module was not initialized successfully. Please check debug.log for" +
                     " more information.");
             return;
@@ -308,7 +308,12 @@ public final class AccessPoint implements ResourcesReservationCalendar {
         
         // Add any checks here
         
-        log.info("===== Post-initialization check for ResourcesReservationCalendar module is complete. =====");
+        if (initChecks.toString().equals("")) {
+            log.info("ResourcesReservationCalendar module was initialized successfully.");
+        } else {
+            log.info("\nResourcesReservationCalendar module initialization reported " +
+            		"the following potential problems:\n"+initChecks.toString());
+        }
     }
     
     public ConstraintsReservationCalendar getConstraintsCalendar() {

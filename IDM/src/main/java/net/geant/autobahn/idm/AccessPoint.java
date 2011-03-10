@@ -110,6 +110,8 @@ public final class AccessPoint implements UserAccessPoint,
     
     private IdmDAOFactory daos = null;
     
+    private StringBuffer initChecks;
+    
 	private AccessPoint() throws Exception {
 	}
 
@@ -163,7 +165,7 @@ public final class AccessPoint implements UserAccessPoint,
 		
         runBeforeInitChecks();
         
-        log.info("===== Initialization =====");
+        log.info("===== IDM module Initialization =====");
         
         long stime = System.currentTimeMillis();
         
@@ -1354,56 +1356,52 @@ public final class AccessPoint implements UserAccessPoint,
      * Performs checks before initialization has taken place
      */
     public void runBeforeInitChecks() {
-        log.info("===== Pre-initialization check for IDM module. Watch out for any messages below... =====");
+        initChecks = new StringBuffer("");
         
         // Check properties
         
         String domain = properties.getProperty("domain");
         if (domain == null || domain.equals("none") || domain.equals("")) {
-            log.info("domain field is empty, please check idm.properties file.");
+            initChecks.append("domain field is empty, please check idm.properties file.\n");
         }
         // Check if it is a proper URL
         try {
             new URL(domain);
         } catch (MalformedURLException e) {
-            log.info("domain field is not a proper URL:");
-            log.info(e.getMessage());
+            initChecks.append("domain field is not a proper URL:\n");
+            initChecks.append(e.getMessage()+"\n");
         }
         
         String domainName = properties.getProperty("domainName");
         if (domainName == null || domainName.equals("none") || domainName.equals("")) {
-            log.info("domainName field is empty, please check idm.properties file." +
-            		"The system will assume the IDM URL (" + domainURL + ") is also the domain name");
+            initChecks.append("domainName field is empty, please check idm.properties file." +
+            		" The system will assume the IDM URL (" + domainURL + ") is also the domain name\n");
         }
         
         String lookuphost = properties.getProperty("lookuphost");
         if (lookuphost == null || lookuphost.equals("none") || lookuphost.equals("")) {
-            log.info("lookuphost is empty. IDM will not be able to register itself at the LS." +
+            initChecks.append("lookuphost is empty. IDM will not be able to register itself at the LS." +
             		" This will only work if other IDMs already have the URL of this IDM as the " +
-            		"domain name in their DBs.");
+            		"domain name in their DBs.\n");
         } else {
             // Check if it is a proper URL
             try {
                 new URL(lookuphost);
             } catch (MalformedURLException e) {
-                log.info(lookuphost + " is not a proper URL for LS." +
+                initChecks.append(lookuphost + " is not a proper URL for LS." +
                 		" IDM will not be able to register itself at the LS." +
                         " This will only work if other IDMs already have the URL of this IDM as the " +
                         "domain name in their DBs.");
-                log.info(e.getMessage());
+                initChecks.append(e.getMessage()+"\n");
             }
         }
-        
-        log.info("===== Pre-initialization check for IDM module is complete. =====");
     }
     
     /**
      * Performs checks after initialization has taken place
      */
     public void runAfterInitChecks() {
-        log.info("===== Post-initialization check for IDM module. Watch out for any messages below... =====");
-        
-        if (state == State.ERROR) {
+        if (state == State.ERROR || initChecks==null) {
             log.error("IDM module was not initialized successfully. Please check debug.log for" +
                     " more information.");
             return;
@@ -1411,14 +1409,20 @@ public final class AccessPoint implements UserAccessPoint,
         
         // Check if the domainName exists in the database
         if (daos.getAdminDomainDAO().getByBodID(domainName) == null) {
-            log.info("The domain " + domainName + " does not exist in the DB. " +
+            initChecks.append("The domain " + domainName + " does not exist in the DB. " +
                     "If this is the very first time you are starting the software " +
                     "this is normal. Otherwise, this is almost certainly a problem " +
                     "and you need to check the idm.properties " +
-                    "and the admin domains in the DB.");
+                    "and the admin domains in the DB.\n");
         }
         
-        log.info("===== Post-initialization check for IDM module is complete. =====");
+        if (initChecks.toString().equals("")) {
+            log.info("IDM module was initialized successfully.");
+        } else {
+            initChecks.append("");
+            log.info("\nIDM module initialization reported " +
+            		"the following potential problems:\n"+initChecks.toString());
+        }
     }
 
     /**

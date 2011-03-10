@@ -39,6 +39,8 @@ public final class AccessPoint implements TopologyAbstraction {
     private TopologyConverter converter;
     private IntradomainTopology topology;
     private String topologyType;
+
+    private StringBuffer initChecks;
     
     /**
      * Entry point for application:<br/>
@@ -278,39 +280,36 @@ public final class AccessPoint implements TopologyAbstraction {
      * Performs checks before initialization has taken place
      */
     public void runBeforeInitChecks() {
-        log.info("===== Pre-initialization check for Topology Abstraction module. Watch out for any messages below... =====");
+        initChecks = new StringBuffer("");
         
         // Check properties
         
         String id_nodes = properties.getProperty("id.nodes");
         if (id_nodes == null || id_nodes.equals("none") || id_nodes.equals("")) {
-            log.info("id.nodes is empty, please check ta.properties file.");
+            initChecks.append("id.nodes is empty, please check ta.properties file.\n");
         }
         String id_ports = properties.getProperty("id.ports");
         if (id_ports == null || id_ports.equals("none") || id_ports.equals("")) {
-            log.info("id.ports is empty, please check ta.properties file.");
+            initChecks.append("id.ports is empty, please check ta.properties file.\n");
         }
         String id_links = properties.getProperty("id.links");
         if (id_links == null || id_links.equals("none") || id_links.equals("")) {
-            log.info("id.links is empty, please check ta.properties file.");
+            initChecks.append("id.links is empty, please check ta.properties file\n");
         }
         
         String lookuphost = properties.getProperty("lookuphost");
         if (lookuphost == null || lookuphost.equals("none") || lookuphost.equals("")) {
-            log.info("lookuphost is empty. Database entries for interdomain links will have to contain" +
-            		" both local and remote port names as the remote port name will not be recovered through the LS.");
+            initChecks.append("lookuphost is empty. Database entries for interdomain links " +
+            		"will have to contain both local and remote port names as the remote " +
+            		"port name will not be recovered through the LS.\n");
         }
-        
-        log.info("===== Pre-initialization check for Topology Abstraction module is complete. =====");
     }
     
     /**
      * Performs checks after initialization has taken place
      */
     public void runAfterInitChecks() {
-        log.info("===== Post-initialization check for Topology Abstraction module. Watch out for any messages below... =====");
-        
-        if (state == State.ERROR) {
+        if (state == State.ERROR || initChecks==null) {
             log.error("TA module was not initialized successfully. Please check debug.log for" +
                     " more information.");
             return;
@@ -325,9 +324,11 @@ public final class AccessPoint implements TopologyAbstraction {
             public_ids.load(fis);
             fis.close();
         } catch (IOException e) {
-            log.info("public.ids.file property points to a non-existing or non-accessible file:");
-            log.info(e.getMessage());
-            log.info("It will not be possible to map public to private names of local ports of interdomain links.");
+            initChecks.append("public.ids.file property points to a non-existing or " +
+            		"non-accessible file:\n");
+            initChecks.append(e.getMessage()+"\n");
+            initChecks.append("It will not be possible to map public to private names " +
+            		"of local ports of interdomain links.\n");
         }
         
         // Check whether the public.ids in the file correspond to ports in the topology
@@ -350,10 +351,18 @@ public final class AccessPoint implements TopologyAbstraction {
 	            }
             }
             if (!found) {
-                log.info("Entry " + portName_key + "=" + portName_value + " from public.ids file does not exist in DB." +
-                		"This will almost certainly create problems! Please check for mis-typed port names.");
+                initChecks.append("Entry " + portName_key + "=" + portName_value + " " +
+                		"from public.ids file does not exist in DB." +
+                		"This will almost certainly create problems! " +
+                		"Please check for mis-typed port names.\n");
             }
         }
-        log.info("===== Post-initialization check for Topology Abstraction module is complete. =====");
+        
+        if (initChecks.toString().equals("")) {
+            log.info("Topology Abstraction module was initialized successfully.");
+        } else {
+            log.info("\nTopology Abstraction module initialization reported " +
+            		"the following potential problems:\n"+initChecks.toString());
+        }
     }
 }
