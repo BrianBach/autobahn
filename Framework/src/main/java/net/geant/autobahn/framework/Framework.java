@@ -284,7 +284,7 @@ public class Framework {
 		} else if ("stop".equals(args[0])){
 			int port = Integer.parseInt(props.getProperty("framework.port"));
 
-			MyTelnetClient cli = new MyTelnetClient("localhost", port, "pass");
+			MyTelnetClient cli = new MyTelnetClient("localhost", port, props.getProperty("framework.password"));
 			cli.write("halt");
 			cli.disconnect();
 		}
