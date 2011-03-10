@@ -458,12 +458,14 @@ public final class AccessPoint implements UserAccessPoint,
 		
 		// Remove idm from LS
 		String host = properties.getProperty("lookuphost");
-        LookupService lookup = new LookupService(host);
-        try {
-			lookup.RemoveIdm(domainName);
-		} catch (LookupServiceException e) {
-			e.printStackTrace();
-			log.info("IDM could not remove itself from LS");
+		if (isLSavailable(host)) {
+            LookupService lookup = new LookupService(host);
+            try {
+    			lookup.RemoveIdm(domainName);
+    		} catch (LookupServiceException e) {
+    			e.printStackTrace();
+    			log.info("IDM could not remove itself from LS");
+    		}
 		}
 		
         log.info("===== Disposing =====");
