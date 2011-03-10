@@ -903,7 +903,9 @@ function init_db {
 		return 1
 	fi
 				
-    sudo -u postgres createuser --superuser $dbuser
+    #sudo -u postgres createuser --superuser $dbuser
+    sudo -u postgres psql -c "CREATE ROLE $dbuser ENCRYPTED PASSWORD '$PGPASSWORD' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN;"
+    
 	cmd="sudo -u postgres psql template1  -c \"create database $dbname with owner $dbuser\" -t > /dev/null 2>&1"
 	echolog "Create dbuser performed."
 	eval $cmd
