@@ -69,7 +69,14 @@ public class Converter {
 		res.setBandwidth(gi.getBandwidth());
 		res.setDescription(gi.getDescription());
 		res.setDomainId(gi.getDomainId());
-		res.setName(gi.getName());
+		
+		int tmp = gi.getName().indexOf("::");
+		if(tmp > 0) {
+			res.setName(gi.getName().split("::")[1]);	
+		} else {
+			res.setName(gi.getName());
+		}
+		
 		res.setMtu(gi.getMtu());
 		res.setStatus(gi.getStatus());
 		res.setInterfaceType(gi.getInterfaceType());

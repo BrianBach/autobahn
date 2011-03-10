@@ -296,7 +296,6 @@ public class IntradomainTopology {
 				
 				node.setName(n.getName());
 				
-				
 				for(PhyInterface p : n.getPhyInterfaces().getInterface()) {
 					GenericInterface port = new GenericInterface();
 					
@@ -423,30 +422,39 @@ public class IntradomainTopology {
 				Node node = new Node();
 				node.setNodeId(0);
 				node.setName(n.getName());
+				node.setIpAddress(n.getIpAddress());
 				n_to_vlans.put(node.getName(), n.getVlanRanges().getRange());
 				
 				for(PhysicalPort p : n.getPhysicalPorts().getPort()) {
 					GenericInterface port = new GenericInterface();
+
+					port.setName(n.getName() + "::" + p.getName());
 					
 					String pub = getPublicName(p);
 					if(pub != null) {
-						log.info("Received public identifier from cNIS: " + p.getName() + " " + pub);
-						publicIds.setProperty(p.getName(), pub);
+						log.info("Received public identifier from cNIS: " + port.getName() + " " + pub);
+						publicIds.setProperty(port.getName(), pub);
 					}
 					
 					port.setInterfaceId(0);
 					port.setNode(node);
-					port.setBandwidth(p.getBandwidth().longValue());
+					if(p.getBandwidth() == null || p.getBandwidth().longValue() == 0) {
+						log.info("Bandwidth for port: "
+								+ port.getName()
+								+ " is not set. This may be a mistake in configuration. Please check the settings in cNIS.");
+					} else {
+						port.setBandwidth(p.getBandwidth().longValue());
+					}
+					
 					port.setDomainId(domainName);
 					port.setClientPort(false);
-					port.setName(p.getName());
 					for (net.geant2.cnis.autobahn.xml.common.Tag tag: p.getTags().getTag()) {
                         if (tag.getKey().equals("mtu")) {
                             port.setMtu(Integer.parseInt(tag.getValue()));
                         }
                     }
 
-					ports.put(p.getName(), port);
+					ports.put(port.getName(), port);
 				}
 				
 				nodes.add(node);
@@ -457,11 +465,12 @@ public class IntradomainTopology {
 			
 			for(Link link : links) {
 				GenericLink glink = new GenericLink();
-				
-				GenericInterface sport = ports.get(link.getStartPort().getName());
+				String sname = link.getStartNode().getName() + "::" + link.getStartPort().getName();
+				GenericInterface sport = ports.get(sname);
 				glink.setStartInterface(sport);
 				
-				GenericInterface dport = ports.get(link.getEndPort().getName());
+				String ename = link.getEndNode().getName() + "::" + link.getEndPort().getName();
+				GenericInterface dport = ports.get(ename);
 				glink.setEndInterface(dport);
 				
 				glink.setLinkId(++id);
@@ -485,7 +494,8 @@ public class IntradomainTopology {
 			for(IDLink l : id_links) {
 				GenericLink glink = new GenericLink();
 				
-				GenericInterface sport = ports.get(l.getStartPort().getName());
+				String sname = l.getStartNode().getName() + "::" + l.getStartPort().getName();
+				GenericInterface sport = ports.get(sname);
 				glink.setStartInterface(sport);
 
 				Node dnode = new Node();
