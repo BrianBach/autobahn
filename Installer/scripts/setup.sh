@@ -195,22 +195,22 @@ function add_tunnel {
 		return
 	fi
 	local_instance=$current_ip
-	$ENTER_IP_NO_CHECK "Local subnet:" "Local subnet address"
+	$ENTER_IP_NO_CHECK "Local subnet:" "Local subnet address (the IP/mask of the tunnel interface, e.g. 10.0.0.1/30)"
 	if [ $? -eq 1 ]; then #escape was pressed
 		return 
 	fi
 	local_subnet=$current_ip
-	$ENTER_IP "Local Router:" "Local Router IP"
+	$ENTER_IP "Local Router:" "Local Router ID ( OSPF daemon configuration)"
 	if [ $? -eq 1 ]; then #escape was pressed
 		return 
 	fi
 	local_router=$current_ip
-	$ENTER_IP_NO_CHECK "Network:" "Network"
+	$ENTER_IP_NO_CHECK "Network:" "Network ( OSPF daemon configuration)"
 	if [ $? -eq 1 ]; then #escape was pressed
 		return 
 	fi
 	network=$current_ip
-	$ENTER_IP "Area:" "Area"
+	$ENTER_IP "Area:" "Area ( OSPF daemon configuration)"
 	if [ $? -eq 1 ]; then #escape was pressed
 		return	
 	fi

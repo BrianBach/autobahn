@@ -467,8 +467,6 @@ function get_dm_defaults {
 	db_pass="pass"
 	db_type=ethernet
 	tool_address=none
-	tool_time_setup=120
-	tool_time_teardown=60	
 	lookuphost="http://ls-host:8080/perfsonar-java-xml-ls/services/LookupService"
 	cnis_address="http://cnis-host/abs/Autobahn"
 	monitoring_use=""
@@ -506,10 +504,6 @@ function get_dm_defaults {
 		      ;;
 			  tool.address ) tool_address=$curval
 		      ;;
-			  tool.time.setup ) tool_time_setup=$curval
-		      ;;
-			  tool.time.teardown ) tool_time_teardown=$curval
-		      ;;
 			  lookuphost ) lookuphost=$curval
 		      ;;
 		      cnis.address ) cnis_address=$curval
@@ -521,15 +515,14 @@ function get_dm_defaults {
 			esac
 		done
 	fi	
-	log "domainName $domainName db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} tool.time.setup ${tool_time_setup} tool.time.teardown ${tool_time_teardown} lookuphost ${lookuphost} cnis.address ${cnis_address} authorization.enabled ${authorization_enabled}"| tr -d '\r' 
-	echo -n "domainName $domainName db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} tool.time.setup ${tool_time_setup} tool.time.teardown ${tool_time_teardown} lookuphost ${lookuphost} cnis.address ${cnis_address} authorization.enabled ${authorization_enabled}"| tr -d '\r' > $path_only/dm_defaults
+	log "domainName $domainName db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} lookuphost ${lookuphost} cnis.address ${cnis_address} authorization.enabled ${authorization_enabled}"| tr -d '\r' 
+	echo -n "domainName $domainName db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} lookuphost ${lookuphost} cnis.address ${cnis_address} authorization.enabled ${authorization_enabled}"| tr -d '\r' > $path_only/dm_defaults
 	poplocalinfo
 }
 
 function get_idm_defaults {
 	pushlocalinfo
 	newlogparagraph "function get_idm_defaults"
-	domain="http://your-host:8080/autobahn/interdomain"
 	latitude="0.000000"
 	longitude="0.000000"
 	ospf_use=true
@@ -546,8 +539,6 @@ function get_idm_defaults {
 				continue
 			fi
 			case $curprop in 
-			  domain ) domain=$curval
-			  ;;
 			  latitude ) latitude=$curval
 			  ;;
 			  longitude ) longitude=$curval
@@ -563,8 +554,8 @@ function get_idm_defaults {
 			esac
 		done
 	fi	
-	log "domain $domain latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf_opaqueType ospf.opaqueId $ospf_opaqueId gui.address $gui_address"
-	echo -n "domain $domain latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf_opaqueType ospf.opaqueId $ospf_opaqueId gui.address $gui_address" | tr -d '\r' > $path_only/idm_defaults
+	log "latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf_opaqueType ospf.opaqueId $ospf_opaqueId gui.address $gui_address"
+	echo -n "latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf_opaqueType ospf.opaqueId $ospf_opaqueId gui.address $gui_address" | tr -d '\r' > $path_only/idm_defaults
 	poplocalinfo
 }
 
@@ -703,8 +694,6 @@ function deploy_dm_modifications {
 	 change_property "domainName" "$domainName" "$autobahn_folder/etc/idm.properties"
 	 
 	 change_property "db.type" "$db_type" "$autobahn_folder/etc/calendar.properties"
-	 change_property "tool.time.setup" "$tool_time_setup" "$autobahn_folder/etc/calendar.properties"
-	 change_property "tool.time.teardown" "$tool_time_teardown" "$autobahn_folder/etc/calendar.properties"
 }
 
 declare -x CREATE_CONF
