@@ -10,6 +10,7 @@ import net.geant.autobahn.constraints.MinValueConstraint;
 import net.geant.autobahn.constraints.PathConstraints;
 import net.geant.autobahn.constraints.RangeConstraint;
 import net.geant.autobahn.intradomain.IntradomainPath;
+import net.geant.autobahn.intradomain.IntradomainTopology;
 import net.geant.autobahn.intradomain.common.GenericInterface;
 import net.geant.autobahn.intradomain.common.GenericLink;
 import net.geant.autobahn.intradomain.common.Node;
@@ -70,9 +71,9 @@ public class Converter {
 		res.setDescription(gi.getDescription());
 		res.setDomainId(gi.getDomainId());
 		
-		int tmp = gi.getName().indexOf("::");
+		int tmp = gi.getName().indexOf(IntradomainTopology.gIfDelim);
 		if(tmp > 0) {
-			res.setName(gi.getName().split("::")[1]);	
+			res.setName(gi.getName().split(IntradomainTopology.gIfDelim)[1]);	
 		} else {
 			res.setName(gi.getName());
 		}
