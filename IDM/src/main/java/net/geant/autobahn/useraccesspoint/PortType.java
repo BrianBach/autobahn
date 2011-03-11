@@ -58,4 +58,7 @@ public class PortType implements Serializable{
 		this.vlan = vlan;
 	}
 	
+    public String toString() {
+        return address;
+    }
 }
