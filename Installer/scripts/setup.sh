@@ -195,7 +195,7 @@ function add_tunnel {
 		return
 	fi
 	local_instance=$current_ip
-	$ENTER_IP_NO_CHECK "Local subnet:" "Local subnet address (the IP/mask of the tunnel interface, e.g. 10.0.0.1/30)"
+	$ENTER_IP_NO_CHECK "Local subnet:" "Local IP address/mask of the tunnel interface (e.g. 10.0.1.5/30)"
 	if [ $? -eq 1 ]; then #escape was pressed
 		return 
 	fi
