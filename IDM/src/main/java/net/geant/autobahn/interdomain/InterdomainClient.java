@@ -47,9 +47,8 @@ public class InterdomainClient implements Interdomain {
             // If the Lookup contained the required information, this will be
             // used as the endpoint
         	finalEndPoint = idmLocation;
-        }
-        else {
-            log.info("IDM location could not be obtained from Lookup, trying other options...");
+        } else {
+            log.info("IDM location for domain <" + endPoint + "> could not be obtained from Lookup Service");
             // This is not a fatal situation, as the IDM location might be
             // available through another channel (e.g. in properties files), and
             // so the provided endPoint parameter might be a valid URL

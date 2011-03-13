@@ -1112,6 +1112,9 @@ public final class AccessPoint implements UserAccessPoint,
     	reservationProcessor.setRestorationMode(false);
         if(startupNotifier != null)
         	startupNotifier.domainUp(this.domainURL);
+        
+        log.info("AutoBAHN Initialization completed.");
+        log.info("Waiting for the requests...");
 	}
 
 	public boolean saveReservationStatusDB(String res, int st) {
