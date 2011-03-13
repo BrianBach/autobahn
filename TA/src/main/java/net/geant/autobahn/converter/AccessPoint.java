@@ -276,6 +276,10 @@ public final class AccessPoint implements TopologyAbstraction {
         return null;
     }
     
+    public TopologyConverter getConverter() {
+    	return converter;
+    }
+    
     /**
      * Performs checks before initialization has taken place
      */

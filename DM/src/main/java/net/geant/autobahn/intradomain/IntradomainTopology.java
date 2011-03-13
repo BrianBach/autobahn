@@ -85,7 +85,7 @@ public class IntradomainTopology {
 
 	// Delimiter used to create GenericInterface name
 	// (by concatanating it with port name)
-	public static String gIfDelim = ";;";
+	public static final String INTERFACE_DELIM = ";;";
 	
     // A public default constructor is required for JAX-RPC marshalling
     public IntradomainTopology(){}
@@ -432,7 +432,7 @@ public class IntradomainTopology {
 				for(PhysicalPort p : n.getPhysicalPorts().getPort()) {
 					GenericInterface port = new GenericInterface();
 
-					port.setName(n.getName() + gIfDelim + p.getName());
+					port.setName(n.getName() + INTERFACE_DELIM + p.getName());
 					
 					String pub = getPublicName(p);
 					if(pub != null) {
@@ -469,11 +469,11 @@ public class IntradomainTopology {
 			
 			for(Link link : links) {
 				GenericLink glink = new GenericLink();
-				String sname = link.getStartNode().getName() + gIfDelim + link.getStartPort().getName();
+				String sname = link.getStartNode().getName() + INTERFACE_DELIM + link.getStartPort().getName();
 				GenericInterface sport = ports.get(sname);
 				glink.setStartInterface(sport);
 				
-				String ename = link.getEndNode().getName() + gIfDelim + link.getEndPort().getName();
+				String ename = link.getEndNode().getName() + INTERFACE_DELIM + link.getEndPort().getName();
 				GenericInterface dport = ports.get(ename);
 				glink.setEndInterface(dport);
 				
@@ -498,7 +498,7 @@ public class IntradomainTopology {
 			for(IDLink l : id_links) {
 				GenericLink glink = new GenericLink();
 				
-				String sname = l.getStartNode().getName() + gIfDelim + l.getStartPort().getName();
+				String sname = l.getStartNode().getName() + INTERFACE_DELIM + l.getStartPort().getName();
 				GenericInterface sport = ports.get(sname);
 				glink.setStartInterface(sport);
 

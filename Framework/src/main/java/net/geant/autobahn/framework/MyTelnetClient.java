@@ -13,30 +13,27 @@ public class MyTelnetClient {
 	private InputStream in;
 	private PrintStream out;
 
-	public MyTelnetClient(String server, int port, String pass) {
-		try {
-			// Connect to the specified server
-			telnet.connect(server, port);
+	public MyTelnetClient(String server, int port, String pass)
+			throws Exception {
+		// Connect to the specified server
+		telnet.connect(server, port);
 
-			// Get input and output stream references
-			in = telnet.getInputStream();
-			out = new PrintStream(telnet.getOutputStream());
+		// Get input and output stream references
+		in = telnet.getInputStream();
+		out = new PrintStream(telnet.getOutputStream());
 
-			// Advance to a prompt
-			readUntil(PASSWORD_PROMPT);
-			write(pass);
-			
-			readUntil(Framework.PROMPT);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		// Advance to a prompt
+		readUntil(PASSWORD_PROMPT);
+		write(pass);
+
+		readUntil(Framework.PROMPT);
 	}
 
 	public String readUntil(String pattern) {
 		try {
 			char lastChar = pattern.charAt(pattern.length() - 1);
 			StringBuffer sb = new StringBuffer();
-			boolean found = false;
+			
 			char ch = (char) in.read();
 			while (true) {
 				sb.append(ch);

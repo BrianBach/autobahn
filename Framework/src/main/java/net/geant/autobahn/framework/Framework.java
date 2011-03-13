@@ -14,6 +14,7 @@ import java.util.Properties;
 import net.geant.autobahn.framework.commands.AutobahnCommand;
 import net.geant.autobahn.framework.commands.ClientPortsCommand;
 import net.geant.autobahn.framework.commands.HelpCommand;
+import net.geant.autobahn.framework.commands.NeighborsCommand;
 import net.geant.autobahn.framework.commands.QuitCommand;
 import net.geant.autobahn.framework.commands.RemoveReservationCommand;
 import net.geant.autobahn.framework.commands.ReservationCommand;
@@ -65,6 +66,7 @@ public class Framework {
 		commands.put("uptime", new UptimeCommand());
 		commands.put("idcptopo", new IdcpTopologyCommand());
         commands.put("statistics", new StatisticsCommand());
+        commands.put("neighbors", new NeighborsCommand());
 	}
 
 	public static Properties loadProperties(String filename) throws Exception {
@@ -284,9 +286,13 @@ public class Framework {
 		} else if ("stop".equals(args[0])){
 			int port = Integer.parseInt(props.getProperty("framework.port"));
 
-			MyTelnetClient cli = new MyTelnetClient("localhost", port, props.getProperty("framework.password"));
-			cli.write("halt");
-			cli.disconnect();
+			try {
+				MyTelnetClient cli = new MyTelnetClient("localhost", port, props.getProperty("framework.password"));
+				cli.write("halt");
+				cli.disconnect();
+			} catch(Exception e) {
+				log.info("Unable to stop. Maybe the service is already stopped...");
+			}
 		}
 		
 		System.exit(0);

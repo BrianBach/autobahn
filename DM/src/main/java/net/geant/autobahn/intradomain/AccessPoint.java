@@ -235,7 +235,16 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
 	public DomainConstraints[] checkResources(Link[] arg0, ReservationParams arg1)
 			throws OversubscribedException, AAIException {
 
-		return intradomainManager.checkResources(arg0, arg1);
+		DomainConstraints[] res = null;
+		try {
+			res = intradomainManager.checkResources(arg0, arg1);
+		} catch(OversubscribedException ove) {
+			throw ove;
+		} catch(Exception e) {
+			log.error("Failed CHECK R:", e);
+		}
+		
+		return res;
 	}
 
 	/* (non-Javadoc)

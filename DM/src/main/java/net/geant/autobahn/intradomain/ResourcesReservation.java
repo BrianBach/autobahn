@@ -109,6 +109,10 @@ public class ResourcesReservation {
 		//Restore active reservations from DB
     	DmHibernateUtil hbm = DmHibernateUtil.getInstance();
 		reservations = prManager.loadReservations();
+		if(reservations.size() == 0) {
+			return;
+		}
+		
 		log.info("DM Recovery - Found: " + reservations.size() + " active reservations");
 		
 		Collection<IntradomainReservation> reservationsToRestore = new ArrayList<IntradomainReservation>();

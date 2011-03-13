@@ -81,6 +81,9 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
 
     private boolean internalCalculationEnded = false;
 
+    public enum NeighborStatus {CONNECTED, PENDING, FAILED};
+    private Map<String, NeighborStatus> neighbors = new HashMap<String, NeighborStatus>();
+    
     /**
      * Creates topology converter.
      * 
@@ -194,7 +197,15 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
 		return result;
 	}
 
-    private ProvisioningDomain createProvisioningDomain(String domainID, boolean isClient) {
+    /* (non-Javadoc)
+	 * @see net.geant.autobahn.converter.TopologyConverter#getNeighborsStatus()
+	 */
+	@Override
+	public Map<String, NeighborStatus> getNeighborsStatus() {
+		return neighbors;
+	}
+
+	private ProvisioningDomain createProvisioningDomain(String domainID, boolean isClient) {
         if(domainID == null)
             return null;
         
@@ -296,6 +307,8 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
     	String homeDomain = gl.getStartInterface().getDomainId();
 		String externalDomain = gl.getEndInterface().getDomainId();
 
+		neighbors.put(externalDomain, NeighborStatus.PENDING);
+		
         String sportname = gl.getStartInterface().getName();
         // Register the local (start) port of the interdomain link at the LS
         if (isLSavailable(lookuphost)) {
@@ -372,6 +385,7 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
 			// Cannot get identifier for port or node
 			log.info("Domain " + externalDomain + " is down, " +
 					"Add to waiting: " + gl);
+			neighbors.put(externalDomain, NeighborStatus.FAILED);
 			AwaitingIdentifiers wait = getWaiting(gl.getEndInterface().getDomainId());
 			wait.addLink(gl);
 			return false;
@@ -395,6 +409,8 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
 		
 		l.setBodID(identifiers.getLinkId());
 
+		neighbors.put(externalDomain, NeighborStatus.CONNECTED);
+		
 		// Add to links
 		absLinks.put(sportname, l);
 		edgeLinks.put(l, gl);
@@ -575,7 +591,8 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
 			// If awaiting identifier list for this domain was emptied, we have
 			// successful connection to that domain
 			if (wait.isEmpty()) {
-			    log.info("Domain " + externalDomain + " successfully attached");
+				neighbors.put(externalDomain, NeighborStatus.CONNECTED);
+			    log.info("Domain: " + externalDomain + " successfully attached");
 			}
 		}
 		

@@ -71,9 +71,9 @@ public class Converter {
 		res.setDescription(gi.getDescription());
 		res.setDomainId(gi.getDomainId());
 		
-		int tmp = gi.getName().indexOf(IntradomainTopology.gIfDelim);
+		int tmp = gi.getName().indexOf(IntradomainTopology.INTERFACE_DELIM);
 		if(tmp > 0) {
-			res.setName(gi.getName().split(IntradomainTopology.gIfDelim)[1]);	
+			res.setName(gi.getName().split(IntradomainTopology.INTERFACE_DELIM)[1]);	
 		} else {
 			res.setName(gi.getName());
 		}

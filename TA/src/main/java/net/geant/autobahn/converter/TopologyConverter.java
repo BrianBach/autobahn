@@ -5,7 +5,9 @@
 package net.geant.autobahn.converter;
 
 import java.util.List;
+import java.util.Map;
 
+import net.geant.autobahn.converter.GenericTopologyConverter.NeighborStatus;
 import net.geant.autobahn.intradomain.common.GenericLink;
 import net.geant.autobahn.intradomain.converter.Stats;
 import net.geant.autobahn.network.Link;
@@ -70,4 +72,10 @@ public interface TopologyConverter {
 	 * @return Abstracted identifiers for network devices
 	 */
     public LinkIdentifiers getIdentifiers(String portName, String linkBodId);
+    
+    /**
+     * 
+     * @return
+     */
+    public Map<String, NeighborStatus> getNeighborsStatus();
 }
