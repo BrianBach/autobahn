@@ -20,15 +20,15 @@ public class ClientPortsCommand implements AutobahnCommand {
 		
 		if(args.length > 1) {
 			if("all".equals(args[1]))
-				ports = autobahn.getIdm().getAllClientPorts();
+				ports = autobahn.getIdm().getAllClientPorts_Friendly();
 			else if("domain".equals(args[1]))
-				ports = autobahn.getIdm().getDomainClientPorts();
+				ports = autobahn.getIdm().getDomainClientPorts_Friendly();
 			else {
 			    return "Error in command";
 			}
 		} else {
 			// Default behaviour
-			ports = autobahn.getIdm().getDomainClientPorts();
+			ports = autobahn.getIdm().getDomainClientPorts_Friendly();
 		}
 
 		if (ports == null) {
@@ -38,7 +38,7 @@ public class ClientPortsCommand implements AutobahnCommand {
 		StringBuffer sb = new StringBuffer();
 		sb.append("Client ports, found: " + ports.length + "\n");
 		for(String port : ports) {
-			sb.append(port + "\n");
+			sb.append("- " + port + "\n");
 		}
 		
 		return sb.toString();

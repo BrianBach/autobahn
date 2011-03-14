@@ -656,6 +656,14 @@ public final class AccessPoint implements UserAccessPoint,
 		return cp;
 	}
 
+	/**
+	 * 
+	 * @return An array containing all client ports with friendly names (if available)
+	 */
+    public String[] getAllClientPorts_Friendly() {
+        return getFriendlyNamesfromLS(getAllClientPorts());
+    }
+    
     /* (non-Javadoc)
      * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getAllIdcpPorts()
      */
@@ -698,6 +706,14 @@ public final class AccessPoint implements UserAccessPoint,
 		
 		return cp;
 	}
+
+   /**
+     * 
+     * @return An array containing this domain's client ports with friendly names (if available)
+     */
+    public String[] getDomainClientPorts_Friendly() {
+        return getFriendlyNamesfromLS(getDomainClientPorts());
+    }
 
 	/**
 	 * Return the first provisioning domain that is contained in the admin domain
@@ -1462,6 +1478,41 @@ public final class AccessPoint implements UserAccessPoint,
             return false;
         }
         return true;
+    }
+
+    /**
+     * Checks the Lookup Service for the friendly names of a list of ports.
+     * 
+     * @param The list of port ids.
+     * @return The list with port ids that was provided as an argument with
+     * the ids substituted with friendly names (where available from LS)
+     */
+    public String[] getFriendlyNamesfromLS(String[] cp) {
+        String host = properties.getProperty("lookuphost");
+        if (!isLSavailable(host)) {
+            // Just return the initially provided ids
+            return cp;
+        }
+
+        LookupService lookup = new LookupService(host);
+        String[] friendlyPorts = new String[cp.length];
+
+        for (int i=0; i < cp.length; i++) {
+            String friendlyName = null;
+            try {
+                friendlyName = lookup.QueryFriendlyName(cp[i]);
+            } catch (LookupServiceException e) {
+                log.info("Friendly name for end port " + cp[i] + " could not be acquired from LS");
+                log.debug(e.getMessage());
+            }
+            if (friendlyName == null || friendlyName.trim().equals("") 
+                    || friendlyName.trim().equals("null")) {
+                friendlyPorts[i] = cp[i];
+            } else {
+                friendlyPorts[i] = friendlyName.trim() + " (" + cp[i] + ")";
+            }
+        }
+        return friendlyPorts;
     }
 
 }

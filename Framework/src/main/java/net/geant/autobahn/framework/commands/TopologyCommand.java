@@ -23,7 +23,15 @@ public class TopologyCommand implements AutobahnCommand {
 		StringBuffer sb = new StringBuffer();
 		sb.append("Topology. Number of links: " + links.size() + "\n");
 		for(Link l : links) {
-			sb.append(l + "\n");
+		    if (l.getStartDomainID() == null) {
+		        sb.append(l + "\n");
+		    }
+		    else if (l.getStartDomainID().equals(l.getEndDomainID())) {
+		        sb.append(l + " - " + l.getStartDomainID() + " internal link\n");
+		    } else {
+		        sb.append(l + " - " + l.getStartDomainID() + " to " + l.getEndDomainID() + 
+		                " link\n");
+		    }
 		}
 		
 		return sb.toString();
