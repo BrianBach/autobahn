@@ -70,7 +70,7 @@ public final class TopologyImpl implements Topology, OspfAsync, Closeable {
     	ospf.synchronizeLsdb();
     	// wait a bit to gather opaques 
     	try {
-    		Thread.sleep(500);
+    		Thread.sleep(3000);
     	} catch (InterruptedException e) { }
     	log.debug("ospf connected to " + ospfApiEndpoint + ":" + port);
     }    	
