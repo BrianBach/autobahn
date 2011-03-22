@@ -44,7 +44,7 @@
                 </executions>
                 <configuration>
                     <appendAssemblyId>false</appendAssemblyId>
-                    <finalName>autobahnclients</finalName>
+                    <finalName>clients</finalName>
                     <descriptors>
                         <descriptor>/src/main/assembly/dist-assembly.xml</descriptor>
                     </descriptors>
@@ -145,11 +145,6 @@
             <artifactId>commons-cli</artifactId>
             <version>1.2</version>
         </dependency>
-    	<!--dependency>
-      		<groupId>net.geant.autobahn</groupId>
-      		<artifactId>autobahn-webgui</artifactId>
-      		<version>0.4.1-SNAPSHOT</version>
-    	</dependency-->
 	</dependencies>
 
 </project>

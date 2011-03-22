@@ -1,47 +1,42 @@
-<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
-	<id>autobahn</id>
+<assembly
+    xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+    <id>autobahn-clients</id>
     <formats>
         <format>zip</format>
     </formats>
     <includeBaseDirectory>true</includeBaseDirectory>
     <includeSiteDirectory>false</includeSiteDirectory>
-	<baseDirectory>/autobahnclients</baseDirectory>
+    <baseDirectory>/clients</baseDirectory>
 
     <fileSets>
-		<fileSet>
-			<directory>src/main/resources</directory>
-			<outputDirectory>/</outputDirectory>
-			<includes>
-				<include>*/*/*/*</include>
-				<include>*/*/*</include>
-				<include>*/*</include>
-				<include>*</include>
-			</includes>
-		</fileSet>
-		<!-- fileSet>
-			<directory>../Installer/scripts</directory>
-			<outputDirectory>/installer</outputDirectory>
-			<includes>
-				<include>*</include>
-			</includes>
-		</fileSet-->
-	</fileSets>
- 
+        <fileSet>
+            <directory>src/main/resources</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>*/*/*/*</include>
+                <include>*/*/*</include>
+                <include>*/*</include>
+                <include>*</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+
     <dependencySets>
         <dependencySet>
             <outputDirectory>lib</outputDirectory>
-			<outputFileNameMapping>${artifact.artifactId}-${artifact.version}.${artifact.extension}</outputFileNameMapping>
-            <excludes>
-				<exclude>antlr:antlr</exclude>
-				<exclude>org.slf4j:slf4j-jdk14</exclude>
-				<exclude>org.slf4j:log4j-over-slf4j</exclude>
-   				<exclude>cglib:cglib</exclude>
-			</excludes>
-			<includes>
-				<include>*:jar</include>					
-			</includes>
+            <outputFileNameMapping>${artifact.artifactId}-${artifact.version}.${artifact.extension}</outputFileNameMapping>
+            <includes>
+                <include>net.geant.autobahn:autobahn-idm</include>
+                <include>net.geant.autobahn:autobahn-common</include>
+                <include>net.geant.autobahn:autobahn-clients</include>
+                <include>commons-cli:commons-cli</include>
+                <include>org.apache.cxf:cxf-bundle</include>
+                <include>log4j:log4j</include>
+                <include>wsdl4j:wsdl4j</include>
+                <include>org.apache.ws.commons.schema:XmlSchema</include>
+            </includes>
         </dependencySet>
     </dependencySets>
 </assembly>
