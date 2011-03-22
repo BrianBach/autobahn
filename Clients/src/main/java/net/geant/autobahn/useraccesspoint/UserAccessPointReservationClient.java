@@ -45,7 +45,8 @@ public class UserAccessPointReservationClient {
         opt.addOption("s", true, "Start port");
         opt.addOption("e", true, "End port");
         opt.addOption("d", true, "Duration in hours - Default " + DEFAULT_DURATION + " hour");
-        opt.addOption("c", true, "Capacity in bps - Default " + DEFAULT_CAPACITY + " bps");
+        opt.addOption("b", true, "Bandwidth in bps - Default " + DEFAULT_CAPACITY + " bps");
+        opt.addOption("c", true, "Cancel the specified service");
 
         BasicParser parser = new BasicParser();
         CommandLine cl = parser.parse(opt, args);
@@ -56,8 +57,23 @@ public class UserAccessPointReservationClient {
         if(cl.hasOption('h')) {
             HelpFormatter hf = new HelpFormatter();
             hf.printHelp("clientWrapper [OPTION] ...", opt);
-        }
-        else {
+        } else if(cl.hasOption('c')) {
+        	String srvId = cl.getOptionValue("c");
+            if (srvId == null) {
+                System.out.println("You have to specify service id");
+                System.exit(0);
+            }
+            
+            String idm = DEFAULT_IDM;
+            if (cl.hasOption('i')) {
+                idm = cl.getOptionValue("i");
+            }            
+            
+            UserAccessPointReservationClient instance = 
+                new UserAccessPointReservationClient("http://" + idm + "/autobahn/uap");
+
+            instance.uap.cancelService(srvId);
+        } else {
             sport = cl.getOptionValue("s");
             if (sport==null) {
                 System.out.println("You have to specify a start port");
@@ -79,8 +95,8 @@ public class UserAccessPointReservationClient {
             }
             
             long cap = DEFAULT_CAPACITY;
-            if (cl.hasOption('c')) {
-                String capacity = cl.getOptionValue("c");
+            if (cl.hasOption('b')) {
+                String capacity = cl.getOptionValue("b");
                 try {
                     cap = new Long(capacity);
                 } catch (NumberFormatException ne) {}
