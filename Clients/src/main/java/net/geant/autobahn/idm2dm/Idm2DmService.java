@@ -16,12 +16,12 @@ import net.geant.autobahn.idm2dm.Idm2Dm;
  * 
  */
 
-@WebServiceClient(name = "Idm2DmService", targetNamespace = "http://idm2dm.jra3.geant2.net/", wsdlLocation = "file:wsdl/idm2dm.wsdl")
+@WebServiceClient(name = "Idm2DmService", targetNamespace = "http://idm2dm.autobahn.geant.net/", wsdlLocation = "file:wsdl/idm2dm.wsdl")
 public class Idm2DmService extends Service {
 
     private final static URL WSDL_LOCATION;
-    private final static QName SERVICE = new QName("http://idm2dm.jra3.geant2.net/", "Idm2DmService");
-    private final static QName Idm2DmPort = new QName("http://idm2dm.jra3.geant2.net/", "Idm2DmPort");
+    private final static QName SERVICE = new QName("http://idm2dm.autobahn.geant.net/", "Idm2DmService");
+    private final static QName Idm2DmPort = new QName("http://idm2dm.autobahn.geant.net/", "Idm2DmPort");
     static {
         URL url = null;
         try {

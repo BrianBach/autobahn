@@ -834,7 +834,7 @@ CREATE TABLE vtp_domain (
 
 
 --
--- Data for Name: link_type; Type: TABLE DATA; Schema: public; Owner: jra3
+-- Data for Name: link_type; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 INSERT INTO link_type VALUES (1);
@@ -843,7 +843,7 @@ INSERT INTO link_type VALUES (3);
 
 
 --
--- Data for Name: state_admin; Type: TABLE DATA; Schema: public; Owner: jra3
+-- Data for Name: state_admin; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 INSERT INTO state_admin VALUES (0);
@@ -852,7 +852,7 @@ INSERT INTO state_admin VALUES (2);
 
 
 --
--- Data for Name: state_oper; Type: TABLE DATA; Schema: public; Owner: jra3
+-- Data for Name: state_oper; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 INSERT INTO state_oper VALUES (0);

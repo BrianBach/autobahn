@@ -16,11 +16,11 @@ import net.geant.autobahn.administration.Administration;
  * 
  */
 
-@WebServiceClient(name = "AdministrationService", targetNamespace = "http://administration.jra3.geant2.net/", wsdlLocation = "file:wsdl/administration.wsdl")
+@WebServiceClient(name = "AdministrationService", targetNamespace = "http://administration.autobahn.geant.net/", wsdlLocation = "file:wsdl/administration.wsdl")
 public class AdministrationService {
 
-    private final static QName SERVICE = new QName("http://administration.jra3.geant2.net/", "AdministrationService");
-    private final static QName AdministrationPort = new QName("http://administration.jra3.geant2.net/", "AdministrationPort");
+    private final static QName SERVICE = new QName("http://administration.autobahn.geant.net/", "AdministrationService");
+    private final static QName AdministrationPort = new QName("http://administration.autobahn.geant.net/", "AdministrationPort");
     private Service service;
     
     public AdministrationService(String endPoint) {

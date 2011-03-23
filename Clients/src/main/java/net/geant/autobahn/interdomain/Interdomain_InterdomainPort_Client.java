@@ -20,7 +20,7 @@ import javax.xml.namespace.QName;
 
 public final class Interdomain_InterdomainPort_Client {
 
-    private static final QName SERVICE_NAME = new QName("http://interdomain.jra3.geant2.net/", "InterdomainService");
+    private static final QName SERVICE_NAME = new QName("http://interdomain.autobahn.geant.net/", "InterdomainService");
 
     private Interdomain_InterdomainPort_Client() {
     }

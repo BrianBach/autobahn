@@ -14,11 +14,11 @@ import javax.xml.ws.soap.SOAPBinding;
  * 
  */
 
-@WebServiceClient(name = "ToolService", targetNamespace = "http://tool.jra3.geant2.net/", wsdlLocation = "file:wsdl/tool.wsdl")
+@WebServiceClient(name = "ToolService", targetNamespace = "http://tool.autobahn.geant.net/", wsdlLocation = "file:wsdl/tool.wsdl")
 public class ToolService {
 
-    private final static QName SERVICE = new QName("http://tool.jra3.geant2.net/", "ToolService");
-    private final static QName ToolPort = new QName("http://tool.jra3.geant2.net/", "ToolPort");
+    private final static QName SERVICE = new QName("http://tool.autobahn.geant.net/", "ToolService");
+    private final static QName ToolPort = new QName("http://tool.autobahn.geant.net/", "ToolPort");
     private Service service;
     
     public ToolService(String endPoint) {

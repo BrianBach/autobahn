@@ -14,13 +14,13 @@ import javax.xml.ws.soap.SOAPBinding;
  * 
  */
 
-@WebServiceClient(name = "UserAccessPointService", targetNamespace = "http://useraccesspoint.jra3.geant2.net/", wsdlLocation = "file:wsdl/useraccesspoint.wsdl")
+@WebServiceClient(name = "UserAccessPointService", targetNamespace = "http://useraccesspoint.autobahn.geant.net/", wsdlLocation = "file:wsdl/useraccesspoint.wsdl")
 public class UserAccessPointService {
 
 	private Service service;
 	
-    private final static QName SERVICE = new QName("http://useraccesspoint.jra3.geant2.net/", "UserAccessPointService");
-    private final static QName UserAccessPointPort = new QName("http://useraccesspoint.jra3.geant2.net/", "UserAccessPointPort");
+    private final static QName SERVICE = new QName("http://useraccesspoint.autobahn.geant.net/", "UserAccessPointService");
+    private final static QName UserAccessPointPort = new QName("http://useraccesspoint.autobahn.geant.net/", "UserAccessPointPort");
 
     public UserAccessPointService(String endPoint) {
     	service = Service.create(SERVICE);

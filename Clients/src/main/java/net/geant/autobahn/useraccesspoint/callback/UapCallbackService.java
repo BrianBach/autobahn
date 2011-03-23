@@ -16,12 +16,12 @@ import net.geant.autobahn.useraccesspoint.callback.UapCallback;
  * 
  */
 
-@WebServiceClient(name = "UapCallbackService", targetNamespace = "http://callback.useraccesspoint.jra3.geant2.net/", wsdlLocation = "file:wsdl/uap-callback.wsdl")
+@WebServiceClient(name = "UapCallbackService", targetNamespace = "http://callback.useraccesspoint.autobahn.geant.net/", wsdlLocation = "file:wsdl/uap-callback.wsdl")
 public class UapCallbackService extends Service {
 
     private final static URL WSDL_LOCATION;
-    private final static QName SERVICE = new QName("http://callback.useraccesspoint.jra3.geant2.net/", "UapCallbackService");
-    private final static QName UapCallbackPort = new QName("http://callback.useraccesspoint.jra3.geant2.net/", "UapCallbackPort");
+    private final static QName SERVICE = new QName("http://callback.useraccesspoint.autobahn.geant.net/", "UapCallbackService");
+    private final static QName UapCallbackPort = new QName("http://callback.useraccesspoint.autobahn.geant.net/", "UapCallbackPort");
     static {
         URL url = null;
         try {

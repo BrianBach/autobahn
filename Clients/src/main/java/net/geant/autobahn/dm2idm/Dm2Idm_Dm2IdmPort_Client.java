@@ -20,7 +20,7 @@ import javax.xml.namespace.QName;
 
 public final class Dm2Idm_Dm2IdmPort_Client {
 
-    private static final QName SERVICE_NAME = new QName("http://dm2idm.jra3.geant2.net/", "Dm2IdmService");
+    private static final QName SERVICE_NAME = new QName("http://dm2idm.autobahn.geant.net/", "Dm2IdmService");
 
     private Dm2Idm_Dm2IdmPort_Client() {
     }

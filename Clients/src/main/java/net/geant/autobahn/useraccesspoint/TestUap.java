@@ -33,7 +33,7 @@ public final class TestUap {
 
 	private static final String callback_url = "http://poznan.autobahn.psnc.pl:8443/callback";
 	
-    private static final QName SERVICE_NAME = new QName("http://useraccesspoint.jra3.geant2.net/", "UserAccessPointService");
+    private static final QName SERVICE_NAME = new QName("http://useraccesspoint.autobahn.geant.net/", "UserAccessPointService");
 
     public TestUap(String target) {
         UserAccessPointService ss = new UserAccessPointService(target);

@@ -22,7 +22,7 @@ import net.geant.autobahn.aai.AAIException;
 
 public final class Idm2Dm_Idm2DmPort_Client {
 
-    private static final QName SERVICE_NAME = new QName("http://idm2dm.jra3.geant2.net/", "Idm2DmService");
+    private static final QName SERVICE_NAME = new QName("http://idm2dm.autobahn.geant.net/", "Idm2DmService");
 
     private Idm2Dm_Idm2DmPort_Client() {
     }

@@ -35,7 +35,7 @@ import org.apache.cxf.common.logging.LogUtils;
 
 public final class Tool_ToolPort_Client {
 
-    private static final QName SERVICE_NAME = new QName("http://tool.jra3.geant2.net/", "ToolService");
+    private static final QName SERVICE_NAME = new QName("http://tool.autobahn.geant.net/", "ToolService");
     private ToolService service;
     
     private Tool_ToolPort_Client(String endPoint) {

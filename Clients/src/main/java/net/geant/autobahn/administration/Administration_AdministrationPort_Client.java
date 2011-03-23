@@ -17,7 +17,7 @@ import javax.xml.namespace.QName;
 
 public final class Administration_AdministrationPort_Client {
 
-    private static final QName SERVICE_NAME = new QName("http://administration.jra3.geant2.net/", "AdministrationService");
+    private static final QName SERVICE_NAME = new QName("http://administration.autobahn.geant.net/", "AdministrationService");
     private static final String pionier = "http://poznan.autobahn.psnc.pl:8080/autobahn/administration";
     
     private Administration_AdministrationPort_Client() {

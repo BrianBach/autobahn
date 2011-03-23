@@ -16,12 +16,12 @@ import net.geant.autobahn.interdomain.Interdomain;
  * 
  */
 
-@WebServiceClient(name = "InterdomainService", targetNamespace = "http://interdomain.jra3.geant2.net/", wsdlLocation = "file:wsdl/interdomain.wsdl")
+@WebServiceClient(name = "InterdomainService", targetNamespace = "http://interdomain.autobahn.geant.net/", wsdlLocation = "file:wsdl/interdomain.wsdl")
 public class InterdomainService extends Service {
 
     private final static URL WSDL_LOCATION;
-    private final static QName SERVICE = new QName("http://interdomain.jra3.geant2.net/", "InterdomainService");
-    private final static QName InterdomainPort = new QName("http://interdomain.jra3.geant2.net/", "InterdomainPort");
+    private final static QName SERVICE = new QName("http://interdomain.autobahn.geant.net/", "InterdomainService");
+    private final static QName InterdomainPort = new QName("http://interdomain.autobahn.geant.net/", "InterdomainPort");
     static {
         URL url = null;
         try {
