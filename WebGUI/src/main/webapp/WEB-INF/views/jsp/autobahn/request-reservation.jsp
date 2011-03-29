@@ -52,7 +52,17 @@ function alerta(){
 	//alert(splittar[0]+"T"+splittar[1]);
 	document.getElementById('endTime').value = splittar2[0]+"T"+splittar2[1];
 
+	var includeLinks = document.getElementById('includeLinks').value;
+	var excludeLinks = document.getElementById('excludeLinks').value;
 
+	if(includeLinks.length != 0){
+		var replacedIncludeLinks = includeLinks.substring(includeLinks.indexOf('[')+1,includeLinks.indexOf(']'));
+		document.getElementById('includeLinks').value = replacedIncludeLinks;
+	}
+	if(excludeLinks.length != 0){
+		var replacedExcludeLinks = excludeLinks.substring(excludeLinks.indexOf('[')+1,excludeLinks.indexOf(']'));
+		document.getElementById('excludeLinks').value = replacedExcludeLinks;
+	}
 }
 
 function setStartFriendlyName(path){
@@ -199,18 +209,14 @@ function blockInputStartTime(checked) {
 			</form:select>
 		</td>
 		<form:hidden path="request.startPortFriendlyName" />
-		<td class="error"><form:errors path="request.startPort.address"/></td>
-		
-		<td class="label"><spring:message code="reservation.mode"/></td>
+		<td class="label" style="width: 20px;"><spring:message code="reservation.mode"/></td>
         <td class="value">
 
-            <form:select path="request.startPort.mode" onchange="checkIfVlanSelected1(this.options[this.options.selectedIndex].text)">
+            <form:select path="request.startPort.mode" id="mode-start" onchange="checkIfVlanSelected1(this.options[this.options.selectedIndex].text)">
                     <form:options items="${modes}"/>
                 </form:select>
             </td>
-        <td class="error"><form:errors path="request.startPort.mode"/></td>
-
-        <td class="label" id="hide1"><spring:message code="reservation.vlan"/></td>
+        <td class="label" style="width: 20px;" id="hide1"><spring:message code="reservation.vlan"/></td>
         <td id="hide2" >
 			<form:input path="request.startPort.vlan" maxlength="4" cssStyle="width:21px; height:12px; margin-right:0px;"/> 
 		</td>
@@ -225,19 +231,15 @@ function blockInputStartTime(checked) {
                 <form:options items="${idcpPorts_all}" />
 			</form:select>
 		</td>
-		<form:hidden path="request.endPortFriendlyName" />
-		<td class="error"><form:errors path="request.endPort.address"/></td>
-		
-		<td class="label"><spring:message code="reservation.mode"/></td>
+		<form:hidden path="request.endPortFriendlyName" />		
+		<td class="label" style="width: 20px;"><spring:message code="reservation.mode"/></td>
         <td class="value">	
 
-               <form:select path="request.endPort.mode" onchange="checkIfVlanSelected2(this.options[this.options.selectedIndex].text)" >
+               <form:select path="request.endPort.mode" id="mode-end" onchange="checkIfVlanSelected2(this.options[this.options.selectedIndex].text)" >
                     <form:options items="${modes}"/>
                </form:select>
         </td>
-        <td class="error"><form:errors path="request.endPort.mode"/></td>
-
-        <td class="label" id="hide3" ><spring:message code="reservation.vlan"/></td>
+        <td class="label" style="width: 20px;" id="hide3" ><spring:message code="reservation.vlan"/></td>
         
         <td id="hide4"  >
 			<form:input path="request.endPort.vlan" maxlength="4" cssStyle="width:21px; height:12px; margin-right:0px;"/> 
@@ -263,7 +265,7 @@ function blockInputStartTime(checked) {
 				<td>
 					<form:input path="request.startTime" id="startTime" cssStyle="width:150px;margin-right:0px;" cssClass="enableStartTimeCss"/> 
 				</td>
-				<td class="label" style="min-width:75px;">
+				<td class="label" style="width:60px;">
 					<spring:message code="reservation.processNow"/>
 				</td>
          		<td class="value" style="width:50px;"> 
@@ -379,8 +381,6 @@ function blockInputStartTime(checked) {
                 <table>
                     <tr>
                         <td class="label"><spring:message code="reservation.userIncludeDomains"/></td>
-                        <td class="label"></td>
-                        <td class="label"></td>
                         <td class="label"><spring:message code="reservation.userIncludeLinks"/></td>
                     </tr>
                     <tr>
@@ -389,10 +389,8 @@ function blockInputStartTime(checked) {
                                 <form:options items="${domains_all}"/>
                             </form:select>
                         </td>
-                        <td class="value"></td>
-						<td class="value"></td>
                         <td class="value">
-                            <form:select size="3" path="request.userInclude.links" >
+                            <form:select id="includeLinks" size="3" path="request.userInclude.links" >
                                 <form:options items="${links_all}"/>
                             </form:select>
                         </td>
@@ -412,8 +410,6 @@ function blockInputStartTime(checked) {
                 <table>
                     <tr>
                         <td class="label"><spring:message code="reservation.userExcludeDomains"/></td>
-                        <td class="label"></td>
-                        <td class="label"></td>
                         <td class="label"><spring:message code="reservation.userExcludeLinks"/></td>
                         
                     </tr>
@@ -422,13 +418,9 @@ function blockInputStartTime(checked) {
                             <form:select size="3" path="request.userExclude.domains" >
                                 <form:options items="${domains_all}"/>
                             </form:select>
-                        </td>
-                        
-						<td class="value"></td>
-						<td class="value"></td>
-						
+                        </td>	
                         <td class="value">
-                            <form:select size="3" path="request.userExclude.links" >
+                            <form:select id="excludeLinks" size="3" path="request.userExclude.links" >
                                 <form:options items="${links_all}"/>
                             </form:select>
                         </td>
@@ -482,6 +474,44 @@ function blockInputStartTime(checked) {
     Cannot retrieve ports. Cannot connect to IDM.
 </c:if>
 </div>
+
+
+<spring:hasBindErrors name="reservation">
+<script>
+
+	if(document.getElementById('processNow').checked){
+		document.getElementById('startTime').disabled = true;
+		document.getElementById("startTime").className = "disableStartTimeCss";
+	}
+	
+	var x = document.getElementById('mode-start');
+	var start_mode = x.options[x.options.selectedIndex].text;
+	
+	if(start_mode != "VLAN"){
+		
+		document.getElementById('hide1').style.display='none';
+		document.getElementById('hide2').style.display='none';
+	
+	}
+	
+	var y = document.getElementById('mode-end');
+	var end_mode = y.options[y.options.selectedIndex].text;
+	
+	if(end_mode != "VLAN"){
+		
+		document.getElementById('hide3').style.display='none';
+		document.getElementById('hide4').style.display='none';
+	}
+	
+</script>
+<!--        <div class="error">-->
+<!--            <ul>-->
+<!--            <c:forEach var="error" items="${errors.allErrors}">-->
+<!--                <li>${error.defaultMessage}</li>-->
+<!--            </c:forEach>-->
+<!--            </ul>-->
+<!--        </div>-->
+ </spring:hasBindErrors>
 
 </form:form>
 <script>

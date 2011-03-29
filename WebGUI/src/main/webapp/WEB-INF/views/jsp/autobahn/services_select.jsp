@@ -76,6 +76,6 @@ jQuery(document).ready(function()
 
 <hr/>
 <%--   <div id="servicesform" style="text-align:center" class="e" >  --%>
- <div id="servicesform" style="text-align:center" class="emptydiv">
+ <div id="servicesform" style="text-align:left;" class="emptydiv">
  </div>
  </div>

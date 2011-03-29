@@ -56,7 +56,7 @@
 		 <c:forEach items="${services}" var="service" varStatus="loopStatus">
 		 	
 		 	<tr >
-		 		<td class="label">${loopStatus.count}#</td>
+		 		<td class="label" style="width: 10px;">${loopStatus.count}#</td>
 				<td ><a href="<c:url value="/portal/secure/services-map.htm?service=${service.key}&domain=${service.value}"/>">${service.key}</a></td>
 			</tr>
 		 
