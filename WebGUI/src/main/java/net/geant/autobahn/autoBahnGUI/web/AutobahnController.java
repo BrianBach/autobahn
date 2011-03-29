@@ -188,14 +188,16 @@ public class AutobahnController {
         logger.debug("getting services for idm");
         ServicesFormModel services=null;
         String[] reservationStates=null;
-        
-        
+        Map<String,String> friendly_ports = null;
+    
         if (currentIdm  !=null){
             services = manager.getSubmitedServicesInIDM(currentIdm);   
             reservationStates=manager.getReservationStates();
+            friendly_ports = manager.getAllAvailablePorts();
         }
         model.put("services", services);
         model.put("reservationStates", reservationStates);
+        model.put("friendly_ports", friendly_ports);
     }
 
 

@@ -43,6 +43,7 @@ import net.geant.autobahn.gui.EventType;
 import net.geant.autobahn.gui.ReservationChangedType;
 import net.geant.autobahn.lookup.LookupService;
 import net.geant.autobahn.lookup.LookupServiceException;
+import net.geant.autobahn.network.Link;
 import net.geant.autobahn.useraccesspoint.Mode;
 import net.geant.autobahn.useraccesspoint.Priority;
 import net.geant.autobahn.useraccesspoint.ReservationRequest;
@@ -131,7 +132,13 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	 */
 	private static Logger logger = Logger.getLogger("IDMsManager");
 	
- 	/**
+	/**
+	 * Map with all ports available in each domain
+	 */
+ 	private Map<String,String> ports = new HashMap<String,String>();
+	
+	
+	/**
  	 * Maps the virtual port to real one and vice versa
  	 */
 	private PortsMapper portsMapper;
@@ -394,8 +401,9 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      */
     public List<String> getAllLinks(){
         // Parse through IDMs and get the first non-null result
-        for(String idm : idms.keySet()) {
+    	for(String idm : idms.keySet()) {
         	InterDomainManager manager = idms.get(idm);
+        	
         	String[] temp = manager.getAllLinks();
         	
         	if(temp != null) {
@@ -483,6 +491,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
                 friendlyPorts.add(new PortMap(p_id, friendlyName.trim() + " (" + p_id + ")"));
             }
         }
+        
         return friendlyPorts;
     }
 	
@@ -1183,7 +1192,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 	}
 
 
-	public ServicesFormModel getSubmitedServicesInIDM(String idm) {
+	public ServicesFormModel getSubmitedServicesInIDM(String idm) {		
 		ServicesFormModel serv = new ServicesFormModel();
 		List<String> managers = getAllInterdomainManagers();
 		InterDomainManager manager = null;
@@ -1326,5 +1335,61 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		
 		long capacity = request.getCapacity();
 		request.setCapacity(capacity * 1000000 );
+	}
+	
+	public Map<String,String> getAllAvailablePorts(){
+		
+		if(ports.size() == 0){
+			
+			List<PortMap> ports_all = getAllFriendlyPorts();
+			if(ports_all == null & ports_all.size()==0)
+				return null;
+			
+			for (PortMap portMap : ports_all) {
+				ports.put(portMap.getIdentifier(), portMap.getFriendlyName());
+			}
+			if(ports.size() == 0)
+				return null;
+		}
+		return ports;
+	}
+	
+	public String getFriendlyNamePort(String port){
+		
+		if(port == null & port.length() == 0)
+			return null;
+		
+		if(ports.size() == 0)
+			getAllAvailablePorts();
+		
+		return ports.get(port);
+	}
+	
+	public List<String> getAllDomainLinks(){
+		
+	List<String> str = getAllLinks_NonClient();
+	List<String> domainLinks = new ArrayList<String>();
+		
+	for(String idm : idms.keySet()) {	
+        	
+        InterDomainManager manager = idms.get(idm);
+        List<Link> links = manager.getTopology();
+        	for (Link link : links) {
+        		if(str.contains(link.getBodID())){
+        			String path = new String();
+        				if(link.getStartDomainID().equals(link.getEndDomainID()))
+        					path = " ["+link.getBodID() +"] Internal Link "+link.getStartDomainID();
+        				else
+        					path = " ["+link.getBodID() +"] from "+link.getStartDomainID()+" to "+link.getEndDomainID();
+        			
+        			domainLinks.add(path);
+        		}	
+			}
+        	break;
+    }
+		if(domainLinks.size() == 0)
+			return null;
+		
+	return domainLinks;
 	}
 }

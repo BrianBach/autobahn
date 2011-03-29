@@ -12,6 +12,7 @@ import net.geant.autobahn.autoBahnGUI.model.ServicesFormModel;
 import net.geant.autobahn.autoBahnGUI.model.SettingsFormModel;
 import net.geant.autobahn.autoBahnGUI.model.StatisticsFormModel;
 import net.geant.autobahn.lookup.LookupService;
+import net.geant.autobahn.network.Link;
 import net.geant.autobahn.useraccesspoint.ReservationRequest;
 import net.geant.autobahn.useraccesspoint.ServiceRequest;
 import net.geant.autobahn.useraccesspoint.UserAccessPointException;
@@ -326,5 +327,23 @@ public interface Manager {
 	public List<String> getReservationModes();
 	
 	public void convertCapacity(ReservationRequest request);
+	
+	/**
+	 * Gets map of FriendlyPorts
+	 * @return map of Identifier() and FriendlyName 
+	 */
+	public Map<String,String> getAllAvailablePorts();
+	
+	/**
+	 * Get friendly name port
+	 * @param port name
+	 * @return friendly name port
+	 */
+	public String getFriendlyNamePort(String port);
+	/**
+	 * Gets list of domain links no clients
+	 * @return	list of links
+	 */
+	public List<String> getAllDomainLinks();
 }
 

@@ -34,7 +34,8 @@
 			<evaluate expression="manager.getAllFriendlyPorts()" result="flowScope.friendlyports_all"/>
 			<evaluate expression="manager.getAllIdcpPorts()" result="flowScope.idcpPorts_all"/>
 			<evaluate expression="manager.getAllDomains_NonClient()" result="flowScope.domains_all"/>
-			<evaluate expression="manager.getAllLinks_NonClient()" result="flowScope.links_all"/>
+<!--			<evaluate expression="manager.getAllLinks_NonClient()" result="flowScope.links_all"/>-->
+			<evaluate expression="manager.getAllDomainLinks()" result="flowScope.links_all"/>
 			<evaluate expression="manager.getReservationRequestTemplate()" result="flowScope.reservation"/>
 			<evaluate expression="manager.getTimezones()" result="flowScope.timezones"/>
 			<evaluate expression="manager.getReservationModes()" result="flowScope.modes"/>

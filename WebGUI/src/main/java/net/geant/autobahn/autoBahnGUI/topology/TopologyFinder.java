@@ -81,7 +81,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 		new Thread(new Runnable() {
             public void run() {
             	synchronized (topology) {
-
+            		
             		manager.checkIDMavailability();
             		
             		if(numberOfIDMs != manager.getNumberOfAvailableIDMs())
@@ -238,7 +238,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 			for (int i = 0; i < strings.size(); i++) {
 				InterfaceComponent ic = map.get(strings.get(i));
 			
-				marker = createMarker(ic.getInterf(), ic.getEndLatitude(), ic.getEndLongitude(), Marker.DEFAULT_ICON_INTERFACE, createHTMLPortInfo(ic.getInterf()));
+				marker = createMarker(ic.getInterf(), ic.getEndLatitude(), ic.getEndLongitude(), Marker.DEFAULT_ICON_INTERFACE, createHTMLPortInfo(ic.getInterf(),ic.getName()));
 				top.addMarker(marker);
 			
 				line = new Line();
@@ -306,7 +306,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 				System.out.println("domain name: "+idmsNames.get(i));
 				if (neighbors==null || neighbors.isEmpty()){
 				
-					System.out.println("neighbor == null or list is empty");
+					System.out.println("Neighbor is null");
 					continue;	
 				}
 				
@@ -322,7 +322,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 				if (neighbourIdm==null)
 					continue;
 				
-				System.out.println("neighbor: "+neighbors.get(j).getDomain());		
+				System.out.println("Neighbor: "+neighbors.get(j).getDomain());		
 				
 				statusNeighbor = neighbourIdm.getStatus();
 				
@@ -363,7 +363,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 							line.setOblique(0);
 							topology.addLine(line);
 							if(list == null){
-							    System.out.println("list is NULL");
+							    System.out.println("Domain hasn't got end-point");
 							    continue;
 							}
 							ic = new InterfaceComponent(status.getDomain(), status.getLatitude(), status.getLongitude(), 
@@ -381,6 +381,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 	}
 
 
+	@SuppressWarnings("rawtypes")
 	public void setInterfaceInMainTopology(Map<String, List<InterfaceComponent>> interfaces){
 
 		Line line = null;
@@ -398,7 +399,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 						for (int i = 0; i < components.size(); i++) {
 							
 							marker = createMarker (components.get(i).getName(),components.get(i).getEndLatitude(),components.get(i).getEndLongitude(),
-							Marker.DEFAULT_ICON_INTERFACE, createHTMLPortInfo(components.get(i).getInterf()));
+							Marker.DEFAULT_ICON_INTERFACE, createHTMLPortInfo(components.get(i).getInterf(),components.get(i).getName()));
 							topology.addMarker(marker);
 							
 							line = new Line();
@@ -578,6 +579,10 @@ public class TopologyFinder implements TopologyFinderNotifier{
 	private String createHTMLLinkInfo (Link link){
 		StringBuffer buffer= new StringBuffer();	
 		buffer.append("<h3 valign=\"middle\" ><image src=\"").append(Marker.DEFAULT_INFO_BIG).append("\">Link information:</h3>");
+		if(link.getStartDomainID().equals(link.getEndDomainID()))
+			buffer.append ("Internal link in ").append(link.getEndDomainID());
+		else
+			buffer.append ("<strong><center>").append(link.getStartDomainID()).append(" <-> ").append(link.getEndDomainID()).append("</center></strong>");
 		buffer.append("<br/><hr/>");
 		buffer.append("<ul>");
 		buffer.append("<div id=\"form\">");
@@ -592,6 +597,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 		buffer.append ("<li><strong>Resilience:  </strong>").append(link.getResilience()).append("</li>");
 		buffer.append ("<li><strong>Start port:  </strong>").append(link.getStartPort().getBodID()).append("</li>");
 		buffer.append ("<li><strong>End port:  </strong>").append(link.getEndPort().getBodID()).append("</li>");
+		
 		buffer.append("</div>");
 		buffer.append("</ul>");
 		return buffer.toString();
@@ -620,13 +626,19 @@ public class TopologyFinder implements TopologyFinderNotifier{
 		return buffer.toString();
 		
 	}
-	private String createHTMLPortInfo(String name) {
+	private String createHTMLPortInfo(String name, String domain) {
+		
+		String friendlyNamePort = manager.getFriendlyNamePort(name);
+		int start = friendlyNamePort.indexOf("(");
+		String str = friendlyNamePort.substring(0, start);
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("<h3  valign=\"middle\"><image src=\"").append(Marker.DEFAULT_ICON_INTERFACE).append("\"> Port information:</h3>");
+		buffer.append ("<center><strong>").append(str).append("</strong></center>");
 		buffer.append("<br/><hr/>");
 		buffer.append("<ul>");
 		buffer.append("<div id=\"form\">");
 		buffer.append ("<li><strong>Name:  </strong>").append(name).append("</li>");
+		buffer.append ("<li><strong>Domain:  </strong>").append(domain).append("</li>");
 		buffer.append("</div>");
 		buffer.append("</ul>");	
 		return buffer.toString();
