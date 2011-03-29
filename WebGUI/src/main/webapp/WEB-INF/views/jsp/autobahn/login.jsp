@@ -162,9 +162,9 @@ label {
 		
       <table>
       <tr>&nbsp;</tr>
-        <tr><td class="label" style="text-align:left">Username:</td><td class="value" style="max-width: 130px;"><input type='text' name='j_username'  pattern="[a-zA-Z ]{5,}" maxlength="30" /></td></tr>
-        <tr><td class="label" style="text-align:left">Password:</td><td  class="value" style="max-width: 130px;"><input type='password' name='j_password'></td></tr>
-        <tr><td  colspan="2" style="text-align:center">Don't ask for my password for two weeks<input type="checkbox" name="_spring_security_remember_me" /></td></tr>
+        <tr><td class="label" style="text-align:left">Username:</td><td class="value_box"><input type='text' name='j_username'  pattern="[a-zA-Z ]{5,}" maxlength="30" /></td></tr>
+        <tr><td class="label" style="text-align:left">Password:</td><td  class="value_box"><input type='password' name='j_password'></td></tr>
+        <tr><td  colspan="2" style="text-align:right">Remember me:<input type="checkbox" style="max-width: 20px" name="_spring_security_remember_me" /></td></tr>
         
         <tr>
         	<td></td>

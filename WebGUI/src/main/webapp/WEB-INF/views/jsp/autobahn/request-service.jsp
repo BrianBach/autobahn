@@ -1,4 +1,5 @@
 <%@ include file="../common/includes.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions"prefix="fn" %>
 <h2><spring:message code="service.htitle" text="Request Reservation Service" /></h2>
 
 
@@ -46,6 +47,9 @@ cursor:pointer;
 	<!--p style="margin:20px"><spring:message code="service.submitted.view"/><a href="<c:url value="/portal/secure/reservations.htm?idm=${service.userHomeDomain}#${serviceId}"/>"><spring:message code="service.submitted.goto"/></a></p-->
 	<p style="margin:20px"><spring:message code="service.submitted.view"/><a href="<c:url value="/portal/secure/reservations_select.htm?idm=${service.userHomeDomain}"/>"><spring:message code="service.submitted.goto"/></a></p>
 </c:if>
+
+
+
 <c:if test="${serviceId==null}">
 <form:form commandName="service">
 <br>
@@ -71,7 +75,6 @@ cursor:pointer;
 		<td class="value">
 			<form:textarea rows="8" cols="65" path="justification"/>
 		</td>
-		<!--td class="error"><form:errors path="justification"/></td-->
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
@@ -81,11 +84,16 @@ cursor:pointer;
 		<td>&nbsp;</td>
 	</tr>
 </table>
-<div id="collection">
 
+<div id="collection">
 <h2>Service Reservations <input type="submit" name="_eventId_add" value="<spring:message code="reservation.add"/>"/></h2>
-<br/>		
-	<table width="100%">
+
+
+<c:if test="${fn:length(service.reservations) != 0}">
+
+<br/>
+
+		<table width="100%">
 		<tr>
 			<th><spring:message code="service.reservations.action" text="Action" /></th>
 			<th><spring:message code="reservation.startTime" text="Start time"/></th>
@@ -122,7 +130,12 @@ cursor:pointer;
 			</spring:bind>
 		</c:forEach>
 	</table>
-	<br>
+	
+<br>	
+</c:if>	
+	
+	
+	
 	</div>
 	  <br>
 	<table class="pos1">

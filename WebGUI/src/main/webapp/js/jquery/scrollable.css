@@ -40,8 +40,15 @@
 .item h3 {
 	margin:0 0 5px 0;
 	font-size:16px;
-	color:#456;
+	text-decoration:none;
+	padding:0px;
+	color:#000000
 	font-weight:normal;
+}
+.item h4 {
+	text-decoration:none;
+	padding:0px;
+	color:#000000;
 }
 
 /* the action buttons above the scrollable */

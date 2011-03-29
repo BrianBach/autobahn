@@ -1,6 +1,8 @@
 <%@ include file="../common/includes.jsp"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions"prefix="fn" %>
 
+
+
 <!--script src="http://cdn.jquerytools.org/1.2.3/full/jquery.tools.min.js"></script-->
 <script type="text/javascript" src="<c:url value="/js/jquery/jquery.validate.min.js"/>"></script>
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/jquery/scrollable.css"/>"/>
@@ -62,21 +64,23 @@
   <div class="item" style="height:570px; overflow: auto;">
    	<c:forEach items="${services.services}" var="element" begin="${k}" end="${end-1}" varStatus="y">
    								
-   	<h3 align="right" style="padding-bottom:10px;"><b>Service: ${element.bodID}</b></h3>
-	<table>
+   	<h4 align="right" style="padding-bottom:10px;"><b>Service: ${element.bodID}</b></h4>
+	<div id="coolection_service">
+	<table width="300px">
 		<tr>
-			<td class="label"><spring:message code="service.user.homeDoamin" text="Home Domain" /></td>
-			<td class="value" style="padding-left:20px;width:400px">${element.user.homeDomain.name}</td>
+			<td class=""><spring:message code="service.user.homeDoamin" text="Home Domain" /></td>
+			<td class="" style="margin-left: 10px;">${element.user.homeDomain.name}</td>
 		</tr>
 		<tr>
-			<td class="label"><spring:message code="service.user.name" text="User" /></td>
-			<td class="value" style="padding-left:20px;width:400px">${element.user.name} ${element.user.email}</td>
+			<td class=""><spring:message code="service.user.name" text="User" /></td>
+			<td class="" style="margin-left: 10px;">${element.user.name} ${element.user.email}</td>
 		</tr>
 		<tr>
-			<td class="label"><spring:message code="service.jastification" text="Justification" /></td>
-			<td class="value" style="padding-left:20px;width:400px">${element.justification}</td>
+			<td class=""><spring:message code="service.jastification" text="Justification" /></td>
+			<td class="" style="margin-left: 10px;">${element.justification}</td>
 		</tr>
 	</table>
+	</div>
 	<div id="collection">
 	<table width="100%">
 		<tr>
@@ -97,10 +101,18 @@
 					<td>${reservationStates[item.state]}(${item.state})</td>
 					<td>${item.startTime.time}</td>
 					<td>${item.endTime.time}</td>
-					<td>${item.startPort.address} </td>
+				<c:forEach items="${friendly_ports}" var="f">
+					<c:if test="${f.key == item.startPort.address}">
+						<td><c:out value="${f.value}"></c:out></td>
+					</c:if>
+				</c:forEach>
 					<td> VLAN </td>
 					<td>${item.startPort.vlan} </td>
-					<td>${item.endPort.address} </td>
+				<c:forEach items="${friendly_ports}" var="f">
+					<c:if test="${f.key == item.endPort.address}">
+						<td><c:out value="${f.value}"></c:out></td>
+					</c:if>
+				</c:forEach>
 					<td> VLAN </td>
 					<td>${item.endPort.vlan} </td>
 					<td>${item.capacity/1000000}</td>
@@ -139,21 +151,23 @@
    				
    		<div class="item"  style="height:570px; overflow: auto;">
    			<c:forEach items="${services.services}" var="element" begin="${k}" end="${end-1}" varStatus="y">
-   	<h3 align="right" style="padding-bottom:10px;"><b>Service: ${element.bodID}</b></h3>
-	<table>
+   	<h4 align="right" style="padding-bottom:10px;"><b>Service: ${element.bodID}</b></h4>
+<div id="coolection_service">
+	<table width="300px">
 		<tr>
-			<td class="label"><spring:message code="service.user.homeDoamin" text="Home Domain" /></td>
-			<td class="value" style="padding-left:20px;width:400px">${element.user.homeDomain.name}</td>
+			<td class=""><spring:message code="service.user.homeDoamin" text="Home Domain" /></td>
+			<td class="" style="margin-left: 10px;">${element.user.homeDomain.name}</td>
 		</tr>
 		<tr>
-			<td class="label"><spring:message code="service.user.name" text="User" /></td>
-			<td class="value" style="padding-left:20px;width:400px">${element.user.name} ${element.user.email}</td>
+			<td class=""><spring:message code="service.user.name" text="User" /></td>
+			<td class="" style="margin-left: 10px;">${element.user.name} ${element.user.email}</td>
 		</tr>
 		<tr>
-			<td class="label"><spring:message code="service.jastification" text="Justification" /></td>
-			<td class="value" style="padding-left:20px;width:400px">${element.justification}</td>
+			<td class=""><spring:message code="service.jastification" text="Justification" /></td>
+			<td class="" style="margin-left: 10px;">${element.justification}</td>
 		</tr>
 	</table>
+	</div>
 	<div id="collection">
 	<table width="100%">
 		<tr>
@@ -174,10 +188,18 @@
 					<td>${reservationStates[item.state]}(${item.state})</td>
 					<td>${item.startTime.time}</td>
 					<td>${item.endTime.time}</td>
-					<td>${item.startPort.address} </td>
+				<c:forEach items="${friendly_ports}" var="f">
+					<c:if test="${f.key == item.startPort.address}">
+						<td><c:out value="${f.value}"></c:out></td>
+					</c:if>
+				</c:forEach>
 					<td> VLAN </td>
 					<td>${item.startPort.vlan} </td>
-					<td>${item.endPort.address} </td>
+				<c:forEach items="${friendly_ports}" var="f">
+					<c:if test="${f.key == item.endPort.address}">
+						<td><c:out value="${f.value}"></c:out></td>
+					</c:if>
+				</c:forEach>
 					<td> VLAN </td>
 					<td>${item.endPort.vlan} </td>
 					<td>${item.capacity/1000000}</td>
@@ -208,22 +230,24 @@
    				
    	<div class="item" style="height:570px; overflow: auto;">
    			<c:forEach items="${services.services}" var="element" begin="${k}" end="${end-1}" varStatus="z">
-   	<h3 align="right" style="padding-bottom:10px;"><b>Service: ${element.bodID}</b></h3>
-	<table>
+   	<h4 align="right" style="padding-bottom:10px;"><b>Service: ${element.bodID}</b></h4>
+<div id="coolection_service">
+	<table width="300px">
 		<tr>
-			<td class="label"><spring:message code="service.user.homeDoamin" text="Home Domain" /></td>
-			<td class="value" style="padding-left:20px;width:400px">${element.user.homeDomain.name}</td>
+			<td class=""><spring:message code="service.user.homeDoamin" text="Home Domain" /></td>
+			<td class="" style="margin-left: 10px;">${element.user.homeDomain.name}</td>
 		</tr>
 		<tr>
-			<td class="label"><spring:message code="service.user.name" text="User" /></td>
-			<td class="value" style="padding-left:20px;width:400px">${element.user.name} ${element.user.email}</td>
+			<td class=""><spring:message code="service.user.name" text="User" /></td>
+			<td class="" style="margin-left: 10px;">${element.user.name} ${element.user.email}</td>
 		</tr>
 		<tr>
-			<td class="label"><spring:message code="service.jastification" text="Justification" /></td>
-			<td class="value" style="padding-left:20px;width:400px">${element.justification}</td>
+			<td class=""><spring:message code="service.jastification" text="Justification" /></td>
+			<td class="" style="margin-left: 10px;">${element.justification}</td>
 		</tr>
 
 	</table>
+	</div>
 	<div id="collection">
 	<table width="100%">
 		<tr>
@@ -244,10 +268,18 @@
 					<td>${reservationStates[item.state]}(${item.state})</td>
 					<td>${item.startTime.time}</td>
 					<td>${item.endTime.time}</td>
-					<td>${item.startPort.address} </td>
+				<c:forEach items="${friendly_ports}" var="f">
+					<c:if test="${f.key == item.startPort.address}">
+						<td><c:out value="${f.value}"></c:out></td>
+					</c:if>
+				</c:forEach>
 					<td> VLAN </td>
 					<td>${item.startPort.vlan} </td>
-					<td>${item.endPort.address} </td>
+				<c:forEach items="${friendly_ports}" var="f">
+					<c:if test="${f.key == item.endPort.address}">
+						<td><c:out value="${f.value}"></c:out></td>
+					</c:if>
+				</c:forEach>
 					<td> VLAN </td>
 					<td>${item.endPort.vlan} </td>
 					<td>${item.capacity/1000000}</td>
