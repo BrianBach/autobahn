@@ -6,14 +6,40 @@
 <fmt:message key="lnk.home" var="lnk"/>
 <a href="<c:url value="/${lnk}"/>"><fmt:message key="nav.home"/></a>
 
+<sec:authorize ifAllGranted="ROLE_ANONYMOUS">
+<fmt:message key="lnk.request" var="lnk"/>
+<a href="<c:url value="/${lnk}"/>">Login</a>
+</sec:authorize>
+
+<sec:authorize ifAllGranted="ROLE_USER">
 <fmt:message key="lnk.request" var="lnk"/>
 <a href="<c:url value="/${lnk}"/>"><fmt:message key="nav.request"/></a>
-  
+</sec:authorize>
+
+<sec:authorize ifAllGranted="ROLE_USER">  
 <fmt:message key="lnk.reservations" var="lnk"/>
 <a href="<c:url value="/${lnk}"/>"><fmt:message key="nav.reservations"/></a>
-  
+</sec:authorize>
+
+<sec:authorize ifAllGranted="ROLE_USER">
 <fmt:message key="lnk.reservationsMap" var="lnk"/>
 <a href="<c:url value="/${lnk}"/>"><fmt:message key="nav.reservationsMap"/></a>
+</sec:authorize>
+
+<sec:authorize ifAllGranted="ROLE_ADMINISTRATOR">
+<fmt:message key="lnk.request" var="lnk"/>
+<a href="<c:url value="/${lnk}"/>"><fmt:message key="nav.request"/></a>
+</sec:authorize>
+
+<sec:authorize ifAllGranted="ROLE_ADMINISTRATOR">  
+<fmt:message key="lnk.reservations" var="lnk"/>
+<a href="<c:url value="/${lnk}"/>"><fmt:message key="nav.reservations"/></a>
+</sec:authorize>
+
+<sec:authorize ifAllGranted="ROLE_ADMINISTRATOR">
+<fmt:message key="lnk.reservationsMap" var="lnk"/>
+<a href="<c:url value="/${lnk}"/>"><fmt:message key="nav.reservationsMap"/></a>
+</sec:authorize>
 
 <sec:authorize ifAllGranted="ROLE_ADMINISTRATOR">
   <fmt:message key="lnk.domainSettings" var="lnk"/>

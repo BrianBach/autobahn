@@ -1,8 +1,10 @@
 <?xml version="1.0"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <%@ include file="../common/includes.jsp" %>
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+  
     <title><spring:message code="${htitle}" text=""/></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="<c:url value="/themes/style/style.css"/>" type="text/css" />
@@ -52,6 +54,11 @@
 		String[] colors;
 		String[] states;
 			if (request.getAttribute("reservationLinkColors")!=null &&request.getAttribute("reservationStates")!=null ){
+			%>
+				<security:authorize ifAllGranted="ROLE_USER">
+					<% out.println ("<br /><br /><br /><br /><br /><br />"); %>
+				</security:authorize>
+				<%
 			out.println ("<h2>Reservation states</h2>");
 			out.println ("<table>");
 			colors =(String[])request.getAttribute("reservationLinkColors");
@@ -81,6 +88,11 @@
 				colors =(String[])request.getAttribute("linkColors");
 				states =(String[])request.getAttribute("linkStates");
 				if (colors!= null && states !=null){
+				%>
+				<security:authorize ifAllGranted="ROLE_USER">
+					<% out.println ("<br /><br /><br /><br /><br /><br />"); %>
+				</security:authorize>
+				<%
 				out.println ("<h2>Link states</h2>");
 				out.println ("<table>");
 				length = colors.length;
