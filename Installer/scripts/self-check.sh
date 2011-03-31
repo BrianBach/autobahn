@@ -132,7 +132,7 @@ function add_attribute {
 		touch $2
 		echo "$initkey=$initvalue" >> $2
 	else
-		cat "$2" | sed "s/$key=.*/$key=$value/;//h;\$G;s/\n..*//;s/\n/&$key=$value/"  &>tempfile
+		cat "$2" | sed "s/^[^#\!]*$key=.*/$key=$value/;//h;\$G;s/\n..*//;s/\n/&$key=$value/"  &>tempfile
 		mv tempfile $2
 		rm -f tempfile
 	fi
@@ -350,7 +350,7 @@ function configure_file_autobahn {
 function read_db_info_from_dm {
 	pushlocalinfo
 	newlogparagraph "function read_db_info_from_dm"
-	propfile=`cat $1`
+	propfile=`grep "^[ ]*[#\!]" -v $1`
 		for line in $propfile; do
 			#curprop has the current property that is read
 			#and curval its value
@@ -474,10 +474,12 @@ function get_dm_defaults {
 	
 	log "The dm file is $1"
 	if [ -e "$1" ]; then
-		propfile=`cat $1`
+		propfile=`grep "^[ ]*[#\!]" -v $1`
 		for line in $propfile; do
 			#curprop has the current property that is read
 			#and curval its value
+			
+			#property reading
 			curprop=`echo $line | awk -F "=" '{print $1}'`
 			curval=`echo $line | tr -s '' | cut -d '=' -f 2 `
 			if [[ "$curval" == '' ]]; then
@@ -531,7 +533,7 @@ function get_idm_defaults {
 	gui_address="http://gui-host:8080/autobahn-gui/service/gui"
 	
 	if [ -f $1 ]; then
-		propfile=`cat $1`
+		propfile=`grep "^[ ]*[#\!]" -v $1`
 		for line in $propfile; do
 			curprop=`echo $line | awk -F "=" '{print $1}'`
 			curval=`echo $line |awk -F "=" '{print $2}'`
@@ -567,7 +569,7 @@ function get_framework_defaults {
 	framework_port=5000
 	framework_password="abahn"
 	if [ -f $1 ]; then
-		propfile=`cat $1`
+		propfile=`grep "^[ ]*[#\!]" -v $1`
 		for line in $propfile; do
 			curprop=`echo $line | awk -F "=" '{print $1}'`
 			curval=`echo $line |awk -F "=" '{print $2}'`
@@ -594,7 +596,7 @@ function get_ta_defaults {
 	id_ports=10.10.32.0/24
 	id_links=10.10.64.0/24
 	if [ -f $1 ]; then
-		propfile=`cat $1`
+		propfile=`grep "^[ ]*[#\!]" -v $1`
 		for line in $propfile; do
 			curprop=`echo $line | awk -F "=" '{print $1}'`
 			curval=`echo $line |awk -F "=" '{print $2}'`
@@ -621,7 +623,7 @@ function get_services_defaults {
 	server_securePort=8090
 	
 	if [ -f $1 ]; then
-		propfile=`cat $1`
+		propfile=`grep "^[ ]*[#\!]" -v $1`
 		for line in $propfile; do
 			curprop=`echo $line | awk -F "=" '{print $1}'`
 			curval=`echo $line |awk -F "=" '{print $2}'`
@@ -668,15 +670,15 @@ function create_services_properties {
 	 change_properties "$1" $all_properties
 }
 
-function update_server_ip {
+function deploy_services_modifications {
 	 get_services_defaults "$autobahn_folder/etc/services.properties"
 
-	 change_property "domain" "http://$server_ip:8080/autobahn/interdomain" "$autobahn_folder/etc/idm.properties"
-	 change_property "dm.address" "http://$server_ip:8080/autobahn/idm2dm" "$autobahn_folder/etc/idm.properties"
+	 change_property "domain" "http://$server_ip:$server_port/autobahn/interdomain" "$autobahn_folder/etc/idm.properties"
+	 change_property "dm.address" "http://$server_ip:$server_port/autobahn/idm2dm" "$autobahn_folder/etc/idm.properties"
 	 
-	 change_property "idm.address" "http://$server_ip:8080/autobahn/dm2idm" "$autobahn_folder/etc/dm.properties"
-	 change_property "topologyabstraction.address" "http://$server_ip:8080/autobahn/topologyabstraction" "$autobahn_folder/etc/dm.properties"
-	 change_property "resourcesreservationcalendar.address" "http://$server_ip:8080/autobahn/resourcesreservationcalendar" "$autobahn_folder/etc/dm.properties"
+	 change_property "idm.address" "http://$server_ip:$server_port/autobahn/dm2idm" "$autobahn_folder/etc/dm.properties"
+	 change_property "topologyabstraction.address" "http://$server_ip:$server_port/autobahn/topologyabstraction" "$autobahn_folder/etc/dm.properties"
+	 change_property "resourcesreservationcalendar.address" "http://$server_ip:$server_port/autobahn/resourcesreservationcalendar" "$autobahn_folder/etc/dm.properties"
 }
 
 function deploy_dm_modifications {
@@ -814,7 +816,7 @@ function check_configuration_files {
 	check_conf_file "$autobahn_folder/etc/ta.properties"	
 	CREATE_CONF=create_services_properties
 	check_conf_file "$autobahn_folder/etc/services.properties"
-	update_server_ip		
+	deploy_services_modifications		
 	poplocalinfo
 }
 
@@ -980,7 +982,7 @@ function config_editor {
 			   get_services_defaults "$autobahn_folder/etc/services.properties"
 			   log "Will call file_editor $autobahn_folder/etc/services.properties `cat $path_only/services_defaults`"
 			   file_editor "$autobahn_folder/etc/services.properties" `cat $path_only/services_defaults`
-			   update_server_ip
+			   deploy_services_modifications
 		;;
 			"framework.properties" )
 			    get_framework_defaults "$autobahn_folder/etc/framework.properties"
