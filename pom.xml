@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  
-	<!--properties>
-		<group_id>net.geant.autobahn</group_id>
-		<project_version>2.0.0-SNAPSHOT</project_version>
-		<artifact_id>autobahn</artifact_id>
-	</properties-->
-	
+
 	<properties>
     	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   	</properties>
@@ -161,57 +155,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>		
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>2.0.1</version>
-                <configuration>
-                     <findbugsXmlOutput>true</findbugsXmlOutput>
-                     <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
-                     <xmlOutput>true</xmlOutput>
-                </configuration>
-                <executions>
-	                <execution>
-	                    <goals>
-	                        <goal>findbugs</goal>
-	                    </goals>
-					    <phase>verify</phase>
-					</execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>2.3</version>
-                <configuration>
-                    <targetJdk>1.5</targetJdk>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>pmd</goal>
-                            <goal>cpd</goal>
-                        </goals>
-                        <phase>verify</phase>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.6</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>checkstyle</goal>
-                        </goals>
-                        <phase>verify</phase>
-                    </execution>
-                </executions>
-                <configuration>
-                    <configLocation>checkstyle_checks.xml</configLocation>
-                </configuration>
             </plugin>
         </plugins>
 		
@@ -385,11 +328,62 @@
 				        	</execution>				        	
 			            </executions>
                     </plugin>
+                    
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>findbugs-maven-plugin</artifactId>
+                        <version>2.0.1</version>
+                        <configuration>
+                             <findbugsXmlOutput>true</findbugsXmlOutput>
+                             <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
+                             <xmlOutput>true</xmlOutput>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>findbugs</goal>
+                                </goals>
+                                <phase>verify</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-pmd-plugin</artifactId>
+                        <version>2.3</version>
+                        <configuration>
+                            <targetJdk>1.5</targetJdk>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>pmd</goal>
+                                    <goal>cpd</goal>
+                                </goals>
+                                <phase>verify</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-checkstyle-plugin</artifactId>
+                        <version>2.6</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>checkstyle</goal>
+                                </goals>
+                                <phase>verify</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <configLocation>checkstyle_checks.xml</configLocation>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
 
-	    
 	    <profile>
 	      <id>create-new-env</id>
 	      <build>
