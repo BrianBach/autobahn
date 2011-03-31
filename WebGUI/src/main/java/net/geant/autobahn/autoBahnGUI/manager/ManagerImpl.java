@@ -2,6 +2,8 @@ package net.geant.autobahn.autoBahnGUI.manager;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -157,9 +159,11 @@ public class ManagerImpl implements Manager, ManagerNotifier {
             logger.info("Could not load lookuphost properties: " + e.getMessage());
         }
         String host = properties.getProperty("lookuphost");
-        lookupService = new LookupService(host);
-		
-		
+        if (isLSavailable(host)) {
+            lookupService = new LookupService(host);
+        } else {
+            lookupService = null;
+        }
 	}
 	
 	public LookupService getLookupServiceObject(){
@@ -334,7 +338,10 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      * @return The friendly name if operation was successful, null otherwise
      */
     public String getFriendlyNamefromLS(String identifier) {
-    	
+        if (lookupService == null) {
+            return null;
+        }
+
         String friendlyName = null;
         try {
             friendlyName = lookupService.QueryFriendlyName(identifier);
@@ -634,7 +641,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 	        } while (iterator.hasNext());
         }
 		else
-			logger.info("IDMs not availabale ");
+			logger.info("IDMs not available ");
 
 	}
 	
@@ -1392,4 +1399,19 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		
 	return domainLinks;
 	}
+
+    private boolean isLSavailable(String ls) {
+        if ((ls == null) || ls.equals("none") || ls.equals("")) {
+            return false;
+        }
+        // Check if it is a proper URL
+        try {
+            new URL(ls);
+        } catch (MalformedURLException e) {
+            logger.debug(ls + " is not a proper URL for LS");
+            return false;
+        }
+        return true;
+    }
+
 }
