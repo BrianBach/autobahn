@@ -524,7 +524,7 @@ public final class AccessPoint implements UserAccessPoint,
         log.info("Cancel service: " + serviceID);
 		
 		if (!serviceScheduler.cancelService(serviceID))
-			throw new UserAccessPointException("service with id " + serviceID + " does not exists");
+			throw new UserAccessPointException("service with id " + serviceID + " does not exist");
 	}
 
 	/* (non-Javadoc)
@@ -755,7 +755,7 @@ public final class AccessPoint implements UserAccessPoint,
 		
 		Service service = serviceScheduler.queryService(serviceID);
 		if (service == null)
-			throw new UserAccessPointException("service with id " + serviceID + " does not exists");
+			throw new UserAccessPointException("service with id " + serviceID + " does not exist");
 		
 		ServiceResponse response = new ServiceResponse();
 		response.setUserEmail(service.getUser().getEmail());
