@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import net.geant.autobahn.framework.commands.AutobahnCommand;
+import net.geant.autobahn.framework.commands.CancelServiceCommand;
 import net.geant.autobahn.framework.commands.ClientPortsCommand;
 import net.geant.autobahn.framework.commands.HelpCommand;
 import net.geant.autobahn.framework.commands.NeighborsCommand;
@@ -70,6 +71,7 @@ public class Framework {
 		commands.put("idcptopo", new IdcpTopologyCommand());
         commands.put("statistics", new StatisticsCommand());
         commands.put("neighbors", new NeighborsCommand());
+        commands.put("cancel", new CancelServiceCommand());
 	}
 
 	public static Properties loadProperties(String filename) throws Exception {
