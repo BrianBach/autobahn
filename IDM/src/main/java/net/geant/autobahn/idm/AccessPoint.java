@@ -1094,7 +1094,8 @@ public final class AccessPoint implements UserAccessPoint,
 	                    break;
 	                } catch (Exception e) {
 	                    if (i == 19) {
-	                        log.error("Connecting to ospf api failed: " + e.getMessage(), e);
+	                        log.error("Connecting to ospf api failed: " + e.getMessage());
+	                        log.debug("", e);
 	                    }
 	                }
 	                

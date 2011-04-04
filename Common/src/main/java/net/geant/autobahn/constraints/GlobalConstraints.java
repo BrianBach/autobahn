@@ -90,7 +90,13 @@ public class GlobalConstraints implements Serializable {
      */
     public DomainConstraints getDomainConstraints(String domainId) {
         
-        int index = domainsIds.indexOf(domainId);
+        int index;
+        try {
+            index = domainsIds.indexOf(domainId);
+        } catch (NullPointerException e) {
+            log.error("domainId supplied was null, no domain constraints can be found");
+            return null;
+        }
         
         if(index < 0)
             return null;
