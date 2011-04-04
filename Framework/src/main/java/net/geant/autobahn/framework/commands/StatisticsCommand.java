@@ -109,6 +109,6 @@ public class StatisticsCommand implements AutobahnCommand {
                 "\t'statistics setuptime average intra' to display average time\n" +
                 "\t    needed to set-up the segment of a reservation in this domain\n" +
                 "\t'statistics setuptime average inter' to display average time\n" +
-                "\t    needed to completely set-up reservations (from request to activation) originating from this domain\n";
+                "\t    needed to completely set-up reservations (from request to activation) originating from this domain.";
 	}
 }

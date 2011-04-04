@@ -75,7 +75,7 @@ final public class ServiceScheduler implements Runnable,  ServiceStatusListener 
 	/**
 	 * Puts service on cancel queue
 	 * @param serviceID
-	 * @return false if service with given serviceID does not exists, otherwise true
+	 * @return false if service with given serviceID does not exist, otherwise true
 	 */
 	public synchronized boolean cancelService(String serviceID) {
 		
@@ -98,7 +98,7 @@ final public class ServiceScheduler implements Runnable,  ServiceStatusListener 
 	/**
 	 * Returns service with given serviceID
 	 * @param serviceID
-	 * @return null if service with given serviceID does not exists
+	 * @return null if service with given serviceID does not exist
 	 */
 	public Service queryService(String serviceID) {
 		
