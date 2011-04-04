@@ -24,7 +24,7 @@ public class ServicesCommand implements AutobahnCommand {
 		
 		StringBuffer sb = new StringBuffer();
 		
-		sb.append("Services found: " + services.size());
+		sb.append("Services found: " + services.size() + "\n");
 		
 		for(ServiceType srv : services) {
 			sb.append("Service: " + srv.getBodID() + ", user: " + srv.getUser().getName() + "\n");
