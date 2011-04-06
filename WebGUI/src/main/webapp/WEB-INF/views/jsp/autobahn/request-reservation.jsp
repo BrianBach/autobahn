@@ -187,7 +187,7 @@ function blockInputStartTime(checked) {
 
 <h2><spring:message code="reservation.htitle" text="Reservation form"/></h2>
 
-<c:if test="${friendlyports_domain != null}">
+<c:if test="${friendlyports_domain != null && friendlyports_domain.size() > 0}">
 <div id="wizard">
 
 <!-- tabs -->
@@ -472,6 +472,9 @@ function blockInputStartTime(checked) {
 </c:if>
 <c:if test="${friendlyports_domain == null}">
     Cannot retrieve ports. Cannot connect to IDM.
+</c:if>
+<c:if test="${friendlyports_domain.size() == 0}">
+    This domain has no clients attached.
 </c:if>
 </div>
 

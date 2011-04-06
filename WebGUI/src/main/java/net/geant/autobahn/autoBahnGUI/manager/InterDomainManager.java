@@ -575,7 +575,11 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 			return ports;
 		try{
 			if (isUserAccessPointConnected()) {
-				this.ports = userAccessPoint.getDomainClientPorts();
+				ports = userAccessPoint.getDomainClientPorts();
+				if(ports == null) {
+				    ports = new String[0];
+				}
+				
 				logger.info(ports);
 				return ports;
 			}
