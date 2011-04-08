@@ -60,7 +60,8 @@ public class DomainConstraints implements Serializable {
     }
 
     public List<PathConstraints> getPathConstraints() {
-        return new ArrayList<PathConstraints>(pathConstraints);
+        //return new ArrayList<PathConstraints>(pathConstraints);
+        return pathConstraints;
     }
 
     public void setPathConstraints(List<PathConstraints> constraints) {

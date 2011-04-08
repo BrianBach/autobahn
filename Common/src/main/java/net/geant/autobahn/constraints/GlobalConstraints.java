@@ -447,7 +447,8 @@ public class GlobalConstraints implements Serializable {
      * @return Returns the domainConstraints.
      */
     public List<DomainConstraints> getDomainConstraints() {
-        return new ArrayList<DomainConstraints>(domainConstraints);
+        //return new ArrayList<DomainConstraints>(domainConstraints);
+        return domainConstraints;
     }
 
     /**
@@ -461,7 +462,8 @@ public class GlobalConstraints implements Serializable {
      * @return Returns the domainsIds.
      */
     public List<String> getDomainsIds() {
-        return new ArrayList<String>(domainsIds);
+        //return new ArrayList<String>(domainsIds);
+        return domainsIds;
     }
 
     /**

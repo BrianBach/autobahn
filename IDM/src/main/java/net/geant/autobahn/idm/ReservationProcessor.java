@@ -112,7 +112,7 @@ public class ReservationProcessor {
 		
         Runnable command = new Runnable() {
             public void run() {
-                rdao.update(res);
+                rdao.merge(res);
                 
                 res.recover();
             }
@@ -150,7 +150,7 @@ public class ReservationProcessor {
 		
         Runnable command = new Runnable() {
             public void run() {
-                rdao.update(res);
+                rdao.merge(res);
                 
                 res.cancel();
             }
@@ -166,7 +166,7 @@ public class ReservationProcessor {
 
         Runnable command = new Runnable() {
             public void run() {
-                rdao.update(res);
+                rdao.merge(res);
                 
                 res.reservationCancelled(message, success);
             }

@@ -79,7 +79,8 @@ public class RangeConstraint extends Constraint implements Serializable {
      * @return Iterator on <code>Range</code> objects
      */
     public List<Range> getRanges() {
-        return new ArrayList<Range>(ranges);
+        //return new ArrayList<Range>(ranges);
+        return ranges;
     }
 
     /**

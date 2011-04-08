@@ -46,6 +46,13 @@ public interface GenericDAO<T, PK extends Serializable> {
     public void update(T transientObject);
 
     /**
+     * Saves the object state in the database.
+     * 
+     * @param transientObject Object to save
+     */
+    public void merge(T transientObject);
+
+    /**
      * Deletes given object from the database. 
      * 
      * @param persistentObject Object to be deleted
