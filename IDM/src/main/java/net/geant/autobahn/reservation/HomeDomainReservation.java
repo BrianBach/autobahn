@@ -13,6 +13,9 @@ import java.util.Timer;
 
 import net.geant.autobahn.constraints.GlobalConstraints;
 import net.geant.autobahn.constraints.PathConstraints;
+import net.geant.autobahn.idm.AccessPoint;
+import net.geant.autobahn.idm.MailSender;
+import net.geant.autobahn.idm.MailValidator;
 import net.geant.autobahn.interdomain.pathfinder.InterdomainPathfinder;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.Path;
@@ -61,6 +64,14 @@ public class HomeDomainReservation extends AutobahnReservation {
      */
     public HomeDomainReservation() {
         super();
+        
+        if (MailValidator.isValidEmail(this.getAuthParameters().getIdentifier())) {
+            addStatusListener(new MailSender(this.getAuthParameters().getIdentifier()));
+        }
+        String adminEmail = AccessPoint.getInstance().getProperty("mail.address.admin");
+        if (adminEmail != null && MailValidator.isValidEmail(adminEmail)) {
+            addStatusListener(new MailSender(adminEmail));
+        }
     }
 
     /**
@@ -76,6 +87,14 @@ public class HomeDomainReservation extends AutobahnReservation {
     public HomeDomainReservation(Port startPort, Port endPort,
             Calendar startTime, Calendar endTime, int priority) {
         super(startPort, endPort, startTime, endTime, priority);
+        
+        if (MailValidator.isValidEmail(this.getAuthParameters().getIdentifier())) {
+            addStatusListener(new MailSender(this.getAuthParameters().getIdentifier()));
+        }
+        String adminEmail = AccessPoint.getInstance().getProperty("mail.address.admin");
+        if (adminEmail != null && MailValidator.isValidEmail(adminEmail)) {
+            addStatusListener(new MailSender(adminEmail));
+        }
     }
     
     public void run() {
