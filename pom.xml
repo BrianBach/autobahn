@@ -425,7 +425,6 @@
 		<module>Framework</module>
 		<module>WebGUI</module>
 		<module>TP-Base</module>
-        <module>TP-Proxy</module>
 		<module>Clients</module>
 		<module>autobahn-testing-platform</module>
 	</modules>
