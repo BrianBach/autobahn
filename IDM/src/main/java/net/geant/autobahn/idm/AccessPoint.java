@@ -509,7 +509,9 @@ public final class AccessPoint implements UserAccessPoint,
     }
     
 	public String getProperty(String name) {
-		
+		if (properties == null) {
+		    return null;
+		}
 		return properties.getProperty(name);
 	}
 	

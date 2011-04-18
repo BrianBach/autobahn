@@ -9,6 +9,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import net.geant.autobahn.reservation.LastDomainReservation;
 import net.geant.autobahn.reservation.ReservationStatusListener;
 
 import org.apache.log4j.Logger;
@@ -91,30 +92,37 @@ public class MailSender implements ReservationStatusListener {
      * @param subject subject of the email
      * @param body body of the email
      */
-    private void send(String subject, String body) {
+    private void send(final String subject, final String body) {
 
         if(!useMail) {
             log.debug("Sending mail disabled");
             return;
         }
 
-        Session session = Session.getDefaultInstance(props);
+        // Send the email in a separate thread
+        Thread mailAction = new Thread(new Runnable() {
+            public void run() {
+                Session session = Session.getDefaultInstance(props);
+                
+                try {
+                    Message msg = new MimeMessage(session);
+                    msg.setFrom(new InternetAddress(from));
+                    msg.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
+                    msg.setSubject(subject);
+                    msg.setText(body);
+                    
+                    Transport transport = session.getTransport("smtp");
+                    transport.connect(host, user, pass);
+                    transport.sendMessage(msg, msg.getAllRecipients());
+                    
+                } catch (MessagingException e) {
+                    log.error("Error sending mail: " + e.getMessage());
+                    log.debug("Error info: ", e);
+                }
+            }
+        });
+        mailAction.start();
         
-        try {
-            Message msg = new MimeMessage(session);
-            msg.setFrom(new InternetAddress(from));
-            msg.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
-            msg.setSubject(subject);
-            msg.setText(body);
-            
-            Transport transport = session.getTransport("smtp");
-            transport.connect(host, user, pass);
-            transport.sendMessage(msg, msg.getAllRecipients());
-            
-        } catch (MessagingException e) {
-            log.error("Error sending mail: " + e.getMessage());
-            log.debug("Error info: ", e);
-        }
     }
     
     @Override
