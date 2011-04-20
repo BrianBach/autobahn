@@ -1,4 +1,5 @@
 <%@ include file="../common/includes.jsp" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions"prefix="fn" %>
 <!-- tab styling -->
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/jquery/tabs.css"/>"/>
 <script type="text/javascript" src="<c:url value="/scripts/jscalendar/js/jscal2.js"/>"></script>
@@ -187,7 +188,7 @@ function blockInputStartTime(checked) {
 
 <h2><spring:message code="reservation.htitle" text="Reservation form"/></h2>
 
-<c:if test="${friendlyports_domain != null && friendlyports_domain.size() > 0}">
+<c:if test="${friendlyports_domain != null && fn:length(friendlyports_domain) > 0}">
 <div id="wizard">
 
 <!-- tabs -->
@@ -220,7 +221,6 @@ function blockInputStartTime(checked) {
         <td id="hide2" >
 			<form:input path="request.startPort.vlan" maxlength="4" cssStyle="width:21px; height:12px; margin-right:0px;"/> 
 		</td>
-		
 	</tr>
 	<tr>
 		<td class="label"><spring:message code="reservation.endPort"/></td>
@@ -244,7 +244,6 @@ function blockInputStartTime(checked) {
         <td id="hide4"  >
 			<form:input path="request.endPort.vlan" maxlength="4" cssStyle="width:21px; height:12px; margin-right:0px;"/> 
 		</td>
-		
 	</tr>
 	<tr>
 		<td class="label"><spring:message code="reservation.timezone"/></td>
@@ -294,7 +293,6 @@ function blockInputStartTime(checked) {
 	</td>
 	<td class="error"></td>
 </tr>
-      
         <tr>
             <td class="label"><spring:message code="reservation.capacity"/></td>
             <td class="value">
@@ -400,10 +398,8 @@ function blockInputStartTime(checked) {
             <td class="error">
                 <form:errors path="request.userInclude.domains"/><br>
                 <form:errors path="request.userInclude.links"/>
-            </td>
-            
+            </td>           
         </tr>
-   
         <tr>
             <td class="label" valign="top"><spring:message code="reservation.userExclude"/></td>
             <td>
@@ -424,9 +420,7 @@ function blockInputStartTime(checked) {
                                 <form:options items="${links_all}"/>
                             </form:select>
                         </td>
-                        
-                        
-                        
+
                     </tr>
                 </table>
             </td>
@@ -473,7 +467,7 @@ function blockInputStartTime(checked) {
 <c:if test="${friendlyports_domain == null}">
     Cannot retrieve ports. Cannot connect to IDM.
 </c:if>
-<c:if test="${friendlyports_domain.size() == 0}">
+<c:if test="${fn:length(friendlyports_domain) > 0}">
     This domain has no clients attached.
 </c:if>
 </div>
@@ -507,13 +501,6 @@ function blockInputStartTime(checked) {
 	}
 	
 </script>
-<!--        <div class="error">-->
-<!--            <ul>-->
-<!--            <c:forEach var="error" items="${errors.allErrors}">-->
-<!--                <li>${error.defaultMessage}</li>-->
-<!--            </c:forEach>-->
-<!--            </ul>-->
-<!--        </div>-->
  </spring:hasBindErrors>
 
 </form:form>

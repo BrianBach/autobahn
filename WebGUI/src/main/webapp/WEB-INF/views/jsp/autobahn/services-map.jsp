@@ -1,19 +1,14 @@
 <%@ include file="../common/includes.jsp"%>
+
+<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.0/jquery.min.js"></script> -->
 <script src="http://cdn.jquerytools.org/1.2.3/full/jquery.tools.min.js"></script>
 <script type="text/javascript" src="<c:url value="/js/jquery/jquery.validate.min.js"/>"></script>
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/jquery/tooltip.css"/>"/>
 <script type="text/javascript" src="<c:url value="/js/jquery/jquery.tools.min.js"/>"></script>
+
 <script>
-     jQuery.noConflict();
-     
-     // Use jQuery via jQuery(...)
-     //jQuery(document).ready(function(){
-     //  jQuery("div").hide();
-     //});
-     
-     // Use Prototype with $(...), etc.
-     //$('someid').hide();
-   </script>
+     jQuery.noConflict();    		 
+</script>
 
 <h2><spring:message code="reservationMap.htitle" text="AutoBAHN Reservations and Reachability Map"/></h2>
 <br/>
@@ -21,7 +16,7 @@
 
 <div class="images">
 
-	<div class="map" id="map"></div>
+	<div id="map" class="map" ></div>
 		<div align="right" >
 		
 			<a href="<c:url value="/portal/secure/services-map.htm?service=&domain="/>">Clear map</a>
@@ -29,148 +24,9 @@
 		</div>
 	
 	</div>
-<!--div class="tooltip" id="tooltip" >
-	
 
-	<img src="<c:url value="/js/jquery/img/close2.PNG"/>"/ id="close_tooltip">
-	
-	<div class="label_reserv"> Reservations: </div>
-
-	<div class="panel_scroll" id="panel_scroll" >
-	
-	<div align="center">
-	<table style="margin:0" >
-	
-		<c:if test="${services == null}">
-		
-			<tr>
-				<td class="label" style="color: white;"># No reservation available # </td>
-			</tr>
-			
-		</c:if>
-		
-		 <c:forEach items="${services}" var="service" varStatus="loopStatus">
-		 	
-		 	<tr >
-		 		<td class="label">${loopStatus.count}#</td>
-				<td ><a href="<c:url value="/portal/secure/services-map.htm?service=${service.key}&domain=${service.value}"/>">${service.key}</a></td>
-			</tr>
-		 
-		 </c:forEach>
-		
-		</table>
-		</div>
-	</div>
-
-
-</div-->
-<!--div id="popupContact">  
-        <a id="popupContactClose">x</a>  
-        <h1>Reservations: </h1>  
-        <p id="contactArea">  
-            <div align="center">
-	<table style="margin-right:20px" >
-	
-		<c:if test="${services == null}">
-		
-			<tr>
-				<td class="label" style="color: white;"># No reservation available # </td>
-			</tr>
-			
-		</c:if>
-		
-		 <c:forEach items="${services}" var="service" varStatus="loopStatus">
-		 	
-		 	<tr >
-		 		<td class="label">${loopStatus.count}#</td>
-				<td ><a href="<c:url value="/portal/secure/services-map.htm?service=${service.key}&domain=${service.value}"/>">${service.key}</a></td>
-			</tr>
-		 
-		 </c:forEach>
-		
-		</table>
-		</div> 
-        </p>  
-    </div>  
-    <div id="backgroundPopup"></div--> 
-<!--style>
-#backgroundPopup{  
-display:none;  
-position:fixed;  
-_position:absolute; /* hack for internet explorer 6*/  
-height:100%;  
-width:100%;  
-top:0;  
-left:0;  
-background:#000000;  
-border:1px solid #cecece;  
-z-index:1;  
-}  
-#popupContact{  
-display:none;  
-position:fixed;  
-_position:absolute; /* hack for internet explorer 6*/  
-height:384px;  
-width:408px;  
-background:#FFFFFF;  
-border:2px solid #cecece;  
-z-index:2;  
-padding:12px;  
-font-size:13px;
-overflow: hidden;  
-}  
-#popupContact h1{  
-text-align:left;  
-color:#6FA5FD;  
-font-size:22px;  
-font-weight:700;  
-border-bottom:1px dotted #D3D3D3;  
-padding-bottom:2px;  
-margin-bottom:20px;  
-}  
-#popupContactClose{  
-font-size:14px;  
-line-height:14px;  
-right:6px;  
-top:4px;  
-position:absolute;  
-color:#6fa5fd;  
-font-weight:700;  
-display:block;  
-}  
-</style-->
 <a id="download_now">Download now</a>
-<!--div id="popupContact">  
-        <a id="popupContactClose">x</a>  
-        <h1>Reservations: </h1>  
-        <p id="contactArea">  
-            <div align="center">
-	<table style="margin:0" >
-	
-		<c:if test="${services == null}">
-		
-			<tr>
-				<td class="label" style="color: white;"># No reservation available # </td>
-			</tr>
-			
-		</c:if>
-		
-		 <c:forEach items="${services}" var="service" varStatus="loopStatus">
-		 	
-		 	<tr >
-		 		<td class="label">${loopStatus.count}#</td>
-				<td ><a href="<c:url value="/portal/secure/services-map.htm?service=${service.key}&domain=${service.value}"/>">${service.key}</a></td>
-			</tr>
-		 
-		 </c:forEach>
-		
-		</table>
-		</div>
-        </p>  
-    </div>  
-    <div id="backgroundPopup"></div--> 
-    
-<!-- tooltip element -->
+
 <div class="tooltip" id="tooltip" >
 	
 
@@ -207,6 +63,8 @@ display:block;
 </div>
 
 </form:form>
+
+<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript">
 	/*jQuery(document).ready(function(){  
 //following code will be here  
@@ -286,9 +144,6 @@ disablePopup();
 
 });*/
 
-	//map will be refreshed every 120 seconds
-	setTimeout( "refresh()", 120*1000 );
-
 	// initialize tooltip
 	jQuery(document).ready(function() {
 		jQuery(function() {		
@@ -321,144 +176,6 @@ disablePopup();
 		}); 	 
 	});			
 	
-	/*if((screen.width>=1281) && (screen.height>=801) && (screen.width < 1680)){
-	jQuery(document).ready(function() {
-		jQuery(function() {		
-			jQuery("#download_now").tooltip({ 		
-				 position: "center right",
-				 offset: [-20, 640],
-				
-				 events: {
-			            def: "click, ''",
-			            tooltip: "'','mouseout'"},
-			        onShow: function(){
-			           var tip = this.getTip();
-			           tip.show();
-			        }
-			    })
-			    .dynamic({
-			        top: { direction: 'up' } 
-			});
-			
-			
-			jQuery('#close_tooltip').click(function() { 
-			    jQuery(this).parent().hide();        
-			});
-			
-			jQuery('#download_now').click(function() { 
-			    jQuery(this).next().show();
-			});
-
-						 
-		}); 	 
-	});													
-}
-
-if((screen.width>=1680) && (screen.height>=1050) && screen.width < 1920 ){
-	jQuery(document).ready(function() {
-		jQuery(function() {		
-			jQuery("#download_now").tooltip({ 		
-				 position: "center right",
-				 offset: [-20, 320],
-				
-				 events: {
-			            def: "click, ''",
-			            tooltip: "'','mouseout'"},
-			        onShow: function(){
-			           var tip = this.getTip();
-			           tip.show();
-			        }
-			    })
-			    .dynamic({
-			        top: { direction: 'up' } 
-			});
-			
-			
-			jQuery('#close_tooltip').click(function() { 
-			    jQuery(this).parent().hide();        
-			});
-			
-			jQuery('#download_now').click(function() { 
-			    jQuery(this).next().show();
-			});
-
-						 
-		}); 	 
-	});													
-}
-if((screen.width>=1920) && (screen.height>=1080) && screen.width < 2048 ){
-
-	jQuery(document).ready(function() {
-		jQuery(function() {		
-			jQuery("#download_now").tooltip({ 		
-				 position: "center right",
-				 offset: [-20, 440],
-				
-				 events: {
-			            def: "click, ''",
-			            tooltip: "'','mouseout'"},
-			        onShow: function(){
-			           var tip = this.getTip();
-			           tip.show();
-			        }
-			    })
-			    .dynamic({
-			        top: { direction: 'up' } 
-			});
-			
-			
-			jQuery('#close_tooltip').click(function() { 
-			    jQuery(this).parent().hide();        
-			});
-			
-			jQuery('#download_now').click(function() { 
-			    jQuery(this).next().show();
-			});
-
-						 
-		}); 	 
-	});													
-}
-else {
-	jQuery(document).ready(function() {
-		jQuery(function() {						
-			jQuery("#download_now").tooltip({ 				
-							 position: "center right",
-							 offset: [-20, 140],
-							
-							 events: {
-					                def: "click, ''",
-					                tooltip: "'','mouseout'"},
-					            onShow: function(){
-					               var tip = this.getTip();
-					               tip.show();
-					            }
-					        })
-					        .dynamic({
-					            top: { direction: 'up' } 
-					    });
-
-						
-					 	jQuery('#close_tooltip').click(function() { 
-					        jQuery(this).parent().hide();        
-					    });
-					    
-					    jQuery('#download_now').click(function() { 
-					        jQuery(this).next().show();
-					    });
-
-						 
-					}); 	 
-			 });							
-}*/
-
-var sURL = location.href;
-
-function refresh()
-{
-    window.location.href = sURL;
-}
-
 </script>
 
 

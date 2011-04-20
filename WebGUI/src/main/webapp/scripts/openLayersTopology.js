@@ -1,4 +1,7 @@
 var map;
+var main_lineXML;
+var main_markersXML;
+var flag = false;
 
 function init() {
 	  var options = {
@@ -159,13 +162,16 @@ function addMarkers (map, markersXML){
 }
 
 function refreashMap (map){
+		
   var request = GXmlHttp.create();
   var service = gup('service');
+  
   var domain = gup('domain');
   if (service==null || service=="")
-  	request.open('GET', '/autobahn-gui/portal/secure/topology.xml?service=&domain=', true);
-	  else{
-	  	var url = '/autobahn-gui/portal/secure/topology.xml'+'?service='+service+'&domain='+domain;
+	  request.open('GET', '/autobahn-gui/portal/secure/topology.xml?service=&domain=', true);
+
+	else{
+		var url = '/autobahn-gui/portal/secure/topology.xml'+'?service='+service+'&domain='+domain;
 	  	
 	  	request.open('GET', url, true);
 	  }
@@ -174,6 +180,20 @@ function refreashMap (map){
       var xmlDoc = GXml.parse(request.responseText);
       var lines = xmlDoc.documentElement.getElementsByTagName('line');            
       var markersXML = xmlDoc.documentElement.getElementsByTagName('marker');
+      
+      //refreshes map
+      //should be the same with lines and main_linesXML but actually not supported
+      if(flag == false){
+    	  flag = true;
+    	  main_markersXML = markersXML;
+      }
+      if(main_markersXML.length != markersXML.length){
+    	  main_markersXML = markersXML;
+
+    	  var sURL = location.href;
+    	  window.location.href = sURL;
+      }
+
       addLines(map, lines);
       addMarkers (map, markersXML);
       }
@@ -209,7 +229,7 @@ function onFeatureUnselect(evt) {
 
 function make_all(map){
 if (GBrowserIsCompatible()) {
-    setInterval('refreashMap(map)',30000);
+    setInterval('refreashMap(map)',10000);
     refreashMap(map);
   }else {
     alert('Sorry, the Google Maps API is not compatible with this browser');
