@@ -48,4 +48,16 @@ public class ConstraintsType {
 		
 		return null;
 	}
+	
+	/**
+	 * Get constraint with the specified name.
+	 *  
+	 * @param name
+	 * @return
+	 */
+	public Constraint getConstraintForName(String name) {
+		ConstraintsNames cn = ConstraintsNames.valueOf(name);
+		if(cn == null) return null;
+		return getConstraintForName(cn);
+	}
 }
