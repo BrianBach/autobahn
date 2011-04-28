@@ -532,6 +532,14 @@ function get_idm_defaults {
 	ospf_opaqueId=1001
 	gui_address="http://gui-host:8080/autobahn-gui/service/gui"
 	
+	mail_use=false
+	mail_smtp_host="smtp.geant.net"
+	mail_smtp_port=25
+	mail_address_from="admin@geant.net"
+	mail_user="admin"
+	mail_pass="pass"
+	mail_address_admin="admin@geant.net"
+	
 	if [ -f $1 ]; then
 		propfile=`grep "^[ ]*[#\!]" -v $1`
 		for line in $propfile; do
@@ -553,11 +561,25 @@ function get_idm_defaults {
 		      ;;
 			  gui.address ) gui_address=$curval
 		      ;;
+		      mail.use ) mail_use=$curval
+		      ;;
+		      mail.smtp.host ) mail_smtp_host=$curval
+		      ;;
+		      mail.smtp.port ) mail_smtp_port=$curval
+		      ;;
+		      mail.address.from ) mail_address_from=$curval
+		      ;;
+		      mail.user ) mail_user=$curval
+		      ;;
+		      mail.pass ) mail_pass=$curval
+		      ;;
+		      mail.address.admin ) mail_address_admin=$curval
+		      ;;
 			esac
 		done
 	fi	
-	log "latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf_opaqueType ospf.opaqueId $ospf_opaqueId gui.address $gui_address"
-	echo -n "latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf_opaqueType ospf.opaqueId $ospf_opaqueId gui.address $gui_address" | tr -d '\r' > $path_only/idm_defaults
+	log "latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf_opaqueType ospf.opaqueId $ospf_opaqueId gui.address $gui_address mail.use $mail_use mail.smtp.host $mail_smtp_host mail.smtp.port $mail_smtp_port mail.address.from $mail_address_from mail.user $mail_user mail.pass $mail_pass mail.address.admin $mail_address_admin"
+	echo -n "latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf_opaqueType ospf.opaqueId $ospf_opaqueId gui.address $gui_address  mail.use $mail_use mail.smtp.host $mail_smtp_host mail.smtp.port $mail_smtp_port mail.address.from $mail_address_from mail.user $mail_user mail.pass $mail_pass mail.address.admin $mail_address_admin" | tr -d '\r' > $path_only/idm_defaults
 	poplocalinfo
 }
 
