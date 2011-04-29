@@ -42,7 +42,30 @@ public class Edugain {
 		
 		this.validator = new Validator(properties);
 	}
-	
+
+	/**
+	 * Searches for a key in the provided properties and converts its value to 
+	 * absolute path by concatenating it with the path argument
+	 * If the key is not found, no action is performed
+	 * 
+	 * @param properties - the properties that contain the key to be converted
+	 * @param key - the key in the properties that will be converted to absolute
+	 * @param path - the absolute path
+	 */
+    public static void convertPropertyToAbsolutePath(Properties properties, String key, String path) {
+        String s = properties.getProperty(key);
+        if (s == null) {
+            return;
+        }
+
+        // If the path is a file, keep only the directory part
+        if (s.charAt(0) != '/') {
+            path=path.substring(0,path.lastIndexOf('/')+1 );
+            s = path + s;
+            properties.setProperty(key, s);
+        }       
+    }
+    
 	/**
 	 * Static method that is used by Spring framework (WebGUI)
 	 * 
@@ -106,6 +129,18 @@ public class Edugain {
 		
 		return result;
 	}
+	
+    public Properties getPropsLoaderForWGui() throws IOException {
+        
+        Properties result = getPropsLoader();
+        
+        if (edugain != null) {
+            convertPropertyToAbsolutePath(result, "org.opensaml.ssl.truststore", edugain.getPath() );        
+            convertPropertyToAbsolutePath(result, "net.geant.edugain.validation.valid-components", edugain.getPath() );                      
+        }
+        
+        return result;
+    }
 	
 	public ComponentID validateCert(X509Certificate cert)
 			throws ValidationException {
