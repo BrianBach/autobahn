@@ -49,7 +49,7 @@ public class GuiClient implements Gui {
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.gui.Gui#statusUpdated(java.lang.String, java.lang.String, net.geant.autobahn.gui.Status)
 	 */
-	public void statusUpdated(String idmName, String idmUrl, Status status) {
+	public synchronized void statusUpdated(String idmName, String idmUrl, Status status) {
 	
 		try {
 			gui.statusUpdated(idmName, idmUrl, status);

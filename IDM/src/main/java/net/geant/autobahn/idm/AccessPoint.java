@@ -112,6 +112,9 @@ public final class AccessPoint implements UserAccessPoint,
     
     private StringBuffer initChecks;
     
+    private List<AdminDomain> compareDomains = new ArrayList<AdminDomain>();
+    private List<Link> compareLinks = new ArrayList<Link>(); 
+    
 	private AccessPoint() throws Exception {
 	}
 
@@ -209,7 +212,13 @@ public final class AccessPoint implements UserAccessPoint,
 	        
 	        neighbors = pathFinder.getNeighbours(admin); 
 	        
+	        
+	        
 	        IdmHibernateUtil.getInstance().closeSession();
+	        
+	        compareDomains = topology.getDomains();
+	        compareLinks = topology.getLinks();
+	        
 	        
 	        // init reservation modules
 	        serviceScheduler = new ServiceScheduler();
@@ -1347,6 +1356,18 @@ public final class AccessPoint implements UserAccessPoint,
 		
 		List<Link> links = topology.getLinks();
 		
+	
+        // init neighbors
+        AdminDomain admin = daos.getAdminDomainDAO().getByBodID(domainName);
+
+        if(compareDomains.size() != topology.getDomains().size() || compareLinks.size() != topology.getLinks().size()){
+        	neighbors = pathFinder.getNeighbours(admin);
+        	compareDomains.clear();
+        	compareDomains = topology.getDomains();
+        	compareLinks.clear();
+        	compareLinks = topology.getLinks();
+        }
+        
 		IdmHibernateUtil.getInstance().closeSession();
 		
 		List<Neighbor> nbors = new ArrayList<Neighbor>();

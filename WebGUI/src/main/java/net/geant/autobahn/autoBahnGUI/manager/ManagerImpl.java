@@ -29,6 +29,7 @@ import javax.xml.datatype.DatatypeFactory;
 
 import net.geant.autobahn.aai.UserAuthParameters;
 import net.geant.autobahn.administration.KeyValue;
+import net.geant.autobahn.administration.Neighbor;
 import net.geant.autobahn.administration.ReservationType;
 import net.geant.autobahn.administration.ServiceType;
 import net.geant.autobahn.administration.Status;
@@ -146,6 +147,10 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	private PortsMapper portsMapper;
 	
 	private LookupService lookupService;
+	
+	private String[] comparedLinks;
+	
+	private String[] comparedDomains;
 	
 	public ManagerImpl(){
 		Properties properties = new Properties();
@@ -664,7 +669,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 			idmsTime.replace(idm, manager.getLastStatusUpdateInMillis());			
 		}
 				
-		if (manager.getLastStatusUpdateInMillis()>tearDownTime) {
+		if (manager.getLastStatusUpdateInMillis() > tearDownTime) {
 			try{
 				manager.getServices(true);
 				manager.getProperties();
@@ -672,9 +677,9 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 			}catch (Exception e){
 				logger.info (e.getClass().getName()+":"+e.getMessage());
 			}
-		}		
-		if (notifier!= null)	
-				notifier.updateTopology();
+		}
+		if (notifier != null)	
+				notifier.updateTopology(idm);
 	}
 	
 	/*
@@ -1328,16 +1333,11 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 
 		return list;
 	}
+	
 	public String setParameter(String param){	
 		return param;
 	}
-	public int getNumberOfAvailableIDMs(){
-		if(idms == null)
-			return -1;		
-		
-		return idms.size();
-	}
-	
+
 	public void convertCapacity(ReservationRequest request){
 		
 		long capacity = request.getCapacity();
@@ -1413,5 +1413,30 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
         }
         return true;
     }
-
+    
+    
+    public boolean checkTopology(String idm){
+    	
+    	if(idms != null && idms.size() > 0){
+    		
+    		if(!idms.containsKey(idm))
+    			return false;
+    		
+    		InterDomainManager manager = idms.get(idm);
+    		if(manager == null)
+    			return false;
+    	
+    		String[] links = manager.getAllLinks();
+    		String[] domains = manager.getAllDomains();
+    	
+    		if(comparedLinks != links || comparedDomains != domains){
+    			comparedLinks = links;
+    			comparedDomains = domains;
+    			
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
 }

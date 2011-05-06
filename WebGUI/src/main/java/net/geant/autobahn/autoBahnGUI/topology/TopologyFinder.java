@@ -48,8 +48,6 @@ public class TopologyFinder implements TopologyFinderNotifier{
 	 */
 	public static final long DEFAULT_DOWN_TIME = 70000;
 	
-	public int numberOfIDMs = 0;
-	
 	/**
 	 * Topology representation
 	 */
@@ -77,14 +75,14 @@ public class TopologyFinder implements TopologyFinderNotifier{
 	/**
 	 * Updates topology by analysing manager data
 	 */
-	public synchronized void updateTopology() {
+	public synchronized void updateTopology(final String idm) {
 		new Thread(new Runnable() {
             public void run() {
             	synchronized (topology) {
-            		
+            	
             		manager.checkIDMavailability();
             		
-            		if(numberOfIDMs != manager.getNumberOfAvailableIDMs())
+            		if(manager.checkTopology(idm))
             			createTopology();
 				}
             	synchronized (timerLock) {
@@ -261,6 +259,8 @@ public class TopologyFinder implements TopologyFinderNotifier{
 	 */
 	private void createTopology() {
 		topology.removeAll();
+		map.clear();
+
 		Marker marker = null;
 		Line line = null;
 		String name=null;
@@ -274,9 +274,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 		Map<String, List<InterfaceComponent>> interfaces = new HashMap<String, List<InterfaceComponent>>();		
 		List<String> strings = new ArrayList<String>();
 		InterfaceComponent ic = null;
-		
-		numberOfIDMs = manager.getNumberOfAvailableIDMs();
-		
+
 		List<String> idmsNames = manager.getAllInterdomainManagers();
 		
 		if (idmsNames == null){
@@ -303,9 +301,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 				
 				List<Neighbor> neighbors = status.getNeighbors();
 				
-				System.out.println("domain name: "+idmsNames.get(i));
 				if (neighbors==null || neighbors.isEmpty()){
-				
 					System.out.println("Neighbor is null");
 					continue;	
 				}
@@ -321,9 +317,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 			 
 				if (neighbourIdm==null)
 					continue;
-				
-				System.out.println("Neighbor: "+neighbors.get(j).getDomain());		
-				
+
 				statusNeighbor = neighbourIdm.getStatus();
 				
 				list = manager.getMappedInterDomainManagerPorts(idmsNames.get(i));
@@ -397,7 +391,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 					if(list != null){	
 						List<InterfaceComponent> components = setInterface(list);
 						for (int i = 0; i < components.size(); i++) {
-							
+
 							marker = createMarker (components.get(i).getName(),components.get(i).getEndLatitude(),components.get(i).getEndLongitude(),
 							Marker.DEFAULT_ICON_INTERFACE, createHTMLPortInfo(components.get(i).getInterf(),components.get(i).getName()));
 							topology.addMarker(marker);
@@ -627,13 +621,19 @@ public class TopologyFinder implements TopologyFinderNotifier{
 		
 	}
 	private String createHTMLPortInfo(String name, String domain) {
+		StringBuffer buffer = new StringBuffer();
 		
 		String friendlyNamePort = manager.getFriendlyNamePort(name);
-		int start = friendlyNamePort.indexOf("(");
-		String str = friendlyNamePort.substring(0, start);
-		StringBuffer buffer = new StringBuffer();
-		buffer.append("<h3  valign=\"middle\"><image src=\"").append(Marker.DEFAULT_ICON_INTERFACE).append("\"> Port information:</h3>");
-		buffer.append ("<center><strong>").append(str).append("</strong></center>");
+		if(friendlyNamePort != null){
+			int start = friendlyNamePort.indexOf("(");
+			String str = friendlyNamePort.substring(0, start);
+		
+			buffer.append("<h3  valign=\"middle\"><image src=\"").append(Marker.DEFAULT_ICON_INTERFACE).append("\"> Port information:</h3>");
+			buffer.append ("<center><strong>").append(str).append("</strong></center>");
+		}
+		else
+			System.out.println("for "+name+" no friendlyName port !");
+		
 		buffer.append("<br/><hr/>");
 		buffer.append("<ul>");
 		buffer.append("<div id=\"form\">");

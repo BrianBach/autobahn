@@ -23,7 +23,7 @@ public class GuiNotifier implements Runnable, ReservationStatusListener {
 	private boolean quit;
 	
 	public GuiNotifier(String guiAddress, int update) throws MalformedURLException {
-		
+
 		gui = new GuiClient(guiAddress);
 		this.update = update;
 		this.domainName = AccessPoint.getInstance().getLocalDomain();
@@ -43,13 +43,14 @@ public class GuiNotifier implements Runnable, ReservationStatusListener {
 	/* (non-Javadoc)
 	 * @see java.lang.Runnable#run()
 	 */
-	public void run() {
+	public synchronized void run() {
+		
 		
 		while (!quit) {
-						
+
 			Status status = AccessPoint.getInstance().getStatus();
 			gui.statusUpdated(domainName, domainUrl, status);
-			
+
 			try {
 				Thread.sleep(update * 1000);
 			} catch (InterruptedException e) { }

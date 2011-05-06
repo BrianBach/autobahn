@@ -10,5 +10,5 @@ public interface TopologyFinderNotifier {
 	/**
 	 * Notify the topology change
 	 */
-	public  void updateTopology();
+	public  void updateTopology(String idm);
 }

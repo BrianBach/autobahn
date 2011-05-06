@@ -276,8 +276,8 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 	 */
 	public void setStatus (Status status){
 		if (status!= null){
-			this.status= status;
-			lastStatusUpdateInMillis= System.currentTimeMillis();
+			this.status = status;
+			lastStatusUpdateInMillis = System.currentTimeMillis();
 		}
 		
 	}

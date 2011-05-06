@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.geant.autobahn.administration.KeyValue;
+import net.geant.autobahn.administration.Neighbor;
 import net.geant.autobahn.administration.ServiceType;
 import net.geant.autobahn.administration.StatisticsType;
 import net.geant.autobahn.autoBahnGUI.model.LogsFormModel;
@@ -322,8 +323,6 @@ public interface Manager {
 	
 	public String setParameter(String param);
 	
-	public int getNumberOfAvailableIDMs();
-	
 	public List<String> getReservationModes();
 	
 	public void convertCapacity(ReservationRequest request);
@@ -345,5 +344,7 @@ public interface Manager {
 	 * @return	list of links
 	 */
 	public List<String> getAllDomainLinks();
+	
+	public boolean checkTopology(String idm);
 }
 
