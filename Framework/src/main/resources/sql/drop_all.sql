@@ -41,6 +41,7 @@ DROP TABLE interdomain_node CASCADE;
 DROP TABLE ho_vc_type CASCADE;
 DROP TABLE ho_vc_link CASCADE;
 DROP TABLE ho_vc_group CASCADE;
+DROP TABLE mpls_link CASCADE;
 
 DROP SEQUENCE hibernate_sequence CASCADE;
 

@@ -2,8 +2,21 @@
 -- PostgreSQL database dump
 --
 
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = off;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET escape_string_warning = off;
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
 --
--- Name: additive_constraint; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: additive_constraint; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE additive_constraint (
@@ -12,8 +25,10 @@ CREATE TABLE additive_constraint (
 );
 
 
+ALTER TABLE public.additive_constraint OWNER TO postgres;
+
 --
--- Name: admin_domain; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: admin_domain; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE admin_domain (
@@ -25,8 +40,10 @@ CREATE TABLE admin_domain (
 );
 
 
+ALTER TABLE public.admin_domain OWNER TO postgres;
+
 --
--- Name: bod_user; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: bod_user; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE bod_user (
@@ -36,8 +53,10 @@ CREATE TABLE bod_user (
 );
 
 
+ALTER TABLE public.bod_user OWNER TO postgres;
+
 --
--- Name: boolean_constraint; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: boolean_constraint; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE boolean_constraint (
@@ -47,8 +66,10 @@ CREATE TABLE boolean_constraint (
 );
 
 
+ALTER TABLE public.boolean_constraint OWNER TO postgres;
+
 --
--- Name: domain_constraints; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: domain_constraints; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE domain_constraints (
@@ -58,8 +79,10 @@ CREATE TABLE domain_constraints (
 );
 
 
+ALTER TABLE public.domain_constraints OWNER TO postgres;
+
 --
--- Name: domainsids; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: domainsids; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE domainsids (
@@ -69,8 +92,10 @@ CREATE TABLE domainsids (
 );
 
 
+ALTER TABLE public.domainsids OWNER TO postgres;
+
 --
--- Name: eth_link; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: eth_link; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE eth_link (
@@ -82,8 +107,10 @@ CREATE TABLE eth_link (
 );
 
 
+ALTER TABLE public.eth_link OWNER TO postgres;
+
 --
--- Name: eth_logical_port; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: eth_logical_port; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE eth_logical_port (
@@ -91,8 +118,10 @@ CREATE TABLE eth_logical_port (
 );
 
 
+ALTER TABLE public.eth_logical_port OWNER TO postgres;
+
 --
--- Name: eth_physical_port; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: eth_physical_port; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE eth_physical_port (
@@ -105,8 +134,10 @@ CREATE TABLE eth_physical_port (
 );
 
 
+ALTER TABLE public.eth_physical_port OWNER TO postgres;
+
 --
--- Name: generic_connection; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: generic_connection; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE generic_connection (
@@ -120,8 +151,10 @@ CREATE TABLE generic_connection (
 );
 
 
+ALTER TABLE public.generic_connection OWNER TO postgres;
+
 --
--- Name: generic_interface; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: generic_interface; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE generic_interface (
@@ -140,8 +173,10 @@ CREATE TABLE generic_interface (
 );
 
 
+ALTER TABLE public.generic_interface OWNER TO postgres;
+
 --
--- Name: generic_link; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: generic_link; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE generic_link (
@@ -155,8 +190,10 @@ CREATE TABLE generic_link (
 );
 
 
+ALTER TABLE public.generic_link OWNER TO postgres;
+
 --
--- Name: glink_to_intrapath; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: glink_to_intrapath; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE glink_to_intrapath (
@@ -166,8 +203,10 @@ CREATE TABLE glink_to_intrapath (
 );
 
 
+ALTER TABLE public.glink_to_intrapath OWNER TO postgres;
+
 --
--- Name: global_constraints; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: global_constraints; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE global_constraints (
@@ -175,8 +214,10 @@ CREATE TABLE global_constraints (
 );
 
 
+ALTER TABLE public.global_constraints OWNER TO postgres;
+
 --
--- Name: hasrole; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: hasrole; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE hasrole (
@@ -186,8 +227,10 @@ CREATE TABLE hasrole (
 );
 
 
+ALTER TABLE public.hasrole OWNER TO postgres;
+
 --
--- Name: hibernate_sequence; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: hibernate_sequence; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE hibernate_sequence
@@ -198,8 +241,17 @@ CREATE SEQUENCE hibernate_sequence
     CACHE 1;
 
 
+ALTER TABLE public.hibernate_sequence OWNER TO postgres;
+
 --
--- Name: ho_vc_group; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: hibernate_sequence; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('hibernate_sequence', 1, false);
+
+
+--
+-- Name: ho_vc_group; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE ho_vc_group (
@@ -209,8 +261,10 @@ CREATE TABLE ho_vc_group (
 );
 
 
+ALTER TABLE public.ho_vc_group OWNER TO postgres;
+
 --
--- Name: ho_vc_link; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: ho_vc_link; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE ho_vc_link (
@@ -225,8 +279,10 @@ CREATE TABLE ho_vc_link (
 );
 
 
+ALTER TABLE public.ho_vc_link OWNER TO postgres;
+
 --
--- Name: ho_vc_type; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: ho_vc_type; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE ho_vc_type (
@@ -237,8 +293,10 @@ CREATE TABLE ho_vc_type (
 );
 
 
+ALTER TABLE public.ho_vc_type OWNER TO postgres;
+
 --
--- Name: interdomain_node; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: interdomain_node; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE interdomain_node (
@@ -255,8 +313,10 @@ CREATE TABLE interdomain_node (
 );
 
 
+ALTER TABLE public.interdomain_node OWNER TO postgres;
+
 --
--- Name: interdomain_path; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: interdomain_path; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE interdomain_path (
@@ -266,8 +326,10 @@ CREATE TABLE interdomain_path (
 );
 
 
+ALTER TABLE public.interdomain_path OWNER TO postgres;
+
 --
--- Name: interface_type; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: interface_type; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE interface_type (
@@ -277,8 +339,10 @@ CREATE TABLE interface_type (
 );
 
 
+ALTER TABLE public.interface_type OWNER TO postgres;
+
 --
--- Name: intradomain_path; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: intradomain_path; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE intradomain_path (
@@ -287,8 +351,10 @@ CREATE TABLE intradomain_path (
 );
 
 
+ALTER TABLE public.intradomain_path OWNER TO postgres;
+
 --
--- Name: intradomain_reservation; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: intradomain_reservation; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE intradomain_reservation (
@@ -300,8 +366,10 @@ CREATE TABLE intradomain_reservation (
 );
 
 
+ALTER TABLE public.intradomain_reservation OWNER TO postgres;
+
 --
--- Name: link; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: link; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE link (
@@ -326,8 +394,10 @@ CREATE TABLE link (
 );
 
 
+ALTER TABLE public.link OWNER TO postgres;
+
 --
--- Name: link_to_path; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: link_to_path; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE link_to_path (
@@ -337,8 +407,10 @@ CREATE TABLE link_to_path (
 );
 
 
+ALTER TABLE public.link_to_path OWNER TO postgres;
+
 --
--- Name: link_type; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: link_type; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE link_type (
@@ -346,8 +418,10 @@ CREATE TABLE link_type (
 );
 
 
+ALTER TABLE public.link_type OWNER TO postgres;
+
 --
--- Name: location; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: location; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE location (
@@ -372,8 +446,10 @@ CREATE TABLE location (
 );
 
 
+ALTER TABLE public.location OWNER TO postgres;
+
 --
--- Name: minval_constraint; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: minval_constraint; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE minval_constraint (
@@ -382,8 +458,21 @@ CREATE TABLE minval_constraint (
 );
 
 
+ALTER TABLE public.minval_constraint OWNER TO postgres;
+
 --
--- Name: network_constraint; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: mpls_link; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE mpls_link (
+    link_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.mpls_link OWNER TO postgres;
+
+--
+-- Name: network_constraint; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE network_constraint (
@@ -391,8 +480,10 @@ CREATE TABLE network_constraint (
 );
 
 
+ALTER TABLE public.network_constraint OWNER TO postgres;
+
 --
--- Name: node; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: node; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE node (
@@ -410,8 +501,10 @@ CREATE TABLE node (
 );
 
 
+ALTER TABLE public.node OWNER TO postgres;
+
 --
--- Name: och; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: och; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE och (
@@ -421,8 +514,10 @@ CREATE TABLE och (
 );
 
 
+ALTER TABLE public.och OWNER TO postgres;
+
 --
--- Name: och_link; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: och_link; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE och_link (
@@ -434,8 +529,10 @@ CREATE TABLE och_link (
 );
 
 
+ALTER TABLE public.och_link OWNER TO postgres;
+
 --
--- Name: ops_link; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: ops_link; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE ops_link (
@@ -446,8 +543,10 @@ CREATE TABLE ops_link (
 );
 
 
+ALTER TABLE public.ops_link OWNER TO postgres;
+
 --
--- Name: path; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: path; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE path (
@@ -458,8 +557,10 @@ CREATE TABLE path (
 );
 
 
+ALTER TABLE public.path OWNER TO postgres;
+
 --
--- Name: path_constraint; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: path_constraint; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE path_constraint (
@@ -469,8 +570,10 @@ CREATE TABLE path_constraint (
 );
 
 
+ALTER TABLE public.path_constraint OWNER TO postgres;
+
 --
--- Name: pcon_add_constraints; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: pcon_add_constraints; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE pcon_add_constraints (
@@ -480,8 +583,10 @@ CREATE TABLE pcon_add_constraints (
 );
 
 
+ALTER TABLE public.pcon_add_constraints OWNER TO postgres;
+
 --
--- Name: pcon_add_names; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: pcon_add_names; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE pcon_add_names (
@@ -491,8 +596,10 @@ CREATE TABLE pcon_add_names (
 );
 
 
+ALTER TABLE public.pcon_add_names OWNER TO postgres;
+
 --
--- Name: pcon_bool_constraints; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: pcon_bool_constraints; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE pcon_bool_constraints (
@@ -502,8 +609,10 @@ CREATE TABLE pcon_bool_constraints (
 );
 
 
+ALTER TABLE public.pcon_bool_constraints OWNER TO postgres;
+
 --
--- Name: pcon_bool_names; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: pcon_bool_names; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE pcon_bool_names (
@@ -513,8 +622,10 @@ CREATE TABLE pcon_bool_names (
 );
 
 
+ALTER TABLE public.pcon_bool_names OWNER TO postgres;
+
 --
--- Name: pcon_minval_constraints; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: pcon_minval_constraints; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE pcon_minval_constraints (
@@ -524,8 +635,10 @@ CREATE TABLE pcon_minval_constraints (
 );
 
 
+ALTER TABLE public.pcon_minval_constraints OWNER TO postgres;
+
 --
--- Name: pcon_minval_names; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: pcon_minval_names; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE pcon_minval_names (
@@ -535,8 +648,10 @@ CREATE TABLE pcon_minval_names (
 );
 
 
+ALTER TABLE public.pcon_minval_names OWNER TO postgres;
+
 --
--- Name: pcon_range_constraints; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: pcon_range_constraints; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE pcon_range_constraints (
@@ -546,8 +661,10 @@ CREATE TABLE pcon_range_constraints (
 );
 
 
+ALTER TABLE public.pcon_range_constraints OWNER TO postgres;
+
 --
--- Name: pcon_range_names; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: pcon_range_names; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE pcon_range_names (
@@ -557,8 +674,10 @@ CREATE TABLE pcon_range_names (
 );
 
 
+ALTER TABLE public.pcon_range_names OWNER TO postgres;
+
 --
--- Name: pcons_to_intrapath; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: pcons_to_intrapath; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE pcons_to_intrapath (
@@ -568,8 +687,10 @@ CREATE TABLE pcons_to_intrapath (
 );
 
 
+ALTER TABLE public.pcons_to_intrapath OWNER TO postgres;
+
 --
--- Name: port; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: port; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE port (
@@ -581,8 +702,10 @@ CREATE TABLE port (
 );
 
 
+ALTER TABLE public.port OWNER TO postgres;
+
 --
--- Name: provisioning_domain; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: provisioning_domain; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE provisioning_domain (
@@ -592,8 +715,10 @@ CREATE TABLE provisioning_domain (
 );
 
 
+ALTER TABLE public.provisioning_domain OWNER TO postgres;
+
 --
--- Name: range; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: range; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE range (
@@ -605,8 +730,10 @@ CREATE TABLE range (
 );
 
 
+ALTER TABLE public.range OWNER TO postgres;
+
 --
--- Name: range_constraint; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: range_constraint; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE range_constraint (
@@ -614,8 +741,10 @@ CREATE TABLE range_constraint (
 );
 
 
+ALTER TABLE public.range_constraint OWNER TO postgres;
+
 --
--- Name: reservation; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: reservation; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE reservation (
@@ -632,7 +761,6 @@ CREATE TABLE reservation (
     maxdelay integer,
     resiliency character varying(255),
     bidirectional boolean,
-    uservlanid integer,
     mtu integer,
     state_oper_enum integer,
     globalconstraints bigint,
@@ -642,8 +770,10 @@ CREATE TABLE reservation (
 );
 
 
+ALTER TABLE public.reservation OWNER TO postgres;
+
 --
--- Name: reservation_params; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: reservation_params; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE reservation_params (
@@ -652,16 +782,18 @@ CREATE TABLE reservation_params (
     maxdelay integer,
     resiliency character varying(255),
     bidirectional boolean,
-    mtu integer,
     starttime timestamp without time zone,
     endtime timestamp without time zone,
+    mtu integer,
     pathconstraintsingress bigint NOT NULL,
     pathconstraintsegress bigint NOT NULL
 );
 
 
+ALTER TABLE public.reservation_params OWNER TO postgres;
+
 --
--- Name: sdh_device; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: sdh_device; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE sdh_device (
@@ -672,8 +804,10 @@ CREATE TABLE sdh_device (
 );
 
 
+ALTER TABLE public.sdh_device OWNER TO postgres;
+
 --
--- Name: sdh_domain; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: sdh_domain; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE sdh_domain (
@@ -685,8 +819,10 @@ CREATE TABLE sdh_domain (
 );
 
 
+ALTER TABLE public.sdh_domain OWNER TO postgres;
+
 --
--- Name: sdh_port; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: sdh_port; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE sdh_port (
@@ -696,8 +832,10 @@ CREATE TABLE sdh_port (
 );
 
 
+ALTER TABLE public.sdh_port OWNER TO postgres;
+
 --
--- Name: service; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: service; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE service (
@@ -708,8 +846,10 @@ CREATE TABLE service (
 );
 
 
+ALTER TABLE public.service OWNER TO postgres;
+
 --
--- Name: spanning_tree; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: spanning_tree; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE spanning_tree (
@@ -720,8 +860,10 @@ CREATE TABLE spanning_tree (
 );
 
 
+ALTER TABLE public.spanning_tree OWNER TO postgres;
+
 --
--- Name: state_admin; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: state_admin; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE state_admin (
@@ -729,8 +871,10 @@ CREATE TABLE state_admin (
 );
 
 
+ALTER TABLE public.state_admin OWNER TO postgres;
+
 --
--- Name: state_oper; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: state_oper; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE state_oper (
@@ -738,20 +882,45 @@ CREATE TABLE state_oper (
 );
 
 
+ALTER TABLE public.state_oper OWNER TO postgres;
+
 --
--- Name: statistics; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: statistics; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE statistics (
-    id serial PRIMARY KEY,
+    id integer NOT NULL,
     reservation_id character varying(255),
     intradomain boolean,
     setup_time bigint
 );
 
 
+ALTER TABLE public.statistics OWNER TO postgres;
+
 --
--- Name: stm_link; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: statistics_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE statistics_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.statistics_id_seq OWNER TO postgres;
+
+--
+-- Name: statistics_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('statistics_id_seq', 1, false);
+
+
+--
+-- Name: stm_link; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE stm_link (
@@ -762,8 +931,10 @@ CREATE TABLE stm_link (
 );
 
 
+ALTER TABLE public.stm_link OWNER TO postgres;
+
 --
--- Name: stm_type; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: stm_type; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE stm_type (
@@ -773,8 +944,10 @@ CREATE TABLE stm_type (
 );
 
 
+ALTER TABLE public.stm_type OWNER TO postgres;
+
 --
--- Name: version_info; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: version_info; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE version_info (
@@ -788,8 +961,10 @@ CREATE TABLE version_info (
 );
 
 
+ALTER TABLE public.version_info OWNER TO postgres;
+
 --
--- Name: vlan; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: vlan; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE vlan (
@@ -801,8 +976,10 @@ CREATE TABLE vlan (
 );
 
 
+ALTER TABLE public.vlan OWNER TO postgres;
+
 --
--- Name: vlan_port; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: vlan_port; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE vlan_port (
@@ -811,8 +988,10 @@ CREATE TABLE vlan_port (
 );
 
 
+ALTER TABLE public.vlan_port OWNER TO postgres;
+
 --
--- Name: vlan_tag; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: vlan_tag; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE vlan_tag (
@@ -822,8 +1001,10 @@ CREATE TABLE vlan_tag (
 );
 
 
+ALTER TABLE public.vlan_tag OWNER TO postgres;
+
 --
--- Name: vtp_domain; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: vtp_domain; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE vtp_domain (
@@ -833,34 +1014,589 @@ CREATE TABLE vtp_domain (
 );
 
 
---
--- Data for Name: link_type; Type: TABLE DATA; Schema: public; Owner: -
---
-
-INSERT INTO link_type VALUES (1);
-INSERT INTO link_type VALUES (2);
-INSERT INTO link_type VALUES (3);
-
+ALTER TABLE public.vtp_domain OWNER TO postgres;
 
 --
--- Data for Name: state_admin; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: additive_constraint; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO state_admin VALUES (0);
-INSERT INTO state_admin VALUES (1);
-INSERT INTO state_admin VALUES (2);
+COPY additive_constraint (con_id, value) FROM stdin;
+\.
 
 
 --
--- Data for Name: state_oper; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: admin_domain; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO state_oper VALUES (0);
-INSERT INTO state_oper VALUES (1);
-INSERT INTO state_oper VALUES (3);
+COPY admin_domain (domain_id, asid, name, clientdomain, idcpserver) FROM stdin;
+some_domain	\N	some_domain	f	\N
+https://oscars-dev.es.net/axis2/services/OSCARS	\N	https://oscars-dev.es.net/axis2/services/OSCARS	t	\N
+DoublinHost	\N	DoublinHost	t	\N
+\.
+
 
 --
--- Name: additive_constraint_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Data for Name: bod_user; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY bod_user (name, email, homedomain) FROM stdin;
+\.
+
+
+--
+-- Data for Name: boolean_constraint; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY boolean_constraint (con_id, value, logic) FROM stdin;
+\.
+
+
+--
+-- Data for Name: domain_constraints; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY domain_constraints (dcon_id, gcon_id, domain_order) FROM stdin;
+\.
+
+
+--
+-- Data for Name: domainsids; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY domainsids (gcon_id, domain_id, domain_order) FROM stdin;
+\.
+
+
+--
+-- Data for Name: eth_link; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY eth_link (link_id, discovery_protocol, is_trunk, is_l2_bndry, native_vlan) FROM stdin;
+1		f	f	0
+2		f	t	1
+3		f	t	1
+4		f	t	1
+\.
+
+
+--
+-- Data for Name: eth_logical_port; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY eth_logical_port (interface_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: eth_physical_port; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY eth_physical_port (interface_id, interface_name, mac_address, duplex, medium_dependent_interface, is_tagged) FROM stdin;
+\.
+
+
+--
+-- Data for Name: generic_connection; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY generic_connection (generic_connection_id, version_id, path_id, link_id, direction, connection_type, bandwidth) FROM stdin;
+\.
+
+
+--
+-- Data for Name: generic_interface; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY generic_interface (interface_id, version_id, interface_type_id, parent_interface_id, node_id, name, description, bandwidth, status, mtu, domain_id, client_port) FROM stdin;
+1	\N	\N	\N	1	cwt1;;Gig1/0/1	\N	1000000000	\N	0	some_domain	f
+2	\N	\N	\N	2	cwt2;;Gig1/0/3	\N	1000000000	\N	0	some_domain	f
+3	\N	\N	\N	2	cwt2;;Gig1/0/8	\N	1000000000	\N	0	some_domain	f
+4	\N	\N	\N	3	DoublinHost	\N	1000000000	\N	0	DoublinHost	t
+5	\N	\N	\N	1	cwt1;;Gig1/0/13	\N	1000000000	\N	0	some_domain	f
+6	\N	\N	\N	4	HEANET1	\N	1000000000	\N	0	GEANT	f
+7	\N	\N	\N	2	cwt2;;t	\N	1	\N	0	some_domain	f
+8	\N	\N	\N	5	new york	null\nidcplink=urn:ogf:network:domain=dev.es.net:node=bois-cr1:port=xe-7/3/0:link=*	1000000000	\N	0	https://oscars-dev.es.net/axis2/services/OSCARS	t
+\.
+
+
+--
+-- Data for Name: generic_link; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY generic_link (link_id, version_id, start_interface_id, end_interface_id, direction, protection, prop_delay) FROM stdin;
+1	\N	1	2	\N	f	0
+2	\N	3	4	\N	f	0
+3	\N	5	6	\N	f	0
+4	\N	7	8	\N	f	0
+\.
+
+
+--
+-- Data for Name: glink_to_intrapath; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY glink_to_intrapath (pathid, glink_id, link_order) FROM stdin;
+\.
+
+
+--
+-- Data for Name: global_constraints; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY global_constraints (gcon_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: hasrole; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY hasrole (nodeid, linkid, isdemarc) FROM stdin;
+\.
+
+
+--
+-- Data for Name: ho_vc_group; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY ho_vc_group (ho_vc_group_id, vlan_tag_id, name) FROM stdin;
+\.
+
+
+--
+-- Data for Name: ho_vc_link; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY ho_vc_link (ho_vc_link_id, ho_vc_group_id, stm_link_id, ho_vc_type_id, time_slot, date_modified, group_sequence, status) FROM stdin;
+\.
+
+
+--
+-- Data for Name: ho_vc_type; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY ho_vc_type (ho_vc_type_id, name, bandwidth, payload) FROM stdin;
+\.
+
+
+--
+-- Data for Name: interdomain_node; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY interdomain_node (node_id, type, address, name, country, city, institution, longitude, latitude, provisioningdomain) FROM stdin;
+10.10.0.0	\N	\N	\N	\N	\N	\N	\N	\N	some_domain
+10.10.0.3	\N	\N	\N	\N	\N	\N	\N	\N	https://oscars-dev.es.net/axis2/services/OSCARS
+10.10.0.1	\N	\N	\N	\N	\N	\N	\N	\N	DoublinHost
+10.10.0.2	\N	\N	\N	\N	\N	\N	\N	\N	some_domain
+\.
+
+
+--
+-- Data for Name: interdomain_path; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY interdomain_path (path_id, monetary_cost, manual_cost) FROM stdin;
+\.
+
+
+--
+-- Data for Name: interface_type; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY interface_type (interface_type_id, switching_type, data_encoding_type) FROM stdin;
+\.
+
+
+--
+-- Data for Name: intradomain_path; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY intradomain_path (pathid, capacity) FROM stdin;
+\.
+
+
+--
+-- Data for Name: intradomain_reservation; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY intradomain_reservation (reservationid, pathcreated, active, path_id, params_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: link; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY link (link_id, kind, startport, endport, bidirectional, delay, manualcost, monetarycost, granularity, minrescapacity, maxrescapacity, capacity, resilience, state_oper_enum, state_admin_enum, link_type_enum, localname, "timestamp") FROM stdin;
+10.10.64.2	3	10.10.32.4	10.10.32.6	f	0	0	0	0	0	0	1	\N	1	1	2	\N	\N
+10.10.64.1	3	10.10.32.2	10.10.32.5	f	0	0	0	0	0	0	1000000000	\N	1	1	2	\N	\N
+10.10.64.0	1	10.10.32.0	10.10.32.1	f	0	0	0	0	0	0	1000000000	\N	1	1	2	\N	\N
+\.
+
+
+--
+-- Data for Name: link_to_path; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY link_to_path (path_id, link_id, link_order) FROM stdin;
+\.
+
+
+--
+-- Data for Name: link_type; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY link_type (link_type_enum) FROM stdin;
+2
+\.
+
+
+--
+-- Data for Name: location; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY location (location_id, name, description, country, institution, street, floor, room_suite, row_, cabinet, zip_code, phone_number, e_mail_address, geo_latitude, geo_longitude, type, zone, altitude) FROM stdin;
+\.
+
+
+--
+-- Data for Name: minval_constraint; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY minval_constraint (con_id, value) FROM stdin;
+\.
+
+
+--
+-- Data for Name: mpls_link; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY mpls_link (link_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: network_constraint; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY network_constraint (con_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: node; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY node (node_id, version_id, location_id, name, description, status, vendor, model, os_name, os_version, ip_address) FROM stdin;
+1	\N	\N	cwt1	\N	\N	\N	\N	\N	\N	\N
+2	\N	\N	cwt2	\N	\N	\N	\N	\N	\N	\N
+3	\N	\N	external-node-2	\N	\N	\N	\N	\N	\N	\N
+4	\N	\N	external-node-3	\N	\N	\N	\N	\N	\N	\N
+5	\N	\N	external-node-4	\N	\N	\N	\N	\N	\N	\N
+\.
+
+
+--
+-- Data for Name: och; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY och (och_id, payload, status) FROM stdin;
+\.
+
+
+--
+-- Data for Name: och_link; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY och_link (och_link_id, ops_link_id, och_id, frequency, status) FROM stdin;
+\.
+
+
+--
+-- Data for Name: ops_link; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY ops_link (ops_link_id, max_no_lambdas, bitrate, status) FROM stdin;
+\.
+
+
+--
+-- Data for Name: path; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY path (path_id, version_id, name, status) FROM stdin;
+\.
+
+
+--
+-- Data for Name: path_constraint; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY path_constraint (pcon_id, dcon_id, path_order) FROM stdin;
+\.
+
+
+--
+-- Data for Name: pcon_add_constraints; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY pcon_add_constraints (pcon_id, constraint_id, constraint_order) FROM stdin;
+\.
+
+
+--
+-- Data for Name: pcon_add_names; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY pcon_add_names (pcon_id, name, constraint_order) FROM stdin;
+\.
+
+
+--
+-- Data for Name: pcon_bool_constraints; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY pcon_bool_constraints (pcon_id, constraint_id, constraint_order) FROM stdin;
+\.
+
+
+--
+-- Data for Name: pcon_bool_names; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY pcon_bool_names (pcon_id, name, constraint_order) FROM stdin;
+\.
+
+
+--
+-- Data for Name: pcon_minval_constraints; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY pcon_minval_constraints (pcon_id, constraint_id, constraint_order) FROM stdin;
+\.
+
+
+--
+-- Data for Name: pcon_minval_names; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY pcon_minval_names (pcon_id, name, constraint_order) FROM stdin;
+\.
+
+
+--
+-- Data for Name: pcon_range_constraints; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY pcon_range_constraints (pcon_id, constraint_id, constraint_order) FROM stdin;
+\.
+
+
+--
+-- Data for Name: pcon_range_names; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY pcon_range_names (pcon_id, name, constraint_order) FROM stdin;
+\.
+
+
+--
+-- Data for Name: pcons_to_intrapath; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY pcons_to_intrapath (pathid, pcon_id, glink_map_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: port; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY port (port_id, description, technology, bundled, node) FROM stdin;
+10.10.32.4	10.10.32.4	Ethernet	f	10.10.0.0
+10.10.32.6	null\nidcplink=urn:ogf:network:domain=dev.es.net:node=bois-cr1:port=xe-7/3/0:link=*	Ethernet	f	10.10.0.3
+10.10.32.2	10.10.32.2	Ethernet	f	10.10.0.0
+10.10.32.5	10.10.32.5	Ethernet	f	10.10.0.1
+10.10.32.0	10.10.32.0	Ethernet	f	10.10.0.2
+10.10.32.1	10.10.32.1	Ethernet	f	10.10.0.0
+\.
+
+
+--
+-- Data for Name: provisioning_domain; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY provisioning_domain (provdomain_id, provtype, admindomain) FROM stdin;
+some_domain	\N	some_domain
+https://oscars-dev.es.net/axis2/services/OSCARS	\N	https://oscars-dev.es.net/axis2/services/OSCARS
+DoublinHost	\N	DoublinHost
+\.
+
+
+--
+-- Data for Name: range; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY range (range_id, min, max, con_id, link_order) FROM stdin;
+\.
+
+
+--
+-- Data for Name: range_constraint; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY range_constraint (con_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: reservation; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY reservation (res_id, res_type, state, startport, endport, starttime, endtime, priority, capacity, description, maxdelay, resiliency, bidirectional, mtu, state_oper_enum, globalconstraints, path, srv_id, res_index) FROM stdin;
+\.
+
+
+--
+-- Data for Name: reservation_params; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY reservation_params (id, capacity, maxdelay, resiliency, bidirectional, starttime, endtime, mtu, pathconstraintsingress, pathconstraintsegress) FROM stdin;
+\.
+
+
+--
+-- Data for Name: sdh_device; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY sdh_device (node_id, sdh_domain_id, name, nsap) FROM stdin;
+\.
+
+
+--
+-- Data for Name: sdh_domain; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY sdh_domain (sdh_domain_id, name, provmethod, equipment_provider, date_modified) FROM stdin;
+\.
+
+
+--
+-- Data for Name: sdh_port; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY sdh_port (port_id, address, phy_port_type) FROM stdin;
+\.
+
+
+--
+-- Data for Name: service; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY service (srv_id, justification, priority, bod_user) FROM stdin;
+\.
+
+
+--
+-- Data for Name: spanning_tree; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY spanning_tree (link_id, vlan_id, state, cost) FROM stdin;
+1	1	\N	0
+2	2	\N	0
+3	3	\N	0
+4	4	\N	0
+\.
+
+
+--
+-- Data for Name: state_admin; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY state_admin (state_admin_enum) FROM stdin;
+1
+\.
+
+
+--
+-- Data for Name: state_oper; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY state_oper (state_oper_enum) FROM stdin;
+1
+\.
+
+
+--
+-- Data for Name: statistics; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY statistics (id, reservation_id, intradomain, setup_time) FROM stdin;
+\.
+
+
+--
+-- Data for Name: stm_link; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY stm_link (stm_link_id, och_id, stm_type_id, status) FROM stdin;
+\.
+
+
+--
+-- Data for Name: stm_type; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY stm_type (stm_type_id, name, bandwidth) FROM stdin;
+\.
+
+
+--
+-- Data for Name: version_info; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY version_info (version_id, start_date, end_date, created_by, modified_by, date_created, date_modified) FROM stdin;
+\.
+
+
+--
+-- Data for Name: vlan; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY vlan (vlan_id, vtp_domain_id, name, low_number, high_number) FROM stdin;
+1	\N	vlan-x	100	200
+2	\N	vlan-ext	0	4096
+3	\N	vlan-ext	0	4096
+4	\N	vlan-ext	0	4096
+\.
+
+
+--
+-- Data for Name: vlan_port; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY vlan_port (interface_id, vlan_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: vlan_tag; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY vlan_tag (vlan_tag_id, payload, date_modified) FROM stdin;
+\.
+
+
+--
+-- Data for Name: vtp_domain; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY vtp_domain (vtp_domain_id, name, srv_ipv4_addr) FROM stdin;
+\.
+
+
+--
+-- Name: additive_constraint_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY additive_constraint
@@ -868,7 +1604,7 @@ ALTER TABLE ONLY additive_constraint
 
 
 --
--- Name: admin_domain_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: admin_domain_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY admin_domain
@@ -876,7 +1612,7 @@ ALTER TABLE ONLY admin_domain
 
 
 --
--- Name: bod_user_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: bod_user_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY bod_user
@@ -884,7 +1620,7 @@ ALTER TABLE ONLY bod_user
 
 
 --
--- Name: boolean_constraint_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: boolean_constraint_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY boolean_constraint
@@ -892,7 +1628,7 @@ ALTER TABLE ONLY boolean_constraint
 
 
 --
--- Name: domain_constraints_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: domain_constraints_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY domain_constraints
@@ -900,7 +1636,7 @@ ALTER TABLE ONLY domain_constraints
 
 
 --
--- Name: domainsids_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: domainsids_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY domainsids
@@ -908,7 +1644,7 @@ ALTER TABLE ONLY domainsids
 
 
 --
--- Name: eth_link_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: eth_link_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY eth_link
@@ -916,7 +1652,7 @@ ALTER TABLE ONLY eth_link
 
 
 --
--- Name: eth_logical_port_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: eth_logical_port_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY eth_logical_port
@@ -924,7 +1660,7 @@ ALTER TABLE ONLY eth_logical_port
 
 
 --
--- Name: eth_physical_port_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: eth_physical_port_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY eth_physical_port
@@ -932,7 +1668,7 @@ ALTER TABLE ONLY eth_physical_port
 
 
 --
--- Name: generic_connection_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: generic_connection_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY generic_connection
@@ -940,7 +1676,7 @@ ALTER TABLE ONLY generic_connection
 
 
 --
--- Name: generic_interface_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: generic_interface_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY generic_interface
@@ -948,7 +1684,7 @@ ALTER TABLE ONLY generic_interface
 
 
 --
--- Name: generic_link_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: generic_link_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY generic_link
@@ -956,7 +1692,7 @@ ALTER TABLE ONLY generic_link
 
 
 --
--- Name: glink_to_intrapath_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: glink_to_intrapath_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY glink_to_intrapath
@@ -964,7 +1700,7 @@ ALTER TABLE ONLY glink_to_intrapath
 
 
 --
--- Name: global_constraints_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: global_constraints_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY global_constraints
@@ -972,7 +1708,7 @@ ALTER TABLE ONLY global_constraints
 
 
 --
--- Name: hasrole_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: hasrole_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY hasrole
@@ -980,7 +1716,7 @@ ALTER TABLE ONLY hasrole
 
 
 --
--- Name: ho_vc_group_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: ho_vc_group_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY ho_vc_group
@@ -988,7 +1724,7 @@ ALTER TABLE ONLY ho_vc_group
 
 
 --
--- Name: ho_vc_link_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: ho_vc_link_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY ho_vc_link
@@ -996,7 +1732,7 @@ ALTER TABLE ONLY ho_vc_link
 
 
 --
--- Name: ho_vc_type_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: ho_vc_type_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY ho_vc_type
@@ -1004,7 +1740,7 @@ ALTER TABLE ONLY ho_vc_type
 
 
 --
--- Name: interdomain_node_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: interdomain_node_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY interdomain_node
@@ -1012,7 +1748,7 @@ ALTER TABLE ONLY interdomain_node
 
 
 --
--- Name: interdomain_path_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: interdomain_path_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY interdomain_path
@@ -1020,7 +1756,7 @@ ALTER TABLE ONLY interdomain_path
 
 
 --
--- Name: interface_type_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: interface_type_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY interface_type
@@ -1028,7 +1764,7 @@ ALTER TABLE ONLY interface_type
 
 
 --
--- Name: intradomain_path_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: intradomain_path_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY intradomain_path
@@ -1036,7 +1772,7 @@ ALTER TABLE ONLY intradomain_path
 
 
 --
--- Name: intradomain_reservation_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: intradomain_reservation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY intradomain_reservation
@@ -1044,7 +1780,7 @@ ALTER TABLE ONLY intradomain_reservation
 
 
 --
--- Name: link_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: link_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY link
@@ -1052,7 +1788,7 @@ ALTER TABLE ONLY link
 
 
 --
--- Name: link_to_path_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: link_to_path_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY link_to_path
@@ -1060,7 +1796,7 @@ ALTER TABLE ONLY link_to_path
 
 
 --
--- Name: link_type_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: link_type_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY link_type
@@ -1068,7 +1804,7 @@ ALTER TABLE ONLY link_type
 
 
 --
--- Name: location_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: location_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY location
@@ -1076,7 +1812,7 @@ ALTER TABLE ONLY location
 
 
 --
--- Name: minval_constraint_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: minval_constraint_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY minval_constraint
@@ -1084,7 +1820,15 @@ ALTER TABLE ONLY minval_constraint
 
 
 --
--- Name: network_constraint_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: mpls_link_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY mpls_link
+    ADD CONSTRAINT mpls_link_pkey PRIMARY KEY (link_id);
+
+
+--
+-- Name: network_constraint_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY network_constraint
@@ -1092,7 +1836,7 @@ ALTER TABLE ONLY network_constraint
 
 
 --
--- Name: node_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: node_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY node
@@ -1100,7 +1844,7 @@ ALTER TABLE ONLY node
 
 
 --
--- Name: och_link_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: och_link_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY och_link
@@ -1108,7 +1852,7 @@ ALTER TABLE ONLY och_link
 
 
 --
--- Name: och_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: och_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY och
@@ -1116,7 +1860,7 @@ ALTER TABLE ONLY och
 
 
 --
--- Name: ops_link_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: ops_link_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY ops_link
@@ -1124,7 +1868,7 @@ ALTER TABLE ONLY ops_link
 
 
 --
--- Name: path_constraint_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: path_constraint_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY path_constraint
@@ -1132,7 +1876,7 @@ ALTER TABLE ONLY path_constraint
 
 
 --
--- Name: path_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: path_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY path
@@ -1140,7 +1884,7 @@ ALTER TABLE ONLY path
 
 
 --
--- Name: pcon_add_constraints_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: pcon_add_constraints_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY pcon_add_constraints
@@ -1148,7 +1892,7 @@ ALTER TABLE ONLY pcon_add_constraints
 
 
 --
--- Name: pcon_add_names_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: pcon_add_names_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY pcon_add_names
@@ -1156,7 +1900,7 @@ ALTER TABLE ONLY pcon_add_names
 
 
 --
--- Name: pcon_bool_constraints_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: pcon_bool_constraints_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY pcon_bool_constraints
@@ -1164,7 +1908,7 @@ ALTER TABLE ONLY pcon_bool_constraints
 
 
 --
--- Name: pcon_bool_names_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: pcon_bool_names_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY pcon_bool_names
@@ -1172,7 +1916,7 @@ ALTER TABLE ONLY pcon_bool_names
 
 
 --
--- Name: pcon_minval_constraints_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: pcon_minval_constraints_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY pcon_minval_constraints
@@ -1180,7 +1924,7 @@ ALTER TABLE ONLY pcon_minval_constraints
 
 
 --
--- Name: pcon_minval_names_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: pcon_minval_names_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY pcon_minval_names
@@ -1188,7 +1932,7 @@ ALTER TABLE ONLY pcon_minval_names
 
 
 --
--- Name: pcon_range_constraints_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: pcon_range_constraints_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY pcon_range_constraints
@@ -1196,7 +1940,7 @@ ALTER TABLE ONLY pcon_range_constraints
 
 
 --
--- Name: pcon_range_names_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: pcon_range_names_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY pcon_range_names
@@ -1204,7 +1948,7 @@ ALTER TABLE ONLY pcon_range_names
 
 
 --
--- Name: pcons_to_intrapath_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: pcons_to_intrapath_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY pcons_to_intrapath
@@ -1212,7 +1956,7 @@ ALTER TABLE ONLY pcons_to_intrapath
 
 
 --
--- Name: port_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: port_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY port
@@ -1220,7 +1964,7 @@ ALTER TABLE ONLY port
 
 
 --
--- Name: provisioning_domain_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: provisioning_domain_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY provisioning_domain
@@ -1228,7 +1972,7 @@ ALTER TABLE ONLY provisioning_domain
 
 
 --
--- Name: range_constraint_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: range_constraint_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY range_constraint
@@ -1236,7 +1980,7 @@ ALTER TABLE ONLY range_constraint
 
 
 --
--- Name: range_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: range_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY range
@@ -1244,7 +1988,7 @@ ALTER TABLE ONLY range
 
 
 --
--- Name: reservation_params_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: reservation_params_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY reservation_params
@@ -1252,7 +1996,7 @@ ALTER TABLE ONLY reservation_params
 
 
 --
--- Name: reservation_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: reservation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY reservation
@@ -1260,7 +2004,7 @@ ALTER TABLE ONLY reservation
 
 
 --
--- Name: sdh_device_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: sdh_device_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY sdh_device
@@ -1268,7 +2012,7 @@ ALTER TABLE ONLY sdh_device
 
 
 --
--- Name: sdh_domain_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: sdh_domain_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY sdh_domain
@@ -1276,7 +2020,7 @@ ALTER TABLE ONLY sdh_domain
 
 
 --
--- Name: sdh_port_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: sdh_port_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY sdh_port
@@ -1284,7 +2028,7 @@ ALTER TABLE ONLY sdh_port
 
 
 --
--- Name: service_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: service_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY service
@@ -1292,7 +2036,7 @@ ALTER TABLE ONLY service
 
 
 --
--- Name: spanning_tree_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: spanning_tree_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY spanning_tree
@@ -1300,7 +2044,7 @@ ALTER TABLE ONLY spanning_tree
 
 
 --
--- Name: state_admin_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: state_admin_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY state_admin
@@ -1308,7 +2052,7 @@ ALTER TABLE ONLY state_admin
 
 
 --
--- Name: state_oper_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: state_oper_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY state_oper
@@ -1316,7 +2060,15 @@ ALTER TABLE ONLY state_oper
 
 
 --
--- Name: stm_link_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: statistics_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY statistics
+    ADD CONSTRAINT statistics_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: stm_link_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY stm_link
@@ -1324,7 +2076,7 @@ ALTER TABLE ONLY stm_link
 
 
 --
--- Name: stm_type_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: stm_type_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY stm_type
@@ -1332,7 +2084,7 @@ ALTER TABLE ONLY stm_type
 
 
 --
--- Name: version_info_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: version_info_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY version_info
@@ -1340,7 +2092,7 @@ ALTER TABLE ONLY version_info
 
 
 --
--- Name: vlan_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: vlan_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY vlan
@@ -1348,7 +2100,7 @@ ALTER TABLE ONLY vlan
 
 
 --
--- Name: vlan_port_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: vlan_port_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY vlan_port
@@ -1356,7 +2108,7 @@ ALTER TABLE ONLY vlan_port
 
 
 --
--- Name: vlan_tag_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: vlan_tag_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY vlan_tag
@@ -1364,7 +2116,7 @@ ALTER TABLE ONLY vlan_tag
 
 
 --
--- Name: vtp_domain_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: vtp_domain_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY vtp_domain
@@ -1372,7 +2124,7 @@ ALTER TABLE ONLY vtp_domain
 
 
 --
--- Name: fk10ab1424b06469e; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk10ab1424b06469e; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY link_to_path
@@ -1380,15 +2132,7 @@ ALTER TABLE ONLY link_to_path
 
 
 --
--- Name: fk10ab1424ba6ddf3a; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY link_to_path
-    ADD CONSTRAINT fk10ab1424ba6ddf3a FOREIGN KEY (path_id) REFERENCES interdomain_path(path_id);
-
-
---
--- Name: fk10ab1424d14d52be; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk10ab1424d14d52be; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY link_to_path
@@ -1396,15 +2140,7 @@ ALTER TABLE ONLY link_to_path
 
 
 --
--- Name: fk10ab1424f426d31a; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY link_to_path
-    ADD CONSTRAINT fk10ab1424f426d31a FOREIGN KEY (link_id) REFERENCES link(link_id);
-
-
---
--- Name: fk17d3c8d5988bff1; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk17d3c8d5988bff1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY minval_constraint
@@ -1412,63 +2148,55 @@ ALTER TABLE ONLY minval_constraint
 
 
 --
--- Name: fk17d3c8d8b30e16d; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY minval_constraint
-    ADD CONSTRAINT fk17d3c8d8b30e16d FOREIGN KEY (con_id) REFERENCES network_constraint(con_id);
-
-
---
--- Name: fk2328d7ac6abd1004; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk2328d7ac819c8388; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY reservation
-    ADD CONSTRAINT fk2328d7ac6abd1004 FOREIGN KEY (startport) REFERENCES port(port_id);
+    ADD CONSTRAINT fk2328d7ac819c8388 FOREIGN KEY (startport) REFERENCES port(port_id);
 
 
 --
--- Name: fk2328d7ac88bbd03; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY reservation
-    ADD CONSTRAINT fk2328d7ac88bbd03 FOREIGN KEY (state_oper_enum) REFERENCES state_oper(state_oper_enum);
-
-
---
--- Name: fk2328d7ac89daeffd; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk2328d7ac8262ff12; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY reservation
-    ADD CONSTRAINT fk2328d7ac89daeffd FOREIGN KEY (endport) REFERENCES port(port_id);
+    ADD CONSTRAINT fk2328d7ac8262ff12 FOREIGN KEY (srv_id) REFERENCES service(srv_id);
 
 
 --
--- Name: fk2328d7ac8adeaf16; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY reservation
-    ADD CONSTRAINT fk2328d7ac8adeaf16 FOREIGN KEY (srv_id) REFERENCES service(srv_id);
-
-
---
--- Name: fk2328d7ac93dc7ae; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk2328d7ac839bdbff; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY reservation
-    ADD CONSTRAINT fk2328d7ac93dc7ae FOREIGN KEY (globalconstraints) REFERENCES global_constraints(gcon_id);
+    ADD CONSTRAINT fk2328d7ac839bdbff FOREIGN KEY (state_oper_enum) REFERENCES state_oper(state_oper_enum);
 
 
 --
--- Name: fk2328d7ace9cee3ea; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk2328d7ac900b4caa; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY reservation
-    ADD CONSTRAINT fk2328d7ace9cee3ea FOREIGN KEY (path) REFERENCES interdomain_path(path_id);
+    ADD CONSTRAINT fk2328d7ac900b4caa FOREIGN KEY (globalconstraints) REFERENCES global_constraints(gcon_id);
 
 
 --
--- Name: fk23a7fa1c0ce5c1; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk2328d7aca0ba6381; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY reservation
+    ADD CONSTRAINT fk2328d7aca0ba6381 FOREIGN KEY (endport) REFERENCES port(port_id);
+
+
+--
+-- Name: fk2328d7acae576e; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY reservation
+    ADD CONSTRAINT fk2328d7acae576e FOREIGN KEY (path) REFERENCES interdomain_path(path_id);
+
+
+--
+-- Name: fk23a7fa1c0ce5c1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY link
@@ -1476,31 +2204,7 @@ ALTER TABLE ONLY link
 
 
 --
--- Name: fk23a7fa3519253d; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY link
-    ADD CONSTRAINT fk23a7fa3519253d FOREIGN KEY (state_admin_enum) REFERENCES state_admin(state_admin_enum);
-
-
---
--- Name: fk23a7fa471ed5; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY link
-    ADD CONSTRAINT fk23a7fa471ed5 FOREIGN KEY (link_type_enum) REFERENCES link_type(link_type_enum);
-
-
---
--- Name: fk23a7fa6abd1004; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY link
-    ADD CONSTRAINT fk23a7fa6abd1004 FOREIGN KEY (startport) REFERENCES port(port_id);
-
-
---
--- Name: fk23a7fa819c8388; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk23a7fa819c8388; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY link
@@ -1508,7 +2212,7 @@ ALTER TABLE ONLY link
 
 
 --
--- Name: fk23a7fa839bdbff; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk23a7fa839bdbff; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY link
@@ -1516,23 +2220,7 @@ ALTER TABLE ONLY link
 
 
 --
--- Name: fk23a7fa88bbd03; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY link
-    ADD CONSTRAINT fk23a7fa88bbd03 FOREIGN KEY (state_oper_enum) REFERENCES state_oper(state_oper_enum);
-
-
---
--- Name: fk23a7fa89daeffd; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY link
-    ADD CONSTRAINT fk23a7fa89daeffd FOREIGN KEY (endport) REFERENCES port(port_id);
-
-
---
--- Name: fk23a7faa0ba6381; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk23a7faa0ba6381; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY link
@@ -1540,7 +2228,7 @@ ALTER TABLE ONLY link
 
 
 --
--- Name: fk23a7faeb793059; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk23a7faeb793059; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY link
@@ -1548,7 +2236,7 @@ ALTER TABLE ONLY link
 
 
 --
--- Name: fk248e3b143af08f99; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk248e3b143af08f99; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY ho_vc_link
@@ -1556,7 +2244,7 @@ ALTER TABLE ONLY ho_vc_link
 
 
 --
--- Name: fk248e3b1462bf895b; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk248e3b1462bf895b; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY ho_vc_link
@@ -1564,7 +2252,7 @@ ALTER TABLE ONLY ho_vc_link
 
 
 --
--- Name: fk248e3b14a93a78cc; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk248e3b14a93a78cc; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY ho_vc_link
@@ -1572,31 +2260,7 @@ ALTER TABLE ONLY ho_vc_link
 
 
 --
--- Name: fk248e3b14ac9686d0; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY ho_vc_link
-    ADD CONSTRAINT fk248e3b14ac9686d0 FOREIGN KEY (stm_link_id) REFERENCES stm_link(stm_link_id);
-
-
---
--- Name: fk248e3b14cae53bd7; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY ho_vc_link
-    ADD CONSTRAINT fk248e3b14cae53bd7 FOREIGN KEY (ho_vc_type_id) REFERENCES ho_vc_type(ho_vc_type_id);
-
-
---
--- Name: fk248e3b14d7812c9d; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY ho_vc_link
-    ADD CONSTRAINT fk248e3b14d7812c9d FOREIGN KEY (ho_vc_group_id) REFERENCES ho_vc_group(ho_vc_group_id);
-
-
---
--- Name: fk259081aceb28; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk259081aceb28; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY port
@@ -1604,31 +2268,7 @@ ALTER TABLE ONLY port
 
 
 --
--- Name: fk259081e9cd77a4; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY port
-    ADD CONSTRAINT fk259081e9cd77a4 FOREIGN KEY (node) REFERENCES interdomain_node(node_id);
-
-
---
--- Name: fk2989aa30a7df722f; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY hasrole
-    ADD CONSTRAINT fk2989aa30a7df722f FOREIGN KEY (linkid) REFERENCES link(link_id);
-
-
---
--- Name: fk2989aa30ab9a0c3f; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY hasrole
-    ADD CONSTRAINT fk2989aa30ab9a0c3f FOREIGN KEY (nodeid) REFERENCES interdomain_node(node_id);
-
-
---
--- Name: fk2989aa30bebee5b3; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk2989aa30bebee5b3; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY hasrole
@@ -1636,7 +2276,7 @@ ALTER TABLE ONLY hasrole
 
 
 --
--- Name: fk2989aa30c2797fc3; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk2989aa30c2797fc3; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY hasrole
@@ -1644,7 +2284,7 @@ ALTER TABLE ONLY hasrole
 
 
 --
--- Name: fk2d0e835e3d1567ad; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk2d0e835e3d1567ad; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY sdh_device
@@ -1652,23 +2292,7 @@ ALTER TABLE ONLY sdh_device
 
 
 --
--- Name: fk2d0e835e407175b1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY sdh_device
-    ADD CONSTRAINT fk2d0e835e407175b1 FOREIGN KEY (node_id) REFERENCES node(node_id);
-
-
---
--- Name: fk2d0e835e71559326; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY sdh_device
-    ADD CONSTRAINT fk2d0e835e71559326 FOREIGN KEY (sdh_domain_id) REFERENCES sdh_domain(sdh_domain_id);
-
-
---
--- Name: fk2d0e835ed4c4f622; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk2d0e835ed4c4f622; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY sdh_device
@@ -1676,7 +2300,7 @@ ALTER TABLE ONLY sdh_device
 
 
 --
--- Name: fk2d4562374019ac92; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk2d4562374019ac92; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY path_constraint
@@ -1684,31 +2308,7 @@ ALTER TABLE ONLY path_constraint
 
 
 --
--- Name: fk2d456237b94c2796; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY path_constraint
-    ADD CONSTRAINT fk2d456237b94c2796 FOREIGN KEY (dcon_id) REFERENCES domain_constraints(dcon_id);
-
-
---
--- Name: fk33ae023c053871; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY node
-    ADD CONSTRAINT fk33ae023c053871 FOREIGN KEY (version_id) REFERENCES version_info(version_id);
-
-
---
--- Name: fk33ae024312c151; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY node
-    ADD CONSTRAINT fk33ae024312c151 FOREIGN KEY (location_id) REFERENCES location(location_id);
-
-
---
--- Name: fk33ae028835554d; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk33ae028835554d; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY node
@@ -1716,7 +2316,7 @@ ALTER TABLE ONLY node
 
 
 --
--- Name: fk33ae028ee852f5; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk33ae028ee852f5; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY node
@@ -1724,15 +2324,7 @@ ALTER TABLE ONLY node
 
 
 --
--- Name: fk3464253c053871; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY path
-    ADD CONSTRAINT fk3464253c053871 FOREIGN KEY (version_id) REFERENCES version_info(version_id);
-
-
---
--- Name: fk3464258ee852f5; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk3464258ee852f5; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY path
@@ -1740,7 +2332,7 @@ ALTER TABLE ONLY path
 
 
 --
--- Name: fk3690c845239669d3; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk3690c845239669d3; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY och_link
@@ -1748,7 +2340,7 @@ ALTER TABLE ONLY och_link
 
 
 --
--- Name: fk3690c8452404c0d8; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk3690c8452404c0d8; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY och_link
@@ -1756,31 +2348,7 @@ ALTER TABLE ONLY och_link
 
 
 --
--- Name: fk3690c8452760cedc; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY och_link
-    ADD CONSTRAINT fk3690c8452760cedc FOREIGN KEY (ops_link_id) REFERENCES ops_link(ops_link_id);
-
-
---
--- Name: fk3690c8452c1219d7; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY och_link
-    ADD CONSTRAINT fk3690c8452c1219d7 FOREIGN KEY (och_id) REFERENCES och(och_id);
-
-
---
--- Name: fk374563460e0bd4; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY vlan
-    ADD CONSTRAINT fk374563460e0bd4 FOREIGN KEY (vtp_domain_id) REFERENCES vtp_domain(vtp_domain_id);
-
-
---
--- Name: fk37456398f12658; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk37456398f12658; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY vlan
@@ -1788,15 +2356,7 @@ ALTER TABLE ONLY vlan
 
 
 --
--- Name: fk3a5c01ce457422a1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pcon_bool_constraints
-    ADD CONSTRAINT fk3a5c01ce457422a1 FOREIGN KEY (pcon_id) REFERENCES path_constraint(pcon_id);
-
-
---
--- Name: fk3a5c01ce71c78646; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk3a5c01ce71c78646; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY pcon_bool_constraints
@@ -1804,7 +2364,7 @@ ALTER TABLE ONLY pcon_bool_constraints
 
 
 --
--- Name: fk3a5c01ce8a96b69d; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk3a5c01ce8a96b69d; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY pcon_bool_constraints
@@ -1812,15 +2372,7 @@ ALTER TABLE ONLY pcon_bool_constraints
 
 
 --
--- Name: fk3a5c01ceeafa014a; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pcon_bool_constraints
-    ADD CONSTRAINT fk3a5c01ceeafa014a FOREIGN KEY (constraint_id) REFERENCES boolean_constraint(con_id);
-
-
---
--- Name: fk3de1469d562fbeb7; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk3de1469d562fbeb7; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY pcons_to_intrapath
@@ -1828,7 +2380,7 @@ ALTER TABLE ONLY pcons_to_intrapath
 
 
 --
--- Name: fk3de1469d6bed35da; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk3de1469d6bed35da; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY pcons_to_intrapath
@@ -1836,7 +2388,7 @@ ALTER TABLE ONLY pcons_to_intrapath
 
 
 --
--- Name: fk3de1469d8a96b69d; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk3de1469d8a96b69d; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY pcons_to_intrapath
@@ -1844,7 +2396,7 @@ ALTER TABLE ONLY pcons_to_intrapath
 
 
 --
--- Name: fk41f1565644aa8e22; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk41f1565644aa8e22; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY provisioning_domain
@@ -1852,23 +2404,7 @@ ALTER TABLE ONLY provisioning_domain
 
 
 --
--- Name: fk41f156564d263e26; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY provisioning_domain
-    ADD CONSTRAINT fk41f156564d263e26 FOREIGN KEY (admindomain) REFERENCES admin_domain(domain_id);
-
-
---
--- Name: fk4a2411d5bbb685a; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY range
-    ADD CONSTRAINT fk4a2411d5bbb685a FOREIGN KEY (con_id) REFERENCES range_constraint(con_id);
-
-
---
--- Name: fk4a2411da0ddfc56; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk4a2411da0ddfc56; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY range
@@ -1876,15 +2412,7 @@ ALTER TABLE ONLY range
 
 
 --
--- Name: fk4dfb302b457422a1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pcon_add_constraints
-    ADD CONSTRAINT fk4dfb302b457422a1 FOREIGN KEY (pcon_id) REFERENCES path_constraint(pcon_id);
-
-
---
--- Name: fk4dfb302b8a96b69d; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk4dfb302b8a96b69d; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY pcon_add_constraints
@@ -1892,15 +2420,7 @@ ALTER TABLE ONLY pcon_add_constraints
 
 
 --
--- Name: fk4dfb302b8fc25c1e; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pcon_add_constraints
-    ADD CONSTRAINT fk4dfb302b8fc25c1e FOREIGN KEY (constraint_id) REFERENCES additive_constraint(con_id);
-
-
---
--- Name: fk4dfb302be2a576a2; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk4dfb302be2a576a2; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY pcon_add_constraints
@@ -1908,15 +2428,7 @@ ALTER TABLE ONLY pcon_add_constraints
 
 
 --
--- Name: fk573948fd457422a1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pcon_add_names
-    ADD CONSTRAINT fk573948fd457422a1 FOREIGN KEY (pcon_id) REFERENCES path_constraint(pcon_id);
-
-
---
--- Name: fk573948fd8a96b69d; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk573948fd8a96b69d; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY pcon_add_names
@@ -1924,23 +2436,7 @@ ALTER TABLE ONLY pcon_add_names
 
 
 --
--- Name: fk5b676bb3457422a1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pcon_minval_constraints
-    ADD CONSTRAINT fk5b676bb3457422a1 FOREIGN KEY (pcon_id) REFERENCES path_constraint(pcon_id);
-
-
---
--- Name: fk5b676bb37eb58ad1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pcon_minval_constraints
-    ADD CONSTRAINT fk5b676bb37eb58ad1 FOREIGN KEY (constraint_id) REFERENCES minval_constraint(con_id);
-
-
---
--- Name: fk5b676bb38a96b69d; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk5b676bb38a96b69d; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY pcon_minval_constraints
@@ -1948,7 +2444,7 @@ ALTER TABLE ONLY pcon_minval_constraints
 
 
 --
--- Name: fk5b676bb3d198a555; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk5b676bb3d198a555; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY pcon_minval_constraints
@@ -1956,7 +2452,7 @@ ALTER TABLE ONLY pcon_minval_constraints
 
 
 --
--- Name: fk61e7a62d1b9c6e4b; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk61e7a62d1b9c6e4b; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY stm_link
@@ -1964,7 +2460,7 @@ ALTER TABLE ONLY stm_link
 
 
 --
--- Name: fk61e7a62d239669d3; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk61e7a62d239669d3; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY stm_link
@@ -1972,15 +2468,7 @@ ALTER TABLE ONLY stm_link
 
 
 --
--- Name: fk61e7a62d2c1219d7; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY stm_link
-    ADD CONSTRAINT fk61e7a62d2c1219d7 FOREIGN KEY (och_id) REFERENCES och(och_id);
-
-
---
--- Name: fk61e7a62d6bd730cc; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk61e7a62d6bd730cc; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY stm_link
@@ -1988,31 +2476,7 @@ ALTER TABLE ONLY stm_link
 
 
 --
--- Name: fk61e7a62d6f333ed0; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY stm_link
-    ADD CONSTRAINT fk61e7a62d6f333ed0 FOREIGN KEY (stm_type_id) REFERENCES stm_type(stm_type_id);
-
-
---
--- Name: fk61e7a62dc8b953c7; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY stm_link
-    ADD CONSTRAINT fk61e7a62dc8b953c7 FOREIGN KEY (stm_link_id) REFERENCES generic_link(link_id);
-
-
---
--- Name: fk69d2641a6f833a2; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY interdomain_node
-    ADD CONSTRAINT fk69d2641a6f833a2 FOREIGN KEY (provisioningdomain) REFERENCES provisioning_domain(provdomain_id);
-
-
---
--- Name: fk69d2641b1753026; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk69d2641b1753026; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY interdomain_node
@@ -2020,15 +2484,7 @@ ALTER TABLE ONLY interdomain_node
 
 
 --
--- Name: fk6cf6cea52a317f33; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY ho_vc_group
-    ADD CONSTRAINT fk6cf6cea52a317f33 FOREIGN KEY (ho_vc_group_id) REFERENCES generic_connection(generic_connection_id);
-
-
---
--- Name: fk6cf6cea52f8fa6b7; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk6cf6cea52f8fa6b7; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY ho_vc_group
@@ -2036,7 +2492,7 @@ ALTER TABLE ONLY ho_vc_group
 
 
 --
--- Name: fk6cf6cea5db66b58c; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk6cf6cea5db66b58c; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY ho_vc_group
@@ -2044,15 +2500,7 @@ ALTER TABLE ONLY ho_vc_group
 
 
 --
--- Name: fk6cf6cea5dec2c390; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY ho_vc_group
-    ADD CONSTRAINT fk6cf6cea5dec2c390 FOREIGN KEY (vlan_tag_id) REFERENCES vlan_tag(vlan_tag_id);
-
-
---
--- Name: fk6eaa323f5988bff1; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk6eaa323f5988bff1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY range_constraint
@@ -2060,23 +2508,7 @@ ALTER TABLE ONLY range_constraint
 
 
 --
--- Name: fk6eaa323f8b30e16d; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY range_constraint
-    ADD CONSTRAINT fk6eaa323f8b30e16d FOREIGN KEY (con_id) REFERENCES network_constraint(con_id);
-
-
---
--- Name: fk882e936f1d348e30; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY intradomain_reservation
-    ADD CONSTRAINT fk882e936f1d348e30 FOREIGN KEY (path_id) REFERENCES intradomain_path(pathid);
-
-
---
--- Name: fk882e936f61e80e60; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk882e936f61e80e60; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY intradomain_reservation
@@ -2084,7 +2516,7 @@ ALTER TABLE ONLY intradomain_reservation
 
 
 --
--- Name: fk882e936f6257222c; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk882e936f6257222c; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY intradomain_reservation
@@ -2092,23 +2524,7 @@ ALTER TABLE ONLY intradomain_reservation
 
 
 --
--- Name: fk882e936fdb1a8964; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY intradomain_reservation
-    ADD CONSTRAINT fk882e936fdb1a8964 FOREIGN KEY (params_id) REFERENCES reservation_params(id);
-
-
---
--- Name: fk8a74d0e0457422a1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pcon_bool_names
-    ADD CONSTRAINT fk8a74d0e0457422a1 FOREIGN KEY (pcon_id) REFERENCES path_constraint(pcon_id);
-
-
---
--- Name: fk8a74d0e08a96b69d; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk8a74d0e08a96b69d; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY pcon_bool_names
@@ -2116,31 +2532,15 @@ ALTER TABLE ONLY pcon_bool_names
 
 
 --
--- Name: fk948601739f99c3b6; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk94860173971e13b2; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY bod_user
-    ADD CONSTRAINT fk948601739f99c3b6 FOREIGN KEY (homedomain) REFERENCES admin_domain(domain_id);
+    ADD CONSTRAINT fk94860173971e13b2 FOREIGN KEY (homedomain) REFERENCES admin_domain(domain_id);
 
 
 --
--- Name: fk957f59792a48762a; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY reservation_params
-    ADD CONSTRAINT fk957f59792a48762a FOREIGN KEY (pathconstraintsingress) REFERENCES path_constraint(pcon_id);
-
-
---
--- Name: fk957f59792a48762b; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY reservation_params
-    ADD CONSTRAINT fk957f59792a48762b FOREIGN KEY (pathconstraintsegress) REFERENCES path_constraint(pcon_id);
-
-
---
--- Name: fk957f5979778518db; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk957f5979778518db; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY reservation_params
@@ -2148,7 +2548,7 @@ ALTER TABLE ONLY reservation_params
 
 
 --
--- Name: fk957f5979f1a229d9; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk957f5979f1a229d9; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY reservation_params
@@ -2156,7 +2556,7 @@ ALTER TABLE ONLY reservation_params
 
 
 --
--- Name: fk984c94305988bff1; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk984c94305988bff1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY additive_constraint
@@ -2164,31 +2564,15 @@ ALTER TABLE ONLY additive_constraint
 
 
 --
--- Name: fk984c94308b30e16d; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY additive_constraint
-    ADD CONSTRAINT fk984c94308b30e16d FOREIGN KEY (con_id) REFERENCES network_constraint(con_id);
-
-
---
--- Name: fka10f52953f39b1e0; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fka10f52952a6bc364; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY service
-    ADD CONSTRAINT fka10f52953f39b1e0 FOREIGN KEY (bod_user) REFERENCES bod_user(name);
+    ADD CONSTRAINT fka10f52952a6bc364 FOREIGN KEY (bod_user) REFERENCES bod_user(name);
 
 
 --
--- Name: fka5af803f1e638d08; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY spanning_tree
-    ADD CONSTRAINT fka5af803f1e638d08 FOREIGN KEY (link_id) REFERENCES eth_link(link_id);
-
-
---
--- Name: fka5af803f21cdd1a1; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fka5af803f21cdd1a1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY spanning_tree
@@ -2196,7 +2580,7 @@ ALTER TABLE ONLY spanning_tree
 
 
 --
--- Name: fka5af803f7d93788c; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fka5af803f7d93788c; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY spanning_tree
@@ -2204,23 +2588,7 @@ ALTER TABLE ONLY spanning_tree
 
 
 --
--- Name: fka5af803fbe5e6ea5; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY spanning_tree
-    ADD CONSTRAINT fka5af803fbe5e6ea5 FOREIGN KEY (vlan_id) REFERENCES vlan(vlan_id);
-
-
---
--- Name: fkab0ef6e08702dada; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY eth_link
-    ADD CONSTRAINT fkab0ef6e08702dada FOREIGN KEY (link_id) REFERENCES generic_link(link_id);
-
-
---
--- Name: fkab0ef6e0d9e5f55e; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkab0ef6e0d9e5f55e; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY eth_link
@@ -2228,15 +2596,15 @@ ALTER TABLE ONLY eth_link
 
 
 --
--- Name: fkafd9f894102e372; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkae729cafd9e5f55e; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY sdh_port
-    ADD CONSTRAINT fkafd9f894102e372 FOREIGN KEY (port_id) REFERENCES generic_interface(interface_id);
+ALTER TABLE ONLY mpls_link
+    ADD CONSTRAINT fkae729cafd9e5f55e FOREIGN KEY (link_id) REFERENCES generic_link(link_id);
 
 
 --
--- Name: fkafd9f89833fbb6e; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkafd9f89833fbb6e; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY sdh_port
@@ -2244,15 +2612,7 @@ ALTER TABLE ONLY sdh_port
 
 
 --
--- Name: fkb3aca85457422a1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pcon_minval_names
-    ADD CONSTRAINT fkb3aca85457422a1 FOREIGN KEY (pcon_id) REFERENCES path_constraint(pcon_id);
-
-
---
--- Name: fkb3aca858a96b69d; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkb3aca858a96b69d; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY pcon_minval_names
@@ -2260,7 +2620,7 @@ ALTER TABLE ONLY pcon_minval_names
 
 
 --
--- Name: fkb5e938093e2d7e16; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkb5e938093e2d7e16; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY domainsids
@@ -2268,23 +2628,7 @@ ALTER TABLE ONLY domainsids
 
 
 --
--- Name: fkb5e93809b75ff91a; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY domainsids
-    ADD CONSTRAINT fkb5e93809b75ff91a FOREIGN KEY (gcon_id) REFERENCES global_constraints(gcon_id);
-
-
---
--- Name: fkb73f7ac3abf533ba; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY eth_physical_port
-    ADD CONSTRAINT fkb73f7ac3abf533ba FOREIGN KEY (interface_id) REFERENCES generic_interface(interface_id);
-
-
---
--- Name: fkb73f7ac3ee320bb6; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkb73f7ac3ee320bb6; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY eth_physical_port
@@ -2292,23 +2636,7 @@ ALTER TABLE ONLY eth_physical_port
 
 
 --
--- Name: fkbecc0e463c053871; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY generic_connection
-    ADD CONSTRAINT fkbecc0e463c053871 FOREIGN KEY (version_id) REFERENCES version_info(version_id);
-
-
---
--- Name: fkbecc0e468702dada; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY generic_connection
-    ADD CONSTRAINT fkbecc0e468702dada FOREIGN KEY (link_id) REFERENCES generic_link(link_id);
-
-
---
--- Name: fkbecc0e468ee852f5; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkbecc0e468ee852f5; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY generic_connection
@@ -2316,7 +2644,7 @@ ALTER TABLE ONLY generic_connection
 
 
 --
--- Name: fkbecc0e468fe190cd; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkbecc0e468fe190cd; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY generic_connection
@@ -2324,15 +2652,7 @@ ALTER TABLE ONLY generic_connection
 
 
 --
--- Name: fkbecc0e46933d9ed1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY generic_connection
-    ADD CONSTRAINT fkbecc0e46933d9ed1 FOREIGN KEY (path_id) REFERENCES path(path_id);
-
-
---
--- Name: fkbecc0e46d9e5f55e; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkbecc0e46d9e5f55e; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY generic_connection
@@ -2340,23 +2660,7 @@ ALTER TABLE ONLY generic_connection
 
 
 --
--- Name: fkd25fa15d110d2abb; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY glink_to_intrapath
-    ADD CONSTRAINT fkd25fa15d110d2abb FOREIGN KEY (pathid) REFERENCES intradomain_path(pathid);
-
-
---
--- Name: fkd25fa15d529be893; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY glink_to_intrapath
-    ADD CONSTRAINT fkd25fa15d529be893 FOREIGN KEY (glink_id) REFERENCES generic_link(link_id);
-
-
---
--- Name: fkd25fa15d562fbeb7; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkd25fa15d562fbeb7; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY glink_to_intrapath
@@ -2364,7 +2668,7 @@ ALTER TABLE ONLY glink_to_intrapath
 
 
 --
--- Name: fkd25fa15da57f0317; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkd25fa15da57f0317; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY glink_to_intrapath
@@ -2372,23 +2676,7 @@ ALTER TABLE ONLY glink_to_intrapath
 
 
 --
--- Name: fkd36c82072c66b21f; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pcon_range_constraints
-    ADD CONSTRAINT fkd36c82072c66b21f FOREIGN KEY (constraint_id) REFERENCES range_constraint(con_id);
-
-
---
--- Name: fkd36c8207457422a1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pcon_range_constraints
-    ADD CONSTRAINT fkd36c8207457422a1 FOREIGN KEY (pcon_id) REFERENCES path_constraint(pcon_id);
-
-
---
--- Name: fkd36c82077189461b; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkd36c82077189461b; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY pcon_range_constraints
@@ -2396,7 +2684,7 @@ ALTER TABLE ONLY pcon_range_constraints
 
 
 --
--- Name: fkd36c82078a96b69d; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkd36c82078a96b69d; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY pcon_range_constraints
@@ -2404,7 +2692,7 @@ ALTER TABLE ONLY pcon_range_constraints
 
 
 --
--- Name: fkd4675b1b3e2d7e16; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkd4675b1b3e2d7e16; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY domain_constraints
@@ -2412,23 +2700,7 @@ ALTER TABLE ONLY domain_constraints
 
 
 --
--- Name: fkd4675b1bb75ff91a; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY domain_constraints
-    ADD CONSTRAINT fkd4675b1bb75ff91a FOREIGN KEY (gcon_id) REFERENCES global_constraints(gcon_id);
-
-
---
--- Name: fkd776d3ddabf533ba; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY eth_logical_port
-    ADD CONSTRAINT fkd776d3ddabf533ba FOREIGN KEY (interface_id) REFERENCES generic_interface(interface_id);
-
-
---
--- Name: fkd776d3ddee320bb6; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkd776d3ddee320bb6; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY eth_logical_port
@@ -2436,15 +2708,7 @@ ALTER TABLE ONLY eth_logical_port
 
 
 --
--- Name: fkd9142fd9457422a1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pcon_range_names
-    ADD CONSTRAINT fkd9142fd9457422a1 FOREIGN KEY (pcon_id) REFERENCES path_constraint(pcon_id);
-
-
---
--- Name: fkd9142fd98a96b69d; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkd9142fd98a96b69d; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY pcon_range_names
@@ -2452,23 +2716,7 @@ ALTER TABLE ONLY pcon_range_names
 
 
 --
--- Name: fke38a50d130e5a9f6; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY generic_interface
-    ADD CONSTRAINT fke38a50d130e5a9f6 FOREIGN KEY (interface_type_id) REFERENCES interface_type(interface_type_id);
-
-
---
--- Name: fke38a50d13c053871; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY generic_interface
-    ADD CONSTRAINT fke38a50d13c053871 FOREIGN KEY (version_id) REFERENCES version_info(version_id);
-
-
---
--- Name: fke38a50d13d1567ad; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fke38a50d13d1567ad; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY generic_interface
@@ -2476,15 +2724,7 @@ ALTER TABLE ONLY generic_interface
 
 
 --
--- Name: fke38a50d1407175b1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY generic_interface
-    ADD CONSTRAINT fke38a50d1407175b1 FOREIGN KEY (node_id) REFERENCES node(node_id);
-
-
---
--- Name: fke38a50d1576c337a; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fke38a50d1576c337a; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY generic_interface
@@ -2492,15 +2732,7 @@ ALTER TABLE ONLY generic_interface
 
 
 --
--- Name: fke38a50d1835e792f; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY generic_interface
-    ADD CONSTRAINT fke38a50d1835e792f FOREIGN KEY (parent_interface_id) REFERENCES generic_interface(interface_id);
-
-
---
--- Name: fke38a50d18ee852f5; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fke38a50d18ee852f5; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY generic_interface
@@ -2508,7 +2740,7 @@ ALTER TABLE ONLY generic_interface
 
 
 --
--- Name: fke38a50d1c59b512b; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fke38a50d1c59b512b; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY generic_interface
@@ -2516,7 +2748,7 @@ ALTER TABLE ONLY generic_interface
 
 
 --
--- Name: fkf053ed621fcc6073; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkf053ed621fcc6073; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY generic_link
@@ -2524,23 +2756,7 @@ ALTER TABLE ONLY generic_link
 
 
 --
--- Name: fkf053ed623c053871; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY generic_link
-    ADD CONSTRAINT fkf053ed623c053871 FOREIGN KEY (version_id) REFERENCES version_info(version_id);
-
-
---
--- Name: fkf053ed6240b909e; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY generic_link
-    ADD CONSTRAINT fkf053ed6240b909e FOREIGN KEY (end_interface_id) REFERENCES generic_interface(interface_id);
-
-
---
--- Name: fkf053ed624648689a; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkf053ed624648689a; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY generic_link
@@ -2548,7 +2764,7 @@ ALTER TABLE ONLY generic_link
 
 
 --
--- Name: fkf053ed628ee852f5; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkf053ed628ee852f5; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY generic_link
@@ -2556,15 +2772,7 @@ ALTER TABLE ONLY generic_link
 
 
 --
--- Name: fkf053ed62dd8f8877; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY generic_link
-    ADD CONSTRAINT fkf053ed62dd8f8877 FOREIGN KEY (start_interface_id) REFERENCES generic_interface(interface_id);
-
-
---
--- Name: fkf5ca8a745988bff1; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkf5ca8a745988bff1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY boolean_constraint
@@ -2572,15 +2780,7 @@ ALTER TABLE ONLY boolean_constraint
 
 
 --
--- Name: fkf5ca8a748b30e16d; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY boolean_constraint
-    ADD CONSTRAINT fkf5ca8a748b30e16d FOREIGN KEY (con_id) REFERENCES network_constraint(con_id);
-
-
---
--- Name: fkf6eaf1dd21cdd1a1; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkf6eaf1dd21cdd1a1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY vlan_port
@@ -2588,23 +2788,7 @@ ALTER TABLE ONLY vlan_port
 
 
 --
--- Name: fkf6eaf1ddabf533ba; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY vlan_port
-    ADD CONSTRAINT fkf6eaf1ddabf533ba FOREIGN KEY (interface_id) REFERENCES generic_interface(interface_id);
-
-
---
--- Name: fkf6eaf1ddbe5e6ea5; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY vlan_port
-    ADD CONSTRAINT fkf6eaf1ddbe5e6ea5 FOREIGN KEY (vlan_id) REFERENCES vlan(vlan_id);
-
-
---
--- Name: fkf6eaf1ddee320bb6; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkf6eaf1ddee320bb6; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY vlan_port
@@ -2612,17 +2796,24 @@ ALTER TABLE ONLY vlan_port
 
 
 --
--- Name: fkf90719671d9b5e4d; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY ops_link
-    ADD CONSTRAINT fkf90719671d9b5e4d FOREIGN KEY (ops_link_id) REFERENCES generic_link(link_id);
-
-
---
--- Name: fkf9071967707e78d1; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkf9071967707e78d1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY ops_link
     ADD CONSTRAINT fkf9071967707e78d1 FOREIGN KEY (ops_link_id) REFERENCES generic_link(link_id);
 
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+ 
