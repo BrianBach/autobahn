@@ -50,7 +50,7 @@ public class MplsTopologyConverter extends GenericTopologyConverter {
 			this.genericLinks = new ArrayList<GenericLink>();
 		
 			for (MplsLink ml : links)
-				this.genericLinks.add(ml.getLink());
+				this.genericLinks.add(ml.getGenericLink());
 		}
 	}
 }
