@@ -181,7 +181,7 @@ public class IntradomainTopology {
 			genericLinks = new ArrayList<GenericLink>();
 			
 			for (MplsLink ml : mplsLinks) {
-				genericLinks.add(ml.getLink());
+				genericLinks.add(ml.getGenericLink());
 			}
 			
 			nodes = daos.getNodeDAO().getAll();

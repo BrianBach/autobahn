@@ -60,7 +60,7 @@ public class MplsIntradomainPathfinder extends GenericIntradomainPathfinder {
 		
 		for (MplsLink ml : all_links) {
 						
-			GenericLink gl = ml.getLink();
+			GenericLink gl = ml.getGenericLink();
 			
 			// do not take into account the excluded links
 			if (excluded == null || excluded.contains(gl))

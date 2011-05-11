@@ -17,46 +17,52 @@ import net.geant.autobahn.intradomain.common.GenericLink;
  */
 @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 @XmlType(name="MplsLink", namespace="mpls.intradomain.autobahn.geant.net", propOrder={
-		"link" 
+		"genericLink" 
 })
 public class MplsLink implements Serializable {
 	
-	private GenericLink link;
+	private GenericLink genericLink;
 	
 	public MplsLink() { 
 		
 	}
 	
 	public MplsLink(GenericLink link) { 
-		this.link = link;
+		this.genericLink = link;
+	}
+		
+	/**
+	 * @return the genericLink
+	 */
+	public GenericLink getGenericLink() {
+		return genericLink;
 	}
 
-	public GenericLink getLink() {
-		return link;
+	/**
+	 * @param genericLink the genericLink to set
+	 */
+	public void setGenericLink(GenericLink genericLink) {
+		this.genericLink = genericLink;
 	}
 
-	public void setLink(GenericLink link) {
-		this.link = link;
-	}
-	
 	@Override
 	public boolean equals(Object obj) {
 		
 		if (!(obj instanceof MplsLink))
 			return false;
 		
-		return this.getLink().getLinkId() == ((MplsLink)obj).getLink().getLinkId();
+		return this.getGenericLink().getLinkId() == ((MplsLink)obj).getGenericLink().getLinkId();
 	}
 	
 	@Override
 	public int hashCode() {
 	
-		return link.hashCode();
+		return genericLink.hashCode();
 	}
 	
 	@Override
 	public String toString() {
 	
-		return "mpls link - " + link.toString();
+		return "mpls link - " + genericLink.toString();
 	}
 }
