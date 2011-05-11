@@ -36,7 +36,7 @@ public class Domain {
 
     @XmlElement(required = true)
     protected Tags tags;
-    @XmlAttribute(required = true)
+    @XmlAttribute(name = "id", required = true)
     protected String id;
 
     /**

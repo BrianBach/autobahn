@@ -35,30 +35,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link InterfaceType }
-     * 
-     */
-    public InterfaceType createInterfaceType() {
-        return new InterfaceType();
-    }
-
-    /**
-     * Create an instance of {@link Status }
-     * 
-     */
-    public Status createStatus() {
-        return new Status();
-    }
-
-    /**
-     * Create an instance of {@link IntegerValue }
-     * 
-     */
-    public IntegerValue createIntegerValue() {
-        return new IntegerValue();
-    }
-
-    /**
      * Create an instance of {@link CnisToAutobahnResponse }
      * 
      */
@@ -75,11 +51,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link VlanRange }
+     * Create an instance of {@link IntegerValue }
      * 
      */
-    public VlanRange createVlanRange() {
-        return new VlanRange();
+    public IntegerValue createIntegerValue() {
+        return new IntegerValue();
+    }
+
+    /**
+     * Create an instance of {@link Status }
+     * 
+     */
+    public Status createStatus() {
+        return new Status();
+    }
+
+    /**
+     * Create an instance of {@link InterfaceType }
+     * 
+     */
+    public InterfaceType createInterfaceType() {
+        return new InterfaceType();
+    }
+
+    /**
+     * Create an instance of {@link PruningConditions }
+     * 
+     */
+    public PruningConditions createPruningConditions() {
+        return new PruningConditions();
     }
 
     /**
@@ -91,11 +91,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PruningConditions }
+     * Create an instance of {@link VlanRange }
      * 
      */
-    public PruningConditions createPruningConditions() {
-        return new PruningConditions();
+    public VlanRange createVlanRange() {
+        return new VlanRange();
     }
 
     /**

@@ -1,31 +1,30 @@
 
-package net.geant2.cnis.autobahn.xml.sdh;
+package net.geant2.cnis.autobahn.xml.mpls;
 
 import java.math.BigInteger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import net.geant2.cnis.autobahn.xml.common.Domain;
 
 
 /**
- * <p>Java class for IDLink complex type.
+ * <p>Java class for InterdomainLink complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="IDLink">
+ * &lt;complexType name="InterdomainLink">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="startNode" type="{http://cnis.geant2.net/autobahn/xml/sdh}node"/>
- *         &lt;element name="startPort" type="{http://cnis.geant2.net/autobahn/xml/sdh}phyInterface"/>
- *         &lt;element name="externalDomain" type="{http://cnis.geant2.net/autobahn/xml/common}Domain"/>
+ *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="startNode" type="{http://cnis.geant2.net/autobahn/xml/mpls}Node" minOccurs="0"/>
+ *         &lt;element name="startPort" type="{http://cnis.geant2.net/autobahn/xml/mpls}Port" minOccurs="0"/>
+ *         &lt;element name="externalDomain" type="{http://cnis.geant2.net/autobahn/xml/common}Domain" minOccurs="0"/>
+ *         &lt;element name="externalPortId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="bandwidth" type="{http://www.w3.org/2001/XMLSchema}integer" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="bandwidth" type="{http://www.w3.org/2001/XMLSchema}integer" />
- *       &lt;attribute name="endPortId" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -34,23 +33,46 @@ import net.geant2.cnis.autobahn.xml.common.Domain;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "IDLink", propOrder = {
+@XmlType(name = "InterdomainLink", propOrder = {
+    "id",
     "startNode",
     "startPort",
-    "externalDomain"
+    "externalDomain",
+    "externalPortId",
+    "bandwidth"
 })
-public class IDLink {
+public class InterdomainLink {
 
-    @XmlElement(required = true)
+    protected String id;
     protected Node startNode;
-    @XmlElement(required = true)
-    protected PhyInterface startPort;
-    @XmlElement(required = true)
+    protected Port startPort;
     protected Domain externalDomain;
-    @XmlAttribute(name = "bandwidth")
+    protected String externalPortId;
     protected BigInteger bandwidth;
-    @XmlAttribute(name = "endPortId")
-    protected String endPortId;
+
+    /**
+     * Gets the value of the id property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Sets the value of the id property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setId(String value) {
+        this.id = value;
+    }
 
     /**
      * Gets the value of the startNode property.
@@ -81,10 +103,10 @@ public class IDLink {
      * 
      * @return
      *     possible object is
-     *     {@link PhyInterface }
+     *     {@link Port }
      *     
      */
-    public PhyInterface getStartPort() {
+    public Port getStartPort() {
         return startPort;
     }
 
@@ -93,10 +115,10 @@ public class IDLink {
      * 
      * @param value
      *     allowed object is
-     *     {@link PhyInterface }
+     *     {@link Port }
      *     
      */
-    public void setStartPort(PhyInterface value) {
+    public void setStartPort(Port value) {
         this.startPort = value;
     }
 
@@ -125,6 +147,30 @@ public class IDLink {
     }
 
     /**
+     * Gets the value of the externalPortId property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getExternalPortId() {
+        return externalPortId;
+    }
+
+    /**
+     * Sets the value of the externalPortId property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setExternalPortId(String value) {
+        this.externalPortId = value;
+    }
+
+    /**
      * Gets the value of the bandwidth property.
      * 
      * @return
@@ -146,30 +192,6 @@ public class IDLink {
      */
     public void setBandwidth(BigInteger value) {
         this.bandwidth = value;
-    }
-
-    /**
-     * Gets the value of the endPortId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getEndPortId() {
-        return endPortId;
-    }
-
-    /**
-     * Sets the value of the endPortId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setEndPortId(String value) {
-        this.endPortId = value;
     }
 
 }

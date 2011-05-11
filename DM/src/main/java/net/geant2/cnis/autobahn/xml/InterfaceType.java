@@ -30,11 +30,11 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "InterfaceType")
 public class InterfaceType {
 
-    @XmlAttribute
+    @XmlAttribute(name = "switching")
     protected String switching;
-    @XmlAttribute
+    @XmlAttribute(name = "encoding")
     protected String encoding;
-    @XmlAttribute
+    @XmlAttribute(name = "description")
     protected String description;
 
     /**

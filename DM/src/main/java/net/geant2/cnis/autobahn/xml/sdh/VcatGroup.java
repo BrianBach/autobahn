@@ -57,7 +57,7 @@ public class VcatGroup {
     protected Reference egressRef;
     @XmlElement(required = true)
     protected VcatGroup.Trails trails;
-    @XmlAttribute(required = true)
+    @XmlAttribute(name = "name", required = true)
     protected String name;
 
     /**

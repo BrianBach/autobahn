@@ -40,11 +40,11 @@ public class Vlan {
 
     @XmlElement(required = true)
     protected Reference refToDomain;
-    @XmlAttribute
+    @XmlAttribute(name = "id")
     protected String id;
-    @XmlAttribute
+    @XmlAttribute(name = "number")
     protected BigInteger number;
-    @XmlAttribute
+    @XmlAttribute(name = "name")
     protected String name;
 
     /**

@@ -35,9 +35,9 @@ import javax.xml.bind.annotation.XmlType;
 public class InterfaceType {
 
     protected String description;
-    @XmlAttribute
+    @XmlAttribute(name = "switching")
     protected String switching;
-    @XmlAttribute
+    @XmlAttribute(name = "encoding")
     protected String encoding;
 
     /**

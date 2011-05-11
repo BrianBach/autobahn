@@ -30,9 +30,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "VlanRange")
 public class VlanRange {
 
-    @XmlAttribute(required = true)
+    @XmlAttribute(name = "from", required = true)
     protected BigInteger from;
-    @XmlAttribute(required = true)
+    @XmlAttribute(name = "to", required = true)
     protected BigInteger to;
 
     /**

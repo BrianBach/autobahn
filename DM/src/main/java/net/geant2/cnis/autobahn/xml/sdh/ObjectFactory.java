@@ -34,11 +34,35 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link VcTrail }
+     * 
+     */
+    public VcTrail createVcTrail() {
+        return new VcTrail();
+    }
+
+    /**
+     * Create an instance of {@link VcatGroup }
+     * 
+     */
+    public VcatGroup createVcatGroup() {
+        return new VcatGroup();
+    }
+
+    /**
      * Create an instance of {@link Node }
      * 
      */
     public Node createNode() {
         return new Node();
+    }
+
+    /**
+     * Create an instance of {@link Topology }
+     * 
+     */
+    public Topology createTopology() {
+        return new Topology();
     }
 
     /**
@@ -50,43 +74,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Topology.Nodes }
+     * Create an instance of {@link Ctp }
      * 
      */
-    public Topology.Nodes createTopologyNodes() {
-        return new Topology.Nodes();
+    public Ctp createCtp() {
+        return new Ctp();
     }
 
     /**
-     * Create an instance of {@link VcTrail.Links }
+     * Create an instance of {@link VcLinkType }
      * 
      */
-    public VcTrail.Links createVcTrailLinks() {
-        return new VcTrail.Links();
+    public VcLinkType createVcLinkType() {
+        return new VcLinkType();
     }
 
     /**
-     * Create an instance of {@link Topology.VcLinkTypes }
+     * Create an instance of {@link PhyLink }
      * 
      */
-    public Topology.VcLinkTypes createTopologyVcLinkTypes() {
-        return new Topology.VcLinkTypes();
-    }
-
-    /**
-     * Create an instance of {@link Topology.VcTrails }
-     * 
-     */
-    public Topology.VcTrails createTopologyVcTrails() {
-        return new Topology.VcTrails();
-    }
-
-    /**
-     * Create an instance of {@link VcatGroup }
-     * 
-     */
-    public VcatGroup createVcatGroup() {
-        return new VcatGroup();
+    public PhyLink createPhyLink() {
+        return new PhyLink();
     }
 
     /**
@@ -106,11 +114,67 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link IDLink }
+     * 
+     */
+    public IDLink createIDLink() {
+        return new IDLink();
+    }
+
+    /**
+     * Create an instance of {@link VcLink }
+     * 
+     */
+    public VcLink createVcLink() {
+        return new VcLink();
+    }
+
+    /**
+     * Create an instance of {@link VcTrail.Links }
+     * 
+     */
+    public VcTrail.Links createVcTrailLinks() {
+        return new VcTrail.Links();
+    }
+
+    /**
+     * Create an instance of {@link VcatGroup.Trails }
+     * 
+     */
+    public VcatGroup.Trails createVcatGroupTrails() {
+        return new VcatGroup.Trails();
+    }
+
+    /**
+     * Create an instance of {@link Node.PhyInterfaces }
+     * 
+     */
+    public Node.PhyInterfaces createNodePhyInterfaces() {
+        return new Node.PhyInterfaces();
+    }
+
+    /**
      * Create an instance of {@link Node.CtpSet }
      * 
      */
     public Node.CtpSet createNodeCtpSet() {
         return new Node.CtpSet();
+    }
+
+    /**
+     * Create an instance of {@link Node.VtpSet }
+     * 
+     */
+    public Node.VtpSet createNodeVtpSet() {
+        return new Node.VtpSet();
+    }
+
+    /**
+     * Create an instance of {@link Topology.Nodes }
+     * 
+     */
+    public Topology.Nodes createTopologyNodes() {
+        return new Topology.Nodes();
     }
 
     /**
@@ -130,83 +194,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link IDLink }
+     * Create an instance of {@link Topology.VcLinkTypes }
      * 
      */
-    public IDLink createIDLink() {
-        return new IDLink();
-    }
-
-    /**
-     * Create an instance of {@link VcLinkType }
-     * 
-     */
-    public VcLinkType createVcLinkType() {
-        return new VcLinkType();
-    }
-
-    /**
-     * Create an instance of {@link VcLink }
-     * 
-     */
-    public VcLink createVcLink() {
-        return new VcLink();
-    }
-
-    /**
-     * Create an instance of {@link Ctp }
-     * 
-     */
-    public Ctp createCtp() {
-        return new Ctp();
-    }
-
-    /**
-     * Create an instance of {@link Node.PhyInterfaces }
-     * 
-     */
-    public Node.PhyInterfaces createNodePhyInterfaces() {
-        return new Node.PhyInterfaces();
-    }
-
-    /**
-     * Create an instance of {@link Topology.VcatGroups }
-     * 
-     */
-    public Topology.VcatGroups createTopologyVcatGroups() {
-        return new Topology.VcatGroups();
-    }
-
-    /**
-     * Create an instance of {@link Node.VtpSet }
-     * 
-     */
-    public Node.VtpSet createNodeVtpSet() {
-        return new Node.VtpSet();
-    }
-
-    /**
-     * Create an instance of {@link VcTrail }
-     * 
-     */
-    public VcTrail createVcTrail() {
-        return new VcTrail();
-    }
-
-    /**
-     * Create an instance of {@link PhyLink }
-     * 
-     */
-    public PhyLink createPhyLink() {
-        return new PhyLink();
-    }
-
-    /**
-     * Create an instance of {@link Topology }
-     * 
-     */
-    public Topology createTopology() {
-        return new Topology();
+    public Topology.VcLinkTypes createTopologyVcLinkTypes() {
+        return new Topology.VcLinkTypes();
     }
 
     /**
@@ -218,11 +210,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link VcatGroup.Trails }
+     * Create an instance of {@link Topology.VcTrails }
      * 
      */
-    public VcatGroup.Trails createVcatGroupTrails() {
-        return new VcatGroup.Trails();
+    public Topology.VcTrails createTopologyVcTrails() {
+        return new Topology.VcTrails();
+    }
+
+    /**
+     * Create an instance of {@link Topology.VcatGroups }
+     * 
+     */
+    public Topology.VcatGroups createTopologyVcatGroups() {
+        return new Topology.VcatGroups();
     }
 
     /**

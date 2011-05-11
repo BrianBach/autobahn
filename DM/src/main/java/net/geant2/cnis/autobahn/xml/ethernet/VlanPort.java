@@ -35,9 +35,9 @@ import javax.xml.bind.annotation.XmlType;
 public class VlanPort {
 
     protected String description;
-    @XmlAttribute
+    @XmlAttribute(name = "id")
     protected String id;
-    @XmlAttribute(required = true)
+    @XmlAttribute(name = "name", required = true)
     protected String name;
 
     /**

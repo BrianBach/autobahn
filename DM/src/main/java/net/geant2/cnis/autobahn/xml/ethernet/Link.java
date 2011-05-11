@@ -58,23 +58,23 @@ public class Link {
     protected Node endNode;
     @XmlElement(required = true)
     protected PhysicalPort endPort;
-    @XmlAttribute
+    @XmlAttribute(name = "id")
     protected String id;
-    @XmlAttribute
+    @XmlAttribute(name = "bandwidth")
     protected BigInteger bandwidth;
-    @XmlAttribute
+    @XmlAttribute(name = "direction")
     protected String direction;
-    @XmlAttribute
+    @XmlAttribute(name = "discoveryProtocol")
     protected String discoveryProtocol;
-    @XmlAttribute
+    @XmlAttribute(name = "isL2Boundary")
     protected Boolean isL2Boundary;
-    @XmlAttribute
+    @XmlAttribute(name = "isTrunk")
     protected Boolean isTrunk;
-    @XmlAttribute
+    @XmlAttribute(name = "nativeVlan")
     protected BigInteger nativeVlan;
-    @XmlAttribute
+    @XmlAttribute(name = "propagationDelay")
     protected BigDecimal propagationDelay;
-    @XmlAttribute
+    @XmlAttribute(name = "protection")
     protected Boolean protection;
 
     /**

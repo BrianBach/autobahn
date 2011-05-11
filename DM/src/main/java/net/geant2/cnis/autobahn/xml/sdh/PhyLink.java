@@ -51,9 +51,9 @@ public class PhyLink {
     protected Node endNode;
     @XmlElement(required = true)
     protected PhyInterface endInterface;
-    @XmlAttribute
+    @XmlAttribute(name = "bandwidth")
     protected BigInteger bandwidth;
-    @XmlAttribute
+    @XmlAttribute(name = "status")
     protected AdministrativeStatus status;
 
     /**

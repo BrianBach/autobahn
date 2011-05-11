@@ -65,6 +65,7 @@ import net.geant2.cnis.autobahn.xml.common.GeoLocation;
  *       &lt;attribute name="status" type="{http://cnis.geant2.net/autobahn/xml/common}AdministrativeStatus" />
  *       &lt;attribute name="vendor" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="model" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="ipAddress" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -90,18 +91,20 @@ public class Node {
     protected Node.CtpSet ctpSet;
     @XmlElement(required = true)
     protected Node.VtpSet vtpSet;
-    @XmlAttribute(required = true)
+    @XmlAttribute(name = "id", required = true)
     protected String id;
-    @XmlAttribute(required = true)
+    @XmlAttribute(name = "name", required = true)
     protected String name;
-    @XmlAttribute
+    @XmlAttribute(name = "nsap")
     protected BigInteger nsap;
-    @XmlAttribute
+    @XmlAttribute(name = "status")
     protected AdministrativeStatus status;
-    @XmlAttribute
+    @XmlAttribute(name = "vendor")
     protected String vendor;
-    @XmlAttribute
+    @XmlAttribute(name = "model")
     protected String model;
+    @XmlAttribute(name = "ipAddress")
+    protected String ipAddress;
 
     /**
      * Gets the value of the location property.
@@ -365,6 +368,30 @@ public class Node {
      */
     public void setModel(String value) {
         this.model = value;
+    }
+
+    /**
+     * Gets the value of the ipAddress property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    /**
+     * Sets the value of the ipAddress property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setIpAddress(String value) {
+        this.ipAddress = value;
     }
 
 

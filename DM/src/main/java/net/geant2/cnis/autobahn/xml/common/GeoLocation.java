@@ -37,11 +37,11 @@ import javax.xml.bind.annotation.XmlType;
 public class GeoLocation {
 
     protected String description;
-    @XmlAttribute(required = true)
+    @XmlAttribute(name = "name", required = true)
     protected String name;
-    @XmlAttribute
+    @XmlAttribute(name = "latitude")
     protected BigDecimal latitude;
-    @XmlAttribute
+    @XmlAttribute(name = "longitude")
     protected BigDecimal longitude;
 
     /**

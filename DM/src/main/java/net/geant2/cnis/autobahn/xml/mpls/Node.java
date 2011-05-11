@@ -1,5 +1,5 @@
 
-package net.geant2.cnis.autobahn.xml.ethernet;
+package net.geant2.cnis.autobahn.xml.mpls;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,25 +23,22 @@ import net.geant2.cnis.autobahn.xml.common.GeoLocation;
  *       &lt;sequence>
  *         &lt;element name="location" type="{http://cnis.geant2.net/autobahn/xml/common}GeoLocation" minOccurs="0"/>
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="physicalPorts">
+ *         &lt;element name="ports">
  *           &lt;complexType>
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
- *                   &lt;element name="port" type="{http://cnis.geant2.net/autobahn/xml/ethernet}PhysicalPort" maxOccurs="unbounded" minOccurs="0"/>
+ *                   &lt;element name="port" type="{http://cnis.geant2.net/autobahn/xml/mpls}Port" maxOccurs="unbounded" minOccurs="0"/>
  *                 &lt;/sequence>
  *               &lt;/restriction>
  *             &lt;/complexContent>
  *           &lt;/complexType>
  *         &lt;/element>
- *         &lt;element ref="{http://cnis.geant2.net/autobahn/xml/ethernet}vlanRanges"/>
  *       &lt;/sequence>
  *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="capability" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="vendor" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="model" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="vlanTranslation" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="ipAddress" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -54,29 +51,22 @@ import net.geant2.cnis.autobahn.xml.common.GeoLocation;
 @XmlType(name = "Node", propOrder = {
     "location",
     "description",
-    "physicalPorts",
-    "vlanRanges"
+    "ports"
 })
 public class Node {
 
     protected GeoLocation location;
     protected String description;
     @XmlElement(required = true)
-    protected Node.PhysicalPorts physicalPorts;
-    @XmlElement(required = true)
-    protected VlanRanges vlanRanges;
+    protected Node.Ports ports;
     @XmlAttribute(name = "id", required = true)
     protected String id;
     @XmlAttribute(name = "name", required = true)
     protected String name;
-    @XmlAttribute(name = "capability")
-    protected String capability;
     @XmlAttribute(name = "vendor")
     protected String vendor;
     @XmlAttribute(name = "model")
     protected String model;
-    @XmlAttribute(name = "vlanTranslation")
-    protected Boolean vlanTranslation;
     @XmlAttribute(name = "ipAddress")
     protected String ipAddress;
 
@@ -129,51 +119,27 @@ public class Node {
     }
 
     /**
-     * Gets the value of the physicalPorts property.
+     * Gets the value of the ports property.
      * 
      * @return
      *     possible object is
-     *     {@link Node.PhysicalPorts }
+     *     {@link Node.Ports }
      *     
      */
-    public Node.PhysicalPorts getPhysicalPorts() {
-        return physicalPorts;
+    public Node.Ports getPorts() {
+        return ports;
     }
 
     /**
-     * Sets the value of the physicalPorts property.
+     * Sets the value of the ports property.
      * 
      * @param value
      *     allowed object is
-     *     {@link Node.PhysicalPorts }
+     *     {@link Node.Ports }
      *     
      */
-    public void setPhysicalPorts(Node.PhysicalPorts value) {
-        this.physicalPorts = value;
-    }
-
-    /**
-     * Gets the value of the vlanRanges property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link VlanRanges }
-     *     
-     */
-    public VlanRanges getVlanRanges() {
-        return vlanRanges;
-    }
-
-    /**
-     * Sets the value of the vlanRanges property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link VlanRanges }
-     *     
-     */
-    public void setVlanRanges(VlanRanges value) {
-        this.vlanRanges = value;
+    public void setPorts(Node.Ports value) {
+        this.ports = value;
     }
 
     /**
@@ -225,30 +191,6 @@ public class Node {
     }
 
     /**
-     * Gets the value of the capability property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getCapability() {
-        return capability;
-    }
-
-    /**
-     * Sets the value of the capability property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setCapability(String value) {
-        this.capability = value;
-    }
-
-    /**
      * Gets the value of the vendor property.
      * 
      * @return
@@ -297,30 +239,6 @@ public class Node {
     }
 
     /**
-     * Gets the value of the vlanTranslation property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isVlanTranslation() {
-        return vlanTranslation;
-    }
-
-    /**
-     * Sets the value of the vlanTranslation property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setVlanTranslation(Boolean value) {
-        this.vlanTranslation = value;
-    }
-
-    /**
      * Gets the value of the ipAddress property.
      * 
      * @return
@@ -355,7 +273,7 @@ public class Node {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element name="port" type="{http://cnis.geant2.net/autobahn/xml/ethernet}PhysicalPort" maxOccurs="unbounded" minOccurs="0"/>
+     *         &lt;element name="port" type="{http://cnis.geant2.net/autobahn/xml/mpls}Port" maxOccurs="unbounded" minOccurs="0"/>
      *       &lt;/sequence>
      *     &lt;/restriction>
      *   &lt;/complexContent>
@@ -368,9 +286,9 @@ public class Node {
     @XmlType(name = "", propOrder = {
         "port"
     })
-    public static class PhysicalPorts {
+    public static class Ports {
 
-        protected List<PhysicalPort> port;
+        protected List<Port> port;
 
         /**
          * Gets the value of the port property.
@@ -390,13 +308,13 @@ public class Node {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link PhysicalPort }
+         * {@link Port }
          * 
          * 
          */
-        public List<PhysicalPort> getPort() {
+        public List<Port> getPort() {
             if (port == null) {
-                port = new ArrayList<PhysicalPort>();
+                port = new ArrayList<Port>();
             }
             return this.port;
         }

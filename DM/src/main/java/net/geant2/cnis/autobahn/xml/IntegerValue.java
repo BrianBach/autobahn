@@ -30,9 +30,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "IntegerValue")
 public class IntegerValue {
 
-    @XmlAttribute(required = true)
+    @XmlAttribute(name = "value", required = true)
     protected BigInteger value;
-    @XmlAttribute(required = true)
+    @XmlAttribute(name = "operator", required = true)
     protected String operator;
 
     /**

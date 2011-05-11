@@ -61,9 +61,9 @@ public class VcTrail {
     @XmlElement(required = true)
     protected VcTrail.Links links;
     protected String description;
-    @XmlAttribute(required = true)
+    @XmlAttribute(name = "name", required = true)
     protected String name;
-    @XmlAttribute
+    @XmlAttribute(name = "id")
     protected String id;
 
     /**

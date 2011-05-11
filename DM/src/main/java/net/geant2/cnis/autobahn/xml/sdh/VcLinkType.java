@@ -32,13 +32,13 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "vcLinkType")
 public class VcLinkType {
 
-    @XmlAttribute(required = true)
+    @XmlAttribute(name = "name", required = true)
     protected String name;
-    @XmlAttribute
+    @XmlAttribute(name = "id")
     protected String id;
-    @XmlAttribute
+    @XmlAttribute(name = "bandwidth")
     protected BigDecimal bandwidth;
-    @XmlAttribute
+    @XmlAttribute(name = "payload")
     protected BigDecimal payload;
 
     /**

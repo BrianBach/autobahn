@@ -34,14 +34,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Tag }
-     * 
-     */
-    public Tag createTag() {
-        return new Tag();
-    }
-
-    /**
      * Create an instance of {@link Tags }
      * 
      */
@@ -55,6 +47,14 @@ public class ObjectFactory {
      */
     public Domain createDomain() {
         return new Domain();
+    }
+
+    /**
+     * Create an instance of {@link Tag }
+     * 
+     */
+    public Tag createTag() {
+        return new Tag();
     }
 
     /**

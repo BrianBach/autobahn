@@ -52,21 +52,21 @@ public class PhysicalPort {
     protected PortType type;
     @XmlElement(namespace = "http://cnis.geant2.net/autobahn/xml/common", required = true)
     protected Tags tags;
-    @XmlAttribute
+    @XmlAttribute(name = "id")
     protected String id;
-    @XmlAttribute(required = true)
+    @XmlAttribute(name = "macAddress", required = true)
     protected String macAddress;
-    @XmlAttribute
+    @XmlAttribute(name = "name")
     protected String name;
-    @XmlAttribute
+    @XmlAttribute(name = "bandwidth")
     protected BigInteger bandwidth;
-    @XmlAttribute
+    @XmlAttribute(name = "status")
     protected AdministrativeStatus status;
-    @XmlAttribute
+    @XmlAttribute(name = "duplex")
     protected String duplex;
-    @XmlAttribute
+    @XmlAttribute(name = "mdi")
     protected Boolean mdi;
-    @XmlAttribute
+    @XmlAttribute(name = "group")
     protected String group;
 
     /**

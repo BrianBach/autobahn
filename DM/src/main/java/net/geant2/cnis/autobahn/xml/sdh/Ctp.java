@@ -41,9 +41,9 @@ public class Ctp {
     protected String description;
     @XmlElement(namespace = "http://cnis.geant2.net/autobahn/xml/common", required = true)
     protected Tags tags;
-    @XmlAttribute
+    @XmlAttribute(name = "id")
     protected String id;
-    @XmlAttribute(required = true)
+    @XmlAttribute(name = "name", required = true)
     protected String name;
 
     /**

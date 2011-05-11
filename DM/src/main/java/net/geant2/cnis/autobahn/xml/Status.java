@@ -30,9 +30,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "Status")
 public class Status {
 
-    @XmlAttribute(required = true)
+    @XmlAttribute(name = "code", required = true)
     protected BigInteger code;
-    @XmlAttribute(required = true)
+    @XmlAttribute(name = "message", required = true)
     protected String message;
 
     /**

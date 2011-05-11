@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="ethTopology" type="{http://cnis.geant2.net/autobahn/xml/ethernet}Topology" minOccurs="0"/>
  *         &lt;element name="sdhTopology" type="{http://cnis.geant2.net/autobahn/xml/sdh}Topology" minOccurs="0"/>
+ *         &lt;element name="mplsTopology" type="{http://cnis.geant2.net/autobahn/xml/mpls}Topology" minOccurs="0"/>
  *         &lt;element name="status" type="{http://cnis.geant2.net/autobahn/xml}Status"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -32,12 +33,14 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "CnisToAutobahnResponse", propOrder = {
     "ethTopology",
     "sdhTopology",
+    "mplsTopology",
     "status"
 })
 public class CnisToAutobahnResponse {
 
     protected net.geant2.cnis.autobahn.xml.ethernet.Topology ethTopology;
     protected net.geant2.cnis.autobahn.xml.sdh.Topology sdhTopology;
+    protected net.geant2.cnis.autobahn.xml.mpls.Topology mplsTopology;
     @XmlElement(required = true)
     protected Status status;
 
@@ -87,6 +90,30 @@ public class CnisToAutobahnResponse {
      */
     public void setSdhTopology(net.geant2.cnis.autobahn.xml.sdh.Topology value) {
         this.sdhTopology = value;
+    }
+
+    /**
+     * Gets the value of the mplsTopology property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link net.geant2.cnis.autobahn.xml.mpls.Topology }
+     *     
+     */
+    public net.geant2.cnis.autobahn.xml.mpls.Topology getMplsTopology() {
+        return mplsTopology;
+    }
+
+    /**
+     * Sets the value of the mplsTopology property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link net.geant2.cnis.autobahn.xml.mpls.Topology }
+     *     
+     */
+    public void setMplsTopology(net.geant2.cnis.autobahn.xml.mpls.Topology value) {
+        this.mplsTopology = value;
     }
 
     /**

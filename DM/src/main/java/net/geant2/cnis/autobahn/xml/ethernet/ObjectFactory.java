@@ -34,43 +34,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Topology.Vlans }
+     * Create an instance of {@link Node }
      * 
      */
-    public Topology.Vlans createTopologyVlans() {
-        return new Topology.Vlans();
-    }
-
-    /**
-     * Create an instance of {@link Topology.IntradomainLinks }
-     * 
-     */
-    public Topology.IntradomainLinks createTopologyIntradomainLinks() {
-        return new Topology.IntradomainLinks();
-    }
-
-    /**
-     * Create an instance of {@link SpanningTree }
-     * 
-     */
-    public SpanningTree createSpanningTree() {
-        return new SpanningTree();
-    }
-
-    /**
-     * Create an instance of {@link VlanPort }
-     * 
-     */
-    public VlanPort createVlanPort() {
-        return new VlanPort();
-    }
-
-    /**
-     * Create an instance of {@link Topology.SpanningTrees }
-     * 
-     */
-    public Topology.SpanningTrees createTopologySpanningTrees() {
-        return new Topology.SpanningTrees();
+    public Node createNode() {
+        return new Node();
     }
 
     /**
@@ -82,35 +50,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Topology.InterdomainLinks }
-     * 
-     */
-    public Topology.InterdomainLinks createTopologyInterdomainLinks() {
-        return new Topology.InterdomainLinks();
-    }
-
-    /**
      * Create an instance of {@link VlanRanges }
      * 
      */
     public VlanRanges createVlanRanges() {
         return new VlanRanges();
-    }
-
-    /**
-     * Create an instance of {@link Node.PhysicalPorts }
-     * 
-     */
-    public Node.PhysicalPorts createNodePhysicalPorts() {
-        return new Node.PhysicalPorts();
-    }
-
-    /**
-     * Create an instance of {@link LogicalPort }
-     * 
-     */
-    public LogicalPort createLogicalPort() {
-        return new LogicalPort();
     }
 
     /**
@@ -130,19 +74,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Topology.Nodes }
+     * Create an instance of {@link VlanPort }
      * 
      */
-    public Topology.Nodes createTopologyNodes() {
-        return new Topology.Nodes();
+    public VlanPort createVlanPort() {
+        return new VlanPort();
     }
 
     /**
-     * Create an instance of {@link Node }
+     * Create an instance of {@link LogicalPort }
      * 
      */
-    public Node createNode() {
-        return new Node();
+    public LogicalPort createLogicalPort() {
+        return new LogicalPort();
+    }
+
+    /**
+     * Create an instance of {@link SpanningTree }
+     * 
+     */
+    public SpanningTree createSpanningTree() {
+        return new SpanningTree();
+    }
+
+    /**
+     * Create an instance of {@link Vlan }
+     * 
+     */
+    public Vlan createVlan() {
+        return new Vlan();
     }
 
     /**
@@ -162,19 +122,59 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Vlan }
-     * 
-     */
-    public Vlan createVlan() {
-        return new Vlan();
-    }
-
-    /**
      * Create an instance of {@link IDLink }
      * 
      */
     public IDLink createIDLink() {
         return new IDLink();
+    }
+
+    /**
+     * Create an instance of {@link Node.PhysicalPorts }
+     * 
+     */
+    public Node.PhysicalPorts createNodePhysicalPorts() {
+        return new Node.PhysicalPorts();
+    }
+
+    /**
+     * Create an instance of {@link Topology.Nodes }
+     * 
+     */
+    public Topology.Nodes createTopologyNodes() {
+        return new Topology.Nodes();
+    }
+
+    /**
+     * Create an instance of {@link Topology.IntradomainLinks }
+     * 
+     */
+    public Topology.IntradomainLinks createTopologyIntradomainLinks() {
+        return new Topology.IntradomainLinks();
+    }
+
+    /**
+     * Create an instance of {@link Topology.InterdomainLinks }
+     * 
+     */
+    public Topology.InterdomainLinks createTopologyInterdomainLinks() {
+        return new Topology.InterdomainLinks();
+    }
+
+    /**
+     * Create an instance of {@link Topology.Vlans }
+     * 
+     */
+    public Topology.Vlans createTopologyVlans() {
+        return new Topology.Vlans();
+    }
+
+    /**
+     * Create an instance of {@link Topology.SpanningTrees }
+     * 
+     */
+    public Topology.SpanningTrees createTopologySpanningTrees() {
+        return new Topology.SpanningTrees();
     }
 
     /**

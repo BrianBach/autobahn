@@ -46,9 +46,9 @@ public class VcLink {
     protected Reference ingressRef;
     @XmlElement(required = true)
     protected Reference egressRef;
-    @XmlAttribute
+    @XmlAttribute(name = "id")
     protected String id;
-    @XmlAttribute(required = true)
+    @XmlAttribute(name = "timeslots", required = true)
     protected int timeslots;
 
     /**

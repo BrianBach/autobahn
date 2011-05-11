@@ -43,9 +43,9 @@ public class SpanningTree {
     protected Reference refToLink;
     @XmlElement(required = true)
     protected Reference refToVlan;
-    @XmlAttribute
+    @XmlAttribute(name = "state")
     protected String state;
-    @XmlAttribute
+    @XmlAttribute(name = "cost")
     protected BigInteger cost;
 
     /**

@@ -51,9 +51,9 @@ public class IDLink {
     protected Domain externalDomain;
     @XmlElement(required = true)
     protected VlanRanges vlanRanges;
-    @XmlAttribute
+    @XmlAttribute(name = "bandwidth")
     protected BigInteger bandwidth;
-    @XmlAttribute
+    @XmlAttribute(name = "endPortId")
     protected String endPortId;
 
     /**
