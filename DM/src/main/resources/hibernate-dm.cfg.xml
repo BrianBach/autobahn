@@ -42,7 +42,7 @@
         <property name="show_sql">false</property>
 
         <!-- Drop and re-create the database schema on startup
-        <property name="hbm2ddl.auto">update</property> --> 
+        <property name="hbm2ddl.auto">update</property> -->
 
 
         <mapping resource="net/geant/autobahn/network/AdminDomain.hbm.xml" />
@@ -91,6 +91,12 @@
 		<mapping resource="net/geant/autobahn/intradomain/sdh/HoVcGroup.hbm.xml" />
 		<mapping resource="net/geant/autobahn/intradomain/sdh/HoVcType.hbm.xml" />
 		<mapping resource="net/geant/autobahn/intradomain/sdh/HoVcLink.hbm.xml" />
+		
+		<mapping resource="net/geant/autobahn/intradomain/mpls/MplsLink.hbm.xml" />
+
+		<mapping resource="net/geant/autobahn/reservation/Reservation.hbm.xml" />
+		<mapping resource="net/geant/autobahn/reservation/User.hbm.xml" />
+		<mapping resource="net/geant/autobahn/reservation/Service.hbm.xml" />
 
 		<mapping resource="net/geant/autobahn/reservation/ReservationParams.hbm.xml" />
 
