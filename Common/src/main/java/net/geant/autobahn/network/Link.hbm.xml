@@ -34,13 +34,13 @@
 		<property name="resilience" type="string" not-null="false" />
 		
 		<many-to-one name="operationalState" column="State_oper_enum" 
-			class="StateOper" />
+			class="StateOper" cascade="save-update" />
 		
 		<many-to-one name="administrativeState" column="State_admin_enum"
-			class="StateAdmin" />
+			class="StateAdmin" cascade="save-update" />
 		
 		<many-to-one name="type" column="Link_type_enum"
-			class="LinkType" />
+			class="LinkType" cascade="save-update" />
 
 		<property name="localName" type="string" not-null="false" />
 		
