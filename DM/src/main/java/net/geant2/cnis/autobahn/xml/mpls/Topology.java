@@ -46,7 +46,7 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
- *                   &lt;element name="interdomainLink" type="{http://cnis.geant2.net/autobahn/xml/mpls}InterdomainLink"/>
+ *                   &lt;element name="interdomainLink" type="{http://cnis.geant2.net/autobahn/xml/mpls}InterdomainLink" maxOccurs="unbounded"/>
  *                 &lt;/sequence>
  *               &lt;/restriction>
  *             &lt;/complexContent>
@@ -158,7 +158,7 @@ public class Topology {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element name="interdomainLink" type="{http://cnis.geant2.net/autobahn/xml/mpls}InterdomainLink"/>
+     *         &lt;element name="interdomainLink" type="{http://cnis.geant2.net/autobahn/xml/mpls}InterdomainLink" maxOccurs="unbounded"/>
      *       &lt;/sequence>
      *     &lt;/restriction>
      *   &lt;/complexContent>
@@ -173,31 +173,36 @@ public class Topology {
     })
     public static class InterdomainLinks {
 
-        @XmlElement(required = true, nillable = true)
-        protected InterdomainLink interdomainLink;
+        @XmlElement(required = true)
+        protected List<InterdomainLink> interdomainLink;
 
         /**
          * Gets the value of the interdomainLink property.
          * 
-         * @return
-         *     possible object is
-         *     {@link InterdomainLink }
-         *     
-         */
-        public InterdomainLink getInterdomainLink() {
-            return interdomainLink;
-        }
-
-        /**
-         * Sets the value of the interdomainLink property.
+         * <p>
+         * This accessor method returns a reference to the live list,
+         * not a snapshot. Therefore any modification you make to the
+         * returned list will be present inside the JAXB object.
+         * This is why there is not a <CODE>set</CODE> method for the interdomainLink property.
          * 
-         * @param value
-         *     allowed object is
-         *     {@link InterdomainLink }
-         *     
+         * <p>
+         * For example, to add a new item, do as follows:
+         * <pre>
+         *    getInterdomainLink().add(newItem);
+         * </pre>
+         * 
+         * 
+         * <p>
+         * Objects of the following type(s) are allowed in the list
+         * {@link InterdomainLink }
+         * 
+         * 
          */
-        public void setInterdomainLink(InterdomainLink value) {
-            this.interdomainLink = value;
+        public List<InterdomainLink> getInterdomainLink() {
+            if (interdomainLink == null) {
+                interdomainLink = new ArrayList<InterdomainLink>();
+            }
+            return this.interdomainLink;
         }
 
     }
