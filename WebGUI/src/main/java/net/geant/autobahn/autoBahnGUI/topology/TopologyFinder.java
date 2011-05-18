@@ -21,6 +21,7 @@ import net.geant.autobahn.autoBahnGUI.model.googlemaps.Marker;
 import net.geant.autobahn.autoBahnGUI.model.googlemaps.Topology;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.Path;
+import net.geant.autobahn.useraccesspoint.UserAccessPointException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -623,16 +624,19 @@ public class TopologyFinder implements TopologyFinderNotifier{
 	private String createHTMLPortInfo(String name, String domain) {
 		StringBuffer buffer = new StringBuffer();
 		
-		String friendlyNamePort = manager.getFriendlyNamePort(name);
-		if(friendlyNamePort != null){
-			int start = friendlyNamePort.indexOf("(");
-			String str = friendlyNamePort.substring(0, start);
-		
-			buffer.append("<h3  valign=\"middle\"><image src=\"").append(Marker.DEFAULT_ICON_INTERFACE).append("\"> Port information:</h3>");
-			buffer.append ("<center><strong>").append(str).append("</strong></center>");
-		}
-		else
-			System.out.println("for "+name+" no friendlyName port !");
+		String friendlyNamePort;
+        try {
+            friendlyNamePort = manager.getFriendlyNamePort(name);
+            if(friendlyNamePort != null){
+                int start = friendlyNamePort.indexOf("(");
+                String str = friendlyNamePort.substring(0, start);
+            
+                buffer.append("<h3  valign=\"middle\"><image src=\"").append(Marker.DEFAULT_ICON_INTERFACE).append("\"> Port information:</h3>");
+                buffer.append ("<center><strong>").append(str).append("</strong></center>");
+            }
+        } catch (UserAccessPointException e) {
+            System.out.println("for "+name+" no friendlyName port !");
+        }
 		
 		buffer.append("<br/><hr/>");
 		buffer.append("<ul>");
