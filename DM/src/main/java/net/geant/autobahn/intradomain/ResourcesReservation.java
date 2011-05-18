@@ -573,7 +573,7 @@ public class ResourcesReservation {
 		if (authEnabled != null && authEnabled.equals("true") ) {
 		    try {
                 ApplicationContext context = new ClassPathXmlApplicationContext(
-                        "classpath:etc/dm_security.xml");
+                        "classpath:etc/security/aai/dm_security.xml");
 
                 GrantedAuthority[] authorities = AuthorityUtils.stringArrayToAuthorityArray(
                 		authParams.parametersToAuthorities());

@@ -41,7 +41,7 @@ class TopologyAbstractionService {
         
         WSSecurity topology = null;
         try {
-            topology = new WSSecurity("etc/edugain");
+            topology = new WSSecurity("etc/security");
         } catch (XPathException e) {
             log.error("Could not create security object: " + e.getMessage());
         }

@@ -45,7 +45,7 @@ class GuiService {
     	
         WSSecurity gui = null;
         try {
-            gui = new WSSecurity("etc/edugain");
+            gui = new WSSecurity("etc/security");
         } catch (XPathException e) {
             log.error("Could not create security object: " + e.getMessage());
         }

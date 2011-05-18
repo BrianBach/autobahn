@@ -40,7 +40,7 @@ public class UapCallbackService {
     	
         WSSecurity uapCallback = null;
         try {
-        	uapCallback = new WSSecurity("etc/edugain");
+        	uapCallback = new WSSecurity("etc/security");
         } catch (XPathException e) {
             log.error("Could not create security object: " + e.getMessage());
         }

@@ -42,7 +42,7 @@ class Dm2IdmService {
 		
 		WSSecurity dm2idm = null;
         try {
-            dm2idm = new WSSecurity("etc/edugain");
+            dm2idm = new WSSecurity("etc/security");
         } catch (XPathException e) {
             log.error("Could not create security object: " + e.getMessage());
         }

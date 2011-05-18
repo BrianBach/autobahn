@@ -3,6 +3,7 @@ package net.geant.autobahn.edugain;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Properties;
 
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
@@ -10,7 +11,6 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 
 import org.apache.log4j.Logger;
 import org.apache.ws.security.WSPasswordCallback;
-import java.util.Properties;
 
 /**
  * Holds a password for secured communication.
@@ -18,43 +18,42 @@ import java.util.Properties;
  * @author Michal
  *
  */
-public class ClientPasswordCallback implements CallbackHandler {
+public class SecurityPasswordCallback implements CallbackHandler {
 
-	private final static Logger log = Logger.getLogger(ClientPasswordCallback.class);
+	private final static Logger log = Logger.getLogger(SecurityPasswordCallback.class);
 	private String PASSWORD;
 	private String PASSWORD_PROPERTY = "org.apache.ws.security.crypto.merlin.keystore.password";
-	public URL client;
-
+	private URL security;
 	
-	public ClientPasswordCallback (URL url) {
+	public SecurityPasswordCallback (URL url) {
 		
-		this.client = url;
+		this.security = url;
 	}
 	
-	public ClientPasswordCallback (String path) {
+	public SecurityPasswordCallback (String path) {
 		
-		ClassLoader client = getClass().getClassLoader();
-		this.client = client.getResource(path);
+		ClassLoader securityLoader = getClass().getClassLoader();
+		this.security= securityLoader.getResource(path);
 	}
 	
 	/* (non-Javadoc)
 	 * @see javax.security.auth.callback.CallbackHandler#handle(javax.security.auth.callback.Callback[])
 	 */
 	@SuppressWarnings("deprecation")
-	public void handle(Callback[] arg0) throws IOException,	UnsupportedCallbackException {
+	public void handle(Callback[] arg0) throws IOException, UnsupportedCallbackException {
 		
 		Properties properties = new Properties();
 		
 		try {
-			properties.load(client.openStream());
+			properties.load(security.openStream());
 			PASSWORD = properties.getProperty(PASSWORD_PROPERTY);
 
 		} catch (FileNotFoundException e) {
-			log.error("Client side security properties not found: " + e.getMessage());
+			log.error("Security properties not found: " + e.getMessage());
 		}
 		
 		WSPasswordCallback pc = (WSPasswordCallback)arg0[0];
-		pc.setPassword(PASSWORD);		
-		
+		pc.setPassword(PASSWORD);
+
 	}
 }

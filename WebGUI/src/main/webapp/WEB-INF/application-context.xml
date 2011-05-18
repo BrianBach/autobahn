@@ -33,16 +33,12 @@
 		<property name="notifier" ref="manager"/>
 	</bean>
 		
-	<bean id="ServerPasswordCallback" class="net.geant.autobahn.edugain.ServerPasswordCallback">
-		<constructor-arg type="java.lang.String" value="../etc/edugain/server-sec.properties"/>
-	</bean>
-	
-	<bean id="ClientPasswordCallback" class="net.geant.autobahn.edugain.ClientPasswordCallback">
-		<constructor-arg type="java.lang.String" value="../etc/edugain/client-sec.properties"/>	
+	<bean id="SecurityPasswordCallback" class="net.geant.autobahn.edugain.SecurityPasswordCallback">
+		<constructor-arg type="java.lang.String" value="../etc/security/security.properties"/>
 	</bean>
 	
 	<bean id="initSecurity" class="net.geant.autobahn.edugain.WSSecurity">
-		<constructor-arg index="0" type="java.lang.String" value="../etc/edugain"/>
+		<constructor-arg index="0" type="java.lang.String" value="../etc/security"/>
 	</bean>	
 			
 	<bean id="readProps" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
@@ -50,8 +46,18 @@
 		<property name="targetMethod"><value>readProperties</value></property>
 	</bean>
 	
+	<bean id="convertFileToProps" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject"><ref bean="initSecurity"/></property>
+		<property name="targetMethod"><value>convertFileToProps</value></property>
+	</bean>
+	
+	<bean id="edugainActive" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject"><ref bean="initSecurity"/></property>
+		<property name="targetMethod"><value>getEdugainActive</value></property>
+	</bean>
+	
 	<bean id="initEdugain" class="net.geant.autobahn.edugain.Edugain">
-		<constructor-arg index="0" type="java.lang.String" value="../etc/edugain/edugain.properties"/>
+		<constructor-arg index="0" type="java.lang.String" value="../etc/security/edugain/edugain.properties"/>
 	</bean>
 	
 	<bean id="edugainProps" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
@@ -64,20 +70,24 @@
 		<jaxws:inInterceptors>
 			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
 				<constructor-arg>
-					<map>               
+					<map>
 						<entry key="action" value-ref="readProps"/>
 						<entry key="passwordType" value="PasswordDigest"/>
-						<entry key="signaturePropFile" value="../etc/edugain/client-sec.properties"/>
+						<entry key="SignaturePropRefId" value="propsLoader"/>
 						<entry key="passwordCallbackRef">
-							<ref bean="ClientPasswordCallback"/>
+							<ref bean="SecurityPasswordCallback"/>
 						</entry>
-						<entry key="decryptionPropFile" value="../etc/edugain/server-sec.properties"/>						
+						<entry key="decryptionPropRefId" value="propsLoader"/>
+						<entry key="propsLoader" value-ref="convertFileToProps"/>
 					</map>
 				</constructor-arg>
 			</bean>			
 			<bean class="net.geant.autobahn.edugain.EdugainSupport">
-				<constructor-arg type="java.util.Properties">
+				<constructor-arg index="0" type="java.util.Properties">
 					<ref bean="edugainProps"/>
+				</constructor-arg>
+				<constructor-arg index="1" type="java.lang.String">
+					<ref bean="edugainActive"/>
 				</constructor-arg>
 			</bean>
 		</jaxws:inInterceptors>
@@ -89,15 +99,16 @@
 						<entry key="action" value-ref="readProps"/>
 						<entry key="user" value="autobahn"/>
 						<entry key="signatureKeyIdentifier" value="DirectReference"/>
-						<entry key="signaturePropFile" value="../etc/edugain/server-sec.properties"/>
+						<entry key="SignaturePropRefId" value="propsLoader"/>
 						<entry key="passwordType" value="PasswordDigest"/>
 						<entry key="passwordCallbackRef">
-							<ref bean="ServerPasswordCallback"/>
+							<ref bean="SecurityPasswordCallback"/>
 						</entry>
-						<entry key="encryptionPropFile" value="../etc/edugain/client-sec.properties"/>
+						<entry key="encryptionPropRefId" value="propsLoader"/>
 						<entry key="encryptionUser" value="autobahn"/>
 						<entry key="encryptionSymAlgorithm" value="http://www.w3.org/2001/04/xmlenc#tripledes-cbc"/>
-						<entry key="encryptionParts" value="{Content}{}Body"/>						
+						<entry key="encryptionParts" value="{Content}{}Body"/>
+						<entry key="propsLoader" value-ref="convertFileToProps"/>
 					</map>
 				</constructor-arg>
 			</bean>

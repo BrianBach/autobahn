@@ -50,7 +50,7 @@ public class UserAccessPointService{
     	WSSecurity userAccessPoint = null;
         
     	try {
-    	    userAccessPoint = new WSSecurity("../etc/edugain");
+    	    userAccessPoint = new WSSecurity("../etc/security");
         } catch (XPathException e) {
             log.error("Couldn't create security object: " + e.getMessage());
         }   

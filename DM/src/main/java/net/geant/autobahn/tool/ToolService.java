@@ -45,7 +45,7 @@ public class ToolService {
     	
         WSSecurity tool = null;
         try {
-            tool = new WSSecurity("etc/edugain");
+            tool = new WSSecurity("etc/security");
         } catch (XPathException e) {
             log.error("Could not create security object: " + e.getMessage());
         }

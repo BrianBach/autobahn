@@ -6,7 +6,6 @@ package net.geant.autobahn.edugain;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Properties;
@@ -61,14 +60,29 @@ public class EdugainSupport extends AbstractSoapInterceptor {
 	private Edugain edugain; 
 	private WSSecurity wss;
 	private X509CertManager x509;
+	private String active = "false";
+	
+	/*
 	public EdugainSupport(Properties properties) throws XPathException, ValidationException {
 
 		this();
 		this.wss = new WSSecurity();
 		this.x509 = new X509CertManager();
 		this.edugain = new Edugain(properties); 
+		this.active = "true";
 	}
+	*/
 	
+	public EdugainSupport(Properties properties, String active) throws XPathException, ValidationException {
+
+        this();
+        this.wss = new WSSecurity();
+        this.x509 = new X509CertManager();
+        this.active = active;
+        this.edugain = new Edugain(properties, active);
+    }
+	
+	/*
 	public EdugainSupport(URL url) throws XPathException, ValidationException, IOException {
 		
 		this();
@@ -79,7 +93,7 @@ public class EdugainSupport extends AbstractSoapInterceptor {
 		properties.load(url.openStream());
 
 		this.edugain = new Edugain(properties); 
-	}
+	}*/
 	
 	/**
 	 * This contructor performs basic handler initialization
@@ -94,63 +108,74 @@ public class EdugainSupport extends AbstractSoapInterceptor {
 
     public void handleMessage(SoapMessage message) {
         
-    	String handleError;
-    	Document doc = null;
-		try {
-			doc = toDocument(message);
-		} catch (TransformerConfigurationException e1) {
-			handleError = "Could not transform Soap Message to Document: " + e1.getMessage();
-			log.error(handleError);			
-		} catch (TransformerException e1) {
-			handleError = "Could not transform Soap Message to Document: " + e1.getMessage();
-			log.error(handleError);
-		} catch (SOAPException e1) {
-			handleError = "Could not transform Soap Message to Document: " + e1.getMessage();
-			log.error(handleError);
-		} catch (IOException e1) {
-			handleError = "Could not transform Soap Message to Document: " + e1.getMessage();
-			log.error(handleError);
-		}
-		
-		assert this.edugain != null;
-		String errorMsg;
-
-		try {
-			String bst = this.wss.extractBstFromSoapEnvelope(doc);
-			byte[] bytes = Base64.decode(bst);
-			ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-			X509Certificate cert = x509.loadCertificate(bais);
-			//log.debug(cert.toString());
-			this.edugain.validateCert(cert);
-		} catch (SecurityTokenNotFoundException e) {
-			errorMsg = valErrPrefix + "the Binary Security Token "
-					+ "could not be found in the SOAP envelope";
-			log.error(errorMsg);
-			throw new EdugainCxfFault(e, errorMsg);
-		} catch (XPathException e) {
-			errorMsg = valErrPrefix + "error appeared when searching for "
-					+ "the Binary Security Token in the SOAP envelope: "
-					+ e.getMessage();
-			log.error(errorMsg);
-			throw new EdugainCxfFault(e, errorMsg);
-		} catch (WSSecurityException e) {
-			errorMsg = valErrPrefix + "the Binary Security Token "
-					+ "could not be decoded (Base64): " + e.getMessage();
-			log.error(errorMsg);
-			throw new EdugainCxfFault(e, errorMsg);
-		} catch (CertificateException e) {
-			errorMsg = valErrPrefix + "the Binary Security Token "
-					+ "is not an X509 certificate: " + e.getMessage();
-			log.error(errorMsg);
-			throw new EdugainCxfFault(e, errorMsg);
-		} catch (ValidationException e) {
-			errorMsg = valErrPrefix + "certificate validation failed: "
-					+ e.getMessage();
-			log.error(errorMsg);
-			throw new EdugainCxfFault(e, errorMsg);
-		}
-		
-		//log.debug("Edugain Validation finished succesfully!");
+        log.debug("+++Inside handleMessage() - 1 ");
+        
+        if (this.active.equals("true")) {
+            
+            String handleError;
+            Document doc = null;
+            
+            log.debug("+++Inside handleMessage() - 2 ");
+            try {
+                doc = toDocument(message);
+            } catch (TransformerConfigurationException e1) {
+                handleError = "Could not transform Soap Message to Document: "
+                        + e1.getMessage();
+                log.error(handleError);
+            } catch (TransformerException e1) {
+                handleError = "Could not transform Soap Message to Document: "
+                        + e1.getMessage();
+                log.error(handleError);
+            } catch (SOAPException e1) {
+                handleError = "Could not transform Soap Message to Document: "
+                        + e1.getMessage();
+                log.error(handleError);
+            } catch (IOException e1) {
+                handleError = "Could not transform Soap Message to Document: "
+                        + e1.getMessage();
+                log.error(handleError);
+            }
+            
+            assert this.edugain != null;
+            String errorMsg;
+            
+            try {
+                String bst = this.wss.extractBstFromSoapEnvelope(doc);
+                byte[] bytes = Base64.decode(bst);
+                ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+                X509Certificate cert = x509.loadCertificate(bais);
+                log.debug(cert.toString());
+                this.edugain.validateCert(cert);
+            } catch (SecurityTokenNotFoundException e) {
+                errorMsg = valErrPrefix + "the Binary Security Token "
+                        + "could not be found in the SOAP envelope";
+                log.error(errorMsg);
+                throw new EdugainCxfFault(e, errorMsg);
+            } catch (XPathException e) {
+                errorMsg = valErrPrefix + "error appeared when searching for "
+                        + "the Binary Security Token in the SOAP envelope: "
+                        + e.getMessage();
+                log.error(errorMsg);
+                throw new EdugainCxfFault(e, errorMsg);
+            } catch (WSSecurityException e) {
+                errorMsg = valErrPrefix + "the Binary Security Token "
+                        + "could not be decoded (Base64): " + e.getMessage();
+                log.error(errorMsg);
+                throw new EdugainCxfFault(e, errorMsg);
+            } catch (CertificateException e) {
+                errorMsg = valErrPrefix + "the Binary Security Token "
+                        + "is not an X509 certificate: " + e.getMessage();
+                log.error(errorMsg);
+                throw new EdugainCxfFault(e, errorMsg);
+            } catch (ValidationException e) {
+                errorMsg = valErrPrefix + "certificate validation failed: "
+                        + e.getMessage();
+                log.error(errorMsg);
+                throw new EdugainCxfFault(e, errorMsg);
+            }
+            
+            log.debug("Edugain Validation finished succesfully!");
+        }
 	}
     
     /**

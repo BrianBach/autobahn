@@ -63,7 +63,7 @@ public class WSSecurity {
 		out.put(WSHandlerConstants.USER, USER);
 		//out.put(WSHandlerConstants.PASSWORD_TYPE, WSConstants.PW_TEXT);
 		out.put(WSHandlerConstants.PW_CALLBACK_CLASS, ClientPasswordCallback.class.getName());
-		out.put(WSHandlerConstants.SIG_PROP_FILE, "etc/client-sec.properties");
+		out.put(WSHandlerConstants.SIG_PROP_FILE, "etc/security/security.properties");
 		
 		WSS4JOutInterceptor wssOut = new WSS4JOutInterceptor(out);
 		endpoint.getOutInterceptors().add(wssOut);
@@ -77,7 +77,7 @@ public class WSSecurity {
 		//in.put(WSHandlerConstants.PASSWORD_TYPE, WSConstants.PW_TEXT);
 		//in.put(WSHandlerConstants.PW_CALLBACK_CLASS, ServerPasswordCallback.class.getName());
 		in.put(WSHandlerConstants.ACTION, WSHandlerConstants.SIGNATURE);
-		in.put(WSHandlerConstants.SIG_PROP_FILE, "etc/server-sec.properties");
+		in.put(WSHandlerConstants.SIG_PROP_FILE, "etc/security/security.properties");
 		
 		WSS4JInInterceptor wssIn = new WSS4JInInterceptor(in);
 		endpoint.getInInterceptors().add(wssIn);

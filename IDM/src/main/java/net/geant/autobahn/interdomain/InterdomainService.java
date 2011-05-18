@@ -44,7 +44,7 @@ class InterdomainService {
 		
         WSSecurity interdomain = null;
         try {
-            interdomain = new WSSecurity("etc/edugain");
+            interdomain = new WSSecurity("etc/security");
         } catch (XPathException e) {
             log.error("Could not create security object: " + e.getMessage());
         }

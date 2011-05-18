@@ -49,7 +49,7 @@ public class AdministrationService {
     	
         try {
             //administration = new WSSecurity("webapps/autobahn-gui/WEB-INF/etc/edugain", "../etc/edugain");
-            administration = new WSSecurity("../etc/edugain");
+            administration = new WSSecurity("../etc/security");
         } catch (XPathException e) {
             log.error("Couldn't create security object: " + e.getMessage());
         }   

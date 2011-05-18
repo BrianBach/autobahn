@@ -40,7 +40,7 @@ class ResourcesReservationCalendarService {
 
         WSSecurity calendar = null;
         try {
-            calendar = new WSSecurity("etc/edugain");
+            calendar = new WSSecurity("etc/security");
         } catch (XPathException e) {
             log.error("Could not create security object: " + e.getMessage());
         }

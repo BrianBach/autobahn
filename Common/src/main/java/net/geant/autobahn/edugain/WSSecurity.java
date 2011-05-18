@@ -2,11 +2,14 @@ package net.geant.autobahn.edugain;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Properties;
+
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -41,14 +44,15 @@ import org.apache.log4j.Logger;
  */
 public class WSSecurity {
 	
-	public URL edugain, client, server;
+	public URL edugain, securityUrl;
 	public String security;
 	private final static Logger log = Logger.getLogger(WSSecurity.class);
-	private String WSS4J_CLIENT_PATH, WSS4J_SERVER_PATH;
-	private String activatedStr, timestampStr, encryptStr, clientUser, serverUser;
-	public final String PROPERTY_ACTIVATED = "net.geant.autobahn.edugain.activated";
+	private URL WSS4J_PROPS;
+	private String activatedStr, timestampStr, encryptStr, edugainAct, securityUser;
+	public final String PROPERTY_ACTIVATED = "net.geant.autobahn.security.activated";
 	public final String PROPERTY_ENCRYPT = "net.geant.autobahn.edugain.encrypt";
 	public final String PROPERTY_TIMESTAMP = "net.geant.autobahn.edugain.timestamp";
+	public final String PROPERTY_EDUGAIN = "net.geant.autobahn.edugain.activated";
 	public final String PROPERTY_USER = "org.apache.ws.security.crypto.merlin.keystore.alias";
 	public final String WSS_X509_TOKENPROFILE = "http://docs.oasis-open"
 		+ ".org/wss/2004/01/oasis-200401-wss-x509-token-profile-1.0#X509v3";
@@ -67,14 +71,55 @@ public class WSSecurity {
 		xpath = compileXpathExpression();
 		ClassLoader securityLoader = getClass().getClassLoader();
 		
-		this.edugain = securityLoader.getResource(commonPath + "/edugain.properties");
-		this.client = securityLoader.getResource(commonPath + "/client-sec.properties");
-		this.server = securityLoader.getResource(commonPath + "/server-sec.properties");
-		this.WSS4J_SERVER_PATH = commonPath + "/server-sec.properties";
-		this.WSS4J_CLIENT_PATH = commonPath + "/client-sec.properties";
+		this.edugain = securityLoader.getResource(commonPath + "/edugain/edugain.properties");
+		this.securityUrl = securityLoader.getResource(commonPath + "/security.properties");
+		this.WSS4J_PROPS= securityLoader.getResource(commonPath + "/security.properties");
+		
+		log.debug("+++ edugain URL: " + edugain);
+		log.debug("+++ security properties URL: " + securityUrl);
+		log.debug("+++ WSS4J URL: " + WSS4J_PROPS);
 
 	}
 	
+	
+	public Properties convertFileToProps() {
+	    
+	    Properties props = new Properties();
+	    String key = "org.apache.ws.security.crypto.merlin.file";
+	    String path = new String();
+	    try {
+            props.load(WSS4J_PROPS.openStream());
+            path = WSS4J_PROPS.getPath();
+        } catch (Exception e) {
+            log.debug("Error in converting properties file to properties object. "
+                    + e.getMessage());
+        }
+        
+        if(props.getProperty(key) != null) {
+            
+            String s = props.getProperty(key);
+            
+            if (s != null) {
+                         
+                // If the path is a file, keep only the directory part
+                if (s.charAt(0) != '/') {
+                    
+                    path=path.substring(0,path.lastIndexOf('/')+1 );
+                    try {
+                        path = URLDecoder.decode(path, "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        log.debug("Error in decoding URL to String. " + e.getMessage());
+                    }
+
+                    s = path + s;
+                    props.setProperty(key, s);
+                }
+            }
+        }
+	    
+	    return props;
+	    
+	}
 	
 	public void setClientTimeout(Object clientInterface) {
 		
@@ -99,31 +144,19 @@ public class WSSecurity {
 	 */
 	public String readProperties () throws IOException {
 
-		Properties edugainProps = new Properties();
-		Properties clientProps = new Properties();
-		Properties serverProps = new Properties();
-
-		try {
-			edugainProps.load(edugain.openStream());
-			activatedStr = edugainProps.getProperty(PROPERTY_ACTIVATED);
-			timestampStr = edugainProps.getProperty(PROPERTY_TIMESTAMP);
-			encryptStr = edugainProps.getProperty(PROPERTY_ENCRYPT);
-		} catch (IOException e) {
-			log.error("Couldn't load edugain properties: " + e.getMessage());
-		}
-
-		try {
-			clientProps.load(client.openStream());
-			clientUser = clientProps.getProperty(PROPERTY_USER);
-		} catch (IOException e) {
-			log.error("Couldn't load client properties: " + e.getMessage());
-		}
+		Properties securityProps = new Properties();
 		
 		try {
-			serverProps.load(server.openStream());
-			serverUser = serverProps.getProperty(PROPERTY_USER);
+			securityProps.load(securityUrl.openStream());
+
+			activatedStr = securityProps.getProperty(PROPERTY_ACTIVATED);
+            timestampStr = securityProps.getProperty(PROPERTY_TIMESTAMP);
+            encryptStr = securityProps.getProperty(PROPERTY_ENCRYPT);
+            edugainAct = securityProps.getProperty(PROPERTY_EDUGAIN);
+            securityUser = securityProps.getProperty(PROPERTY_USER);            
+                        
 		} catch (IOException e) {
-			log.error("Couldn't load server properties: " + e.getMessage());
+			log.error("Couldn't load client properties: " + e.getMessage());
 		}
 		
 		if (activatedStr != null && "true".equalsIgnoreCase(activatedStr)) {
@@ -141,10 +174,22 @@ public class WSSecurity {
 			} 
 			
 		} else security = "NoSecurity";
-
+		
 		return security;
 		
 	}
+	
+	/**
+	 * Returns the string variable that 
+	 * shows if Edugain validation should be 
+	 * enabled or not
+	 * 
+	 * @return String
+	 */
+	public String getEdugainActive() {	    
+	    return this.edugainAct;
+	}
+	
 	
 	/**
 	 * Retrieves the CXF endpoint from the client's interface object
@@ -179,39 +224,42 @@ public class WSSecurity {
 		Map<String, Object> in = new HashMap<String, Object>();
 		Map<String, Object> out = new HashMap<String, Object>();
 		
-		ClientPasswordCallback clientPassword = new ClientPasswordCallback(client);
-		ServerPasswordCallback serverPassword = new ServerPasswordCallback(server);
+		SecurityPasswordCallback securityPassword = new SecurityPasswordCallback(securityUrl);
 		
 		//Encrypt the SOAP body
 		String bodyPart = "{Content}{}Body";
 		
-		out.put(WSHandlerConstants.ENC_PROP_FILE, WSS4J_CLIENT_PATH);
-		out.put(WSHandlerConstants.SIG_PROP_FILE, WSS4J_SERVER_PATH);
+		out.put("properties", convertFileToProps());
+		out.put(WSHandlerConstants.ENC_PROP_REF_ID, "properties");
+		out.put(WSHandlerConstants.SIG_PROP_REF_ID, "properties");
 		out.put(WSHandlerConstants.ACTION, readProperties());
-		out.put(WSHandlerConstants.ENCRYPTION_USER, clientUser);
-		out.put(WSHandlerConstants.USER, serverUser);
-		out.put(WSHandlerConstants.PW_CALLBACK_REF, serverPassword);
+		out.put(WSHandlerConstants.ENCRYPTION_USER, securityUser);
+		out.put(WSHandlerConstants.USER, securityUser);
+		out.put(WSHandlerConstants.PW_CALLBACK_REF, securityPassword);
 		out.put(WSHandlerConstants.ENC_SYM_ALGO, WSConstants.TRIPLE_DES);
 		out.put(WSHandlerConstants.SIG_KEY_ID, "DirectReference");
 		out.put(WSHandlerConstants.ENCRYPTION_PARTS, bodyPart);
 		
+		in.put("properties", convertFileToProps());
 		in.put(WSHandlerConstants.ACTION, readProperties());
-		in.put(WSHandlerConstants.PW_CALLBACK_REF, clientPassword);
-		in.put(WSHandlerConstants.DEC_PROP_FILE, WSS4J_SERVER_PATH);
-		in.put(WSHandlerConstants.SIG_PROP_FILE, WSS4J_CLIENT_PATH);
+		in.put(WSHandlerConstants.PW_CALLBACK_REF, securityPassword);
+		in.put(WSHandlerConstants.DEC_PROP_REF_ID, "properties");
+		in.put(WSHandlerConstants.SIG_PROP_REF_ID, "properties");
 				
 		WSS4JOutInterceptor wssOut = new WSS4JOutInterceptor(out);
 		cxfEndpoint.getOutInterceptors().add(wssOut);
 		WSS4JInInterceptor wssIn = new WSS4JInInterceptor(in);
 		cxfEndpoint.getInInterceptors().add(wssIn);
 
-		if (security != "NoSecurity") {
+		if (security != "NoSecurity" && edugainAct.equals("true")) {
+						
+		    Properties edugainProps = new Properties();
+			edugainProps.load(edugain.openStream());
 			
-			Properties properties = new Properties();
-			properties.load(edugain.openStream());
+			Edugain loader = new Edugain(edugain);
 			
-			EdugainSupport edugainInInterceptor = new EdugainSupport(edugain);
-			EdugainSupport edugainOutInterceptor = new EdugainSupport(edugain);
+			EdugainSupport edugainInInterceptor = new EdugainSupport(loader.getPropsLoaderForWGui(), edugainAct);
+			EdugainSupport edugainOutInterceptor = new EdugainSupport(loader.getPropsLoaderForWGui(), edugainAct);
 			cxfEndpoint.getInInterceptors().add(edugainInInterceptor);
 			cxfEndpoint.getOutInterceptors().add(edugainOutInterceptor);			
 		}

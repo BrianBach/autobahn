@@ -8,9 +8,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.security.cert.X509Certificate;
 import java.util.Properties;
+
+import javax.xml.xpath.XPathException;
 
 import net.geant.edugain.validation.ComponentID;
 import net.geant.edugain.validation.ValidationException;
@@ -29,7 +33,6 @@ public class Edugain {
 
 	public URL edugain = null;
 	static private Logger log = Logger.getLogger(Edugain.class);
-
 	Validator validator;
 
 	public Edugain(String configFile) throws ValidationException, IOException {
@@ -38,10 +41,22 @@ public class Edugain {
 		this.edugain = edugainLoader.getResource(configFile);
 	}
 	
-	public Edugain(Properties properties) throws ValidationException {
+	public Edugain(URL configFile) throws ValidationException, IOException {
+
+        this.edugain = configFile;
+    }
+	
+	public Edugain(Properties properties) throws ValidationException, XPathException {
 		
-		this.validator = new Validator(properties);
+		this.validator = new Validator(properties);	    
 	}
+	
+	public Edugain(Properties properties, String active) throws ValidationException, XPathException {
+        
+        if (active.equals("true")) {
+            this.validator = new Validator(properties);
+        }        
+    }
 
 	/**
 	 * Searches for a key in the provided properties and converts its value to 
@@ -53,14 +68,22 @@ public class Edugain {
 	 * @param path - the absolute path
 	 */
     public static void convertPropertyToAbsolutePath(Properties properties, String key, String path) {
+        
         String s = properties.getProperty(key);
         if (s == null) {
             return;
         }
-
+        
         // If the path is a file, keep only the directory part
         if (s.charAt(0) != '/') {
+            
             path=path.substring(0,path.lastIndexOf('/')+1 );
+            try {
+                path = URLDecoder.decode(path, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                log.debug("Error in converting relative path to absolute: " + e.getMessage());
+            }
+            
             s = path + s;
             properties.setProperty(key, s);
         }       
@@ -76,11 +99,16 @@ public class Edugain {
 	public static Properties loadProperties(String file) throws IOException {
 
 		Properties result = new Properties();
-		InputStream in = new FileInputStream(file);
+		InputStream in = null;
+        try {
+            in = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            log.debug("Edugain: Couldn't open stream " + file);
+        }
 
-		if (in == null) {
+		if (in == null) 
 			throw new FileNotFoundException(file);
-		}
+		
 		try {
 			result.load(in);
 		} catch (IOException e) {
@@ -130,6 +158,7 @@ public class Edugain {
 		return result;
 	}
 	
+    
     public Properties getPropsLoaderForWGui() throws IOException {
         
         Properties result = getPropsLoader();
@@ -144,13 +173,13 @@ public class Edugain {
 	
 	public ComponentID validateCert(X509Certificate cert)
 			throws ValidationException {
-
+	    
 		/*log.debug("Validation (" + cert.getType() + "|"
 				+ cert.getIssuerDN().getName() + "|"
 				+ cert.getSubjectDN().getName() + ")");*/
 
 		ComponentID result = validator.validate(cert);
-
+		
 		log.debug("Certificate successfully validated by Edugain (CID: " + result.getURN()
 				+ ")");
 
