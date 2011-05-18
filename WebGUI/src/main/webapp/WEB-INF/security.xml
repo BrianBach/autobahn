@@ -25,6 +25,7 @@
 		<logout invalidate-session="true" />
 	</http>
 
+	<!-- XML IDP -->
 	<beans:bean id="xmlUserDetailsAdmin"
 		class="net.geant.security.xml.userdetails.XmlUserDetailsAdmin">
 		
@@ -39,4 +40,25 @@
 	dmarchal/auto123 : ROLE_ADMINISTRATOR
 	rod/koala : ROLE_USER
 	-->
+	
+	
+	
+	<!-- CROWD IDP 
+	<beans:import resource="classpath:/applicationContext-CrowdClient.xml" />
+
+	<beans:bean id="crowdUserDetailsService"
+		class="com.atlassian.crowd.integration.springsecurity.user.CrowdUserDetailsServiceImpl">
+		<beans:property name="authenticationManager" ref="crowdAuthenticationManager" />
+		<beans:property name="groupMembershipManager" ref="crowdGroupMembershipManager" />
+		<beans:property name="userManager" ref="crowdUserManager" />
+	</beans:bean>
+
+
+	<beans:bean id="crowdAuthenticationProvider" class="net.geant.security.crowd.WebAuthNProvider">
+		<custom-authentication-provider />
+		<beans:constructor-arg ref="crowdAuthenticationManager" />
+		<beans:constructor-arg ref="httpAuthenticator" />
+		<beans:constructor-arg ref="crowdUserDetailsService" />
+	</beans:bean>
+    -->
 </beans:beans>

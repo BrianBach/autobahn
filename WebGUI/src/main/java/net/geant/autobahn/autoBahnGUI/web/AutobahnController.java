@@ -15,6 +15,7 @@ import net.geant.autobahn.autoBahnGUI.model.ServicesFormModel;
 import net.geant.autobahn.autoBahnGUI.model.SettingsFormModel;
 import net.geant.autobahn.autoBahnGUI.model.StatisticsFormModel;
 import net.geant.autobahn.autoBahnGUI.topology.TopologyFinder;
+import net.geant.autobahn.useraccesspoint.UserAccessPointException;
 import net.sf.json.JSONSerializer;
 import net.sf.json.JSONObject;
 
@@ -193,7 +194,12 @@ public class AutobahnController {
         if (currentIdm  !=null){
             services = manager.getSubmitedServicesInIDM(currentIdm);   
             reservationStates=manager.getReservationStates();
-            friendly_ports = manager.getAllAvailablePorts();
+            try {
+                friendly_ports = manager.getAllAvailablePorts();
+            } catch (UserAccessPointException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
         model.put("services", services);
         model.put("reservationStates", reservationStates);

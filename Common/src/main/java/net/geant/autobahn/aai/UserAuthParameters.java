@@ -9,17 +9,18 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "UserAuthParameters", namespace = "aai.autobahn.geant.net", propOrder = {
-        "identifier", "organization", "projectMembership", "projectRole"  })
+        "identifier", "organization", "projectMembership", "projectRole", "email"  })
 public class UserAuthParameters implements Serializable {
 
     private static final long serialVersionUID = 7565000373455342687L;
     
     private String identifier;
     
-    private String organization;
-    private String projectMembership;
-    private String projectRole;
-    
+    private String organization=new String();
+    private String projectMembership=new String();
+    private String projectRole=new String();
+    private String email=new String();
+
     public UserAuthParameters() {}
     
     public UserAuthParameters(String name, Set<String> authorities) {
@@ -32,15 +33,18 @@ public class UserAuthParameters implements Serializable {
     			this.setOrganization(authority.replaceFirst("ORG_", ""));
     		} else if(authority.startsWith("PM_")) {
     			this.setProjectMembership(authority.replaceFirst("PM_", ""));
-    		}
+    		} else if(authority.startsWith("EMAIL_")) {
+                this.setEmail(authority.replaceFirst("EMAIL_", ""));
+            }
     	}
     }
     
     public String[] parametersToAuthorities() {
-        String authorities[]=new String[3];
+        String authorities[]=new String[4];
         authorities[0]="ROLE_" + getProjectRole();
         authorities[1]="ORG_" + getOrganization();
         authorities[2]="PM_" + getProjectMembership();
+        authorities[3]="EMAIL_" + getEmail();
         
         return authorities;
     }
@@ -77,4 +81,11 @@ public class UserAuthParameters implements Serializable {
         this.projectRole = projectRole;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

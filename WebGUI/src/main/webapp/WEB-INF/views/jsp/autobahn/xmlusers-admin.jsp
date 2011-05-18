@@ -10,6 +10,7 @@
                         <th><spring:message code="userview.organization" text="Organization"/></th>
                         <th><spring:message code="userview.projectMembership" text="Project Membership"/></th>
                         <th><spring:message code="userview.projectRole" text="Project Role"/></th>
+                        <th><spring:message code="userview.email" text="e-mail"/></th>
                         <th></th>
                 </tr>
                 <c:forEach items="${users}" var="user" varStatus="loopStatus">
@@ -18,6 +19,7 @@
                                         <td>${user.organization}</td>
                                         <td>${user.projectMembership}</td>
                                         <td>${user.projectRole}</td>
+                                        <td>${user.email}</td>
                                         <td>
                                                 <a href="${flowExecutionUrl}&_eventId=remove&username=${user.identifier}">Remove</a>
                                         </td>
@@ -35,6 +37,7 @@
                                         		<option value="USER">USER</option>
                                         	</select>
                                         </td>
+                                        <td><input type="text" name="email" style="width:auto" size="10" /></td>
                                         <td>Password:<input type="password" name="password" style="width:auto" size="10" /></td>
                                 </tr>
                                 <tr>    

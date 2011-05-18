@@ -39,8 +39,10 @@
 				type="string" />
 			<set name="requestScope.membership" value="requestParameters.membership"
 				type="string" />
+			<set name="requestScope.email" value="requestParameters.email"
+				type="string" />
 				
-			<evaluate expression="xmlUserDetailsAdmin.createUserFromUserParameters(username, organization, membership, role, password)" />
+			<evaluate expression="xmlUserDetailsAdmin.createUserFromUserParameters(username, organization, membership, role, password, email)" />
 			<evaluate expression="xmlUserDetailsAdmin.loadUsers()" />
 			<evaluate expression="xmlUserDetailsAdmin.usersParameters" result="flowScope.users" />
 		</transition>

@@ -66,7 +66,7 @@ public class XmlUserDetailsAdmin extends XmlUserDetailsManager {
      * Adds a user to the xml file, using username, organization, 
      * project role, project membership parameters
      */
-    public void createUserFromUserParameters(String username, String organization, String projectMembership, String projectRole, String password) {
+    public void createUserFromUserParameters(String username, String organization, String projectMembership, String projectRole, String password, String email) {
         UserAuthParameters user = new UserAuthParameters();
         
         /*
@@ -76,6 +76,7 @@ public class XmlUserDetailsAdmin extends XmlUserDetailsManager {
         user.setOrganization(organization);
         user.setProjectMembership(projectMembership);
         user.setProjectRole(projectRole);
+        user.setEmail(email);
         
         try {
             /*
