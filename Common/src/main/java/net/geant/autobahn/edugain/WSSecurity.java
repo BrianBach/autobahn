@@ -74,10 +74,6 @@ public class WSSecurity {
 		this.edugain = securityLoader.getResource(commonPath + "/edugain/edugain.properties");
 		this.securityUrl = securityLoader.getResource(commonPath + "/security.properties");
 		this.WSS4J_PROPS= securityLoader.getResource(commonPath + "/security.properties");
-		
-		log.debug("+++ edugain URL: " + edugain);
-		log.debug("+++ security properties URL: " + securityUrl);
-		log.debug("+++ WSS4J URL: " + WSS4J_PROPS);
 
 	}
 	
