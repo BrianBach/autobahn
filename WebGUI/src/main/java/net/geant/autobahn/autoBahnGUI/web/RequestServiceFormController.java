@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import net.geant.autobahn.autoBahnGUI.manager.Manager;
 import net.geant.autobahn.useraccesspoint.ReservationRequest;
 import net.geant.autobahn.useraccesspoint.ServiceRequest;
+import net.geant.autobahn.useraccesspoint.UserAccessPointException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -116,7 +117,14 @@ public class RequestServiceFormController extends SimpleFormController {
 						mappedDomainPorts.add(mappedPort);
 				}
 				
-				List<String> allPorts = manager.getAllPorts();
+				List<String> allPorts=null;
+				
+				try {
+                    allPorts = manager.getAllPorts();
+                } catch (UserAccessPointException e1) {
+                    // TODO Auto-generated catch block
+                    logger.error (e1.getMessage());
+                }
 				
 				// Add to allPorts also IDCP ports
                 List<String> allIdcpPorts = manager.getAllIdcpPorts();

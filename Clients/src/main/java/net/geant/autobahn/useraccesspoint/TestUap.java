@@ -83,10 +83,15 @@ public final class TestUap {
         	System.out.println(cport);
         }
         
-        cports = uap.getAllClientPorts();
-        System.out.println("All client ports found: " + cports.length);
-        for(String cport : cports) {
-        	System.out.println(cport);
+        try {
+            cports = uap.getAllClientPorts();
+            System.out.println("All client ports found: " + cports.length);
+            for(String cport : cports) {
+                System.out.println(cport);
+            }
+        } catch (UserAccessPointException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
     

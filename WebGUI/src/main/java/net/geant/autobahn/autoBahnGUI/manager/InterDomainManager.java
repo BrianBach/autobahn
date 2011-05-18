@@ -541,14 +541,17 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getAllClientPorts()
 	 */
-	public String[] getAllClientPorts() {
+	public String[] getAllClientPorts() throws UserAccessPointException {
 		try{
-		if (isUserAccessPointConnected())
-			return userAccessPoint.getAllClientPorts();
-		}catch (Exception e ){
-			e.printStackTrace();
+    		if (isUserAccessPointConnected()) {
+    			return userAccessPoint.getAllClientPorts();
+    		}
+		}catch (Exception e) {
+	        //TODO: convert to spring strings
+		    throw new UserAccessPointException("errors.uap.notconnected");
 		}
-		return null;
+		
+		throw new UserAccessPointException("errors.uap.notconnected");
 	}
 	
     /*

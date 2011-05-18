@@ -40,9 +40,6 @@
 			<evaluate expression="manager.getTimezones()" result="flowScope.timezones"/>
 			<evaluate expression="manager.getReservationModes()" result="flowScope.modes"/>
 		</transition>
-		<transition on-exception="net.geant.autobahn.autoBahnGUI.manager.ManagerException"  to="request-service"> 
-			<evaluate expression="exceptionTranslator.translateException(flowRequestContext, flowExecutionException)"/>
-		</transition>	
 		<transition on-exception="java.lang.Exception" to="request-service"> 
 			<evaluate expression="exceptionTranslator.translateException(flowRequestContext, flowExecutionException)"/>
 		</transition>	

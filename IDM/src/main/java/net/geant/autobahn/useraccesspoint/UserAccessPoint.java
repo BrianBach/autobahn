@@ -46,9 +46,10 @@ public interface UserAccessPoint {
      * Returns all client ports in the global topology
      * Does not include IDCP ports
      * @return client ports
+	 * @throws UserAccessPointException 
      */
 	@WebResult(name="Ports")
-	String[] getAllClientPorts();
+	String[] getAllClientPorts() throws UserAccessPointException;
 	
 	/**
      * Returns client ports the are connected to the called domain

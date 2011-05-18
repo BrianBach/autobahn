@@ -66,7 +66,7 @@ public class UserAccessPointSampleClient {
         
     }
     
-    private String[] getPorts() {
+    private String[] getPorts() throws UserAccessPointException {
         return uap.getAllClientPorts();
     }
 

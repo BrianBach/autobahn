@@ -68,8 +68,8 @@ public class ExceptionTranslator implements MessageSourceAware {
 				UserAccessPointException ue = findUserAccessPointException ((FlowExecutionException)exception);
 				
 				if (ue!= null){
-					logger.info("FileSystemManagerException:"+conf.getMessage());
-					requestContext.getFlowScope().put("error", messages.getMessage("errors.idm.error:"+ue.getMessage(), null, Locale.getDefault()));
+					logger.info("FileSystemManagerException:"+ue.getMessage());
+					requestContext.getFlowScope().put("error", messages.getMessage(ue.getMessage(), null, Locale.getDefault()));
 					return;
 				}
 				

@@ -124,24 +124,27 @@ public interface Manager {
 	/**
 	 * Gets all port names in all IDM registered in WEB GUI
 	 * @return list of  ports names
+	 * @throws UserAccessPointException 
 	 */
-	public List<String> getAllPorts ();
+	public List<String> getAllPorts () throws UserAccessPointException;
 	
     /**
      * Gets all port names (with associated friendly ones from LS) in all IDM
      * registered in WEB GUI
      * Does not include any IDCP ports
      * @return list of ports names with associated friendly ones
+     * @throws UserAccessPointException 
      */
-    public List<PortMap> getAllFriendlyPorts ();
+    public List<PortMap> getAllFriendlyPorts () throws UserAccessPointException;
     
     /**
      * Gets all port names (with associated friendly ones from LS) in all IDM
      * registered in WEB GUI
      * Also gets IDCP ports
      * @return list of ports names with associated friendly ones
+     * @throws UserAccessPointException 
      */
-    public List<PortMap> getAllFriendlyAndIdcpPorts ();
+    public List<PortMap> getAllFriendlyAndIdcpPorts () throws UserAccessPointException;
 
     /**
      * Gets all domain names
@@ -256,8 +259,9 @@ public interface Manager {
 	/**
 	 * Get mapped ports names manages by all IDMs
 	 * @return list of mapped ports names
+	 * @throws UserAccessPointException 
 	 */
-	public List<String> getMappedAllPorts();
+	public List<String> getMappedAllPorts() throws UserAccessPointException;
 	
 	public List<String> getReservationPriorities();
 	
@@ -330,15 +334,17 @@ public interface Manager {
 	/**
 	 * Gets map of FriendlyPorts
 	 * @return map of Identifier() and FriendlyName 
+	 * @throws UserAccessPointException 
 	 */
-	public Map<String,String> getAllAvailablePorts();
+	public Map<String,String> getAllAvailablePorts() throws UserAccessPointException;
 	
 	/**
 	 * Get friendly name port
 	 * @param port name
 	 * @return friendly name port
+	 * @throws UserAccessPointException 
 	 */
-	public String getFriendlyNamePort(String port);
+	public String getFriendlyNamePort(String port) throws UserAccessPointException;
 	/**
 	 * Gets list of domain links no clients
 	 * @return	list of links

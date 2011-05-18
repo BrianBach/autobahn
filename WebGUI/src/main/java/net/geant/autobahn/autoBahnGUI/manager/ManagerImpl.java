@@ -274,7 +274,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllPorts()
 	 */
-	public List<String> getAllPorts (){
+	public List<String> getAllPorts () throws UserAccessPointException{
         // Parse through IDMs and get the first non-null result
         for(String idm : idms.keySet()) {
         	InterDomainManager manager = idms.get(idm);
@@ -298,7 +298,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      * (non-Javadoc)
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllFriendlyPorts()
      */
-    public List<PortMap> getAllFriendlyPorts () {
+    public List<PortMap> getAllFriendlyPorts () throws UserAccessPointException {
         List<String> ports = getAllPorts();
         List<PortMap> friendlyPorts = new ArrayList<PortMap>();
         
@@ -318,7 +318,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      * (non-Javadoc)
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllFriendlyAndIdcpPorts()
      */
-    public List<PortMap> getAllFriendlyAndIdcpPorts () {
+    public List<PortMap> getAllFriendlyAndIdcpPorts () throws UserAccessPointException {
         List<PortMap> friendlyPorts = getAllFriendlyPorts();
         List<String> idcpPorts = this.getAllIdcpPorts();
         
@@ -1074,7 +1074,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getMappedAllPorts()
 	 */
-	public List<String> getMappedAllPorts() {
+	public List<String> getMappedAllPorts() throws UserAccessPointException {
 		List<String> allPorts = getAllPorts();
 		if (allPorts==null)
 			return null;
@@ -1344,7 +1344,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		request.setCapacity(capacity * 1000000 );
 	}
 	
-	public Map<String,String> getAllAvailablePorts(){
+	public Map<String,String> getAllAvailablePorts() throws UserAccessPointException{
 		
 		if(ports.size() == 0){
 			
@@ -1361,7 +1361,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		return ports;
 	}
 	
-	public String getFriendlyNamePort(String port){
+	public String getFriendlyNamePort(String port) throws UserAccessPointException{
 		
 		if(port == null & port.length() == 0)
 			return null;

@@ -5,6 +5,7 @@ import javax.xml.ws.Service;
 import javax.xml.ws.soap.SOAPBinding;
 
 import net.geant.autobahn.useraccesspoint.UserAccessPoint;
+import net.geant.autobahn.useraccesspoint.UserAccessPointException;
 
 public class UserAccessPointClient {
 	private Service service;
@@ -27,8 +28,13 @@ public class UserAccessPointClient {
 		UserAccessPoint uap = new UserAccessPointClient(
 				"http://localhost:8080/autobahn/uap").getUserAccessPointPort();
 		
-		for(String port : uap.getAllClientPorts()) {
-			System.out.println(port);
-		}
+		try {
+            for(String port : uap.getAllClientPorts()) {
+            	System.out.println(port);
+            }
+        } catch (UserAccessPointException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 	}
 }
