@@ -317,7 +317,7 @@ public class Framework {
 			}
 		}
 		
-		if("start".equals(args[0])) {
+		if(args.length == 0 || "start".equals(args[0])) {
 			info();
 	
 			Framework autobahn = new Framework();
