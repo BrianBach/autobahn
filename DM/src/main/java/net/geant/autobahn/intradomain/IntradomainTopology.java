@@ -40,6 +40,8 @@ import net.geant2.cnis.autobahn.xml.ethernet.IDLink;
 import net.geant2.cnis.autobahn.xml.ethernet.Link;
 import net.geant2.cnis.autobahn.xml.ethernet.PhysicalPort;
 import net.geant2.cnis.autobahn.xml.ethernet.Range;
+import net.geant2.cnis.autobahn.xml.mpls.InterdomainLink;
+import net.geant2.cnis.autobahn.xml.mpls.IntradomainLink;
 import net.geant2.cnis.autobahn.xml.sdh.PhyInterface;
 import net.geant2.cnis.autobahn.xml.sdh.PhyLink;
 
@@ -543,7 +545,102 @@ public class IntradomainTopology {
 	    	t.commit();
 	    	
 		} else if (isMpls()) {  
-			// TODO when cnis wsdl with mpls support is ready
+
+			int id = 0;
+			nodes = new ArrayList<Node>();
+			Map<String, GenericInterface> ports = new HashMap<String, GenericInterface>();
+			
+			List<net.geant2.cnis.autobahn.xml.mpls.Node> mplsNodes = resp.getMplsTopology().getNodes().getNode();
+
+			for (net.geant2.cnis.autobahn.xml.mpls.Node n : mplsNodes) {
+				
+				Node node = new Node();
+				node.setNodeId(0);
+				node.setName(n.getName());
+				node.setIpAddress(n.getIpAddress());
+				
+				List<net.geant2.cnis.autobahn.xml.mpls.Port> mplsPorts = n.getPorts().getPort();
+				for (net.geant2.cnis.autobahn.xml.mpls.Port p : mplsPorts) {
+					
+					GenericInterface port = new GenericInterface();
+					port.setName(n.getName() + INTERFACE_DELIM + p.getName());
+					
+					String pub = getPublicName(p);
+					if(pub != null) {
+						log.info("Received public identifier from cNIS: " + port.getName() + " " + pub);
+						publicIds.setProperty(port.getName(), pub);
+					}
+
+					port.setBandwidth(10000000); 
+					port.setInterfaceId(0);
+					port.setNode(node);
+					port.setDomainId(domainName);
+					port.setClientPort(false);
+					
+					ports.put(port.getName(), port);
+				}
+				nodes.add(node);
+			}
+			
+			mplsLinks = new ArrayList<MplsLink>();
+			
+			List<IntradomainLink> intraLinks = resp.getMplsTopology().getIntradomainLinks().getIntradomainLink();
+			for (IntradomainLink intraLink : intraLinks) { 
+				
+				GenericLink link = new GenericLink();
+				link.setLinkId(++id);
+				String startName = intraLink.getStartNode().getName() + INTERFACE_DELIM + intraLink.getStartPort().getName();
+				GenericInterface startPort = ports.get(startName);
+				link.setStartInterface(startPort);
+				
+				String endName = intraLink.getEndNode().getName() + INTERFACE_DELIM + intraLink.getEndPort().getName();
+				GenericInterface endPort = ports.get(endName);
+				link.setEndInterface(endPort);
+				
+				MplsLink mplsLink = new MplsLink();
+				mplsLink.setGenericLink(link);
+				mplsLinks.add(mplsLink);
+			}
+
+			List<InterdomainLink> interLinks = resp.getMplsTopology().getInterdomainLinks().getInterdomainLink();
+			for (InterdomainLink interLink : interLinks) {
+				
+				GenericLink link = new GenericLink();
+				String startName = interLink.getStartNode().getName() + INTERFACE_DELIM + interLink.getStartPort().getName();
+				GenericInterface startPort = ports.get(startName);
+				link.setStartInterface(startPort);
+				
+				Node endNode = new Node();
+				endNode.setNodeId(0L);
+				endNode.setName("external-node-" + id);
+				nodes.add(endNode);
+				
+				GenericInterface endPort = new GenericInterface();
+				endPort.setName(interLink.getExternalPortId());
+				endPort.setInterfaceId(0);
+				endPort.setBandwidth(interLink.getBandwidth().longValue());
+				endPort.setNode(endNode);
+				String domainId = interLink.getExternalDomain().getId();
+				endPort.setDomainId(domainId);
+				endPort.setClientPort(isClientDomain(interLink.getExternalDomain()));
+				endPort.setDescription(getExternalDomainDescription(interLink.getExternalDomain()));
+				link.setEndInterface(endPort);
+				
+				String idcpLink = getIdcpLink(interLink.getExternalDomain());
+				if (idcpLink != null) 
+					endPort.setDescription(endPort.getDescription() + "\n" + "idcplink=" + idcpLink);
+				
+				MplsLink mplsLink = new MplsLink();
+				mplsLink.setGenericLink(link);
+				mplsLinks.add(mplsLink);
+			}
+			
+	    	Transaction t = DmHibernateUtil.getInstance().beginTransaction();
+	    	
+	    	clearIntradomainTopologyDatabase();
+			saveTopology();
+			
+	    	t.commit();
 		}
 		
 		publicIds.save(new File("etc/public_ids.properties"));
@@ -607,6 +704,12 @@ public class IntradomainTopology {
 	            daos.getNodeDAO().create(dev.getNode());
 	        	daos.getSdhDeviceDAO().update(dev);
 	        }
+    	} else if (isMpls()) {
+    		
+    		for (MplsLink link : mplsLinks) {
+    			daos.getGenericLinkDAO().create(link.getGenericLink());
+    			daos.getMplsLinkDAO().update(link);
+    		}
     	}
     }
     
@@ -682,6 +785,26 @@ public class IntradomainTopology {
      * @return
      */
     private String getPublicName(net.geant2.cnis.autobahn.xml.ethernet.PhysicalPort p) {
+    	net.geant2.cnis.autobahn.xml.common.Tags dTags = p.getTags();
+    	
+    	if(dTags == null)
+    		return null;
+    	
+		for (net.geant2.cnis.autobahn.xml.common.Tag tag: dTags.getTag()) {
+			if(tag.getKey().contains("public-name")) {
+				return tag.getValue();
+			}
+		}
+		
+		return null;
+    }
+    
+    /**
+     * 
+     * @param p
+     * @return
+     */
+    private String getPublicName(net.geant2.cnis.autobahn.xml.mpls.Port p) {
     	net.geant2.cnis.autobahn.xml.common.Tags dTags = p.getTags();
     	
     	if(dTags == null)
