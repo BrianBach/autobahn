@@ -7,6 +7,7 @@ import java.util.Map;
 import net.geant.autobahn.constraints.ConstraintsNames;
 import net.geant.autobahn.constraints.MinValueConstraint;
 import net.geant.autobahn.constraints.PathConstraints;
+import net.geant.autobahn.constraints.RangeConstraint;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
 import net.geant.autobahn.intradomain.IntradomainPath;
 import net.geant.autobahn.intradomain.common.GenericLink;
@@ -27,6 +28,8 @@ public class SdhConstraintsReservationCalendar implements
 	
 	private Map<GenericLink, AdditiveCalendar> timeslotCalendars = new HashMap<GenericLink, AdditiveCalendar>();
 
+	private ConstraintsReservationCalendar vlanCalendar = new EthConstraintsReservationCalendar();
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -36,7 +39,11 @@ public class SdhConstraintsReservationCalendar implements
 	public IntradomainPath getConstraints(IntradomainPath ipath,
 			Calendar startTime, Calendar endTime) {
 		
-		log.info("CAL: got path " + ipath.getInfo());
+		IntradomainPath spath = vlanCalendar.getConstraints(ipath.getSimplifiedPath(), startTime, endTime);
+		
+		if(spath == null) {
+			return null;
+		}
 		
 		MinValueConstraint av_timeslots = new MinValueConstraint();
 		IntradomainPath res = new IntradomainPath();
@@ -73,6 +80,15 @@ public class SdhConstraintsReservationCalendar implements
 				return null;
 			}
 		}
+
+		// Update the result with VLANS information
+		for(GenericLink gl : spath.getLinks()) {
+			RangeConstraint vlans = spath.getConstraints(gl).getRangeConstraint(ConstraintsNames.VLANS);
+			if(vlans != null) {
+				PathConstraints pcon = res.getConstraints(gl);
+				pcon.addRangeConstraint(ConstraintsNames.VLANS, vlans);
+			}
+		}
 		
 		return res;
 	}
@@ -85,6 +101,8 @@ public class SdhConstraintsReservationCalendar implements
 	 *      java.util.Calendar)
 	 */
 	public void releaseResources(IntradomainPath path, Calendar start, Calendar end) {
+		
+		vlanCalendar.releaseResources(path.getSimplifiedPath(), start, end);
 		
 		for(GenericLink gl : path.getLinks()) {
 			PathConstraints pcon = path.getConstraints(gl);
@@ -115,6 +133,8 @@ public class SdhConstraintsReservationCalendar implements
 	 */
 	public void reserveResources(IntradomainPath path, Calendar start, Calendar end)
 			throws ConstraintsAlreadyUsedException {
+		
+		vlanCalendar.reserveResources(path.getSimplifiedPath(), start, end);
 		
 		for(GenericLink gl : path.getLinks()) {
 			PathConstraints pcon = path.getConstraints(gl);

@@ -221,6 +221,20 @@ public class IntradomainPath implements Comparable<IntradomainPath> {
 	 * 
 	 * @return
 	 */
+	public IntradomainPath getSimplifiedPath() {
+		IntradomainPath res = new IntradomainPath();
+		res.setCapacity(this.capacity);
+		
+		res.addGenericLink(this.getFirstLink(), this.getIngressConstraints());
+		res.addGenericLink(this.getLastLink(), this.getEgressConstraints());
+		
+		return res;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public int getSize() {
 		return getLinks().size();
 	}

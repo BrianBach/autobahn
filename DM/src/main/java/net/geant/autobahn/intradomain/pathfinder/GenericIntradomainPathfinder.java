@@ -7,7 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.geant.autobahn.constraints.ConstraintsNames;
 import net.geant.autobahn.constraints.PathConstraints;
+import net.geant.autobahn.constraints.RangeConstraint;
 import net.geant.autobahn.intradomain.IntradomainPath;
 import net.geant.autobahn.intradomain.common.GenericLink;
 import net.geant.autobahn.intradomain.common.Node;
@@ -170,6 +172,25 @@ public abstract class GenericIntradomainPathfinder implements
 
 		return ipath;
 	}
+
+	public void settleConstraintsValuesForPath(IntradomainPath path) {
+		
+		for(GenericLink gl : path.getLinks()) {
+			PathConstraints pcon = path.getConstraints(gl);
+			
+			// vlans
+			RangeConstraint vlans = pcon.getRangeConstraint(ConstraintsNames.VLANS);
+			if(vlans != null) {
+				int singleValue = vlans.getFirstValue();
+				
+				// replaces it with a single value (first one)
+				RangeConstraint sVlan = new RangeConstraint(singleValue, singleValue);
+				pcon.addRangeConstraint(ConstraintsNames.VLANS, sVlan);
+			}
+			
+			path.setPathConstraints(gl, pcon);
+		}
+	}
 	
 	/**
 	 * Initialize a graph to search in. Graph represents the whole network
@@ -182,10 +203,5 @@ public abstract class GenericIntradomainPathfinder implements
      * @return Graph to be searched
      */
     public abstract GraphSearch initGraph(Collection<GenericLink> excluded, int mtu);
-    
-    /**
-     * 
-     * @param path
-     */
-    public abstract void settleConstraintsValuesForPath(IntradomainPath path);
+
 }

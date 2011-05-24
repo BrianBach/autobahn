@@ -202,9 +202,12 @@ public class DomainConfiguration {
 				sql += "DELETE FROM pcon_range_names;\n";
 				sql += "DELETE FROM pcon_bool_constraints;\n";
 				sql += "DELETE FROM pcon_bool_names;\n";
+				sql += "DELETE FROM pcon_minval_constraints;\n";
+				sql += "DELETE FROM pcon_minval_names;\n";		
 				sql += "DELETE FROM reservation;\n";
 				sql += "DELETE FROM service;\n";
 		        sql += "DELETE FROM glink_to_intrapath;\n";
+		        sql += "DELETE FROM pcons_to_intrapath;\n";
 		        sql += "DELETE FROM intradomain_reservation;\n";
 				sql += "DELETE FROM reservation_params;\n";
 

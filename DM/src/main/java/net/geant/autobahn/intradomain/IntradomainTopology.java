@@ -230,7 +230,14 @@ public class IntradomainTopology {
                         sb.append(sdhd.toString()+"\n");
                     }
                 }
-                //sb.append("\n**"+stmLinks.toString()+sdhDevices.toString()+"**\n");
+                sb.append("\n|-sptrees:");
+                if (sptrees!=null) {
+                    sb.append(" size:"+sptrees.size()+"\n");
+                    for (SpanningTree st: sptrees) {
+                        sb.append("    st ethlink generic link:"+st.getEthLink().getGenericLink()+"\n");
+                        sb.append("    st vlans               :"+st.getVlan().getLowNumber() + " " + st.getVlan().getHighNumber() +"\n");
+                    }
+                }
             }
             if (isEthernet()) {
                 sb.append("\n|-Is Ethernet.\n|-ethpp:");
@@ -380,7 +387,27 @@ public class IntradomainTopology {
 				if (idcpLink != null) 
 					dport.setDescription(dport.getDescription() + "\n" + "idcplink=" + idcpLink);
 
-				genericLinks.add(glink);
+				EthLink elink = new EthLink(glink, "", false, true, 1);
+				String vlan = getVlansForSDH(l.getExternalDomain());
+				
+				if (vlan != null) {
+					RangeConstraint rcon = new RangeConstraint(vlan);
+					for(net.geant.autobahn.constraints.Range r : rcon.getRanges()) {
+						SpanningTree st = new SpanningTree();
+						
+						st.setEthLink(elink);
+						st.setVlan(new Vlan(id++, "vlan-ext", r.getMin(), r.getMax()));
+						
+						sptrees.add(st);
+					}
+				} else {
+					SpanningTree st = new SpanningTree();
+					
+					st.setEthLink(elink);
+					st.setVlan(new Vlan(id++, "vlan-ext", 0, 4096));
+					
+					sptrees.add(st);
+				}
 			}
 
 			// SDH specific
@@ -695,6 +722,15 @@ public class IntradomainTopology {
 	        	daos.getSpanningTreeDAO().create(st);
 	        }
     	} else if(isSDH()) {
+        	zeroTheIdentifiers(sptrees);
+    		
+	        for(SpanningTree st : sptrees) {
+	        	daos.getGenericLinkDAO().create(st.getEthLink().getGenericLink());
+	        	daos.getEthLinkDAO().create(st.getEthLink());
+	        	daos.getVlanDAO().create(st.getVlan());
+	        	daos.getSpanningTreeDAO().create(st);
+	        }
+    		
 	        for(StmLink link : stmLinks) {
 	        	daos.getGenericLinkDAO().create(link.getStmLink());
 	        	daos.getStmLinkDAO().update(link);
@@ -742,6 +778,21 @@ public class IntradomainTopology {
 		}
 		return null;
     }
+
+	/**
+	 * Helper method that retrieves description tag from an interdomain link.
+	 */
+    private String getVlansForSDH(net.geant2.cnis.autobahn.xml.common.Domain d) {
+		// Check whether this is a client port by looking at the domain tags
+		// and search for a tag named "client" set to true.
+		net.geant2.cnis.autobahn.xml.common.Tags dTags = d.getTags();
+		for (net.geant2.cnis.autobahn.xml.common.Tag tag: dTags.getTag()) {
+			if (tag.getKey().equals("vlans")) {
+				return tag.getValue();
+			}
+		}
+		return null;
+    }    
     
     /**
      * Helper method that retrieves idcp link mapping for idcp link

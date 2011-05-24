@@ -3,17 +3,20 @@
  */
 package net.geant.autobahn.intradomain.sdh;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.geant.autobahn.constraints.ConstraintsNames;
 import net.geant.autobahn.constraints.MinValueConstraint;
 import net.geant.autobahn.constraints.PathConstraints;
-import net.geant.autobahn.intradomain.IntradomainPath;
+import net.geant.autobahn.constraints.RangeConstraint;
 import net.geant.autobahn.intradomain.IntradomainTopology;
 import net.geant.autobahn.intradomain.common.GenericLink;
 import net.geant.autobahn.intradomain.common.Node;
+import net.geant.autobahn.intradomain.ethernet.SpanningTree;
 import net.geant.autobahn.intradomain.pathfinder.GenericIntradomainPathfinder;
 import net.geant.autobahn.intradomain.pathfinder.GraphEdge;
 import net.geant.autobahn.intradomain.pathfinder.GraphNode;
@@ -29,20 +32,30 @@ public class SdhIntradomainPathfinder extends GenericIntradomainPathfinder {
 
 	private List<StmLink> all_links = null;
 	private List<SdhDevice> all_devices = null;
-	    
+	private Map<GenericLink, SpanningTree> strees = null;
+	
 	private static final Logger log = Logger.getLogger(SdhIntradomainPathfinder.class);
 	private final int defaultSdhMtu = 4474;
 	
     public SdhIntradomainPathfinder(IntradomainTopology topology) {
         this.all_links = topology.getStmLinks();
         this.all_devices = topology.getSdhDevices();
+        
+        this.strees = new HashMap<GenericLink, SpanningTree>();
+        for(SpanningTree st : topology.getSpanningTrees()) {
+        	strees.put(st.getEthLink().getGenericLink(), st);
+        }
     }
 
 	public SdhIntradomainPathfinder(List<StmLink> all_links,
-			List<SdhDevice> all_devices) {
+			List<SdhDevice> all_devices, List<SpanningTree> sptrees) {
 		super();
 		this.all_links = all_links;
 		this.all_devices = all_devices;
+        this.strees = new HashMap<GenericLink, SpanningTree>();
+        for(SpanningTree st : sptrees) {
+        	strees.put(st.getEthLink().getGenericLink(), st);
+        }
 	}
 
 
@@ -56,12 +69,23 @@ public class SdhIntradomainPathfinder extends GenericIntradomainPathfinder {
         	Node n = device.getNode();
         	grnodes.put(n, new GraphNode(n));
         }
-
+    	for(SpanningTree st : strees.values()) {
+    		Node n = st.getEthLink().getGenericLink().getEndInterface().getNode();
+        	grnodes.put(n, new GraphNode(n));
+    	}
+    	
     	gredges.clear();
         
+    	List<GenericLink> allLinks = new ArrayList<GenericLink>();
+    	for(StmLink stmLink : all_links) {
+    		allLinks.add(stmLink.getStmLink());
+    	}
+    	for(SpanningTree st : strees.values()) {
+    		allLinks.add(st.getEthLink().getGenericLink());
+    	}
+
         // Determine neighbors of each node
-        for (StmLink stmLink : all_links) {
-            GenericLink link = stmLink.getStmLink();
+        for (GenericLink link : allLinks) {
             
             // Skip excluded generic links
             if(excluded != null && excluded.contains(link))
@@ -122,6 +146,14 @@ public class SdhIntradomainPathfinder extends GenericIntradomainPathfinder {
             
             if(link.isInterdomain()) {
             	gredges.put(link, edge);
+            	SpanningTree st = strees.get(link);
+            	if(st != null) {
+	    			RangeConstraint rcon = new RangeConstraint((int)st.getVlan()
+	    					.getLowNumber(), (int)st.getVlan().getHighNumber());
+	            	pcon.addRangeConstraint(ConstraintsNames.VLANS, rcon);
+            	}
+            } else {
+            	pcon.addRangeConstraint(ConstraintsNames.VLANS, new RangeConstraint("0-4096"));
             }
             
             if(link.getStartInterface().getDomainId() != null) {
@@ -142,9 +174,5 @@ public class SdhIntradomainPathfinder extends GenericIntradomainPathfinder {
         
         return grSearch;
 	}
-
-	@Override
-	public void settleConstraintsValuesForPath(IntradomainPath path) {
-		// TODO Auto-generated method stub
-	}
+	
 }

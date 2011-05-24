@@ -171,6 +171,8 @@ public class PathConstraints implements Serializable {
         result = intersectAddConstraints(constraints2, result);
         result = intersectBoolConstraints(constraints2, result);
         result = intersectRangeConstraints(constraints2, result);
+        if(result == null)
+        	return null;
         result = intersectMinValConstraints(constraints2, result);
         
         return result;

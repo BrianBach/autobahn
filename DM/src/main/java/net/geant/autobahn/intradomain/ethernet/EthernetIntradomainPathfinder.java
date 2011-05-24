@@ -166,24 +166,6 @@ public class EthernetIntradomainPathfinder extends GenericIntradomainPathfinder 
 	}
 	
 	@Override
-	public void settleConstraintsValuesForPath(IntradomainPath path) {
-		
-		for(GenericLink gl : path.getLinks()) {
-			PathConstraints pcon = path.getConstraints(gl);
-			
-			// vlans
-			RangeConstraint vlans = pcon.getRangeConstraint(ConstraintsNames.VLANS);
-			int singleValue = vlans.getFirstValue();
-			
-			// replaces it with a single value (first one)
-			RangeConstraint sVlan = new RangeConstraint(singleValue, singleValue);
-			pcon.addRangeConstraint(ConstraintsNames.VLANS, sVlan);
-			
-			path.setPathConstraints(gl, pcon);
-		}
-	}
-	
-	@Override
 	public IntradomainPath createIntradomainPath(GraphEdge[] edges) {
 		if(edges.length < 1) {
 			log.info("Wrong path!");
