@@ -60,6 +60,14 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
 		<property name="targetObject"><ref bean="initEdugain"/></property>
 		<property name="targetMethod"><value>getPropsLoaderForWGui</value></property>
 	</bean>
+	
+	<bean id="IdcpServerKeyPasswordCallback" class="net.geant.autobahn.idcp.KeyPasswordCallback">
+		<constructor-arg type="java.lang.String" value="serverkey"/>
+	</bean>
+	
+	<bean id="IdcpClientKeyPasswordCallback" class="net.geant.autobahn.idcp.KeyPasswordCallback">
+		<constructor-arg type="java.lang.String" value="clientkey"/>	
+	</bean>	
 
 	<jaxws:endpoint id="idm2dm" implementor="net.geant.autobahn.idm2dm.Idm2DmImpl" address="http://${server.ip}:${server.port}/autobahn/idm2dm">
 		<jaxws:inInterceptors>
@@ -456,74 +464,83 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
 			</bean>
 		</jaxws:outInterceptors>	
 	</jaxws:endpoint>	
-	
-	<bean id="OscarsServerPasswordCallback" class="net.geant.autobahn.edugain.SecurityPasswordCallback">
-		<constructor-arg type="java.lang.String" value="etc/security/oscars/client-sec.properties"/>
-	</bean>
-	
-	<bean id="OscarsClientPasswordCallback" class="net.geant.autobahn.edugain.SecurityPasswordCallback">
-		<constructor-arg type="java.lang.String" value="etc/security/security.properties"/>	
-	</bean>	
 		
 	<jaxws:endpoint id="oscars" implementor="net.geant.autobahn.idcp.OSCARSImpl" address="https://${server.ip}:${server.securePort}/autobahn/oscars" wsdlLocation="etc/wsdl/IDCP/OSCARS.wsdl">
 		<jaxws:properties>
 			<entry key="ws-security.callback-handler">
-				<ref bean="OscarsServerPasswordCallback"/>
+				<ref bean="IdcpServerKeyPasswordCallback"/>
 			</entry>
-			<entry key="ws-security.encryption.properties" value="etc/security/oscars/server-sec.properties"/>
-			<entry key="ws-security.signature.properties" value="etc/security/oscars/client-sec.properties"/>
-			<entry key="ws-security.encryption.username" value="guest"/>
-			<entry key="ws-security.signature.username" value="guest"/>
+			<entry key="ws-security.signature.properties" value="etc/security/idcp/server.properties"/>
+			<entry key="ws-security.signature.username" value="server"/>
 		</jaxws:properties> 
 	</jaxws:endpoint>
 	
 	<jaxws:endpoint id="oscarsnotify" implementor="net.geant.autobahn.idcp.notify.OSCARSNotifyImpl" address="https://${server.ip}:${server.securePort}/autobahn/oscarsnotify" wsdlLocation="etc/wsdl/IDCP/OSCARS-Notify.wsdl">
 		<jaxws:properties>
 			<entry key="ws-security.callback-handler">
-				<ref bean="OscarsServerPasswordCallback"/>
+				<ref bean="IdcpServerKeyPasswordCallback"/>
 			</entry>
-			<entry key="ws-security.encryption.properties" value="etc/security/oscars/server-sec.properties"/>
-			<entry key="ws-security.signature.properties" value="etc/security/oscars/client-sec.properties"/>
-			<entry key="ws-security.encryption.username" value="guest"/>
-			<entry key="ws-security.signature.username" value="guest"/>
+			<entry key="ws-security.signature.properties" value="etc/security/idcp/server.properties"/>
+			<entry key="ws-security.signature.username" value="server"/>
 		</jaxws:properties> 
 	</jaxws:endpoint>
 	
     <jaxws:client name="{http://oscars.es.net/OSCARS}OSCARS" createdFromAPI="true">
         <jaxws:properties>
-			<entry key="ws-security.callback-handler" value-ref="OscarsClientPasswordCallback"/>        
-			<entry key="ws-security.encryption.properties" value="etc/security/security.properties"/>
-			<entry key="ws-security.signature.properties" value="etc/security/security.properties"/>
-			<entry key="ws-security.encryption.username" value="autobahn"/>
-			<entry key="ws-security.signature.username" value="autobahn"/>
+			<entry key="ws-security.callback-handler" value-ref="IdcpClientKeyPasswordCallback"/>        
+			
+			<entry key="ws-security.signature.properties" value="etc/security/idcp/client.properties"/>
+			<entry key="ws-security.signature.username" value="client"/>
 		</jaxws:properties>
     </jaxws:client>   
     
     <jaxws:client name="{http://oscars.es.net/OSCARS}OSCARSNotify" createdFromAPI="true">
         <jaxws:properties>
-			<entry key="ws-security.callback-handler" value-ref="OscarsClientPasswordCallback"/>        
-			<entry key="ws-security.encryption.properties" value="etc/security/security.properties"/>
-			<entry key="ws-security.signature.properties" value="etc/security/security.properties"/>
-			<entry key="ws-security.encryption.username" value="autobahn"/>
-			<entry key="ws-security.signature.username" value="autobahn"/>
+			<entry key="ws-security.callback-handler" value-ref="IdcpClientKeyPasswordCallback"/>        
+			<entry key="ws-security.signature.properties" value="etc/security/idcp/client.properties"/>
+			<entry key="ws-security.signature.username" value="client"/>
 		</jaxws:properties>
     </jaxws:client>   
 	
 	<http:conduit name="{http://oscars.es.net/OSCARS}OSCARS.http-conduit">
     <http:tlsClientParameters disableCNCheck="true" secureSocketProtocol="SSL">
       <sec:trustManagers>
-          <sec:keyStore type="JKS" password="password"
-               file="etc/security/oscars/ssl-client.jks"/>
+          <sec:keyStore type="JKS" password="clientpass" file="etc/security/idcp/client.jks"/>
       </sec:trustManagers>      
+      
+      <sec:keyManagers keyPassword="clientkey" >
+          <sec:keyStore type="JKS" password="clientpass" file="etc/security/idcp/client.jks"/>
+      </sec:keyManagers>
+
+      <sec:cipherSuitesFilter>
+      	  <sec:include>.*_EXPORT_.*</sec:include>
+      	  <sec:include>.*_EXPORT1024_.*</sec:include>
+      	  <sec:include>.*_WITH_DES_.*</sec:include>
+      	  <sec:include>.*_WITH_NULL_.*</sec:include>
+      	  <sec:exclude>.*_DH_anon_.*</sec:exclude>
+      </sec:cipherSuitesFilter>
+      
     </http:tlsClientParameters>
    </http:conduit>
    
    <http:conduit name="{http://oscars.es.net/OSCARS}OSCARSNotify.http-conduit">
     <http:tlsClientParameters disableCNCheck="true" secureSocketProtocol="SSL">
       <sec:trustManagers>
-          <sec:keyStore type="JKS" password="password"
-               file="etc/security/oscars/ssl-client.jks"/>
-      </sec:trustManagers>      
+          <sec:keyStore type="JKS" password="clientpass" file="etc/security/idcp/client.jks"/>
+      </sec:trustManagers>     
+      
+       <sec:keyManagers keyPassword="clientkey" >
+          <sec:keyStore type="JKS" password="clientpass" file="etc/security/idcp/client.jks"/>
+      </sec:keyManagers>
+
+      <sec:cipherSuitesFilter>
+          <sec:include>.*_EXPORT_.*</sec:include>
+  	      <sec:include>.*_EXPORT1024_.*</sec:include>
+     	  <sec:include>.*_WITH_DES_.*</sec:include>
+      	  <sec:include>.*_WITH_NULL_.*</sec:include>
+      	  <sec:exclude>.*_DH_anon_.*</sec:exclude>
+      </sec:cipherSuitesFilter>
+       
     </http:tlsClientParameters>
    </http:conduit>
 
@@ -536,13 +553,14 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
   <httpj:engine-factory>
 	 <httpj:engine port="${server.securePort}">	 	
 	     <httpj:tlsServerParameters secureSocketProtocol="TLS">
-         <sec:keyManagers keyPassword="password">
-	     		<sec:keyStore type="JKS" password="password" 
-	             	file="etc/security/oscars/OSCARS.jks"/>
+         <sec:keyManagers keyPassword="serverkey">
+	     		<sec:keyStore type="JKS" password="serverpass" 
+	             	file="etc/security/idcp/server.jks"/>
 	      </sec:keyManagers>
+	      
 	      <sec:trustManagers>
-	      		<sec:keyStore type="JKS" password="bahn2auto"
-		   			file="etc/security/oscars/ssl-server.ks"/>
+	      		<sec:keyStore type="JKS" password="serverpass"
+		   			file="etc/security/idcp/server.jks"/>
 	      </sec:trustManagers>
 
 	      <sec:cipherSuitesFilter>
