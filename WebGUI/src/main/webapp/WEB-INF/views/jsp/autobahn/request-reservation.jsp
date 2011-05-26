@@ -467,7 +467,7 @@ function blockInputStartTime(checked) {
 <c:if test="${friendlyports_domain == null}">
     Cannot retrieve ports. Cannot connect to IDM.
 </c:if>
-<c:if test="${fn:length(friendlyports_domain) > 0}">
+<c:if test="${fn:length(friendlyports_domain) <= 0}">
     This domain has no clients attached.
 </c:if>
 </div>
@@ -509,6 +509,8 @@ function blockInputStartTime(checked) {
     jQuery(document).ready(function() {
 
         $(function() {
+	    
+	    blockInputStartTime(document.getElementById('processNow').checked);
 
             var wizard = $("#wizard");
 
@@ -516,11 +518,11 @@ function blockInputStartTime(checked) {
     
                 vv = $("#reservationform").valid();
 
+<%--  		blockInputStartTime(getElementById.processNow.checked);  --%>
                 if (!vv)
                 {
                     return false;
                 }
-              
             });
 
         });
