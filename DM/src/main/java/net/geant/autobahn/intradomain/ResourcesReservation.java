@@ -240,17 +240,18 @@ public class ResourcesReservation {
 		Set<IntradomainPath> results = new HashSet<IntradomainPath>();
 		int i = 0;
 		
-		while(i < paths.size()) {
+		while (i < paths.size()) {
 			IntradomainPath path = paths.get(i++); 
 			
-			if(path == null)
+			if (path == null) {
 				continue;
+			}
 
 			// Filter out links using capacity in calendar 
 			List<GenericLink> toExclude = calendar.checkCapacity(path.getLinks(),
 					par.getCapacity(), sTime, eTime);
 			
-			if(toExclude.isEmpty()) {
+			if (toExclude.isEmpty()) {
 				// Path contains enough capacity.
 				results.add(path);
 			} else {
@@ -260,9 +261,9 @@ public class ResourcesReservation {
 				int newPathsNeeded = 1;
 				
 				// Filter out already found paths
-				for(int j = i; j < paths.size(); j++) {
+				for (int j = i; j < paths.size(); j++) {
 					IntradomainPath p2 = paths.get(j);
-					if(p2.containsAny(excluded)) {
+					if (p2.containsAny(excluded)) {
 						newPathsNeeded++;
 						paths.set(j, null);
 					}
@@ -271,28 +272,28 @@ public class ResourcesReservation {
 				List<IntradomainPath> npaths = pathfinder.findPaths(skel, 
 						par.getCapacity(), excluded, newPathsNeeded, par.getMtu());
 
-				if(npaths != null)
+				if (npaths != null)
 					npaths.removeAll(paths);
 				
-				if(npaths != null && npaths.size() > 0) {
+				if (npaths != null && npaths.size() > 0) {
 					int j = --i;
-					for(IntradomainPath npath : npaths) {
+					for (IntradomainPath npath : npaths) {
 						paths.set(j++, npath);
 					}
 				}
 			}
 		}
 		
-		if(results.size() > 0) {        
+		if (results.size() > 0) {        
 			DomainConstraints dconIngress = new DomainConstraints();
 			DomainConstraints dconEgress = new DomainConstraints();
 			
 			// Filtering Constraints
-			for(IntradomainPath path : results) {
+			for (IntradomainPath path : results) {
 				log.info("Checking path: " + path.getInfo());
 				IntradomainPath res = calendar.getConstraints(path, sTime, eTime);
 				
-				if(res == null) {
+				if (res == null) {
 					log.debug("Constraints not correct or already reserved for path: " + path);
 					continue;
 				}
@@ -609,7 +610,7 @@ public class ResourcesReservation {
         TopologyAbstraction ta = new TopologyAbstractionClient(taAddress);
 		GenericLink glink = ta.getEdgeLink(link);
 		
-		System.out.println(link + " [" + glink + "]");
+		log.debug(link + " [" + glink + "]");
 		
 		List<GenericLink> links = new ArrayList<GenericLink>();
 		links.add(glink);

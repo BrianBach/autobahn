@@ -260,8 +260,9 @@ public final class AccessPoint implements TopologyAbstraction {
      * @see net.geant.autobahn.topologyabstraction.TopologyAbstraction#getEdgeLink(net.geant.autobahn.network.Link)
      */
     public GenericLink getEdgeLink(Link l) {
-        if(converter != null)
+        if(converter != null) {
             return converter.getEdgeLink(l);
+        }
         
         return null;
     }
