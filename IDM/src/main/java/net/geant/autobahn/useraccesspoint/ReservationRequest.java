@@ -365,6 +365,7 @@ public class ReservationRequest implements Serializable {
             res += "    User organization: " + getAuthParameters().getOrganization() + "\n";
             res += "    User project membership: " + getAuthParameters().getProjectMembership() + "\n";
             res += "    User project role: " + getAuthParameters().getProjectRole() + "\n";
+            res += "    User email: " + getAuthParameters().getEmail() + "\n";
         }
         
         return res;
