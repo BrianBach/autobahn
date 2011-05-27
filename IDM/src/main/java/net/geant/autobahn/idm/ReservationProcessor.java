@@ -72,12 +72,13 @@ public class ReservationProcessor {
 
         Runnable command = new Runnable() {
             public void run() {
-                rdao.update(res);
+                rdao.merge(res);
                 
                 res.run();
                 
                 // Delete fake reservation after processing
                 if(res instanceof LastDomainReservation && res.isFake()) {
+                    rdao.merge(res);
                 	rdao.delete(res);
                 }
             }
@@ -128,13 +129,15 @@ public class ReservationProcessor {
 
         Runnable command = new Runnable() {
             public void run() {
-                rdao.update(res);
+                rdao.merge(res);
                 
                 res.reservationScheduled(msgCode, arguments, success, global);
                 
                 // Delete if it's fake
-                if(res.isFake())
+                if(res.isFake()) {
+                    rdao.merge(res);
                 	rdao.delete(res);
+                }
             }
         };
 
@@ -182,7 +185,7 @@ public class ReservationProcessor {
 
         Runnable command = new Runnable() {
             public void run() {
-            	rdao.update(res);
+            	rdao.merge(res);
                 
                 res.modify(startTime, endTime);
             }
@@ -200,7 +203,7 @@ public class ReservationProcessor {
 		
         Runnable command = new Runnable() {
             public void run() {
-            	rdao.update(res);
+            	rdao.merge(res);
                 
                 res.withdraw();
             }
@@ -217,7 +220,7 @@ public class ReservationProcessor {
 
 		Runnable command = new Runnable() {
 			public void run() {
-				rdao.update(res);
+				rdao.merge(res);
 
 				res.reservationWithdrawn(message, success);
 			}
@@ -234,7 +237,7 @@ public class ReservationProcessor {
 
         Runnable command = new Runnable() {
             public void run() {
-                rdao.update(res);
+                rdao.merge(res);
                 
                 res.reservationModified(startTime, endTime, message, success);
             }
@@ -254,7 +257,7 @@ public class ReservationProcessor {
 		
         Runnable command = new Runnable() {
             public void run() {
-                rdao.update(res);
+                rdao.merge(res);
                 
                 res.reservationActivated(message, success);
             }
@@ -285,7 +288,7 @@ public class ReservationProcessor {
 			
 	        Runnable command = new Runnable() {
 	            public void run() {
-	                rdao.update(res);
+	                rdao.merge(res);
 	                
 	                res.reservationFinished(message, success);
 	            }
@@ -321,7 +324,7 @@ public class ReservationProcessor {
 		
         Runnable command = new Runnable() {
             public void run() {
-                rdao.update(res);
+                rdao.merge(res);
 	                
         		res.activate(success);
             }
@@ -346,7 +349,7 @@ public class ReservationProcessor {
 		
         Runnable command = new Runnable() {
             public void run() {
-            	rdao.update(res);
+            	rdao.merge(res);
                 
         		res.finish(success);
             }
