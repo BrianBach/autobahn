@@ -169,6 +169,7 @@ public class IntradomainTopology {
 			nodes = new ArrayList<Node>();
 			sdhDevices = daos.getSdhDeviceDAO().getAll();
 			for(SdhDevice device : sdhDevices) {
+				device.getNode().setVlanTranslationSupport(true);
 				nodes.add(device.getNode());
 			}
 		} else if (isEthernet()){
@@ -314,6 +315,7 @@ public class IntradomainTopology {
 				node.setNodeId(0);
 				
 				node.setName(n.getName());
+				node.setVlanTranslationSupport(true);
 				
 				for(PhyInterface p : n.getPhyInterfaces().getInterface()) {
 					GenericInterface port = new GenericInterface();

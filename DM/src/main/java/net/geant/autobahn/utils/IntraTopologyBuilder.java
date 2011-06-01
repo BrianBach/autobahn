@@ -202,28 +202,30 @@ public class IntraTopologyBuilder {
     public IntradomainTopology getIntradomainTopology() {
     	IntradomainTopology topo = new IntradomainTopology();
     	
-    	if(strees.size() > 0) {
-	    	topo.setSptrees(strees);
-	    	topo.setNodes(getNodes());
-	    	topo.setType(IntradomainTopology.Type.ETH);
-
-	    	List<GenericLink> glinks = new ArrayList<GenericLink>();
-	    	for(SpanningTree st : strees) {
-	    		glinks.add(st.getEthLink().getGenericLink());
-	    	}
-    		topo.setGenericLinks(glinks);
-    	} else {
+    	topo.setType(IntradomainTopology.Type.ETH);
+    	List<GenericLink> glinks = new ArrayList<GenericLink>();
+    	
+    	if(stmLinks.size() > 0) {
+    		// SDH
 	    	topo.setStmLinks(stmLinks);
 	    	topo.setSdhDevices(getSdhDevices());
 	    	topo.setType(IntradomainTopology.Type.SDH);
-	    	topo.setNodes(getNodes());
 	    	
-	    	List<GenericLink> glinks = new ArrayList<GenericLink>();
 	    	for(StmLink slink : stmLinks) {
 	    		glinks.add(slink.getStmLink());
 	    	}
-    		topo.setGenericLinks(glinks);
     	}
+    	
+    	if(strees.size() > 0) {
+	    	topo.setSptrees(strees);
+
+	    	for(SpanningTree st : strees) {
+	    		glinks.add(st.getEthLink().getGenericLink());
+	    	}
+    	}
+    	
+    	topo.setNodes(getNodes());
+		topo.setGenericLinks(glinks);
     	
     	return topo;
     }

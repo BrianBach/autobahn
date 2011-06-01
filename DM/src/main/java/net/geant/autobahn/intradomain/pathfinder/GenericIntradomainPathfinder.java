@@ -140,39 +140,61 @@ public abstract class GenericIntradomainPathfinder implements
 		return createIntradomainPath(completePath);
 	}
 
-	/**
-	 * 
-	 * @param path
-	 * @return
-	 */
-	public IntradomainPath createIntradomainPath(GraphEdge[] path) {
-		if (path.length < 1) {
+	public IntradomainPath createIntradomainPath(GraphEdge[] edges) {
+		if(edges.length < 1) {
 			log.info("Wrong path!");
 		}
-
+		
 		long capacity = Long.MAX_VALUE;
-
-		PathConstraints pcon = new PathConstraints();
+		
 		IntradomainPath ipath = new IntradomainPath();
 
-		for (GraphEdge edge : path) {
-			pcon = pcon.intersect(edge.getConstraints());
-
-			if (pcon == null) {
-				// Constraints not agreed
+		IntradomainPath[] segments = getPathsSeparatedByTranslatingNodes(edges);
+		
+		for(IntradomainPath seg : segments) {
+			PathConstraints merged = seg.getMergedConstraints();
+			
+			if(merged == null)
 				return null;
+			
+			for(GenericLink glink : seg.getLinks()) {
+				ipath.addGenericLink(glink, merged);
+				
+				capacity = Math.min(capacity, glink.getCapacity());
 			}
-
-			ipath.addGenericLink(edge.getLink(), pcon);
-
-			capacity = Math.min(capacity, edge.getCapacity());
 		}
 
 		ipath.setCapacity(capacity);
-
+		
 		return ipath;
 	}
-
+	
+	private IntradomainPath[] getPathsSeparatedByTranslatingNodes(GraphEdge[] edges) {
+		List<IntradomainPath> res = new ArrayList<IntradomainPath>();
+		
+		IntradomainPath pth = new IntradomainPath();
+		
+		for(GraphEdge edge : edges) {
+			Node sn = edge.getStartNode().getInternalNode();
+			Node en = edge.getEndNode().getInternalNode();
+			
+			if(en.isVlanTranslationSupport() || (edge.getLink().isInterdomain() && sn.isVlanTranslationSupport())) {
+				pth.addGenericLink(edge.getLink(), edge.getConstraints());
+				
+				res.add(pth);
+				pth = new IntradomainPath();
+			} else {
+				pth.addGenericLink(edge.getLink(), edge.getConstraints());
+			}
+		}
+		
+		if(pth.getSize() > 0 && !res.contains(pth)) {
+			res.add(pth);
+		}
+		
+		return res.toArray(new IntradomainPath[res.size()]);
+	}
+	
 	public void settleConstraintsValuesForPath(IntradomainPath path) {
 		
 		for(GenericLink gl : path.getLinks()) {

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.geant.autobahn.constraints.BooleanConstraint;
 import net.geant.autobahn.constraints.ConstraintsNames;
 import net.geant.autobahn.constraints.MinValueConstraint;
 import net.geant.autobahn.constraints.PathConstraints;
@@ -133,6 +134,12 @@ public class SdhIntradomainPathfinder extends GenericIntradomainPathfinder {
 
             // For sdh empty constraints
 			PathConstraints pcon = new PathConstraints();
+			
+			if(sgr.getInternalNode().isVlanTranslationSupport() || egr.getInternalNode().isVlanTranslationSupport()) {
+				pcon.addBooleanConstraint(ConstraintsNames.SUPPORTS_VLAN_TRANSLATION, new BooleanConstraint(true, "OR"));
+        	} else {
+				pcon.addBooleanConstraint(ConstraintsNames.SUPPORTS_VLAN_TRANSLATION, new BooleanConstraint(false, "OR"));
+        	}
 			
 			double ts_num = Math.ceil((double)link.getCapacity() / 150336000.0);
 			pcon.addMinValueConstraint(ConstraintsNames.TIMESLOTS, new MinValueConstraint(ts_num));
