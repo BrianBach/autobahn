@@ -160,6 +160,12 @@ public class IntradomainTopology {
 				genericLinks.add(link.getStmLink());
 			}
 
+            // Edge links will probably be Ethernet (possibly also vlan tagged)
+            sptrees = daos.getSpanningTreeDAO().getAll();
+            for (SpanningTree st: sptrees) {
+                genericLinks.add(st.getEthLink().getGenericLink());
+            }            
+            
 			nodes = new ArrayList<Node>();
 			sdhDevices = daos.getSdhDeviceDAO().getAll();
 			for(SdhDevice device : sdhDevices) {
