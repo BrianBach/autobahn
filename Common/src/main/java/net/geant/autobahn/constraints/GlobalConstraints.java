@@ -265,7 +265,7 @@ public class GlobalConstraints implements Serializable {
         	if(segments == null)
         		return null;
         	
-        	int count = 0;
+        	int count = -1;
         	
         	for(List<PathConstraints> seg : segments) {
                 // merging the segment constraints
@@ -275,13 +275,13 @@ public class GlobalConstraints implements Serializable {
         			break;
         		}
         		
-        		count += seg.size() - 1;
+       			count += seg.size();
         		
                 if(seg_res != null && checkConstraintsAgainst(seg_res, par)) {
     	            merged.put(count, seg_res);
                 }
         	}
-
+        	
         	// get first that suits
         	if(merged.size() == segments.size()) {
         		selected = path;
@@ -338,7 +338,9 @@ public class GlobalConstraints implements Serializable {
         	}
 
         	if(merged != null) {
-        		curList.add(pcon);
+        		if(!curList.contains(pcon)) {
+        			curList.add(pcon);
+        		}
         		continue;
         	}
 
@@ -359,10 +361,10 @@ public class GlobalConstraints implements Serializable {
             		res.add(curList);
             		
             		curList = new ArrayList<PathConstraints>();
-            		curList.add(pcon2);
+            		curList.add(pcon);
             		
-            		merged = pcon2;
-            		i = j;
+            		merged = pcon;
+            		i = j + 1;
             		
             		break;
             	} else {

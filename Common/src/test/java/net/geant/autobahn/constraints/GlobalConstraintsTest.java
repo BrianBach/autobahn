@@ -145,7 +145,7 @@ public class GlobalConstraintsTest {
 	
 	@Test
 	public void testGlobalConstraintsVlanTranslationOnGood1() {
-		System.out.println("CCC ---");
+		System.out.println("CCC1 ---");
 		
 		GlobalConstraints gcon = new GlobalConstraints();
 		gcon.addDomainConstraints("domain1-ingress", produceDomainConstraints(false, "100-120"));
@@ -257,6 +257,27 @@ public class GlobalConstraintsTest {
 		System.out.println(res);
 	}
 
+	@Test
+	public void testGlobalConstraints2() {
+		System.out.println("--- Translation on - one domain2");
+		
+		GlobalConstraints gcon = new GlobalConstraints();
+		gcon.addDomainConstraints("domain1-ingress", produceDomainConstraints(true, "100-100", "100-100"));
+		gcon.addDomainConstraints("domain1-egress", produceDomainConstraints(true, "200-200", "200-200"));
+		
+		ReservationParams par = new ReservationParams();
+		par.setCapacity(100);
+		
+		List<List<PathConstraints>> paths = gcon.findPossibilities();
+		TestCase.assertEquals(4, paths.size());
+		
+		GlobalConstraints res = gcon.calculateConstraints(par);
+		TestCase.assertNotNull(res);
+		
+		TestCase.assertEquals("100-100", getVlan(res.getDomainConstraints("domain1-ingress")));
+		TestCase.assertEquals("200-200", getVlan(res.getDomainConstraints("domain1-egress")));
+	}
+	
 	private static String getVlan(DomainConstraints dcon) {
 		return dcon.getFirstPathConstraints().getRangeConstraint(ConstraintsNames.VLANS).toString();
 	}
