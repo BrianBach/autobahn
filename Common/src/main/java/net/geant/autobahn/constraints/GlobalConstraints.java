@@ -348,6 +348,8 @@ public class GlobalConstraints implements Serializable {
             	
             	if(pcon2 == null) {
             		log.debug("PCON2 is null");
+            	} else if(pcon2.getBooleanConstraint(ConstraintsNames.SUPPORTS_VLAN_TRANSLATION) == null) {
+            		log.debug("PCON2 vlan trans is null");
             	}
             	
            		// need to check whether the VLAN translation is supported
