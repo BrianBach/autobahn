@@ -196,6 +196,9 @@ public class LocalCheck extends HomeDomainState {
     	
         // compute global constraints
     	GlobalConstraints constraints = res.getGlobalConstraints();
+    	
+    	log.debug("GCONS: " + constraints);
+    	
         constraints = constraints.calculateConstraints(
         		res.getReservationParameters(domainID));
 

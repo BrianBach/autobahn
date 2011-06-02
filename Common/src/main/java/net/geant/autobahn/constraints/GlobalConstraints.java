@@ -346,6 +346,10 @@ public class GlobalConstraints implements Serializable {
         	for(int j = i - 1; j >= 0; j--) {
             	PathConstraints pcon2 = pcons.get(j);
             	
+            	if(pcon2 == null) {
+            		log.debug("PCON2 is null");
+            	}
+            	
            		// need to check whether the VLAN translation is supported
             	boolean vlanTranslationEnabled = pcon2.getBooleanConstraint(ConstraintsNames.SUPPORTS_VLAN_TRANSLATION).getValue();
             	
