@@ -28,7 +28,7 @@
 		<transition on="cancel" to="services">
 			<set name="requestScope.id" value="requestParameters.id"/>
 			<set name="requestScope.valueParam" value="requestParameters.valueParam" type="string"></set>
-			<evaluate expression="manager.cancelServiceInInterDomainManager(flowScope.services.currentIdm,requestScope.id)"/>	 
+			<evaluate expression="manager.cancelServiceInInterDomainManager(requestParameters.currentIdm2,requestScope.id)"/>	 
 			<evaluate expression="manager.setParameter(requestScope.valueParam)" result="flowScope.result"></evaluate>
 		</transition>
 		
