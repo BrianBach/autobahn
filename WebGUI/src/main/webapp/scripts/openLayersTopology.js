@@ -1,7 +1,7 @@
 var map;
-var main_lineXML;
-var main_markersXML;
-var flag = false;
+var initial_markersXML;
+var initial_linesXML;
+var flag = true;
 
 function init() {
 	  var options = {
@@ -70,37 +70,45 @@ function processResponse(http) {
     }
 }
 
-function addLines (map, lines){
-	var length = lines.length;
+function addLines (map, linesXML, flag){
+	
+	var length = linesXML.length;
 	var vector = map.getLayersByName ('AutoBAHN Connections')[0];
-    if (vector== null){
-   	  vector= new OpenLayers.Layer.Vector('AutoBAHN Connections');
-      map.addLayer (vector);
-    }else{
-   	  vector.removeFeatures();
-    }
-    for (var i = 0; i < length; i++) {
-      var start_lat = parseFloat(lines[i].getAttribute('start-lat'));
-      var start_lng = parseFloat(lines[i].getAttribute('start-lng'));
-      var end_lat = parseFloat(lines[i].getAttribute('end-lat'));
-      var end_lng = parseFloat(lines[i].getAttribute('end-lng'));
+	
+	//If flag==false  then it's not first time execution and the topology data are
+	//updated. The old vector is destroyed and a new one is created with z-index to 0
+	//to avoid overlapping issues
+	if(flag == false){
+		vector.destroy();
+		vector= new OpenLayers.Layer.Vector('AutoBAHN Connections');
+		map.addLayer(vector);
+		map.setLayerIndex(vector,0);
+	}
+	
+	for (var i = 0; i < length; i++) {
+      var start_lat = parseFloat(linesXML[i].getAttribute('start-lat'));
+      var start_lng = parseFloat(linesXML[i].getAttribute('start-lng'));
+      var end_lat = parseFloat(linesXML[i].getAttribute('end-lat'));
+      var end_lng = parseFloat(linesXML[i].getAttribute('end-lng'));
 
-      
-      var color =  lines[i].getAttribute('color');
-      var tickness = parseFloat(lines[i].getAttribute('tickness'));
+	  
+      var color =  linesXML[i].getAttribute('color');
+      var tickness = parseFloat(linesXML[i].getAttribute('tickness'));
       var style = {
           strokeColor: color,
           fillOpacity: 0.5,
           strokeWidth: tickness,
           strokeDashstyle: 'solid'
-      };        
+      };
+      
       var start= new OpenLayers.LonLat(start_lng,start_lat).transform(new OpenLayers.Projection('EPSG:4326'), new OpenLayers.Projection('EPSG:900913'));
       var end= new OpenLayers.LonLat(end_lng,end_lat).transform(new OpenLayers.Projection('EPSG:4326'), new OpenLayers.Projection('EPSG:900913'));
       var start_point= new OpenLayers.Geometry.Point(start.lon, start.lat);
       var end_point= new OpenLayers.Geometry.Point(end.lon, end.lat);
       var line= new OpenLayers.Geometry.LineString([start_point,end_point]);
-      var v= new OpenLayers.Feature.Vector(line,null,style);
+	  var v= new OpenLayers.Feature.Vector(line,null,style);
       vector.addFeatures([v]);
+	  vector.redraw();
     }    
 }
 
@@ -108,6 +116,7 @@ function addMarkers (map, markersXML){
 	 var markers = map.getLayersByName ('AutoBAHN IDMs')[0];
 	 var features = map.getLayersByName ('Popups')[0];
 	 if (markers != null){
+
     	 markers.clearMarkers();
      }else{
    	  markers = new OpenLayers.Layer.Markers('AutoBAHN IDMs');
@@ -163,43 +172,54 @@ function addMarkers (map, markersXML){
 
 function refreashMap (map){
 		
-  var request = GXmlHttp.create();
-  var service = gup('service');
+    var request = GXmlHttp.create();
+    var service = gup('service');
   
-  var domain = gup('domain');
-  if (service==null || service=="")
-	  request.open('GET', '/autobahn-gui/portal/secure/topology.xml?service=&domain=', true);
-
-	else{
-		var url = '/autobahn-gui/portal/secure/topology.xml'+'?service='+service+'&domain='+domain;
-	  	
+    var domain = gup('domain');
+    if (service==null || service=="") {
+		request.open('GET', '/autobahn-gui/portal/secure/topology.xml?service=&domain=', true);
+	} else {
+		var url = '/autobahn-gui/portal/secure/topology.xml'+'?service='+service+'&domain='+domain;		  	
 	  	request.open('GET', url, true);
-	  }
-  	request.onreadystatechange = function() {
-    if (request.readyState == 4) {
-      var xmlDoc = GXml.parse(request.responseText);
-      var lines = xmlDoc.documentElement.getElementsByTagName('line');            
-      var markersXML = xmlDoc.documentElement.getElementsByTagName('marker');
-      
-      //refreshes map
-      //should be the same with lines and main_linesXML but actually not supported
-      if(flag == false){
-    	  flag = true;
-    	  main_markersXML = markersXML;
-      }
-      if(main_markersXML.length != markersXML.length){
-    	  main_markersXML = markersXML;
+	}
+	
+	request.onreadystatechange = function() {
+		if (request.readyState == 4) {
+	
+			var xmlDoc = GXml.parse(request.responseText);
+			var linesXML = xmlDoc.documentElement.getElementsByTagName('line');            
+			var markersXML = xmlDoc.documentElement.getElementsByTagName('marker');
+			
+			//For first time execution only. Variables with prefix initial_
+			//are used to store the previous topology data
+			if(flag == true){
+				addLines(map, linesXML, flag);
+				addMarkers (map, markersXML);
+								  
+				initial_markersXML = markersXML;
+				initial_linesXML = linesXML;
+				
+				flag = false;
+			  
+				return;
+			}
+			
+			//Checks if topology has been updated with the help
+			//of initial_* variables
+			if(initial_markersXML.length != markersXML.length){
+				addMarkers(map,markersXML);		
+				initial_markersXML = markersXML;				    			
+			}
 
-    	  var sURL = location.href;
-    	  window.location.href = sURL;
-      }
-
-      addLines(map, lines);
-      addMarkers (map, markersXML);
-      }
-  	}
+			if(initial_linesXML.length != linesXML.length){
+				addLines(map, linesXML, flag);
+				initial_linesXML = linesXML;				    
+			}		
+		}
+	};
+	
   	request.send(null);
-  }
+}
 
 function onPopupClose(evt) {
     selectControl.unselect(this.feature);
