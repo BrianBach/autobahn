@@ -66,70 +66,85 @@ public class UserAccessPointSampleClient {
         
     }
     
-    private String[] getPorts() throws UserAccessPointException {
-        return uap.getAllClientPorts();
-    }
-
     public static void main(String args[]) throws Exception {
-        UserAccessPointSampleClient instance = new UserAccessPointSampleClient("http://150.140.8.13:8080/autobahn/uap");
+        System.out.println("Give IDM to connect to:");
+        byte byteStr[] = new byte[50];
+        System.in.read(byteStr);
+        String idm = (new String(byteStr).trim());
+
+        System.out.println("Give IDM port:");
+        byteStr = new byte[50];
+        System.in.read(byteStr);
+        String port = (new String(byteStr).trim());
+        
+        if (idm == null || idm.equals("")) {
+            idm = "109.105.111.62";
+        }
+        if (port == null || port.equals("")) {
+            port = "8080";
+        }
+        
+        UserAccessPointSampleClient instance = new UserAccessPointSampleClient("http://"+idm+":"+port+"/autobahn/uap");
+        System.out.println("Connecting to "+idm+":"+port);
+        
+        System.out.println("\n---getIdcpPorts():");
         String[] idcpPorts = instance.uap.getIdcpPorts();
         if (idcpPorts!=null) {
             for (int i=0; i<idcpPorts.length; i++) {
-                System.out.println("Idcp Port:"+idcpPorts[i]);
+                System.out.println(i+": "+idcpPorts[i]);
             }
         }
-        System.out.println("---");
         
+        System.out.println("\n---getAllClientPorts():");
         String[] clPorts = instance.uap.getAllClientPorts();
         if (clPorts!=null) {
             for (int i=0; i<clPorts.length; i++) {
-                System.out.println("Client Port:"+clPorts[i]);
+                System.out.println(i+": "+clPorts[i]);
             }
         }
-        System.out.println("---");
-
+        
+        System.out.println("\n---getAllDomains():");
         String[] doms = instance.uap.getAllDomains();
         if (doms!=null) {
             for (int i=0; i<doms.length; i++) {
-                System.out.println("Domain:"+doms[i]);
+                System.out.println(i+": "+doms[i]);
             }
         }
-        System.out.println("---");
-
+        
+        System.out.println("\n---getAllDomains_NonClient():");
         String[] domsNonClient = instance.uap.getAllDomains_NonClient();
         if (domsNonClient!=null) {
             for (int i=0; i<domsNonClient.length; i++) {
-                System.out.println("Domain Non client:"+domsNonClient[i]);
+                System.out.println(i+": "+domsNonClient[i]);
             }
         }
-        System.out.println("---");
-
+        
+        System.out.println("\n---getAllLinks():");
         String[] lnks = instance.uap.getAllLinks();
         if (lnks!=null) {
             for (int i=0; i<lnks.length; i++) {
-                System.out.println("Link:"+lnks[i]);
+                System.out.println(i+": "+lnks[i]);
             }
         }
-        System.out.println("---");
-
+        
+        System.out.println("\n---getAllLinks_NonClient():");
         String[] lnksNonCl = instance.uap.getAllLinks_NonClient();
         if (lnksNonCl!=null) {
             for (int i=0; i<lnksNonCl.length; i++) {
-                System.out.println("Link non client:"+lnksNonCl[i]);
+                System.out.println(i+": "+lnksNonCl[i]);
             }
         }
-        System.out.println("---");
-
+        
+        System.out.println("\n---getDomainClientPorts():");
         String[] domClPorts = instance.uap.getDomainClientPorts();
         if (domClPorts!=null) {
             for (int i=0; i<domClPorts.length; i++) {
-                System.out.println("Dom Client port:"+domClPorts[i]);
+                System.out.println(i+": "+domClPorts[i]);
             }
         }
         System.out.println("---");
 
-        instance.sampleReservation();
-        //System.out.println(instance.getPorts());
+        //instance.sampleReservation();
         
         System.exit(0);
     }
