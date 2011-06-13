@@ -18,6 +18,7 @@ import net.geant.autobahn.framework.commands.AutobahnCommand;
 import net.geant.autobahn.framework.commands.CancelServiceCommand;
 import net.geant.autobahn.framework.commands.ClientPortsCommand;
 import net.geant.autobahn.framework.commands.HelpCommand;
+import net.geant.autobahn.framework.commands.IdcpCommand;
 import net.geant.autobahn.framework.commands.NeighborsCommand;
 import net.geant.autobahn.framework.commands.QuitCommand;
 import net.geant.autobahn.framework.commands.RemoveReservationCommand;
@@ -29,7 +30,6 @@ import net.geant.autobahn.framework.commands.ShutdownCommand;
 import net.geant.autobahn.framework.commands.StatisticsCommand;
 import net.geant.autobahn.framework.commands.TopologyCommand;
 import net.geant.autobahn.framework.commands.UptimeCommand;
-import net.geant.autobahn.framework.commands.IdcpTopologyCommand;
 
 import org.apache.log4j.Logger;
 
@@ -68,10 +68,10 @@ public class Framework {
 		commands.put("shutdown", new ShutdownCommand());
 		commands.put("halt", new ShutdownCommand());
 		commands.put("uptime", new UptimeCommand());
-		commands.put("idcptopo", new IdcpTopologyCommand());
         commands.put("statistics", new StatisticsCommand());
         commands.put("neighbors", new NeighborsCommand());
         commands.put("cancel", new CancelServiceCommand());
+        commands.put("idcp", new IdcpCommand());
 	}
 
 	public static Properties loadProperties(String filename) throws Exception {
@@ -104,7 +104,7 @@ public class Framework {
 	private void init(Properties props) throws Exception {
 		
 		properties = props;
-		
+
         // Start Topology Abstraction before DM or IDM
         ta = net.geant.autobahn.converter.AccessPoint.getInstance();
         // Start Calendar
@@ -120,7 +120,7 @@ public class Framework {
             log.error("IDM did not initialize successfully, shutting framework down");
             System.exit(0);
         }
-		
+
 		// choose command liner
 		String cmdLiner = properties.getProperty("framework.commandLine");
 		if (cmdLiner.equals("interactive"))
@@ -166,7 +166,7 @@ public class Framework {
                         client.getOutputStream(), "ISO-8859-1"));
 
 				out.println("-------------------------");
-				out.println(" Autobahn framework '08");
+				out.println(" Autobahn framework '11");
 				out.println("  quit - to quit");
 				out.println("  help - to display help");
 				out.println("-------------------------");
