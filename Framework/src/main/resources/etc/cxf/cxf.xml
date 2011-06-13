@@ -62,11 +62,11 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
 	</bean>
 	
 	<bean id="IdcpServerKeyPasswordCallback" class="net.geant.autobahn.idcp.KeyPasswordCallback">
-		<constructor-arg type="java.lang.String" value="serverkey"/>
+		<constructor-arg type="java.lang.String" value="autobahnsslkey"/>
 	</bean>
 	
 	<bean id="IdcpClientKeyPasswordCallback" class="net.geant.autobahn.idcp.KeyPasswordCallback">
-		<constructor-arg type="java.lang.String" value="clientkey"/>	
+		<constructor-arg type="java.lang.String" value="autobahnkey"/>	
 	</bean>	
 
 	<jaxws:endpoint id="idm2dm" implementor="net.geant.autobahn.idm2dm.Idm2DmImpl" address="http://${server.ip}:${server.port}/autobahn/idm2dm">
@@ -365,8 +365,6 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
 		</jaxws:outInterceptors>		
 	</jaxws:endpoint>
 	
-<!-- <jaxws:endpoint id="proxy" implementor="net.geant.autobahn.proxy.ProxyImpl" address="http://${server.ip}:8080/autobahn/proxy"/> -->
-
 	<jaxws:endpoint id="administration" implementor="net.geant.autobahn.administration.AdministrationImpl" address="http://${server.ip}:${server.port}/autobahn/administration">
 		<jaxws:inInterceptors>
 			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
@@ -470,8 +468,8 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
 			<entry key="ws-security.callback-handler">
 				<ref bean="IdcpServerKeyPasswordCallback"/>
 			</entry>
-			<entry key="ws-security.signature.properties" value="etc/security/idcp/server.properties"/>
-			<entry key="ws-security.signature.username" value="server"/>
+			<entry key="ws-security.signature.properties" value="etc/security/idcp/autobahnssl.properties"/>
+			<entry key="ws-security.signature.username" value="autobahnssl"/>
 		</jaxws:properties> 
 	</jaxws:endpoint>
 	
@@ -480,8 +478,8 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
 			<entry key="ws-security.callback-handler">
 				<ref bean="IdcpServerKeyPasswordCallback"/>
 			</entry>
-			<entry key="ws-security.signature.properties" value="etc/security/idcp/server.properties"/>
-			<entry key="ws-security.signature.username" value="server"/>
+			<entry key="ws-security.signature.properties" value="etc/security/idcp/autobahnssl.properties"/>
+			<entry key="ws-security.signature.username" value="autobahnssl"/>
 		</jaxws:properties> 
 	</jaxws:endpoint>
 	
@@ -489,29 +487,26 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
         <jaxws:properties>
 			<entry key="ws-security.callback-handler" value-ref="IdcpClientKeyPasswordCallback"/>        
 			
-			<entry key="ws-security.signature.properties" value="etc/security/idcp/client.properties"/>
-			<entry key="ws-security.signature.username" value="client"/>
+			<entry key="ws-security.signature.properties" value="etc/security/idcp/autobahn.properties"/>
+			<entry key="ws-security.signature.username" value="autobahn"/>
 		</jaxws:properties>
     </jaxws:client>   
     
     <jaxws:client name="{http://oscars.es.net/OSCARS}OSCARSNotify" createdFromAPI="true">
         <jaxws:properties>
 			<entry key="ws-security.callback-handler" value-ref="IdcpClientKeyPasswordCallback"/>        
-			<entry key="ws-security.signature.properties" value="etc/security/idcp/client.properties"/>
-			<entry key="ws-security.signature.username" value="client"/>
+			<entry key="ws-security.signature.properties" value="etc/security/idcp/autobahn.properties"/>
+			<entry key="ws-security.signature.username" value="autobahn"/>
 		</jaxws:properties>
     </jaxws:client>   
 	
 	<http:conduit name="{http://oscars.es.net/OSCARS}OSCARS.http-conduit">
     <http:tlsClientParameters disableCNCheck="true" secureSocketProtocol="SSL">
+    
       <sec:trustManagers>
-          <sec:keyStore type="JKS" password="clientpass" file="etc/security/idcp/client.jks"/>
+          <sec:keyStore type="JKS" password="autobahnpass" file="etc/security/idcp/autobahn.jks"/>
       </sec:trustManagers>      
       
-      <sec:keyManagers keyPassword="clientkey" >
-          <sec:keyStore type="JKS" password="clientpass" file="etc/security/idcp/client.jks"/>
-      </sec:keyManagers>
-
       <sec:cipherSuitesFilter>
       	  <sec:include>.*_EXPORT_.*</sec:include>
       	  <sec:include>.*_EXPORT1024_.*</sec:include>
@@ -525,14 +520,11 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
    
    <http:conduit name="{http://oscars.es.net/OSCARS}OSCARSNotify.http-conduit">
     <http:tlsClientParameters disableCNCheck="true" secureSocketProtocol="SSL">
+    
       <sec:trustManagers>
-          <sec:keyStore type="JKS" password="clientpass" file="etc/security/idcp/client.jks"/>
+          <sec:keyStore type="JKS" password="autobahnpass" file="etc/security/idcp/autobahn.jks"/>
       </sec:trustManagers>     
       
-       <sec:keyManagers keyPassword="clientkey" >
-          <sec:keyStore type="JKS" password="clientpass" file="etc/security/idcp/client.jks"/>
-      </sec:keyManagers>
-
       <sec:cipherSuitesFilter>
           <sec:include>.*_EXPORT_.*</sec:include>
   	      <sec:include>.*_EXPORT1024_.*</sec:include>
@@ -553,14 +545,15 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
   <httpj:engine-factory>
 	 <httpj:engine port="${server.securePort}">	 	
 	     <httpj:tlsServerParameters secureSocketProtocol="TLS">
-         <sec:keyManagers keyPassword="serverkey">
-	     		<sec:keyStore type="JKS" password="serverpass" 
-	             	file="etc/security/idcp/server.jks"/>
+	     
+         <sec:keyManagers keyPassword="autobahnkey">
+	     		<sec:keyStore type="JKS" password="autobahnpass" 
+	             	file="etc/security/idcp/autobahn.jks"/>
 	      </sec:keyManagers>
 	      
 	      <sec:trustManagers>
-	      		<sec:keyStore type="JKS" password="serverpass"
-		   			file="etc/security/idcp/server.jks"/>
+	      		<sec:keyStore type="JKS" password="autobahnsslpass"
+		   			file="etc/security/idcp/autobahnssl.jks"/>
 	      </sec:trustManagers>
 
 	      <sec:cipherSuitesFilter>
