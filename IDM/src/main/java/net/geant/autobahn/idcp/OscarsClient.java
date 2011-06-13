@@ -3,6 +3,7 @@ package net.geant.autobahn.idcp;
 
 import java.rmi.RemoteException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.ws.Holder;
@@ -22,6 +23,10 @@ import net.geant.autobahn.idcp.OSCARS;
 import net.geant.autobahn.idcp.OSCARS_Service;
 
 import org.apache.log4j.Logger;
+import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneDomainContent;
+import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneLinkContent;
+import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneNodeContent;
+import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlanePortContent;
 
 
 /**
@@ -53,6 +58,8 @@ public class OscarsClient {
 	private final int TIME_SCALE = 1000;
 	
 	private final OSCARS oscars;
+	private String endpoint;
+	private String prefferedPathMode = PATH_AUTOMATIC;
 
 	/**
 	 * Creates new instance of OSCARS client
@@ -60,6 +67,7 @@ public class OscarsClient {
 	 */
 	public OscarsClient(String endpoint) {
 		
+		this.endpoint = endpoint;
 		oscars = new OSCARS_Service(endpoint).getOSCARS();
 	}
 	
@@ -83,6 +91,7 @@ public class OscarsClient {
 			bandwidth = 1;
 		}
 
+		bandwidth = 50;
 		PathInfo pinfo = new PathInfo();
 		pinfo.setPathSetupMode(PATH_AUTOMATIC);
 		pinfo.setPathType(PATH_LOOSE);
@@ -105,15 +114,17 @@ public class OscarsClient {
 		Holder<String> status = new Holder<String>();
 		
 		try {
-		
 			oscars.createReservation(grid, startTime, endTime, bandwidth, resv.getDescription(), pathInfo, token, status);
 			// after create ACCEPTED must be returned
 			if (!status.value.equals("ACCEPTED"))
 				throw new RemoteException("reservation " + resv.getBodID() + " returned in wrong state - " + status.value);
+			
+			
+			if (prefferedPathMode.equals(PATH_AUTOMATIC)) { // poll for reservation states
 				
-			System.out.println("res " + resv.getBodID() + " ok, token: " + token.value + ", status: " + status.value);
+				new ResStatePolling(endpoint, resv.getBodID());
+			}
 		} catch (Exception e) {
-			e.printStackTrace(); // remove that
 			throw new RemoteException(e.getMessage());
 		}
 	}
@@ -199,6 +210,7 @@ public class OscarsClient {
 		VlanTag vlan = new VlanTag();
 		//TODO: set the proper vlan identifier here
 		//vlan.setValue(String.valueOf(resv.getUserVlanId()));
+		vlan.setValue("any");
 		vlan.setTagged(true);
 		l2.setSrcVtag(vlan);
 		l2.setDestVtag(vlan);
@@ -231,6 +243,54 @@ public class OscarsClient {
 		}
 	}
 	
+	public void list() throws RemoteException {
+		
+		ListRequest request = new ListRequest();
+		
+		
+		
+	}
+	
+	/**
+	 * Returns a list of idcp link identifiers witout performing conversion to autobahn format
+	 * @return a list of idcp link identifiers
+	 * @throws RemoteException
+	 */
+	public List<String> getIdcpTopology() throws RemoteException {
+		
+		GetTopologyContent request = new GetTopologyContent();
+		request.setTopologyType("all");
+
+		try {
+			
+			GetTopologyResponseContent response = oscars.getNetworkTopology(request);
+			if (response.getTopology().getDomain() == null)
+				return null;
+			
+			List<String> links = new ArrayList<String>();
+			for (CtrlPlaneDomainContent domain : response.getTopology().getDomain()) {
+				if (domain.getNode() == null)  
+					continue;
+				for (CtrlPlaneNodeContent node : domain.getNode()) {
+					if (node.getPort() == null)
+						continue;
+					for (CtrlPlanePortContent port : node.getPort()) {
+						if (port.getLink() == null)
+							continue;
+						for (CtrlPlaneLinkContent link : port.getLink()) {
+						
+							links.add(link.getId());
+						}
+					}
+				}
+			}
+			return links;
+			
+		} catch (Exception e) {
+			throw new RemoteException(e.getMessage());
+		}
+	}
+			
 	/**
 	 * Reads an idcp topology and converts it into autobahn representation
 	 * @return
@@ -243,7 +303,6 @@ public class OscarsClient {
 		request.setTopologyType("all");
 
 		try {
-			
 			GetTopologyResponseContent response = oscars.getNetworkTopology(request);
 			return OscarsConverter.getGeantTopology(response.getTopology().getDomain());
 		} catch (Exception e) { 
