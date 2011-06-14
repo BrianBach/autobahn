@@ -132,7 +132,7 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
         	if(startDomainID == null || endDomainID == null)
         		continue;
         	
-        	if(!startDomainID.equals(endDomainID)) {
+        	if(!startDomainID.equalsIgnoreCase(endDomainID)) {
         		eLinks.add(gl);
         		
         		routers.add(gl.getStartInterface().getNode());
@@ -433,7 +433,7 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
         		String dnode = glink.getEndInterface().getNode().getName();
     			String bodID = internalIds.generatePortID();
     			String ddesc = glink.getEndInterface().getDescription();
-    			if (ddesc == null || ddesc.equals("") || ddesc.equals("null")) {
+    			if (ddesc == null || ddesc.equals("") || ddesc.equalsIgnoreCase("null")) {
     			    ddesc = bodID;
     			}
             	Port eport = new Port(bodID, "Ethernet", false, absNodes.get(dnode), ddesc);
@@ -697,7 +697,7 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
 	}
 	
 	private boolean isLSavailable(String ls) {
-	    if ((ls == null) || ls.equals("none") || ls.equals("")) {
+	    if ((ls == null) || ls.equalsIgnoreCase("none") || ls.equals("")) {
 	        return false;
 	    }
         // Check if it is a proper URL

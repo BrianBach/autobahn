@@ -145,7 +145,7 @@ public class InterdomainClient implements Interdomain {
 	}
 
     private boolean isLSavailable(String ls) {
-        if ((ls == null) || ls.equals("none") || ls.equals("")) {
+        if ((ls == null) || ls.equalsIgnoreCase("none") || ls.equals("")) {
             return false;
         }
         // Check if it is a proper URL

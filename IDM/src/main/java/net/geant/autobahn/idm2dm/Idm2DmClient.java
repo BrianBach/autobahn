@@ -27,7 +27,7 @@ public class Idm2DmClient implements Idm2Dm {
 	private Idm2Dm idm2dm;
 	
 	public Idm2DmClient(String endPoint) {
-        if("none".equals(endPoint)) {
+        if("none".equalsIgnoreCase(endPoint)) {
             log.info("DM location was specified as none, IDM->DM communication impossible");
             return;
         }

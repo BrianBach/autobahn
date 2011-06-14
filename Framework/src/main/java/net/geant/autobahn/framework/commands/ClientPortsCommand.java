@@ -19,9 +19,9 @@ public class ClientPortsCommand implements AutobahnCommand {
 		String[] ports = null;
 		
 		if(args.length > 1) {
-			if("all".equals(args[1]))
+			if("all".equalsIgnoreCase(args[1]))
 				ports = autobahn.getIdm().getAllClientPorts_Friendly();
-			else if("domain".equals(args[1]))
+			else if("domain".equalsIgnoreCase(args[1]))
 				ports = autobahn.getIdm().getDomainClientPorts_Friendly();
 			else {
 			    return "Error in command";

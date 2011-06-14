@@ -66,7 +66,7 @@ public class IdcpCommand implements AutobahnCommand {
 	@Override
 	public String execute(Framework autobahn, String[] args) {
 		
-		if (args.length == 2 && args[1].equals("friends")) {
+		if (args.length == 2 && args[1].equalsIgnoreCase("friends")) {
 			StringBuffer sb = new StringBuffer();
 			for (String key : friends.keySet()) 
 				sb.append(key + " - " + friends.get(key) + NL);
@@ -80,7 +80,7 @@ public class IdcpCommand implements AutobahnCommand {
 		final String address = friends.containsKey(args[1]) ? friends.get(args[1]) : args[1];
 		final String operation = args[2];
 		
-		if (operation.equals("topology")) {
+		if (operation.equalsIgnoreCase("topology")) {
 			String format, filename;
 			if (args.length == 4) {
 				format = args[3];
@@ -91,7 +91,7 @@ public class IdcpCommand implements AutobahnCommand {
 			} else
 				return "too many arguments specified";
 				
-			if (!format.equals("autobahn") && !format.equals("idcp"))
+			if (!format.equalsIgnoreCase("autobahn") && !format.equalsIgnoreCase("idcp"))
 				return "topology format can be either in autobahn or idcp format";
 			
 			try {
@@ -99,11 +99,11 @@ public class IdcpCommand implements AutobahnCommand {
 				StringBuffer sb = new StringBuffer();
 				OscarsClient idcp = new OscarsClient(address);
 				
-				if (format.equals("autobahn")) {
+				if (format.equalsIgnoreCase("autobahn")) {
 					List<Link> links = idcp.getTopology();
 					for (Link l : links)
 						sb.append(l + "\r\n");
-				} else if (format.equals("idcp")) {
+				} else if (format.equalsIgnoreCase("idcp")) {
 					List<String> links = idcp.getIdcpTopology();
 					for (String l : links)
 						sb.append(l + "\r\n");
@@ -121,7 +121,7 @@ public class IdcpCommand implements AutobahnCommand {
 				e.printStackTrace();
 				return "topology could not be obtained - " + e.getMessage();
 			}
-		} else if (operation.equals("schedule")) {
+		} else if (operation.equalsIgnoreCase("schedule")) {
 			
 			if (args.length != 7)
 				return invalid;
@@ -150,7 +150,7 @@ public class IdcpCommand implements AutobahnCommand {
 				e.printStackTrace();
 				return resId + " failed to schedule - " + e.getMessage();
 			}
-		} else if (operation.equals("cancel")) {
+		} else if (operation.equalsIgnoreCase("cancel")) {
 			
 			if (args.length != 4)
 				return invalid;
@@ -164,7 +164,7 @@ public class IdcpCommand implements AutobahnCommand {
 				e.printStackTrace();
 				return resId + " failed to cancel - " + e.getMessage();
 			}
-		} else if (operation.equals("query")) {
+		} else if (operation.equalsIgnoreCase("query")) {
 			
 			if (args.length != 4)
 				return invalid;
@@ -177,7 +177,7 @@ public class IdcpCommand implements AutobahnCommand {
 			} catch (Exception e) {
 				return resId + " failed to query - " + e.getMessage();
 			}
-		} else if (operation.equals("subscribe")) {
+		} else if (operation.equalsIgnoreCase("subscribe")) {
 			
 			String consumer = friends.containsKey(args[3]) ? friends.get(args[3]) : args[3];
 			String producer = friends.containsKey(args[4]) ? friends.get(args[4]) : args[4];
@@ -189,7 +189,7 @@ public class IdcpCommand implements AutobahnCommand {
 			} catch (Exception e) { 
 				return "failed to subscribe";
 			}
-		} else if (operation.equals("unsubscribe")) {
+		} else if (operation.equalsIgnoreCase("unsubscribe")) {
 			
 			String consumer = friends.containsKey(args[3]) ? friends.get(args[3]) : args[3];
 			try {

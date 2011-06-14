@@ -574,7 +574,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 	private String createHTMLLinkInfo (Link link){
 		StringBuffer buffer= new StringBuffer();	
 		buffer.append("<h3 valign=\"middle\" ><image src=\"").append(Marker.DEFAULT_INFO_BIG).append("\">Link information:</h3>");
-		if(link.getStartDomainID().equals(link.getEndDomainID()))
+		if(link.getStartDomainID().equalsIgnoreCase(link.getEndDomainID()))
 			buffer.append ("Internal link in ").append(link.getEndDomainID());
 		else
 			buffer.append ("<strong><center>").append(link.getStartDomainID()).append(" <-> ").append(link.getEndDomainID()).append("</center></strong>");

@@ -19,7 +19,7 @@ public class CancelServiceCommand implements AutobahnCommand {
     public String execute(Framework autobahn, String[] args) {
 
         if (args.length > 1) {
-            if ("all".equals(args[1])) {
+            if ("all".equalsIgnoreCase(args[1])) {
                 autobahn.getIdm().cancelAllServices();
                 return "All services cancelled";
             } else {

@@ -20,16 +20,16 @@ public class StatisticsCommand implements AutobahnCommand {
 	    List<StatisticsEntry> selist = new ArrayList<StatisticsEntry>();
 		
 		if (args.length > 1) {
-			if ("setuptime".equals(args[1]) || "set-uptime".equals(args[1])
-			        || "setup".equals(args[1]) || "set-up".equals(args[1])) {
+			if ("setuptime".equalsIgnoreCase(args[1]) || "set-uptime".equalsIgnoreCase(args[1])
+			        || "setup".equalsIgnoreCase(args[1]) || "set-up".equalsIgnoreCase(args[1])) {
 			    if (args.length > 2) {
-			        if ("average".equals(args[2])) {
+			        if ("average".equalsIgnoreCase(args[2])) {
 			            if (args.length > 3) {
-			                if ("intra".equals(args[3])) {
+			                if ("intra".equalsIgnoreCase(args[3])) {
 	                            selist = autobahn.getDm().getStatisticsIntra();
 	                            return "Average set-up time for segments in this domain: " +
 	                                calculateAverage(selist) + "msec";
-			                } else if ("inter".equals(args[3])) {
+			                } else if ("inter".equalsIgnoreCase(args[3])) {
                                 selist = autobahn.getDm().getStatisticsInter();
                                 return "Average set-up time for reservations from this domain: " +
                                     calculateAverage(selist) + "msec";
@@ -42,10 +42,10 @@ public class StatisticsCommand implements AutobahnCommand {
                             return "Average set-up time for all reservations: " +
     			                calculateAverage(selist) + "msec";
 			            }
-			        } else if ("intra".equals(args[2])){
+			        } else if ("intra".equalsIgnoreCase(args[2])){
                         selist = autobahn.getDm().getStatisticsIntra();
 			            
-			        } else if ("inter".equals(args[2])) {
+			        } else if ("inter".equalsIgnoreCase(args[2])) {
                         selist = autobahn.getDm().getStatisticsInter();
 			            
 			        } else {

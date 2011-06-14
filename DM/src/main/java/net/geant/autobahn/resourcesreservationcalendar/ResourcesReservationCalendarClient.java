@@ -29,7 +29,7 @@ public class ResourcesReservationCalendarClient implements ResourcesReservationC
      * @param endPoint URL address of a DM
      */
 	public ResourcesReservationCalendarClient(String endPoint) {
-        if("none".equals(endPoint)) {
+        if("none".equalsIgnoreCase(endPoint)) {
             log.info("RRCalendar location was specified as none, DM->Cal communication impossible");
             return;
         }

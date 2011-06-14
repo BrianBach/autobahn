@@ -98,8 +98,8 @@ public class InterdomainPathfinderImplDFS extends InterdomainPathfinderAbstractI
                 log.debug("User has requested to exclude some domains...");
                 for (Link e : allEdges) {
                     for (String str : userExcludeDomains) {
-                        if (str.equals(e.getStartDomainID()) || 
-                                str.equals(e.getEndDomainID())) {
+                        if (str.equalsIgnoreCase(e.getStartDomainID()) || 
+                                str.equalsIgnoreCase(e.getEndDomainID())) {
                             log.debug("Excluding link " + e);
                             edges.remove(e);
                         }
@@ -219,8 +219,8 @@ public class InterdomainPathfinderImplDFS extends InterdomainPathfinderAbstractI
         
         List<Link> pathLinks = p.getLinks();
         for (Link l : pathLinks) {
-            if (l.getEndDomainID().equals(dom)
-                    || l.getStartDomainID().equals(dom)) {
+            if (l.getEndDomainID().equalsIgnoreCase(dom)
+                    || l.getStartDomainID().equalsIgnoreCase(dom)) {
                 return true;
             }
         }

@@ -23,7 +23,7 @@ public class RemoveReservationCommand implements AutobahnCommand {
 	 */
 	public String execute(Framework autobahn, String[] args) {
 		
-		if("tool".equals(args[1])) {
+		if("tool".equalsIgnoreCase(args[1])) {
 			String resID = args[2].replaceAll(":", "_");
 			
 			try {

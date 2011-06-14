@@ -290,20 +290,20 @@ public final class AccessPoint implements TopologyAbstraction {
         // Check properties
         
         String id_nodes = properties.getProperty("id.nodes");
-        if (id_nodes == null || id_nodes.equals("none") || id_nodes.equals("")) {
+        if (id_nodes == null || id_nodes.equalsIgnoreCase("none") || id_nodes.equals("")) {
             initChecks.append("id.nodes is empty, please check ta.properties file.\n");
         }
         String id_ports = properties.getProperty("id.ports");
-        if (id_ports == null || id_ports.equals("none") || id_ports.equals("")) {
+        if (id_ports == null || id_ports.equalsIgnoreCase("none") || id_ports.equals("")) {
             initChecks.append("id.ports is empty, please check ta.properties file.\n");
         }
         String id_links = properties.getProperty("id.links");
-        if (id_links == null || id_links.equals("none") || id_links.equals("")) {
+        if (id_links == null || id_links.equalsIgnoreCase("none") || id_links.equals("")) {
             initChecks.append("id.links is empty, please check ta.properties file\n");
         }
         
         String lookuphost = properties.getProperty("lookuphost");
-        if (lookuphost == null || lookuphost.equals("none") || lookuphost.equals("")) {
+        if (lookuphost == null || lookuphost.equalsIgnoreCase("none") || lookuphost.equals("")) {
             initChecks.append("lookuphost is empty. Database entries for interdomain links " +
             		"will have to contain both local and remote port names as the remote " +
             		"port name will not be recovered through the LS.\n");

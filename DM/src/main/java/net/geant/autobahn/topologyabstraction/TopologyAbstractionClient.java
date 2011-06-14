@@ -30,7 +30,7 @@ public class TopologyAbstractionClient implements TopologyAbstraction {
      * @param endPoint URL address of a TA
      */
     public TopologyAbstractionClient(String endPoint) {
-        if("none".equals(endPoint)) {
+        if("none".equalsIgnoreCase(endPoint)) {
             log.info("TA location was specified as none, DM->TA communication impossible");
             return;
         }

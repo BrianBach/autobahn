@@ -207,7 +207,7 @@ public abstract class AutobahnReservation extends Reservation implements Runnabl
     public String getPrevDomainAddress() {
         Link ingress = getPath().getIngress(localDomainID);
         
-        if(localDomainID.equals(ingress.getStartDomainID()))
+        if(localDomainID.equalsIgnoreCase(ingress.getStartDomainID()))
             return ingress.getEndDomainID();
             
         return ingress.getStartDomainID();
@@ -223,7 +223,7 @@ public abstract class AutobahnReservation extends Reservation implements Runnabl
     public String getNextDomainAddress() {
         Link egress = getPath().getEgress(localDomainID);
         
-        if(localDomainID.equals(egress.getEndDomainID()))
+        if(localDomainID.equalsIgnoreCase(egress.getEndDomainID()))
             return egress.getStartDomainID();
         
         return egress.getEndDomainID();

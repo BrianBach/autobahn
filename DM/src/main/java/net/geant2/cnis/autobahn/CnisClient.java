@@ -22,7 +22,7 @@ public final class CnisClient {
 	private CnisService cnis;
 	
 	public CnisClient(String endPoint) {
-		if(endPoint.equals("none"))
+		if(endPoint.equalsIgnoreCase("none"))
 			return;
 
 		cnis = new CnisService(endPoint);

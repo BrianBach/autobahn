@@ -148,9 +148,9 @@ public final class AccessPoint implements ResourcesReservationCalendar {
                 throw new Exception("db.type property can not be empty!");
             }
             
-        	if(type.equals("eth") || type.equals("ethernet")) {
+        	if(type.equalsIgnoreCase("eth") || type.equalsIgnoreCase("ethernet")) {
         		this.constraintsCalendar = new EthConstraintsReservationCalendar();	
-        	} else if(type.equals("sdh")) {
+        	} else if(type.equalsIgnoreCase("sdh")) {
         		this.constraintsCalendar = new SdhConstraintsReservationCalendar();
         	}
         	
@@ -286,11 +286,12 @@ public final class AccessPoint implements ResourcesReservationCalendar {
         // Check properties
         
         String db_type = properties.getProperty("db.type");
-        if (db_type == null || db_type.equals("none") || db_type.equals("")) {
+        if (db_type == null || db_type.equalsIgnoreCase("none") || db_type.equals("")) {
             initChecks.append("db.type property is empty, please check " +
             		"calendar.properties file.\n");
         }
-        else if (!db_type.equals("ethernet") && !db_type.equals("eth") && !db_type.equals("sdh")) {
+        else if (!db_type.equalsIgnoreCase("ethernet") && !db_type.equalsIgnoreCase("eth")
+                && !db_type.equalsIgnoreCase("sdh")) {
             initChecks.append("db.type property currently supports either " +
             		"ethernet (or eth) or sdh value\n");
         }

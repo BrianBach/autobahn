@@ -49,8 +49,8 @@ public abstract class InterdomainPathfinderAbstractImpl implements InterdomainPa
             for (int i=0; i<links.size(); i++) {
                 Link lnk = links.get(i);
                 
-                if (!lnk.getStartDomainID().equals(lnk.getEndDomainID())) {
-                    if (lnk.getStartDomainID().equals(domain.getBodID())) {
+                if (!lnk.getStartDomainID().equalsIgnoreCase(lnk.getEndDomainID())) {
+                    if (lnk.getStartDomainID().equalsIgnoreCase(domain.getBodID())) {
                         // This is a neigboring domain
                         AdminDomain tmpdom = findAdminDomainInList(domains, lnk.getEndDomainID());
                         if (!neighbors.contains(tmpdom) && !tmpdom.isClientDomain()) {
@@ -58,7 +58,7 @@ public abstract class InterdomainPathfinderAbstractImpl implements InterdomainPa
                         }
                         continue;
                     }
-                    if (lnk.getEndDomainID().equals(domain.getBodID())) {
+                    if (lnk.getEndDomainID().equalsIgnoreCase(domain.getBodID())) {
                         // This is a neigboring domain
                         AdminDomain tmpdom = findAdminDomainInList(domains, lnk.getStartDomainID());
                         if (!neighbors.contains(tmpdom) && !tmpdom.isClientDomain()) {

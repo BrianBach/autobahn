@@ -104,11 +104,11 @@ public class IntradomainTopology {
 	 *            String type of the topology, "eth" or "sdh" or "mpls"
 	 */
     public IntradomainTopology(String cnisAddress, String domainId, String topologyType) {
-    	if("sdh".equals(topologyType))
+    	if("sdh".equalsIgnoreCase(topologyType))
     		type = Type.SDH;
-    	else if (topologyType.startsWith("eth"))
+    	else if (topologyType.equalsIgnoreCase("eth") || topologyType.equalsIgnoreCase("ethernet"))
     		type = Type.ETH;
-    	else if (topologyType.equals("mpls"))
+    	else if (topologyType.equalsIgnoreCase("mpls"))
     		type = Type.MPLS;
 
         domainName = domainId;
@@ -334,7 +334,7 @@ public class IntradomainTopology {
 					
 	                //mtu info added
                     for (net.geant2.cnis.autobahn.xml.common.Tag tag: p.getTags().getTag()) {
-                        if (tag.getKey().equals("mtu")) {
+                        if (tag.getKey().equalsIgnoreCase("mtu")) {
                             port.setMtu(Integer.parseInt(tag.getValue()));
                         }
                     }
@@ -490,7 +490,7 @@ public class IntradomainTopology {
 					port.setDomainId(domainName);
 					port.setClientPort(false);
 					for (net.geant2.cnis.autobahn.xml.common.Tag tag: p.getTags().getTag()) {
-                        if (tag.getKey().equals("mtu")) {
+                        if (tag.getKey().equalsIgnoreCase("mtu")) {
                             port.setMtu(Integer.parseInt(tag.getValue()));
                         }
                     }
@@ -765,7 +765,7 @@ public class IntradomainTopology {
 		// and search for a tag named "client" set to true.
 		net.geant2.cnis.autobahn.xml.common.Tags dTags = d.getTags();
 		for (net.geant2.cnis.autobahn.xml.common.Tag tag: dTags.getTag()) {
-			if ( (tag.getKey().equals("client")) && (tag.getValue().equals("true")) ) {
+			if ( (tag.getKey().equalsIgnoreCase("client")) && (tag.getValue().equalsIgnoreCase("true")) ) {
 				return true;						
 			}
 		}
@@ -780,7 +780,7 @@ public class IntradomainTopology {
 		// and search for a tag named "client" set to true.
 		net.geant2.cnis.autobahn.xml.common.Tags dTags = d.getTags();
 		for (net.geant2.cnis.autobahn.xml.common.Tag tag: dTags.getTag()) {
-			if (tag.getKey().equals("description")) {
+			if (tag.getKey().equalsIgnoreCase("description")) {
 				return tag.getValue();
 			}
 		}
@@ -795,7 +795,7 @@ public class IntradomainTopology {
 		// and search for a tag named "client" set to true.
 		net.geant2.cnis.autobahn.xml.common.Tags dTags = d.getTags();
 		for (net.geant2.cnis.autobahn.xml.common.Tag tag: dTags.getTag()) {
-			if (tag.getKey().equals("vlans")) {
+			if (tag.getKey().equalsIgnoreCase("vlans")) {
 				return tag.getValue();
 			}
 		}

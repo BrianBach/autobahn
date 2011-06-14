@@ -29,7 +29,7 @@ public class ToolClient {
 	 * @param endPoint
 	 */
 	public ToolClient(String endPoint) {
-		if(endPoint.equals("none")) {
+		if(endPoint.equalsIgnoreCase("none")) {
             log.info("TP location was specified as none, DM->TP communication impossible");
             return;
         }

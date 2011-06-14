@@ -1,4 +1,5 @@
 package net.geant.autobahn.autoBahnGUI.web;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
@@ -191,6 +192,7 @@ public class AutobahnController {
         String[] reservationStates=null;
         Map<String,String> friendly_ports = null;
     
+        logger.debug("getting services for idm, currentIdm:"+currentIdm);
         if (currentIdm  !=null){
             services = manager.getSubmitedServicesInIDM(currentIdm);   
             reservationStates=manager.getReservationStates();
@@ -200,6 +202,16 @@ public class AutobahnController {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+        }
+        logger.debug("services:"+services);
+        logger.debug("reservationStates:"+reservationStates);
+        logger.debug("friendly_ports:"+friendly_ports);
+        logger.debug("services.getServices():"+services.getServices());
+        java.util.Set<Map.Entry<String, String>> entries = friendly_ports.entrySet();
+        java.util.Iterator<Map.Entry<String, String>> iterator = entries.iterator();
+        while (iterator.hasNext()) {
+          Map.Entry<String, String> entry = (Map.Entry<String, String>)iterator.next();
+          logger.debug(entry.getKey() + " : " + entry.getValue());
         }
         model.put("services", services);
         model.put("reservationStates", reservationStates);

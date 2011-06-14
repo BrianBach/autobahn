@@ -30,10 +30,10 @@ public class ReservationsCommand implements AutobahnCommand {
 		String filter = "all";
 		
 		if(args.length > 1) {
-			if("running".equals(args[1])) {
+			if("running".equalsIgnoreCase(args[1])) {
 				min = 0;
 				max = HomeDomainState.FINISHED.getCode();
-			} else if("active".equals(args[1])) {
+			} else if("active".equalsIgnoreCase(args[1])) {
 				min = HomeDomainState.ACTIVE.getCode();
 				max = HomeDomainState.ACTIVE.getCode();
 			}

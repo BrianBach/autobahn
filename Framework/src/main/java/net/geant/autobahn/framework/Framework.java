@@ -123,11 +123,11 @@ public class Framework {
 
 		// choose command liner
 		String cmdLiner = properties.getProperty("framework.commandLine");
-		if (cmdLiner.equals("interactive"))
+		if (cmdLiner.equalsIgnoreCase("interactive"))
 			commandLine();
-		else if (cmdLiner.equals("localhost"))
+		else if (cmdLiner.equalsIgnoreCase("localhost"))
 			telnetCommandLine(false);
-		else if (cmdLiner.equals("remote"))
+		else if (cmdLiner.equalsIgnoreCase("remote"))
 			telnetCommandLine(true);
 
 	}
@@ -311,13 +311,13 @@ public class Framework {
 		Properties props = Framework.loadProperties("etc/framework.properties");
 		
 		for(int i = 0; i < args.length; i++) {
-			if("--startup-notifier".equals(args[i])) {
+			if("--startup-notifier".equalsIgnoreCase(args[i])) {
 				String callbackUrl = args[i + 1];
 				props.put("startup.notify", callbackUrl);
 			}
 		}
 		
-		if(args.length == 0 || "start".equals(args[0])) {
+		if(args.length == 0 || "start".equalsIgnoreCase(args[0])) {
 			info();
 	
 			Framework autobahn = new Framework();
@@ -325,7 +325,7 @@ public class Framework {
 
 			log.info("autobahn framework shutdown");
 			
-		} else if ("stop".equals(args[0])){
+		} else if ("stop".equalsIgnoreCase(args[0])){
 			int port = Integer.parseInt(props.getProperty("framework.port"));
 
 			try {

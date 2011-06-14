@@ -26,7 +26,7 @@ public class TopologyCommand implements AutobahnCommand {
 		    if (l.getStartDomainID() == null) {
 		        sb.append(l + "\n");
 		    }
-		    else if (l.getStartDomainID().equals(l.getEndDomainID())) {
+		    else if (l.getStartDomainID().equalsIgnoreCase(l.getEndDomainID())) {
 		        sb.append(l + " - " + l.getStartDomainID() + " internal link\n");
 		    } else {
 		        sb.append(l + " - " + l.getStartDomainID() + " to " + l.getEndDomainID() + 

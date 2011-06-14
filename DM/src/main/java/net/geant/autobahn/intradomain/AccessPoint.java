@@ -168,12 +168,12 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
             // Create Domain Manager
             intradomainManager = new ResourcesReservation(pathfinder, prman, properties);
             
-            if("true".equals(properties.getProperty("monitoring"))) {
-            	if("ethernet".equals(topologyType)) {
+            if("true".equalsIgnoreCase(properties.getProperty("monitoring"))) {
+            	if("ethernet".equalsIgnoreCase(topologyType)) {
             		EthMonitoring ethm = new EthMonitoring(this, topology);
             		ethm.startMonitoring();
             	}
-            	if("sdh".equals(topologyType)) {
+            	if("sdh".equalsIgnoreCase(topologyType)) {
             		SdhMonitoring sthm = new SdhMonitoring(this);
             		sthm.startMonitoring();
             	}
@@ -423,12 +423,12 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
         // Check properties
         
         String domainName = properties.getProperty("domainName");
-        if (domainName == null || domainName.equals("none") || domainName.equals("")) {
+        if (domainName == null || domainName.equalsIgnoreCase("none") || domainName.equals("")) {
             initChecks.append("domainName field is empty, please check dm.properties file.\n");
         }
         
         String lookuphost = properties.getProperty("lookuphost");
-        if (lookuphost == null || lookuphost.equals("none") || lookuphost.equals("")) {
+        if (lookuphost == null || lookuphost.equalsIgnoreCase("none") || lookuphost.equals("")) {
             initChecks.append("lookuphost is empty. The DM may need the LS in order to " +
             		"communicate with the IDM.\n");
         } else {
@@ -486,7 +486,7 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
             if (gi.isClientPort()) {
                 if (gi.getDescription() == null || 
                         gi.getDescription().trim().equals("") || 
-                        gi.getDescription().trim().equals("null")) {
+                        gi.getDescription().trim().equalsIgnoreCase("null")) {
                     initChecks.append("The client port \"" + gi.getName() + 
                             "\" does not have a description " +
                     		"that can be used as a user-friendly name. " +

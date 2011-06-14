@@ -305,7 +305,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
         for (String p_id : ports) {
             String friendlyName = getFriendlyNamefromLS(p_id);
             if (friendlyName == null || friendlyName.trim().equals("") 
-                    || friendlyName.trim().equals("null")) {
+                    || friendlyName.trim().equalsIgnoreCase("null")) {
                 friendlyPorts.add(new PortMap(p_id, p_id));                
             } else {
                 friendlyPorts.add(new PortMap(p_id, friendlyName.trim() + " (" + p_id + ")"));
@@ -396,9 +396,11 @@ public class ManagerImpl implements Manager, ManagerNotifier {
                 List<String> domains = new ArrayList<String>();
             	
             	String[] temp = manager.getAllDomains_NonClient();
-        		for(String domain : temp) {
-        			domains.add(domain);
-        		}
+            	if (temp!=null) {
+            		for(String domain : temp) {
+            			domains.add(domain);
+            		}
+            	}
 
         		return domains;
             }
@@ -497,7 +499,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
         for (String p_id : ports) {
             String friendlyName = getFriendlyNamefromLS(p_id);
             if (friendlyName == null || friendlyName.trim().equals("")
-                    || friendlyName.trim().equals("null")) {
+                    || friendlyName.trim().equalsIgnoreCase("null")) {
                 friendlyPorts.add(new PortMap(p_id, p_id));                
             } else {
                 friendlyPorts.add(new PortMap(p_id, friendlyName.trim() + " (" + p_id + ")"));
@@ -1384,7 +1386,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
         	for (Link link : links) {
         		if(str.contains(link.getBodID())){
         			String path = new String();
-        				if(link.getStartDomainID().equals(link.getEndDomainID()))
+        				if(link.getStartDomainID().equalsIgnoreCase(link.getEndDomainID()))
         					path = " ["+link.getBodID() +"] Internal Link "+link.getStartDomainID();
         				else
         					path = " ["+link.getBodID() +"] from "+link.getStartDomainID()+" to "+link.getEndDomainID();
@@ -1401,7 +1403,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 	}
 
     private boolean isLSavailable(String ls) {
-        if ((ls == null) || ls.equals("none") || ls.equals("")) {
+        if ((ls == null) || ls.equalsIgnoreCase("none") || ls.equals("")) {
             return false;
         }
         // Check if it is a proper URL

@@ -329,12 +329,12 @@ public class LinkSerializer {
 		link.getEndPort().setNode(readNode());
 		
 		ProvisioningDomain pd2 = readProvisioningDomain();
-		if(pd2.getBodID().equals(pd1.getBodID()))
+		if(pd2.getBodID().equalsIgnoreCase(pd1.getBodID()))
 			pd2 = pd1;
 		link.getEndPort().getNode().setProvisioningDomain(pd2);
 
 		AdminDomain ad2 = readAdminDomain();
-		if(ad2.getBodID().equals(ad1.getBodID()))
+		if(ad2.getBodID().equalsIgnoreCase(ad1.getBodID()))
 			ad2 = ad1;
 		link.getEndPort().getNode().getProvisioningDomain().setAdminDomain(ad2);
 		

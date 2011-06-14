@@ -88,6 +88,7 @@ public class LocalCheck extends HomeDomainState {
         	return;
         }
                 
+        //TODO: Ask Michal why IDCP check is moved here and not below
         if (!path.isHomeDomain(domainID)) {
         	
         	 // see if this is an idcp-only reservation, if so pass the reservation to its idcp server
@@ -209,7 +210,7 @@ public class LocalCheck extends HomeDomainState {
 
         res.setGlobalConstraints(constraints);
      
-        if (res.isIdcpReservation() && res.getNextDomainAddress().equals(res.getIdcpServer())) {
+        if (res.isIdcpReservation() && res.getNextDomainAddress().equalsIgnoreCase(res.getIdcpServer())) {
         	
      	   	Autobahn2OscarsConverter client = new Autobahn2OscarsConverter(res.getIdcpServer());
      	   	int code = client.scheduleReservation(res);

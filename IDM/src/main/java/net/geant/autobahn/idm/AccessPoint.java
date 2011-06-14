@@ -174,7 +174,7 @@ public final class AccessPoint implements UserAccessPoint,
         
 		domainURL = properties.getProperty("domain");
 		domainName = properties.getProperty("domainName");
-		if (domainName == null || domainName.equals("none") || domainName.equals("")) {
+		if (domainName == null || domainName.equalsIgnoreCase("none") || domainName.equals("")) {
 		    log.info("domainName property does not exist. Will try to use domain property" +
 		    		"(" + domainURL + ") both as the IDM URL and as the domain name.");
 		    domainName = domainURL;
@@ -232,7 +232,7 @@ public final class AccessPoint implements UserAccessPoint,
 	        
 	        // init gui notifier
 	        String guiAddress = properties.getProperty("gui.address");
-	        if (!guiAddress.equals("none")) {
+	        if (!guiAddress.equalsIgnoreCase("none")) {
 	        	int update = Integer.parseInt(properties.getProperty("gui.update"));
 	        	guiNotifier = new GuiNotifier(guiAddress, update);
 	        }
@@ -735,7 +735,7 @@ public final class AccessPoint implements UserAccessPoint,
 	public ProvisioningDomain getProvisioningDomainByAdminId(String adminBodId) {
 	    List<ProvisioningDomain> domains = topology.getProvDomains();
 	    for (ProvisioningDomain pd : domains) {
-	        if (pd.getAdminDomainID().equals(adminBodId)) {
+	        if (pd.getAdminDomainID().equalsIgnoreCase(adminBodId)) {
 	            return pd;
 	        }
 	    }
@@ -751,7 +751,7 @@ public final class AccessPoint implements UserAccessPoint,
     public Node getNodeByAdminId(String adminBodId) {
         List<Node> nodes = topology.getNodes();
         for (Node n : nodes) {
-            if (n.getAdminDomainID().equals(adminBodId)) {
+            if (n.getAdminDomainID().equalsIgnoreCase(adminBodId)) {
                 return n;
             }
         }
@@ -1377,10 +1377,10 @@ public final class AccessPoint implements UserAccessPoint,
 			n.setDomain(neighbors.get(i).getBodID());
 
 			for (Link l : links) {
-				if (l.getStartDomainID().equals(domainName) &&
-					l.getEndDomainID().equals(n.getDomain()) ||
-					l.getStartDomainID().equals(n.getDomain()) &&
-					l.getEndDomainID().equals(domainName)) {
+				if (l.getStartDomainID().equalsIgnoreCase(domainName) &&
+					l.getEndDomainID().equalsIgnoreCase(n.getDomain()) ||
+					l.getStartDomainID().equalsIgnoreCase(n.getDomain()) &&
+					l.getEndDomainID().equalsIgnoreCase(domainName)) {
 					n.setLink(l);
 				}
 			}
@@ -1404,7 +1404,7 @@ public final class AccessPoint implements UserAccessPoint,
         // Check properties
         
         String domain = properties.getProperty("domain");
-        if (domain == null || domain.equals("none") || domain.equals("")) {
+        if (domain == null || domain.equalsIgnoreCase("none") || domain.equals("")) {
             initChecks.append("domain field is empty, please check idm.properties file.\n");
         }
         // Check if it is a proper URL
@@ -1416,13 +1416,13 @@ public final class AccessPoint implements UserAccessPoint,
         }
         
         String domainName = properties.getProperty("domainName");
-        if (domainName == null || domainName.equals("none") || domainName.equals("")) {
+        if (domainName == null || domainName.equalsIgnoreCase("none") || domainName.equals("")) {
             initChecks.append("domainName field is empty, please check idm.properties file." +
             		" The system will assume the IDM URL (" + domainURL + ") is also the domain name\n");
         }
         
         String lookuphost = properties.getProperty("lookuphost");
-        if (lookuphost == null || lookuphost.equals("none") || lookuphost.equals("")) {
+        if (lookuphost == null || lookuphost.equalsIgnoreCase("none") || lookuphost.equals("")) {
             initChecks.append("lookuphost is empty. IDM will not be able to register itself at the LS." +
             		" This will only work if other IDMs already have the URL of this IDM as the " +
             		"domain name in their DBs.\n");
@@ -1491,7 +1491,7 @@ public final class AccessPoint implements UserAccessPoint,
     }
 
     private boolean isLSavailable(String ls) {
-        if ((ls == null) || ls.equals("none") || ls.equals("")) {
+        if ((ls == null) || ls.equalsIgnoreCase("none") || ls.equals("")) {
             return false;
         }
         // Check if it is a proper URL
@@ -1530,7 +1530,7 @@ public final class AccessPoint implements UserAccessPoint,
                 log.debug(e.getMessage());
             }
             if (friendlyName == null || friendlyName.trim().equals("") 
-                    || friendlyName.trim().equals("null")) {
+                    || friendlyName.trim().equalsIgnoreCase("null")) {
                 friendlyPorts[i] = cp[i];
             } else {
                 friendlyPorts[i] = friendlyName.trim() + " (" + cp[i] + ")";

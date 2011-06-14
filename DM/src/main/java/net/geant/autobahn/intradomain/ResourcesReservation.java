@@ -571,7 +571,7 @@ public class ResourcesReservation {
 		String authEnabled = ap.getProperty("authorization.enabled");
         
 		
-		if (authEnabled != null && authEnabled.equals("true") ) {
+		if (authEnabled != null && authEnabled.equalsIgnoreCase("true") ) {
 		    try {
                 ApplicationContext context = new ClassPathXmlApplicationContext(
                         "classpath:etc/security/aai/dm_security.xml");

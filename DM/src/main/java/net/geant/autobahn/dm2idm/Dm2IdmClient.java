@@ -30,7 +30,7 @@ public class Dm2IdmClient implements Dm2Idm {
 	 * @param endPoint URL address of an IDM (dm2idm interface)
 	 */
 	public Dm2IdmClient(String endPoint) {
-		if("none".equals(endPoint)) {
+		if("none".equalsIgnoreCase(endPoint)) {
             log.info("IDM location was specified as none, DM->IDM communication impossible");
 			return;
 		}
@@ -136,7 +136,7 @@ public class Dm2IdmClient implements Dm2Idm {
     }
 
     private boolean isLSavailable(String ls) {
-        if ((ls == null) || ls.equals("none") || ls.equals("")) {
+        if ((ls == null) || ls.equalsIgnoreCase("none") || ls.equals("")) {
             return false;
         }
         // Check if it is a proper URL
