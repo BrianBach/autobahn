@@ -72,13 +72,12 @@ public class ReservationProcessor {
 
         Runnable command = new Runnable() {
             public void run() {
-                rdao.merge(res);
+                rdao.update(res);
                 
                 res.run();
                 
                 // Delete fake reservation after processing
                 if(res instanceof LastDomainReservation && res.isFake()) {
-                    rdao.merge(res);
                 	rdao.delete(res);
                 }
             }
@@ -113,7 +112,7 @@ public class ReservationProcessor {
 		
         Runnable command = new Runnable() {
             public void run() {
-                rdao.merge(res);
+                rdao.update(res);
                 
                 res.recover();
             }
@@ -129,15 +128,13 @@ public class ReservationProcessor {
 
         Runnable command = new Runnable() {
             public void run() {
-                rdao.merge(res);
+                rdao.update(res);
                 
                 res.reservationScheduled(msgCode, arguments, success, global);
                 
                 // Delete if it's fake
-                if(res.isFake()) {
-                    rdao.merge(res);
+                if(res.isFake())
                 	rdao.delete(res);
-                }
             }
         };
 
@@ -153,7 +150,7 @@ public class ReservationProcessor {
 		
         Runnable command = new Runnable() {
             public void run() {
-                rdao.merge(res);
+                rdao.update(res);
                 
                 res.cancel();
             }
@@ -169,7 +166,7 @@ public class ReservationProcessor {
 
         Runnable command = new Runnable() {
             public void run() {
-                rdao.merge(res);
+                rdao.update(res);
                 
                 res.reservationCancelled(message, success);
             }
@@ -185,7 +182,7 @@ public class ReservationProcessor {
 
         Runnable command = new Runnable() {
             public void run() {
-            	rdao.merge(res);
+            	rdao.update(res);
                 
                 res.modify(startTime, endTime);
             }
@@ -203,7 +200,7 @@ public class ReservationProcessor {
 		
         Runnable command = new Runnable() {
             public void run() {
-            	rdao.merge(res);
+            	rdao.update(res);
                 
                 res.withdraw();
             }
@@ -220,7 +217,7 @@ public class ReservationProcessor {
 
 		Runnable command = new Runnable() {
 			public void run() {
-				rdao.merge(res);
+				rdao.update(res);
 
 				res.reservationWithdrawn(message, success);
 			}
@@ -237,7 +234,7 @@ public class ReservationProcessor {
 
         Runnable command = new Runnable() {
             public void run() {
-                rdao.merge(res);
+                rdao.update(res);
                 
                 res.reservationModified(startTime, endTime, message, success);
             }
@@ -257,7 +254,7 @@ public class ReservationProcessor {
 		
         Runnable command = new Runnable() {
             public void run() {
-                rdao.merge(res);
+                rdao.update(res);
                 
                 res.reservationActivated(message, success);
             }
@@ -288,7 +285,7 @@ public class ReservationProcessor {
 			
 	        Runnable command = new Runnable() {
 	            public void run() {
-	                rdao.merge(res);
+	                rdao.update(res);
 	                
 	                res.reservationFinished(message, success);
 	            }
@@ -324,7 +321,7 @@ public class ReservationProcessor {
 		
         Runnable command = new Runnable() {
             public void run() {
-                rdao.merge(res);
+                rdao.update(res);
 	                
         		res.activate(success);
             }
@@ -349,7 +346,7 @@ public class ReservationProcessor {
 		
         Runnable command = new Runnable() {
             public void run() {
-            	rdao.merge(res);
+            	rdao.update(res);
                 
         		res.finish(success);
             }

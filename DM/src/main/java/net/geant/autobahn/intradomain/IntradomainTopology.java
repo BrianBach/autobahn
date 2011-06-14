@@ -2,6 +2,7 @@ package net.geant.autobahn.intradomain;
 
 import java.io.File;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -560,11 +561,16 @@ public class IntradomainTopology {
 				if (idcpLink != null) 
 					dport.setDescription(dport.getDescription() + "\n" + "idcplink=" + idcpLink);
 				
-				SpanningTree st = new SpanningTree();
-				st.setEthLink(new EthLink(glink, "", false, true, 1));
-				st.setVlan(new Vlan(id++, "vlan-ext", 0, 4096));
+				EthLink ethLink = new EthLink(glink, "", false, true, 1);
 				
-				sptrees.add(st);
+				for(Range r : l.getVlanRanges().getRange()) {
+					SpanningTree st = new SpanningTree();
+					
+					st.setEthLink(ethLink);
+					st.setVlan(new Vlan(id++, "vlan-ext", Integer.valueOf("" + r.getFrom()), Integer.valueOf("" + r.getTo())));
+					
+					sptrees.add(st);
+				}
 			}
 			
 			genericLinks = new ArrayList<GenericLink>();
@@ -800,7 +806,7 @@ public class IntradomainTopology {
 			}
 		}
 		return null;
-    }    
+    }
     
     /**
      * Helper method that retrieves idcp link mapping for idcp link

@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.geant.autobahn.constraints.BooleanConstraint;
 import net.geant.autobahn.constraints.ConstraintsNames;
 import net.geant.autobahn.constraints.MinValueConstraint;
 import net.geant.autobahn.constraints.PathConstraints;
@@ -45,7 +46,6 @@ public class SdhConstraintsReservationCalendar implements
 			return null;
 		}
 		
-		MinValueConstraint av_timeslots = new MinValueConstraint();
 		IntradomainPath res = new IntradomainPath();
 		
 		for(GenericLink glink : ipath.getLinks()) {
@@ -59,7 +59,6 @@ public class SdhConstraintsReservationCalendar implements
 			System.out.println("Constraint for link: " + glink + " " + timeslots);
 			
 			if(calendar == null) {
-				av_timeslots = av_timeslots.intersect(timeslots);
 				res.addGenericLink(glink, pcon);
 				continue;
 			}
@@ -68,8 +67,7 @@ public class SdhConstraintsReservationCalendar implements
 			double usage = calendar.getMaxUsage(startTime, endTime);
 			
 			if(total - usage > 0) {
-				MinValueConstraint tmp = new MinValueConstraint(total - usage);
-				av_timeslots = av_timeslots.intersect(tmp);
+				MinValueConstraint av_timeslots = new MinValueConstraint(total - usage);
 				
 				PathConstraints resPCon = new PathConstraints();
 				resPCon.addMinValueConstraint(ConstraintsNames.TIMESLOTS, av_timeslots);
@@ -83,10 +81,16 @@ public class SdhConstraintsReservationCalendar implements
 
 		// Update the result with VLANS information
 		for(GenericLink gl : spath.getLinks()) {
+			PathConstraints pcon = res.getConstraints(gl);
+
 			RangeConstraint vlans = spath.getConstraints(gl).getRangeConstraint(ConstraintsNames.VLANS);
 			if(vlans != null) {
-				PathConstraints pcon = res.getConstraints(gl);
 				pcon.addRangeConstraint(ConstraintsNames.VLANS, vlans);
+			}
+			
+			BooleanConstraint trans = spath.getConstraints(gl).getBooleanConstraint(ConstraintsNames.SUPPORTS_VLAN_TRANSLATION);
+			if(trans != null) {
+				pcon.addBooleanConstraint(ConstraintsNames.SUPPORTS_VLAN_TRANSLATION, trans);
 			}
 		}
 		
@@ -154,6 +158,8 @@ public class SdhConstraintsReservationCalendar implements
 				timeslotCalendars.put(gl, calendar);
 			}
 	
+			log.info("Adding: " + count + " TIMESLOTS to calendar");
+			
 			calendar.addReservation(count, start, end);
 		}
 	}
