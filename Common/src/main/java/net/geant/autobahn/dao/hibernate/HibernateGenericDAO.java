@@ -85,8 +85,8 @@ public class HibernateGenericDAO<T, PK extends Serializable> implements
     /* (non-Javadoc)
      * @see net.geant.autobahn.dao.GenericDAO#merge(java.lang.Object)
      */
-    public Object merge(T transientObject) {
-        return getSession().merge(transientObject);
+    public void merge(T transientObject) {
+        getSession().merge(transientObject);
     }
 
     /* (non-Javadoc)

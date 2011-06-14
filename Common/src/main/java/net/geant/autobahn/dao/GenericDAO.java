@@ -50,7 +50,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      * 
      * @param transientObject Object to save
      */
-    public Object merge(T transientObject);
+    public void merge(T transientObject);
 
     /**
      * Deletes given object from the database. 
