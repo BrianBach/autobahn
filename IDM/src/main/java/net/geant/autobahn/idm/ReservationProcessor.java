@@ -72,13 +72,9 @@ public class ReservationProcessor {
 
         Runnable command = new Runnable() {
             public void run() {
-                log.trace(res+" state before merge:"+res.getState());
-                AutobahnReservation res1 = (AutobahnReservation) rdao.merge(res);
-                rdao.update(res1);
-                log.trace(res1+" state after merge:"+res1.getState());
+                rdao.merge(res);
                 
-                res1.run();
-                log.trace(res1+" state after run:"+res1.getState());
+                res.run();
                 
                 // Delete fake reservation after processing
                 if(res instanceof LastDomainReservation && res.isFake()) {
@@ -117,13 +113,9 @@ public class ReservationProcessor {
 		
         Runnable command = new Runnable() {
             public void run() {
-                log.trace(res+" state before merge:"+res.getState());
-                AutobahnReservation res1 = (AutobahnReservation) rdao.merge(res);
-                rdao.update(res1);
-                log.trace(res1+" state after merge:"+res1.getState());
+                rdao.merge(res);
                 
-                res1.recover();
-                log.trace(res1+" state after recover:"+res1.getState());
+                res.recover();
             }
         };
 		
@@ -137,13 +129,9 @@ public class ReservationProcessor {
 
         Runnable command = new Runnable() {
             public void run() {
-                log.trace(res+" state before merge:"+res.getState());
-                AutobahnReservation res1 = (AutobahnReservation) rdao.merge(res);
-                rdao.update(res1);
-                log.trace(res+" state before merge:"+res1.getState());
+                rdao.merge(res);
                 
-                res1.reservationScheduled(msgCode, arguments, success, global);
-                log.trace(res+" state before merge:"+res1.getState());
+                res.reservationScheduled(msgCode, arguments, success, global);
                 
                 // Delete if it's fake
                 if(res.isFake()) {
@@ -165,13 +153,9 @@ public class ReservationProcessor {
 		
         Runnable command = new Runnable() {
             public void run() {
-                log.trace(res+" state before merge:"+res.getState());
-                AutobahnReservation res1 = (AutobahnReservation) rdao.merge(res);
-                rdao.update(res1);
-                log.trace(res1+" state after merge:"+res1.getState());
+                rdao.merge(res);
                 
-                res1.cancel();
-                log.trace(res1+" state after cancel:"+res1.getState());
+                res.cancel();
             }
         };
 
@@ -185,13 +169,9 @@ public class ReservationProcessor {
 
         Runnable command = new Runnable() {
             public void run() {
-                log.trace(res+" state before merge:"+res.getState());
-                AutobahnReservation res1 = (AutobahnReservation) rdao.merge(res);
-                rdao.update(res1);
-                log.trace(res1+" state after merge:"+res1.getState());
+                rdao.merge(res);
                 
-                res1.reservationCancelled(message, success);
-                log.trace(res1+" state after cancelled:"+res1.getState());
+                res.reservationCancelled(message, success);
             }
         };
 
@@ -205,13 +185,9 @@ public class ReservationProcessor {
 
         Runnable command = new Runnable() {
             public void run() {
-                log.trace(res+" state before merge:"+res.getState());
-                AutobahnReservation res1 = (AutobahnReservation) rdao.merge(res);
-                rdao.update(res1);
-                log.trace(res1+" state after merge:"+res1.getState());
+            	rdao.merge(res);
                 
-                res1.modify(startTime, endTime);
-                log.trace(res1+" state after modify:"+res1.getState());
+                res.modify(startTime, endTime);
             }
         };
 
@@ -227,13 +203,9 @@ public class ReservationProcessor {
 		
         Runnable command = new Runnable() {
             public void run() {
-                log.trace(res+" state before merge:"+res.getState());
-                AutobahnReservation res1 = (AutobahnReservation) rdao.merge(res);
-                rdao.update(res1);
-                log.trace(res1+" state after merge:"+res1.getState());
+            	rdao.merge(res);
                 
-                res1.withdraw();
-                log.trace(res1+" state after withdraw:"+res1.getState());
+                res.withdraw();
             }
         };
 
@@ -248,13 +220,9 @@ public class ReservationProcessor {
 
 		Runnable command = new Runnable() {
 			public void run() {
-                log.trace(res+" state before merge:"+res.getState());
-                AutobahnReservation res1 = (AutobahnReservation) rdao.merge(res);
-                rdao.update(res1);
-                log.trace(res1+" state after merge:"+res1.getState());
+				rdao.merge(res);
 
-				res1.reservationWithdrawn(message, success);
-                log.trace(res1+" state after rsvWithdrawn:"+res1.getState());
+				res.reservationWithdrawn(message, success);
 			}
 		};
 
@@ -269,13 +237,9 @@ public class ReservationProcessor {
 
         Runnable command = new Runnable() {
             public void run() {
-                log.trace(res+" state before merge:"+res.getState());
-                AutobahnReservation res1 = (AutobahnReservation) rdao.merge(res);
-                rdao.update(res1);
-                log.trace(res1+" state after merge:"+res1.getState());
+                rdao.merge(res);
                 
-                res1.reservationModified(startTime, endTime, message, success);
-                log.trace(res1+" state after rsvModified:"+res1.getState());
+                res.reservationModified(startTime, endTime, message, success);
             }
         };
 
@@ -293,13 +257,9 @@ public class ReservationProcessor {
 		
         Runnable command = new Runnable() {
             public void run() {
-                log.trace(res+" state before merge:"+res.getState());
-                AutobahnReservation res1 = (AutobahnReservation) rdao.merge(res);
-                rdao.update(res1);
-                log.trace(res1+" state after merge:"+res1.getState());
+                rdao.merge(res);
                 
-                res1.reservationActivated(message, success);
-                log.trace(res1+" state after rsvActivated:"+res1.getState());
+                res.reservationActivated(message, success);
             }
         };
 
@@ -328,13 +288,9 @@ public class ReservationProcessor {
 			
 	        Runnable command = new Runnable() {
 	            public void run() {
-	                log.trace(res+" state before merge:"+res.getState());
-	                AutobahnReservation res1 = (AutobahnReservation) rdao.merge(res);
-	                rdao.update(res1);
-	                log.trace(res1+" state after merge:"+res1.getState());
+	                rdao.merge(res);
 	                
-	                res1.reservationFinished(message, success);
-	                log.trace(res1+" state after rsvFinished:"+res1.getState());
+	                res.reservationFinished(message, success);
 	            }
 	        };
 
@@ -368,13 +324,9 @@ public class ReservationProcessor {
 		
         Runnable command = new Runnable() {
             public void run() {
-                log.trace(res+" state before merge:"+res.getState());
-                AutobahnReservation res1 = (AutobahnReservation) rdao.merge(res);
-                rdao.update(res1);
-                log.trace(res1+" state after merge:"+res1.getState());
+                rdao.merge(res);
 	                
-        		res1.activate(success);
-                log.trace(res1+" state after activate:"+res1.getState());
+        		res.activate(success);
             }
         };
 
@@ -397,13 +349,9 @@ public class ReservationProcessor {
 		
         Runnable command = new Runnable() {
             public void run() {
-                log.trace(res+" state before merge:"+res.getState());
-                AutobahnReservation res1 = (AutobahnReservation) rdao.merge(res);
-                rdao.update(res1);
-                log.trace(res1+" state after merge:"+res1.getState());
+            	rdao.merge(res);
                 
-        		res1.finish(success);
-                log.trace(res1+" state after finish:"+res1.getState());
+        		res.finish(success);
             }
         };
 
