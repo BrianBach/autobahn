@@ -44,7 +44,7 @@
 		
 		<many-to-one name="globalConstraints" 
 			class="net.geant.autobahn.constraints.GlobalConstraints" 
-			cascade="all" />
+			cascade="all" lazy="false" />
 		
 		<many-to-one name="path" 
 			class="net.geant.autobahn.network.Path" 

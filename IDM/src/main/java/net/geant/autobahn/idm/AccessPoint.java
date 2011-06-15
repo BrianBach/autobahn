@@ -230,13 +230,6 @@ public final class AccessPoint implements UserAccessPoint,
 	        	startupNotifier = new UapCallbackClient(startupNotifyAddress);
 	        }
 	        
-	        // init gui notifier
-	        String guiAddress = properties.getProperty("gui.address");
-	        if (!guiAddress.equalsIgnoreCase("none")) {
-	        	int update = Integer.parseInt(properties.getProperty("gui.update"));
-	        	guiNotifier = new GuiNotifier(guiAddress, update);
-	        }
-	
 	        recoverReservations();
 
 	        // call DM to abstract topology
@@ -499,6 +492,8 @@ public final class AccessPoint implements UserAccessPoint,
 		log.info("IDM recovery: " + services.size() + " active services found");
 		for(Service srv : services) {
 			srv.recover(reservationProcessor, serviceScheduler);
+			//TODO: hack for lazy loading - change it
+			Translator.convert(srv);
 		}
 		
 		// Reservations
@@ -1140,6 +1135,17 @@ public final class AccessPoint implements UserAccessPoint,
     	reservationProcessor.setRestorationMode(false);
         if(startupNotifier != null)
         	startupNotifier.domainUp(this.domainURL);
+        
+        // init gui notifier
+        String guiAddress = properties.getProperty("gui.address");
+        if (!guiAddress.equals("none")) {
+        	int update = Integer.parseInt(properties.getProperty("gui.update"));
+        	try {
+				guiNotifier = new GuiNotifier(guiAddress, update);
+			} catch (MalformedURLException e) {
+				log.error("Error when setting up gui notifier", e);
+			}
+        }
         
         log.info("AutoBAHN Initialization completed.");
         log.info("Waiting for the requests...");

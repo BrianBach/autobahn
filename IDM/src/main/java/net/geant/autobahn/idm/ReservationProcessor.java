@@ -28,7 +28,7 @@ public class ReservationProcessor {
 
 	private static final Logger log = Logger.getLogger(ReservationProcessor.class);
 	
-	private Map<String, BlockingQueue<Runnable>> events = new HashMap<String, BlockingQueue<Runnable>>();
+	private Map<String, BlockingQueue<AutobahnCommand>> events = new HashMap<String, BlockingQueue<AutobahnCommand>>();
 	private Map<String, AutobahnReservation> reservations = new HashMap<String, AutobahnReservation>();
 	private Map<String, String> previousDomains = new HashMap<String, String>();
 	
@@ -70,7 +70,7 @@ public class ReservationProcessor {
 	
 	public void runReservation(final AutobahnReservation res) {
 
-        Runnable command = new Runnable() {
+        AutobahnCommand command = new AutobahnCommand () {
             public void run() {
                 rdao.update(res);
                 
@@ -81,17 +81,22 @@ public class ReservationProcessor {
                 	rdao.delete(res);
                 }
             }
+
+			@Override
+			public String getInfo() {
+				return "Run: " + res.getBodID();
+			}
         };
 
         addReservation(res, command);
 	}
 	
-	private void addReservation(AutobahnReservation res, Runnable command) {
+	private void addReservation(AutobahnReservation res, AutobahnCommand command) {
 		final String resID = res.getBodID();
 		
 		reservations.put(resID, res);
 
-        BlockingQueue<Runnable> queue = new LinkedBlockingQueue<Runnable>();
+        BlockingQueue<AutobahnCommand> queue = new LinkedBlockingQueue<AutobahnCommand>();
         events.put(resID, queue);
         
         if(command != null)
@@ -110,23 +115,28 @@ public class ReservationProcessor {
 		res.setResourcesReservation(domainManager);
 		res.setLocalDomainID(domainID);
 		
-        Runnable command = new Runnable() {
+		AutobahnCommand command = new AutobahnCommand() {
             public void run() {
                 rdao.update(res);
                 
                 res.recover();
             }
+
+			@Override
+			public String getInfo() {
+				return "Recover: " + res.getBodID();
+			}
         };
 		
 		addReservation(res, command);
 	}
 	
-	public void reportSchedule(String resID, final int msgCode,
+	public void reportSchedule(final String resID, final int msgCode,
 			final String arguments, final boolean success,
 			final GlobalConstraints global) {
 		final AutobahnReservation res = reservations.get(resID);
 
-        Runnable command = new Runnable() {
+		AutobahnCommand command = new AutobahnCommand() {
             public void run() {
                 rdao.update(res);
                 
@@ -136,115 +146,150 @@ public class ReservationProcessor {
                 if(res.isFake())
                 	rdao.delete(res);
             }
+
+			@Override
+			public String getInfo() {
+				return "Report Schedule: " + resID;
+			}
         };
 
-        BlockingQueue<Runnable> queue = events.get(resID);
+        BlockingQueue<AutobahnCommand> queue = events.get(resID);
         queue.add(new TransactionTask(command));
 	}
 	
-    public void cancelReservation(String resID) throws NoSuchReservationException {
+    public void cancelReservation(final String resID) throws NoSuchReservationException {
 		final AutobahnReservation res = reservations.get(resID);
 
 		if(res == null)
 			throw new NoSuchReservationException(resID);
 		
-        Runnable command = new Runnable() {
+		AutobahnCommand command = new AutobahnCommand() {
             public void run() {
                 rdao.update(res);
                 
                 res.cancel();
             }
+
+			@Override
+			public String getInfo() {
+				return "Cancel: " + resID;
+			}
         };
 
-        BlockingQueue<Runnable> queue = events.get(resID);
+        BlockingQueue<AutobahnCommand> queue = events.get(resID);
         queue.add(new TransactionTask(command));
     }
 	
-	public void reportCancellation(String resID, final String message,
+	public void reportCancellation(final String resID, final String message,
 			final boolean success) {
 		final AutobahnReservation res = reservations.get(resID);
 
-        Runnable command = new Runnable() {
+		AutobahnCommand command = new AutobahnCommand() {
             public void run() {
                 rdao.update(res);
                 
                 res.reservationCancelled(message, success);
             }
+
+			@Override
+			public String getInfo() {
+				return "Report cancel: " + resID;
+			}
         };
 
-        BlockingQueue<Runnable> queue = events.get(resID);
+        BlockingQueue<AutobahnCommand> queue = events.get(resID);
         queue.add(new TransactionTask(command));
 	}
 
-	public void modifyReservation(String resID, final Calendar startTime,
+	public void modifyReservation(final String resID, final Calendar startTime,
 			final Calendar endTime) {
 		final AutobahnReservation res = reservations.get(resID);
 
-        Runnable command = new Runnable() {
+		AutobahnCommand command = new AutobahnCommand() {
             public void run() {
             	rdao.update(res);
                 
                 res.modify(startTime, endTime);
             }
+
+			@Override
+			public String getInfo() {
+				return "Modify: " + resID;
+			}
         };
 
-        BlockingQueue<Runnable> queue = events.get(resID);
+        BlockingQueue<AutobahnCommand> queue = events.get(resID);
         queue.add(new TransactionTask(command));
 	}
 	
-	public void withdrawReservation(String resID) throws NoSuchReservationException {
+	public void withdrawReservation(final String resID) throws NoSuchReservationException {
 		final AutobahnReservation res = reservations.get(resID);
 
 		if(res == null)
 			throw new NoSuchReservationException(resID);
 		
-        Runnable command = new Runnable() {
+		AutobahnCommand command = new AutobahnCommand() {
             public void run() {
             	rdao.update(res);
                 
                 res.withdraw();
             }
+
+			@Override
+			public String getInfo() {
+				return "Withdraw: " + resID;
+			}
         };
 
-        BlockingQueue<Runnable> queue = events.get(resID);
+        BlockingQueue<AutobahnCommand> queue = events.get(resID);
         queue.add(new TransactionTask(command));
 	}
 	
-	public void reportWithdraw(String resID, final String message,
+	public void reportWithdraw(final String resID, final String message,
 			final boolean success) {
 		
 		final AutobahnReservation res = reservations.get(resID);
 
-		Runnable command = new Runnable() {
+		AutobahnCommand command = new AutobahnCommand() {
 			public void run() {
 				rdao.update(res);
 
 				res.reservationWithdrawn(message, success);
 			}
+
+			@Override
+			public String getInfo() {
+				return "Report withdraw: " + resID;
+			}
 		};
 
-		BlockingQueue<Runnable> queue = events.get(resID);
+		BlockingQueue<AutobahnCommand> queue = events.get(resID);
 		queue.add(new TransactionTask(command));
 	}
 
-	public void reportModify(String resID, final Calendar startTime,
+	public void reportModify(final String resID, final Calendar startTime,
 			final Calendar endTime, final String message, final boolean success) {
 		
 		final AutobahnReservation res = reservations.get(resID);
 
-        Runnable command = new Runnable() {
+		AutobahnCommand command = new AutobahnCommand() {
             public void run() {
                 rdao.update(res);
                 
                 res.reservationModified(startTime, endTime, message, success);
             }
+
+			@Override
+			public String getInfo() {
+				return "Report modify: " + resID;
+			}
         };
 
-        BlockingQueue<Runnable> queue = events.get(resID);
+        BlockingQueue<AutobahnCommand> queue = events.get(resID);
         queue.add(new TransactionTask(command));
 	}
 	
-	public void reportActive(String resID, final String message,
+	public void reportActive(final String resID, final String message,
 			final boolean success) throws NoSuchReservationException {
 		
 		final AutobahnReservation res = reservations.get(resID);
@@ -252,19 +297,24 @@ public class ReservationProcessor {
 		if(res == null)
 			throw new NoSuchReservationException(resID);
 		
-        Runnable command = new Runnable() {
+		AutobahnCommand command = new AutobahnCommand() {
             public void run() {
                 rdao.update(res);
                 
                 res.reservationActivated(message, success);
             }
+
+			@Override
+			public String getInfo() {
+				return "Report active: " + resID;
+			}
         };
 
-        BlockingQueue<Runnable> queue = events.get(resID);
+        BlockingQueue<AutobahnCommand> queue = events.get(resID);
         queue.add(new TransactionTask(command));
 	}
 
-	public void reportFinished(String resID, final String message,
+	public void reportFinished(final String resID, final String message,
 			final boolean success) {
 		
 		final AutobahnReservation res = reservations.get(resID);
@@ -283,15 +333,20 @@ public class ReservationProcessor {
 				return;
 			}
 			
-	        Runnable command = new Runnable() {
+			AutobahnCommand command = new AutobahnCommand() {
 	            public void run() {
 	                rdao.update(res);
 	                
 	                res.reservationFinished(message, success);
 	            }
+
+				@Override
+				public String getInfo() {
+					return "Report finished: " + resID;
+				}
 	        };
 
-	        BlockingQueue<Runnable> queue = events.get(resID);
+	        BlockingQueue<AutobahnCommand> queue = events.get(resID);
 	        queue.add(new TransactionTask(command));
 		} else {
 			// Means that the reservation might be already finished in this domain
@@ -311,7 +366,7 @@ public class ReservationProcessor {
 		}
 	}
 
-	public void activate(String resID, final boolean success) {
+	public void activate(final String resID, final boolean success) {
 		final AutobahnReservation res = reservations.get(resID);
 
 		if(res == null) {
@@ -319,12 +374,17 @@ public class ReservationProcessor {
 			return;
 		}
 		
-        Runnable command = new Runnable() {
+		AutobahnCommand command = new AutobahnCommand() {
             public void run() {
                 rdao.update(res);
 	                
         		res.activate(success);
             }
+
+			@Override
+			public String getInfo() {
+				return "Activate: " + resID;
+			}
         };
 
         if(restorationMode) {
@@ -332,11 +392,11 @@ public class ReservationProcessor {
         	return;
         }
         
-        BlockingQueue<Runnable> queue = events.get(resID);
+        BlockingQueue<AutobahnCommand> queue = events.get(resID);
         queue.add(new TransactionTask(command));
 	}
 
-	public void finish(String resID, final boolean success) {
+	public void finish(final String resID, final boolean success) {
 		final AutobahnReservation res = reservations.get(resID);
 
 		if(res == null) {
@@ -344,12 +404,17 @@ public class ReservationProcessor {
 			return;
 		}
 		
-        Runnable command = new Runnable() {
+		AutobahnCommand command = new AutobahnCommand() {
             public void run() {
             	rdao.update(res);
                 
         		res.finish(success);
             }
+
+			@Override
+			public String getInfo() {
+				return "Finish: " + resID;
+			}
         };
 
         if(restorationMode) {
@@ -357,14 +422,18 @@ public class ReservationProcessor {
         	return;
         }
         
-        BlockingQueue<Runnable> queue = events.get(resID);
+        BlockingQueue<AutobahnCommand> queue = events.get(resID);
         queue.add(new TransactionTask(command));
 	}
 	
-	class TransactionTask implements Runnable {
-		private Runnable command = null;
+	abstract class AutobahnCommand implements Runnable {
+		public abstract String getInfo();
+	}
+	
+	class TransactionTask extends AutobahnCommand {
+		private AutobahnCommand command = null;
 		
-		TransactionTask(Runnable command) {
+		TransactionTask(AutobahnCommand command) {
 			this.command = command;
 		}
 		
@@ -372,12 +441,19 @@ public class ReservationProcessor {
 			HibernateUtil hbm = IdmHibernateUtil.getInstance();
 			Transaction t = hbm.beginTransaction();
 			
+			log.info("Processor: command " + command.getInfo() + " start");
 			command.run();
+			log.info("Processor: command " + command.getInfo() + " end");
 			
 			if (!t.wasCommitted()) {
 			    t.commit();
 			}
             hbm.closeSession();
+		}
+
+		@Override
+		public String getInfo() {
+			return command.getInfo();
 		}
 	}
 	
@@ -390,7 +466,7 @@ public class ReservationProcessor {
 		}
 
 		public void run() {
-			BlockingQueue<Runnable> queue = events.get(resID);
+			BlockingQueue<AutobahnCommand> queue = events.get(resID);
 			
 			Runnable command = null;
 			try {
