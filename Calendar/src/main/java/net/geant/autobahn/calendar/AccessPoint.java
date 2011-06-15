@@ -9,6 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import net.geant.autobahn.constraints.BooleanConstraint;
+import net.geant.autobahn.constraints.ConstraintsNames;
+import net.geant.autobahn.constraints.GlobalConstraints;
+import net.geant.autobahn.constraints.MinValueConstraint;
+import net.geant.autobahn.constraints.PathConstraints;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
 import net.geant.autobahn.intradomain.IntradomainPath;
 import net.geant.autobahn.intradomain.common.GenericLink;
@@ -191,6 +196,16 @@ public final class AccessPoint implements ResourcesReservationCalendar {
 		start.add(Calendar.SECOND, -1 * setupTime);
 		end = (Calendar) end.clone();
 		end.add(Calendar.SECOND, teardownTime);
+		
+		for (GenericLink glink : path.getLinks()) {
+			PathConstraints pcon = path.getConstraints(glink);
+			MinValueConstraint tslots = pcon.getMinValueConstraint(ConstraintsNames.TIMESLOTS);
+			
+			if (tslots != null) {
+				double count = Math.ceil((double) capacity / GlobalConstraints.ONE_TIMESLOT_CAPACITY);
+				tslots.setValue(count);
+			}
+		}
 		
 		// Reserve constraints
 		constraintsCalendar.reserveResources(path, start, end);

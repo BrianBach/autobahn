@@ -11,6 +11,7 @@ import java.util.Map;
 
 import net.geant.autobahn.constraints.BooleanConstraint;
 import net.geant.autobahn.constraints.ConstraintsNames;
+import net.geant.autobahn.constraints.GlobalConstraints;
 import net.geant.autobahn.constraints.MinValueConstraint;
 import net.geant.autobahn.constraints.PathConstraints;
 import net.geant.autobahn.constraints.RangeConstraint;
@@ -141,7 +142,7 @@ public class SdhIntradomainPathfinder extends GenericIntradomainPathfinder {
 				pcon.addBooleanConstraint(ConstraintsNames.SUPPORTS_VLAN_TRANSLATION, new BooleanConstraint(false, "OR"));
         	}
 			
-			double ts_num = Math.ceil((double)link.getCapacity() / 150336000.0);
+			double ts_num = Math.ceil((double)link.getCapacity() / GlobalConstraints.ONE_TIMESLOT_CAPACITY);
 			pcon.addMinValueConstraint(ConstraintsNames.TIMESLOTS, new MinValueConstraint(ts_num));
 			pcon.addMinValueConstraint(ConstraintsNames.MTU, new MinValueConstraint(mtuMin));
 

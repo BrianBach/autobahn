@@ -54,7 +54,7 @@ public class GlobalConstraints implements Serializable {
     @XmlElement(required = true, nillable = true)
     private List<DomainConstraints> domainConstraints = new ArrayList<DomainConstraints>();
     
-    private static final double ONE_TIMESLOT_CAPACITY = 150336000.0;
+    public static final double ONE_TIMESLOT_CAPACITY = 150336000.0;
     
     /**
      * @return Returns the constraintID.
