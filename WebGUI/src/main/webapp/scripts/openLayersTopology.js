@@ -206,12 +206,12 @@ function refreashMap (map){
 			
 			//Checks if topology has been updated with the help
 			//of initial_* variables
-			if(initial_markersXML.length != markersXML.length){
+			if(initial_markersXML != markersXML){
 				addMarkers(map,markersXML);		
 				initial_markersXML = markersXML;				    			
 			}
 
-			if(initial_linesXML.length != linesXML.length){
+			if(initial_linesXML != linesXML){
 				addLines(map, linesXML, flag);
 				initial_linesXML = linesXML;				    
 			}		
