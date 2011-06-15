@@ -6,6 +6,8 @@ abspath=$(cd ${0%/*} && echo $PWD/${0##*/})
 # to get the path only - not the script name - add
 path_only=`dirname "$abspath"`
 
+framework_pass="abahn"
+
 #include logging mechanism
 source $path_only/log.sh
 
@@ -35,7 +37,9 @@ declare -x TOPOLOGYFILE
 declare -x GRAPHICAL
 declare -x AUTOBAHN_FOLDER
 
-
+function md5 {
+ 	echo -n $1 |md5sum |awk '{print $1}'
+}
 
 #Performs dependency checks
 function perform_checks {
@@ -250,6 +254,10 @@ function file_editor {
     echo "$cmd" >> $path_only/cur_properties 
     i=0
     reqval=0
+    echo ""
+    echo "$cmd"
+    echo ""
+    cat $path_only/cur_properties
     log "to cur_prop `cat $path_only/cur_properties`"
     cat $path_only/cur_properties | while read line; do 
     	((i++))	
@@ -257,12 +265,21 @@ function file_editor {
 	((reqval=$i+$num_of_prop))
 	valnum=$reqval"p"
 	val=$(sed -n "$valnum" $path_only/cur_properties)
+
+  	if [ $line == "framework.password" ]
+  	then
+ 		if [ $val != "xxxx" ]
+ 		then
+ 			val=`md5 $val`
+ 		else
+ 			val=$framework_pass
+ 		fi
+  	fi
 	add_attribute "$line=$val" "$conf_file"
     done
     rm -f cur_properties temp_editor
     poplocalinfo
-}      
-     
+}
 
 
 #Configuring a Quagga file in an ncurses env
@@ -588,8 +605,8 @@ function get_framework_defaults {
 	pushlocalinfo
 	newlogparagraph "function get_framework_defaults"
 	framework_commandLine=localhost
-	framework_port=5000
-	framework_password="abahn"
+	framework_port=5000	
+	framework_pass=abahn
 	if [ -f $1 ]; then
 		propfile=`grep "^[ ]*[#\!]" -v $1`
 		for line in $propfile; do
@@ -599,12 +616,14 @@ function get_framework_defaults {
 		          framework.commandLine ) framework_commandLine=$curval
 			  ;;
 		          framework.port ) framework_port=$curval
-		      ;;
-		          framework.password ) framework_password=$curval
+		      	  ;;
+		          framework.password ) framework_pass=$curval
 			  ;;
 			esac
 		done
-	fi	
+	fi
+ 	framework_password="xxxx"
+	
 	log "framework.commandLine $framework_commandLine framework.port $framework_port framework.password $framework_password" 
 	echo -n "framework.commandLine $framework_commandLine framework.port $framework_port framework.password $framework_password" | tr -d '\r' > $path_only/framework_defaults
 	poplocalinfo
@@ -1082,3 +1101,4 @@ fi
 
 finalize
 																					       
+ 
