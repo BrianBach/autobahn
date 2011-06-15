@@ -10,9 +10,13 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import sun.misc.Signal;
+import sun.misc.SignalHandler;
 
 import net.geant.autobahn.framework.commands.AutobahnCommand;
 import net.geant.autobahn.framework.commands.CancelServiceCommand;
@@ -32,6 +36,7 @@ import net.geant.autobahn.framework.commands.TopologyCommand;
 import net.geant.autobahn.framework.commands.UptimeCommand;
 
 import org.apache.log4j.Logger;
+import org.apache.commons.codec.binary.Hex;
 
 /**
  * @author Michal
@@ -52,6 +57,16 @@ public class Framework {
 
 	private Properties properties;
 		
+    private ServerSocket server;
+    private Socket client = null;
+
+    private PrintWriter out = null;
+    private BufferedReader in = null;
+    private BufferedReader br = null;
+    
+    //Used for telnet codes
+    private BufferedWriter rawout = null;
+
 	public static Map<String, AutobahnCommand> commands = new HashMap<String, AutobahnCommand>();
 		
 	static {
@@ -74,6 +89,12 @@ public class Framework {
         commands.put("idcp", new IdcpCommand());
 	}
 
+    private static String info = "-------------------------\n" +
+                                 " Autobahn framework\n" +
+                                 "  quit - to quit\n" +
+                                 "  help - to display help\n" +
+                                 "-------------------------\n";
+    
 	public static Properties loadProperties(String filename) throws Exception {
 		Properties properties = new Properties();
 		FileInputStream fis = new FileInputStream(filename);
@@ -83,6 +104,24 @@ public class Framework {
 		return properties;
 	}
 	
+    public static String md5(String s)
+    {
+        byte[] hash;
+        String result = "";
+        try {
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+            digest.update(s.getBytes());
+            hash = digest.digest();
+            result =new String ( Hex.encodeHex(hash) );
+        } catch (NoSuchAlgorithmException nsae) {
+            log.error("Could not find the md5 algorithm");
+            log.debug("Exception info: ", nsae);
+            return result;
+        }
+
+        return result;
+    }
+
 	public net.geant.autobahn.idm.AccessPoint.State startIdm() {
 		try {
 			
@@ -101,7 +140,7 @@ public class Framework {
         }
 	}
 	
-	private void init(Properties props) throws Exception {
+	private synchronized void init(Properties props) throws Exception {
 		
 		properties = props;
 
@@ -123,32 +162,43 @@ public class Framework {
 
 		// choose command liner
 		String cmdLiner = properties.getProperty("framework.commandLine");
-		if (cmdLiner.equalsIgnoreCase("interactive"))
+		if (cmdLiner.equalsIgnoreCase("interactive")) {
 			commandLine();
-		else if (cmdLiner.equalsIgnoreCase("localhost"))
+		}
+		else if (cmdLiner.equalsIgnoreCase("localhost")) {
 			telnetCommandLine(false);
-		else if (cmdLiner.equalsIgnoreCase("remote"))
+		}
+		else if (cmdLiner.equalsIgnoreCase("remote")) {
 			telnetCommandLine(true);
+		}
+        else if (cmdLiner.equals("none")) {
+            wait();
+        }
 
 	}
 
 	private void telnetCommandLine(boolean allowRemote) throws IOException {
 
 		int port = Integer.parseInt(properties.getProperty("framework.port"));
-		ServerSocket server = new ServerSocket(port);
-
-		Socket client = null;
-
-		PrintWriter out = null;
-		BufferedReader in = null;
 		
-		//Used for telnet codes
-        BufferedWriter rawout = null;
+		try {       
+		    server = new ServerSocket(port);        
+        } catch (IOException e) {
+            log.error("Telnet server could not listen on port " + port);
+            log.debug("Exception info: ", e);
+            System.exit(-1);
+        }
 
 		while (true) {
 
 			if (client == null) {
-				client = server.accept();
+			    try {
+			        client = server.accept();
+			    } catch (IOException e) {
+			        log.info("Telnet server will accept no more incoming connections");
+                    server.close();
+                    System.exit(-1);                
+			    }
 				stop = false;
 				if (!allowRemote && !client.getInetAddress().isLoopbackAddress()) {
 					client.close();
@@ -165,11 +215,7 @@ public class Framework {
                 rawout = new BufferedWriter(new OutputStreamWriter(
                         client.getOutputStream(), "ISO-8859-1"));
 
-				out.println("-------------------------");
-				out.println(" Autobahn framework '11");
-				out.println("  quit - to quit");
-				out.println("  help - to display help");
-				out.println("-------------------------");
+				out.println(info);
 				
 				/*
 				 * Password check
@@ -188,6 +234,7 @@ public class Framework {
                 // (0xff 0xfd 0x01)
                 // so we have to remove these commands from incoming stream
                 String line = trimTelnetNegotiationCommands(in.readLine());
+                line = md5(line);
                 if(!line.equals(properties.getProperty("framework.password"))) {
                     client.close();
                     log.warn("wrong password");
@@ -230,39 +277,13 @@ public class Framework {
 			}
 
 			if (stop) {
-				if (out != null) {
-				    out.close();
-				}
-				if (in != null) {
-				    in.close();
-				}
-                if (rawout != null) {
-                    rawout.close();
-                }
-                if (client != null) {
-                    client.close();
-                }
-				client = null;
-
-				if (shutdown) {
-					server.close();
-					break;
-				}
+			    stop(shutdown);
 			}
 		}
 	}
-	
-	
-	static void info() {
-		System.out.println("-------------------------");
-		System.out.println(" Autobahn framework '08");
-		System.out.println("  quit - to quit");
-		System.out.println("  help - to display help");
-		System.out.println("-------------------------");
-	}
 
 	private void commandLine() throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		br = new BufferedReader(new InputStreamReader(System.in));
 
 		while (true) {
 			System.out.println("enter command");
@@ -305,10 +326,37 @@ public class Framework {
 	public void stop(boolean shutdown) {
 		this.stop = true;
 		this.shutdown = shutdown;
+		
+        if (out != null) {       
+            out.close();            
+        }
+        try {       
+            if (br != null) {                       
+                br.close();         
+            }       
+            if (in != null) {           
+                in.close();             
+            }           
+            if (rawout != null) {           
+                rawout.close();             
+            }           
+            if (client != null) {           
+                client.close();            
+            }
+            client = null;          
+            if (shutdown && server!=null) {
+                server.close();
+            }
+        } catch (IOException e) {       
+            log.error("Error while closing telnet ports");
+            log.debug("Exception info: ", e);
+        }
 	}
 
+	public static boolean running = true;
+
 	public static void main(String[] args) throws Exception {
-		Properties props = Framework.loadProperties("etc/framework.properties");
+		final Properties props = Framework.loadProperties("etc/framework.properties");
 		
 		for(int i = 0; i < args.length; i++) {
 			if("--startup-notifier".equalsIgnoreCase(args[i])) {
@@ -317,26 +365,32 @@ public class Framework {
 			}
 		}
 		
-		if(args.length == 0 || "start".equalsIgnoreCase(args[0])) {
-			info();
+		System.out.println(info);
 	
-			Framework autobahn = new Framework();
-			autobahn.init(props);
+		final Framework autobahn = new Framework();
 
-			log.info("autobahn framework shutdown");
-			
-		} else if ("stop".equalsIgnoreCase(args[0])){
-			int port = Integer.parseInt(props.getProperty("framework.port"));
+        SignalHandler handler = new SignalHandler () {
+            public void handle(Signal sig) {
+                log.info("Autobahn framework was ordered to shut down");
+                if (running) {
+                    running = false;
+                    autobahn.stop(true);
+                    System.exit(0);
+                }
+                else {
+                    // only on the second attempt do we exit
+                    log.info("Previous autobahn framework shutdown was interrupted");
+                    System.exit(0);
+                }
+            }
+        };
 
-			try {
-				MyTelnetClient cli = new MyTelnetClient("localhost", port, props.getProperty("framework.password"));
-				cli.write("halt");
-				cli.disconnect();
-			} catch(Exception e) {
-				log.info("Unable to stop. Maybe the service is already stopped...");
-			}
-		}
-		
+        Signal.handle(new Signal("TERM"), handler);
+
+		autobahn.init(props);
+
+		log.info("Autobahn framework was shut down");
+	
 		System.exit(0);
 	}
 
