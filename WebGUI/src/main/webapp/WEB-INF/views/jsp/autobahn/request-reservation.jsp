@@ -219,7 +219,7 @@ function blockInputStartTime(checked) {
             </td>
         <td class="label" style="width: 20px;" id="hide1"><spring:message code="reservation.vlan"/></td>
         <td id="hide2" >
-			<form:input path="request.startPort.vlan" maxlength="4" cssStyle="width:21px; height:12px; margin-right:0px;"/> 
+			<form:input path="request.startPort.vlan" maxlength="4" cssStyle="width:30px; height:20px; margin-right:0px;"/> 
 		</td>
 	</tr>
 	<tr>
@@ -242,7 +242,7 @@ function blockInputStartTime(checked) {
         <td class="label" style="width: 20px;" id="hide3" ><spring:message code="reservation.vlan"/></td>
         
         <td id="hide4"  >
-			<form:input path="request.endPort.vlan" maxlength="4" cssStyle="width:21px; height:12px; margin-right:0px;"/> 
+			<form:input path="request.endPort.vlan" maxlength="4" cssStyle="width:30px; height:20px; margin-right:0px;"/> 
 		</td>
 	</tr>
 	<tr>
