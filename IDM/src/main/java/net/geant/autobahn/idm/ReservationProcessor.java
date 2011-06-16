@@ -513,4 +513,12 @@ public class ReservationProcessor {
 	public void setRestorationMode(boolean mode) {
 		this.restorationMode = mode;
 	}
+	
+	public void addStatusListenerToAllReservations(ReservationStatusListener listener) {
+		for (AutobahnReservation res : reservations.values()) {
+			if(!res.getStatusListeners().contains(listener)) {
+				res.addStatusListener(listener);
+			}
+		}
+	}
 }

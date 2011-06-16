@@ -498,6 +498,8 @@ public final class AccessPoint implements UserAccessPoint,
 		
 		// Reservations
 		List<Reservation> reservations = daos.getReservationDAO().getRunningReservations();
+		IdmHibernateUtil.getInstance().closeSession();
+		
 		log.info("IDM recovery: " + reservations.size() + " running reservation found");
 		for(Reservation r : reservations) {
 			reservationProcessor.recoverReservation((AutobahnReservation) r);
@@ -1144,6 +1146,11 @@ public final class AccessPoint implements UserAccessPoint,
 				guiNotifier = new GuiNotifier(guiAddress, update);
 			} catch (MalformedURLException e) {
 				log.error("Error when setting up gui notifier", e);
+			}
+			
+			// attach it to the axisting reservations
+			if (guiNotifier != null) {
+				reservationProcessor.addStatusListenerToAllReservations(guiNotifier);
 			}
         }
         
