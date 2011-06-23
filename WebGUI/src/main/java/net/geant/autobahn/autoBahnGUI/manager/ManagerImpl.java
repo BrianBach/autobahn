@@ -1015,7 +1015,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		String[] times = getTimes();
 		reservation.setPriority(Priority.NORMAL);
 		reservation.setResiliency(Resiliency.NONE);
-		reservation.setCapacity(1000);
+		reservation.setCapacity(10);
 		try {
 			reservation.setStartTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(times[0]).toGregorianCalendar());
 			reservation.setEndTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(times[1]).toGregorianCalendar());
