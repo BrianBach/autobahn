@@ -1,4 +1,4 @@
 #!/bin/sh
-CP=.
-for i in `ls lib/*.jar`; do CP=$CP:$i; done
-java -Dcxf.config.file=etc/cxf/cxf.xml -Dorg.apache.cxf.Logger=org.apache.cxf.common.logging.Log4jLogger -classpath $CP net.geant.autobahn.framework.Framework stop
+echo "Terminating Autobahn"
+kill -SIGTERM `ps h -C java -o "%p:%a" | grep net.geant.autobahn.framework.Framework | cut -d: -f1`
+echo "Autobahn terminated"
