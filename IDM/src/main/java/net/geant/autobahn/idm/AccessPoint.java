@@ -1416,6 +1416,10 @@ public final class AccessPoint implements UserAccessPoint,
         
         // Check properties
         
+        if (properties == null) {
+            initChecks.append("No properties were loaded, this is a fatal problem.\n");
+        }
+        
         String domain = properties.getProperty("domain");
         if (domain == null || domain.equalsIgnoreCase("none") || domain.equals("")) {
             initChecks.append("domain field is empty, please check idm.properties file.\n");
@@ -1450,6 +1454,16 @@ public final class AccessPoint implements UserAccessPoint,
                         "domain name in their DBs.");
                 initChecks.append(e.getMessage()+"\n");
             }
+        }
+        
+        if (getTimeoutProperty("timeout.activating") == 0) {
+            initChecks.append("timeout.activating property is zero or " +
+            		"a non-proper integer value, so a default value will be used instead.");
+        }
+
+        if (getTimeoutProperty("timeout.scheduling") == 0) {
+            initChecks.append("timeout.scheduling property is zero or " +
+                    "a non-proper integer value, so a default value will be used instead.");
         }
     }
     
@@ -1550,6 +1564,27 @@ public final class AccessPoint implements UserAccessPoint,
             }
         }
         return friendlyPorts;
+    }
+    
+    /**
+     * Reads the supplied timeout property from properties
+     * 
+     * @param prop - the property key
+     * @return Timeout in msec, 0 if not found
+     */
+    public int getTimeoutProperty(String prop) {
+        int timeout = 0;
+        String timeoutStr = getProperty(prop);
+        
+        if (timeoutStr != null) {
+            try {
+                timeout = Integer.parseInt(timeoutStr);
+            } catch (NumberFormatException ne) {
+                // No need to do anything
+            }
+        }
+        // Value in properties is in seconds, make it msec
+        return timeout * 1000;        
     }
 
 }

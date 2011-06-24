@@ -6,6 +6,7 @@
 package net.geant.autobahn.reservation.states.hd;
 
 import net.geant.autobahn.constraints.GlobalConstraints;
+import net.geant.autobahn.idm.AccessPoint;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
 import net.geant.autobahn.idm2dm.OversubscribedException;
 import net.geant.autobahn.interdomain.NoSuchReservationException;
@@ -20,7 +21,7 @@ import net.geant.autobahn.reservation.ReservationTimeout;
  */
 public class Scheduling extends HomeDomainState {
 
-	public static final int TIMEOUT = 60 * 1000;
+	public static final int MAX_SCHEDULING_TIME_DEFAULT = 60 * 1000;
 	
     public Scheduling(int code, String label) {
         super(code, label);
@@ -28,7 +29,11 @@ public class Scheduling extends HomeDomainState {
     
     @Override
 	public void run(HomeDomainReservation res) {
-    	res.addTimeout(new SchedulingTimeout(res), TIMEOUT);
+        int timeout = AccessPoint.getInstance().getTimeoutProperty("timeout.scheduling");
+        if (timeout == 0) {
+            timeout = MAX_SCHEDULING_TIME_DEFAULT;
+        }
+    	res.addTimeout(new SchedulingTimeout(res), timeout);
 	}
 
 	@Override

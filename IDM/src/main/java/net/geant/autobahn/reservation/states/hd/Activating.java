@@ -15,7 +15,7 @@ import net.geant.autobahn.reservation.ReservationTimeout;
  */
 public class Activating extends HomeDomainState {
 
-	public static final int MAX_ACTIVATION_TIME = 300 * 1000; //in msec
+	public static final int MAX_ACTIVATION_TIME_DEFAULT = 300 * 1000; //in msec
 	
 	public Activating(int code, String label) {
 		super(code, label);
@@ -30,7 +30,11 @@ public class Activating extends HomeDomainState {
 		if(res.areAllDomainsActivated()) {
 			res.switchState(HomeDomainState.ACTIVE);
 		} else {
-			res.addTimeout(new ActivatingTimeout(res.getBodID()), MAX_ACTIVATION_TIME);
+		    int timeout = AccessPoint.getInstance().getTimeoutProperty("timeout.activating");
+		    if (timeout == 0) {
+		        timeout = MAX_ACTIVATION_TIME_DEFAULT;
+		    }
+			res.addTimeout(new ActivatingTimeout(res.getBodID()), timeout);
 		}
 	}
 
