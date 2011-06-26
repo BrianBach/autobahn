@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>autobahn</artifactId>
 		<groupId>net.geant.autobahn</groupId>
-		<version>1.0.1</version>
+		<version>1.1-SNAPSHOT</version>
 	</parent>
 	
 	<repositories>
@@ -17,7 +17,7 @@
 	<modelVersion>4.0.0</modelVersion>
     <groupId>net.geant.autobahn</groupId>
     <artifactId>autobahn-dm</artifactId>
-    <version>1.0.1</version>
+    <version>1.1-SNAPSHOT</version>
     <name>Domain Manager module</name>
     <packaging>jar</packaging>
 
@@ -198,12 +198,12 @@
 		<dependency>
 			<groupId>net.geant.autobahn</groupId>
 			<artifactId>autobahn-common</artifactId>
-			<version>1.0.1</version>
+			<version>1.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>net.geant.autobahn</groupId>
 			<artifactId>autobahn-tool</artifactId>
-			<version>1.0.1</version>
+			<version>1.1-SNAPSHOT</version>
 		</dependency>			
 		<dependency>
 			<groupId>sshtools</groupId>
