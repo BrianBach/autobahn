@@ -26,7 +26,9 @@ import net.geant.autobahn.dao.hibernate.HibernateUtil;
 import net.geant.autobahn.dao.hibernate.IdmHibernateUtil;
 import net.geant.autobahn.dm2idm.Dm2Idm;
 import net.geant.autobahn.gui.GuiNotifier;
-import net.geant.autobahn.idcp.Autobahn2OscarsConverter;
+import net.geant.autobahn.idcp.IdcpException;
+import net.geant.autobahn.idcp.IdcpManager;
+import net.geant.autobahn.idcp.ToIdcp;
 import net.geant.autobahn.idm2dm.Idm2Dm;
 import net.geant.autobahn.idm2dm.Idm2DmClient;
 import net.geant.autobahn.interdomain.Interdomain;
@@ -284,8 +286,6 @@ public final class AccessPoint implements UserAccessPoint,
 	    List<String> idcpServerList = getPropertiesSubset(properties, "idcp.");
 	    for (String idcpServer : idcpServerList) {
 	    	
-            Autobahn2OscarsConverter client = new Autobahn2OscarsConverter(idcpServer);
-            
             // The IDCP cloud should be already connected with at least one link
             // to the AutoBAHN topology, and an admin_domain with the server name 
             // should be present as a client domain
@@ -308,11 +308,13 @@ public final class AccessPoint implements UserAccessPoint,
             // First time we handle this idcpServer, so set it as an IDCP cloud
             AdminDomain idcpAdminDom = idcpProvDomain.getAdminDomain();
             this.saveIdcpServer(idcpAdminDom, idcpServer);
-            
             List<Port> idcpPorts = new ArrayList<Port>();
+            log.info("Retrieving topology from " + idcpServer);
             
             try {
-                List<Link> links = client.getEndpoints();
+            	
+            	ToIdcp client = new ToIdcp(idcpServer);
+                List<Link> links = client.getTopology("*");
                 
                 for (Link l : links) {
                     log.debug("Retrieving IDCP client ports from link " + l.getBodID());
@@ -320,6 +322,19 @@ public final class AccessPoint implements UserAccessPoint,
                     // Set all IDCP ports as part of the IDCP cloud
                     Port ePort = l.getEndPort();
                     Port sPort = l.getStartPort();
+                    
+                    if (!ePort.getBodID().equals(sPort.getBodID())) {
+                    	log.debug("Idcp src + " + sPort.getBodID() + " is diffrent than idcp end " + ePort.getBodID() + ", ignoring");
+                    }
+                    
+                    if (!ePort.getBodID().contains(":") && !sPort.getBodID().contains(":")) {
+                    	// set portId as domain:node:port
+                        String[] split = l.getBodID().split("\\:");
+                        String fullPortId = split[3] + ":" + split[4] + ":" + split[5];
+                        ePort.setBodID(fullPortId);
+                        sPort.setBodID(fullPortId);
+                    }
+                     
                     if (!idcpPorts.contains(ePort)) {
                         ePort.getNode().setProvisioningDomain(idcpProvDomain);
                         idcpPorts.add(ePort);
@@ -332,8 +347,9 @@ public final class AccessPoint implements UserAccessPoint,
                     }
                 }
             }
-            catch (Exception e) {
-                e.printStackTrace();
+            catch (IdcpException e) {
+            	log.info("Could not retrieve topology from " + idcpServer + ", " + e.getMessage());
+                continue;
             }
             
             // Construct dummy IDCP internal links and nodes and insert them in topology
@@ -391,6 +407,9 @@ public final class AccessPoint implements UserAccessPoint,
             // so make sure it is saved
             IdmHibernateUtil.getInstance().closeSession();
             this.saveIdcpServer(idcpAdminDom, idcpServer);
+            
+            // Once idcp topologies have been acquired, subscribe for notifications 
+            IdcpManager.startSubscriptions();
 	    }
 	}
 	
@@ -448,6 +467,8 @@ public final class AccessPoint implements UserAccessPoint,
 	        String name = (String) e.nextElement();
 	        if (name.contains(token)) {
 	            propNames.add(props.getProperty(name));
+	            if (token.startsWith("idcp."))
+	            	IdcpManager.addIdcp(props.getProperty(name), name);
 	        }
 	    }
 	    return propNames;
@@ -482,6 +503,7 @@ public final class AccessPoint implements UserAccessPoint,
         	guiNotifier.stop();
         	guiNotifier = null;
         }
+        IdcpManager.stopSubscriptions();
 	    log.info("===== Disposed =====");
 	}
 		
@@ -1288,7 +1310,7 @@ public final class AccessPoint implements UserAccessPoint,
                 retrieveIdcpTopology();
 			}
 		} catch(Exception e) {
-			log.error("Problem z set topo, ", e);
+			log.error("Could not set topology, ", e);
 		}
 	}
 
