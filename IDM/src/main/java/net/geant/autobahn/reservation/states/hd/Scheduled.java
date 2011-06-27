@@ -8,7 +8,7 @@ package net.geant.autobahn.reservation.states.hd;
 
 import java.util.Calendar;
 
-import net.geant.autobahn.idcp.Autobahn2OscarsConverter;
+import net.geant.autobahn.idcp.ToIdcp;
 import net.geant.autobahn.interdomain.NoSuchReservationException;
 import net.geant.autobahn.reservation.HomeDomainReservation;
 import net.geant.autobahn.reservation.ReservationStatusListener;
@@ -40,8 +40,8 @@ public class Scheduled extends HomeDomainState {
 		if(res.isLastDomain()) {
 
 			if (res.isIdcpReservation() && res.getNextDomainAddress().contains(res.getIdcpServer())) {
-	        	Autobahn2OscarsConverter client = new Autobahn2OscarsConverter(res.getIdcpServer());
-	        	client.cancelReservation(res.getBodID());
+	        	ToIdcp client = new ToIdcp(res.getIdcpServer());
+	        	client.cancel(res.getBodID());
 	        }
 			
 	        res.releaseResources();
@@ -71,8 +71,8 @@ public class Scheduled extends HomeDomainState {
 		if(res.isLastDomain()) {
 			
 			if (res.isIdcpReservation() && res.getNextDomainAddress().contains(res.getIdcpServer())) {
-	        	Autobahn2OscarsConverter client = new Autobahn2OscarsConverter(res.getIdcpServer());
-	        	client.cancelReservation(res.getBodID());
+	        	ToIdcp client = new ToIdcp(res.getIdcpServer());
+	        	client.cancel(res.getBodID());
 	        }
 			
 	        res.releaseResources();

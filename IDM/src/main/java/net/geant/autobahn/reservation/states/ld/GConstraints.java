@@ -6,7 +6,7 @@
 package net.geant.autobahn.reservation.states.ld;
 
 import net.geant.autobahn.constraints.GlobalConstraints;
-import net.geant.autobahn.idcp.Autobahn2OscarsConverter;
+import net.geant.autobahn.idcp.ToIdcp;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
 import net.geant.autobahn.idm2dm.OversubscribedException;
 import net.geant.autobahn.network.Link;
@@ -58,8 +58,8 @@ public class GConstraints extends LastDomainState {
         if(res.isAb2IdcpReservation() && (res.getIdcpServer()!=null)) {
             log.info("Talking with IDCP server... (" + res.getIdcpServer() + ")");
             
-            Autobahn2OscarsConverter client = new Autobahn2OscarsConverter(res.getIdcpServer());
-            int res_code = client.scheduleReservation(res);
+            ToIdcp client = new ToIdcp(res.getIdcpServer());
+            int res_code = client.schedule(res);
             if(res_code != 0) {
                 res.fail(res_code, domainID);
                 return;

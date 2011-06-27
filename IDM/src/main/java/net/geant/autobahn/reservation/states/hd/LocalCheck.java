@@ -10,7 +10,7 @@ import java.util.List;
 
 import net.geant.autobahn.constraints.DomainConstraints;
 import net.geant.autobahn.constraints.GlobalConstraints;
-import net.geant.autobahn.idcp.Autobahn2OscarsConverter;
+import net.geant.autobahn.idcp.ToIdcp;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
 import net.geant.autobahn.idm2dm.OversubscribedException;
 import net.geant.autobahn.network.Link;
@@ -88,24 +88,18 @@ public class LocalCheck extends HomeDomainState {
         	return;
         }
                 
-        //TODO: Ask Michal why IDCP check is moved here and not below
         if (!path.isHomeDomain(domainID)) {
         	
-        	 // see if this is an idcp-only reservation, if so pass the reservation to its idcp server
+        	 // if this is idcp reservation only, send now
         	 if (res.isIdcp2AbReservation() && res.isAb2IdcpReservation() && res.getIdcpServer() != null) {
-        		 
-       			 Autobahn2OscarsConverter client = new Autobahn2OscarsConverter(res.getIdcpServer());
-   	     	   	 int code = client.scheduleReservation(res);
-       	     	 if (code != 0) {
+        		 ToIdcp client = new ToIdcp(res.getIdcpServer());
+   	     	   	 int code = client.schedule(res);
+       	     	 if (code != 0) 
        	     		 res.fail(ReservationErrors.getInfo(code, res.getIdcpServer()));
-       	     	 	 return;
-   	     	   	} else {
+   	     	   	 else 
    	     	   		res.success("OK");
-   	     	   		return;
-        		 }
-        	 }
-        	
-        	 pathFailed(res, ReservationErrors.WRONG_DOMAIN, domainID);
+        	 } else
+        		 pathFailed(res, ReservationErrors.WRONG_DOMAIN, domainID);
              return; 
         }
         
@@ -154,6 +148,19 @@ public class LocalCheck extends HomeDomainState {
         globalConstraints.addDomainConstraints("user-egress", tmp);
         
         res.switchState(HomeDomainState.SCHEDULING);
+        
+        // check if this res should be send to an idcp domain
+        if (res.isIdcpReservation()) {
+        	 System.out.println("IDCP - res idcp");
+    		 ToIdcp client = new ToIdcp(res.getIdcpServer());
+	     	   	 int code = client.schedule(res);
+   	     	 if (code != 0) 
+   	     		 res.fail(ReservationErrors.getInfo(code, res.getIdcpServer()));
+     	   	 else 
+     	   		res.success("OK");
+   	     	 
+             return; 
+        }
         
         // send reservation request to another IDM from the chain
         try {
@@ -211,9 +218,9 @@ public class LocalCheck extends HomeDomainState {
         res.setGlobalConstraints(constraints);
      
         if (res.isIdcpReservation() && res.getNextDomainAddress().equalsIgnoreCase(res.getIdcpServer())) {
-        	
-     	   	Autobahn2OscarsConverter client = new Autobahn2OscarsConverter(res.getIdcpServer());
-     	   	int code = client.scheduleReservation(res);
+        	System.out.println("IDCP SELF SCHEDULE");
+        	ToIdcp client = new ToIdcp(res.getIdcpServer());
+     	   	int code = client.schedule(res);
      	   	if (code != 0) {
      	   		res.fail(ReservationErrors.getInfo(code, res.getNextDomainAddress()));
      	   		return;
