@@ -15,6 +15,7 @@ import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.ws.Holder;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
@@ -59,121 +60,59 @@ public class OSCARSImpl implements OSCARS {
 
     private Logger log = Logger.getLogger(this.getClass());
 
-    private HomeDomainReservation makeReservation(
-            javax.xml.ws.Holder<java.lang.String> globalReservationId,
-            long startTime,
-            long endTime,
-            int bandwidth,
-            java.lang.String description,
-            javax.xml.ws.Holder<net.geant.autobahn.idcp.PathInfo> pathInfo,
-            javax.xml.ws.Holder<java.lang.String> token,
-            javax.xml.ws.Holder<java.lang.String> status)
-    throws IOException {
-    
-        int capacity = bandwidth;
-        // Time
-        Calendar start = Calendar.getInstance();
-        start.setTimeInMillis(startTime * 1000);
-        Calendar end = Calendar.getInstance();
-        end.setTimeInMillis(endTime * 1000);
-        
-        // Ports
-        String dest = pathInfo.value.getLayer2Info().getDestEndpoint();
-        
-        // Vlans
-        String vlans = pathInfo.value.getLayer2Info().getSrcVtag().getValue();
-        
-        //CtrlPlaneHopContent[] hops = (CtrlPlaneHopContent[]) pathInfo.value.getPath().getHop().toArray();
-        CtrlPlaneHopContent[] hops = new CtrlPlaneHopContent[pathInfo.value.getPath().getHop().size()];
-		for (int i=0; i < pathInfo.value.getPath().getHop().size(); i++) {
-			hops[i] = pathInfo.value.getPath().getHop().get(i);
-		}
-        //System.out.println("Hops received: " + hops.length);
-        
-        CtrlPlaneHopContent srcHop = hops[hops.length - 2];
-        String src = srcHop.getLinkIdRef();
-        String resID = globalReservationId.value;
-        //src = src.substring(src.indexOf(":link=") + 6);
-        //dest = dest.substring(dest.indexOf(":link=") + 6);
-
-        // TODO vlans, port, bodID?
-        Oscars2Autobahn autobahn = new Oscars2Autobahn();
-        HomeDomainReservation resp = null;
-        resp = autobahn.createReservation(resID, capacity, start, end, src, dest, vlans);
-
-        return resp;
-    }
-
-
     /* (non-Javadoc)
      * @see net.geant.autobahn.idcp.OSCARS#cancelReservation(net.geant.autobahn.idcp.GlobalReservationId  cancelReservation )*
      */
     public java.lang.String cancelReservation(GlobalReservationId cancelReservation) throws AAAFaultMessage , BSSFaultMessage    { 
        
-    	log.debug("cancelReservation.begin");
-
-        String resID = cancelReservation.getGri();
+        String resId = cancelReservation.getGri();
         try {
-            Oscars2Autobahn autobahn = new Oscars2Autobahn();
-            autobahn.cancelReservation(resID);
-        } catch (IOException e) {
-            log.debug("cancelReservation exc - " + e.getMessage());
+        	FromIdcp.cancel(resId);
+            return resId;
+        } catch (IdcpException e) {
             throw new BSSFaultMessage(e.getMessage());
         }
-
-        log.debug("cancelReservation.end");
-        return resID;
     }
 
     /* (non-Javadoc)
      * @see net.geant.autobahn.idcp.OSCARS#createReservation(java.lang.String  globalReservationId ,)long  startTime ,)long  endTime ,)int  bandwidth ,)java.lang.String  description ,)net.geant.autobahn.idcp.PathInfo  pathInfo ,)java.lang.String  token ,)java.lang.String  status )*
      */
     public void createReservation(javax.xml.ws.Holder<java.lang.String> globalReservationId,long startTime,long endTime,int bandwidth,java.lang.String description,javax.xml.ws.Holder<PathInfo> pathInfo,javax.xml.ws.Holder<java.lang.String> token,javax.xml.ws.Holder<java.lang.String> status) throws AAAFaultMessage , BSSFaultMessage    { 
-     
-    	token.value = "none";
-    	status.value = "ACCEPTED";
     	
-    	try {
-            makeReservation(globalReservationId,startTime,endTime,bandwidth,description,pathInfo,token,status);
-        } catch (Exception e) {
-            System.out.println("Exception makeReservation! " + e.getMessage());
-            throw new BSSFaultMessage(e.getMessage(), e);
-        }
+    	CtrlPlaneHopContent[] hops = new CtrlPlaneHopContent[pathInfo.value.getPath().getHop().size()];
+ 		for (int i=0; i < pathInfo.value.getPath().getHop().size(); i++) {
+ 			hops[i] = pathInfo.value.getPath().getHop().get(i);
+ 		}
+        CtrlPlaneHopContent srcHop = hops[hops.length - 2];
+        final String src = srcHop.getLinkIdRef();
+    	final String dst = pathInfo.value.getLayer2Info().getDestEndpoint();
+    	final String resId = globalReservationId.value;
+    	final String vlan = pathInfo.value.getLayer2Info().getSrcVtag().getValue();
+   		FromIdcp.create(resId, description, src, dst, startTime, endTime, bandwidth, vlan);
+
+   		// ACCEPTED must be returned
+    	token.value = "not set";
+    	status.value = "ACCEPTED";
     }
 
     /* (non-Javadoc)
      * @see net.geant.autobahn.idcp.OSCARS#queryReservation(java.lang.String  gri ,)java.lang.String  globalReservationId ,)java.lang.String  login ,)java.lang.String  status ,)java.lang.Long  startTime ,)java.lang.Long  endTime ,)java.lang.Long  createTime ,)java.lang.Integer  bandwidth ,)java.lang.String  description ,)net.geant.autobahn.idcp.PathInfo  pathInfo )*
      */
     public void queryReservation(java.lang.String gri,javax.xml.ws.Holder<java.lang.String> globalReservationId,javax.xml.ws.Holder<java.lang.String> login,javax.xml.ws.Holder<java.lang.String> status,javax.xml.ws.Holder<java.lang.Long> startTime,javax.xml.ws.Holder<java.lang.Long> endTime,javax.xml.ws.Holder<java.lang.Long> createTime,javax.xml.ws.Holder<java.lang.Integer> bandwidth,javax.xml.ws.Holder<java.lang.String> description,javax.xml.ws.Holder<PathInfo> pathInfo) throws AAAFaultMessage , BSSFaultMessage    { 
-     
-    	 log.debug("queryReservation.begin");
 
-         ResDetails res = new ResDetails();
-         res.setGlobalReservationId("reservation not found");
-         res.setLogin("autobahn");
-         res.setStatus("ok");
-         res.setGlobalReservationId("aaa");
+    	ResDetails res = FromIdcp.query(gri);
+    	if (res == null)
+    		throw new BSSFaultMessage("Reservation " + gri + " not found");
 
-         try {
-             // find reservation
-             Oscars2Autobahn autobahn = new Oscars2Autobahn();
-             Reservation resInfo = autobahn.queryReservation(gri);
-
-             if (resInfo != null) {
-                 log.debug("found res: " + gri);
-                 res.setBandwidth((int) resInfo.getCapacity());
-                 res.setDescription(resInfo.getDescription());
-                 res.setGlobalReservationId(resInfo.getBodID());
-                 res.setLogin("DRAGON");
-                 res.setStatus(String.valueOf(resInfo.getState()));
-                 res.setStartTime(resInfo.getStartTime().getTimeInMillis());
-                 res.setEndTime(resInfo.getEndTime().getTimeInMillis());
-             }
-
-         } catch (Exception e) {
-             log.info("query - " + e.getMessage());
-         }
-         log.debug("queryReservation.end");
+    	globalReservationId.value = res.getGlobalReservationId();
+    	login.value = res.getLogin();
+    	status.value = res.getStatus();
+    	startTime.value = res.getStartTime();
+    	endTime.value = res.getEndTime();
+    	createTime.value = 0L;
+    	bandwidth.value = res.getBandwidth();
+    	description.value = res.getDescription();
+    	pathInfo.value = res.getPathInfo();
     }
 
     /* (non-Javadoc)
@@ -181,17 +120,8 @@ public class OSCARSImpl implements OSCARS {
      */
     public void refreshPath(java.lang.String token,javax.xml.ws.Holder<java.lang.String> globalReservationId,javax.xml.ws.Holder<java.lang.String> status) throws AAAFaultMessage , BSSFaultMessage    { 
         
-        System.out.println(token);
-        System.out.println(globalReservationId.value);
-        try {
-            java.lang.String statusValue = "";
-            status.value = statusValue;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new RuntimeException(ex);
-        }
-        //throw new AAAFaultMessage("AAAFaultMessage...");
-        //throw new BSSFaultMessage("BSSFaultMessage...");
+    	log.info("Idcp refreshPath - token: " + token );
+    	throw new BSSFaultMessage("refreshPath not supported");
     }
 
     /* (non-Javadoc)
@@ -199,35 +129,17 @@ public class OSCARSImpl implements OSCARS {
      */
     public void teardownPath(java.lang.String token,javax.xml.ws.Holder<java.lang.String> globalReservationId,javax.xml.ws.Holder<java.lang.String> status) throws AAAFaultMessage , BSSFaultMessage    { 
         
-        System.out.println(token);
-        System.out.println(globalReservationId.value);
-        try {
-            java.lang.String statusValue = "";
-            status.value = statusValue;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new RuntimeException(ex);
-        }
-        //throw new AAAFaultMessage("AAAFaultMessage...");
-        //throw new BSSFaultMessage("BSSFaultMessage...");
+    	log.info("Idcp teardownPath - token: " + token);
+    	throw new BSSFaultMessage("teardownPath not supported");
     }
 
     /* (non-Javadoc)
      * @see net.geant.autobahn.idcp.OSCARS#createPath(java.lang.String  token ,)java.lang.String  globalReservationId ,)java.lang.String  status )*
      */
     public void createPath(java.lang.String token,javax.xml.ws.Holder<java.lang.String> globalReservationId,javax.xml.ws.Holder<java.lang.String> status) throws AAAFaultMessage , BSSFaultMessage    { 
-        
-        System.out.println(token);
-        System.out.println(globalReservationId.value);
-        try {
-            java.lang.String statusValue = "";
-            status.value = statusValue;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new RuntimeException(ex);
-        }
-        //throw new AAAFaultMessage("AAAFaultMessage...");
-        //throw new BSSFaultMessage("BSSFaultMessage...");
+
+    	log.info("Idcp createPath - token: " + token);
+    	throw new BSSFaultMessage("createPath not supported");
     }
 
     /* (non-Javadoc)
@@ -235,38 +147,25 @@ public class OSCARSImpl implements OSCARS {
      */
     public net.geant.autobahn.idcp.GetTopologyResponseContent getNetworkTopology(GetTopologyContent getNetworkTopology) throws AAAFaultMessage , BSSFaultMessage    { 
 
-    	 log.debug("getNetworkTopology.begin");
-
-         List<Link> links = new ArrayList<Link>();
-         
-         try {
-             Oscars2Autobahn autobahn = new Oscars2Autobahn();
-             links = autobahn.getTopology();
-         } catch (IOException e) {
-             throw new BSSFaultMessage(e.getMessage());
-         }
+         List<Link> links = FromIdcp.getTopology();
          
          GetTopologyResponseContent cont = new GetTopologyResponseContent();
          CtrlPlaneTopologyContent ctrlTopology = new CtrlPlaneTopologyContent();
-         ctrlTopology.setId("GEANT2");
-         ctrlTopology.setIdcId("GEANT2");
+         ctrlTopology.setId("GEANT");
+         ctrlTopology.setIdcId("GEANT");
          CtrlPlaneDomainSignatureContent[] ctrlSigns = new CtrlPlaneDomainSignatureContent[1];
          ctrlSigns[0] = new CtrlPlaneDomainSignatureContent();
-         ctrlSigns[0].setDomainId("NOT SET");
+         ctrlSigns[0].setDomainId("GEANT");
          
          for (CtrlPlaneDomainSignatureContent dsc : ctrlSigns)
         	 ctrlTopology.getDomainSignature().add(dsc);
 
-         //TODO THE RIGHT CONVERTER JOHNIES
-         CtrlPlaneDomainContent[] ctrlDomains = OscarsConverter
-                 .getOscarsTopology(links);
-
+         CtrlPlaneDomainContent[] ctrlDomains = OscarsConverter.getOscarsTopology(links);
+         
          for (CtrlPlaneDomainContent dc : ctrlDomains)
         	 ctrlTopology.getDomain().add(dc);
          
          cont.setTopology(ctrlTopology);
-         log.debug("getNetworkTopolgoy.finish");
-
          return cont;
     }
 
@@ -275,37 +174,7 @@ public class OSCARSImpl implements OSCARS {
      */
     public net.geant.autobahn.idcp.ResDetails modifyReservation(java.lang.String globalReservationId,long startTime,long endTime,int bandwidth,java.lang.String description,net.geant.autobahn.idcp.PathInfo pathInfo) throws AAAFaultMessage , BSSFaultMessage    { 
         
-    	Reservation resInfo = new Reservation();
-        resInfo.setBodID(globalReservationId);
-        resInfo.setCapacity(bandwidth);
-        resInfo.setDescription(description);
-        Calendar start = Calendar.getInstance();
-        start.setTimeInMillis(startTime);
-        resInfo.setStartTime(start);
-        Calendar end = Calendar.getInstance();
-        end.setTimeInMillis(endTime);
-        resInfo.setEndTime(end);
-
-        try {
-            Oscars2Autobahn autobahn = new Oscars2Autobahn();
-            boolean succ = autobahn.modifyReservation(resInfo);
-            if (succ == false) {
-                throw new BSSFaultMessage("could not modify reservation");
-            }
-        } catch (IOException e) {
-            throw new BSSFaultMessage(e.getMessage());
-        }
-
-        ResDetails rd = new ResDetails();
-        rd.setBandwidth(bandwidth);
-        rd.setDescription(description);
-        rd.setEndTime(endTime);
-        rd.setStartTime(startTime);
-        rd.setGlobalReservationId(globalReservationId);
-        rd.setLogin("no login");
-        rd.setStatus("no status");
-
-        return rd;
+    	throw new BSSFaultMessage("Modify not supported");
     }
 
     /* (non-Javadoc)
@@ -313,8 +182,10 @@ public class OSCARSImpl implements OSCARS {
      */
     public void notify(org.oasis_open.docs.wsn.b_2.Notify notify) { 
         
-        System.out.println(notify);
         try {
+        	
+        	log.info("notify message arrived");
+        	
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new RuntimeException(ex);
@@ -336,15 +207,30 @@ public class OSCARSImpl implements OSCARS {
          TeardownPathContent teardownPathCon = payload.getTeardownPath();
 
          if (createReservation != null) {
+        	 
              HomeDomainReservation res = null;
+             
+             final String resId = createReservationCon.getGlobalReservationId();
+             final String desc = createReservationCon.getDescription();
+             final long startTime = createReservationCon.getStartTime();
+             final long endTime = createReservationCon.getEndTime();
+             final int bandwidth = createReservationCon.getBandwidth();
+             
+             final PathInfo pathInfo = createReservationCon.getPathInfo();
+             CtrlPlaneHopContent[] hops = new CtrlPlaneHopContent[pathInfo.getPath().getHop().size()];
+      		 for (int i=0; i < pathInfo.getPath().getHop().size(); i++) {
+      			hops[i] = pathInfo.getPath().getHop().get(i);
+      		 }
+             CtrlPlaneHopContent srcHop = hops[hops.length - 2];
+             final String src = srcHop.getLinkIdRef();
+         	 final String dst = pathInfo.getLayer2Info().getDestEndpoint();
+         	 final String vlan = pathInfo.getLayer2Info().getSrcVtag().getValue();
+        	 res = FromIdcp.create(resId, desc, src, dst, startTime, endTime, bandwidth, vlan);
 
              try {
             	 
-            	 res = makeReservation(new javax.xml.ws.Holder<String>(createReservationCon.getGlobalReservationId()),
-            			 createReservationCon.getStartTime(), createReservationCon.getEndTime(), createReservationCon.getBandwidth(),
-            			 createReservationCon.getDescription(), new javax.xml.ws.Holder<PathInfo>(createReservationCon.getPathInfo()), 
-            			 null, null);
-             } catch (IOException e) {
+            	 res = FromIdcp.create(resId, desc, src, dst, startTime, endTime, bandwidth, vlan);
+             } catch (Exception e) {
                  throw new BSSFaultMessage(e.getMessage(), e);
              }
 
@@ -358,17 +244,15 @@ public class OSCARSImpl implements OSCARS {
          }
 
          String cancelRes = null;
-         if (cancel != null && cancel.getGri() != null
-                 && !"".equals(cancel.getGri())) {
+         if (cancel != null && cancel.getGri() != null && !"".equals(cancel.getGri())) {
              cancelRes = cancel.getGri();
          }
 
          if (cancelRes != null) {
              try {
-                 Oscars2Autobahn autobahn = new Oscars2Autobahn();
-                 autobahn.cancelReservation(cancelRes);
-             } catch (IOException e) {
-                 log.info("forward.ProxyException: ", e);
+                 FromIdcp.cancel(cancelRes);
+             } catch (Exception e) {
+                 log.info("forward Exception: ", e);
              }
          }
 
@@ -376,7 +260,6 @@ public class OSCARSImpl implements OSCARS {
         	 String resID = createPath.value.getGlobalReservationId();
 
              log.info("CreatePath received: " + resID);
-
              // Just ignore, create empty reply
          }
 
@@ -393,39 +276,18 @@ public class OSCARSImpl implements OSCARS {
      */
     public net.geant.autobahn.idcp.ListReply listReservations(ListRequest listReservations) throws AAAFaultMessage , BSSFaultMessage    { 
        
-    	 log.debug("listReservations.begin");
-
-         List<Reservation> reservations = new ArrayList<Reservation>();
-
-         try {
-             Oscars2Autobahn autobahn = new Oscars2Autobahn();
-             reservations = autobahn.listReservations();
-         } catch (IOException e) {
-             throw new BSSFaultMessage(e.getMessage());
-         }
-         ResDetails[] resDetails = new ResDetails[reservations.size()];
-         int index = 0;
-
-         for (Reservation ri : reservations) {
-
-             ResDetails rd = new ResDetails();
-             rd.setBandwidth((int) ri.getCapacity());
-             rd.setDescription(ri.getDescription());
-             rd.setGlobalReservationId(ri.getBodID());
-             rd.setLogin("no login");
-             rd.setStatus(String.valueOf(ri.getState()));
-             rd.setStartTime(ri.getStartTime().getTimeInMillis());
-             rd.setEndTime(ri.getEndTime().getTimeInMillis());
-             resDetails[index++] = rd;
-         }
-
-         ListReply list = new ListReply();
-         
-         for (ResDetails rd : resDetails)
-        	 list.getResDetails().add(rd);
-
-         log.debug("listReservations.end");
-
-         return list;
+    	ListReply response = new ListReply();
+    	
+    	List<ResDetails> res = FromIdcp.list();
+    	if (res == null) {
+    		response.setTotalResults(0);
+    		return response;
+    	}
+    	
+    	response.setTotalResults(res.size());
+    	for (ResDetails rd : res)
+    		response.getResDetails().add(rd);
+    	
+    	return response;
     }
 }
