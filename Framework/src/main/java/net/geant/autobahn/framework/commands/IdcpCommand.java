@@ -3,65 +3,51 @@ package net.geant.autobahn.framework.commands;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.Writer;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneHopContent;
-
 import net.geant.autobahn.framework.Framework;
-import net.geant.autobahn.idcp.OscarsClient;
+import net.geant.autobahn.idcp.IdcpClient;
 import net.geant.autobahn.idcp.ResDetails;
 import net.geant.autobahn.idcp.notify.OscarsNotifyClient;
 import net.geant.autobahn.network.Link;
-import net.geant.autobahn.reservation.Reservation;
 
 /**
  * Allows for calling some methods on IdcpClient
  * @author PCSS
  **/
-public class IdcpCommand implements AutobahnCommand {
+public final class IdcpCommand implements AutobahnCommand {
 	
 	private final static String NL = "\r\n";
 	private final static String invalid = "specified arguments were invalid";
-	private static HashMap<String, String> friends; // key - alias for address, value - address
+	private static HashMap<String, String> friends; 
 	
 	static {
-		
 		friends = new HashMap<String, String>();
 		friends.put("local", "https://localhost:8090/autobahn/oscars");
 		friends.put("localNotify", "https://localhost:8090/autobahn/oscarsnotify");
 		friends.put("esnet", "https://oscars-dev.es.net/axis2/services/OSCARS");
 		friends.put("esnetNotify", "https://oscars-dev.es.net/axis2/services/OSCARSNotify");
+		friends.put("internet2", "https://idcdev0.internet2.edu:8443/axis2/services/OSCARS");
+		friends.put("internet2Notify", "https://idcdev0.internet2.edu:8443/axis2/services/OSCARSNotify");
 		// add others or retrieve from idm.properties
 	}
 	
 	private String dumpResDetails(ResDetails res) {
 		
-		Calendar start = Calendar.getInstance();
-		start.setTimeInMillis(res.getStartTime());
-		Calendar end = Calendar.getInstance();
-		end.setTimeInMillis(res.getStartTime());
-		String st = new Date(res.getStartTime() * 1000).toString();
-		String en = new Date(res.getEndTime() * 1000).toString();
-				
 		StringBuffer sb = new StringBuffer();
 		sb.append("reservation id - " + res.getGlobalReservationId() + NL);
 		sb.append("status - " + res.getStatus() + NL);
 		sb.append("bandwidth - " + res.getBandwidth() + NL);
-		sb.append("start time - " + st + NL);
-		sb.append("end time - " + en + NL);
+		sb.append("start time - " + new Date(res.getStartTime() * 1000).toString() + NL);
+		sb.append("end time - " + new Date(res.getEndTime() * 1000).toString() + NL);
 		sb.append("source - " + res.getPathInfo().getLayer2Info().getSrcEndpoint() + NL);
 		sb.append("dest - " + res.getPathInfo().getLayer2Info().getDestEndpoint() + NL);
-		// print hops
-		sb.append("path:" + NL);
-		List<CtrlPlaneHopContent> hops = res.getPathInfo().getPath().getHop();
-		for (CtrlPlaneHopContent hop : hops)
-			sb.append(hop.getLinkIdRef() + " - " + hop.getId() + NL);
 		return sb.toString();
 	}
+
 	
 	@Override
 	public String execute(Framework autobahn, String[] args) {
@@ -95,9 +81,8 @@ public class IdcpCommand implements AutobahnCommand {
 				return "topology format can be either in autobahn or idcp format";
 			
 			try {
-				
 				StringBuffer sb = new StringBuffer();
-				OscarsClient idcp = new OscarsClient(address);
+				IdcpClient idcp = new IdcpClient(address);
 				
 				if (format.equalsIgnoreCase("autobahn")) {
 					List<Link> links = idcp.getTopology();
@@ -118,10 +103,9 @@ public class IdcpCommand implements AutobahnCommand {
 				}
 				return sb.toString();
 			} catch (Exception e) {
-				e.printStackTrace();
 				return "topology could not be obtained - " + e.getMessage();
 			}
-		} else if (operation.equalsIgnoreCase("schedule")) {
+		} else if (operation.equals("schedule")) {
 			
 			if (args.length != 7)
 				return invalid;
@@ -131,53 +115,48 @@ public class IdcpCommand implements AutobahnCommand {
 			String dest = args[5];
 			int bandwidth = Integer.parseInt(args[6]);
 			
-			Reservation r = new Reservation();
-			r.setBodID(resId);
-			r.setDescription("autbahn test reservation - " + System.currentTimeMillis());
-			r.setCapacity(bandwidth);
 			Calendar start = Calendar.getInstance();
 			start.add(Calendar.MINUTE, 1);
 			Calendar end = Calendar.getInstance();
-			end.add(Calendar.MINUTE, 2);
-			r.setStartTime(start);
-			r.setEndTime(end);
+			end.add(Calendar.MINUTE, 4);
 			
 			try {
-				OscarsClient idcp = new OscarsClient(address);
-				idcp.scheduleReservation(r, source, dest, "any");
+				IdcpClient idcp = new IdcpClient(address);
+				idcp.schedule(resId, "test reservation", source, dest, start.getTimeInMillis(), end.getTimeInMillis(),
+						bandwidth, "any", IdcpClient.PATH_MODE_AUTOMATIC);
 				return resId + " has been submitted";
 			} catch (Exception e) {
 				e.printStackTrace();
 				return resId + " failed to schedule - " + e.getMessage();
 			}
-		} else if (operation.equalsIgnoreCase("cancel")) {
+		} else if (operation.equals("cancel")) {
 			
 			if (args.length != 4)
 				return invalid;
 			
 			String resId = args[3];
 			try {
-				OscarsClient idcp = new OscarsClient(address);
-				idcp.cancelReservation(resId);
+				IdcpClient idcp = new IdcpClient(address);
+				idcp.cancel(resId);
 				return resId + " has been cancelled";
 			} catch (Exception e) {
 				e.printStackTrace();
 				return resId + " failed to cancel - " + e.getMessage();
 			}
-		} else if (operation.equalsIgnoreCase("query")) {
+		} else if (operation.equals("query")) {
 			
 			if (args.length != 4)
 				return invalid;
 			
 			String resId = args[3];
 			try {
-				OscarsClient idcp = new OscarsClient(address);
-				ResDetails res = idcp.queryReservation(resId);
+				IdcpClient idcp = new IdcpClient(address);
+				ResDetails res = idcp.query(resId);
 				return dumpResDetails(res);
 			} catch (Exception e) {
 				return resId + " failed to query - " + e.getMessage();
 			}
-		} else if (operation.equalsIgnoreCase("subscribe")) {
+		} else if (operation.equals("subscribe")) {
 			
 			String consumer = friends.containsKey(args[3]) ? friends.get(args[3]) : args[3];
 			String producer = friends.containsKey(args[4]) ? friends.get(args[4]) : args[4];
@@ -189,7 +168,7 @@ public class IdcpCommand implements AutobahnCommand {
 			} catch (Exception e) { 
 				return "failed to subscribe";
 			}
-		} else if (operation.equalsIgnoreCase("unsubscribe")) {
+		} else if (operation.equals("unsubscribe")) {
 			
 			String consumer = friends.containsKey(args[3]) ? friends.get(args[3]) : args[3];
 			try {
