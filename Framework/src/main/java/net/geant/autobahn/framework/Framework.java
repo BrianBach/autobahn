@@ -67,6 +67,8 @@ public class Framework {
     //Used for telnet codes
     private BufferedWriter rawout = null;
 
+    private static Framework instance = null;
+    
 	public static Map<String, AutobahnCommand> commands = new HashMap<String, AutobahnCommand>();
 		
 	static {
@@ -94,6 +96,14 @@ public class Framework {
                                  "  quit - to quit\n" +
                                  "  help - to display help\n" +
                                  "-------------------------\n";
+    
+    public synchronized static Framework getInstance() {
+    	if(instance == null) {
+    		instance = new Framework();
+    	}
+    	
+    	return instance;
+    }
     
 	public static Properties loadProperties(String filename) throws Exception {
 		Properties properties = new Properties();
@@ -324,6 +334,7 @@ public class Framework {
     }
 
 	public void stop(boolean shutdown) {
+		
 		this.stop = true;
 		this.shutdown = shutdown;
 		
@@ -367,7 +378,7 @@ public class Framework {
 		
 		System.out.println(info);
 	
-		final Framework autobahn = new Framework();
+		final Framework autobahn = Framework.getInstance();
 
         SignalHandler handler = new SignalHandler () {
             public void handle(Signal sig) {

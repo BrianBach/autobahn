@@ -17,12 +17,6 @@ import net.geant.autobahn.framework.Framework;
         endpointInterface = "net.geant.autobahn.framework.manager.AutobahnManager")
 public class AutobahnManagerImpl implements AutobahnManager {
 
-	private Framework server = null;
-	
-	public AutobahnManagerImpl(Framework server) {
-		this.server = server;
-	}
-	
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.framework.manager.AutobahnManager#getServices()
 	 */
@@ -48,7 +42,8 @@ public class AutobahnManagerImpl implements AutobahnManager {
 				}
 				System.out.println("Stopping AutoBAHN...");
 				try {
-					Framework.main(new String[] {"stop"});
+					Framework.getInstance().stop(true);
+					System.exit(0);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

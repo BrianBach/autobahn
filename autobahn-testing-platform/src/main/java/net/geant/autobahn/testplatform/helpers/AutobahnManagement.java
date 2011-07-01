@@ -5,9 +5,10 @@ import java.util.List;
 
 import net.geant.autobahn.administration.Administration;
 import net.geant.autobahn.administration.KeyValue;
-import net.geant.autobahn.amanager.AutobahnManagerService;
+import net.geant.autobahn.amanager.AutobahnManager;
 import net.geant.autobahn.intradomain.administration.DmAdministration;
 import net.geant.autobahn.testplatform.clients.AdministrationClient;
+import net.geant.autobahn.testplatform.clients.AutobahnManagerClient;
 import net.geant.autobahn.testplatform.clients.DmAdministrationClient;
 import net.geant.autobahn.testplatform.clients.UserAccessPointClient;
 import net.geant.autobahn.testplatform.configuration.DomainConfiguration;
@@ -36,7 +37,9 @@ public class AutobahnManagement {
 	}
 	
 	public void stopInstance() {
-		runner.stop(path);
+		AutobahnManager client = new AutobahnManagerClient(wsPrefix + "/autobahnmanager").getAutobahnManagerPort();
+		
+		client.halt();
 	}
 	
 	public void cleanOldReservations() {
@@ -77,11 +80,6 @@ public class AutobahnManagement {
         UserAccessPointClient ss = new UserAccessPointClient(wsPrefix + "/uap");
         
         return ss.getUserAccessPointPort();
-	}
-	
-	public static void halt(String idmAddress) {
-		AutobahnManagerService service = new AutobahnManagerService(idmAddress + "/manager");
-		service.getAutobahnManagerPort().halt();
 	}
 	
 	public static void restart(String idmAddress) {

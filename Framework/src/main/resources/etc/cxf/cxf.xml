@@ -462,7 +462,56 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
 			</bean>
 		</jaxws:outInterceptors>	
 	</jaxws:endpoint>	
+
+	<jaxws:endpoint id="autobahnmanager" implementor="net.geant.autobahn.framework.manager.AutobahnManagerImpl" address="http://${server.ip}:${server.port}/autobahn/autobahnmanager">
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+				<constructor-arg>
+					<map>               
+						<entry key="action" value-ref="readProps"/>
+						<entry key="passwordType" value="PasswordDigest"/>
+						<entry key="SignaturePropRefId" value="propsLoader"/>
+						<entry key="passwordCallbackRef">
+							<ref bean="SecurityPasswordCallback"/>
+						</entry>
+						<entry key="decryptionPropRefId" value="propsLoader"/>
+						<entry key="propsLoader" value-ref="convertFileToProps"/>
+					</map>
+				</constructor-arg>
+			</bean>			
+			<bean class="net.geant.autobahn.edugain.EdugainSupport">
+				<constructor-arg index="0" type="java.util.Properties">
+					<ref bean="edugainProps"/>
+				</constructor-arg>
+				<constructor-arg index="1" type="java.lang.String">
+					<ref bean="edugainActive"/>
+				</constructor-arg>
+			</bean>
+		</jaxws:inInterceptors>
 		
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+				<constructor-arg>
+					<map>               
+						<entry key="action" value-ref="readProps"/>
+						<entry key="user" value="autobahn"/>
+						<entry key="signatureKeyIdentifier" value="DirectReference"/>
+						<entry key="SignaturePropRefId" value="propsLoader"/>
+						<entry key="passwordType" value="PasswordDigest"/>
+						<entry key="passwordCallbackRef">
+							<ref bean="SecurityPasswordCallback"/>
+						</entry>
+						<entry key="encryptionPropRefId" value="propsLoader"/>
+						<entry key="encryptionUser" value="autobahn"/>
+						<entry key="encryptionSymAlgorithm" value="http://www.w3.org/2001/04/xmlenc#tripledes-cbc"/>
+						<entry key="encryptionParts" value="{Content}{}Body"/>	
+						<entry key="propsLoader" value-ref="convertFileToProps"/>					
+					</map>
+				</constructor-arg>
+			</bean>
+		</jaxws:outInterceptors>	
+	</jaxws:endpoint>	
+
 	<jaxws:endpoint id="oscars" implementor="net.geant.autobahn.idcp.OSCARSImpl" address="https://${server.ip}:${server.securePort}/autobahn/oscars" wsdlLocation="etc/wsdl/IDCP/OSCARS.wsdl">
 		<jaxws:properties>
 			<entry key="ws-security.callback-handler">
