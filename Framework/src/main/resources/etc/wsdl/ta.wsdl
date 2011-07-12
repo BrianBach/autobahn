@@ -128,10 +128,19 @@
     </xs:sequence>
   </xs:complexType>
 </xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="common.intradomain.autobahn.geant.net" xmlns:ns2="ethernet.intradomain.autobahn.geant.net" xmlns:ns3="sdh.intradomain.autobahn.geant.net" xmlns:tns="intradomain.autobahn.geant.net" targetNamespace="intradomain.autobahn.geant.net" version="1.0">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="common.intradomain.autobahn.geant.net" targetNamespace="mpls.intradomain.autobahn.geant.net" version="1.0">
+<xs:import namespace="common.intradomain.autobahn.geant.net"/>
+<xs:complexType name="MplsLink">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="genericLink" type="ns1:GenericLink"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="common.intradomain.autobahn.geant.net" xmlns:ns2="ethernet.intradomain.autobahn.geant.net" xmlns:ns3="sdh.intradomain.autobahn.geant.net" xmlns:ns4="mpls.intradomain.autobahn.geant.net" xmlns:tns="intradomain.autobahn.geant.net" targetNamespace="intradomain.autobahn.geant.net" version="1.0">
 <xs:import namespace="common.intradomain.autobahn.geant.net"/>
 <xs:import namespace="ethernet.intradomain.autobahn.geant.net"/>
 <xs:import namespace="sdh.intradomain.autobahn.geant.net"/>
+<xs:import namespace="mpls.intradomain.autobahn.geant.net"/>
 <xs:complexType name="IntradomainTopology">
     <xs:sequence>
       <xs:element maxOccurs="unbounded" minOccurs="0" name="genericLinks" nillable="true" type="ns1:GenericLink"/>
@@ -141,6 +150,7 @@
       <xs:element maxOccurs="unbounded" minOccurs="0" name="vlaps" nillable="true" type="ns2:VlanPort"/>
       <xs:element maxOccurs="unbounded" minOccurs="0" name="stmLinks" nillable="true" type="ns3:StmLink"/>
       <xs:element maxOccurs="unbounded" minOccurs="0" name="sdhDevices" nillable="true" type="ns3:SdhDevice"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="mplsLinks" nillable="true" type="ns4:MplsLink"/>
       <xs:element minOccurs="0" name="type" type="tns:Type"/>
       <xs:element minOccurs="0" name="domainName" type="xs:string"/>
     </xs:sequence>
@@ -149,6 +159,7 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="ETH"/>
       <xs:enumeration value="SDH"/>
+      <xs:enumeration value="MPLS"/>
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>
@@ -359,6 +370,7 @@
       <xs:element minOccurs="0" name="osName" type="xs:string"/>
       <xs:element minOccurs="0" name="osVersion" type="xs:string"/>
       <xs:element minOccurs="0" name="ipAddress" type="xs:string"/>
+      <xs:element name="vlanTranslationSupport" type="xs:boolean"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="Location">

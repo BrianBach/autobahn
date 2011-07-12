@@ -18,8 +18,8 @@
       <xs:element name="bidirectional" type="xs:boolean"/>
       <xs:element minOccurs="0" name="startTime" type="xs:dateTime"/>
       <xs:element minOccurs="0" name="endTime" type="xs:dateTime"/>
-      <xs:element minOccurs="0" name="pathConstraints" type="ns1:PathConstraints"/>
-      <xs:element name="userVlanId" type="xs:int"/>
+      <xs:element minOccurs="0" name="pathConstraintsIngress" type="ns1:PathConstraints"/>
+      <xs:element minOccurs="0" name="pathConstraintsEgress" type="ns1:PathConstraints"/>
       <xs:element name="mtu" type="xs:int"/>
       <xs:element minOccurs="0" name="authParameters" type="ns2:UserAuthParameters"/>
     </xs:sequence>
@@ -168,7 +168,7 @@
   </xs:complexType>
   <xs:complexType name="checkResourcesResponse">
     <xs:sequence>
-      <xs:element minOccurs="0" name="DomainConstraints" type="ns3:DomainConstraints"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="DomainConstraints" type="ns3:DomainConstraints"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="prepareTopology">
@@ -249,6 +249,7 @@
       <xs:extension base="tns:Constraint">
         <xs:sequence>
           <xs:element minOccurs="0" name="value" type="xs:boolean"/>
+          <xs:element minOccurs="0" name="logic" type="xs:string"/>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -287,6 +288,7 @@
       <xs:enumeration value="VLANS"/>
       <xs:enumeration value="TIMESLOTS"/>
       <xs:enumeration value="MTU"/>
+      <xs:enumeration value="SUPPORTS_VLAN_TRANSLATION"/>
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>
@@ -297,6 +299,7 @@
       <xs:element minOccurs="0" name="organization" type="xs:string"/>
       <xs:element minOccurs="0" name="projectMembership" type="xs:string"/>
       <xs:element minOccurs="0" name="projectRole" type="xs:string"/>
+      <xs:element minOccurs="0" name="email" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>

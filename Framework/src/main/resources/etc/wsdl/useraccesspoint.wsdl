@@ -15,8 +15,8 @@
   </xs:complexType>
 <xs:complexType name="ReservationRequest">
     <xs:sequence>
-      <xs:element minOccurs="0" name="startPort" type="xs:string"/>
-      <xs:element minOccurs="0" name="endPort" type="xs:string"/>
+      <xs:element minOccurs="0" name="startPort" type="tns:PortType"/>
+      <xs:element minOccurs="0" name="endPort" type="tns:PortType"/>
       <xs:element minOccurs="0" name="startTime" type="xs:dateTime"/>
       <xs:element minOccurs="0" name="endTime" type="xs:dateTime"/>
       <xs:element minOccurs="0" name="priority" type="ns1:priority"/>
@@ -24,13 +24,19 @@
       <xs:element name="capacity" type="xs:long"/>
       <xs:element minOccurs="0" name="userInclude" type="tns:PathInfo"/>
       <xs:element minOccurs="0" name="userExclude" type="tns:PathInfo"/>
-      <xs:element name="userVlanId" type="xs:int"/>
       <xs:element name="mtu" type="xs:int"/>
       <xs:element name="maxDelay" type="xs:int"/>
       <xs:element minOccurs="0" name="resiliency" type="ns1:resiliency"/>
       <xs:element name="bidirectional" type="xs:boolean"/>
       <xs:element name="processNow" type="xs:boolean"/>
       <xs:element minOccurs="0" name="authParameters" type="ns2:UserAuthParameters"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="PortType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="address" type="xs:string"/>
+      <xs:element minOccurs="0" name="mode" type="ns1:mode"/>
+      <xs:element name="vlan" type="xs:int"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="PathInfo">
@@ -228,6 +234,13 @@
       <xs:element maxOccurs="unbounded" minOccurs="0" name="Domains" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
+  <xs:simpleType name="mode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="VLAN"/>
+      <xs:enumeration value="UNTAGGED"/>
+      <xs:enumeration value="TRANSPARENT"/>
+    </xs:restriction>
+  </xs:simpleType>
   <xs:simpleType name="priority">
     <xs:restriction base="xs:string">
       <xs:enumeration value="NORMAL"/>
@@ -272,6 +285,7 @@
       <xs:element minOccurs="0" name="organization" type="xs:string"/>
       <xs:element minOccurs="0" name="projectMembership" type="xs:string"/>
       <xs:element minOccurs="0" name="projectRole" type="xs:string"/>
+      <xs:element minOccurs="0" name="email" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>
@@ -412,6 +426,8 @@
     </wsdl:input>
       <wsdl:output name="getAllClientPortsResponse" message="tns:getAllClientPortsResponse">
     </wsdl:output>
+      <wsdl:fault name="UserAccessPointException" message="tns:UserAccessPointException">
+    </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="getAllLinks">
       <wsdl:input name="getAllLinks" message="tns:getAllLinks">
@@ -507,6 +523,9 @@
       <wsdl:output name="getAllClientPortsResponse">
         <soap:body use="literal"/>
       </wsdl:output>
+      <wsdl:fault name="UserAccessPointException">
+        <soap:fault name="UserAccessPointException" use="literal"/>
+      </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="submitServiceAndRegister">
       <soap:operation soapAction="" style="document"/>

@@ -1,17 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wsdl:definitions name="Interdomain" targetNamespace="http://interdomain.autobahn.geant.net/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://interdomain.autobahn.geant.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
   <wsdl:types>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="useraccesspoint.autobahn.geant.net" version="1.0">
-<xs:complexType name="PathInfo">
-    <xs:sequence>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="domains" nillable="true" type="xs:string"/>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="links" nillable="true" type="xs:string"/>
-    </xs:sequence>
-  </xs:complexType>
-</xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="network.autobahn.geant.net" xmlns:ns2="useraccesspoint.autobahn.geant.net" xmlns:ns3="constraints.autobahn.geant.net" xmlns:ns4="aai.autobahn.geant.net" targetNamespace="reservation.autobahn.geant.net" version="1.0">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="network.autobahn.geant.net" xmlns:ns2="constraints.autobahn.geant.net" xmlns:ns3="aai.autobahn.geant.net" targetNamespace="reservation.autobahn.geant.net" version="1.0">
 <xs:import namespace="network.autobahn.geant.net"/>
-<xs:import namespace="useraccesspoint.autobahn.geant.net"/>
 <xs:import namespace="constraints.autobahn.geant.net"/>
 <xs:import namespace="aai.autobahn.geant.net"/>
 <xs:complexType name="TimeRange">
@@ -30,18 +21,15 @@
       <xs:element name="priority" type="xs:int"/>
       <xs:element minOccurs="0" name="description" type="xs:string"/>
       <xs:element name="capacity" type="xs:long"/>
-      <xs:element minOccurs="0" name="userInclude" type="ns2:PathInfo"/>
-      <xs:element minOccurs="0" name="userExclude" type="ns2:PathInfo"/>
-      <xs:element name="userVlanId" type="xs:int"/>
       <xs:element name="mtu" type="xs:int"/>
       <xs:element name="maxDelay" type="xs:int"/>
       <xs:element minOccurs="0" name="resiliency" type="xs:string"/>
       <xs:element name="bidirectional" type="xs:boolean"/>
-      <xs:element minOccurs="0" name="globalConstraints" type="ns3:GlobalConstraints"/>
+      <xs:element minOccurs="0" name="globalConstraints" type="ns2:GlobalConstraints"/>
       <xs:element minOccurs="0" name="path" type="ns1:Path"/>
       <xs:element name="intState" type="xs:int"/>
       <xs:element name="fake" type="xs:boolean"/>
-      <xs:element minOccurs="0" name="authParameters" type="ns4:UserAuthParameters"/>
+      <xs:element minOccurs="0" name="authParameters" type="ns3:UserAuthParameters"/>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>
@@ -327,6 +315,7 @@
       <xs:extension base="tns:Constraint">
         <xs:sequence>
           <xs:element minOccurs="0" name="value" type="xs:boolean"/>
+          <xs:element minOccurs="0" name="logic" type="xs:string"/>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -360,6 +349,7 @@
       <xs:enumeration value="VLANS"/>
       <xs:enumeration value="TIMESLOTS"/>
       <xs:enumeration value="MTU"/>
+      <xs:enumeration value="SUPPORTS_VLAN_TRANSLATION"/>
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>
@@ -370,6 +360,7 @@
       <xs:element minOccurs="0" name="organization" type="xs:string"/>
       <xs:element minOccurs="0" name="projectMembership" type="xs:string"/>
       <xs:element minOccurs="0" name="projectRole" type="xs:string"/>
+      <xs:element minOccurs="0" name="email" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>

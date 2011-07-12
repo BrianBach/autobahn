@@ -1,57 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="Administration" targetNamespace="http://administration.autobahn.geant.net/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://administration.autobahn.geant.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+<wsdl:definitions name="AdministrationService" targetNamespace="http://administration.autobahn.geant.net/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://administration.autobahn.geant.net/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
   <wsdl:types>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="useraccesspoint.autobahn.geant.net" version="1.0">
-<xs:complexType name="PathInfo">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://administration.autobahn.geant.net/" targetNamespace="useraccesspoint.autobahn.geant.net" version="1.0">
+<xs:import namespace="http://administration.autobahn.geant.net/"/>
+<xs:complexType name="PortType">
     <xs:sequence>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="domains" nillable="true" type="xs:string"/>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="links" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="address" type="xs:string"/>
+      <xs:element minOccurs="0" name="mode" type="ns1:mode"/>
+      <xs:element name="vlan" type="xs:int"/>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://administration.autobahn.geant.net/" xmlns:ns2="network.autobahn.geant.net" xmlns:ns3="useraccesspoint.autobahn.geant.net" xmlns:ns4="constraints.autobahn.geant.net" xmlns:tns="reservation.autobahn.geant.net" targetNamespace="reservation.autobahn.geant.net" version="1.0">
-<xs:import namespace="http://administration.autobahn.geant.net/"/>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="network.autobahn.geant.net" targetNamespace="reservation.autobahn.geant.net" version="1.0">
 <xs:import namespace="network.autobahn.geant.net"/>
-<xs:import namespace="useraccesspoint.autobahn.geant.net"/>
-<xs:import namespace="constraints.autobahn.geant.net"/>
-<xs:complexType name="Service">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="state" type="ns1:state"/>
-      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
-      <xs:element minOccurs="0" name="justification" type="xs:string"/>
-      <xs:element name="priority" type="xs:int"/>
-      <xs:element minOccurs="0" name="user" type="tns:User"/>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="reservations" nillable="true" type="ns1:autobahnReservation"/>
-    </xs:sequence>
-  </xs:complexType>
 <xs:complexType name="User">
     <xs:sequence>
       <xs:element minOccurs="0" name="name" type="xs:string"/>
-      <xs:element minOccurs="0" name="homeDomain" type="ns2:AdminDomain"/>
+      <xs:element minOccurs="0" name="homeDomain" type="ns1:AdminDomain"/>
       <xs:element minOccurs="0" name="email" type="xs:string"/>
-    </xs:sequence>
-  </xs:complexType>
-<xs:complexType name="Reservation">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
-      <xs:element minOccurs="0" name="startPort" type="ns2:Port"/>
-      <xs:element minOccurs="0" name="endPort" type="ns2:Port"/>
-      <xs:element minOccurs="0" name="startTime" type="xs:dateTime"/>
-      <xs:element minOccurs="0" name="endTime" type="xs:dateTime"/>
-      <xs:element name="priority" type="xs:int"/>
-      <xs:element minOccurs="0" name="description" type="xs:string"/>
-      <xs:element name="capacity" type="xs:long"/>
-      <xs:element minOccurs="0" name="userInclude" type="ns3:PathInfo"/>
-      <xs:element minOccurs="0" name="userExclude" type="ns3:PathInfo"/>
-      <xs:element name="userVlanId" type="xs:int"/>
-      <xs:element name="mtu" type="xs:int"/>
-      <xs:element name="maxDelay" type="xs:int"/>
-      <xs:element minOccurs="0" name="resiliency" type="xs:string"/>
-      <xs:element name="bidirectional" type="xs:boolean"/>
-      <xs:element minOccurs="0" name="globalConstraints" type="ns4:GlobalConstraints"/>
-      <xs:element minOccurs="0" name="path" type="ns2:Path"/>
-      <xs:element name="intState" type="xs:int"/>
-      <xs:element name="fake" type="xs:boolean"/>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>
@@ -62,36 +28,7 @@
       <xs:element minOccurs="0" name="ASID" type="xs:string"/>
       <xs:element minOccurs="0" name="name" type="xs:string"/>
       <xs:element name="clientDomain" type="xs:boolean"/>
-    </xs:sequence>
-  </xs:complexType>
-<xs:complexType name="Port">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
-      <xs:element minOccurs="0" name="address" type="xs:string"/>
-      <xs:element minOccurs="0" name="technology" type="xs:string"/>
-      <xs:element name="bundled" type="xs:boolean"/>
-      <xs:element minOccurs="0" name="node" type="tns:Node"/>
-    </xs:sequence>
-  </xs:complexType>
-<xs:complexType name="Node">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
-      <xs:element minOccurs="0" name="type" type="xs:string"/>
-      <xs:element minOccurs="0" name="address" type="xs:string"/>
-      <xs:element minOccurs="0" name="provisioningDomain" type="tns:ProvisioningDomain"/>
-      <xs:element minOccurs="0" name="name" type="xs:string"/>
-      <xs:element minOccurs="0" name="country" type="xs:string"/>
-      <xs:element minOccurs="0" name="city" type="xs:string"/>
-      <xs:element minOccurs="0" name="institution" type="xs:string"/>
-      <xs:element minOccurs="0" name="longitude" type="xs:string"/>
-      <xs:element minOccurs="0" name="latitude" type="xs:string"/>
-    </xs:sequence>
-  </xs:complexType>
-<xs:complexType name="ProvisioningDomain">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
-      <xs:element minOccurs="0" name="provType" type="xs:string"/>
-      <xs:element minOccurs="0" name="adminDomain" type="tns:AdminDomain"/>
+      <xs:element minOccurs="0" name="idcpServer" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="Path">
@@ -124,6 +61,36 @@
       <xs:element minOccurs="0" name="administrativeState" type="tns:StateAdmin"/>
     </xs:sequence>
   </xs:complexType>
+<xs:complexType name="Port">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="technology" type="xs:string"/>
+      <xs:element name="bundled" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="node" type="tns:Node"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="Node">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+      <xs:element minOccurs="0" name="type" type="xs:string"/>
+      <xs:element minOccurs="0" name="address" type="xs:string"/>
+      <xs:element minOccurs="0" name="provisioningDomain" type="tns:ProvisioningDomain"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="country" type="xs:string"/>
+      <xs:element minOccurs="0" name="city" type="xs:string"/>
+      <xs:element minOccurs="0" name="institution" type="xs:string"/>
+      <xs:element minOccurs="0" name="longitude" type="xs:string"/>
+      <xs:element minOccurs="0" name="latitude" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ProvisioningDomain">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+      <xs:element minOccurs="0" name="provType" type="xs:string"/>
+      <xs:element minOccurs="0" name="adminDomain" type="tns:AdminDomain"/>
+    </xs:sequence>
+  </xs:complexType>
 <xs:complexType name="LinkType">
     <xs:sequence>
       <xs:element name="type" type="xs:int"/>
@@ -140,10 +107,9 @@
     </xs:sequence>
   </xs:complexType>
 </xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="reservation.autobahn.geant.net" xmlns:ns2="network.autobahn.geant.net" xmlns:ns3="administration.autobahn.geant.net" xmlns:tns="http://administration.autobahn.geant.net/" elementFormDefault="unqualified" targetNamespace="http://administration.autobahn.geant.net/" version="1.0">
-<xs:import namespace="reservation.autobahn.geant.net"/>
-<xs:import namespace="network.autobahn.geant.net"/>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="administration.autobahn.geant.net" xmlns:ns2="network.autobahn.geant.net" xmlns:tns="http://administration.autobahn.geant.net/" elementFormDefault="unqualified" targetNamespace="http://administration.autobahn.geant.net/" version="1.0">
 <xs:import namespace="administration.autobahn.geant.net"/>
+<xs:import namespace="network.autobahn.geant.net"/>
 <xs:element name="cancelAllServices" type="tns:cancelAllServices"/>
 <xs:element name="cancelAllServicesResponse" type="tns:cancelAllServicesResponse"/>
 <xs:element name="getLog" type="tns:getLog"/>
@@ -156,6 +122,8 @@
 <xs:element name="getServiceResponse" type="tns:getServiceResponse"/>
 <xs:element name="getServices" type="tns:getServices"/>
 <xs:element name="getServicesResponse" type="tns:getServicesResponse"/>
+<xs:element name="getStatistics" type="tns:getStatistics"/>
+<xs:element name="getStatisticsResponse" type="tns:getStatisticsResponse"/>
 <xs:element name="getStatus" type="tns:getStatus"/>
 <xs:element name="getStatusResponse" type="tns:getStatusResponse"/>
 <xs:element name="getTopology" type="tns:getTopology"/>
@@ -171,15 +139,8 @@
   </xs:complexType>
 <xs:complexType name="getServiceResponse">
     <xs:sequence>
-      <xs:element minOccurs="0" name="service" type="ns1:Service"/>
+      <xs:element minOccurs="0" name="service" type="ns1:ServiceType"/>
     </xs:sequence>
-  </xs:complexType>
-<xs:complexType abstract="true" name="autobahnReservation">
-    <xs:complexContent>
-      <xs:extension base="ns1:Reservation">
-        <xs:sequence/>
-      </xs:extension>
-    </xs:complexContent>
   </xs:complexType>
 <xs:complexType name="setTopology">
     <xs:sequence>
@@ -194,7 +155,7 @@
   </xs:complexType>
 <xs:complexType name="getStatusResponse">
     <xs:sequence>
-      <xs:element minOccurs="0" name="status" type="ns3:Status"/>
+      <xs:element minOccurs="0" name="status" type="ns1:Status"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="getProperties">
@@ -202,7 +163,25 @@
   </xs:complexType>
 <xs:complexType name="getPropertiesResponse">
     <xs:sequence>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="Properties" type="ns3:KeyValue"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="Properties" type="ns1:KeyValue"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="getStatistics">
+    <xs:sequence>
+      <xs:element name="all" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="getStatisticsResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="statistics" type="ns1:StatisticsType"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="statisticsEntry">
+    <xs:sequence>
+      <xs:element name="id" type="xs:int"/>
+      <xs:element name="intradomain" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="reservation_id" type="xs:string"/>
+      <xs:element name="setup_time" type="xs:long"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="getTopology">
@@ -225,7 +204,7 @@
   </xs:complexType>
 <xs:complexType name="setProperties">
     <xs:sequence>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="properties" type="ns3:KeyValue"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="properties" type="ns1:KeyValue"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="setPropertiesResponse">
@@ -242,7 +221,7 @@
   </xs:complexType>
 <xs:complexType name="getServicesResponse">
     <xs:sequence>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="serivces" type="ns1:Service"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="serivces" type="ns1:ServiceType"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="getReservation">
@@ -252,99 +231,49 @@
   </xs:complexType>
 <xs:complexType name="getReservationResponse">
     <xs:sequence>
-      <xs:element minOccurs="0" name="Reservation" type="ns1:Reservation"/>
+      <xs:element minOccurs="0" name="Reservation" type="ns1:ReservationType"/>
     </xs:sequence>
   </xs:complexType>
-<xs:simpleType name="state">
+<xs:simpleType name="mode">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="SCHEDULING"/>
-      <xs:enumeration value="SCHEDULED"/>
-      <xs:enumeration value="FAILED"/>
-      <xs:enumeration value="CANCELLING"/>
-      <xs:enumeration value="CANCELLED"/>
-      <xs:enumeration value="FINISHED"/>
+      <xs:enumeration value="VLAN"/>
+      <xs:enumeration value="UNTAGGED"/>
+      <xs:enumeration value="TRANSPARENT"/>
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="constraints.autobahn.geant.net" targetNamespace="constraints.autobahn.geant.net" version="1.0">
-<xs:complexType name="GlobalConstraints">
-    <xs:sequence>
-      <xs:element maxOccurs="unbounded" name="domainsIds" nillable="true" type="xs:string"/>
-      <xs:element maxOccurs="unbounded" name="domainConstraints" nillable="true" type="tns:DomainConstraints"/>
-    </xs:sequence>
-  </xs:complexType>
-<xs:complexType name="DomainConstraints">
-    <xs:sequence>
-      <xs:element maxOccurs="unbounded" name="pathConstraints" nillable="true" type="tns:PathConstraints"/>
-    </xs:sequence>
-  </xs:complexType>
-<xs:complexType name="PathConstraints">
-    <xs:sequence>
-      <xs:element maxOccurs="unbounded" name="addNames" nillable="true" type="tns:ConstraintsNames"/>
-      <xs:element maxOccurs="unbounded" name="addConstraints" nillable="true" type="tns:AdditiveConstraint"/>
-      <xs:element maxOccurs="unbounded" name="boolNames" nillable="true" type="tns:ConstraintsNames"/>
-      <xs:element maxOccurs="unbounded" name="boolConstraints" nillable="true" type="tns:BooleanConstraint"/>
-      <xs:element maxOccurs="unbounded" name="rangeNames" nillable="true" type="tns:ConstraintsNames"/>
-      <xs:element maxOccurs="unbounded" name="rangeConstraints" nillable="true" type="tns:RangeConstraint"/>
-      <xs:element maxOccurs="unbounded" name="minValNames" nillable="true" type="tns:ConstraintsNames"/>
-      <xs:element maxOccurs="unbounded" name="minValConstraints" nillable="true" type="tns:MinValueConstraint"/>
-    </xs:sequence>
-  </xs:complexType>
-<xs:complexType name="AdditiveConstraint">
-    <xs:complexContent>
-      <xs:extension base="tns:Constraint">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="value" type="xs:double"/>
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-<xs:complexType abstract="true" name="Constraint">
-    <xs:all/>
-  </xs:complexType>
-<xs:complexType name="BooleanConstraint">
-    <xs:complexContent>
-      <xs:extension base="tns:Constraint">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="value" type="xs:boolean"/>
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-<xs:complexType name="RangeConstraint">
-    <xs:complexContent>
-      <xs:extension base="tns:Constraint">
-        <xs:sequence>
-          <xs:element maxOccurs="unbounded" name="ranges" nillable="true" type="tns:Range"/>
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-<xs:complexType name="Range">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="min" type="xs:int"/>
-      <xs:element minOccurs="0" name="max" type="xs:int"/>
-    </xs:sequence>
-  </xs:complexType>
-<xs:complexType name="MinValueConstraint">
-    <xs:complexContent>
-      <xs:extension base="tns:Constraint">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="value" type="xs:double"/>
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-<xs:simpleType name="ConstraintsNames">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="VLANS"/>
-      <xs:enumeration value="TIMESLOTS"/>
-      <xs:enumeration value="MTU"/>
-    </xs:restriction>
-  </xs:simpleType>
-</xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="network.autobahn.geant.net" xmlns:tns="administration.autobahn.geant.net" targetNamespace="administration.autobahn.geant.net" version="1.0">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="reservation.autobahn.geant.net" xmlns:ns2="useraccesspoint.autobahn.geant.net" xmlns:ns3="network.autobahn.geant.net" xmlns:ns4="http://administration.autobahn.geant.net/" xmlns:tns="administration.autobahn.geant.net" targetNamespace="administration.autobahn.geant.net" version="1.0">
+<xs:import namespace="reservation.autobahn.geant.net"/>
+<xs:import namespace="useraccesspoint.autobahn.geant.net"/>
 <xs:import namespace="network.autobahn.geant.net"/>
+<xs:import namespace="http://administration.autobahn.geant.net/"/>
+<xs:complexType name="ServiceType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+      <xs:element minOccurs="0" name="justification" type="xs:string"/>
+      <xs:element name="priority" type="xs:int"/>
+      <xs:element minOccurs="0" name="user" type="ns1:User"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="reservations" nillable="true" type="tns:ReservationType"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ReservationType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bodID" type="xs:string"/>
+      <xs:element minOccurs="0" name="startPort" type="ns2:PortType"/>
+      <xs:element minOccurs="0" name="endPort" type="ns2:PortType"/>
+      <xs:element minOccurs="0" name="startTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="endTime" type="xs:dateTime"/>
+      <xs:element name="priority" type="xs:int"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element name="capacity" type="xs:long"/>
+      <xs:element name="mtu" type="xs:int"/>
+      <xs:element name="maxDelay" type="xs:int"/>
+      <xs:element minOccurs="0" name="resiliency" type="xs:string"/>
+      <xs:element name="bidirectional" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="path" type="ns3:Path"/>
+      <xs:element name="state" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
 <xs:complexType name="Status">
     <xs:sequence>
       <xs:element minOccurs="0" name="domain" type="xs:string"/>
@@ -356,13 +285,21 @@
 <xs:complexType name="Neighbor">
     <xs:sequence>
       <xs:element minOccurs="0" name="domain" type="xs:string"/>
-      <xs:element minOccurs="0" name="link" type="ns1:Link"/>
+      <xs:element minOccurs="0" name="link" type="ns3:Link"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="KeyValue">
     <xs:sequence>
       <xs:element minOccurs="0" name="key" type="xs:string"/>
       <xs:element minOccurs="0" name="value" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="StatisticsType">
+    <xs:sequence>
+      <xs:element name="averageIntra" type="xs:long"/>
+      <xs:element name="averageInter" type="xs:long"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="intra" nillable="true" type="ns4:statisticsEntry"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="inter" nillable="true" type="ns4:statisticsEntry"/>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>
@@ -399,16 +336,20 @@
     <wsdl:part name="parameters" element="tns:getService">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="getStatistics">
+    <wsdl:part name="parameters" element="tns:getStatistics">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="getServices">
     <wsdl:part name="parameters" element="tns:getServices">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="getPropertiesResponse">
-    <wsdl:part name="parameters" element="tns:getPropertiesResponse">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="getLogResponse">
     <wsdl:part name="parameters" element="tns:getLogResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPropertiesResponse">
+    <wsdl:part name="parameters" element="tns:getPropertiesResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getStatus">
@@ -417,6 +358,10 @@
   </wsdl:message>
   <wsdl:message name="getServiceResponse">
     <wsdl:part name="parameters" element="tns:getServiceResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getStatisticsResponse">
+    <wsdl:part name="parameters" element="tns:getStatisticsResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getLog">
@@ -470,6 +415,12 @@
       <wsdl:input name="getProperties" message="tns:getProperties">
     </wsdl:input>
       <wsdl:output name="getPropertiesResponse" message="tns:getPropertiesResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getStatistics">
+      <wsdl:input name="getStatistics" message="tns:getStatistics">
+    </wsdl:input>
+      <wsdl:output name="getStatisticsResponse" message="tns:getStatisticsResponse">
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getTopology">
@@ -547,6 +498,15 @@
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="getStatistics">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getStatistics">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getStatisticsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="getTopology">
       <soap:operation soapAction="" style="document"/>
       <wsdl:input name="getTopology">
@@ -602,7 +562,7 @@
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
-  <wsdl:service name="Administration">
+  <wsdl:service name="AdministrationService">
     <wsdl:port name="AdministrationPort" binding="tns:AdministrationServiceSoapBinding">
       <soap:address location="http://localhost:9090/AdministrationPort"/>
     </wsdl:port>

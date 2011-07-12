@@ -6,8 +6,8 @@
 <xs:import namespace="constraints.autobahn.geant.net"/>
 <xs:complexType name="IntradomainPath">
     <xs:sequence>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="gLinks" nillable="true" type="ns1:GenericLink"/>
-      <xs:element name="pcons">
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="glinks" nillable="true" type="ns1:GenericLink"/>
+      <xs:element name="pathConstraints">
         <xs:complexType>
           <xs:sequence>
             <xs:element maxOccurs="unbounded" minOccurs="0" name="entry">
@@ -25,10 +25,9 @@
     </xs:sequence>
   </xs:complexType>
 </xs:schema>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="common.intradomain.autobahn.geant.net" xmlns:ns2="constraints.autobahn.geant.net" xmlns:ns3="net.geant.autobahn.intradomain.IntradomainPath" xmlns:tns="http://resourcesreservationcalendar.autobahn.geant.net/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://resourcesreservationcalendar.autobahn.geant.net/">
-  <xs:import namespace="common.intradomain.autobahn.geant.net"/>
-  <xs:import namespace="constraints.autobahn.geant.net"/>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="net.geant.autobahn.intradomain.IntradomainPath" xmlns:ns2="common.intradomain.autobahn.geant.net" xmlns:tns="http://resourcesreservationcalendar.autobahn.geant.net/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://resourcesreservationcalendar.autobahn.geant.net/">
   <xs:import namespace="net.geant.autobahn.intradomain.IntradomainPath"/>
+  <xs:import namespace="common.intradomain.autobahn.geant.net"/>
   <xs:element name="addReservation" type="tns:addReservation"/>
   <xs:element name="addReservationResponse" type="tns:addReservationResponse"/>
   <xs:element name="checkCapacity" type="tns:checkCapacity"/>
@@ -39,9 +38,8 @@
   <xs:element name="removeReservationResponse" type="tns:removeReservationResponse"/>
   <xs:complexType name="removeReservation">
     <xs:sequence>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="glink" type="ns1:GenericLink"/>
+      <xs:element minOccurs="0" name="path" type="ns1:IntradomainPath"/>
       <xs:element name="capacity" type="xs:long"/>
-      <xs:element minOccurs="0" name="pcon" type="ns2:PathConstraints"/>
       <xs:element minOccurs="0" name="start" type="xs:dateTime"/>
       <xs:element minOccurs="0" name="end" type="xs:dateTime"/>
     </xs:sequence>
@@ -51,7 +49,7 @@
   </xs:complexType>
   <xs:complexType name="checkCapacity">
     <xs:sequence>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="glinks" type="ns1:GenericLink"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="glinks" type="ns2:GenericLink"/>
       <xs:element name="capacity" type="xs:long"/>
       <xs:element minOccurs="0" name="start" type="xs:dateTime"/>
       <xs:element minOccurs="0" name="end" type="xs:dateTime"/>
@@ -59,14 +57,13 @@
   </xs:complexType>
   <xs:complexType name="checkCapacityResponse">
     <xs:sequence>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="genericLink" type="ns1:GenericLink"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="genericLink" type="ns2:GenericLink"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="addReservation">
     <xs:sequence>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="glink" type="ns1:GenericLink"/>
+      <xs:element minOccurs="0" name="path" type="ns1:IntradomainPath"/>
       <xs:element name="arg1" type="xs:long"/>
-      <xs:element minOccurs="0" name="pcon" type="ns2:PathConstraints"/>
       <xs:element minOccurs="0" name="start" type="xs:dateTime"/>
       <xs:element minOccurs="0" name="end" type="xs:dateTime"/>
     </xs:sequence>
@@ -76,14 +73,14 @@
   </xs:complexType>
   <xs:complexType name="getConstraints">
     <xs:sequence>
-      <xs:element minOccurs="0" name="path" type="ns3:IntradomainPath"/>
+      <xs:element minOccurs="0" name="path" type="ns1:IntradomainPath"/>
       <xs:element minOccurs="0" name="start" type="xs:dateTime"/>
       <xs:element minOccurs="0" name="end" type="xs:dateTime"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="getConstraintsResponse">
     <xs:sequence>
-      <xs:element minOccurs="0" name="PathConstraints" type="ns2:PathConstraints"/>
+      <xs:element minOccurs="0" name="PathConstraints" type="ns1:IntradomainPath"/>
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ConstraintsAlreadyUsedException" type="tns:ConstraintsAlreadyUsedException"/>
@@ -121,6 +118,7 @@
       <xs:extension base="tns:Constraint">
         <xs:sequence>
           <xs:element minOccurs="0" name="value" type="xs:boolean"/>
+          <xs:element minOccurs="0" name="logic" type="xs:string"/>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -154,6 +152,7 @@
       <xs:enumeration value="VLANS"/>
       <xs:enumeration value="TIMESLOTS"/>
       <xs:enumeration value="MTU"/>
+      <xs:enumeration value="SUPPORTS_VLAN_TRANSLATION"/>
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>
@@ -216,6 +215,7 @@
       <xs:element minOccurs="0" name="osName" type="xs:string"/>
       <xs:element minOccurs="0" name="osVersion" type="xs:string"/>
       <xs:element minOccurs="0" name="ipAddress" type="xs:string"/>
+      <xs:element name="vlanTranslationSupport" type="xs:boolean"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="Location">

@@ -141,14 +141,14 @@ public class ReservationParams {
 	}
 
 	/**
-     * @return the userVlanId
+     * @return the MTU
      */
     public int getMtu() {
         return mtu;
     }
 
     /**
-     * @param userVlanId the userVlanId to set
+     * @param mtu the MTU to set
      */
     public void setMtu(int mtu) {
         this.mtu = mtu;
