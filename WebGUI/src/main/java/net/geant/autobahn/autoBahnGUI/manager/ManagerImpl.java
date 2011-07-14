@@ -1374,32 +1374,34 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		return ports.get(port);
 	}
 	
-	public List<String> getAllDomainLinks(){
+	public List<LinkMap> getAllDomainLinks(){
 		
-	List<String> str = getAllLinks_NonClient();
-	List<String> domainLinks = new ArrayList<String>();
-		
-	for(String idm : idms.keySet()) {	
-        	
-        InterDomainManager manager = idms.get(idm);
-        List<Link> links = manager.getTopology();
-        	for (Link link : links) {
-        		if(str.contains(link.getBodID())){
-        			String path = new String();
+		List<String> str = getAllLinks_NonClient();
+		//List<String> domainLinks = new ArrayList<String>();
+		List<LinkMap> domainLinks = new ArrayList<LinkMap>();
+			
+		for(String idm : idms.keySet()) {	
+	        InterDomainManager manager = idms.get(idm);
+	        List<Link> links = manager.getTopology();
+	        	for (Link link : links) {
+	        		if(str.contains(link.getBodID())){
+	        			String path = new String();
         				if(link.getStartDomainID().equalsIgnoreCase(link.getEndDomainID()))
         					path = " ["+link.getBodID() +"] Internal Link "+link.getStartDomainID();
         				else
         					path = " ["+link.getBodID() +"] from "+link.getStartDomainID()+" to "+link.getEndDomainID();
-        			
-        			domainLinks.add(path);
-        		}	
-			}
-        	break;
-    }
+	        			
+	        			//domainLinks.add(path);
+	        			domainLinks.add(new LinkMap(link.getBodID(), path));
+	        		}	
+				}
+	        	break;
+	    }
+			
 		if(domainLinks.size() == 0)
 			return null;
-		
-	return domainLinks;
+			
+		return domainLinks;
 	}
 
     private boolean isLSavailable(String ls) {

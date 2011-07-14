@@ -349,7 +349,7 @@ public interface Manager {
 	 * Gets list of domain links no clients
 	 * @return	list of links
 	 */
-	public List<String> getAllDomainLinks();
+	public List<LinkMap> getAllDomainLinks();
 	
 	public boolean checkTopology(String idm);
 }
