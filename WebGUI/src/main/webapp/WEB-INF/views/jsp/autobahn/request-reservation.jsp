@@ -389,7 +389,7 @@ function blockInputStartTime(checked) {
                         </td>
                         <td class="value">
                             <form:select id="includeLinks" size="3" path="request.userInclude.links" >
-                                <form:options items="${links_all}"/>
+                                <form:options items="${links_all}" itemValue="identifier" itemLabel="friendlyName"/>
                             </form:select>
                         </td>
                     </tr>
