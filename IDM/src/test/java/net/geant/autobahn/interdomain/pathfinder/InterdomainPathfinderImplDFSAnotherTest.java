@@ -449,5 +449,32 @@ public class InterdomainPathfinderImplDFSAnotherTest {
     public void testFindInterdomainPathsTest() {
         fail("Not yet implemented");
     }
+    
+    public Topology getStraightTopology() {
+        List<Link> ls = new ArrayList<Link>();
+        ls.add(l1_3); ls.add(l2_3); ls.add(l3_4); ls.add(l3_5); ls.add(l5_6);
+        ls.add(l3_3_1); ls.add(l3_3_2); ls.add(l3_3_3);
+        ls.add(l5_5_1);
+        //
+        //      [n1_1]            [n2_1]
+        //          \               /
+        //           \             /
+        //           [n3_1]---[n3_2]
+        //            /   \      |  
+        //           /     \     | 
+        //          /       \    |
+        //         /         [n3_3]
+        //        /             |
+        //     [n4_1]           |
+        //                      |
+        //                   [n5_1]
+        //                     |
+        //                     |
+        //                   [n5_2]---n[6_1]
+        //
+        Topology topo = new TopologyTest(ads, ls, ns);
+        
+        return topo;
+    }
 
 }
