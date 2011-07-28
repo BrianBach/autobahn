@@ -80,6 +80,7 @@ public class EthConstraintsReservationCalendar implements
     			Set<CalendarEntry> vlanCalendar = vlanCalendars.get(n);
     			
     			vlanCalendar.remove(entry);
+    	        log.debug("Released vlan reservation on node " + n.getNodeId() + ": " + entry);
     		}
     	}
     }
@@ -120,6 +121,7 @@ public class EthConstraintsReservationCalendar implements
 			}
 			
 			vlanCalendar.add(newEntry);
+			log.debug("New vlan reserved on node " + node.getNodeId() + ": " + newEntry);
 		}
     }
     
@@ -159,6 +161,15 @@ public class EthConstraintsReservationCalendar implements
 		return new CalendarEntry(start, end, vlanNumber);
     }
     
+    /**
+     * Edit a RangeConstraint by removing resources that have already been
+     * reserved in a specified time frame
+     * 
+     * @param n the node on which constraints are defined
+     * @param rcon the RangeConstraint that will be pruned
+     * @param start
+     * @param end
+     */
 	private void removeAlreadyReservedResources(Node n, RangeConstraint rcon, Calendar start, Calendar end) {
 		Set<CalendarEntry> vlanCalendar = vlanCalendars.get(n);
 		

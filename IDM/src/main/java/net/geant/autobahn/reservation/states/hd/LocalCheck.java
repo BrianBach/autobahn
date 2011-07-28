@@ -216,7 +216,13 @@ public class LocalCheck extends HomeDomainState {
         }
 
         res.setGlobalConstraints(constraints);
-     
+
+        // Don't reserve resources for fake reservation
+        if (res.isFake()) {
+            res.success("OK");
+            return;
+        }
+        
         if (res.isIdcpReservation() && res.getNextDomainAddress().equalsIgnoreCase(res.getIdcpServer())) {
         	System.out.println("IDCP SELF SCHEDULE");
         	ToIdcp client = new ToIdcp(res.getIdcpServer());
