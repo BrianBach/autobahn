@@ -126,6 +126,7 @@
 								<exclude>**/Test*.java</exclude>
 								<exclude>**/TopologyTest.java</exclude>
 								<exclude>**/TestTopology*.java</exclude>
+								<exclude>**/GetAdminDomainTest.java</exclude>
 								<exclude>**/topologies/*.java</exclude>
 							</excludes>
 						</configuration>
@@ -302,6 +303,7 @@
 		                              <exclude>**/Test*.java</exclude>
 		                              <exclude>**/TopologyTest.java</exclude>
 		                              <exclude>**/TestTopology*.java</exclude>
+		                              <exclude>**/GetAdminDomainTest.java</exclude>
 		                              <exclude>**/topologies/*.java</exclude>
 	                              </excludes>
 	                              
