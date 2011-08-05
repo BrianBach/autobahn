@@ -40,7 +40,7 @@ $('input#id_search').quicksearch('table#statisticsview tbody tr');
 	<div id="ajaxsuccess" style="color:green">
 	</div>
 	
-	<form:form id="statisticsform" action="#" >
+	<form:form id="statisticsform" action="#" onsubmit="javascript:return false;">
 	
 		<c:if test="${statistics != null}" >
             <p align="left">Average time needed to set-up the segment of a reservation 
