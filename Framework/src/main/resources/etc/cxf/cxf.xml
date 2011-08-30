@@ -519,16 +519,20 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
 			</entry>
 			<entry key="ws-security.signature.properties" value="etc/security/idcp/autobahnssl.properties"/>
 			<entry key="ws-security.signature.username" value="autobahnssl"/>
+			<entry key="ws-security.encryption.properties" value="etc/security/idcp/autobahn.properties"/>
+			<entry key="ws-security.encryption.username" value="autobahn"/>
 		</jaxws:properties> 
 	</jaxws:endpoint>
 	
-	<jaxws:endpoint id="oscarsnotify" implementor="net.geant.autobahn.idcp.notify.OSCARSNotifyImpl" address="https://${server.ip}:${server.securePort}/autobahn/oscarsnotify" wsdlLocation="etc/wsdl/IDCP/OSCARS-Notify.wsdl">
+	<jaxws:endpoint id="oscarsnotify" implementor="net.geant.autobahn.idcp.OSCARSNotifyImpl" address="https://${server.ip}:${server.securePort}/autobahn/oscarsnotify" wsdlLocation="etc/wsdl/IDCP/OSCARS-Notify.wsdl">
 		<jaxws:properties>
 			<entry key="ws-security.callback-handler">
 				<ref bean="IdcpServerKeyPasswordCallback"/>
 			</entry>
 			<entry key="ws-security.signature.properties" value="etc/security/idcp/autobahnssl.properties"/>
 			<entry key="ws-security.signature.username" value="autobahnssl"/>
+			<entry key="ws-security.encryption.properties" value="etc/security/idcp/autobahn.properties"/>
+			<entry key="ws-security.encryption.username" value="autobahn"/>
 		</jaxws:properties> 
 	</jaxws:endpoint>
 	

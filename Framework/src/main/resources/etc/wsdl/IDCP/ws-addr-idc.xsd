@@ -41,8 +41,8 @@
 	
 	<xs:complexType name="ReferenceParametersType" mixed="false">
 		<xs:sequence>
-		    <xs:element ref="idc:subscriptionId" minOccurs="0" maxOccurs="1"/>
-		    <xs:element ref="idc:publisherRegistrationId" minOccurs="0" maxOccurs="1"/>
+		    <xs:element ref="idc:subscriptionId" minOccurs="1" maxOccurs="1"/>
+		    <xs:element ref="idc:publisherRegistrationId" minOccurs="1" maxOccurs="1"/>
 		</xs:sequence>
 	</xs:complexType>
 	

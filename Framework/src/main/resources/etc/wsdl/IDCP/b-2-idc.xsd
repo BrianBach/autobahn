@@ -21,6 +21,7 @@ This document and the information contained herein is provided on an "AS IS" bas
   xmlns:wsa="http://www.w3.org/2005/08/addressing"
   xmlns:wsrf-bf="http://docs.oasis-open.org/wsrf/bf-2"
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:tns="http://oscars.es.net/OSCARS"
   elementFormDefault="qualified"  attributeFormDefault="unqualified">
 
 <!-- ======================== Imports  ============================ -->
@@ -32,6 +33,8 @@ This document and the information contained herein is provided on an "AS IS" bas
   <xsd:import namespace="http://docs.oasis-open.org/wsrf/bf-2"
               schemaLocation="bf-2-idc.xsd" 
   />
+
+
   
 <!-- ===================== Misc. Helper Types ===================== -->
   <xsd:complexType name="QueryExpressionType">
@@ -116,12 +119,19 @@ This document and the information contained herein is provided on an "AS IS" bas
       <xsd:element name="Message" type="wsnt:MessageType"/>
     </xsd:sequence>
   </xsd:complexType>
-  <xsd:complexType name="MessageType">
+ 
+ <xsd:complexType name="MessageType">
     <xsd:sequence>
+
+ <!-- change for cxf 
         <xsd:any namespace="##other" processContents="lax"
-                 minOccurs="0" maxOccurs="unbounded"/>
+                 minOccurs="0" maxOccurs="unbounded"/> 
+-->
+        <xsd:element name="event" type="tns:eventContent" minOccurs="0" maxOccurs="unbounded" />
+
     </xsd:sequence>
   </xsd:complexType>
+
   <xsd:element name="NotificationMessage"
                type="wsnt:NotificationMessageHolderType"/>
 
@@ -131,6 +141,7 @@ This document and the information contained herein is provided on an "AS IS" bas
       <xsd:sequence>
         <xsd:element ref="wsnt:NotificationMessage"
                      minOccurs="1" maxOccurs="unbounded" />
+
         <xsd:any namespace="##other" processContents="lax"
                  minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
@@ -169,7 +180,7 @@ This document and the information contained herein is provided on an "AS IS" bas
         <xsd:element name="InitialTerminationTime" 
                      type="xsd:string"
                      nillable="true"
-                     minOccurs="0" maxOccurs="1" />
+                     minOccurs="1" maxOccurs="1" />
         <xsd:element name="SubscriptionPolicy"
                      minOccurs="0" maxOccurs="1">
           <xsd:complexType>
