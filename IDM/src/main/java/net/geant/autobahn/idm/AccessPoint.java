@@ -314,8 +314,8 @@ public final class AccessPoint implements UserAccessPoint,
             try {
             	
             	ToIdcp client = new ToIdcp(idcpServer);
-                List<Link> links = client.getTopology("*");
-                
+                List<Link> links = client.getTopology("*.*");
+
                 for (Link l : links) {
                     log.debug("Retrieving IDCP client ports from link " + l.getBodID());
 
@@ -326,15 +326,7 @@ public final class AccessPoint implements UserAccessPoint,
                     if (!ePort.getBodID().equals(sPort.getBodID())) {
                     	log.debug("Idcp src + " + sPort.getBodID() + " is diffrent than idcp end " + ePort.getBodID() + ", ignoring");
                     }
-                    
-                    if (!ePort.getBodID().contains(":") && !sPort.getBodID().contains(":")) {
-                    	// set portId as domain:node:port
-                        String[] split = l.getBodID().split("\\:");
-                        String fullPortId = split[3] + ":" + split[4] + ":" + split[5];
-                        ePort.setBodID(fullPortId);
-                        sPort.setBodID(fullPortId);
-                    }
-                     
+                  
                     if (!idcpPorts.contains(ePort)) {
                         ePort.getNode().setProvisioningDomain(idcpProvDomain);
                         idcpPorts.add(ePort);
@@ -350,7 +342,7 @@ public final class AccessPoint implements UserAccessPoint,
             catch (IdcpException e) {
             	log.info("Could not retrieve topology from " + idcpServer + ", " + e.getMessage());
                 continue;
-            }
+            } 
             
             // Construct dummy IDCP internal links and nodes and insert them in topology
             if (!idcpPorts.isEmpty()) {
@@ -429,30 +421,24 @@ public final class AccessPoint implements UserAccessPoint,
 	}
 	
 	/**
-	 * 
-	 * Utility function to remove links associated with an idcp cloud identified by idcpServer
-	 * @param idcpServer
+	 * Removes links that belong to other idcp domains
 	 */
-	private void removeIdcpTopology(String idcpServer) {
+	public void removeIdcpLinks() {
+
+		List<Link> links = this.getTopology();
+    	HibernateUtil hbm = IdmHibernateUtil.getInstance();
+        Transaction t = hbm.beginTransaction();
 		
-		HibernateUtil hbt = IdmHibernateUtil.getInstance();
-		Transaction t = hbt.beginTransaction();
-		
-		daos.getAdminDomainDAO().delete(daos.getAdminDomainDAO().get(idcpServer));
+        for (Link l : links) {
+        	
+        	if (l.getBodID().contains("dummyLink") || (l.isIdcpLink() && l.isDummyIdcpLink())) {
+       			this.topology.removeLink(l);
+      			daos.getLinkDAO().delete(l);
+			}
+		}
 		t.commit();
-		hbt.closeSession();
-		
-		log.info("topology obtained from " + idcpServer + " has been removed");
-	}
-	
-	/**
-	 * Removes all non-autobahn topologies
-	 */
-	private void removeIdcpTopology() {
-		
-		for (String idcp : getPropertiesSubset(properties, "idcp."))
-			removeIdcpTopology(idcp);
-	}
+        IdmHibernateUtil.getInstance().closeSession();
+	} 
 	
 	/**
 	 * Read all properties containing a specified String and store in a string list.
@@ -693,6 +679,27 @@ public final class AccessPoint implements UserAccessPoint,
     public String[] getAllClientPorts_Friendly() {
         return getFriendlyNamesfromLS(getAllClientPorts());
     }
+    
+    /**
+     * Returns all client ports (excluding idcp ones) presented in idcp format
+     * @return
+     */
+    public String[] getIdcpClientPorts() {
+
+    	List<Link> links = daos.getLinkDAO().getAll();
+    	List<String> idcpLinks = new ArrayList<String>();
+    	for (Link l : links) {
+
+    		Port end = l.getEndPort();
+    		if (end.isClientPort() && !end.isIdcpPort()) {
+    			
+    			String  idcpLink = "urn:ogf:network:domain=" + end.getAdminDomainID() + ":node=" + end.getNode().getBodID() + 
+    					":port=" + end.getBodID() + ":link=" + l.getBodID(); 
+    			idcpLinks.add(idcpLink);
+    		}
+    	}
+    	return (String[])idcpLinks.toArray(new String[idcpLinks.size()]);
+    } 
     
     /* (non-Javadoc)
      * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getAllIdcpPorts()
