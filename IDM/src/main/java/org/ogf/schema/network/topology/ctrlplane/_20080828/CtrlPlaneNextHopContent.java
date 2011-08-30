@@ -34,9 +34,9 @@ public class CtrlPlaneNextHopContent {
 
     @XmlValue
     protected String value;
-    @XmlAttribute
+    @XmlAttribute(name = "weight")
     protected Integer weight;
-    @XmlAttribute
+    @XmlAttribute(name = "optional")
     protected Boolean optional;
 
     /**

@@ -41,9 +41,9 @@ public class Lifetime {
     protected TimeContent start;
     protected TimeContent end;
     protected Duration duration;
-    @XmlAttribute(required = true)
+    @XmlAttribute(name = "id", required = true)
     protected String id;
-    @XmlAttribute
+    @XmlAttribute(name = "direction")
     protected String direction;
 
     /**

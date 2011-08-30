@@ -7,12 +7,16 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+
+import org.apache.log4j.Logger;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneAdministrativeGroup;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneDomainContent;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneLinkContent;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneNodeContent;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlanePortContent;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneAddressContent;
+import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneSwcapContent;
+import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneSwitchingCapabilitySpecificInfo;
 
 import net.geant.autobahn.network.AdminDomain;
 import net.geant.autobahn.network.Link;
@@ -21,12 +25,14 @@ import net.geant.autobahn.network.Port;
 import net.geant.autobahn.network.ProvisioningDomain;
 
 /**
- * Performs topology conversion 
+ * Converts topology from idcp format to autobahn representation. Conversion from autobahn to idcp is also possible.
+ * 
  * @author Michal
- *
  */
 
 public class OscarsConverter {
+	
+	private static final Logger log = Logger.getLogger(OscarsConverter.class);
 	
 	private OscarsConverter() { }
 	
@@ -113,8 +119,9 @@ public class OscarsConverter {
 							String nodeID = split[4].replace("node=", "");
 							String portID = split[5].replace("port=", "");
 							String linkID = split[6].replace("link=", "");
-							String fullLinkID = "urn:ogf:network:" + domainID
-									+ ":" + nodeID + ":" + portID + ":" + linkID;
+							String fullLinkID = "urn:ogf:network:" + domainID + ":" + nodeID + ":" + portID + ":" + linkID;
+							// override port id with full identifier
+							portID = domainID + ":" + nodeID + ":" + portID;
 
 							// set start port
 							AdminDomain aDomain = ads.get(domainID);
@@ -166,6 +173,9 @@ public class OscarsConverter {
 							nodeID = split2[4].replace("node=", "");
 							portID = split2[5].replace("port=", "");
 							linkID = split2[6].replace("link=", "");
+							
+							// override port id with full identifier
+							portID = domainID + ":" + nodeID + ":" + portID;
 
 							aDomain = ads.get(domainID);
 							
@@ -213,10 +223,8 @@ public class OscarsConverter {
 							Link addLink;
 							if (domain.getId().equals(find.domain.getId())) {
 								addLink = Link.createVirtualLink(startPort, endPort, 0);
-								//System.out.println("created virtual link: " + addLink.getBodID());
 							} else { 
 								addLink = Link.createInterDomainLink(startPort, endPort, 0);
-								//System.out.println("created inter link: " + addLink.getBodID());
 							}
 							// set link properties from link
 							addLink.setBodID(fullLinkID);
@@ -238,7 +246,7 @@ public class OscarsConverter {
 							}
 							links.add(addLink);
 						} else {
-							//System.out.println("remote link not found for: " + link.getId());
+							log.info("OscarsConverter - remote link not found for: " + link.getId());
 						}
 					}
 				}
@@ -285,10 +293,24 @@ public class OscarsConverter {
 				// set start link
 				CtrlPlaneLinkContent link = new CtrlPlaneLinkContent();
 				link.setId(prefix + ":domain=" + provDomains[i].getAdminDomainID() + ":node=" + l.getStartPort().getNode().getBodID() + ":port=" + l.getStartPort().getBodID() + ":link=" + l.getBodID());
-				link.setCapacity(String.valueOf(l.getCapacity()));
-				link.setGranularity(String.valueOf(l.getGranularity()));
-				link.setMaximumReservableCapacity(String.valueOf(l.getMaxResCapacity()));
-				link.setMinimumReservableCapacity(String.valueOf(l.getMinResCapacity()));
+				
+				// commented out because axis2 complaints
+				//link.setCapacity(String.valueOf(l.getCapacity()));
+				//link.setGranularity(String.valueOf(l.getGranularity()));
+				//link.setMaximumReservableCapacity(String.valueOf(l.getMaxResCapacity()));
+				//link.setMinimumReservableCapacity(String.valueOf(l.getMinResCapacity()));
+				
+				// added bacuase of axis2 complaints
+				link.setTrafficEngineeringMetric("10");
+				CtrlPlaneSwcapContent switching = new CtrlPlaneSwcapContent();
+				CtrlPlaneSwitchingCapabilitySpecificInfo switchingCaps = new CtrlPlaneSwitchingCapabilitySpecificInfo();
+				switchingCaps.setCapability("");
+				switchingCaps.setInterfaceMTU(9000);
+				switchingCaps.setVlanRangeAvailability("256-4096");
+				switching.setSwitchingCapabilitySpecificInfo(switchingCaps);
+				link.setSwitchingCapabilityDescriptors(switching);
+
+				
 				link.setRemoteLinkId(prefix + ":domain=" + provDomains[i].getAdminDomainID() + 
 						":node=" + l.getEndPort().getNode().getBodID() + ":port=" + 
 						l.getEndPort().getBodID() + ":link=" + l.getBodID());

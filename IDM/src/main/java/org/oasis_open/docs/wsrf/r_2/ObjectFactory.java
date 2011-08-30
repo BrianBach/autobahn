@@ -35,19 +35,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ResourceUnavailableFaultType }
-     * 
-     */
-    public ResourceUnavailableFaultType createResourceUnavailableFaultType() {
-        return new ResourceUnavailableFaultType();
-    }
-
-    /**
      * Create an instance of {@link ResourceUnknownFaultType }
      * 
      */
     public ResourceUnknownFaultType createResourceUnknownFaultType() {
         return new ResourceUnknownFaultType();
+    }
+
+    /**
+     * Create an instance of {@link ResourceUnavailableFaultType }
+     * 
+     */
+    public ResourceUnavailableFaultType createResourceUnavailableFaultType() {
+        return new ResourceUnavailableFaultType();
     }
 
     /**

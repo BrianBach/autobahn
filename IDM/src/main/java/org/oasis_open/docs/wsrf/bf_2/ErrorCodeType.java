@@ -34,7 +34,7 @@ public class ErrorCodeType {
 
     @XmlValue
     protected String value;
-    @XmlAttribute(required = true)
+    @XmlAttribute(name = "dialect", required = true)
     @XmlSchemaType(name = "anyURI")
     protected String dialect;
 

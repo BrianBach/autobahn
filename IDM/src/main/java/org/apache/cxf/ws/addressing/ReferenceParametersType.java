@@ -17,8 +17,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{http://oscars.es.net/OSCARS}subscriptionId" minOccurs="0"/>
- *         &lt;element ref="{http://oscars.es.net/OSCARS}publisherRegistrationId" minOccurs="0"/>
+ *         &lt;element ref="{http://oscars.es.net/OSCARS}subscriptionId"/>
+ *         &lt;element ref="{http://oscars.es.net/OSCARS}publisherRegistrationId"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -34,9 +34,9 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class ReferenceParametersType {
 
-    @XmlElement(namespace = "http://oscars.es.net/OSCARS")
+    @XmlElement(namespace = "http://oscars.es.net/OSCARS", required = true)
     protected String subscriptionId;
-    @XmlElement(namespace = "http://oscars.es.net/OSCARS")
+    @XmlElement(namespace = "http://oscars.es.net/OSCARS", required = true)
     protected String publisherRegistrationId;
 
     /**

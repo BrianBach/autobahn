@@ -39,11 +39,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CtrlPlaneAdministrativeGroup }
+     * Create an instance of {@link CtrlPlanePortContent }
      * 
      */
-    public CtrlPlaneAdministrativeGroup createCtrlPlaneAdministrativeGroup() {
-        return new CtrlPlaneAdministrativeGroup();
+    public CtrlPlanePortContent createCtrlPlanePortContent() {
+        return new CtrlPlanePortContent();
+    }
+
+    /**
+     * Create an instance of {@link CtrlPlaneNodeContent }
+     * 
+     */
+    public CtrlPlaneNodeContent createCtrlPlaneNodeContent() {
+        return new CtrlPlaneNodeContent();
     }
 
     /**
@@ -55,11 +63,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CtrlPlaneSwitchingCapabilitySpecificInfo }
+     * Create an instance of {@link CtrlPlanePathContent }
      * 
      */
-    public CtrlPlaneSwitchingCapabilitySpecificInfo createCtrlPlaneSwitchingCapabilitySpecificInfo() {
-        return new CtrlPlaneSwitchingCapabilitySpecificInfo();
+    public CtrlPlanePathContent createCtrlPlanePathContent() {
+        return new CtrlPlanePathContent();
     }
 
     /**
@@ -79,19 +87,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Lifetime }
+     * Create an instance of {@link CtrlPlaneDomainSignatureContent }
      * 
      */
-    public Lifetime createLifetime() {
-        return new Lifetime();
+    public CtrlPlaneDomainSignatureContent createCtrlPlaneDomainSignatureContent() {
+        return new CtrlPlaneDomainSignatureContent();
     }
 
     /**
-     * Create an instance of {@link CtrlPlaneNodeContent }
+     * Create an instance of {@link CtrlPlaneAdministrativeGroup }
      * 
      */
-    public CtrlPlaneNodeContent createCtrlPlaneNodeContent() {
-        return new CtrlPlaneNodeContent();
+    public CtrlPlaneAdministrativeGroup createCtrlPlaneAdministrativeGroup() {
+        return new CtrlPlaneAdministrativeGroup();
     }
 
     /**
@@ -103,19 +111,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CtrlPlaneSwcapContent }
+     * Create an instance of {@link TimeContent }
      * 
      */
-    public CtrlPlaneSwcapContent createCtrlPlaneSwcapContent() {
-        return new CtrlPlaneSwcapContent();
+    public TimeContent createTimeContent() {
+        return new TimeContent();
     }
 
     /**
-     * Create an instance of {@link CtrlPlanePathContent }
+     * Create an instance of {@link Lifetime }
      * 
      */
-    public CtrlPlanePathContent createCtrlPlanePathContent() {
-        return new CtrlPlanePathContent();
+    public Lifetime createLifetime() {
+        return new Lifetime();
     }
 
     /**
@@ -127,19 +135,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CtrlPlaneDomainSignatureContent }
+     * Create an instance of {@link CtrlPlaneNextHopContent }
      * 
      */
-    public CtrlPlaneDomainSignatureContent createCtrlPlaneDomainSignatureContent() {
-        return new CtrlPlaneDomainSignatureContent();
-    }
-
-    /**
-     * Create an instance of {@link TimeContent }
-     * 
-     */
-    public TimeContent createTimeContent() {
-        return new TimeContent();
+    public CtrlPlaneNextHopContent createCtrlPlaneNextHopContent() {
+        return new CtrlPlaneNextHopContent();
     }
 
     /**
@@ -151,19 +151,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CtrlPlanePortContent }
+     * Create an instance of {@link CtrlPlaneSwcapContent }
      * 
      */
-    public CtrlPlanePortContent createCtrlPlanePortContent() {
-        return new CtrlPlanePortContent();
+    public CtrlPlaneSwcapContent createCtrlPlaneSwcapContent() {
+        return new CtrlPlaneSwcapContent();
     }
 
     /**
-     * Create an instance of {@link CtrlPlaneNextHopContent }
+     * Create an instance of {@link CtrlPlaneSwitchingCapabilitySpecificInfo }
      * 
      */
-    public CtrlPlaneNextHopContent createCtrlPlaneNextHopContent() {
-        return new CtrlPlaneNextHopContent();
+    public CtrlPlaneSwitchingCapabilitySpecificInfo createCtrlPlaneSwitchingCapabilitySpecificInfo() {
+        return new CtrlPlaneSwitchingCapabilitySpecificInfo();
     }
 
     /**

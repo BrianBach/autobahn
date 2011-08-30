@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "CtrlPlaneDomainSignatureContent")
 public class CtrlPlaneDomainSignatureContent {
 
-    @XmlAttribute(required = true)
+    @XmlAttribute(name = "domainId", required = true)
     protected String domainId;
 
     /**

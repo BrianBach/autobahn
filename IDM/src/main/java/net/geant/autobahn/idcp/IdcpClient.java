@@ -143,6 +143,24 @@ public class IdcpClient {
 	}
 	
 	/**
+	 * Needed for xml serialization 
+	 * @return
+	 * @throws IdcpException
+	 */
+	public GetTopologyResponseContent getRawTopology() throws IdcpException {
+		
+		GetTopologyContent request = new GetTopologyContent();
+		request.setTopologyType("all");
+
+		try {
+			GetTopologyResponseContent response = idcp.getNetworkTopology(request);
+			return response;
+		} catch (Exception e) { 
+			throw new IdcpException(e.getMessage());
+		}
+	}
+	
+	/**
 	 * Returns a list of links suitable for autobahn representation
 	 * @return
 	 * @throws IdcpException

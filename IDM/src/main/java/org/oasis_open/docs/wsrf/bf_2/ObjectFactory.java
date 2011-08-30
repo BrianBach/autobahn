@@ -34,14 +34,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ErrorCodeType }
-     * 
-     */
-    public ErrorCodeType createErrorCodeType() {
-        return new ErrorCodeType();
-    }
-
-    /**
      * Create an instance of {@link BaseFaultType }
      * 
      */
@@ -55,6 +47,14 @@ public class ObjectFactory {
      */
     public FaultCauseType createFaultCauseType() {
         return new FaultCauseType();
+    }
+
+    /**
+     * Create an instance of {@link ErrorCodeType }
+     * 
+     */
+    public ErrorCodeType createErrorCodeType() {
+        return new ErrorCodeType();
     }
 
     /**

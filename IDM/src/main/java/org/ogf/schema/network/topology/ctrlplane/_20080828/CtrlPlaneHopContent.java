@@ -60,7 +60,7 @@ public class CtrlPlaneHopContent {
     protected CtrlPlanePortContent port;
     protected CtrlPlaneLinkContent link;
     protected List<CtrlPlaneNextHopContent> nextHop;
-    @XmlAttribute(required = true)
+    @XmlAttribute(name = "id", required = true)
     protected String id;
 
     /**

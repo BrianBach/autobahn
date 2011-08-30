@@ -33,7 +33,7 @@ public class VlanTag {
 
     @XmlValue
     protected String value;
-    @XmlAttribute
+    @XmlAttribute(name = "tagged")
     protected Boolean tagged;
 
     /**

@@ -4,15 +4,16 @@
 package net.geant.autobahn.idcp;
 
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import net.geant.autobahn.idm.AccessPoint;
+import net.geant.autobahn.constraints.ConstraintsNames;
+import net.geant.autobahn.constraints.DomainConstraints;
+import net.geant.autobahn.constraints.GlobalConstraints;
+import net.geant.autobahn.constraints.PathConstraints;
+import net.geant.autobahn.constraints.Range;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.Path;
 import net.geant.autobahn.network.Port;
@@ -27,7 +28,7 @@ import net.geant.autobahn.reservation.ReservationErrors;
  */
 public final class ToIdcp {
 	
-	private static Logger log = Logger.getLogger(ToIdcp.class);
+private static Logger log = Logger.getLogger(ToIdcp.class);
 	
 	public static final int TIME_SCALE = 1000; // divide time by this value before sending
 	public static final int BANDWIDTH_SCALE = 1000000; // idcp uses Mbps so we must divide by this value
@@ -76,6 +77,20 @@ public final class ToIdcp {
     	return domain + "@" + num + "_res_" + resNum;
     }
 	
+    /**
+     * Converts idcp link id to autobahn port representation
+     * @param linkId
+     * @return
+     */
+    public static String convertLinkId(String linkId) {
+    	
+    	String[] split = linkId.split("\\:");
+    	if (split.length != 7) 
+    		throw new IllegalArgumentException("linkId");
+    	
+        return split[3] + ":" + split[4] + ":" + split[5];
+    }
+    
 	/**
 	 * Converts back linkId (domain:node:port) to full idcp representation (urn:ogf:network:domain=*:node=*:port=*:link=*)
 	 * @param linkId
@@ -85,6 +100,19 @@ public final class ToIdcp {
 		
 		String[] split = portId.split("\\:");
     	return "urn:ogf:network:domain=" + split[0] + ":node=" + split[1] + ":port=" + split[2] + ":link=*"; 
+	}
+	
+	/**
+	 * Returns link identifier in idcp form
+	 * @param domainId
+	 * @param nodeId
+	 * @param portId
+	 * @param linkId
+	 * @return
+	 */
+	public static String createLinkId(String domainId, String nodeId, String portId, String linkId) {
+		
+		return "urn:ogf:network:domain=" + domainId + ":node=" + nodeId + ":port=" + portId + ":link=" + linkId;
 	}
 	
 	/**
@@ -125,17 +153,25 @@ public final class ToIdcp {
 	     	} else
 	     		log.info("ToIdcp - source port " + src + " with no link mapping");
 	    }
+	    
 	    String dst = reservation.getEndPort().getBodID();
 	    dst = ToIdcp.restorePortId(dst);
-	    	    
+	    
+	    GlobalConstraints globalCons = reservation.getGlobalConstraints();
+	    DomainConstraints domainCons = globalCons.getDomainConstraints().get(globalCons.getDomainConstraints().size() - 1);
+	    
+	    PathConstraints pathCons = domainCons.getPathConstraints().get(domainCons.getPathConstraints().size() - 1);
+	    List<Range> ranges = pathCons.getRangeConstraint(ConstraintsNames.VLANS).getRanges();
+	    Range vlans = ranges.get(ranges.size() - 1);
+	    
 	    final String resId = convertResId(reservation.getBodID());
 	    final String desc =  reservation.getDescription();
 	    final long startTime = reservation.getStartTime().getTimeInMillis() / TIME_SCALE;
 	    final long endTime = reservation.getEndTime().getTimeInMillis() / TIME_SCALE;
 	    final int bandwidth = ((int)(reservation.getCapacity() / BANDWIDTH_SCALE));
-	    final String vlan = "any"; 
+	    final String vlan = vlans.getMin() == 0 ? "any" : String.valueOf(vlans.getMin());
 	    final String pathMode = properties.containsKey(IdcpManager.NOTIFY_URL) ? IdcpClient.PATH_MODE_MANUAL : IdcpClient.PATH_MODE_AUTOMATIC;
-	    log.info("ToIdcp - scheduling " + resId + ", src - " + src + ", dst - " + dst);
+	    log.info("ToIdcp - scheduling " + resId + ", src - " + src + ", dst - " + dst + ", vlan - " + vlan);
 	    
 	    try {
 	    	idcp.schedule(resId, desc, src, dst, startTime, endTime, bandwidth, vlan, pathMode);
@@ -190,7 +226,7 @@ public final class ToIdcp {
 	}
 	
 	/**
-	 * Returns a list of links that matches filer (:link=filter)
+	 * Returns a list of links that matches filer (:link=filter). Use *.* to get all the links.
 	 * @param filter
 	 * @return
 	 * @throws IdcpException
@@ -198,6 +234,9 @@ public final class ToIdcp {
 	public List<Link> getTopology(String filter) throws IdcpException {
 		
 		List<Link> links = idcp.getTopology();
+		if (filter.equalsIgnoreCase("*.*"))
+			return links;
+		
 		List<Link> filtered = new ArrayList<Link>();
 		
 		for (Link l : links) {

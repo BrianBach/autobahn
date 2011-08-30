@@ -3,12 +3,10 @@ package org.oasis_open.docs.wsn.b_2;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import org.apache.cxf.ws.addressing.EndpointReferenceType;
@@ -27,7 +25,7 @@ import org.w3c.dom.Element;
  *       &lt;sequence>
  *         &lt;element name="ConsumerReference" type="{http://www.w3.org/2005/08/addressing}EndpointReferenceType"/>
  *         &lt;element name="Filter" type="{http://docs.oasis-open.org/wsn/b-2}FilterType" minOccurs="0"/>
- *         &lt;element name="InitialTerminationTime" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="InitialTerminationTime" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="SubscriptionPolicy" minOccurs="0">
  *           &lt;complexType>
  *             &lt;complexContent>
@@ -63,8 +61,8 @@ public class Subscribe {
     protected EndpointReferenceType consumerReference;
     @XmlElement(name = "Filter")
     protected FilterType filter;
-    @XmlElementRef(name = "InitialTerminationTime", namespace = "http://docs.oasis-open.org/wsn/b-2", type = JAXBElement.class)
-    protected JAXBElement<String> initialTerminationTime;
+    @XmlElement(name = "InitialTerminationTime", required = true, nillable = true)
+    protected String initialTerminationTime;
     @XmlElement(name = "SubscriptionPolicy")
     protected Subscribe.SubscriptionPolicy subscriptionPolicy;
     @XmlAnyElement(lax = true)
@@ -123,10 +121,10 @@ public class Subscribe {
      * 
      * @return
      *     possible object is
-     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     {@link String }
      *     
      */
-    public JAXBElement<String> getInitialTerminationTime() {
+    public String getInitialTerminationTime() {
         return initialTerminationTime;
     }
 
@@ -135,11 +133,11 @@ public class Subscribe {
      * 
      * @param value
      *     allowed object is
-     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     {@link String }
      *     
      */
-    public void setInitialTerminationTime(JAXBElement<String> value) {
-        this.initialTerminationTime = ((JAXBElement<String> ) value);
+    public void setInitialTerminationTime(String value) {
+        this.initialTerminationTime = value;
     }
 
     /**

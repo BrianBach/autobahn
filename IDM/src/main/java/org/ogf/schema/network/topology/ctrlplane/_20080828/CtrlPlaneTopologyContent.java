@@ -47,7 +47,7 @@ public class CtrlPlaneTopologyContent {
     protected List<CtrlPlanePathContent> path;
     protected List<CtrlPlaneDomainContent> domain;
     protected List<CtrlPlaneDomainSignatureContent> domainSignature;
-    @XmlAttribute(required = true)
+    @XmlAttribute(name = "id", required = true)
     protected String id;
 
     /**

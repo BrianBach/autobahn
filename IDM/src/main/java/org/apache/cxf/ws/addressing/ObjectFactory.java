@@ -47,11 +47,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RelatesToType }
+     * Create an instance of {@link ProblemActionType }
      * 
      */
-    public RelatesToType createRelatesToType() {
-        return new RelatesToType();
+    public ProblemActionType createProblemActionType() {
+        return new ProblemActionType();
     }
 
     /**
@@ -63,30 +63,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AttributedQNameType }
-     * 
-     */
-    public AttributedQNameType createAttributedQNameType() {
-        return new AttributedQNameType();
-    }
-
-    /**
-     * Create an instance of {@link MetadataType }
-     * 
-     */
-    public MetadataType createMetadataType() {
-        return new MetadataType();
-    }
-
-    /**
-     * Create an instance of {@link ReferenceParametersType }
-     * 
-     */
-    public ReferenceParametersType createReferenceParametersType() {
-        return new ReferenceParametersType();
-    }
-
-    /**
      * Create an instance of {@link AttributedURIType }
      * 
      */
@@ -95,11 +71,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ProblemActionType }
+     * Create an instance of {@link AttributedQNameType }
      * 
      */
-    public ProblemActionType createProblemActionType() {
-        return new ProblemActionType();
+    public AttributedQNameType createAttributedQNameType() {
+        return new AttributedQNameType();
+    }
+
+    /**
+     * Create an instance of {@link EndpointReferenceType }
+     * 
+     */
+    public EndpointReferenceType createEndpointReferenceType() {
+        return new EndpointReferenceType();
     }
 
     /**
@@ -111,11 +95,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link EndpointReferenceType }
+     * Create an instance of {@link MetadataType }
      * 
      */
-    public EndpointReferenceType createEndpointReferenceType() {
-        return new EndpointReferenceType();
+    public MetadataType createMetadataType() {
+        return new MetadataType();
+    }
+
+    /**
+     * Create an instance of {@link RelatesToType }
+     * 
+     */
+    public RelatesToType createRelatesToType() {
+        return new RelatesToType();
+    }
+
+    /**
+     * Create an instance of {@link ReferenceParametersType }
+     * 
+     */
+    public ReferenceParametersType createReferenceParametersType() {
+        return new ReferenceParametersType();
     }
 
     /**
