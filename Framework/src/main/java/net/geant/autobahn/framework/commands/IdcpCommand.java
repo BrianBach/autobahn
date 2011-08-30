@@ -8,10 +8,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import com.thoughtworks.xstream.XStream;
+
 import net.geant.autobahn.framework.Framework;
+import net.geant.autobahn.idcp.GetTopologyResponseContent;
 import net.geant.autobahn.idcp.IdcpClient;
+import net.geant.autobahn.idcp.IdcpManager;
+import net.geant.autobahn.idcp.IdcpNotifyClient;
 import net.geant.autobahn.idcp.ResDetails;
-import net.geant.autobahn.idcp.notify.OscarsNotifyClient;
+import net.geant.autobahn.idcp.SubscriptionInfo;
+//import net.geant.autobahn.idcp.notify.OscarsNotifyClient;
 import net.geant.autobahn.network.Link;
 
 /**
@@ -32,6 +38,8 @@ public final class IdcpCommand implements AutobahnCommand {
 		friends.put("esnetNotify", "https://oscars-dev.es.net/axis2/services/OSCARSNotify");
 		friends.put("internet2", "https://idcdev0.internet2.edu:8443/axis2/services/OSCARS");
 		friends.put("internet2Notify", "https://idcdev0.internet2.edu:8443/axis2/services/OSCARSNotify");
+		friends.put("geant", "https://autobahn.par.fr.geant2.net:8090/autobahn/oscars");
+		friends.put("geantNotify", "https://autobahn.par.fr.geant2.net:8090/autobahn/oscarsnotify");
 		// add others or retrieve from idm.properties
 	}
 	
@@ -52,11 +60,41 @@ public final class IdcpCommand implements AutobahnCommand {
 	@Override
 	public String execute(Framework autobahn, String[] args) {
 		
-		if (args.length == 2 && args[1].equalsIgnoreCase("friends")) {
-			StringBuffer sb = new StringBuffer();
-			for (String key : friends.keySet()) 
-				sb.append(key + " - " + friends.get(key) + NL);
-			return sb.toString();
+		if (args.length == 2) { 
+			if (args[1].equalsIgnoreCase("friends")) {
+				StringBuffer sb = new StringBuffer();
+				for (String key : friends.keySet()) 
+					sb.append(key + " - " + friends.get(key) + NL);
+				return sb.toString();
+			} else if (args[1].equalsIgnoreCase("clientports")) {
+				StringBuffer sb = new StringBuffer();
+				String[] ports = autobahn.getIdm().getIdcpClientPorts();
+				for (String p : ports)
+					sb.append(p + NL);
+				return sb.toString();
+			} else if (args[1].equalsIgnoreCase("removelinks")) {
+				autobahn.getIdm().removeIdcpLinks();
+				return "idcp links have been removed";
+			} else if (args[1].equalsIgnoreCase("topologyxml")) {
+			
+				try {
+					IdcpClient idcp = new IdcpClient(friends.get("local"));
+					GetTopologyResponseContent topology = idcp.getRawTopology();
+					Writer output = new BufferedWriter(new FileWriter("geant.xml"));
+					XStream xs = new XStream();
+					xs.toXML(topology, output);
+					output.close();
+					return "saved geant.xml";
+				} catch (Exception e) {
+					return "could not serialize to xml - " + e.getMessage();
+				} 
+			} else if (args[1].equalsIgnoreCase("subscribers")) {
+				StringBuffer sb = new StringBuffer();
+				List<SubscriptionInfo> subscribers = IdcpManager.getSubscribers();
+				for (SubscriptionInfo si : subscribers)
+					sb.append(si + NL);
+				return sb.toString();
+			}
 		}
 					
 		// at least 3 args required - idcp address operation 
@@ -107,13 +145,14 @@ public final class IdcpCommand implements AutobahnCommand {
 			}
 		} else if (operation.equals("schedule")) {
 			
-			if (args.length != 7)
+			if (args.length != 8)
 				return invalid;
 			
 			String resId = args[3];
 			String source = args[4];
 			String dest = args[5];
 			int bandwidth = Integer.parseInt(args[6]);
+			String vlan = args[7]; 
 			
 			Calendar start = Calendar.getInstance();
 			start.add(Calendar.MINUTE, 1);
@@ -123,7 +162,7 @@ public final class IdcpCommand implements AutobahnCommand {
 			try {
 				IdcpClient idcp = new IdcpClient(address);
 				idcp.schedule(resId, "test reservation", source, dest, start.getTimeInMillis(), end.getTimeInMillis(),
-						bandwidth, "any", IdcpClient.PATH_MODE_AUTOMATIC);
+						bandwidth, vlan, IdcpClient.PATH_MODE_AUTOMATIC);
 				return resId + " has been submitted";
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -158,22 +197,35 @@ public final class IdcpCommand implements AutobahnCommand {
 			}
 		} else if (operation.equals("subscribe")) {
 			
+			if (args.length != 6)
+				return invalid;
+			
 			String consumer = friends.containsKey(args[3]) ? friends.get(args[3]) : args[3];
 			String producer = friends.containsKey(args[4]) ? friends.get(args[4]) : args[4];
+			String subId = args[5];
+			if (subId.equalsIgnoreCase("auto"))
+				subId = IdcpManager.generateSubscriptionId();
 			
 			try {
-				OscarsNotifyClient idcpNotify = new OscarsNotifyClient(address);
-				idcpNotify.subscribe(consumer, producer);
-				return "subscribed to " + producer;
+				IdcpNotifyClient idcpNotify = new IdcpNotifyClient(address);
+				idcpNotify.subscribe(producer, consumer, subId, null, null, null);				
+				
+				return "subscribed";
 			} catch (Exception e) { 
 				return "failed to subscribe";
 			}
 		} else if (operation.equals("unsubscribe")) {
 			
-			String consumer = friends.containsKey(args[3]) ? friends.get(args[3]) : args[3];
+			if (args.length != 5)
+				return invalid;
+			
+			String notifier = friends.containsKey(args[3]) ? friends.get(args[3]) : args[3];
+			String subId = args[4];
+			
 			try {
-				OscarsNotifyClient idcpNotify = new OscarsNotifyClient(address);
-				idcpNotify.unsubscribe(consumer);
+				IdcpNotifyClient idcpNotify = new IdcpNotifyClient(address);
+				idcpNotify.unsubscribe(notifier, subId, null);
+			
 				return "unsubscribed";
 			} catch (Exception e) { 
 				return "failed to unsubscribe";
@@ -188,13 +240,17 @@ public final class IdcpCommand implements AutobahnCommand {
 		StringBuffer sb = new StringBuffer();
 		sb.append("allows creating, cancelling and querying resources in idcp domains" + NL);
 		sb.append("\t'friends' - returns a list of known aliases that can be used instead of full address" + NL);
+		sb.append("\t'clientports' - returns a list of client ports in idcp format" + NL);
+		sb.append("\t'removelinks' - removes all idcp links" + NL);
+		sb.append("\t'topologyxml' - saves autobahn tology in idcp format(xml)" + NL);
+		sb.append("\t'subscribers' - prints all subscribers" + NL);
 		sb.append("\t'address topology autobahn|idcp [filename]' - gets topology either in autobahn or idcp format," +
 				"optionally saves it to a file" + NL);
 		sb.append("\t'address schedule resId source dest bandwidth' - reserves resources" + NL);
 		sb.append("\t'address cancel resId' - cancels reservation indicated by resId" + NL);
 		sb.append("\t'address query resId' - queries for reservation indicated by resId" + NL);
-		sb.append("\t'address subscribe consumer producer' - subscribes for asynchronous event notifications" + NL);
-		sb.append("\t'address unsubscribe consumer' - unsubscribes to stop receiving event notifications" + NL);
+		sb.append("\t'notifyAddress subscribe consumer producer subscriptionId|auto' - subscribes for asynchronous event notifications" + NL);
+		sb.append("\t'notifyAddress unsubscribe notifier subscriptionId' - unsubscribes to stop receiving event notifications" + NL);
 				
 		return sb.toString();
 	}
