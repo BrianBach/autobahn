@@ -2,6 +2,8 @@ package net.geant.autobahn.useraccesspoint;
 
 import java.util.Calendar;
 
+import org.apache.log4j.Logger;
+
 import net.geant.autobahn.constraints.ConstraintsNames;
 import net.geant.autobahn.constraints.PathConstraints;
 import net.geant.autobahn.constraints.RangeConstraint;
@@ -14,6 +16,8 @@ public class RequestConverter {
 
 	private IdmDAOFactory daos = null;
 	
+    private static final Logger log = Logger.getLogger(RequestConverter.class);
+    
 	public RequestConverter(IdmDAOFactory daos) {
 		this.daos = daos;
 	}
@@ -24,15 +28,21 @@ public class RequestConverter {
 		
 		if(!req.isProcessNow()) {
 			// not process now - check if: and start > now
-            if (startTime.compareTo(now) < 0) 
-            	throw new UserAccessPointException("wrong reservation time - startTime: " + startTime.getTime() + " < currentTime: " + now.getTime());
+            if (startTime.compareTo(now) < 0) {
+                String message = "wrong reservation time - startTime: " + startTime.getTime() + " < currentTime: " + now.getTime();
+                log.error(message);
+            	throw new UserAccessPointException(message);
+            }
 		} else {
 			req.setStartTime(now);
 		}
 
 		// check if start < end
-        if (startTime.compareTo(req.getEndTime()) >= 0) 
-        	throw new UserAccessPointException("wrong reservation time - startTime: " + startTime.getTime() + " >= endTime: " + req.getEndTime().getTime());
+        if (req.getStartTime().compareTo(req.getEndTime()) >= 0) {
+            String message = "wrong reservation time - startTime: " + req.getStartTime().getTime() + " >= endTime: " + req.getEndTime().getTime();
+            log.error(message);
+            throw new UserAccessPointException(message);
+        }
 		
         PortDAO pdao = daos.getPortDAO();
         Port start = pdao.getByBodID(req.getStartPort().getAddress());
