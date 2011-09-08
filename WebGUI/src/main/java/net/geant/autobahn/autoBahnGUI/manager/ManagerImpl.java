@@ -133,7 +133,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	/**
 	 * Logs information
 	 */
-	private static Logger logger = Logger.getLogger("IDMsManager");
+	private static Logger logger = Logger.getLogger("ManagerImpl");
 	
 	/**
 	 * Map with all ports available in each domain
