@@ -169,6 +169,21 @@ public class ManagerImpl implements Manager, ManagerNotifier {
         } else {
             lookupService = null;
         }
+        
+        // Build user-friendly list of timezones
+        for (int i =0; i<timezones.size(); i++) {
+            String tzStr = timezones.get(i);
+            TimeZone tz = TimeZone.getTimeZone(tzStr);
+            int offset = tz.getRawOffset() / (60*1000);
+            int offset_hrs = offset / 60;
+            int offset_min = offset % 60;
+            if (offset_hrs < 0) {
+                timezones.set(i, String.format("(GMT%03d:%02d) %s", offset_hrs, -offset_min, tzStr));
+            } else {
+                timezones.set(i, String.format("(GMT+%02d:%02d) %s", offset_hrs, offset_min, tzStr));
+            }
+        }
+        Collections.sort(timezones);
 	}
 	
 	public LookupService getLookupServiceObject(){
@@ -248,19 +263,56 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	
     /*
      * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllIdcpPorts(java.lang.String)
+     */
+    public List<String> getAllIdcpPorts (String idmIdentifier) {
+        if (idmIdentifier != null) {
+            InterDomainManager manager = idms.get(idmIdentifier);
+            if (manager == null) {
+                logger.info("getAllIdcpPorts() could not find idm manager for " 
+                        + idmIdentifier + ", will try with any other registered IDM");
+                return getAllIdcpPorts();
+            }
+
+            String[] temp = manager.getIdcpPorts();
+
+            List<String> ports = new ArrayList<String>();
+
+            if (temp != null) {
+                logger.info("--Got the following IDCP ports:");
+                for (String link : temp) {
+                    ports.add(link);
+                    logger.info(link);
+                }
+
+                return ports;
+            } else {
+                return getAllIdcpPorts();
+            }
+        }
+
+        // idmIndentifier is null
+        return getAllIdcpPorts();
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllIdcpPorts()
      */
     public List<String> getAllIdcpPorts (){
         // Parse through IDMs and get the first non-null result
         for(String idm : idms.keySet()) {
+            logger.info("Getting IDCP ports from " + idm);
             InterDomainManager manager = idms.get(idm);
             String[] temp = manager.getIdcpPorts();
             
             List<String> ports = new ArrayList<String>();
             
-            if(temp != null) {
+            if (temp != null) {
+                logger.info("--Got the following IDCP ports:");
                 for(String link : temp) {
                     ports.add(link);
+                    logger.info(link);
                 }
                 
                 return ports; 
@@ -270,36 +322,74 @@ public class ManagerImpl implements Manager, ManagerNotifier {
         return null;
     }
     
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllPorts()
-	 */
-	public List<String> getAllPorts () throws UserAccessPointException{
-        // Parse through IDMs and get the first non-null result
-        for(String idm : idms.keySet()) {
-        	InterDomainManager manager = idms.get(idm);
-        	String[] temp = manager.getAllClientPorts();
-        	
-        	List<String> ports = new ArrayList<String>();
-        	
-        	if(temp != null) {
-        		for(String link : temp) {
-        			ports.add(link);
-        		}
-        		
-        		return ports; 
-        	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllPorts(java.lang.String)
+     */
+    public List<String> getAllPorts(String idmIdentifier) throws UserAccessPointException {
+        if (idmIdentifier != null) {
+            InterDomainManager manager = idms.get(idmIdentifier);
+            if (manager == null) {
+                logger.info("getAllPorts() could not find idm manager for " + idmIdentifier
+                        + ", will try with any other registered IDM");
+                return getAllPorts();
+            }
+
+            String[] temp = manager.getAllClientPorts();
+
+            List<String> ports = new ArrayList<String>();
+
+            if (temp != null) {
+                logger.info("--Got the following ports:");
+                for (String link : temp) {
+                    ports.add(link);
+                    logger.info(link);
+                }
+
+                return ports;
+            } else {
+                return getAllPorts();
+            }
         }
-        
-		return null;
-	}
+
+        // idmIndentifier is null
+        return getAllPorts();
+    }
 	
     /*
      * (non-Javadoc)
-     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllFriendlyPorts()
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllPorts()
      */
-    public List<PortMap> getAllFriendlyPorts () throws UserAccessPointException {
-        List<String> ports = getAllPorts();
+    public List<String> getAllPorts () throws UserAccessPointException {
+        // Parse through IDMs and get the first non-null result
+        for (String idm : idms.keySet()) {
+            logger.info("Getting client ports from " + idm);
+            InterDomainManager manager = idms.get(idm);
+            String[] temp = manager.getAllClientPorts();
+            
+            List<String> ports = new ArrayList<String>();
+            
+            if(temp != null) {
+                logger.info("--Got the following ports:");
+                for (String link : temp) {
+                    ports.add(link);
+                    logger.info(link);
+                }
+                
+                return ports; 
+            }
+        }
+        
+        return null;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllFriendlyPorts(java.lang.String)
+     */
+    public List<PortMap> getAllFriendlyPorts (String idm) throws UserAccessPointException {
+        List<String> ports = getAllPorts(idm);
         List<PortMap> friendlyPorts = new ArrayList<PortMap>();
         
         for (String p_id : ports) {
@@ -316,11 +406,11 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 
     /*
      * (non-Javadoc)
-     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllFriendlyAndIdcpPorts()
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllFriendlyAndIdcpPorts(java.lang.String)
      */
-    public List<PortMap> getAllFriendlyAndIdcpPorts () throws UserAccessPointException {
-        List<PortMap> friendlyPorts = getAllFriendlyPorts();
-        List<String> idcpPorts = this.getAllIdcpPorts();
+    public List<PortMap> getAllFriendlyAndIdcpPorts (String idm) throws UserAccessPointException {
+        List<PortMap> friendlyPorts = getAllFriendlyPorts(idm);
+        List<String> idcpPorts = this.getAllIdcpPorts(idm);
         
         if (friendlyPorts == null) {
             friendlyPorts = new ArrayList<PortMap>();
@@ -1144,36 +1234,46 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		this.timezone = timezone;
 	}
 
-	
-	
-	     // Change a date to GMT from a given timezone  
-	     public static Date toGmtFromZone(Date date, String fromZone) {  
-	         TimeZone pst = TimeZone.getTimeZone(fromZone);  
-	         return new Date(date.getTime() - pst.getRawOffset());  
-	     }  
-	   
+    // Change a date to GMT from a given timezone
+    public static Date toGmtFromZone(Date date, String fromZone) {
+        TimeZone pst = TimeZone.getTimeZone(fromZone);
+        return new Date(date.getTime() - pst.getRawOffset());
+    }
 
-	public void convertTimeToApplicationTimezone(String timezone, ReservationRequest request){
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#convertTimeToApplicationTimezone(java.lang.String, net.geant.autobahn.useraccesspoint.ReservationRequest)
+     */
+	public void convertTimeToApplicationTimezone(String userZoneStr, ReservationRequest request){
 		
-		logger.info ("Modifing timezone:"+timezone);
+		logger.info ("Converting times for request " + request + 
+		        " according to timezone " + userZoneStr);
 		try {
-			if (timezone == null || timezone.equals("UTC")|| timezone.equals("GMT")|| this.timezone.equals(timezone)) {
+			if (userZoneStr == null) {
 				return;
 			}
-			TimeZone applicationTimeZone = TimeZone.getTimeZone(this.timezone);
-			if (applicationTimeZone== null)
-				applicationTimeZone= TimeZone.getTimeZone("UTC");
-			TimeZone pst = TimeZone.getTimeZone(timezone); 
-			Calendar startTime= request.getStartTime();
-			Calendar endTime= request.getEndTime();
-	        GregorianCalendar startDate=(GregorianCalendar)Calendar.getInstance();
-	        startDate.setTimeInMillis(startTime.getTimeInMillis()-pst.getRawOffset()+applicationTimeZone.getRawOffset());
-	        GregorianCalendar endDate=(GregorianCalendar)Calendar.getInstance();
-	        endDate.setTimeInMillis(endTime.getTimeInMillis()-pst.getRawOffset()+applicationTimeZone.getRawOffset());
+			
+	        // Cut user-friendly text from timezone String
+	        String[] split_tz = userZoneStr.split("\\) ");
+	        userZoneStr = split_tz[split_tz.length-1];
+			TimeZone userZone = TimeZone.getTimeZone(userZoneStr);
+			
+			Calendar startTime = request.getStartTime();
+	        GregorianCalendar startTimeShifted = (GregorianCalendar) Calendar.getInstance();
+            startTimeShifted.setTimeZone(userZone);
+	        startTimeShifted.setTimeInMillis(startTime.getTimeInMillis() - 
+	                userZone.getRawOffset() + startTime.getTimeZone().getRawOffset());
+            
+            Calendar endTime = request.getEndTime();
+	        GregorianCalendar endTimeShifted = (GregorianCalendar) Calendar.getInstance();
+	        endTimeShifted.setTimeZone(userZone);
+	        endTimeShifted.setTimeInMillis(endTime.getTimeInMillis() - 
+	                userZone.getRawOffset() + endTime.getTimeZone().getRawOffset());
 	        
 	        try {
-				request.setStartTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(startDate).toGregorianCalendar());
-				request.setEndTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(endDate).toGregorianCalendar());
+				request.setStartTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(startTimeShifted).toGregorianCalendar());
+				request.setEndTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(endTimeShifted).toGregorianCalendar());
+				logger.info("Request was shifted to " + request);
 			} catch (DatatypeConfigurationException e) {
 				e.printStackTrace();
 			}
@@ -1183,29 +1283,6 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		}
 	}
 	
-	public void convertTimeToTimezone(String timezone, ReservationRequest request){	
-		logger.info ("Modifing timezone:"+timezone);
-		if (timezone == null || timezone.equals("UTC")|| timezone.equals("GMT")|| this.timezone.equals(timezone))
-			return;
-		TimeZone applicationTimeZone = TimeZone.getTimeZone(this.timezone);
-		if (applicationTimeZone== null)
-			applicationTimeZone= TimeZone.getTimeZone("UTC");
-		TimeZone pst = TimeZone.getTimeZone(timezone); 
-		Calendar startTime= request.getStartTime();
-		Calendar endTime= request.getEndTime();
-        GregorianCalendar startDate=(GregorianCalendar)Calendar.getInstance();
-        startDate.setTimeInMillis(startTime.getTimeInMillis()+pst.getRawOffset()-applicationTimeZone.getRawOffset());
-        GregorianCalendar endDate=(GregorianCalendar)Calendar.getInstance();
-        endDate.setTimeInMillis(endTime.getTimeInMillis()+pst.getRawOffset()-applicationTimeZone.getRawOffset());
-        try {
-			request.setStartTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(startDate).toGregorianCalendar());
-			request.setEndTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(endDate).toGregorianCalendar());
-		} catch (DatatypeConfigurationException e) {
-			e.printStackTrace();
-		}	
-	}
-
-
 	public ServicesFormModel getSubmitedServicesInIDM(String idm) {		
 		ServicesFormModel serv = new ServicesFormModel();
 		List<String> managers = getAllInterdomainManagers();
@@ -1346,11 +1423,11 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		request.setCapacity(capacity * 1000000 );
 	}
 	
-	public Map<String,String> getAllAvailablePorts() throws UserAccessPointException{
+	public Map<String,String> getAllAvailablePorts(String idm) throws UserAccessPointException{
 		
 		if(ports.size() == 0){
 			
-			List<PortMap> ports_all = getAllFriendlyPorts();
+			List<PortMap> ports_all = getAllFriendlyPorts(idm);
 			if(ports_all == null & ports_all.size()==0)
 				return null;
 			
@@ -1369,7 +1446,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 			return null;
 		
 		if(ports.size() == 0)
-			getAllAvailablePorts();
+			getAllAvailablePorts(null);
 		
 		return ports.get(port);
 	}

@@ -28,13 +28,10 @@
 		</transition>
 		<transition on="add" to="addReservation" bind="true">
 			<set name="flowScope.home" value="service.userHomeDomain" type="string"/>
-			<evaluate expression="manager.getMappedInterDomainManagerPorts(service.userHomeDomain)" result="flowScope.ports_domain"/>
 			<evaluate expression="manager.getFriendlyInterDomainManagerPorts(service.userHomeDomain)" result="flowScope.friendlyports_domain"/>
-			<evaluate expression="manager.getMappedAllPorts()" result="flowScope.ports_all"/>
-			<evaluate expression="manager.getAllFriendlyPorts()" result="flowScope.friendlyports_all"/>
-			<evaluate expression="manager.getAllIdcpPorts()" result="flowScope.idcpPorts_all"/>
+			<evaluate expression="manager.getAllFriendlyPorts(service.userHomeDomain)" result="flowScope.friendlyports_all"/>
+			<evaluate expression="manager.getAllIdcpPorts(service.userHomeDomain)" result="flowScope.idcpPorts_all"/>
 			<evaluate expression="manager.getAllDomains_NonClient()" result="flowScope.domains_all"/>
-<!--			<evaluate expression="manager.getAllLinks_NonClient()" result="flowScope.links_all"/>-->
 			<evaluate expression="manager.getAllDomainLinks()" result="flowScope.links_all"/>
 			<evaluate expression="manager.getReservationRequestTemplate()" result="flowScope.reservation"/>
 			<evaluate expression="manager.getTimezones()" result="flowScope.timezones"/>
@@ -86,7 +83,6 @@
 		<transition on="test" to="addReservation" bind="true" validate="true" >
 			<evaluate expression="manager.convertTimeToApplicationTimezone(reservation.timezone,reservation.request)"/>
 			<evaluate expression="manager.demapPortsForReservationRequest(reservation.request)"/>
-			<evaluate expression="manager.convertTimeToTimezone(reservation.timezone,reservation.request)"/>
 			<evaluate expression="manager.checkReservationPossibility(flowScope.home,reservation.request)" result="flashScope.test"/>		
 			<evaluate expression="manager.mapPortsForReservationRequest(reservation.request)"/>
 		</transition>

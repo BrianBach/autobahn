@@ -115,7 +115,12 @@ cursor:pointer;
 					<td>
 						<a href="${flowExecutionUrl}&_eventId=remove&id=${loop.count-1}">Remove</a>
         			</td>
-					<td>${item.startTime.time}</td>
+		            <c:if test="${item.processNow == true}">
+		                <td>Starts immediately</td>
+		            </c:if>
+		            <c:if test="${item.processNow == false}">
+                        <td>${item.startTime.time}</td>
+		            </c:if>
 					<td>${item.endTime.time}</td>
 					<td>${item.startPortFriendlyName}</td>
 					<td>VLAN</td>

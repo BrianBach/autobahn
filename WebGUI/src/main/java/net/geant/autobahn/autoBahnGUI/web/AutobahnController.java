@@ -197,7 +197,7 @@ public class AutobahnController {
             services = manager.getSubmitedServicesInIDM(currentIdm);   
             reservationStates=manager.getReservationStates();
             try {
-                friendly_ports = manager.getAllAvailablePorts();
+                friendly_ports = manager.getAllAvailablePorts(currentIdm);
             } catch (UserAccessPointException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
