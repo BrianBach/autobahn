@@ -5,6 +5,8 @@ package net.geant.autobahn.converter.sdh;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 import net.geant.autobahn.converter.GenericTopologyConverter;
 import net.geant.autobahn.converter.InternalIdentifiersSource;
 import net.geant.autobahn.converter.PublicIdentifiersMapping;
@@ -22,7 +24,9 @@ import net.geant.autobahn.intradomain.sdh.StmLink;
  */
 public class SdhTopologyConverter extends GenericTopologyConverter {
 
-	public SdhTopologyConverter(IntradomainPathfinder pathfinder, 
+    private final Logger log = Logger.getLogger(SdhTopologyConverter.class);
+
+    public SdhTopologyConverter(IntradomainPathfinder pathfinder, 
 			InternalIdentifiersSource internal, PublicIdentifiersMapping mapping, String lookuphost) {
 		super(pathfinder, internal, mapping, lookuphost);
 	}
@@ -31,20 +35,34 @@ public class SdhTopologyConverter extends GenericTopologyConverter {
 			InternalIdentifiersSource internal, PublicIdentifiersMapping mapping, String lookuphost) {
 		super(pathfinder, internal, mapping, lookuphost);
 		
+        if (topology == null) {
+            log.error("SDH Topology is null, can not initialize abstraction");
+            return;
+        }
+        
 		genericLinks = new ArrayList<GenericLink>();
-		for(StmLink link : topology.getStmLinks()) {
-			genericLinks.add(link.getStmLink());
+
+		if (topology.getStmLinks() != null) {
+    		for(StmLink link : topology.getStmLinks()) {
+    			genericLinks.add(link.getStmLink());
+    		}
 		}
-		for(SpanningTree st : topology.getSpanningTrees()) {
-			genericLinks.add(st.getEthLink().getGenericLink());
-		}
+        if (topology.getSpanningTrees() != null) {
+    		for(SpanningTree st : topology.getSpanningTrees()) {
+    			genericLinks.add(st.getEthLink().getGenericLink());
+    		}
+        }
 		
 		nodes = new ArrayList<Node>();
-    	for(SdhDevice device : topology.getSdhDevices()) {
-    		nodes.add(device.getNode());
-    	}
-		for(SpanningTree st : topology.getSpanningTrees()) {
-			nodes.add(st.getEthLink().getGenericLink().getEndInterface().getNode());
-		}    	
+		if (topology.getSdhDevices() != null) {
+        	for(SdhDevice device : topology.getSdhDevices()) {
+        		nodes.add(device.getNode());
+        	}
+		}
+        if (topology.getSpanningTrees() != null) {
+    		for(SpanningTree st : topology.getSpanningTrees()) {
+    			nodes.add(st.getEthLink().getGenericLink().getEndInterface().getNode());
+    		}
+        }
 	}
 }

@@ -3,6 +3,8 @@ package net.geant.autobahn.converter.ethernet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import net.geant.autobahn.converter.GenericTopologyConverter;
 import net.geant.autobahn.converter.InternalIdentifiersSource;
 import net.geant.autobahn.converter.PublicIdentifiersMapping;
@@ -20,6 +22,8 @@ import net.geant.autobahn.intradomain.pathfinder.IntradomainPathfinder;
  */
 public class EthernetTopologyConverter extends GenericTopologyConverter {
 
+    private final Logger log = Logger.getLogger(EthernetTopologyConverter.class);
+    
 	private List<SpanningTree> sptrees = null;
 	
 	/**
@@ -47,6 +51,11 @@ public class EthernetTopologyConverter extends GenericTopologyConverter {
 			InternalIdentifiersSource internal, PublicIdentifiersMapping mapping, String lookuphost) {
 		super(pathfinder, internal, mapping, lookuphost);
 		
+        if (topology == null) {
+            log.error("Ethernet Topology is null, can not initialize abstraction");
+            return;
+        }
+        
 		sptrees = topology.getSpanningTrees();
 
 		genericLinks = new ArrayList<GenericLink>();
@@ -72,6 +81,11 @@ public class EthernetTopologyConverter extends GenericTopologyConverter {
 			InternalIdentifiersSource internal, PublicIdentifiersMapping mapping) {
 		super(pathfinder, internal, mapping);
 		
+        if (topology == null) {
+            log.error("Ethernet Topology is null, can not initialize abstraction");
+            return;
+        }
+        
 		sptrees = topology.getSpanningTrees();
 
 		genericLinks = new ArrayList<GenericLink>();
@@ -95,9 +109,11 @@ public class EthernetTopologyConverter extends GenericTopologyConverter {
     	this.nodes = nodes;
     	genericLinks = new ArrayList<GenericLink>();
     	
-    	for(SpanningTree st: strees) {
-    		genericLinks.add(st.getEthLink().getGenericLink());
-    	}
+        if (strees != null){
+            for (SpanningTree st : strees) {
+                genericLinks.add(st.getEthLink().getGenericLink());
+            }
+        }
     }
 
 }

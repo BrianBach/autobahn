@@ -214,13 +214,10 @@ public final class AccessPoint implements UserAccessPoint,
 	        
 	        neighbors = pathFinder.getNeighbours(admin); 
 	        
-	        
-	        
 	        IdmHibernateUtil.getInstance().closeSession();
 	        
 	        compareDomains = topology.getDomains();
 	        compareLinks = topology.getLinks();
-	        
 	        
 	        // init reservation modules
 	        serviceScheduler = new ServiceScheduler();
