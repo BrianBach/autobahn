@@ -18,6 +18,7 @@ import net.geant.autobahn.constraints.RangeConstraint;
 import net.geant.autobahn.intradomain.IntradomainTopology;
 import net.geant.autobahn.intradomain.common.GenericLink;
 import net.geant.autobahn.intradomain.common.Node;
+import net.geant.autobahn.intradomain.ethernet.EthLink;
 import net.geant.autobahn.intradomain.ethernet.SpanningTree;
 import net.geant.autobahn.intradomain.pathfinder.GenericIntradomainPathfinder;
 import net.geant.autobahn.intradomain.pathfinder.GraphEdge;
@@ -34,19 +35,15 @@ public class SdhIntradomainPathfinder extends GenericIntradomainPathfinder {
 
 	private List<StmLink> all_links = null;
 	private List<SdhDevice> all_devices = null;
-	private Map<GenericLink, SpanningTree> strees = null;
+	
+	// A single link may have multiple VLAN ranges (SpanningTree)
+    private Map<GenericLink, List<SpanningTree>> strees = null;
 	
 	private static final Logger log = Logger.getLogger(SdhIntradomainPathfinder.class);
 	private final int defaultSdhMtu = 4474;
 	
     public SdhIntradomainPathfinder(IntradomainTopology topology) {
-        this.all_links = topology.getStmLinks();
-        this.all_devices = topology.getSdhDevices();
-        
-        this.strees = new HashMap<GenericLink, SpanningTree>();
-        for(SpanningTree st : topology.getSpanningTrees()) {
-        	strees.put(st.getEthLink().getGenericLink(), st);
-        }
+        this(topology.getStmLinks(), topology.getSdhDevices(), topology.getSpanningTrees());
     }
 
 	public SdhIntradomainPathfinder(List<StmLink> all_links,
@@ -54,9 +51,18 @@ public class SdhIntradomainPathfinder extends GenericIntradomainPathfinder {
 		super();
 		this.all_links = all_links;
 		this.all_devices = all_devices;
-        this.strees = new HashMap<GenericLink, SpanningTree>();
-        for(SpanningTree st : sptrees) {
-        	strees.put(st.getEthLink().getGenericLink(), st);
+		
+		// Build a map of links with all their associated VLAN ranges (SpanningTree)
+        this.strees = new HashMap<GenericLink, List<SpanningTree>>();
+        for (SpanningTree st : sptrees) {
+            List<SpanningTree> stList = strees.get(st.getEthLink().getGenericLink());
+            if (stList != null) {
+                stList.add(st);
+            } else {
+                stList = new ArrayList<SpanningTree>();
+                stList.add(st);
+                strees.put(st.getEthLink().getGenericLink(), stList);
+            }
         }
 	}
 
@@ -70,8 +76,8 @@ public class SdhIntradomainPathfinder extends GenericIntradomainPathfinder {
         	Node n = device.getNode();
         	grnodes.put(n, new GraphNode(n));
         }
-    	for(SpanningTree st : strees.values()) {
-    		Node n = st.getEthLink().getGenericLink().getEndInterface().getNode();
+    	for(GenericLink gl : strees.keySet()) {
+    		Node n = gl.getEndInterface().getNode();
         	grnodes.put(n, new GraphNode(n));
     	}
     	
@@ -81,8 +87,8 @@ public class SdhIntradomainPathfinder extends GenericIntradomainPathfinder {
     	for(StmLink stmLink : all_links) {
     		allLinks.add(stmLink.getStmLink());
     	}
-    	for(SpanningTree st : strees.values()) {
-    		allLinks.add(st.getEthLink().getGenericLink());
+    	for(GenericLink gl : strees.keySet()) {
+    		allLinks.add(gl);
     	}
 
         // Determine neighbors of each node
@@ -153,11 +159,22 @@ public class SdhIntradomainPathfinder extends GenericIntradomainPathfinder {
             
             if(link.isInterdomain()) {
             	gredges.put(link, edge);
-            	SpanningTree st = strees.get(link);
-            	if(st != null) {
-	    			RangeConstraint rcon = new RangeConstraint((int)st.getVlan()
-	    					.getLowNumber(), (int)st.getVlan().getHighNumber());
-	            	pcon.addRangeConstraint(ConstraintsNames.VLANS, rcon);
+            	List<SpanningTree> stList = strees.get(link);
+            	if (stList == null) {
+            	    log.error("SDH intra graph error, no VLAN range for link " + link);
+            	} else {
+                    RangeConstraint rcon = new RangeConstraint();
+
+                    // Add a VLAN range for each associated SpanningTree
+                    for (SpanningTree st : stList) {
+                        if(st != null) {
+                            rcon.addRange((int) st.getVlan().getLowNumber(), 
+                                    (int) st.getVlan().getHighNumber());
+                        } else {
+                            log.error("VLAN range for link " + link + " was null");
+                        }
+                    }
+                    pcon.addRangeConstraint(ConstraintsNames.VLANS, rcon);
             	}
             } else {
             	pcon.addRangeConstraint(ConstraintsNames.VLANS, new RangeConstraint("0-4096"));
