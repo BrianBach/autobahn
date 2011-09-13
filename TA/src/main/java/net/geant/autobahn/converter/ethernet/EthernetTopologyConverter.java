@@ -62,7 +62,10 @@ public class EthernetTopologyConverter extends GenericTopologyConverter {
 
 		if(sptrees != null){
 			for(SpanningTree st: sptrees) {
-				genericLinks.add(st.getEthLink().getGenericLink());
+                GenericLink gl = st.getEthLink().getGenericLink();
+                if (!genericLinks.contains(gl)) {
+                    genericLinks.add(st.getEthLink().getGenericLink());
+                }
 			}
 		}
 		
@@ -92,7 +95,10 @@ public class EthernetTopologyConverter extends GenericTopologyConverter {
 
 		if(sptrees != null){
 			for(SpanningTree st: sptrees) {
-				genericLinks.add(st.getEthLink().getGenericLink());
+                GenericLink gl = st.getEthLink().getGenericLink();
+                if (!genericLinks.contains(gl)) {
+                    genericLinks.add(gl);
+                }
 			}
 		}
 		
@@ -111,7 +117,10 @@ public class EthernetTopologyConverter extends GenericTopologyConverter {
     	
         if (strees != null){
             for (SpanningTree st : strees) {
-                genericLinks.add(st.getEthLink().getGenericLink());
+                GenericLink gl = st.getEthLink().getGenericLink();
+                if (!genericLinks.contains(gl)) {
+                    genericLinks.add(gl);
+                }
             }
         }
     }

@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.geant.autobahn.constraints.BooleanConstraint;
 import net.geant.autobahn.constraints.ConstraintsNames;
 import net.geant.autobahn.constraints.MinValueConstraint;
 import net.geant.autobahn.constraints.PathConstraints;
 import net.geant.autobahn.constraints.RangeConstraint;
-import net.geant.autobahn.intradomain.IntradomainPath;
 import net.geant.autobahn.intradomain.IntradomainTopology;
 import net.geant.autobahn.intradomain.common.GenericLink;
 import net.geant.autobahn.intradomain.common.Node;
@@ -73,36 +73,53 @@ public class EthernetIntradomainPathfinder extends GenericIntradomainPathfinder 
 
     	gredges.clear();
         
+    	// Multiple SpanningTree objects may refer to the same ethLink
+    	// We want to add each ethLink once, but with as many VLAN ranges
+    	// as there are SpanningTrees, so we keep this map that combines both
+    	HashMap<EthLink, List<SpanningTree>> links = new HashMap<EthLink, List<SpanningTree>>();
+    	for (SpanningTree st : sptrees) {
+            List<SpanningTree> stList = links.get(st.getEthLink());
+    	    if (stList != null) {
+    	        stList.add(st);
+    	    } else {
+    	        stList = new ArrayList<SpanningTree>();
+    	        stList.add(st);
+    	        links.put(st.getEthLink(), stList);
+    	    }
+    	}
+    	
         // Determine neighbors of each node
-        for (SpanningTree st : sptrees) {
+        for (Map.Entry<EthLink, List<SpanningTree>> lnk : links.entrySet()) {
+            
+            EthLink elink = lnk.getKey();
             
             if (mtu > 0){
                 log.debug("User has requested Mtu size " + mtu + ", checking if" +
                         " ethernet link supports it...");
                 
-                int linkMtu = st.getEthLink().getGenericLink().getStartInterface().getMtu();
+                int linkMtu = elink.getGenericLink().getStartInterface().getMtu();
                 
                 if (linkMtu<=0) {
                     linkMtu = this.defaultEthernetMtu;
                 }
                 
                 if (mtu > linkMtu){  
-                    log.debug("Link " + st.getEthLink() + " rejected.");
+                    log.debug("Link " + elink + " rejected.");
                     continue;
                 }
                 
-                linkMtu = st.getEthLink().getGenericLink().getEndInterface().getMtu();
+                linkMtu = elink.getGenericLink().getEndInterface().getMtu();
                 
                 if (linkMtu<=0) {
                     linkMtu = this.defaultEthernetMtu;
                 }
                 
                 if (mtu > linkMtu){
-                    log.debug("Link " + st.getEthLink() + " rejected.");
+                    log.debug("Link " + elink + " rejected.");
                     continue;
                 }
             }
-            GenericLink link = st.getEthLink().getGenericLink();
+            GenericLink link = elink.getGenericLink();
             
             // Skip excluded generic links
             if(excluded != null && excluded.contains(link))
@@ -114,8 +131,12 @@ public class EthernetIntradomainPathfinder extends GenericIntradomainPathfinder 
             GraphNode sgr = grnodes.get(s);
             GraphNode egr = grnodes.get(e);
 
-			RangeConstraint rcon = new RangeConstraint((int)st.getVlan()
-					.getLowNumber(), (int)st.getVlan().getHighNumber());
+            RangeConstraint rcon = new RangeConstraint();
+            // Add a VLAN range for each associated SpanningTree
+            for (SpanningTree st : lnk.getValue()) {
+                rcon.addRange((int) st.getVlan().getLowNumber(), 
+                        (int) st.getVlan().getHighNumber());
+            }
 			PathConstraints pcon = new PathConstraints();
 			pcon.addRangeConstraint(ConstraintsNames.VLANS, rcon);
 			
@@ -127,11 +148,11 @@ public class EthernetIntradomainPathfinder extends GenericIntradomainPathfinder 
 			
 			//mtu info added
             MinValueConstraint mcon = null;
-            if ((st.getEthLink().getGenericLink().getStartInterface().getMtu() != 0) && (st.getEthLink().getGenericLink().getEndInterface().getMtu()!= 0)){
-                if (st.getEthLink().getGenericLink().getStartInterface().getMtu() < st.getEthLink().getGenericLink().getEndInterface().getMtu()){
-                    mcon = new MinValueConstraint((double)st.getEthLink().getGenericLink().getStartInterface().getMtu());
+            if ((elink.getGenericLink().getStartInterface().getMtu() != 0) && (elink.getGenericLink().getEndInterface().getMtu()!= 0)){
+                if (elink.getGenericLink().getStartInterface().getMtu() < elink.getGenericLink().getEndInterface().getMtu()){
+                    mcon = new MinValueConstraint((double)elink.getGenericLink().getStartInterface().getMtu());
                 } else {
-                    mcon = new MinValueConstraint((double)st.getEthLink().getGenericLink().getEndInterface().getMtu());
+                    mcon = new MinValueConstraint((double)elink.getGenericLink().getEndInterface().getMtu());
                 }
                 pcon.addMinValueConstraint(ConstraintsNames.MTU, mcon);
             }

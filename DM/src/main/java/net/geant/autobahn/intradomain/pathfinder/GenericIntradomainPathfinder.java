@@ -76,6 +76,8 @@ public abstract class GenericIntradomainPathfinder implements
 
 			if(ipath != null) {
 				res.add(ipath);
+			} else {
+			    log.debug("Intradomain path could not be created!");
 			}
 		}
 
@@ -151,6 +153,7 @@ public abstract class GenericIntradomainPathfinder implements
 
 		IntradomainPath[] segments = getPathsSeparatedByTranslatingNodes(edges);
 		
+        log.debug("IntraPath consists of " + segments.length + " VLAN segments");
 		for(IntradomainPath seg : segments) {
 			PathConstraints merged = seg.getMergedConstraints();
 			

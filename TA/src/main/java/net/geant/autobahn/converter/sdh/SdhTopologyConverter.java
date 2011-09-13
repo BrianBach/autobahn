@@ -49,7 +49,10 @@ public class SdhTopologyConverter extends GenericTopologyConverter {
 		}
         if (topology.getSpanningTrees() != null) {
     		for(SpanningTree st : topology.getSpanningTrees()) {
-    			genericLinks.add(st.getEthLink().getGenericLink());
+                GenericLink gl = st.getEthLink().getGenericLink();
+                if (!genericLinks.contains(gl)) {
+                    genericLinks.add(gl);
+                }
     		}
         }
 		
@@ -61,7 +64,10 @@ public class SdhTopologyConverter extends GenericTopologyConverter {
 		}
         if (topology.getSpanningTrees() != null) {
     		for(SpanningTree st : topology.getSpanningTrees()) {
-    			nodes.add(st.getEthLink().getGenericLink().getEndInterface().getNode());
+                Node n = st.getEthLink().getGenericLink().getEndInterface().getNode();
+                if (!nodes.contains(n)) {
+                    nodes.add(n);
+                }
     		}
         }
 	}

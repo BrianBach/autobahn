@@ -522,13 +522,15 @@ public class IntradomainTopology {
 				
 				RangeConstraint vlans = vlansStartNode.intersect(vlansEndNode);
 				
-				SpanningTree st = new SpanningTree();
-				st.setEthLink(new EthLink(glink, "", false, false, 0));
-				st.setVlan(new Vlan(++id, "vlan-x", 
-						vlans.getRanges().get(0).getMin(), 
-						vlans.getRanges().get(0).getMax()));
+				EthLink ethLink = new EthLink(glink, "", false, false, 0);
 				
-				sptrees.add(st);
+                for (net.geant.autobahn.constraints.Range r : vlans.getRanges()) {
+                    SpanningTree st = new SpanningTree();
+                    st.setEthLink(ethLink);
+                    st.setVlan(new Vlan(++id, "vlan-x", r.getMin(), r.getMax()));
+
+                    sptrees.add(st);
+                }
 			}
 			
 			List<IDLink> id_links = resp.getEthTopology().getInterdomainLinks().getLink();

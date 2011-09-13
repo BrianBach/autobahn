@@ -51,7 +51,7 @@ public class ReservationErrors {
         infos.put(LOCAL_COMMUNICATION_ERROR, "DM not responding in domain");
         infos.put(NEGATIVE_DELAY, "Attempt to make a reservation in the past");
         infos.put(CONSTRAINTS_NOT_CORRECT, "Constraints not correct on path");
-        infos.put(NOT_ENOUGH_CAPACITY, "Not enough capacity in the specified time period on link");
+        infos.put(NOT_ENOUGH_CAPACITY, "Not enough resources in the specified time period on link");
         infos.put(PATH_CAPACITY_NOT_ENOUGH, "Path can't guarantee enough capacity");
         infos.put(CONSTRAINTS_NOT_AGREED, "Global constraints not fulfilled on path");
         infos.put(CONSTRAINTS_ALREADY_IN_USE, "Calculated constraints are already in use");
