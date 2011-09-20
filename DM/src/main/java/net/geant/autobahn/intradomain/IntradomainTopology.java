@@ -130,9 +130,10 @@ public class IntradomainTopology {
     		try {
 				readFromCnis(cnisAddress);
 			} catch (Exception e) {
-				log.info("Unable to use cNIS: " + e.getMessage() + " - Autobahn reads topology from DB. " +
-						"If you want to use cNIS, please make sure that the cnis.address property in the" +
-						" etc/dm.properties file is correct.");
+				log.info("Unable to use cNIS: " + e.getMessage() + " - Autobahn reads " +
+						"topology from DB. If you want to use cNIS, try to resolve this " +
+						"issue. Also make sure that the cnis.address property in the " +
+						"etc/dm.properties file is correct.");
 				log.debug("cNIS error info: ", e);
 				readFromDatabase();
 			}
@@ -524,6 +525,9 @@ public class IntradomainTopology {
 				
 				EthLink ethLink = new EthLink(glink, "", false, false, 0);
 				
+				if (vlans == null || vlans.getRanges() == null) {
+				    throw new Exception("No vlan range for link " + glink);
+				}
                 for (net.geant.autobahn.constraints.Range r : vlans.getRanges()) {
                     SpanningTree st = new SpanningTree();
                     st.setEthLink(ethLink);
