@@ -13,6 +13,13 @@ public class MapKeySetComparator implements Comparator<Object> {
 	    	int start2 = ((String) o2).indexOf("@");
 	    	int end2 = ((String) o2).length();
 	    	
+	    	if (start1 < 0) {
+	    	    start1 = 0;
+	    	}
+            if (start2 < 0) {
+                start2 = 0;
+            }
+	    	
 	    	String str1 = ((String) o1).substring(start1, end1);
 	    	String str2 = ((String) o2).substring(start2, end2);
 			
