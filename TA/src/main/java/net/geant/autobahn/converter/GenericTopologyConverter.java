@@ -165,6 +165,31 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
 		
 		this.externalIds = externalIds;
 		
+		// Remove all old entries of edge ports from the LS
+        if (isLSavailable(lookuphost)) {
+            LookupService lookup = new LookupService(lookuphost);
+            try {
+                // Find a link with the same start and end domain Id, that
+                // is an internal link and therefore our home domain Id
+                if (genericLinks != null) {
+                    for (GenericLink gl : genericLinks) {
+                        if (gl != null) {
+                            String candidateDomain = gl.getStartInterface().getDomainId();
+                            if (candidateDomain.equals(gl.getEndInterface().getDomainId())) {
+                                log.debug("Removing old edge port entries from the lookup" +
+                                		" for domain " + candidateDomain);
+                                lookup.RemoveAllEdgePorts(candidateDomain);
+                                break;
+                            }
+                        }
+                    }
+                }
+            } catch (LookupServiceException lse) {
+                log.error("Old edge port entries could not be removed from LS");
+                lse.printStackTrace();
+            }
+        }
+		
 		for(GenericLink glink : eLinks) {
 			// Skip client devices
     		if(glink.getEndInterface().isClientPort()) {

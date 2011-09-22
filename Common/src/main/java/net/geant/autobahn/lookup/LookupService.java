@@ -5,6 +5,7 @@ import java.io.StringReader;
 
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.List;
 import java.sql.Timestamp;
 
 import org.w3c.dom.NodeList;
@@ -85,7 +86,7 @@ public class LookupService {
        										   "<nmwgt:interface xmlns:nmwgt=\"http://ggf.org/ns/nmwg/topology/2.0/\"><lookup:eventType>";
     private final String xmlSuffixRegisterLS = "</lookup:newLS></nmwgt:interface></perfsonar:subject></nmwg:metadata>" +
        										   "</nmwg:data></nmwg:message></soapenv:Body></soapenv:Envelope>";
-    private final String xmlPrefixRemoveIdm = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ns=\"http://ggf.org/ns/nmwg/base/2.0/\">" +
+    private final String xmlPrefixRemove = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ns=\"http://ggf.org/ns/nmwg/base/2.0/\">" +
       										  "<soapenv:Header/><soapenv:Body><nmwg:message  id = \"blah1\" messageIdRef=\"blah2\" type=\"LSDeregisterRequest\"" +
       										  " xmlns:perfsonar=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/1.0/\"" +
       										  " xmlns:nmwg=\"http://ggf.org/ns/nmwg/base/2.0/\"" +
@@ -94,7 +95,7 @@ public class LookupService {
       										  "<!--You have a CHOICE of the next 2 items at this level--><nmwg:metadata id=\"meta1\">" +
       										  "<nmwg:key id=\"localhost.localdomain.-6236687d:116c5a2ab6a:-7fc4\">" +
       										  "<nmwg:parameters id=\"localhost.localdomain.-6236687d:116c5a2ab6a:-7fc3\"><nmwg:parameter name=\"lsKey\">";
-    private final String xmlSuffixRemoveIdm = "</nmwg:parameter></nmwg:parameters></nmwg:key></nmwg:metadata>" +
+    private final String xmlSuffixRemove = "</nmwg:parameter></nmwg:parameters></nmwg:key></nmwg:metadata>" +
       										  "<nmwg:data id=\"data1\" metadataIdRef=\"meta1\"/>" +
       										  "</nmwg:message></soapenv:Body></soapenv:Envelope>";
     private final String xmlPrefixQuery = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"><soapenv:Header/><soapenv:Body><nmwg:message" +
@@ -119,7 +120,7 @@ public class LookupService {
      * @return responseContent - information returned by queries
      * @throws LookupServiceException
      */
-    public String invokeLS(String xmlToSent)
+    private String invokeLS(String xmlToSent)
     	    throws LookupServiceException {
         HttpClient httpclient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(host);
@@ -154,6 +155,110 @@ public class LookupService {
         
         httpclient.getConnectionManager().shutdown();
         return responseContent;
+    }
+    
+    
+    /**
+     * Gets the first matching key from the supplied String
+     * 
+     * @param input
+     * @return null if none found
+     * @throws LookupServiceException
+     */
+    private String getFirstMatch(String input, String elementName) throws LookupServiceException {
+        try {
+            DocumentBuilderFactory dbf =
+                DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            InputSource is = new InputSource();
+            is.setCharacterStream(new StringReader(input));
+            
+            // Parsing the response of the lookup service
+            Document doc = db.parse(is);
+            // Getting data from child nodes of "psservice:datum"
+            NodeList nodes = doc.getElementsByTagName("psservice:datum");
+              
+            for (int i = 0; i < nodes.getLength(); i++) {
+                Element element = (Element) nodes.item(i);
+                
+                NodeList name = element.getElementsByTagName(elementName);
+                
+                Element line = (Element) name.item(0);
+                int nodesLength = nodes.getLength();
+                if (nodesLength != 0) {
+                    String fname = getCharacterDataFromElement(line);
+                    if (fname != null) {
+                        return fname;
+                    }
+                }
+            }
+
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+            throw new LookupServiceException(e.getMessage());
+        } catch (SAXException e) {
+            e.printStackTrace();
+            throw new LookupServiceException(e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new LookupServiceException(e.getMessage());
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Gets all matching keys from the supplied String
+     * 
+     * @param input
+     * @return null if none found
+     * @throws LookupServiceException
+     */
+    private ArrayList<String> getMatches(String input, String elementName) throws LookupServiceException {
+        ArrayList<String> results = new ArrayList<String>();
+        
+        try {
+            DocumentBuilderFactory dbf =
+                DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            InputSource is = new InputSource();
+            is.setCharacterStream(new StringReader(input));
+            
+            // Parsing the response of the lookup service
+            Document doc = db.parse(is);
+            // Getting data from child nodes of "psservice:datum"
+            NodeList nodes = doc.getElementsByTagName("psservice:datum");
+              
+            for (int i = 0; i < nodes.getLength(); i++) {
+                Element element = (Element) nodes.item(i);
+                
+                NodeList name = element.getElementsByTagName(elementName);
+                
+                Element line = (Element) name.item(0);
+                int nodesLength = nodes.getLength();
+                if (nodesLength != 0) {
+                    String response = getCharacterDataFromElement(line);
+                    if (response != null) {
+                        results.add(response);
+                    }
+                }
+            }
+            if (nodes.getLength() != 0) {
+                return results;
+            }
+
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+            throw new LookupServiceException(e.getMessage());
+        } catch (SAXException e) {
+            e.printStackTrace();
+            throw new LookupServiceException(e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new LookupServiceException(e.getMessage());
+        }
+        
+        return null;
     }
     
     /**
@@ -299,10 +404,10 @@ public class LookupService {
             // use domain name to get the primary key according to the Exist database
             key = this.findDomainkey(domain);
         } catch (NullPointerException e){
-            log.info("There is no domain with the particular name to delete");
+            log.info("There is no domain " + domain + " to delete");
         }
         // XML query to sent to the lookup service
-        this.xmlToBeSent = this.xmlPrefixRemoveIdm + key + this.xmlSuffixRemoveIdm;
+        this.xmlToBeSent = this.xmlPrefixRemove + key + this.xmlSuffixRemove;
         invokeLS(xmlToBeSent);
     }
     
@@ -317,28 +422,55 @@ public class LookupService {
      */
     public void RemoveEdgePort(String startDomain, String endDomain, String edgeport) 
     		throws LookupServiceException {
+        RemoveEdgePort(edgeport);
+    }
+    
+    /**
+     * 
+     * Removal of edge port
+     * 
+     * @param edgeport - public edge port identifier
+     * @throws LookupServiceException
+     */
+    public void RemoveEdgePort(String edgeport) 
+            throws LookupServiceException {
         String key = "";
         try {
-            // use domain name to get the primary key according to the Exist database
-            key = this.findPortKey(startDomain, endDomain, edgeport);
+            // use edge port to get the primary key according to the Exist database
+            key = this.findPortKey(edgeport);
         } catch (NullPointerException e){
-            log.info("There is no port with the particular name to delete");
+            log.info("There is no edge port " + edgeport + " to delete");
         }
         // XML query to sent to the lookup service
-        this.xmlToBeSent = this.xmlPrefixRemoveIdm + key + this.xmlSuffixRemoveIdm;
+        this.xmlToBeSent = this.xmlPrefixRemove + key + this.xmlSuffixRemove;
         invokeLS(xmlToBeSent);
+    }
+    
+    /**
+     * Remove all edge ports with the specified starting domain
+     * @param startDomain
+     * @throws LookupServiceException
+     */
+    public void RemoveAllEdgePorts(String startDomain) 
+        throws LookupServiceException {
+        List<String> edgePorts = findAllEdgePortKeys(startDomain);
+        if (edgePorts != null) {
+            for (String port : edgePorts) {
+                this.RemoveEdgePort(port);
+            }
+        }
     }
     
     public void RemoveEndPort(String portIdentifier) throws LookupServiceException {
         String key = "";
         try {
-            // use domain name to get the primary key according to the Exist database
+            // use end port to get the primary key according to the Exist database
             key = this.findEndPortkey(portIdentifier);
         } catch (NullPointerException e){
-            log.info("There is no domain with the particular name to delete");
+            log.info("There is no end port " + portIdentifier + " to delete");
         }
         // XML query to sent to the lookup service
-        this.xmlToBeSent = this.xmlPrefixRemoveIdm + key + this.xmlSuffixRemoveIdm;
+        this.xmlToBeSent = this.xmlPrefixRemove + key + this.xmlSuffixRemove;
         invokeLS(xmlToBeSent);
     }
 
@@ -360,45 +492,7 @@ public class LookupService {
         
         // XML query to sent to the lookup service
         this.xmlToBeSent = this.xmlPrefixQuery + xmlMetaDataQuery + this.xmlSuffixQuery;
-        String testing = "";
-        testing = invokeLS(xmlToBeSent);
-
-        String fname = "";
-        
-        try {
-        	DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        	
-        	DocumentBuilder db = dbf.newDocumentBuilder();
-        	InputSource is = new InputSource();
-        	is.setCharacterStream(new StringReader(testing));
-        	
-        	// Parsing the response of the lookup service			
-        	Document doc = db.parse(is);
-        	// Getting data from child nodes of "psservice:datum"
-        	NodeList nodes = doc.getElementsByTagName("psservice:datum");
-        	for (int i = 0; i < nodes.getLength(); i++) {
-                Element element = (Element) nodes.item(i);
-        		
-        		NodeList name = element.getElementsByTagName("lookup:url");
-        		Element line = (Element) name.item(0);
-        		
-        		int nodesLength = nodes.getLength();
-                if (nodesLength != 0){
-                	fname = getCharacterDataFromElement(line);
-                	return fname;
-                }	
-        	}	
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-            throw new LookupServiceException(e.getMessage());
-        } catch (SAXException e) {
-        	e.printStackTrace();
-        	throw new LookupServiceException(e.getMessage());
-        } catch (IOException e) {
-        	e.printStackTrace();
-        	throw new LookupServiceException(e.getMessage());
-        }
-        return null;		
+        return getFirstMatch(invokeLS(xmlToBeSent), "lookup:url");
     }
     
     /**
@@ -418,45 +512,7 @@ public class LookupService {
         
         // XML query to sent to the lookup service
         this.xmlToBeSent = this.xmlPrefixQuery + xmlMetaDataQuery + this.xmlSuffixQuery;
-        String testing = "";
-        testing = invokeLS(xmlToBeSent);
-        
-        String fname = "";
-        try {
-            DocumentBuilderFactory dbf =
-                DocumentBuilderFactory.newInstance();
-            
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            InputSource is = new InputSource();
-            is.setCharacterStream(new StringReader(testing));
-        
-            // Parsing the response of the lookup service
-            Document doc = db.parse(is);
-            // Getting data from child nodes of "psservice:datum"
-            NodeList nodes = doc.getElementsByTagName("psservice:datum");
-            for (int i = 0; i < nodes.getLength(); i++) {
-                Element element = (Element) nodes.item(i);
-        
-                NodeList name = element.getElementsByTagName("lookup:friendlyName");
-                Element line = (Element) name.item(0);
-                
-                int nodesLength = nodes.getLength();
-                if(nodesLength != 0){
-                    fname = getCharacterDataFromElement(line);
-                	return fname;
-                }
-            }
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-            throw new LookupServiceException(e.getMessage());
-        } catch (SAXException e) {
-            e.printStackTrace();
-        	throw new LookupServiceException(e.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
-        	throw new LookupServiceException(e.getMessage());
-        }
-        return null;	
+        return getFirstMatch(invokeLS(xmlToBeSent), "lookup:friendlyName");
     }
     
     /**
@@ -474,50 +530,7 @@ public class LookupService {
     	String xmlMetaDataQuery = xmlMetaFirstDataQuery + xmlMetaSuffixQuery;
     	// XML query to sent to the lookup service
     	this.xmlToBeSent = this.xmlPrefixQuery + xmlMetaDataQuery + this.xmlSuffixQuery;
-    	String testing = "";
-   		testing = invokeLS(xmlToBeSent);
-    	
-    	String fname = "";
-    	ArrayList<String> friendlynames = new ArrayList<String>();
-    	try {
-            DocumentBuilderFactory dbf =
-                DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            InputSource is = new InputSource();
-            is.setCharacterStream(new StringReader(testing));
-    
-            // Parsing the response of the lookup service
-            Document doc = db.parse(is);
-            // Getting data from child nodes of "psservice:datum"
-            NodeList nodes = doc.getElementsByTagName("psservice:datum");
-            for (int i = 0; i < nodes.getLength(); i++) {
-                Element element = (Element) nodes.item(i);
-    
-                NodeList name = element.getElementsByTagName("lookup:friendlyName");
-                Element line = (Element) name.item(0);
-                
-                int nodesLength = nodes.getLength();
-                if(nodesLength != 0) {
-                	fname = getCharacterDataFromElement(line);
-                }
-                if (fname != null) {
-	                friendlynames.add(fname); 
-	            }
-            }
-            if (nodes.getLength() != 0) {
-            	return friendlynames;
-            }
-    	} catch (ParserConfigurationException e) {
-            e.printStackTrace();
-            throw new LookupServiceException(e.getMessage());
-        } catch (SAXException e) {
-        	e.printStackTrace();
-        	throw new LookupServiceException(e.getMessage());
-        } catch (IOException e) {
-        	e.printStackTrace();
-        	throw new LookupServiceException(e.getMessage());
-        }
-    	return null;
+    	return getMatches(invokeLS(xmlToBeSent), "lookup:friendlyName");
     }
     
     /**
@@ -538,50 +551,7 @@ public class LookupService {
     	String xmlMetaDataQuery = xmlMetaFirstDataQuery + startDomain + xmlMiddleQuery + endDomain + xmlMetaSuffixQuery;
     	// XML query to sent to the lookup service
     	this.xmlToBeSent = this.xmlPrefixQuery + xmlMetaDataQuery + this.xmlSuffixQuery;
-    	String testing = "";
-   		testing = invokeLS(xmlToBeSent);
-
-   		String fname = "";
-    	ArrayList<String> edgeports = new ArrayList<String>();
-    	
-    	try {
-    		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-    		DocumentBuilder db = dbf.newDocumentBuilder();
-    		InputSource is = new InputSource();
-    		is.setCharacterStream(new StringReader(testing));
-    		
-    		//Parsing the response of the lookup service
-    		Document doc = db.parse(is);
-    		//Getting data from child nodes of "psservice:datum"
-    		NodeList nodes = doc.getElementsByTagName("psservice:datum");
-    		for (int i = 0; i < nodes.getLength(); i++) {
-    			Element element = (Element) nodes.item(i);
-    			
-    			NodeList name = element.getElementsByTagName("lookup:port");
-    			Element line = (Element) name.item(0);
-    			
-    			int nodesLength = nodes.getLength();
-                if (nodesLength != 0) {
-                	fname = getCharacterDataFromElement(line);
-                }
-                if (fname != null) {
-                	edgeports.add(fname);
-                }
-    		}
-    		if (nodes.getLength() != 0) {
-            	return edgeports;
-            }
-    	} catch (ParserConfigurationException e) {
-            e.printStackTrace();
-            throw new LookupServiceException(e.getMessage());
-        } catch (SAXException e) {
-        	e.printStackTrace();
-        	throw new LookupServiceException(e.getMessage());
-        } catch (IOException e) {
-        	e.printStackTrace();
-        	throw new LookupServiceException(e.getMessage());
-        }
-    	return null;
+    	return getMatches(invokeLS(xmlToBeSent), "lookup:port");
     }
     
     private String QueryEdgePortForDuplication(String startDomain, String endDomain,String edgeport)
@@ -596,46 +566,7 @@ public class LookupService {
     	String xmlMetaDataQuery = xmlMetaFirstDataQuery + startDomain + xmlMiddleQuery + endDomain + xmlMiddleSecondQuery + edgeport + xmlMetaSuffixQuery;
     	// XML query to sent to the lookup service
     	this.xmlToBeSent = this.xmlPrefixQuery + xmlMetaDataQuery + this.xmlSuffixQuery;
-    	String testing = "";
-   		testing = invokeLS(xmlToBeSent);
-   		
-   		String fname = "";
-   		
-   		try {
-    		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-    		DocumentBuilder db = dbf.newDocumentBuilder();
-    		InputSource is = new InputSource();
-    		is.setCharacterStream(new StringReader(testing));
-    		
-    		//Parsing the response of the lookup service
-    		Document doc = db.parse(is);
-    		//Getting data from child nodes of "psservice:datum"
-    		NodeList nodes = doc.getElementsByTagName("psservice:datum");
-    		for (int i = 0; i < nodes.getLength(); i++) {
-    			Element element = (Element) nodes.item(i);
-    			
-    			NodeList name = element.getElementsByTagName("lookup:port");
-    			Element line = (Element) name.item(0);
-    			
-    			int nodesLength = nodes.getLength();
-                if(nodesLength != 0) {
-                	fname = getCharacterDataFromElement(line);
-                }
-                if (fname != null) {
-                	return fname;
-                } 
-    		}
-	 	} catch (ParserConfigurationException e) {
-            e.printStackTrace();
-            throw new LookupServiceException(e.getMessage());
-        } catch (SAXException e) {
-        	e.printStackTrace();
-        	throw new LookupServiceException(e.getMessage());
-        } catch (IOException e) {
-        	e.printStackTrace();
-        	throw new LookupServiceException(e.getMessage());
-        }
-    	return null;
+    	return getFirstMatch(invokeLS(xmlToBeSent), "lookup:port");
     }
 
     /**
@@ -654,50 +585,7 @@ public class LookupService {
     	String xmlMetaDataQuery = xmlMetaFirstDataQuery + startDomain + xmlMetaSuffixQuery;
     	// XML query to sent to the lookup service
     	this.xmlToBeSent = this.xmlPrefixQuery + xmlMetaDataQuery + this.xmlSuffixQuery;
-    	String testing = "";
-    	testing = invokeLS(xmlToBeSent);
-
-    	String fname = "";
-    	ArrayList<String> edgeports = new ArrayList<String>();
-    	
-    	try {
-    		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-    		DocumentBuilder db = dbf.newDocumentBuilder();
-    		InputSource is = new InputSource();
-    		is.setCharacterStream(new StringReader(testing));
-    		
-    		//Parsing the response of the lookup service
-    		Document doc = db.parse(is);
-    		//Getting data from child nodes of "psservice:datum"
-    		NodeList nodes = doc.getElementsByTagName("psservice:datum");
-    		for (int i = 0; i < nodes.getLength(); i++) {
-    			Element element = (Element) nodes.item(i);
-    			
-    			NodeList name = element.getElementsByTagName("lookup:port");
-    			Element line = (Element) name.item(0);
-    			
-    			int nodesLength = nodes.getLength();
-                if (nodesLength != 0) {
-                	fname = getCharacterDataFromElement(line);
-                }
-                if (fname != null) {
-                    edgeports.add(fname); 
-    			}
-    		}
-    		if (nodes.getLength() != 0) {
-            	return edgeports;
-            }
-    	} catch (ParserConfigurationException e) {
-            e.printStackTrace();
-            throw new LookupServiceException(e.getMessage());
-        } catch (SAXException e) {
-        	e.printStackTrace();
-        	throw new LookupServiceException(e.getMessage());
-        } catch (IOException e) {
-        	e.printStackTrace();
-        	throw new LookupServiceException(e.getMessage());
-        }
-    	return null;
+    	return getMatches(invokeLS(xmlToBeSent), "lookup:port");
     }
     
     /**
@@ -748,8 +636,9 @@ public class LookupService {
      * 
      * @param domain
      * @return domain key record in the database, or null if not found
+     * @throws LookupServiceException
      */
-    public String findDomainkey(String domain) 
+    private String findDomainkey(String domain) 
     		throws LookupServiceException {
     	String xmlStart = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"><soapenv:Header/>" +
     					"<soapenv:Body><nmwg:message type=\"LSQueryRequest\" id=\"msg1\" xmlns:nmwg=\"http://ggf.org/ns/nmwg/base/2.0/\" xmlns:xquery=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/lookup/xquery/1.0/\">" +
@@ -758,57 +647,18 @@ public class LookupService {
     					" for $m in /nmwg:store/nmwg:metadata let $a := for $j in /nmwg:store/nmwg:data let $n := $j/nmwg:metadata/perfsonar:subject/nmwgt:interface where  $n/lookup:domain = \"";
     	String xmlEnd = "\" return  data($j/@metadataIdRef) where $m/@id = $a return $m/perfsonar:subject/psservice:service/psservice:accessPoint " +
     					" </xquery:subject><nmwg:eventType>service.lookup.xquery</nmwg:eventType></nmwg:metadata><nmwg:data id=\"data1\" metadataIdRef=\"meta1\" /></nmwg:message></soapenv:Body></soapenv:Envelope>";
-    	String response = "";
     	// XML query to sent to the lookup service
     	String toSent = xmlStart + domain + xmlEnd;
-    	String testing = "";
-   		testing = invokeLS(toSent);
-    	
-    	try {
-            DocumentBuilderFactory dbf =
-                DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            InputSource is = new InputSource();
-            is.setCharacterStream(new StringReader(testing));
-    
-            // Parsing the response of the lookup service
-            Document doc = db.parse(is);
-            // Getting data from child nodes of "psservice:datum"
-            NodeList nodes = doc.getElementsByTagName("psservice:datum");
-          
-            for (int i = 0; i < nodes.getLength(); i++) {
-                Element element = (Element) nodes.item(i);
-    
-                NodeList name = element.getElementsByTagName("psservice:accessPoint");
-                
-                Element line = (Element) name.item(0);
-                int nodesLength = nodes.getLength();
-                if (nodesLength != 0) {
-                	response = getCharacterDataFromElement(line);
-                	return response;
-                }
-            }
-            
-    	} catch (ParserConfigurationException e) {
-            e.printStackTrace();
-            throw new LookupServiceException(e.getMessage());
-        } catch (SAXException e) {
-        	e.printStackTrace();
-        	throw new LookupServiceException(e.getMessage());
-        } catch (IOException e) {
-        	e.printStackTrace();
-        	throw new LookupServiceException(e.getMessage());
-        }
-    
-    	return null;
+    	return getFirstMatch(invokeLS(toSent), "psservice:accessPoint");
     }
     
     /**
      * 
-     * @param domain
-     * @return domain key record in the database, or null if not found
+     * @param portIdentifier
+     * @return EndPort key record in the database, or null if not found
+     * @throws LookupServiceException
      */
-    public String findEndPortkey(String domain) 
+    private String findEndPortkey(String portIdentifier) 
             throws LookupServiceException {
         String xmlStart = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"><soapenv:Header/>" +
                         "<soapenv:Body><nmwg:message type=\"LSQueryRequest\" id=\"msg1\" xmlns:nmwg=\"http://ggf.org/ns/nmwg/base/2.0/\" xmlns:xquery=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/lookup/xquery/1.0/\">" +
@@ -817,103 +667,48 @@ public class LookupService {
                         " for $m in /nmwg:store/nmwg:metadata let $a := for $j in /nmwg:store/nmwg:data let $n := $j/nmwg:metadata/perfsonar:subject/nmwgt:interface where  $n/lookup:identifier = \"";
         String xmlEnd = "\" return  data($j/@metadataIdRef) where $m/@id = $a return $m/perfsonar:subject/psservice:service/psservice:accessPoint " +
                         " </xquery:subject><nmwg:eventType>service.lookup.xquery</nmwg:eventType></nmwg:metadata><nmwg:data id=\"data1\" metadataIdRef=\"meta1\" /></nmwg:message></soapenv:Body></soapenv:Envelope>";
-        String response = "";
         // XML query to sent to the lookup service
-        String toSent = xmlStart + domain + xmlEnd;
-        String testing = "";
-        testing = invokeLS(toSent);
-        
-        try {
-            DocumentBuilderFactory dbf =
-                DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            InputSource is = new InputSource();
-            is.setCharacterStream(new StringReader(testing));
-    
-            // Parsing the response of the lookup service
-            Document doc = db.parse(is);
-            // Getting data from child nodes of "psservice:datum"
-            NodeList nodes = doc.getElementsByTagName("psservice:datum");
-          
-            for (int i = 0; i < nodes.getLength(); i++) {
-                Element element = (Element) nodes.item(i);
-    
-                NodeList name = element.getElementsByTagName("psservice:accessPoint");
-                
-                Element line = (Element) name.item(0);
-                int nodesLength = nodes.getLength();
-                if (nodesLength != 0) {
-                    response = getCharacterDataFromElement(line);
-                    return response;
-                }
-            }
-            
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-            throw new LookupServiceException(e.getMessage());
-        } catch (SAXException e) {
-            e.printStackTrace();
-            throw new LookupServiceException(e.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new LookupServiceException(e.getMessage());
-        }
-    
-        return null;
+        String toSent = xmlStart + portIdentifier + xmlEnd;
+        return getFirstMatch(invokeLS(toSent), "psservice:accessPoint");        
     }
     
-    public String findPortKey(String startDomain, String endDomain, String edgeport) 
+    /**
+     * Find Edge Port key
+     * 
+     * @param edgeport
+     * @return EdgePort key record in the database, or null if not found
+     * @throws LookupServiceException
+     */
+    private String findPortKey(String edgeport) 
             throws LookupServiceException {
         String xmlStart = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"><soapenv:Header/><soapenv:Body><nmwg:message type=\"LSQueryRequest\" id=\"msg1\" xmlns:nmwg=\"http://ggf.org/ns/nmwg/base/2.0/\" xmlns:xquery=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/lookup/xquery/1.0/\">" +
                     	  "<nmwg:metadata id=\"meta1\"><xquery:subject id=\"sub1\">declare namespace nmwg=\"http://ggf.org/ns/nmwg/base/2.0/\"; declare namespace perfsonar=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/1.0/\"; declare namespace psservice=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/1.0/\"; declare namespace xquery=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/lookup/xquery/1.0/\";" +
                     	  " declare namespace nmwgt=\"http://ggf.org/ns/nmwg/topology/2.0/\"; declare namespace lookup=\"ru6.cti.gr\"; for $m in /nmwg:store/nmwg:metadata let $a := for $j in /nmwg:store/nmwg:data let $n := $j/nmwg:metadata/perfsonar:subject where $n/nmwgt:interface/lookup:port = \"";
         String xmlEnd = "\" return  data($j/@metadataIdRef) where $m/@id = $a return $m/perfsonar:subject/psservice:service/psservice:accessPoint " +
                         " </xquery:subject><nmwg:eventType>service.lookup.xquery</nmwg:eventType></nmwg:metadata><nmwg:data id=\"data1\" metadataIdRef=\"meta1\" /></nmwg:message></soapenv:Body></soapenv:Envelope>";
-        String response = "";
         // XML query to sent to the lookup service
         String toSent = xmlStart + edgeport + xmlEnd;
         //String toSent = xmlStart + startDomain + xmlMiddleQuery + endDomain + xmlMiddleSecondQuery + edgeport + xmlEnd;
-        String testing = "";
-
-        testing = invokeLS(toSent);
-        
-        try {
-            DocumentBuilderFactory dbf =
-                DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            InputSource is = new InputSource();
-            is.setCharacterStream(new StringReader(testing));
-            
-            // Parsing the response of the lookup service
-            Document doc = db.parse(is);
-            // Getting data from child nodes of "psservice:datum"
-            NodeList nodes = doc.getElementsByTagName("psservice:datum");
-              
-            for (int i = 0; i < nodes.getLength(); i++) {
-                Element element = (Element) nodes.item(i);
-                
-                NodeList name = element.getElementsByTagName("psservice:accessPoint");
-                
-                Element line = (Element) name.item(0);
-                int nodesLength = nodes.getLength();
-                if (nodesLength != 0) {
-                    response = getCharacterDataFromElement(line);
-                    return response;
-                }
-    	    }
-
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-            throw new LookupServiceException(e.getMessage());
-        } catch (SAXException e) {
-            e.printStackTrace();
-            throw new LookupServiceException(e.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new LookupServiceException(e.getMessage());
-        }
-        
-        return null;
+        return getFirstMatch(invokeLS(toSent), "psservice:accessPoint");
+    }
+    
+    /**
+     * Find all Edge Port keys starting from specified domain
+     * 
+     * @param domain
+     * @return All EdgePort key records in the database for the specified start domain, null if none found
+     * @throws LookupServiceException
+     */
+    private List<String> findAllEdgePortKeys(String startDomain) 
+            throws LookupServiceException {
+        String xmlStart = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"><soapenv:Header/><soapenv:Body><nmwg:message type=\"LSQueryRequest\" id=\"msg1\" xmlns:nmwg=\"http://ggf.org/ns/nmwg/base/2.0/\" xmlns:xquery=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/lookup/xquery/1.0/\">" +
+                          "<nmwg:metadata id=\"meta1\"><xquery:subject id=\"sub1\">declare namespace nmwg=\"http://ggf.org/ns/nmwg/base/2.0/\"; declare namespace perfsonar=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/1.0/\"; declare namespace psservice=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/1.0/\"; declare namespace xquery=\"http://ggf.org/ns/nmwg/tools/org/perfsonar/service/lookup/xquery/1.0/\";" +
+                          " declare namespace nmwgt=\"http://ggf.org/ns/nmwg/topology/2.0/\"; declare namespace lookup=\"ru6.cti.gr\"; for $m in /nmwg:store/nmwg:metadata let $a := for $j in /nmwg:store/nmwg:data let $n := $j/nmwg:metadata/perfsonar:subject where $n/nmwgt:interface/lookup:startDomain = \"";
+        String xmlEnd = "\" return  data($j/@metadataIdRef) where $m/@id = $a return $m/perfsonar:subject/psservice:service/psservice:accessPoint " +
+                        " </xquery:subject><nmwg:eventType>service.lookup.xquery</nmwg:eventType></nmwg:metadata><nmwg:data id=\"data1\" metadataIdRef=\"meta1\" /></nmwg:message></soapenv:Body></soapenv:Envelope>";
+        // XML query to sent to the lookup service
+        String toSent = xmlStart + startDomain + xmlEnd;
+        return getMatches(invokeLS(toSent), "psservice:accessPoint");
     }
     
 }
