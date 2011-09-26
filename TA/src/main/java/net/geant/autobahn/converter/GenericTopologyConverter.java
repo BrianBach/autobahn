@@ -174,12 +174,18 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
                 if (genericLinks != null) {
                     for (GenericLink gl : genericLinks) {
                         if (gl != null) {
-                            String candidateDomain = gl.getStartInterface().getDomainId();
-                            if (candidateDomain.equals(gl.getEndInterface().getDomainId())) {
-                                log.debug("Removing old edge port entries from the lookup" +
-                                		" for domain " + candidateDomain);
-                                lookup.RemoveAllEdgePorts(candidateDomain);
-                                break;
+                            GenericInterface startIf = gl.getStartInterface();
+                            GenericInterface endIf = gl.getEndInterface();
+                            if (startIf != null && endIf != null) {
+                                String candidateDomain = startIf.getDomainId();
+                                if(candidateDomain != null) {
+                                    if (candidateDomain.equals(endIf.getDomainId())) {
+                                        log.debug("Removing old edge port entries from the lookup" +
+                                        		" for domain " + candidateDomain);
+                                        lookup.RemoveAllEdgePorts(candidateDomain);
+                                        break;
+                                    }
+                                }
                             }
                         }
                     }
