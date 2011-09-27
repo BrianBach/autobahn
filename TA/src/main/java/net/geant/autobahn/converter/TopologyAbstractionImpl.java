@@ -118,4 +118,9 @@ public final class TopologyAbstractionImpl implements TopologyAbstraction {
         }
     }
 
+    @Override
+    public void dispose() {
+        AccessPoint.getInstance().dispose();
+    }
+
 }

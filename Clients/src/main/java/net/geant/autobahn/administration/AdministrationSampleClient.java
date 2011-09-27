@@ -3,6 +3,7 @@ package net.geant.autobahn.administration;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import javax.xml.ws.soap.SOAPBinding;
+import net.geant.autobahn.administration.Administration;
 
 import net.geant.autobahn.network.Link;
 
@@ -22,6 +23,10 @@ public class AdministrationSampleClient {
         adm = service.getPort(AdministrationPort, Administration.class);
     }
 
+    /**
+     * @param args
+     * @throws Exception
+     */
     public static void main(String args[]) throws Exception {
 
         System.out.println("Give IDM to connect to:");
@@ -35,7 +40,8 @@ public class AdministrationSampleClient {
         String port = (new String(byteStr).trim());
         
         if (idm == null || idm.equals("")) {
-            idm = "109.105.111.62";
+            //idm = "109.105.111.62";
+            idm = "150.140.8.13";
         }
         if (port == null || port.equals("")) {
             port = "8080";
@@ -43,7 +49,7 @@ public class AdministrationSampleClient {
         
         AdministrationSampleClient instance = new AdministrationSampleClient("http://"+idm+":"+port+"/autobahn/administration");
         System.out.println("Connecting to "+idm+":"+port);
-        
+        /*
         System.out.println("\n---getLog():");
         String ad_log = instance.adm.getLog(true);
         System.out.println(ad_log);
@@ -88,7 +94,7 @@ public class AdministrationSampleClient {
                 System.out.println(i+": "+topo.get(i));
             }
         }
-        
+        */
         System.out.println("\n---getStatus():");
         Status stat = instance.adm.getStatus();
         if (stat != null) {
@@ -99,6 +105,12 @@ public class AdministrationSampleClient {
                 System.out.println("getNeighbors length:"+stat.getNeighbors().size());
             }
         }
+        
+        System.out.println("\n---restart():");
+        instance.adm.restart();
+        
+        System.out.println("\n---setProperties():");
+        instance.adm.setProperties(null);
         
         System.exit(0);
     }

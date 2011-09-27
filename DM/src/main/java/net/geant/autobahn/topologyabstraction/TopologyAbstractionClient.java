@@ -116,4 +116,11 @@ public class TopologyAbstractionClient implements TopologyAbstraction {
         return null;
     }
 
+    @Override
+    public void dispose() {
+        if(ta != null)
+            ta.dispose();
+        
+    }
+
 }

@@ -335,4 +335,8 @@ public final class AccessPoint implements ResourcesReservationCalendar {
     public ConstraintsReservationCalendar getConstraintsCalendar() {
     	return constraintsCalendar;
     }
+
+    public void dispose() {
+        instance = null;        
+    }
 }

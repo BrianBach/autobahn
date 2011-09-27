@@ -108,4 +108,7 @@ public interface ResourcesReservationCalendar {
     @WebMethod()
     public void removeReservation(@WebParam(name = "path")IntradomainPath path, @WebParam(name = "capacity")long capacity,
     		@WebParam(name = "start")Calendar start, @WebParam(name = "end")Calendar end);
+
+    @WebMethod()
+    public void dispose();
 }

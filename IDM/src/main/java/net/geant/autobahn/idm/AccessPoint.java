@@ -1613,4 +1613,14 @@ public final class AccessPoint implements UserAccessPoint,
         return timeout * 1000;        
     }
 
+    @Override
+    public void restart() {
+        
+        dispose();
+
+        domainManager.restart();
+        init(this.properties);
+        
+    }
+
 }

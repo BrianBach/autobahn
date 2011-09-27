@@ -370,4 +370,9 @@ public final class AccessPoint implements TopologyAbstraction {
             		"the following potential problems:\n"+initChecks.toString());
         }
     }
+
+    @Override
+    public void dispose() {
+        instance = null;
+    }
 }

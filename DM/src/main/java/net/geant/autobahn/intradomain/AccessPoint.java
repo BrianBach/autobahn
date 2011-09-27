@@ -334,7 +334,12 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
 	 * be restarted.
 	 */
 	public void restart() {
-        state = State.RESTARTING;
+        TopologyAbstraction ta = new TopologyAbstractionClient(taAddress);
+        ta.dispose();
+	    
+        intradomainManager.dispose();
+        
+	    state = State.RESTARTING;
         dispose();
         try {
             init();

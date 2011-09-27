@@ -92,4 +92,10 @@ public class ResourcesReservationCalendarClient implements ResourcesReservationC
              rc.removeReservation( path, capacity, start,  end);
 	}
 
+    public void dispose() {
+        if(rc != null)
+            rc.dispose();
+        
+    }
+
 }

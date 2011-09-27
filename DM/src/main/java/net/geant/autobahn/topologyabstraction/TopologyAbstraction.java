@@ -107,4 +107,8 @@ public interface TopologyAbstraction {
     @WebResult(name="links")
     public Set<Link> getAllEdgeLinks();
 
+    @WebMethod
+    @WebResult(name="dispose")
+    public void dispose();
+
 }

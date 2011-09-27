@@ -117,5 +117,13 @@ public class ResourcesReservationCalendarImpl implements ResourcesReservationCal
             log.debug("Exception info: ", e);
         }
     }
+	
+	public void dispose() {
+	    if (props != null) {
+            AccessPoint.getInstance(props).dispose();
+        } else {
+            AccessPoint.getInstance().dispose();
+        }
+	}
    
 }

@@ -15,7 +15,9 @@ public class RestartCommand implements AutobahnCommand {
 	 * @see net.geant.autobahn.framework.commands.AutobahnCommand#execute(net.geant.autobahn.framework.Framework, java.lang.String[])
 	 */
 	public String execute(Framework autobahn, String[] args) {
-		autobahn.getDm().dispose();
+		autobahn.getCalendar().dispose();
+		autobahn.getTopologyAbstraction().dispose();
+	    autobahn.getDm().dispose();
 		
 		try {
 			autobahn.getDm().init();

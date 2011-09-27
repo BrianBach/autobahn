@@ -102,4 +102,10 @@ public class AdministrationImpl implements Administration {
 		
 		AccessPoint.getInstance().cancelAllServices();
 	}
+
+    @Override
+    public void restart() {
+
+        AccessPoint.getInstance().restart();
+    }
 }

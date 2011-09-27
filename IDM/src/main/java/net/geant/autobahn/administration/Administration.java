@@ -46,4 +46,7 @@ public interface Administration {
 	
 	@WebMethod
 	void cancelAllServices();
+	
+	@WebMethod
+	void restart();
 }

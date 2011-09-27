@@ -753,6 +753,9 @@ public class ResourcesReservation {
      */
     public void dispose() {
     	timer.cancelAll();
+        if (calendar != null) {
+            calendar.dispose();
+        }
     }
     
     /**
