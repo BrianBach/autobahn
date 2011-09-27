@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.jws.WebService;
 
+import org.apache.log4j.Logger;
+
 import net.geant.autobahn.intradomain.IntradomainTopology;
 import net.geant.autobahn.intradomain.common.GenericLink;
 import net.geant.autobahn.intradomain.converter.Stats;
@@ -24,53 +26,96 @@ import net.geant.autobahn.topologyabstraction.TopologyAbstraction;
         endpointInterface="net.geant.autobahn.topologyabstraction.TopologyAbstraction")
 public final class TopologyAbstractionImpl implements TopologyAbstraction {
 
+    private final Logger log = Logger.getLogger(TopologyAbstractionImpl.class);
+    
     /* (non-Javadoc)
      * @see net.geant.autobahn.topologyabstraction.TopologyAbstraction#setIntradomainTopology()
      */
     public void setIntradomainTopology(IntradomainTopology topology, String topologyType){
-        AccessPoint.getInstance().setIntradomainTopology(topology, topologyType);
+        try {
+            AccessPoint.getInstance().setIntradomainTopology(topology, topologyType);
+        } catch (Exception e) {
+            log.error("TA setIntradomainTopology failed: " + e.getMessage());
+            log.debug("Exception info: ", e);
+        }
     }
     
     /* (non-Javadoc)
      * @see net.geant.autobahn.topologyabstraction.TopologyAbstraction#abstractInternalPartOfTopology()
      */
     public Stats abstractInternalPartOfTopology() {
-        return AccessPoint.getInstance().abstractInternalPartOfTopology();
+        try {
+            return AccessPoint.getInstance().abstractInternalPartOfTopology();
+        } catch (Exception e) {
+            log.error("TA abstractInternalPartOfTopology failed: " + e.getMessage());
+            log.debug("Exception info: ", e);
+            return null;
+        }
     }
     
     /* (non-Javadoc)
      * @see net.geant.autobahn.topologyabstraction.TopologyAbstraction#abstractExternalPartOfTopology(java.lang.String)
      */
     public List<Link> abstractExternalPartOfTopology(String idmAddress) {
-        return AccessPoint.getInstance().abstractExternalPartOfTopology(idmAddress);
+        try {
+            return AccessPoint.getInstance().abstractExternalPartOfTopology(idmAddress);
+        } catch (Exception e) {
+            log.error("TA abstractExternalPartOfTopology failed: " + e.getMessage());
+            log.debug("Exception info: ", e);
+            return null;
+        }
     }
     
     /* (non-Javadoc)
 	 * @see net.geant.autobahn.topologyabstraction.TopologyAbstraction#getAbstractLinks()
 	 */
 	public List<Link> getAbstractLinks() {
-		return AccessPoint.getInstance().getAbstractLinks();
+	    try {
+	        return AccessPoint.getInstance().getAbstractLinks();
+        } catch (Exception e) {
+            log.error("TA getAbstractLinks failed: " + e.getMessage());
+            log.debug("Exception info: ", e);
+            return null;
+        }
 	}
 
 	/* (non-Javadoc)
      * @see net.geant.autobahn.topologyabstraction.TopologyAbstraction#getIdentifiers(java.lang.String, java.lang.String)
      */
     public LinkIdentifiers getIdentifiers(String portName, String linkBodId) {
-        return AccessPoint.getInstance().getIdentifiers(portName, linkBodId);
+        try {
+            return AccessPoint.getInstance().getIdentifiers(portName, linkBodId);
+        } catch (Exception e) {
+            log.error("TA getIdentifiers failed: " + e.getMessage());
+            log.debug("Exception info: ", e);
+            return null;
+        }
     }
 
     /* (non-Javadoc)
      * @see net.geant.autobahn.topologyabstraction.TopologyAbstraction#getEdgeLink(net.geant.autobahn.network.Link)
      */
     public GenericLink getEdgeLink(Link l) {
-        return AccessPoint.getInstance().getEdgeLink(l);
+        try {
+            return AccessPoint.getInstance().getEdgeLink(l);
+        } catch (Exception e) {
+            log.error("TA getEdgeLink failed: " + e.getMessage());
+            log.debug("Exception info: ", e);
+            return null;
+        }
     }
 
     /* (non-Javadoc)
      * @see net.geant.autobahn.topologyabstraction.TopologyAbstraction#getAllEdgeLinks()
      */
     public Set<Link> getAllEdgeLinks() {
-        return AccessPoint.getInstance().getAllEdgeLinks();
+        try {
+            return AccessPoint.getInstance().getAllEdgeLinks();
+        } catch (Exception e) {
+            log.error("TA getAllEdgeLinks failed: " + e.getMessage());
+            log.debug("Exception info: ", e);
+            return null;
+        }
     }
 
 }

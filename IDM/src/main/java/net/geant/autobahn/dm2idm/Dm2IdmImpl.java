@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.jws.WebService;
 
+import org.apache.log4j.Logger;
+
 import net.geant.autobahn.dm2idm.Dm2Idm;
 import net.geant.autobahn.idm.AccessPoint;
 import net.geant.autobahn.network.Link;
@@ -19,31 +21,70 @@ import net.geant.autobahn.network.LinkIdentifiers;
         endpointInterface = "net.geant.autobahn.dm2idm.Dm2Idm")
 public class Dm2IdmImpl implements Dm2Idm {
 
+    private final Logger log = Logger.getLogger(Dm2IdmImpl.class);
+    
 	public void dispose() {
-		AccessPoint.getInstance().dispose();
+	    try {
+	        AccessPoint.getInstance().dispose();
+        } catch (Exception e) {
+            log.error("IDM dispose failed: " + e.getMessage());
+            log.debug("Exception info: ", e);
+        }
 	}
 	
 	public void activate(String arg0, boolean arg1) {
-		AccessPoint.getInstance().activate(arg0, arg1);
+	    try {
+	        AccessPoint.getInstance().activate(arg0, arg1);
+        } catch (Exception e) {
+            log.error("IDM activate failed: " + e.getMessage());
+            log.debug("Exception info: ", e);
+        }
 	}
 
 	public void finish(String arg0, boolean arg1) {
-		AccessPoint.getInstance().finish(arg0, arg1);
+	    try {
+	        AccessPoint.getInstance().finish(arg0, arg1);
+        } catch (Exception e) {
+            log.error("IDM finish failed: " + e.getMessage());
+            log.debug("Exception info: ", e);
+        }
 	}
 
 	public LinkIdentifiers getIdentifiers(String domain, String portName, String bodId) {
-		return AccessPoint.getInstance().getIdentifiers(domain, portName, bodId);
+	    try {
+	        return AccessPoint.getInstance().getIdentifiers(domain, portName, bodId);
+        } catch (Exception e) {
+            log.error("IDM getIdentifiers failed: " + e.getMessage());
+            log.debug("Exception info: ", e);
+            return null;
+        }
 	}
 
 	public void injectAbstractLinks(List<Link> links) {
-		AccessPoint.getInstance().injectAbstractLinks(links);
+	    try {
+	        AccessPoint.getInstance().injectAbstractLinks(links);
+        } catch (Exception e) {
+            log.error("IDM injectAbstractLinks failed: " + e.getMessage());
+            log.debug("Exception info: ", e);
+        }
 	}
     
 	public void restorationCompleted() {
-		AccessPoint.getInstance().restorationCompleted();
+	    try {
+	        AccessPoint.getInstance().restorationCompleted();
+        } catch (Exception e) {
+            log.error("IDM restorationCompleted failed: " + e.getMessage());
+            log.debug("Exception info: ", e);
+        }
 	}
 
 	public boolean saveReservationStatusDB(String res, int st) {
-        return AccessPoint.getInstance().saveReservationStatusDB(res, st);
+	    try {
+	        return AccessPoint.getInstance().saveReservationStatusDB(res, st);
+        } catch (Exception e) {
+            log.error("IDM saveReservationStatusDB failed: " + e.getMessage());
+            log.debug("Exception info: ", e);
+            return false;
+        }
     }
 }

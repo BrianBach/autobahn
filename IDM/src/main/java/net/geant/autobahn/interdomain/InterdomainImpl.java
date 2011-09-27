@@ -4,6 +4,7 @@ import javax.jws.WebService;
 
 import net.geant.autobahn.constraints.GlobalConstraints;
 import net.geant.autobahn.idm.AccessPoint;
+import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
 import net.geant.autobahn.network.LinkIdentifiers;
 import net.geant.autobahn.reservation.Reservation;
 import net.geant.autobahn.reservation.TimeRange;
@@ -27,7 +28,16 @@ public class InterdomainImpl implements Interdomain {
 	 */
 	public void cancelReservation(String resID) throws NoSuchReservationException {
 		log.info("IDM -> IDM: Cancel " + resID + " received");
-		AccessPoint.getInstance().cancelReservation(resID);
+		try {
+		    AccessPoint.getInstance().cancelReservation(resID);
+        } catch (Exception e) {
+            if (e instanceof NoSuchReservationException) {
+                throw (NoSuchReservationException) e;
+            } else {
+                log.error("IDM cancelReservation failed: " + e.getMessage());
+                log.debug("Exception info: ", e);
+            }
+        }
 	}
 
 	/* (non-Javadoc)
@@ -43,7 +53,16 @@ public class InterdomainImpl implements Interdomain {
 	 */
 	public void reportActive(String resID, String message, boolean success) throws NoSuchReservationException {
 		log.info("IDM -> IDM: Report Active: " + resID + " received");
-		AccessPoint.getInstance().reportActive(resID, message, success);
+		try {
+		    AccessPoint.getInstance().reportActive(resID, message, success);
+        } catch (Exception e) {
+            if (e instanceof NoSuchReservationException) {
+                throw (NoSuchReservationException) e;
+            } else {
+                log.error("IDM reportActive failed: " + e.getMessage());
+                log.debug("Exception info: ", e);
+            }
+        }
 	}
 
 	/* (non-Javadoc)
@@ -51,7 +70,12 @@ public class InterdomainImpl implements Interdomain {
 	 */
 	public void reportCancellation(String resID, String message, boolean success) {
 		log.info("IDM -> IDM: Report Cancel: " + resID + " received");
-		AccessPoint.getInstance().reportCancellation(resID, message, success);
+		try {
+		    AccessPoint.getInstance().reportCancellation(resID, message, success);
+        } catch (Exception e) {
+            log.error("IDM reportCancellation failed: " + e.getMessage());
+            log.debug("Exception info: ", e);
+        }
 	}
 
 	/* (non-Javadoc)
@@ -59,7 +83,12 @@ public class InterdomainImpl implements Interdomain {
 	 */
 	public void reportFinished(String resID, String message, boolean success) {
 		log.info("IDM -> IDM: Report Finished: " + resID + " received");
-		AccessPoint.getInstance().reportFinished(resID, message, success);
+		try {
+		    AccessPoint.getInstance().reportFinished(resID, message, success);
+        } catch (Exception e) {
+            log.error("IDM reportFinished failed: " + e.getMessage());
+            log.debug("Exception info: ", e);
+        }
 	}
 
 	/* (non-Javadoc)
@@ -68,7 +97,12 @@ public class InterdomainImpl implements Interdomain {
 	public void reportSchedule(String resID, int code, String message,
 			boolean success, GlobalConstraints global) {
 		log.info("IDM -> IDM: Report Schedule: " + resID + " received");
-		AccessPoint.getInstance().reportSchedule(resID, code, message, success, global);
+		try {
+		    AccessPoint.getInstance().reportSchedule(resID, code, message, success, global);
+        } catch (Exception e) {
+            log.error("IDM reportSchedule failed: " + e.getMessage());
+            log.debug("Exception info: ", e);
+        }
 	}
 
 	/* (non-Javadoc)
@@ -76,31 +110,66 @@ public class InterdomainImpl implements Interdomain {
 	 */
 	public void scheduleReservation(Reservation reservation) {
 		log.info("IDM -> IDM: Schedule reservation: " + reservation.getBodID() + " received");
-		AccessPoint.getInstance().scheduleReservation(reservation);
+		try {
+		    AccessPoint.getInstance().scheduleReservation(reservation);
+        } catch (Exception e) {
+            log.error("IDM scheduleReservation failed: " + e.getMessage());
+            log.debug("Exception info: ", e);
+        }
 	}
 
 	public void withdrawReservation(String resID) throws NoSuchReservationException {
 		log.info("IDM -> IDM: Withdraw: " + resID + " received");
-		AccessPoint.getInstance().withdrawReservation(resID);
+		try {
+		    AccessPoint.getInstance().withdrawReservation(resID);
+        } catch (Exception e) {
+            if (e instanceof NoSuchReservationException) {
+                throw (NoSuchReservationException) e;
+            } else {
+                log.error("IDM withdrawReservation failed: " + e.getMessage());
+                log.debug("Exception info: ", e);
+            }
+        }
 	}
 	
 	public void reportWithdraw(String resID, String message, boolean success) {
 		log.info("IDM -> IDM: Report Withdraw: " + resID + " received");
-		AccessPoint.getInstance().reportWithdraw(resID, message, success);
+		try {
+		    AccessPoint.getInstance().reportWithdraw(resID, message, success);
+        } catch (Exception e) {
+            log.error("IDM reportWithdraw failed: " + e.getMessage());
+            log.debug("Exception info: ", e);
+        }
 	}
 
 	public void modifyReservation(String resID, TimeRange time) {
 		log.info("IDM -> IDM: Modify: " + resID + " received");
-		AccessPoint.getInstance().modifyReservation(resID, time);
+		try {
+		    AccessPoint.getInstance().modifyReservation(resID, time);
+        } catch (Exception e) {
+            log.error("IDM modifyReservation failed: " + e.getMessage());
+            log.debug("Exception info: ", e);
+        }
 	}
 
 	public void reportModify(String resID, TimeRange time,
 			String message, boolean success) {
 		log.info("IDM -> IDM: Report Modify: " + resID + " received");
-		AccessPoint.getInstance().reportModify(resID, time, message, success);
+		try {
+		    AccessPoint.getInstance().reportModify(resID, time, message, success);
+        } catch (Exception e) {
+            log.error("IDM reportModify failed: " + e.getMessage());
+            log.debug("Exception info: ", e);
+        }
 	}
 	
 	public LinkIdentifiers getIdentifiers(String portName, String bodId) {
-		return AccessPoint.getInstance().getIdentifiers(portName, bodId);
+        try {
+            return AccessPoint.getInstance().getIdentifiers(portName, bodId);
+        } catch (Exception e) {
+            log.error("IDM getIdentifiers failed: " + e.getMessage());
+            log.debug("Exception info: ", e);
+            return null;
+        }
 	}
 }
