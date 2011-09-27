@@ -652,4 +652,8 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 		// TODO Auto-generated method stub
 		
 	}
+    @Override
+    public void restart() {
+        administration.restart();
+    }
 }
