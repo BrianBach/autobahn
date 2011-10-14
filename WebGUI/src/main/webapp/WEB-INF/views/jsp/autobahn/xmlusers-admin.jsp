@@ -1,5 +1,5 @@
 <%@ include file="../common/includes.jsp"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions"prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/jquery/tabs.css"/>"/>
 <h2><spring:message code="home.usersadmin" text="User Administration"/></h2>
 

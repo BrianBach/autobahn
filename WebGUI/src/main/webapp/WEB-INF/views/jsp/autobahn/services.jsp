@@ -1,5 +1,5 @@
 <%@ include file="../common/includes.jsp"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions"prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <style>
 	.cancelButton:hover input {
 		margin-left: 2px;

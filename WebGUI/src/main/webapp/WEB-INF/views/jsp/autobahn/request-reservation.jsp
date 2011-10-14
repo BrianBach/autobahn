@@ -1,5 +1,5 @@
 <%@ include file="../common/includes.jsp" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions"prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!-- tab styling -->
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/jquery/tabs.css"/>"/>
 <script type="text/javascript" src="<c:url value="/scripts/jscalendar/js/jscal2.js"/>"></script>
