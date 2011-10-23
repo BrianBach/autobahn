@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!--
     W3C XML Schema defined in the Web Services Addressing 1.0 specification
     http://www.w3.org/TR/ws-addr-core
@@ -84,7 +84,7 @@
 	<xs:complexType name="AttributedURIType" mixed="false">
 		<xs:simpleContent>
 			<xs:extension base="xs:anyURI">
-				<!-- <xs:anyAttribute namespace="##other" processContents="lax"/> -->
+				<xs:anyAttribute namespace="##other" processContents="lax"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>

@@ -34,6 +34,9 @@ This document and the information contained herein is provided on an "AS IS" bas
               schemaLocation="bf-2-idc.xsd" 
   />
 
+  <xsd:import namespace="http://oscars.es.net/OSCARS" schemaLocation="OSCARS.xsd"/>
+
+
 
   
 <!-- ===================== Misc. Helper Types ===================== -->
@@ -123,11 +126,15 @@ This document and the information contained herein is provided on an "AS IS" bas
  <xsd:complexType name="MessageType">
     <xsd:sequence>
 
- <!-- change for cxf 
+ <!-- change for autobahn
         <xsd:any namespace="##other" processContents="lax"
                  minOccurs="0" maxOccurs="unbounded"/> 
 -->
-        <xsd:element name="event" type="tns:eventContent" minOccurs="0" maxOccurs="unbounded" />
+<!--
+        <xsd:element name="tns:event" type="tns:eventContent" minOccurs="0" maxOccurs="unbounded" />
+
+-->
+	<xsd:element ref="tns:event" minOccurs="0" maxOccurs="unbounded" />
 
     </xsd:sequence>
   </xsd:complexType>
@@ -177,10 +184,14 @@ This document and the information contained herein is provided on an "AS IS" bas
                      type="wsnt:FilterType" 
                      minOccurs="0" maxOccurs="1" />
          <!-- CHANGE: Type was wsnt:AbsoluteOrRelativeTimeType"-->             
-        <xsd:element name="InitialTerminationTime" 
-                     type="xsd:string"
+
+<!-- change for autobahn
+        <xsd:element name="InitialTerminationTime" type="xsd:string"
                      nillable="true"
                      minOccurs="1" maxOccurs="1" />
+-->
+        <xsd:element name="InitialTerminationTime" type="xsd:dateTime"
+ minOccurs="0" maxOccurs="1" />
         <xsd:element name="SubscriptionPolicy"
                      minOccurs="0" maxOccurs="1">
           <xsd:complexType>
@@ -457,10 +468,16 @@ This document and the information contained herein is provided on an "AS IS" bas
     <xsd:complexType>
       <xsd:sequence>
         <!-- CHANGE: Type was wsnt:AbsoluteOrRelativeTimeType"--> 
+
+<!-- change for autobahn
         <xsd:element name="TerminationTime" 
                      type="xsd:string"
                      nillable="true"
                      minOccurs="1" maxOccurs="1" />
+-->	  
+	<xsd:element ref="wsnt:TerminationTime" 
+                      minOccurs="1" maxOccurs="1" />
+	
         <xsd:element ref="wsnt:SubscriptionReference" 
                    minOccurs="1" maxOccurs="1" />
         <xsd:any namespace="##other" processContents="lax"
