@@ -7,21 +7,6 @@
 package net.geant.autobahn.idcp;
 
 
-
-import javax.jws.Oneway;
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebResult;
-import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
-import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.ws.Holder;
-import javax.xml.ws.RequestWrapper;
-import javax.xml.ws.ResponseWrapper;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import org.apache.log4j.Logger;
 
@@ -34,9 +19,6 @@ import net.geant.autobahn.idcp.ResCreateContent;
 import net.geant.autobahn.idcp.ResDetails;
 import net.geant.autobahn.idcp.TeardownPathContent;
 import net.geant.autobahn.network.Link;
-import net.geant.autobahn.reservation.HomeDomainReservation;
-import net.geant.autobahn.reservation.Reservation;
-
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneDomainContent;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneDomainSignatureContent;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneHopContent;
@@ -58,7 +40,7 @@ import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneTopologyCont
                       
 public class OSCARSImpl implements OSCARS {
 
-    private Logger log = Logger.getLogger(this.getClass());
+    private static Logger log = Logger.getLogger(OSCARSImpl.class);
 
     /* (non-Javadoc)
      * @see net.geant.autobahn.idcp.OSCARS#cancelReservation(net.geant.autobahn.idcp.GlobalReservationId  cancelReservation )*
@@ -77,7 +59,9 @@ public class OSCARSImpl implements OSCARS {
     /* (non-Javadoc)
      * @see net.geant.autobahn.idcp.OSCARS#createReservation(java.lang.String  globalReservationId ,)long  startTime ,)long  endTime ,)int  bandwidth ,)java.lang.String  description ,)net.geant.autobahn.idcp.PathInfo  pathInfo ,)java.lang.String  token ,)java.lang.String  status )*
      */
-    public void createReservation(javax.xml.ws.Holder<java.lang.String> globalReservationId,long startTime,long endTime,int bandwidth,java.lang.String description,javax.xml.ws.Holder<PathInfo> pathInfo,javax.xml.ws.Holder<java.lang.String> token,javax.xml.ws.Holder<java.lang.String> status) throws AAAFaultMessage , BSSFaultMessage    { 
+    public void createReservation(javax.xml.ws.Holder<java.lang.String> globalReservationId,long startTime,long endTime,int bandwidth,
+    		java.lang.String description,javax.xml.ws.Holder<PathInfo> pathInfo,javax.xml.ws.Holder<java.lang.String> token,
+    		javax.xml.ws.Holder<java.lang.String> status) throws AAAFaultMessage , BSSFaultMessage    { 
     	
     	CtrlPlaneHopContent[] hops = new CtrlPlaneHopContent[pathInfo.value.getPath().getHop().size()];
  		for (int i=0; i < pathInfo.value.getPath().getHop().size(); i++) {
@@ -88,7 +72,13 @@ public class OSCARSImpl implements OSCARS {
     	final String dst = pathInfo.value.getLayer2Info().getDestEndpoint();
     	final String resId = globalReservationId.value;
     	final String vlan = pathInfo.value.getLayer2Info().getSrcVtag().getValue();
-   		FromIdcp.create(resId, description, src, dst, startTime, endTime, bandwidth, vlan);
+    	
+    	try {
+    		FromIdcp.create(resId, description, src, dst, startTime, endTime, bandwidth, vlan, pathInfo.value);
+    	} catch (Exception e) {
+    		log.info("idcp create reservation failed - " + e.getMessage());
+    		throw new BSSFaultMessage(e.getMessage());
+    	}
 
    		// ACCEPTED must be returned
     	token.value = "not set";
@@ -147,26 +137,27 @@ public class OSCARSImpl implements OSCARS {
      */
     public net.geant.autobahn.idcp.GetTopologyResponseContent getNetworkTopology(GetTopologyContent getNetworkTopology) throws AAAFaultMessage , BSSFaultMessage    { 
 
-         List<Link> links = FromIdcp.getTopology();
+    	final String domainId = IdcpManager.getDomainName();
+        List<Link> links = FromIdcp.getTopology(false);
+                  
+        GetTopologyResponseContent cont = new GetTopologyResponseContent();
+        CtrlPlaneTopologyContent ctrlTopology = new CtrlPlaneTopologyContent();
+        ctrlTopology.setId(domainId);
+        ctrlTopology.setIdcId(domainId);
+        CtrlPlaneDomainSignatureContent[] ctrlSigns = new CtrlPlaneDomainSignatureContent[1];
+        ctrlSigns[0] = new CtrlPlaneDomainSignatureContent();
+        ctrlSigns[0].setDomainId(domainId);
          
-         GetTopologyResponseContent cont = new GetTopologyResponseContent();
-         CtrlPlaneTopologyContent ctrlTopology = new CtrlPlaneTopologyContent();
-         ctrlTopology.setId("GEANT");
-         ctrlTopology.setIdcId("GEANT");
-         CtrlPlaneDomainSignatureContent[] ctrlSigns = new CtrlPlaneDomainSignatureContent[1];
-         ctrlSigns[0] = new CtrlPlaneDomainSignatureContent();
-         ctrlSigns[0].setDomainId("GEANT");
-         
-         for (CtrlPlaneDomainSignatureContent dsc : ctrlSigns)
-        	 ctrlTopology.getDomainSignature().add(dsc);
+        for (CtrlPlaneDomainSignatureContent dsc : ctrlSigns)
+            ctrlTopology.getDomainSignature().add(dsc);
 
-         CtrlPlaneDomainContent[] ctrlDomains = OscarsConverter.getOscarsTopology(links);
+        CtrlPlaneDomainContent[] ctrlDomains = OscarsConverter.getOscarsTopology(links);
          
-         for (CtrlPlaneDomainContent dc : ctrlDomains)
-        	 ctrlTopology.getDomain().add(dc);
+        for (CtrlPlaneDomainContent dc : ctrlDomains)
+            ctrlTopology.getDomain().add(dc);
          
-         cont.setTopology(ctrlTopology);
-         return cont;
+        cont.setTopology(ctrlTopology);
+        return cont;
     }
 
     /* (non-Javadoc)
@@ -181,15 +172,8 @@ public class OSCARSImpl implements OSCARS {
      * @see net.geant.autobahn.idcp.OSCARS#notify(org.oasis_open.docs.wsn.b_2.Notify  notify )*
      */
     public void notify(org.oasis_open.docs.wsn.b_2.Notify notify) { 
-        
-        try {
-        	
-        	log.info("notify message arrived");
-        	
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new RuntimeException(ex);
-        }
+
+    	// cxf cannot handle notify (unsigned), moved to OSCARSNotifyOnly
     }
 
     /* (non-Javadoc)
@@ -202,72 +186,137 @@ public class OSCARSImpl implements OSCARS {
     		javax.xml.ws.Holder<RefreshPathResponseContent> refreshPath,javax.xml.ws.Holder<TeardownPathResponseContent> teardownPath) throws AAAFaultMessage , BSSFaultMessage    { 
         
     	 ResCreateContent createReservationCon = payload.getCreateReservation();
-         GlobalReservationId cancel = payload.getCancelReservation();
+    	 ModifyResContent modifyCon = payload.getModifyReservation();
+         GlobalReservationId cancelCon = payload.getCancelReservation();
          CreatePathContent createPathCon = payload.getCreatePath();
          TeardownPathContent teardownPathCon = payload.getTeardownPath();
+         ListRequest listCon = payload.getListReservations();
+         GlobalReservationId queryCon = payload.getQueryReservation();
+         
+         contentType.value = payload.getContentType();
 
-         if (createReservation != null) {
+         if (createReservationCon != null) {
         	 
-             HomeDomainReservation res = null;
-             
              final String resId = createReservationCon.getGlobalReservationId();
              final String desc = createReservationCon.getDescription();
              final long startTime = createReservationCon.getStartTime();
              final long endTime = createReservationCon.getEndTime();
              final int bandwidth = createReservationCon.getBandwidth();
-             
              final PathInfo pathInfo = createReservationCon.getPathInfo();
-             CtrlPlaneHopContent[] hops = new CtrlPlaneHopContent[pathInfo.getPath().getHop().size()];
-      		 for (int i=0; i < pathInfo.getPath().getHop().size(); i++) {
-      			hops[i] = pathInfo.getPath().getHop().get(i);
+             
+             if (pathInfo == null) {
+            	 log.info("pathInfo not present");
+            	 throw new BSSFaultMessage("pathInfo not present");
+             }
+             
+             if (!pathInfo.getPathSetupMode().equals(Idcp.PATH_MODE_AUTOMATIC)) {
+            	 log.info("invalid path mode: " + pathInfo.getPathSetupMode());
+            	 throw new BSSFaultMessage("invalid path mode: " + pathInfo.getPathSetupMode());
+             }
+             
+             int pathSize = pathInfo.getPath().getHop().size();
+             if (pathSize < 3) {
+            	 log.info("path contains < 3 hops");
+            	 throw new BSSFaultMessage("path contains < 3 hops");
+             }
+             
+             log.info("========= NEW IDCP RESERVATION ========\n");
+             log.info("reservationId: " + resId + ", description: " + desc + ", bandwidth: " + bandwidth);
+             
+             if (IdcpManager.isDebugging())
+            	 Idcp.printPathInfo(pathInfo);
+             
+             
+             
+      		 final String domain = IdcpManager.getDomainName();
+      		 
+      		 
+      		 CtrlPlaneHopContent srcHop = pathInfo.getPath().getHop().get(pathSize - 2);
+      		 String srcPort = srcHop.getLink().getId();
+      		 if (!srcPort.contains(domain)) {
+      			 log.info("source port " + srcPort + " does not contain " + domain);
+      			 throw new BSSFaultMessage("source hop " + srcPort + " does not contain " + domain);
       		 }
-             CtrlPlaneHopContent srcHop = hops[hops.length - 2];
-             final String src = srcHop.getLinkIdRef();
-         	 final String dst = pathInfo.getLayer2Info().getDestEndpoint();
-         	 final String vlan = pathInfo.getLayer2Info().getSrcVtag().getValue();
-        	 res = FromIdcp.create(resId, desc, src, dst, startTime, endTime, bandwidth, vlan);
-
+      		 
+      		 CtrlPlaneHopContent dstHop = pathInfo.getPath().getHop().get(pathSize - 1);
+      		 String dstPort = srcHop.getLink().getId();
+     		 if (!dstPort.contains(domain)) {
+     			 log.info("dst port " + dstPort + " does not contain " + domain);
+     			 throw new BSSFaultMessage("dst hop " + dstPort + " does not contain " + domain);
+     		 }
+      		  
+      		 String suggestedVlan = dstHop.getLink().getSwitchingCapabilityDescriptors().getSwitchingCapabilitySpecificInfo().getSuggestedVLANRange();
+      		 String availableVlans = dstHop.getLink().getSwitchingCapabilityDescriptors().getSwitchingCapabilitySpecificInfo().getVlanRangeAvailability();
+      		 
+      		 if (availableVlans == null || availableVlans.equals("any")) {
+      			 
+      			 availableVlans = "2-4094";
+      		 }
+      		       		 
+      		 final String vlan = availableVlans;
+      		 
              try {
-            	 
-            	 res = FromIdcp.create(resId, desc, src, dst, startTime, endTime, bandwidth, vlan);
-             } catch (Exception e) {
-                 throw new BSSFaultMessage(e.getMessage(), e);
+            	 FromIdcp.create(resId, desc, srcPort, dstPort, startTime, endTime, bandwidth, vlan, pathInfo);
+             } catch (IdcpException e) {
+            	 log.info("create idcp reseration failed - " + e.getMessage());
+            	 throw new BSSFaultMessage(e.getMessage());
              }
-
-             String failure = res.getDescription();
-             if (res != null && failure == null) {
-             } else {
-                 System.out.println("Failure: " + failure);
-                 throw new BSSFaultMessage(failure);
-             }
-
+             
+             CreateReply createReply = new CreateReply();
+             createReply.setGlobalReservationId(resId);
+             createReply.setPathInfo(pathInfo);
+             createReply.setStatus("ACCEPTED");
+             createReply.setToken(null);
+             createReservation.value = createReply;
          }
-
-         String cancelRes = null;
-         if (cancel != null && cancel.getGri() != null && !"".equals(cancel.getGri())) {
-             cancelRes = cancel.getGri();
+         
+         if (cancelCon != null) {
+        	 
+        	 try {
+        		 FromIdcp.cancel(cancelCon.getGri());
+        	 } catch (IdcpException e) { 
+            	 log.info("cancel idcp reservation failed - " + e.getMessage());
+            	 throw new BSSFaultMessage(e.getMessage());
+        	 }
+             cancelReservation.value = cancelCon.getGri();
          }
+         
+         if (modifyCon != null) {
 
-         if (cancelRes != null) {
-             try {
-                 FromIdcp.cancel(cancelRes);
-             } catch (Exception e) {
-                 log.info("forward Exception: ", e);
-             }
+        	 try {
+        		 FromIdcp.modify(modifyCon.getGlobalReservationId(), modifyCon.getStartTime(), modifyCon.getEndTime());
+        	 } catch (IdcpException e) { 
+            	 log.info("modify idcp reservation failed - " + e.getMessage());
+            	 throw new BSSFaultMessage(e.getMessage());
+        	 }
+        	 ModifyResReply res = new ModifyResReply();
+             modifyReservation.value = res;
          }
-
-         if (createPath != null) {
-        	 String resID = createPath.value.getGlobalReservationId();
-
-             log.info("CreatePath received: " + resID);
-             // Just ignore, create empty reply
+         
+         if (createPathCon != null) {
+             log.info("CreatePath received: " + createPathCon.getGlobalReservationId());
+             CreatePathResponseContent res = new CreatePathResponseContent();
+             res.setGlobalReservationId(createPathCon.getGlobalReservationId());
+             res.setStatus("INSETUP");
+             createPath.value = res;
          }
-
-         if (teardownPath != null) {
-             String resID = teardownPath.value.getGlobalReservationId();
-
-             log.info("TeardownPath received: " + resID);
-             // Just ignore, create empty reply
+         
+         if (teardownPathCon != null) {
+             log.info("TeardownPath received: " + teardownPathCon.getGlobalReservationId());
+             TeardownPathResponseContent res = new TeardownPathResponseContent();
+             res.setGlobalReservationId(teardownPathCon.getGlobalReservationId());
+             res.setStatus("INTEARDOWN");
+             teardownPath.value = res;
+         }
+         
+         if (listCon != null)  {
+        	 // not support through forward, use regular list
+        	 throw new BSSFaultMessage("operation not supported");
+         } 
+         
+         if (queryCon != null) { 
+        	 // not support through forward, use regular query
+        	 throw new BSSFaultMessage("operation not supported");
          }
     }
 
@@ -281,13 +330,11 @@ public class OSCARSImpl implements OSCARS {
     	List<ResDetails> res = FromIdcp.list();
     	if (res == null) {
     		response.setTotalResults(0);
-    		return response;
+    	} else {
+    		response.setTotalResults(res.size());
+    		for (ResDetails rd : res)
+    			response.getResDetails().add(rd);
     	}
-    	
-    	response.setTotalResults(res.size());
-    	for (ResDetails rd : res)
-    		response.getResDetails().add(rd);
-    	
     	return response;
     }
 }

@@ -54,7 +54,7 @@ public final class IdcpStatePolling extends Thread {
 	@Override
 	public void run() {
 		
-		final String abResId = ToIdcp.restoreResId(resId);
+		final String abResId = Idcp.toAutobahnReservationId(resId);
 		final Reservation res = updateReservation ? AccessPoint.getInstance().getAutobahnReservation(abResId) : null;
 		String prevStatus = "UNKNOWN";
 		int numInSetup = 0; // for detecting hanging reservations, happens for some port combinations

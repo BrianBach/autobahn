@@ -60,7 +60,7 @@ public class EventContent {
     protected ResDetails resDetails;
     protected MsgDetails msgDetails;
     protected LocalDetails localDetails;
-    @XmlAttribute(name = "id", required = true)
+    @XmlAttribute(required = true)
     protected String id;
 
     /**

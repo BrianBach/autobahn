@@ -121,7 +121,7 @@ public class OscarsConverter {
 							String linkID = split[6].replace("link=", "");
 							String fullLinkID = "urn:ogf:network:" + domainID + ":" + nodeID + ":" + portID + ":" + linkID;
 							// override port id with full identifier
-							portID = domainID + ":" + nodeID + ":" + portID;
+							portID = domainID + ":" + nodeID + ":" + portID + ":" + linkID;
 
 							// set start port
 							AdminDomain aDomain = ads.get(domainID);
@@ -160,10 +160,8 @@ public class OscarsConverter {
 							Port startPort = ports.get(portID);
 							if(startPort == null) {
 								startPort = new Port();
-
 								startPort.setNode(startNode);
 								startPort.setBodID(portID);
-								
 								ports.put(portID, startPort);
 							}
 
@@ -175,7 +173,7 @@ public class OscarsConverter {
 							linkID = split2[6].replace("link=", "");
 							
 							// override port id with full identifier
-							portID = domainID + ":" + nodeID + ":" + portID;
+							portID = domainID + ":" + nodeID + ":" + portID + ":" + linkID;
 
 							aDomain = ads.get(domainID);
 							
@@ -183,7 +181,6 @@ public class OscarsConverter {
 								aDomain = new AdminDomain();
 								aDomain.setBodID(domainID);
 								aDomain.setName(domainID);
-								
 								ads.put(domainID, aDomain);
 							}
 							pDomain = pds.get(domainID);
@@ -191,7 +188,6 @@ public class OscarsConverter {
 								pDomain = new ProvisioningDomain();
 								pDomain.setAdminDomain(aDomain);
 								pDomain.setBodID(domainID);
-
 								pds.put(domainID, pDomain);
 							}
 							
@@ -206,16 +202,13 @@ public class OscarsConverter {
 									endNode.setAddress(find.node.getAddress().getValue());
 									endNode.setType(find.node.getAddress().getType());
 								}
-								
 								nodes.put(nodeID, endNode);
 							}
 							Port endPort = ports.get(portID);
 							if(endPort == null) {
 								endPort = new Port();
-
 								endPort.setNode(endNode);
 								endPort.setBodID(portID);
-								
 								ports.put(portID, endPort);
 							}
 							
@@ -246,13 +239,12 @@ public class OscarsConverter {
 							}
 							links.add(addLink);
 						} else {
-							log.info("OscarsConverter - remote link not found for: " + link.getId());
+							log.debug("OscarsConverter - " + link.getId() + " does not have remote link " + link.getRemoteLinkId());
 						}
 					}
 				}
 			}
 		}
-				
 		return links;
 	}
 	
@@ -289,7 +281,7 @@ public class OscarsConverter {
 			for (Link l : itLinks) {
 			
 				domain.setId(provDomains[i].getAdminDomain().getBodID());
-				final String prefix = "urn:org.network";
+				final String prefix = "urn:org:network";
 				// set start link
 				CtrlPlaneLinkContent link = new CtrlPlaneLinkContent();
 				link.setId(prefix + ":domain=" + provDomains[i].getAdminDomainID() + ":node=" + l.getStartPort().getNode().getBodID() + ":port=" + l.getStartPort().getBodID() + ":link=" + l.getBodID());
@@ -303,13 +295,14 @@ public class OscarsConverter {
 				// added bacuase of axis2 complaints
 				link.setTrafficEngineeringMetric("10");
 				CtrlPlaneSwcapContent switching = new CtrlPlaneSwcapContent();
+				switching.setEncodingType("");
+				switching.setSwitchingcapType("");
 				CtrlPlaneSwitchingCapabilitySpecificInfo switchingCaps = new CtrlPlaneSwitchingCapabilitySpecificInfo();
 				switchingCaps.setCapability("");
 				switchingCaps.setInterfaceMTU(9000);
 				switchingCaps.setVlanRangeAvailability("256-4096");
 				switching.setSwitchingCapabilitySpecificInfo(switchingCaps);
 				link.setSwitchingCapabilityDescriptors(switching);
-
 				
 				link.setRemoteLinkId(prefix + ":domain=" + provDomains[i].getAdminDomainID() + 
 						":node=" + l.getEndPort().getNode().getBodID() + ":port=" + 

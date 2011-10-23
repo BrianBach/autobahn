@@ -11,6 +11,7 @@ import javax.xml.ws.Holder;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneDomainContent;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneLinkContent;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneNodeContent;
+import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlanePathContent;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlanePortContent;
 
 import net.geant.autobahn.network.Link;
@@ -24,21 +25,94 @@ import net.geant.autobahn.network.Link;
  */
 public class IdcpClient {
 	
-	public static final String PATH_TYPE_LOOSE = "loose"; // have idcp-side figure out proper path
-	public static final String PATH_TYPE_STRICT = "strict"; // allows specifying hops in the path, not supported by this client
-	
-	public static final String PATH_MODE_AUTOMATIC = "timer-automatic"; // poll for the status
-	public static final String PATH_MODE_MANUAL = ""; // have to use notifications for the status
-	
 	private final String url;
 	private final OSCARS idcp;
 	
 	public IdcpClient(String url) {
 		
 		this.url = url;
-		idcp = new OSCARS_Service(url).getOSCARS();
+		this.idcp = new OSCARS_Service(url).getOSCARS();
+	}
+		
+	/**
+	 * Sends create message
+	 * @param resId
+	 * @param desc
+	 * @param src
+	 * @param dst
+	 * @param startTime
+	 * @param endTime
+	 * @param bandwidth
+	 * @param vlan
+	 * @param pathInfo
+	 * @throws IdcpException
+	 */
+	public void forwardCreate(String resId, String desc, String src, String dst, 
+			long startTime, long endTime, int bandwidth, String vlan, PathInfo pathInfo) throws IdcpException {
+	
+		
+		Holder<String> contentType = new Holder<String>();
+		contentType.value = "createReservation";
+		Holder<CreateReply> createReservation = new Holder<CreateReply>();
+						
+		CreateReply createReply = new CreateReply();
+		createReply.status = "ACCEPTED";
+		createReply.setGlobalReservationId(resId);
+		createReply.setPathInfo(pathInfo);
+		createReply.setToken(null);
+		createReservation.value = createReply;
+		
+		ResCreateContent resCreate = new ResCreateContent();
+		resCreate.setBandwidth(bandwidth);
+		resCreate.setDescription(desc);
+		resCreate.setGlobalReservationId(resId);
+		resCreate.setStartTime(startTime);
+		resCreate.setEndTime(endTime);
+		resCreate.setPathInfo(pathInfo);
+		
+		ForwardPayload payload = new ForwardPayload();
+		payload.setCreateReservation(resCreate);
+		payload.setContentType("createReservation");
+		
+		try {
+			idcp.forward(payload, IdcpManager.getDomainName(), contentType, createReservation, null, null, null, null, null, null, null);
+		} catch (Exception e) {
+			throw new IdcpException(e.getMessage());
+		}
 	}
 	
+	/**
+	 * Sends cancel message
+	 * @param resId
+	 * @throws IdcpException
+	 */
+	public void forwardCancel(String resId) throws IdcpException { 
+		
+		Holder<String> contentType = new Holder<String>();
+		contentType.value = "cancelReservation";
+				
+		GlobalReservationId grid = new GlobalReservationId();
+		grid.setGri(resId);
+		ForwardPayload payload = new ForwardPayload();
+		payload.setCancelReservation(grid);
+		payload.setContentType("cancelReservation");
+		Holder<String> cancelReservation = new Holder<String>();
+		cancelReservation.value = resId;
+						
+		try {
+			idcp.forward(payload, IdcpManager.getDomainName(), contentType, null, null, cancelReservation, null, null, null, null, null);
+		} catch (Exception e) { 
+			throw new IdcpException(e.getMessage());
+		}
+	}
+	
+	public void forwardModify(String resId, long startTime, long endTime) throws IdcpException {
+		
+		Holder<String> contentType = new Holder<String>();
+		contentType.value = "modifyReservation";
+		throw new IdcpException("not implemented");
+	}
+		
 	/**
 	 * Schedules new reservation
 	 * @param resId
@@ -58,7 +132,7 @@ public class IdcpClient {
 		Holder<String> gri = new Holder<String>(resId);
 		PathInfo pinfo = new PathInfo();
 		pinfo.setPathSetupMode(pathMode);
-		pinfo.setPathType(PATH_TYPE_LOOSE);
+		pinfo.setPathType(Idcp.PATH_TYPE_LOOSE);
 		Layer2Info layer2 = new Layer2Info();
 		layer2.setSrcEndpoint(src);
 		layer2.setDestEndpoint(dst);
@@ -83,7 +157,7 @@ public class IdcpClient {
 				throw new IdcpException("ACCEPTED must be returned");
 			
 			// if path automatic, start polling
-			if (pathMode.equals(PATH_MODE_AUTOMATIC))
+			if (pathMode.equals(Idcp.PATH_MODE_AUTOMATIC))
 				new IdcpStatePolling(url, resId);
 			
 		} catch (Exception e) {

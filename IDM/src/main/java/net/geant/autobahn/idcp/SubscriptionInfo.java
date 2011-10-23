@@ -20,6 +20,11 @@ public class SubscriptionInfo {
 	private String topic;
 	private Calendar termination;
 	
+	public SubscriptionInfo(String consumerUrl, String notifierUrl, String subscriptionId, String publisherId,	String topic, Calendar termination) {
+		
+		this(consumerUrl, notifierUrl, notifierUrl, subscriptionId, publisherId, topic, termination);
+	}
+	
 	public SubscriptionInfo(String consumerUrl, String notifierUrl, String producerUrl, String subscriptionId, String publisherId,
 			String topic, Calendar termination) {
 		
@@ -91,6 +96,6 @@ public class SubscriptionInfo {
 	@Override
 	public String toString() {
 		
-		return "NotifyService: " + notifierUrl + ", subscriptionId: " + subscriptionId + ", termination: " + termination.toString();		
+		return "ConsumerUrl: " + consumerUrl + ", subscriptionId: " + subscriptionId; // + ", termination: " + termination.getTime().toString();	
 	}
 }

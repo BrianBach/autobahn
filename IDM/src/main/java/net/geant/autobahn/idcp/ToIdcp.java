@@ -3,11 +3,15 @@
  */
 package net.geant.autobahn.idcp;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
+import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneHopContent;
+import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneLinkContent;
+import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlanePathContent;
+import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneSwcapContent;
+import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneSwitchingCapabilitySpecificInfo;
 
 import net.geant.autobahn.constraints.ConstraintsNames;
 import net.geant.autobahn.constraints.DomainConstraints;
@@ -28,99 +32,54 @@ import net.geant.autobahn.reservation.ReservationErrors;
  */
 public final class ToIdcp {
 	
-private static Logger log = Logger.getLogger(ToIdcp.class);
+	private static Logger log = Logger.getLogger(ToIdcp.class);
 	
-	public static final int TIME_SCALE = 1000; // divide time by this value before sending
-	public static final int BANDWIDTH_SCALE = 1000000; // idcp uses Mbps so we must divide by this value
-	private static final String DUMMY_PORT = "_dummyPort"; 
-	private final String url;
+	private final String domainName;
+	private final IdcpDomain domain;
 	private final IdcpClient idcp;
 	
-	// idcp.*.properties should have
-	// url=
-	// url.notify=
-	// ab_port=idcp_port
-	
-	public ToIdcp(String url) {
+	public ToIdcp(String domainName) {
 		
-		this.url = url;
-		this.idcp = new IdcpClient(url);
+		this.domainName = domainName;
+		this.domain = IdcpManager.getIdcpDomain(domainName);
+		this.idcp = new IdcpClient(domain.getIdcpUrl());
 	}
 	
-   /**
-     * Returns transformed reservation identifier that is suitable for idcp 
-     * @param resId
-     * @return
-     */
-    public static String convertResId(String resId) {
-    	
-    	String[] split = resId.split("\\@");
-    	if (split[0].contains("."))
-    		log.info("domain for " + resId + " contains postfix, another one will be applied");
-    	String domain = split[0] + ".net-";
-    	split = split[1].split("\\_");
-    	return domain + split[0] + split[2];
-    }
-    
-    /**
-     * Restores idcp identifier to autobahn reservation identifier
-     * @param resId
-     * @return
-     */
-    public static String restoreResId(String resId) {
-    	
-    	String[] split = resId.split("\\-");
-    	String domain = split[0].replace(".net", "");
-    	int length = split[1].length();
-    	String resNum = String.valueOf(split[1].charAt(length - 1));
-    	String num = split[1].substring(0, length - 1);
-    	return domain + "@" + num + "_res_" + resNum;
-    }
 	
-    /**
-     * Converts idcp link id to autobahn port representation
-     * @param linkId
-     * @return
-     */
-    public static String convertLinkId(String linkId) {
-    	
-    	String[] split = linkId.split("\\:");
-    	if (split.length != 7) 
-    		throw new IllegalArgumentException("linkId");
-    	
-        return split[3] + ":" + split[4] + ":" + split[5];
-    }
-    
-	/**
-	 * Converts back linkId (domain:node:port) to full idcp representation (urn:ogf:network:domain=*:node=*:port=*:link=*)
-	 * @param linkId
-	 * @return
-	 */
-	public static String restorePortId(String portId) {
+	
+	private static CtrlPlaneHopContent createHop(String hopId, String linkId, String remoteId, String vlan) { 
 		
-		String[] split = portId.split("\\:");
-    	return "urn:ogf:network:domain=" + split[0] + ":node=" + split[1] + ":port=" + split[2] + ":link=*"; 
+		CtrlPlaneLinkContent link = new CtrlPlaneLinkContent();
+		link.setId(linkId);
+		link.setRemoteLinkId(remoteId);
+		link.setTrafficEngineeringMetric("10");
+		
+		CtrlPlaneSwitchingCapabilitySpecificInfo switching = new CtrlPlaneSwitchingCapabilitySpecificInfo();
+		switching.setInterfaceMTU(9000);
+		switching.setVlanTranslation(true);
+		switching.setVlanRangeAvailability(vlan);
+		switching.setSuggestedVLANRange(vlan);
+		switching.setCapability("");
+		
+		CtrlPlaneSwcapContent swcaps = new CtrlPlaneSwcapContent();
+		swcaps.setEncodingType("ethernet");
+		swcaps.setSwitchingcapType("l2sc");
+		swcaps.setSwitchingCapabilitySpecificInfo(switching);
+		link.setSwitchingCapabilityDescriptors(swcaps);
+		
+		CtrlPlaneHopContent hop = new CtrlPlaneHopContent();
+		hop.setId(hopId);
+		hop.setLink(link);
+		
+		return hop;
 	}
 	
 	/**
-	 * Returns link identifier in idcp form
-	 * @param domainId
-	 * @param nodeId
-	 * @param portId
-	 * @param linkId
-	 * @return
-	 */
-	public static String createLinkId(String domainId, String nodeId, String portId, String linkId) {
-		
-		return "urn:ogf:network:domain=" + domainId + ":node=" + nodeId + ":port=" + portId + ":link=" + linkId;
-	}
-	
-	/**
-	 * Sends schedule reservation to idcp domain
+	 * Send create message to idcp domain
 	 * @param reservation
 	 * @return
 	 */
-	public int schedule(AutobahnReservation reservation) {
+	public int forwardCreate(AutobahnReservation reservation) {
 		
 		if (!reservation.isIdcpReservation())
 			return ReservationErrors.RESERVATION_NOTSUPPORTED;
@@ -129,25 +88,62 @@ private static Logger log = Logger.getLogger(ToIdcp.class);
     	// topology. Still we should allow this kind of reservations, however exceptions thrown by the idcp is less than descriptive so we quit here  
 	    if (reservation.isIdcp2AbReservation() && !reservation.isAb2IdcpReservation()) 
 	    	return ReservationErrors.RESERVATION_NOTSUPPORTED;
-
-	    String src;
-	    try {
-            src = this.getIdcpIngressPort(reservation);
-    	    if (src.endsWith(DUMMY_PORT)) 
-    	    	src = src.substring(0, src.indexOf(DUMMY_PORT));
-        } catch (Exception e) {
-        	//This is supposed to be an IDCP reservation, so this is an error
-            log.debug("Trying to send to IDCP non-IDCP reservation: " + e.getMessage());
-            return ReservationErrors.WRONG_DOMAIN;
-	    }
-        Properties properties = IdcpManager.getProperties(url);
 	    
+	    if (domain.getIdcpNotifyUrl().equals(IdcpManager.IDCP_NONE)) {
+	    	log.info("cannot send idcp reservation without subscription set");
+	    	return ReservationErrors.RESERVATION_NOTSUPPORTED;
+	    }
+
+	    final String startPort = reservation.getStartPort().getBodID();
+	    final String endPort = reservation.getEndPort().getBodID();
+	    final String idcpEndPort = Idcp.restorePortId(endPort);
+	    
+	    IdcpDomain nextIdcpDomain = domain.isPeered() ? domain : IdcpManager.getIdcpDomain(domain.getStaticRoute());
+	    	
+	    Link autobahnToIdcp = reservation.getPath().getIngress(nextIdcpDomain.getDomainName());
+	    if (autobahnToIdcp == null) {
+	    	log.info("autobahn egress not found for path " + reservation.getPath());
+	    	return ReservationErrors.WRONG_DOMAIN;
+	    }
+	    if (!autobahnToIdcp.getEndPort().isIdcpPort()) {
+	    	log.info("autobahn egress not idcp");
+	    	return ReservationErrors.WRONG_DOMAIN;
+	    }
+	    
+	    String autobahnEgress = autobahnToIdcp.getEndPort().getBodID();
+	    if (autobahnEgress.equals(endPort)) {
+	    	log.info("dest port is the same as autobahn egress");
+	    	return ReservationErrors.WRONG_DOMAIN;
+	    }
+        
+        String idcpIngress = nextIdcpDomain.getProperties().getProperty(autobahnEgress);
+        if (idcpIngress == null) { 
+        	log.info("could not find mapping for " + autobahnEgress + ", please ensure it is set either in property file or cnis database");
+        	return ReservationErrors.WRONG_DOMAIN;
+        }
+        
+        // now we have valid idcpIngress and idcp end port, convert to idcp start port and egress
+        final String idcpStartPort = Idcp.portToIdcpLink(startPort);
+        if (idcpStartPort == null) {
+        	log.info("could not convert " + startPort + " to idcp link");
+        	return ReservationErrors.WRONG_DOMAIN;
+        }
+        final String idcpAutobahnEgress = Idcp.portToIdcpLink(autobahnEgress);
+        if (idcpAutobahnEgress == null) {
+        	log.info("could not convert " + autobahnEgress + " to idcp link");
+        	return ReservationErrors.WRONG_DOMAIN;
+        }
+        
+        /*
+        
 	    // check if link mapping (autobahn's egress to idcp ingress) has been provided by cnis (port desc property)
 	    String portDesc = reservation.getEndPort().getDescription();
 	    if (portDesc != null && portDesc.contains("idcplink")) {
+	    	System.out.println("port desc contains: " + portDesc);
 	    	String linkMapping = portDesc.substring(portDesc.indexOf("idcplink"));
 	    	src = linkMapping.split("\\=")[1];
 	    } else {
+	    	
 	     	if (properties.containsKey(src)) {
 	     		src = properties.getProperty(src);
 	     	} else
@@ -156,25 +152,66 @@ private static Logger log = Logger.getLogger(ToIdcp.class);
 	    
 	    String dst = reservation.getEndPort().getBodID();
 	    dst = ToIdcp.restorePortId(dst);
-	    
+	    System.out.println("src: " + src + ", dst: " + dst);
+	    */
 	    GlobalConstraints globalCons = reservation.getGlobalConstraints();
 	    DomainConstraints domainCons = globalCons.getDomainConstraints().get(globalCons.getDomainConstraints().size() - 1);
 	    
 	    PathConstraints pathCons = domainCons.getPathConstraints().get(domainCons.getPathConstraints().size() - 1);
 	    List<Range> ranges = pathCons.getRangeConstraint(ConstraintsNames.VLANS).getRanges();
 	    Range vlans = ranges.get(ranges.size() - 1);
-	    
-	    final String resId = convertResId(reservation.getBodID());
+	    	    
+	    int vlanNumber = reservation.getGlobalConstraints().getDomainConstraints().get(0).getFirstPathConstraints().getRangeConstraints().get(0).getFirstValue();
+	    final String vlan = vlanNumber == 0 ? "any" : String.valueOf(vlanNumber);
+	    final String resId = Idcp.toIdcpReservationId(reservation.getBodID());
 	    final String desc =  reservation.getDescription();
-	    final long startTime = reservation.getStartTime().getTimeInMillis() / TIME_SCALE;
-	    final long endTime = reservation.getEndTime().getTimeInMillis() / TIME_SCALE;
-	    final int bandwidth = ((int)(reservation.getCapacity() / BANDWIDTH_SCALE));
-	    final String vlan = vlans.getMin() == 0 ? "any" : String.valueOf(vlans.getMin());
-	    final String pathMode = properties.containsKey(IdcpManager.NOTIFY_URL) ? IdcpClient.PATH_MODE_MANUAL : IdcpClient.PATH_MODE_AUTOMATIC;
-	    log.info("ToIdcp - scheduling " + resId + ", src - " + src + ", dst - " + dst + ", vlan - " + vlan);
+	    final long startTime = reservation.getStartTime().getTimeInMillis() / Idcp.TIME_SCALE;
+	    final long endTime = reservation.getEndTime().getTimeInMillis() / Idcp.TIME_SCALE;
+	    final int bandwidth = ((int)(reservation.getCapacity() / Idcp.BANDWIDTH_SCALE));
 	    
-	    try {
-	    	idcp.schedule(resId, desc, src, dst, startTime, endTime, bandwidth, vlan, pathMode);
+	    CtrlPlanePathContent pathContent = new CtrlPlanePathContent();
+		pathContent.setId(startPort + " - " + endPort);
+		pathContent.setDirection("");
+		pathContent.setLifetime(null);
+		
+		// create 4-hops path content
+		pathContent.getHop().add(createHop("0", idcpStartPort, idcpStartPort, vlan));
+		pathContent.getHop().add(createHop("1", idcpAutobahnEgress, idcpIngress, vlan));
+		pathContent.getHop().add(createHop("2", idcpIngress, idcpAutobahnEgress, vlan));
+		pathContent.getHop().add(createHop("3", idcpEndPort, idcpEndPort, vlan));
+	    
+		PathInfo pathInfo = new PathInfo();
+		
+		Layer2Info l2 = new Layer2Info();
+		VlanTag srcVtag = new VlanTag();
+		srcVtag.setValue(vlan);
+		srcVtag.setTagged(true);
+		l2.setSrcEndpoint(idcpAutobahnEgress);
+		l2.setSrcVtag(srcVtag);
+		VlanTag dstVtag = new VlanTag();
+		dstVtag.setValue(vlan);
+		dstVtag.setTagged(true);
+		l2.setDestEndpoint(idcpEndPort);
+		l2.setDestVtag(dstVtag);
+		
+		pathInfo.setLayer2Info(l2);
+		pathInfo.setLayer3Info(null);
+		pathInfo.setMplsInfo(null);
+		pathInfo.setPathSetupMode(Idcp.PATH_MODE_AUTOMATIC);
+		pathInfo.setPathType(Idcp.PATH_TYPE_LOOSE);
+		pathInfo.setPath(pathContent);
+		
+		if (IdcpManager.isDebugging())
+			Idcp.printPathInfo(pathInfo);
+		
+		if (1 == 1)
+			return ReservationErrors.COMMUNICATION_ERROR;
+	    	    
+	    // add res listener
+	    reservation.addStatusListener(new IdcpReservation(resId, reservation, pathInfo));
+		
+		try {
+	    	idcp.forwardCreate(resId, desc, idcpStartPort, idcpEndPort, startTime, endTime, bandwidth, vlan, pathInfo);
 	    	return 0;
 	    } catch (IdcpException e) {
 	    	log.info("ToIdcp - schedule failed - " + e.getMessage());
@@ -192,57 +229,14 @@ private static Logger log = Logger.getLogger(ToIdcp.class);
 	 * Sends cancel message to idcp domain
 	 * @param resId
 	 */
-	public void cancel(String resId) { 
+	public void forwardCancel(String resId) { 
 		
-		final String rid = convertResId(resId);
-		log.info("ToIdcp - cancelling " + rid);
+		final String rid = Idcp.toIdcpReservationId(resId);
 		
 		try {
-			idcp.cancel(rid);
+			idcp.forwardCancel(rid);
 		} catch (IdcpException e) {
-			log.info("ToIdcp - cancel failed - " + e.getMessage());
-			// should we rethrow?
+			log.info("ToIdcp - forward cancel failed - " + e.getMessage());
 		}
-	}
-	
-	private String getIdcpIngressPort(Reservation reservation) throws Exception {
-        // The original reservation defines an AutoBAHN port as source and an
-        // IDCP one as destination. We have to change the source port to the IDCP
-        // ingress port before sending the reservation over to IDCP.
-        Path res_path = reservation.getPath();
-        Link ab2idcp_link = res_path.getIngress(url);
-        
-        Port srcPort;
-        if (ab2idcp_link.getStartPort().isIdcpPort()) {
-            srcPort = ab2idcp_link.getStartPort();
-        }
-        else if (ab2idcp_link.getEndPort().isIdcpPort()) {
-            srcPort = ab2idcp_link.getEndPort();
-        }
-        else {
-            throw new Exception("This reservation does not include IDCP cloud");
-        }
-        return srcPort.getBodID();
-	}
-	
-	/**
-	 * Returns a list of links that matches filer (:link=filter). Use *.* to get all the links.
-	 * @param filter
-	 * @return
-	 * @throws IdcpException
-	 */
-	public List<Link> getTopology(String filter) throws IdcpException {
-		
-		List<Link> links = idcp.getTopology();
-		if (filter.equalsIgnoreCase("*.*"))
-			return links;
-		
-		List<Link> filtered = new ArrayList<Link>();
-		
-		for (Link l : links) {
-			if (l.getBodID().endsWith(filter))
-				filtered.add(l);
-		}
-		return filtered;
 	}
 }
