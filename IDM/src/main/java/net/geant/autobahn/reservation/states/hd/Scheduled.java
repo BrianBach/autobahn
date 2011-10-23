@@ -41,7 +41,7 @@ public class Scheduled extends HomeDomainState {
 
 			if (res.isIdcpReservation() && res.getNextDomainAddress().contains(res.getIdcpServer())) {
 	        	ToIdcp client = new ToIdcp(res.getIdcpServer());
-	        	client.cancel(res.getBodID());
+	        	client.forwardCancel(res.getBodID());
 	        }
 			
 	        res.releaseResources();
@@ -72,7 +72,7 @@ public class Scheduled extends HomeDomainState {
 			
 			if (res.isIdcpReservation() && res.getNextDomainAddress().contains(res.getIdcpServer())) {
 	        	ToIdcp client = new ToIdcp(res.getIdcpServer());
-	        	client.cancel(res.getBodID());
+	        	client.forwardCancel(res.getBodID());
 	        }
 			
 	        res.releaseResources();

@@ -56,11 +56,9 @@ public class GConstraints extends LastDomainState {
         
         // IDCP reservation, send to suitable IDCP server
         if(res.isAb2IdcpReservation() && (res.getIdcpServer()!=null)) {
-            log.info("Talking with IDCP server... (" + res.getIdcpServer() + ")");
-            
             ToIdcp client = new ToIdcp(res.getIdcpServer());
-            int res_code = client.schedule(res);
-            if(res_code != 0) {
+            int res_code = client.forwardCreate(res);
+            if (res_code != 0) {
                 res.fail(res_code, domainID);
                 return;
             }

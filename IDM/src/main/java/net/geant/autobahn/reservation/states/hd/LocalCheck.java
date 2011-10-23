@@ -93,7 +93,7 @@ public class LocalCheck extends HomeDomainState {
         	 // if this is idcp reservation only, send now
         	 if (res.isIdcp2AbReservation() && res.isAb2IdcpReservation() && res.getIdcpServer() != null) {
         		 ToIdcp client = new ToIdcp(res.getIdcpServer());
-   	     	   	 int code = client.schedule(res);
+   	     	   	 int code = client.forwardCreate(res);
        	     	 if (code != 0) 
        	     		 res.fail(ReservationErrors.getInfo(code, res.getIdcpServer()));
    	     	   	 else 
@@ -151,14 +151,12 @@ public class LocalCheck extends HomeDomainState {
         
         // check if this res should be send to an idcp domain
         if (res.isIdcpReservation()) {
-        	 System.out.println("IDCP - res idcp");
     		 ToIdcp client = new ToIdcp(res.getIdcpServer());
-	     	   	 int code = client.schedule(res);
+     	   	 int code = client.forwardCreate(res);
    	     	 if (code != 0) 
    	     		 res.fail(ReservationErrors.getInfo(code, res.getIdcpServer()));
      	   	 else 
      	   		res.success("OK");
-   	     	 
              return; 
         }
         
@@ -224,9 +222,8 @@ public class LocalCheck extends HomeDomainState {
         }
         
         if (res.isIdcpReservation() && res.getNextDomainAddress().equalsIgnoreCase(res.getIdcpServer())) {
-        	System.out.println("IDCP SELF SCHEDULE");
         	ToIdcp client = new ToIdcp(res.getIdcpServer());
-     	   	int code = client.schedule(res);
+     	   	int code = client.forwardCreate(res);
      	   	if (code != 0) {
      	   		res.fail(ReservationErrors.getInfo(code, res.getNextDomainAddress()));
      	   		return;
