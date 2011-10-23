@@ -3,21 +3,18 @@ package net.geant.autobahn.framework.commands;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.Writer;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import com.thoughtworks.xstream.XStream;
-
 import net.geant.autobahn.framework.Framework;
-import net.geant.autobahn.idcp.GetTopologyResponseContent;
+import net.geant.autobahn.idcp.Idcp;
 import net.geant.autobahn.idcp.IdcpClient;
+import net.geant.autobahn.idcp.IdcpDomain;
 import net.geant.autobahn.idcp.IdcpManager;
 import net.geant.autobahn.idcp.IdcpNotifyClient;
 import net.geant.autobahn.idcp.ResDetails;
 import net.geant.autobahn.idcp.SubscriptionInfo;
-//import net.geant.autobahn.idcp.notify.OscarsNotifyClient;
 import net.geant.autobahn.network.Link;
 
 /**
@@ -40,7 +37,6 @@ public final class IdcpCommand implements AutobahnCommand {
 		friends.put("internet2Notify", "https://idcdev0.internet2.edu:8443/axis2/services/OSCARSNotify");
 		friends.put("geant", "https://autobahn.par.fr.geant2.net:8090/autobahn/oscars");
 		friends.put("geantNotify", "https://autobahn.par.fr.geant2.net:8090/autobahn/oscarsnotify");
-		// add others or retrieve from idm.properties
 	}
 	
 	private String dumpResDetails(ResDetails res) {
@@ -55,7 +51,6 @@ public final class IdcpCommand implements AutobahnCommand {
 		sb.append("dest - " + res.getPathInfo().getLayer2Info().getDestEndpoint() + NL);
 		return sb.toString();
 	}
-
 	
 	@Override
 	public String execute(Framework autobahn, String[] args) {
@@ -72,27 +67,16 @@ public final class IdcpCommand implements AutobahnCommand {
 				for (String p : ports)
 					sb.append(p + NL);
 				return sb.toString();
-			} else if (args[1].equalsIgnoreCase("removelinks")) {
-				autobahn.getIdm().removeIdcpLinks();
-				return "idcp links have been removed";
-			} else if (args[1].equalsIgnoreCase("topologyxml")) {
-			
-				try {
-					IdcpClient idcp = new IdcpClient(friends.get("local"));
-					GetTopologyResponseContent topology = idcp.getRawTopology();
-					Writer output = new BufferedWriter(new FileWriter("geant.xml"));
-					XStream xs = new XStream();
-					xs.toXML(topology, output);
-					output.close();
-					return "saved geant.xml";
-				} catch (Exception e) {
-					return "could not serialize to xml - " + e.getMessage();
-				} 
 			} else if (args[1].equalsIgnoreCase("subscribers")) {
 				StringBuffer sb = new StringBuffer();
 				List<SubscriptionInfo> subscribers = IdcpManager.getSubscribers();
 				for (SubscriptionInfo si : subscribers)
 					sb.append(si + NL);
+				return sb.toString();
+			} else if (args[1].equalsIgnoreCase("domains")) {
+				StringBuffer sb = new StringBuffer();
+				for (IdcpDomain id : IdcpManager.getIdcpDomains())
+					sb.append(id + NL);
 				return sb.toString();
 			}
 		}
@@ -143,58 +127,6 @@ public final class IdcpCommand implements AutobahnCommand {
 			} catch (Exception e) {
 				return "topology could not be obtained - " + e.getMessage();
 			}
-		} else if (operation.equals("schedule")) {
-			
-			if (args.length != 8)
-				return invalid;
-			
-			String resId = args[3];
-			String source = args[4];
-			String dest = args[5];
-			int bandwidth = Integer.parseInt(args[6]);
-			String vlan = args[7]; 
-			
-			Calendar start = Calendar.getInstance();
-			start.add(Calendar.MINUTE, 1);
-			Calendar end = Calendar.getInstance();
-			end.add(Calendar.MINUTE, 4);
-			
-			try {
-				IdcpClient idcp = new IdcpClient(address);
-				idcp.schedule(resId, "test reservation", source, dest, start.getTimeInMillis(), end.getTimeInMillis(),
-						bandwidth, vlan, IdcpClient.PATH_MODE_AUTOMATIC);
-				return resId + " has been submitted";
-			} catch (Exception e) {
-				e.printStackTrace();
-				return resId + " failed to schedule - " + e.getMessage();
-			}
-		} else if (operation.equals("cancel")) {
-			
-			if (args.length != 4)
-				return invalid;
-			
-			String resId = args[3];
-			try {
-				IdcpClient idcp = new IdcpClient(address);
-				idcp.cancel(resId);
-				return resId + " has been cancelled";
-			} catch (Exception e) {
-				e.printStackTrace();
-				return resId + " failed to cancel - " + e.getMessage();
-			}
-		} else if (operation.equals("query")) {
-			
-			if (args.length != 4)
-				return invalid;
-			
-			String resId = args[3];
-			try {
-				IdcpClient idcp = new IdcpClient(address);
-				ResDetails res = idcp.query(resId);
-				return dumpResDetails(res);
-			} catch (Exception e) {
-				return resId + " failed to query - " + e.getMessage();
-			}
 		} else if (operation.equals("subscribe")) {
 			
 			if (args.length != 6)
@@ -204,7 +136,7 @@ public final class IdcpCommand implements AutobahnCommand {
 			String producer = friends.containsKey(args[4]) ? friends.get(args[4]) : args[4];
 			String subId = args[5];
 			if (subId.equalsIgnoreCase("auto"))
-				subId = IdcpManager.generateSubscriptionId();
+				subId = Idcp.generateSubscriptionId();
 			
 			try {
 				IdcpNotifyClient idcpNotify = new IdcpNotifyClient(address);
@@ -241,14 +173,10 @@ public final class IdcpCommand implements AutobahnCommand {
 		sb.append("allows creating, cancelling and querying resources in idcp domains" + NL);
 		sb.append("\t'friends' - returns a list of known aliases that can be used instead of full address" + NL);
 		sb.append("\t'clientports' - returns a list of client ports in idcp format" + NL);
-		sb.append("\t'removelinks' - removes all idcp links" + NL);
-		sb.append("\t'topologyxml' - saves autobahn tology in idcp format(xml)" + NL);
+		sb.append("\t'domains' - displays all idcp domains" + NL);
 		sb.append("\t'subscribers' - prints all subscribers" + NL);
 		sb.append("\t'address topology autobahn|idcp [filename]' - gets topology either in autobahn or idcp format," +
 				"optionally saves it to a file" + NL);
-		sb.append("\t'address schedule resId source dest bandwidth' - reserves resources" + NL);
-		sb.append("\t'address cancel resId' - cancels reservation indicated by resId" + NL);
-		sb.append("\t'address query resId' - queries for reservation indicated by resId" + NL);
 		sb.append("\t'notifyAddress subscribe consumer producer subscriptionId|auto' - subscribes for asynchronous event notifications" + NL);
 		sb.append("\t'notifyAddress unsubscribe notifier subscriptionId' - unsubscribes to stop receiving event notifications" + NL);
 				
