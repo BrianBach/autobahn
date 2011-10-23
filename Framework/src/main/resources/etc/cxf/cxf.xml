@@ -524,6 +524,9 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
 		</jaxws:properties> 
 	</jaxws:endpoint>
 	
+	<jaxws:endpoint id="oscarsnotifyonly" implementor="net.geant.autobahn.idcp.OSCARSNotifyOnlyImpl" address="https://${server.ip}:${server.securePort}/autobahn/oscarsnotifyonly" wsdlLocation="etc/wsdl/IDCP/OSCARS-NotifyOnly.wsdl">
+	</jaxws:endpoint>
+	
 	<jaxws:endpoint id="oscarsnotify" implementor="net.geant.autobahn.idcp.OSCARSNotifyImpl" address="https://${server.ip}:${server.securePort}/autobahn/oscarsnotify" wsdlLocation="etc/wsdl/IDCP/OSCARS-Notify.wsdl">
 		<jaxws:properties>
 			<entry key="ws-security.callback-handler">
@@ -590,6 +593,9 @@ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schema
    </http:conduit>
 
   <http:destination name="{http://oscars.es.net/OSCARS}OSCARS.http-destination">    
+  </http:destination>
+  
+  <http:destination name="{http://oscars.es.net/OSCARS}OSCARSNotifyOnly.http-destination">    
   </http:destination>
   
   <http:destination name="{http://oscars.es.net/OSCARS}OSCARSNotify.http-destination">    
