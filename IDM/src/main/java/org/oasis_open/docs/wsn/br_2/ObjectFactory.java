@@ -40,11 +40,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PublisherRegistrationFailedFaultType }
+     * Create an instance of {@link ResourceNotDestroyedFaultType }
      * 
      */
-    public PublisherRegistrationFailedFaultType createPublisherRegistrationFailedFaultType() {
-        return new PublisherRegistrationFailedFaultType();
+    public ResourceNotDestroyedFaultType createResourceNotDestroyedFaultType() {
+        return new ResourceNotDestroyedFaultType();
     }
 
     /**
@@ -56,11 +56,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link DestroyRegistrationResponse }
+     * 
+     */
+    public DestroyRegistrationResponse createDestroyRegistrationResponse() {
+        return new DestroyRegistrationResponse();
+    }
+
+    /**
      * Create an instance of {@link RegisterPublisher }
      * 
      */
     public RegisterPublisher createRegisterPublisher() {
         return new RegisterPublisher();
+    }
+
+    /**
+     * Create an instance of {@link PublisherRegistrationRejectedFaultType }
+     * 
+     */
+    public PublisherRegistrationRejectedFaultType createPublisherRegistrationRejectedFaultType() {
+        return new PublisherRegistrationRejectedFaultType();
     }
 
     /**
@@ -72,27 +88,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ResourceNotDestroyedFaultType }
+     * Create an instance of {@link PublisherRegistrationFailedFaultType }
      * 
      */
-    public ResourceNotDestroyedFaultType createResourceNotDestroyedFaultType() {
-        return new ResourceNotDestroyedFaultType();
-    }
-
-    /**
-     * Create an instance of {@link DestroyRegistrationResponse }
-     * 
-     */
-    public DestroyRegistrationResponse createDestroyRegistrationResponse() {
-        return new DestroyRegistrationResponse();
-    }
-
-    /**
-     * Create an instance of {@link PublisherRegistrationRejectedFaultType }
-     * 
-     */
-    public PublisherRegistrationRejectedFaultType createPublisherRegistrationRejectedFaultType() {
-        return new PublisherRegistrationRejectedFaultType();
+    public PublisherRegistrationFailedFaultType createPublisherRegistrationFailedFaultType() {
+        return new PublisherRegistrationFailedFaultType();
     }
 
     /**

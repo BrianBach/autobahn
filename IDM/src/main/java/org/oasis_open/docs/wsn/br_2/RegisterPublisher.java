@@ -30,7 +30,7 @@ import org.w3c.dom.Element;
  *         &lt;element name="Topic" type="{http://docs.oasis-open.org/wsn/b-2}TopicExpressionType" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="Demand" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="InitialTerminationTime" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
- *         &lt;any processContents='lax' namespace='##other' maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;any/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -181,8 +181,8 @@ public class RegisterPublisher {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Element }
      * {@link Object }
+     * {@link Element }
      * 
      * 
      */

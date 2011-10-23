@@ -27,8 +27,8 @@ public class ObjectFactory {
     private final static QName _Link_QNAME = new QName("http://ogf.org/schema/network/topology/ctrlPlane/20080828/", "link");
     private final static QName _Port_QNAME = new QName("http://ogf.org/schema/network/topology/ctrlPlane/20080828/", "port");
     private final static QName _Topology_QNAME = new QName("http://ogf.org/schema/network/topology/ctrlPlane/20080828/", "topology");
-    private final static QName _Path_QNAME = new QName("http://ogf.org/schema/network/topology/ctrlPlane/20080828/", "path");
     private final static QName _Domain_QNAME = new QName("http://ogf.org/schema/network/topology/ctrlPlane/20080828/", "domain");
+    private final static QName _Path_QNAME = new QName("http://ogf.org/schema/network/topology/ctrlPlane/20080828/", "path");
     private final static QName _Node_QNAME = new QName("http://ogf.org/schema/network/topology/ctrlPlane/20080828/", "node");
 
     /**
@@ -36,54 +36,6 @@ public class ObjectFactory {
      * 
      */
     public ObjectFactory() {
-    }
-
-    /**
-     * Create an instance of {@link CtrlPlanePortContent }
-     * 
-     */
-    public CtrlPlanePortContent createCtrlPlanePortContent() {
-        return new CtrlPlanePortContent();
-    }
-
-    /**
-     * Create an instance of {@link CtrlPlaneNodeContent }
-     * 
-     */
-    public CtrlPlaneNodeContent createCtrlPlaneNodeContent() {
-        return new CtrlPlaneNodeContent();
-    }
-
-    /**
-     * Create an instance of {@link CtrlPlaneLinkContent }
-     * 
-     */
-    public CtrlPlaneLinkContent createCtrlPlaneLinkContent() {
-        return new CtrlPlaneLinkContent();
-    }
-
-    /**
-     * Create an instance of {@link CtrlPlanePathContent }
-     * 
-     */
-    public CtrlPlanePathContent createCtrlPlanePathContent() {
-        return new CtrlPlanePathContent();
-    }
-
-    /**
-     * Create an instance of {@link CtrlPlaneDomainContent }
-     * 
-     */
-    public CtrlPlaneDomainContent createCtrlPlaneDomainContent() {
-        return new CtrlPlaneDomainContent();
-    }
-
-    /**
-     * Create an instance of {@link CtrlPlaneTopologyContent }
-     * 
-     */
-    public CtrlPlaneTopologyContent createCtrlPlaneTopologyContent() {
-        return new CtrlPlaneTopologyContent();
     }
 
     /**
@@ -95,27 +47,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CtrlPlaneAdministrativeGroup }
+     * Create an instance of {@link CtrlPlaneTopologyContent }
      * 
      */
-    public CtrlPlaneAdministrativeGroup createCtrlPlaneAdministrativeGroup() {
-        return new CtrlPlaneAdministrativeGroup();
+    public CtrlPlaneTopologyContent createCtrlPlaneTopologyContent() {
+        return new CtrlPlaneTopologyContent();
     }
 
     /**
-     * Create an instance of {@link CtrlPlaneHopContent }
+     * Create an instance of {@link CtrlPlaneDomainContent }
      * 
      */
-    public CtrlPlaneHopContent createCtrlPlaneHopContent() {
-        return new CtrlPlaneHopContent();
-    }
-
-    /**
-     * Create an instance of {@link TimeContent }
-     * 
-     */
-    public TimeContent createTimeContent() {
-        return new TimeContent();
+    public CtrlPlaneDomainContent createCtrlPlaneDomainContent() {
+        return new CtrlPlaneDomainContent();
     }
 
     /**
@@ -127,27 +71,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Duration }
-     * 
-     */
-    public Duration createDuration() {
-        return new Duration();
-    }
-
-    /**
      * Create an instance of {@link CtrlPlaneNextHopContent }
      * 
      */
     public CtrlPlaneNextHopContent createCtrlPlaneNextHopContent() {
         return new CtrlPlaneNextHopContent();
-    }
-
-    /**
-     * Create an instance of {@link CtrlPlaneAddressContent }
-     * 
-     */
-    public CtrlPlaneAddressContent createCtrlPlaneAddressContent() {
-        return new CtrlPlaneAddressContent();
     }
 
     /**
@@ -159,11 +87,83 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CtrlPlaneHopContent }
+     * 
+     */
+    public CtrlPlaneHopContent createCtrlPlaneHopContent() {
+        return new CtrlPlaneHopContent();
+    }
+
+    /**
+     * Create an instance of {@link CtrlPlaneAdministrativeGroup }
+     * 
+     */
+    public CtrlPlaneAdministrativeGroup createCtrlPlaneAdministrativeGroup() {
+        return new CtrlPlaneAdministrativeGroup();
+    }
+
+    /**
+     * Create an instance of {@link CtrlPlanePortContent }
+     * 
+     */
+    public CtrlPlanePortContent createCtrlPlanePortContent() {
+        return new CtrlPlanePortContent();
+    }
+
+    /**
+     * Create an instance of {@link Duration }
+     * 
+     */
+    public Duration createDuration() {
+        return new Duration();
+    }
+
+    /**
      * Create an instance of {@link CtrlPlaneSwitchingCapabilitySpecificInfo }
      * 
      */
     public CtrlPlaneSwitchingCapabilitySpecificInfo createCtrlPlaneSwitchingCapabilitySpecificInfo() {
         return new CtrlPlaneSwitchingCapabilitySpecificInfo();
+    }
+
+    /**
+     * Create an instance of {@link TimeContent }
+     * 
+     */
+    public TimeContent createTimeContent() {
+        return new TimeContent();
+    }
+
+    /**
+     * Create an instance of {@link CtrlPlanePathContent }
+     * 
+     */
+    public CtrlPlanePathContent createCtrlPlanePathContent() {
+        return new CtrlPlanePathContent();
+    }
+
+    /**
+     * Create an instance of {@link CtrlPlaneAddressContent }
+     * 
+     */
+    public CtrlPlaneAddressContent createCtrlPlaneAddressContent() {
+        return new CtrlPlaneAddressContent();
+    }
+
+    /**
+     * Create an instance of {@link CtrlPlaneLinkContent }
+     * 
+     */
+    public CtrlPlaneLinkContent createCtrlPlaneLinkContent() {
+        return new CtrlPlaneLinkContent();
+    }
+
+    /**
+     * Create an instance of {@link CtrlPlaneNodeContent }
+     * 
+     */
+    public CtrlPlaneNodeContent createCtrlPlaneNodeContent() {
+        return new CtrlPlaneNodeContent();
     }
 
     /**
@@ -194,21 +194,21 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link CtrlPlanePathContent }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://ogf.org/schema/network/topology/ctrlPlane/20080828/", name = "path")
-    public JAXBElement<CtrlPlanePathContent> createPath(CtrlPlanePathContent value) {
-        return new JAXBElement<CtrlPlanePathContent>(_Path_QNAME, CtrlPlanePathContent.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link CtrlPlaneDomainContent }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://ogf.org/schema/network/topology/ctrlPlane/20080828/", name = "domain")
     public JAXBElement<CtrlPlaneDomainContent> createDomain(CtrlPlaneDomainContent value) {
         return new JAXBElement<CtrlPlaneDomainContent>(_Domain_QNAME, CtrlPlaneDomainContent.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CtrlPlanePathContent }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ogf.org/schema/network/topology/ctrlPlane/20080828/", name = "path")
+    public JAXBElement<CtrlPlanePathContent> createPath(CtrlPlanePathContent value) {
+        return new JAXBElement<CtrlPlanePathContent>(_Path_QNAME, CtrlPlanePathContent.class, null, value);
     }
 
     /**

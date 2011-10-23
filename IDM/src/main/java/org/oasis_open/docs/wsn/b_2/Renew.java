@@ -8,7 +8,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.w3c.dom.Element;
 
@@ -23,9 +25,9 @@ import org.w3c.dom.Element;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="TerminationTime" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element ref="{http://docs.oasis-open.org/wsn/b-2}TerminationTime"/>
  *         &lt;element ref="{http://docs.oasis-open.org/wsn/b-2}SubscriptionReference"/>
- *         &lt;any processContents='lax' namespace='##other' maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;any/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -44,7 +46,8 @@ import org.w3c.dom.Element;
 public class Renew {
 
     @XmlElement(name = "TerminationTime", required = true, nillable = true)
-    protected String terminationTime;
+    @XmlSchemaType(name = "dateTime")
+    protected XMLGregorianCalendar terminationTime;
     @XmlElement(name = "SubscriptionReference", required = true)
     protected EndpointReferenceType subscriptionReference;
     @XmlAnyElement(lax = true)
@@ -55,10 +58,10 @@ public class Renew {
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link XMLGregorianCalendar }
      *     
      */
-    public String getTerminationTime() {
+    public XMLGregorianCalendar getTerminationTime() {
         return terminationTime;
     }
 
@@ -67,10 +70,10 @@ public class Renew {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link XMLGregorianCalendar }
      *     
      */
-    public void setTerminationTime(String value) {
+    public void setTerminationTime(XMLGregorianCalendar value) {
         this.terminationTime = value;
     }
 

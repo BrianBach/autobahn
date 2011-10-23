@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import net.geant.autobahn.idcp.EventContent;
 
@@ -19,7 +20,7 @@ import net.geant.autobahn.idcp.EventContent;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="event" type="{http://oscars.es.net/OSCARS}eventContent" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element ref="{http://oscars.es.net/OSCARS}event" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -34,6 +35,7 @@ import net.geant.autobahn.idcp.EventContent;
 })
 public class MessageType {
 
+    @XmlElement(namespace = "http://oscars.es.net/OSCARS")
     protected List<EventContent> event;
 
     /**

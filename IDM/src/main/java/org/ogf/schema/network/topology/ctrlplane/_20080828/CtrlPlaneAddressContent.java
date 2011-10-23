@@ -36,7 +36,7 @@ public class CtrlPlaneAddressContent {
     protected String value;
     @XmlAttribute(name = "value")
     protected String ctrlPlaneAddressContentValue;
-    @XmlAttribute(name = "type")
+    @XmlAttribute
     protected String type;
 
     /**

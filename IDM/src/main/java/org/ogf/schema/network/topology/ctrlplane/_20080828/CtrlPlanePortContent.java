@@ -54,7 +54,7 @@ public class CtrlPlanePortContent {
     protected String granularity;
     protected String unreservedCapacity;
     protected List<CtrlPlaneLinkContent> link;
-    @XmlAttribute(name = "id", required = true)
+    @XmlAttribute(required = true)
     protected String id;
 
     /**

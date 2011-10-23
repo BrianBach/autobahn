@@ -34,7 +34,7 @@ public class FaultCauseType {
 
     @XmlValue
     protected String value;
-    @XmlAttribute(name = "dialect")
+    @XmlAttribute
     @XmlSchemaType(name = "anyURI")
     protected String dialect;
 

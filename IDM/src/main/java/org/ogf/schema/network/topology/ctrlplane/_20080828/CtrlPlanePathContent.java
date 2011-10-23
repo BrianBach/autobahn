@@ -40,9 +40,9 @@ public class CtrlPlanePathContent {
 
     protected Lifetime lifetime;
     protected List<CtrlPlaneHopContent> hop;
-    @XmlAttribute(name = "id", required = true)
+    @XmlAttribute(required = true)
     protected String id;
-    @XmlAttribute(name = "direction")
+    @XmlAttribute
     protected String direction;
 
     /**

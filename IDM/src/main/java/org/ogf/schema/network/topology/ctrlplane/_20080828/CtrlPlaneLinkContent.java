@@ -66,7 +66,7 @@ public class CtrlPlaneLinkContent {
     protected List<CtrlPlaneAdministrativeGroup> administrativeGroups;
     @XmlElement(name = "SwitchingCapabilityDescriptors", required = true)
     protected CtrlPlaneSwcapContent switchingCapabilityDescriptors;
-    @XmlAttribute(name = "id", required = true)
+    @XmlAttribute(required = true)
     protected String id;
 
     /**

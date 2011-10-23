@@ -33,7 +33,7 @@ public class Duration {
 
     @XmlValue
     protected String value;
-    @XmlAttribute(name = "type", required = true)
+    @XmlAttribute(required = true)
     protected String type;
 
     /**

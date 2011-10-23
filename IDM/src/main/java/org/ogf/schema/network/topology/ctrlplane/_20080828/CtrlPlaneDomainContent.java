@@ -45,7 +45,7 @@ public class CtrlPlaneDomainContent {
     protected List<CtrlPlaneNodeContent> node;
     protected List<CtrlPlanePortContent> port;
     protected List<CtrlPlaneLinkContent> link;
-    @XmlAttribute(name = "id", required = true)
+    @XmlAttribute(required = true)
     protected String id;
 
     /**

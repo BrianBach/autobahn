@@ -8,7 +8,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.w3c.dom.Element;
 
@@ -25,19 +27,19 @@ import org.w3c.dom.Element;
  *       &lt;sequence>
  *         &lt;element name="ConsumerReference" type="{http://www.w3.org/2005/08/addressing}EndpointReferenceType"/>
  *         &lt;element name="Filter" type="{http://docs.oasis-open.org/wsn/b-2}FilterType" minOccurs="0"/>
- *         &lt;element name="InitialTerminationTime" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="InitialTerminationTime" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="SubscriptionPolicy" minOccurs="0">
  *           &lt;complexType>
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
- *                   &lt;any processContents='lax' maxOccurs="unbounded" minOccurs="0"/>
+ *                   &lt;any/>
  *                 &lt;/sequence>
  *               &lt;/restriction>
  *             &lt;/complexContent>
  *           &lt;/complexType>
  *         &lt;/element>
- *         &lt;any processContents='lax' namespace='##other' maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;any/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -61,8 +63,9 @@ public class Subscribe {
     protected EndpointReferenceType consumerReference;
     @XmlElement(name = "Filter")
     protected FilterType filter;
-    @XmlElement(name = "InitialTerminationTime", required = true, nillable = true)
-    protected String initialTerminationTime;
+    @XmlElement(name = "InitialTerminationTime")
+    @XmlSchemaType(name = "dateTime")
+    protected XMLGregorianCalendar initialTerminationTime;
     @XmlElement(name = "SubscriptionPolicy")
     protected Subscribe.SubscriptionPolicy subscriptionPolicy;
     @XmlAnyElement(lax = true)
@@ -121,10 +124,10 @@ public class Subscribe {
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link XMLGregorianCalendar }
      *     
      */
-    public String getInitialTerminationTime() {
+    public XMLGregorianCalendar getInitialTerminationTime() {
         return initialTerminationTime;
     }
 
@@ -133,10 +136,10 @@ public class Subscribe {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link XMLGregorianCalendar }
      *     
      */
-    public void setInitialTerminationTime(String value) {
+    public void setInitialTerminationTime(XMLGregorianCalendar value) {
         this.initialTerminationTime = value;
     }
 
@@ -205,7 +208,7 @@ public class Subscribe {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;any processContents='lax' maxOccurs="unbounded" minOccurs="0"/>
+     *         &lt;any/>
      *       &lt;/sequence>
      *     &lt;/restriction>
      *   &lt;/complexContent>

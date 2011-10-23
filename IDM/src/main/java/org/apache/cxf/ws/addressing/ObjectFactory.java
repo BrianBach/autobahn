@@ -47,35 +47,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ProblemActionType }
-     * 
-     */
-    public ProblemActionType createProblemActionType() {
-        return new ProblemActionType();
-    }
-
-    /**
-     * Create an instance of {@link AttributedAnyType }
-     * 
-     */
-    public AttributedAnyType createAttributedAnyType() {
-        return new AttributedAnyType();
-    }
-
-    /**
      * Create an instance of {@link AttributedURIType }
      * 
      */
     public AttributedURIType createAttributedURIType() {
         return new AttributedURIType();
-    }
-
-    /**
-     * Create an instance of {@link AttributedQNameType }
-     * 
-     */
-    public AttributedQNameType createAttributedQNameType() {
-        return new AttributedQNameType();
     }
 
     /**
@@ -87,19 +63,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ProblemActionType }
+     * 
+     */
+    public ProblemActionType createProblemActionType() {
+        return new ProblemActionType();
+    }
+
+    /**
+     * Create an instance of {@link ReferenceParametersType }
+     * 
+     */
+    public ReferenceParametersType createReferenceParametersType() {
+        return new ReferenceParametersType();
+    }
+
+    /**
      * Create an instance of {@link AttributedUnsignedLongType }
      * 
      */
     public AttributedUnsignedLongType createAttributedUnsignedLongType() {
         return new AttributedUnsignedLongType();
-    }
-
-    /**
-     * Create an instance of {@link MetadataType }
-     * 
-     */
-    public MetadataType createMetadataType() {
-        return new MetadataType();
     }
 
     /**
@@ -111,11 +95,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ReferenceParametersType }
+     * Create an instance of {@link AttributedQNameType }
      * 
      */
-    public ReferenceParametersType createReferenceParametersType() {
-        return new ReferenceParametersType();
+    public AttributedQNameType createAttributedQNameType() {
+        return new AttributedQNameType();
+    }
+
+    /**
+     * Create an instance of {@link MetadataType }
+     * 
+     */
+    public MetadataType createMetadataType() {
+        return new MetadataType();
+    }
+
+    /**
+     * Create an instance of {@link AttributedAnyType }
+     * 
+     */
+    public AttributedAnyType createAttributedAnyType() {
+        return new AttributedAnyType();
     }
 
     /**

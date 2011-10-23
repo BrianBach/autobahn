@@ -42,7 +42,7 @@ public class CtrlPlaneNodeContent {
     protected Lifetime lifetime;
     protected CtrlPlaneAddressContent address;
     protected List<CtrlPlanePortContent> port;
-    @XmlAttribute(name = "id", required = true)
+    @XmlAttribute(required = true)
     protected String id;
 
     /**

@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element ref="{http://docs.oasis-open.org/wsn/b-2}TopicExpression" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element ref="{http://docs.oasis-open.org/wsn/b-2}ProducerProperties" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element ref="{http://docs.oasis-open.org/wsn/b-2}MessageContent" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;any maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;any/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>

@@ -28,7 +28,7 @@ import org.w3c.dom.Element;
  *         &lt;element name="SubscriptionReference" type="{http://www.w3.org/2005/08/addressing}EndpointReferenceType"/>
  *         &lt;element ref="{http://docs.oasis-open.org/wsn/b-2}CurrentTime" minOccurs="0"/>
  *         &lt;element ref="{http://docs.oasis-open.org/wsn/b-2}TerminationTime" minOccurs="0"/>
- *         &lt;any processContents='lax' namespace='##other' maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;any/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
