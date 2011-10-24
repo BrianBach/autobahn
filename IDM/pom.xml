@@ -246,5 +246,27 @@
             <artifactId>mail</artifactId>
             <version>1.4</version>
         </dependency>
+        <dependency>
+        	<groupId>com.thoughtworks.xstream</groupId>
+        	<artifactId>xstream</artifactId>
+        	<version>1.4.1</version>
+        	<type>jar</type>
+        	<scope>compile</scope>
+        </dependency>
+        <dependency>
+        	<groupId>edu.internet2.perfsonar</groupId>
+        	<artifactId>perfsonar</artifactId>
+        	<version>1.0</version>
+        	<type>jar</type>
+        	<scope>system</scope>
+        	<systemPath>${project.basedir}/lib/perfsonar.jar</systemPath>
+        </dependency>
+        <dependency>
+        	<groupId>org.jdom</groupId>
+        	<artifactId>jdom</artifactId>
+        	<version>1.1</version>
+        	<type>jar</type>
+        	<scope>compile</scope>
+        </dependency>
 	</dependencies>
 </project>
