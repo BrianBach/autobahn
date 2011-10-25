@@ -3,6 +3,8 @@
  */
 package net.geant.autobahn.idcp;
 
+import java.util.Map.Entry;
+import java.util.Enumeration;
 import java.util.Properties;
 
 /**
@@ -25,6 +27,29 @@ public class IdcpDomain {
 		this.psTopologyUrl = psTopologyUrl;
 		this.staticRoute = staticRoute;
 		this.properties = properties;
+	}
+	
+	/**
+	 * Returns key-value pair for link mapping
+	 * @return
+	 */
+	public String[] getLinkMapping() {
+		
+		if (!isPeered()) // only peered domains contain link mapping
+			return null;
+
+		for (Enumeration e = properties.propertyNames(); e.hasMoreElements(); ) {
+			
+			String name = (String)e.nextElement();
+			String value = properties.getProperty(name);
+			if (value.contains("urn:ogf:network")) {
+				String[] linkMapping = new String[2];
+				linkMapping[0] = name;
+				linkMapping[1] = value;
+				return linkMapping;
+			}
+		}
+		return null;
 	}
 	
 	public boolean isPeered() { 

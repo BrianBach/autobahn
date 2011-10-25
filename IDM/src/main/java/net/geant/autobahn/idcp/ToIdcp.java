@@ -45,8 +45,6 @@ public final class ToIdcp {
 		this.idcp = new IdcpClient(domain.getIdcpUrl());
 	}
 	
-	
-	
 	private static CtrlPlaneHopContent createHop(String hopId, String linkId, String remoteId, String vlan) { 
 		
 		CtrlPlaneLinkContent link = new CtrlPlaneLinkContent();
@@ -95,45 +93,61 @@ public final class ToIdcp {
 	    }
 
 	    final String startPort = reservation.getStartPort().getBodID();
-	    final String endPort = reservation.getEndPort().getBodID();
-	    final String idcpEndPort = Idcp.restorePortId(endPort);
-	    
-	    IdcpDomain nextIdcpDomain = domain.isPeered() ? domain : IdcpManager.getIdcpDomain(domain.getStaticRoute());
-	    	
-	    Link autobahnToIdcp = reservation.getPath().getIngress(nextIdcpDomain.getDomainName());
-	    if (autobahnToIdcp == null) {
-	    	log.info("autobahn egress not found for path " + reservation.getPath());
-	    	return ReservationErrors.WRONG_DOMAIN;
-	    }
-	    if (!autobahnToIdcp.getEndPort().isIdcpPort()) {
-	    	log.info("autobahn egress not idcp");
-	    	return ReservationErrors.WRONG_DOMAIN;
-	    }
-	    
-	    String autobahnEgress = autobahnToIdcp.getEndPort().getBodID();
-	    if (autobahnEgress.equals(endPort)) {
-	    	log.info("dest port is the same as autobahn egress");
-	    	return ReservationErrors.WRONG_DOMAIN;
-	    }
-        
-        String idcpIngress = nextIdcpDomain.getProperties().getProperty(autobahnEgress);
-        if (idcpIngress == null) { 
-        	log.info("could not find mapping for " + autobahnEgress + ", please ensure it is set either in property file or cnis database");
-        	return ReservationErrors.WRONG_DOMAIN;
-        }
-        
-        // now we have valid idcpIngress and idcp end port, convert to idcp start port and egress
         final String idcpStartPort = Idcp.portToIdcpLink(startPort);
         if (idcpStartPort == null) {
         	log.info("could not convert " + startPort + " to idcp link");
         	return ReservationErrors.WRONG_DOMAIN;
         }
-        final String idcpAutobahnEgress = Idcp.portToIdcpLink(autobahnEgress);
-        if (idcpAutobahnEgress == null) {
-        	log.info("could not convert " + autobahnEgress + " to idcp link");
-        	return ReservationErrors.WRONG_DOMAIN;
-        }
-        
+	    final String endPort = reservation.getEndPort().getBodID();
+	    final String idcpEndPort = Idcp.restorePortId(endPort);
+	    
+	    //IdcpDomain nextIdcpDomain = domain.isPeered() ? domain : IdcpManager.getIdcpDomain(domain.getStaticRoute());
+	    String idcpAutobahnEgress, idcpIngress;
+	    if (!domain.isPeered()) {
+	    	
+	    	IdcpDomain peered = IdcpManager.getIdcpDomain(domain.getStaticRoute());
+	    	String[] linkMapping = peered.getLinkMapping();
+	    	if (linkMapping == null) {
+	    		log.info("link maping not found for domain " + peered.getDomainName());
+	    		return ReservationErrors.WRONG_DOMAIN;
+	    	}
+	    	idcpAutobahnEgress = linkMapping[0];
+	    	idcpAutobahnEgress = Idcp.portToIdcpLink(idcpAutobahnEgress);
+	        if (idcpAutobahnEgress == null) {
+	        	log.info("could not convert " + idcpAutobahnEgress + " to idcp link");
+	        	return ReservationErrors.WRONG_DOMAIN;
+	        }
+	    	idcpIngress = linkMapping[1];
+	    	
+	    } else {
+	    
+		    Link autobahnToIdcp = reservation.getPath().getIngress(domain.getDomainName());
+		    if (autobahnToIdcp == null) {
+		    	log.info("autobahn egress not found for path " + reservation.getPath());
+		    	return ReservationErrors.WRONG_DOMAIN;
+		    }
+		    if (!autobahnToIdcp.getEndPort().isIdcpPort()) {
+		    	log.info("autobahn egress not idcp");
+		    	return ReservationErrors.WRONG_DOMAIN;
+		    }
+		    
+		    String autobahnEgress = autobahnToIdcp.getEndPort().getBodID();
+		    if (autobahnEgress.equals(endPort)) {
+		    	log.info("dest port is the same as autobahn egress");
+		    	return ReservationErrors.WRONG_DOMAIN;
+		    }
+		    idcpAutobahnEgress = Idcp.portToIdcpLink(autobahnEgress);
+	        if (idcpAutobahnEgress == null) {
+	        	log.info("could not convert " + autobahnEgress + " to idcp link");
+	        	return ReservationErrors.WRONG_DOMAIN;
+	        }
+	    	idcpIngress = domain.getProperties().getProperty(autobahnEgress);
+	        if (idcpIngress == null) { 
+	        	log.info("could not find mapping for " + autobahnEgress + ", please ensure it is set either in property file or cnis database");
+	        	return ReservationErrors.WRONG_DOMAIN;
+	        }
+	    }
+               
         /*
         
 	    // check if link mapping (autobahn's egress to idcp ingress) has been provided by cnis (port desc property)
@@ -204,9 +218,6 @@ public final class ToIdcp {
 		if (IdcpManager.isDebugging())
 			Idcp.printPathInfo(pathInfo);
 		
-		if (1 == 1)
-			return ReservationErrors.COMMUNICATION_ERROR;
-	    	    
 	    // add res listener
 	    reservation.addStatusListener(new IdcpReservation(resId, reservation, pathInfo));
 		
