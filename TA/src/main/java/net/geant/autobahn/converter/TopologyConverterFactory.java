@@ -33,7 +33,7 @@ public class TopologyConverterFactory {
         
         String lookuphost = properties.getProperty("lookuphost");
         
-        InternalIdentifiersSource internal = new InternalIdentifiersSource(
+        InternalIdentifiersSource internal = new InternalIdentifiersSourceIPv4(
         		nrange, prange, lrange);
         PublicIdentifiersMapping mapping = new PublicIdentifiersMapping(
         		properties.getProperty("public.ids.file"));
