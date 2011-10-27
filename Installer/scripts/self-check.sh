@@ -136,7 +136,7 @@ function add_attribute {
 		touch $2
 		echo "$initkey=$initvalue" >> $2
 	else
-		cat "$2" | sed "s/^[^#\!]*$key=.*/$key=$value/;//h;\$G;s/\n..*//;s/\n/&$key=$value/"  &>tempfile
+		cat "$2" | sed "s/^[ \t]*$key=.*/$key=$value/;//h;\$G;s/\n..*//;s/\n/&$key=$value/"  &>tempfile
 		mv tempfile $2
 		rm -f tempfile
 	fi
@@ -469,12 +469,12 @@ function change_properties {
 	poplocalinfo
 }
 
-#if dm.properties exists the default values are the existing
+#if autobahn.properties exists the default values are the existing
 #else other values are proposed
-#get_dm_defaults dm_properties_file
-function get_dm_defaults {
+#get_autobahn_defaults autobahn_properties_file
+function get_autobahn_defaults {
 	pushlocalinfo
-	newlogparagraph "function get_dm_defaults"	
+	newlogparagraph "function get_autobahn_defaults"	
 	#declare db_host db_port db_name db_user db_pass db_type
 	domainName="http://some_domain:8080/autobahn/interdomain"
 	db_host=localhost
@@ -488,8 +488,31 @@ function get_dm_defaults {
 	cnis_address="http://cnis-host/abs/Autobahn"
 	monitoring_use=""
 	authorization_enabled="false"
+
+    latitude="0.000000"
+    longitude="0.000000"
+    ospf_use=true
+    ospf_opaqueType=135
+    ospf_opaqueId=1001
+    gui_address="http://gui-host:8080/autobahn-gui/service/gui"
 	
-	log "The dm file is $1"
+    mail_use=false
+    mail_smtp_host="smtp.geant.net"
+    mail_smtp_port=25
+    mail_address_from="admin@geant.net"
+    mail_user="admin"
+    mail_pass="pass"
+    mail_address_admin="admin@geant.net"
+    
+    framework_commandLine=localhost
+    framework_port=5000 
+    framework_pass=abahn
+    
+    id_nodes=10.10.0.0/24
+    id_ports=10.10.32.0/24
+    id_links=10.10.64.0/24
+    
+	log "The properties file is $1"
 	if [ -e "$1" ]; then
 		propfile=`grep "^[ ]*[#\!]" -v $1`
 		for line in $propfile; do
@@ -531,134 +554,58 @@ function get_dm_defaults {
 		   	  ;;
 		   	  authorization.enabled ) authorization_enabled=$curval
 		   	  ;;
-			esac
-		done
-	fi	
-	log "domainName $domainName db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} lookuphost ${lookuphost} cnis.address ${cnis_address} authorization.enabled ${authorization_enabled}"| tr -d '\r' 
-	echo -n "domainName $domainName db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} lookuphost ${lookuphost} cnis.address ${cnis_address} authorization.enabled ${authorization_enabled}"| tr -d '\r' > $path_only/dm_defaults
-	poplocalinfo
-}
-
-function get_idm_defaults {
-	pushlocalinfo
-	newlogparagraph "function get_idm_defaults"
-	latitude="0.000000"
-	longitude="0.000000"
-	ospf_use=true
-	ospf_opaqueType=135
-	ospf_opaqueId=1001
-	gui_address="http://gui-host:8080/autobahn-gui/service/gui"
-	
-	mail_use=false
-	mail_smtp_host="smtp.geant.net"
-	mail_smtp_port=25
-	mail_address_from="admin@geant.net"
-	mail_user="admin"
-	mail_pass="pass"
-	mail_address_admin="admin@geant.net"
-	
-	if [ -f $1 ]; then
-		propfile=`grep "^[ ]*[#\!]" -v $1`
-		for line in $propfile; do
-			curprop=`echo $line | awk -F "=" '{print $1}'`
-			curval=`echo $line |awk -F "=" '{print $2}'`
-			if [ -z $curval ]; then
-				continue
-			fi
-			case $curprop in 
-			  latitude ) latitude=$curval
-			  ;;
-			  longitude ) longitude=$curval
-			  ;;
-			  ospf.use ) ospf_use=$curval
-		      ;;
-			  ospf.opaqueType ) ospf_opaqueType=$curval
-		      ;;
-			  ospf.opaqueId ) ospf_opaqueId=$curval
-		      ;;
-			  gui.address ) gui_address=$curval
-		      ;;
-		      mail.use ) mail_use=$curval
-		      ;;
-		      mail.smtp.host ) mail_smtp_host=$curval
-		      ;;
-		      mail.smtp.port ) mail_smtp_port=$curval
-		      ;;
-		      mail.address.from ) mail_address_from=$curval
-		      ;;
-		      mail.user ) mail_user=$curval
-		      ;;
-		      mail.pass ) mail_pass=$curval
-		      ;;
-		      mail.address.admin ) mail_address_admin=$curval
-		      ;;
-			esac
-		done
-	fi	
-	log "latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf_opaqueType ospf.opaqueId $ospf_opaqueId gui.address $gui_address mail.use $mail_use mail.smtp.host $mail_smtp_host mail.smtp.port $mail_smtp_port mail.address.from $mail_address_from mail.user $mail_user mail.pass $mail_pass mail.address.admin $mail_address_admin"
-	echo -n "latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf_opaqueType ospf.opaqueId $ospf_opaqueId gui.address $gui_address  mail.use $mail_use mail.smtp.host $mail_smtp_host mail.smtp.port $mail_smtp_port mail.address.from $mail_address_from mail.user $mail_user mail.pass $mail_pass mail.address.admin $mail_address_admin" | tr -d '\r' > $path_only/idm_defaults
-	poplocalinfo
-}
-
-
-function get_framework_defaults {
-	pushlocalinfo
-	newlogparagraph "function get_framework_defaults"
-	framework_commandLine=localhost
-	framework_port=5000	
-	framework_pass=abahn
-	if [ -f $1 ]; then
-		propfile=`grep "^[ ]*[#\!]" -v $1`
-		for line in $propfile; do
-			curprop=`echo $line | awk -F "=" '{print $1}'`
-			curval=`echo $line |awk -F "=" '{print $2}'`
-			case $curprop in 
-		          framework.commandLine ) framework_commandLine=$curval
-			  ;;
-		          framework.port ) framework_port=$curval
-		      	  ;;
-		          framework.password ) framework_pass=$curval
-			  ;;
+              latitude ) latitude=$curval
+              ;;
+              longitude ) longitude=$curval
+              ;;
+              ospf.use ) ospf_use=$curval
+              ;;
+              ospf.opaqueType ) ospf_opaqueType=$curval
+              ;;
+              ospf.opaqueId ) ospf_opaqueId=$curval
+              ;;
+              gui.address ) gui_address=$curval
+              ;;
+              mail.use ) mail_use=$curval
+              ;;
+              mail.smtp.host ) mail_smtp_host=$curval
+              ;;
+              mail.smtp.port ) mail_smtp_port=$curval
+              ;;
+              mail.address.from ) mail_address_from=$curval
+              ;;
+              mail.user ) mail_user=$curval
+              ;;
+              mail.pass ) mail_pass=$curval
+              ;;
+              mail.address.admin ) mail_address_admin=$curval
+              ;;
+              framework.commandLine ) framework_commandLine=$curval
+              ;;
+              framework.port ) framework_port=$curval
+              ;;
+              framework.password ) framework_pass=$curval
+              ;;
+              id.nodes ) id_nodes=$curval
+                  ;;
+              id.ports ) id_ports=$curval
+                  ;;
+              id.links ) id_links=$curval
+                  ;;
 			esac
 		done
 	fi
- 	framework_password="xxxx"
-	
-	log "framework.commandLine $framework_commandLine framework.port $framework_port framework.password $framework_password" 
-	echo -n "framework.commandLine $framework_commandLine framework.port $framework_port framework.password $framework_password" | tr -d '\r' > $path_only/framework_defaults
-	poplocalinfo
-}
-
-
-function get_ta_defaults {
-	pushlocalinfo
-	newlogparagraph "funciton get_ta_defaults"
-	id_nodes=10.10.0.0/24
-	id_ports=10.10.32.0/24
-	id_links=10.10.64.0/24
-	if [ -f $1 ]; then
-		propfile=`grep "^[ ]*[#\!]" -v $1`
-		for line in $propfile; do
-			curprop=`echo $line | awk -F "=" '{print $1}'`
-			curval=`echo $line |awk -F "=" '{print $2}'`
-			case $curprop in 
-			  id.nodes ) id_nodes=$curval
-		          ;;
-			  id.ports ) id_ports=$curval
-		          ;;
-			  id.links ) id_links=$curval
-		          ;;
-			esac
-		done
-	fi	
-	log "id.nodes $id_nodes id.ports $id_ports id.links $id_links" 
-	echo -n "id.nodes $id_nodes id.ports $id_ports id.links $id_links" > $path_only/ta_defaults
+		
+    framework_password="xxxx"
+    
+	log "domainName $domainName db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} lookuphost ${lookuphost} cnis.address ${cnis_address} authorization.enabled ${authorization_enabled} latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf_opaqueType ospf.opaqueId $ospf_opaqueId gui.address $gui_address mail.use $mail_use mail.smtp.host $mail_smtp_host mail.smtp.port $mail_smtp_port mail.address.from $mail_address_from mail.user $mail_user mail.pass $mail_pass mail.address.admin $mail_address_admin framework.commandLine $framework_commandLine framework.port $framework_port framework.password $framework_password id.nodes $id_nodes id.ports $id_ports id.links $id_links"| tr -d '\r' 
+	echo -n "domainName $domainName db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} lookuphost ${lookuphost} cnis.address ${cnis_address} authorization.enabled ${authorization_enabled} latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf_opaqueType ospf.opaqueId $ospf_opaqueId gui.address $gui_address  mail.use $mail_use mail.smtp.host $mail_smtp_host mail.smtp.port $mail_smtp_port mail.address.from $mail_address_from mail.user $mail_user mail.pass $mail_pass mail.address.admin $mail_address_admin framework.commandLine $framework_commandLine framework.port $framework_port framework.password $framework_password id.nodes $id_nodes id.ports $id_ports id.links $id_links"| tr -d '\r' > $path_only/autobahn_defaults
 	poplocalinfo
 }
 
 function get_services_defaults {
 	pushlocalinfo
-	newlogparagraph "funciton get_services_defaults"
+	newlogparagraph "function get_services_defaults"
 	server_ip=150.140.8.57
 	server_port=8080
 	server_securePort=8090
@@ -686,22 +633,9 @@ function get_services_defaults {
 ###The following functions create the relevant configuration files
 ###create_x_properties path_to_property_file
 
-function create_dm_properties {
-     get_dm_defaults "$1"
-	 all_properties=`cat $path_only/dm_defaults`
-	 change_properties "$1" $all_properties
-}
-
-function create_idm_properties {
-	 get_idm_defaults "$1"
-	 all_properties=`cat $path_only/idm_defaults`
-	 change_properties "$1" $all_properties
-}
-
-
-function create_ta_properties {
-	 get_ta_defaults "$1"
-	 all_properties=`cat $path_only/ta_defaults`
+function create_autobahn_properties {
+     get_autobahn_defaults "$1"
+	 all_properties=`cat $path_only/autobahn_defaults`
 	 change_properties "$1" $all_properties
 }
 
@@ -714,29 +648,12 @@ function create_services_properties {
 function deploy_services_modifications {
 	 get_services_defaults "$autobahn_folder/etc/services.properties"
 
-	 change_property "domain" "http://$server_ip:$server_port/autobahn/interdomain" "$autobahn_folder/etc/idm.properties"
-	 change_property "dm.address" "http://$server_ip:$server_port/autobahn/idm2dm" "$autobahn_folder/etc/idm.properties"
+	 change_property "domain" "http://$server_ip:$server_port/autobahn/interdomain" "$autobahn_folder/etc/autobahn.properties"
+	 change_property "dm.address" "http://$server_ip:$server_port/autobahn/idm2dm" "$autobahn_folder/etc/autobahn.properties"
 	 
-	 change_property "idm.address" "http://$server_ip:$server_port/autobahn/dm2idm" "$autobahn_folder/etc/dm.properties"
-	 change_property "topologyabstraction.address" "http://$server_ip:$server_port/autobahn/topologyabstraction" "$autobahn_folder/etc/dm.properties"
-	 change_property "resourcesreservationcalendar.address" "http://$server_ip:$server_port/autobahn/resourcesreservationcalendar" "$autobahn_folder/etc/dm.properties"
-}
-
-function deploy_dm_modifications {
-	 get_dm_defaults "$autobahn_folder/etc/dm.properties"
-
-	 change_property "lookuphost" "$lookuphost" "$autobahn_folder/etc/idm.properties"
-	 change_property "lookuphost" "$lookuphost" "$autobahn_folder/etc/ta.properties"
-	 
-	 change_property "db.host" "$db_host" "$autobahn_folder/etc/idm.properties"
-	 change_property "db.port" "$db_port" "$autobahn_folder/etc/idm.properties"
-	 change_property "db.name" "$db_name" "$autobahn_folder/etc/idm.properties"
-	 change_property "db.user" "$db_user" "$autobahn_folder/etc/idm.properties"
-	 change_property "db.pass" "$db_pass" "$autobahn_folder/etc/idm.properties"
-	 
-	 change_property "domainName" "$domainName" "$autobahn_folder/etc/idm.properties"
-	 
-	 change_property "db.type" "$db_type" "$autobahn_folder/etc/calendar.properties"
+	 change_property "idm.address" "http://$server_ip:$server_port/autobahn/dm2idm" "$autobahn_folder/etc/autobahn.properties"
+	 change_property "topologyabstraction.address" "http://$server_ip:$server_port/autobahn/topologyabstraction" "$autobahn_folder/etc/autobahn.properties"
+	 change_property "resourcesreservationcalendar.address" "http://$server_ip:$server_port/autobahn/resourcesreservationcalendar" "$autobahn_folder/etc/autobahn.properties"
 }
 
 declare -x CREATE_CONF
@@ -749,7 +666,7 @@ function check_conf_file {
 	newlogparagraph "function check_conf_file"
 	echo
 	if [ ! -f "$1"  ]; then
-	 #Create dm.properties - doesn't exist
+	 #Create properties file - doesn't exist
 		if [ $GRAPHICAL="no" ]; then
 			echolog "$1 doesn't exist! Will try to create it!"
 		else
@@ -847,14 +764,8 @@ function check_configuration_files {
 	        autobahn_folder=`dirname "$autobahn_folder"`
 	fi
 
-	CREATE_CONF=create_dm_properties
-	check_conf_file "$autobahn_folder/etc/dm.properties"
-	deploy_dm_modifications		
-	#parse dm.properties get dbname and password and run
-	CREATE_CONF=create_idm_properties
-	check_conf_file "$autobahn_folder/etc/idm.properties"		
-	CREATE_CONF=create_ta_properties
-	check_conf_file "$autobahn_folder/etc/ta.properties"	
+	CREATE_CONF=create_autobahn_properties
+	check_conf_file "$autobahn_folder/etc/autobahn.properties"
 	CREATE_CONF=create_services_properties
 	check_conf_file "$autobahn_folder/etc/services.properties"
 	deploy_services_modifications		
@@ -916,7 +827,7 @@ function finalize {
 	if [ "$graphics" == yes ]; then
 		clear
 	fi
-	rm -f retval key value   $path_only/idm_defaults  $path_only/calendar_defaults  $path_only/ta_defaults $path_only/services_defaults temp_editor temp_prop ans $path_only/cur_properties $path_only/dm_defaults $path_only/templocalinfostack $path_only/framework_defaults
+	rm -f retval key value $path_only/services_defaults temp_editor temp_prop ans $path_only/cur_properties $path_only/autobahn_defaults $path_only/templocalinfostack
 }
 
 #init_db
@@ -986,11 +897,8 @@ function config_editor {
 	should_exit=0
 	while [ $should_exit -ne 1 ]; do
 		$DIALOG --clear --backtitle "AutoBAHN configuration files editor" --menu "AutoBAHN configuration files" 15 80 8 \
-		"dm.properties" "Sets properties about the Domain Manager" \
-		"idm.properties" "Sets properties about the Interdomain Manager" \
-		"ta.properties" "Sets properties about the Topology Abstraction" \
-		"services.properties" "Sets properties about the services" \
-		"framework.properties" "Sets properties about the Framework" \
+		"autobahn.properties" "Configure the AutoBAHN system" \
+		"services.properties" "Configure IP address and ports for the AutoBAHN services" \
 		"Back" "Return to previous menu" 2>ans
 		
 		case $? in 
@@ -1001,36 +909,18 @@ function config_editor {
 		esac
         	choice=`cat ans`
 		case $choice in 
-			"dm.properties" )
-	        	   get_dm_defaults "$autobahn_folder/etc/dm.properties"
-			   log "Will call file_editor $autobahn_folder/etc/dm.properties `cat $path_only/dm_defaults`"
-			   dm_def=`cat $path_only/dm_defaults`
-			   file_editor "$autobahn_folder/etc/dm.properties" `cat $path_only/dm_defaults`
-			   deploy_dm_modifications
+			"autobahn.properties" )
+	           get_autobahn_defaults "$autobahn_folder/etc/autobahn.properties"
+			   log "Will call file_editor $autobahn_folder/etc/autobahn.properties `cat $path_only/autobahn_defaults`"
+			   autobahn_def=`cat $path_only/autobahn_defaults`
+			   file_editor "$autobahn_folder/etc/autobahn.properties" `cat $path_only/autobahn_defaults`
 			;;
-			"idm.properties" )
-		   	   get_idm_defaults "$autobahn_folder/etc/idm.properties"
-#  echo "IDM_DEFAULTS: `cat $path_only/idm_defaults`";sleep 3
-			   log "Will call file_editor $autobahn_folder/etc/idm.properties `cat $path_only/idm_defaults`"
-		   	   file_editor "$autobahn_folder/etc/idm.properties" `cat $path_only/idm_defaults`
-		;;
-			"ta.properties" )
-			   get_ta_defaults "$autobahn_folder/etc/ta.properties"
-			   log "Will call file_editor $autobahn_folder/etc/ta.properties `cat $path_only/ta_defaults`"
-			   file_editor "$autobahn_folder/etc/ta.properties" `cat $path_only/ta_defaults`
-		;;
 			"services.properties" )
 			   get_services_defaults "$autobahn_folder/etc/services.properties"
 			   log "Will call file_editor $autobahn_folder/etc/services.properties `cat $path_only/services_defaults`"
 			   file_editor "$autobahn_folder/etc/services.properties" `cat $path_only/services_defaults`
 			   deploy_services_modifications
 		;;
-			"framework.properties" )
-			    get_framework_defaults "$autobahn_folder/etc/framework.properties"
-			   log "Will call file_editor $autobahn_folder/etc/framework.properties `cat $path_only/framework_defaults`"
-		   	   file_editor "$autobahn_folder/etc/framework.properties" `cat $path_only/framework_defaults`
-
-;; 
 			"Back" )
 		    	return 1
 		 	;;
@@ -1090,7 +980,7 @@ if [ "$enterui" == yes ]; then
 	else
 		simple_ui
 	fi
-	read_db_info_from_dm $autobahn_folder/etc/dm.properties
+	read_db_info_from_dm $autobahn_folder/etc/autobahn.properties
 	init_db $DBNAME $DBPASS $DBUSER
 	
 	#TODO: not use tmp for resiliency reasons

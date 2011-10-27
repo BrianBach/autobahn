@@ -13,21 +13,13 @@ cat tunnels_installed_conf.sh | tr -d '\r' > tunnels_installed_conf.sh.bak
 cat setup.sh | tr -d '\r' > setup.sh.bak
 cat tunnels_installed.sh | tr -d '\r' > tunnels_installed.sh.bak
 cat tunnels_not_installed.sh | tr -d '\r' > tunnels_not_installed.sh.bak
-cat ../etc/idm.properties | tr -d '\r' > ../etc/idm.properties.bak
-cat ../etc/dm.properties | tr -d '\r' > ../etc/dm.properties.bak
-cat ../etc/calendar.properties | tr -d '\r' > ../etc/calendar.properties.bak
-cat ../etc/ta.properties | tr -d '\r' > ../etc/ta.properties.bak
+cat ../etc/autobahn.properties | tr -d '\r' > ../etc/autobahn.properties.bak
 cat ../etc/public_ids.properties | tr -d '\r' > ../etc/public_ids.properties.bak
 cat ../etc/services.properties | tr -d '\r' > ../etc/services.properties.bak
-cat ../etc/framework.properties | tr -d '\r' > ../etc/framework.properties.bak
 cat tunnels_not_installed.sh | tr -d '\r' > tunnels_not_installed.sh.bak
-cp ../etc/idm.properties.bak ../etc/idm.properties
-cp ../etc/dm.properties.bak ../etc/dm.properties
-cp ../etc/calendar.properties.bak ../etc/calendar.properties
-cp ../etc/ta.properties.bak ../etc/ta.properties
+cp ../etc/autobahn.properties.bak ../etc/autobahn.properties
 cp ../etc/public_ids.properties.bak ../etc/public_ids.properties
 cp ../etc/services.properties.bak ../etc/services.properties
-cp ../etc/framework.properties.bak ../etc/framework.properties
 cp change-tunnel.sh.bak change-tunnel.sh
 cp create_db.sh.bak create_db.sh
 cp del-tunnels.sh.bak del-tunnels.sh
