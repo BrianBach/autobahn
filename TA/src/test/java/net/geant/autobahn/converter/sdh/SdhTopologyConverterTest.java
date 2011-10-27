@@ -5,6 +5,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 import net.geant.autobahn.converter.InternalIdentifiersSource;
+import net.geant.autobahn.converter.InternalIdentifiersSourceIPv4;
 import net.geant.autobahn.converter.PublicIdentifiersMapping;
 import net.geant.autobahn.converter.TopologyConverter;
 import net.geant.autobahn.intradomain.common.GenericLink;
@@ -47,7 +48,7 @@ public class SdhTopologyConverterTest {
         String prange = "10.11.32.0/19";
         String lrange = "10.11.64.0/19";
         
-        InternalIdentifiersSource internal = new InternalIdentifiersSource(
+        InternalIdentifiersSource internal = new InternalIdentifiersSourceIPv4(
                 nrange, prange, lrange);
         
         // It's OK as this topology has no neighbors
@@ -84,7 +85,7 @@ public class SdhTopologyConverterTest {
         String prange = "10.11.32.0/19";
         String lrange = "10.11.64.0/19";
         
-        InternalIdentifiersSource internal = new InternalIdentifiersSource(
+        InternalIdentifiersSource internal = new InternalIdentifiersSourceIPv4(
                 nrange, prange, lrange);
         
         // It's OK as this topology has no neighbors
@@ -183,7 +184,7 @@ public class SdhTopologyConverterTest {
         String prange = "10.11.32.0/19";
         String lrange = "10.11.64.0/19";
         
-        InternalIdentifiersSource internal = new InternalIdentifiersSource(
+        InternalIdentifiersSource internal = new InternalIdentifiersSourceIPv4(
                 nrange, prange, lrange);
         PublicIdentifiersMapping mapping = new PublicIdentifiersMapping(
                 "./src/test/resources/test_etc/topology2-public-ids.properties");
