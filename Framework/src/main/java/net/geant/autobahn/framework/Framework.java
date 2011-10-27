@@ -2,6 +2,7 @@ package net.geant.autobahn.framework;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -134,8 +135,12 @@ public class Framework {
 
 	public net.geant.autobahn.idm.AccessPoint.State startIdm() {
 		try {
-			
-			Properties idmProps = loadProperties("etc/idm.properties");
+	        String prop_file = "etc/autobahn.properties";
+	        if (!new File(prop_file).exists()) {
+	            prop_file = "etc/idm.properties";
+	        }
+
+			Properties idmProps = loadProperties(prop_file);
 			
 			if(properties.containsKey("startup.notify")) {
 				idmProps.put("startup.notify", properties.getProperty("startup.notify"));
@@ -367,7 +372,11 @@ public class Framework {
 	public static boolean running = true;
 
 	public static void main(String[] args) throws Exception {
-		final Properties props = Framework.loadProperties("etc/framework.properties");
+        String prop_file = "etc/autobahn.properties";
+        if (!new File(prop_file).exists()) {
+            prop_file = "etc/framework.properties";
+        }
+		final Properties props = Framework.loadProperties(prop_file);
 		
 		for(int i = 0; i < args.length; i++) {
 			if("--startup-notifier".equalsIgnoreCase(args[i])) {

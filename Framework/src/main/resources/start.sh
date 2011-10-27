@@ -6,6 +6,12 @@ FILE_PATH=`dirname $0`
 
 #this is the framework properties file
 FILE=etc/framework.properties
+if [ -f etc/autobahn.properties ]
+  then
+    echo "Using autobahn.properties"
+    FILE=etc/autobahn.properties
+fi
+
 CONFIG=etc/cxf/cxf.xml
 
 cd $FILE_PATH

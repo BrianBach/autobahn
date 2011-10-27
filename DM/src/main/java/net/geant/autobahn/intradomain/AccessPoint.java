@@ -1,5 +1,6 @@
 package net.geant.autobahn.intradomain;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -68,12 +69,16 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
 	private AccessPoint() throws Exception {
 		
 		properties = new Properties();
+        String prop_file = "etc/autobahn.properties";
+        if (!new File(prop_file).exists()) {
+            prop_file = "etc/dm.properties";
+        }
         try {
         	InputStream is =
-        		getClass().getClassLoader().getResourceAsStream("etc/dm.properties");
+        		getClass().getClassLoader().getResourceAsStream(prop_file);
             properties.load(is);
             is.close();
-            log.debug(properties.size() + " properties loaded");
+            log.debug(properties.size() + " properties loaded from " + prop_file);
         } catch (IOException e) {
             log.info("Could not load app.properties: " + e.getMessage());
             throw new Exception("Could not load app.properties: " + e.getMessage());
@@ -185,7 +190,7 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
             state = State.ERROR;
             log.error("Database error while DM init: " + 
                     ExceptionUtils.getRootCause(e).getMessage() + 
-                    "\nPlease check the #DB PPOPERTIES section in etc/dm.properties " +
+                    "\nPlease check the #DB PPOPERTIES section in properties " +
                     "file and verify the values there.");
             log.debug("Error info: ", e);
         } catch (Exception e) {
@@ -201,7 +206,7 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
                 log.error("Error while DM init: " + thr.getMessage() +
                         "\nPlease check whether the URL of the rest of the services" +
                         " (IDM, TA, Calendar) have been properly defined in" +
-                        " etc/dm.properties.");                
+                        " properties file.");                
             }
             else {
                 log.error("Error while DM init: " + ((thr == null)?"":thr.getMessage()));
@@ -429,7 +434,7 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
         
         String domainName = properties.getProperty("domainName");
         if (domainName == null || domainName.equalsIgnoreCase("none") || domainName.equals("")) {
-            initChecks.append("domainName field is empty, please check dm.properties file.\n");
+            initChecks.append("domainName field is empty, please check properties file.\n");
         }
         
         String lookuphost = properties.getProperty("lookuphost");
@@ -452,7 +457,7 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
         } catch (MalformedURLException e) {
             initChecks.append("idm.address field is not a proper URL:\n");
             initChecks.append(e.getMessage()+"\n");
-            initChecks.append("Please check dm.properties file.\n");
+            initChecks.append("Please check properties file.\n");
         }
         
         String topologyabstraction_address = properties.getProperty("topologyabstraction.address");
@@ -461,7 +466,7 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
         } catch (MalformedURLException e) {
             initChecks.append("topologyabstraction.address field is not a proper URL:\n");
             initChecks.append(e.getMessage()+"\n");
-            initChecks.append("Please check dm.properties file.\n");
+            initChecks.append("Please check properties file.\n");
         }
         
         String resourcesreservationcalendar_address = properties.getProperty("resourcesreservationcalendar.address");
@@ -470,7 +475,7 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
         } catch (MalformedURLException e) {
             initChecks.append("resourcesreservationcalendar.address field is not a proper URL:\n");
             initChecks.append(e.getMessage()+"\n");
-            initChecks.append("Please check dm.properties file.\n");
+            initChecks.append("Please check properties file.\n");
         }
     }
     

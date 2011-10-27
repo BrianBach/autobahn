@@ -1,5 +1,6 @@
 package net.geant.autobahn.converter;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,11 +51,15 @@ public final class AccessPoint implements TopologyAbstraction {
     public AccessPoint() throws Exception {
 
         properties = new Properties();
+        String prop_file = "etc/autobahn.properties";
+        if (!new File(prop_file).exists()) {
+            prop_file = "etc/ta.properties";
+        }
         try {
-            FileInputStream fis = new FileInputStream("etc/ta.properties");
+            FileInputStream fis = new FileInputStream(prop_file);
             properties.load(fis);
             fis.close();
-            log.debug(properties.size() + " properties loaded");
+            log.debug(properties.size() + " properties loaded from " + prop_file);
         } catch (IOException e) {
             log.info("Could not load app.properties: " + e.getMessage());
             throw new Exception("Could not load app.properties: " + e.getMessage());
@@ -291,15 +296,15 @@ public final class AccessPoint implements TopologyAbstraction {
         
         String id_nodes = properties.getProperty("id.nodes");
         if (id_nodes == null || id_nodes.equalsIgnoreCase("none") || id_nodes.equals("")) {
-            initChecks.append("id.nodes is empty, please check ta.properties file.\n");
+            initChecks.append("id.nodes is empty, please check properties file.\n");
         }
         String id_ports = properties.getProperty("id.ports");
         if (id_ports == null || id_ports.equalsIgnoreCase("none") || id_ports.equals("")) {
-            initChecks.append("id.ports is empty, please check ta.properties file.\n");
+            initChecks.append("id.ports is empty, please check properties file.\n");
         }
         String id_links = properties.getProperty("id.links");
         if (id_links == null || id_links.equalsIgnoreCase("none") || id_links.equals("")) {
-            initChecks.append("id.links is empty, please check ta.properties file\n");
+            initChecks.append("id.links is empty, please check properties file\n");
         }
         
         String lookuphost = properties.getProperty("lookuphost");

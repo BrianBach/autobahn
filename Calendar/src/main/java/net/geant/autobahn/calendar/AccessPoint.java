@@ -1,5 +1,6 @@
 package net.geant.autobahn.calendar;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,11 +51,15 @@ public final class AccessPoint implements ResourcesReservationCalendar {
     public AccessPoint() throws Exception {
 
         properties = new Properties();
+        String prop_file = "etc/autobahn.properties";
+        if (!new File(prop_file).exists()) {
+            prop_file = "etc/calendar.properties";
+        }
         try {
-            FileInputStream fis = new FileInputStream("etc/calendar.properties");
+            FileInputStream fis = new FileInputStream(prop_file);
             properties.load(fis);
             fis.close();
-            log.debug(properties.size() + " properties loaded");
+            log.debug(properties.size() + " properties loaded from " + prop_file);
         } catch (IOException e) {
             log.info("Could not load app.properties: " + e.getMessage());
             throw new Exception("Could not load app.properties: " + e.getMessage());
@@ -303,7 +308,7 @@ public final class AccessPoint implements ResourcesReservationCalendar {
         String db_type = properties.getProperty("db.type");
         if (db_type == null || db_type.equalsIgnoreCase("none") || db_type.equals("")) {
             initChecks.append("db.type property is empty, please check " +
-            		"calendar.properties file.\n");
+            		"properties file.\n");
         }
         else if (!db_type.equalsIgnoreCase("ethernet") && !db_type.equalsIgnoreCase("eth")
                 && !db_type.equalsIgnoreCase("sdh")) {

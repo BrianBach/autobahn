@@ -1,6 +1,7 @@
 package net.geant.autobahn.idm;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -145,13 +146,16 @@ public final class AccessPoint implements UserAccessPoint,
      */
 	public State init() {
 		Properties properties = new Properties();
-	        
+
+        String prop_file = "etc/autobahn.properties";
+        if (!new File(prop_file).exists()) {
+            prop_file = "etc/idm.properties";
+        }
 		try {
-			InputStream is = getClass().getClassLoader().getResourceAsStream(
-					"etc/idm.properties");
+			InputStream is = getClass().getClassLoader().getResourceAsStream(prop_file);
 			properties.load(is);
 			is.close();
-			log.debug(properties.size() + " properties loaded");
+			log.debug(properties.size() + " properties loaded from " + prop_file);
 		} catch (IOException e) {
 			log.info("Could not load app.properties: " + e.getMessage());
 		}
@@ -249,7 +253,7 @@ public final class AccessPoint implements UserAccessPoint,
             state = State.ERROR;
             log.error("Database error while IDM init: " + 
                     ExceptionUtils.getRootCause(e).getMessage() + 
-                    "\nPlease check the #DB PPOPERTIES section in etc/idm.properties " +
+                    "\nPlease check the #DB PPOPERTIES section in properties " +
                     "file and verify the values there.");
             log.debug("Error info: ", e);
         } catch (Exception e) {
@@ -264,7 +268,7 @@ public final class AccessPoint implements UserAccessPoint,
             else if (thr instanceof java.net.ConnectException) {
                 log.error("Error while IDM init: " + thr.getMessage() +
                         "\nPlease check whether the dm.address and the lookuphost" +
-                        " have been properly defined in etc/idm.properties.");                
+                        " have been properly defined in properties file.");                
             }
             else {
                 log.error("Error while IDM init: " + ((thr == null)?"":thr.getMessage()));
@@ -1433,7 +1437,7 @@ public final class AccessPoint implements UserAccessPoint,
         
         String domain = properties.getProperty("domain");
         if (domain == null || domain.equalsIgnoreCase("none") || domain.equals("")) {
-            initChecks.append("domain field is empty, please check idm.properties file.\n");
+            initChecks.append("domain field is empty, please check properties file.\n");
         }
         // Check if it is a proper URL
         try {
@@ -1445,7 +1449,7 @@ public final class AccessPoint implements UserAccessPoint,
         
         String domainName = properties.getProperty("domainName");
         if (domainName == null || domainName.equalsIgnoreCase("none") || domainName.equals("")) {
-            initChecks.append("domainName field is empty, please check idm.properties file." +
+            initChecks.append("domainName field is empty, please check properties file." +
             		" The system will assume the IDM URL (" + domainURL + ") is also the domain name\n");
         }
         
@@ -1493,7 +1497,7 @@ public final class AccessPoint implements UserAccessPoint,
             initChecks.append("The domain " + domainName + " does not exist in the DB. " +
                     "If this is the very first time you are starting the software " +
                     "this is normal. Otherwise, this is almost certainly a problem " +
-                    "and you need to check the idm.properties " +
+                    "and you need to check the properties file " +
                     "and the admin domains in the DB.\n");
         }
         
