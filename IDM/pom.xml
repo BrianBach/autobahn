@@ -254,7 +254,7 @@
         	<scope>compile</scope>
         </dependency>
         <dependency>
-         <groupId>net.perfsonar</groupId>
+         <groupId>net.geant.autobahn</groupId>
          <artifactId>ps-api</artifactId>
          <version>0.5</version>
         </dependency>
