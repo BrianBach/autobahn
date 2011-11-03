@@ -19,17 +19,17 @@ public class InternalIdentifiersSourceURN implements InternalIdentifiersSource {
 
     @Override
     public String generateNodeID() {
-        return domain + delimiter + "Node" + ++count;
+        return domain + delimiter + "Node" + delimiter + ++count;
     }
 
     @Override
     public String generatePortID() {
-        return domain + delimiter + "Port" + ++count;
+        return domain + delimiter + "Port" + delimiter + ++count;
     }
 
     @Override
     public String generateLinkID() {
-        return domain + delimiter + "Link" + ++count;
+        return domain + delimiter + "Link" + delimiter + ++count;
     }
 
 }

@@ -27,14 +27,10 @@ public class TopologyConverterFactory {
     public static TopologyConverter getTopologyConverter(IntradomainTopology topology, 
     		IntradomainPathfinder pathfinder, Properties properties) throws IOException {
         
-        String nrange = properties.getProperty("id.nodes");
-        String prange = properties.getProperty("id.ports");
-        String lrange = properties.getProperty("id.links");
-        
+        String domain = properties.getProperty("domainName");
         String lookuphost = properties.getProperty("lookuphost");
         
-        InternalIdentifiersSource internal = new InternalIdentifiersSourceIPv4(
-        		nrange, prange, lrange);
+        InternalIdentifiersSource internal = new InternalIdentifiersSourceURN(domain);
         PublicIdentifiersMapping mapping = new PublicIdentifiersMapping(
         		properties.getProperty("public.ids.file"));
         

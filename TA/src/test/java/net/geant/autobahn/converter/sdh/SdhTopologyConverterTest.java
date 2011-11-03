@@ -6,6 +6,7 @@ import java.util.List;
 import junit.framework.TestCase;
 import net.geant.autobahn.converter.InternalIdentifiersSource;
 import net.geant.autobahn.converter.InternalIdentifiersSourceIPv4;
+import net.geant.autobahn.converter.InternalIdentifiersSourceURN;
 import net.geant.autobahn.converter.PublicIdentifiersMapping;
 import net.geant.autobahn.converter.TopologyConverter;
 import net.geant.autobahn.intradomain.common.GenericLink;
@@ -35,8 +36,8 @@ public class SdhTopologyConverterTest {
     }
 
     @Test
-    public void testSingleDomainWith2Clients() throws IOException {
-        System.out.println(" ---Running testSingleDomainWith2Clients");
+    public void testSingleDomainWith2ClientsIPv4() throws IOException {
+        System.out.println(" ---Running testSingleDomainWith2ClientsIPv4");
         IntraTopologyBuilder builder = new IntraTopologyBuilder(false);
         TestTopology1 topo = new TestTopology1();
         topo.domain1(builder);
@@ -72,8 +73,8 @@ public class SdhTopologyConverterTest {
     }
     
     @Test
-    public void testTopologyWithoutExternalConnections() {
-        System.out.println(" ---Running testTopologyWithoutExternalConnections");
+    public void testTopologyWithoutExternalConnectionsIPv4() {
+        System.out.println(" ---Running testTopologyWithoutExternalConnectionsIPv4");
         IntraTopologyBuilder builder = new IntraTopologyBuilder(false);
         TestTopology3 topo = new TestTopology3();
         topo.domain1(builder);
@@ -112,10 +113,10 @@ public class SdhTopologyConverterTest {
     }
     
     @Test
-    public void testAbstractingInternalPart() throws IOException {
-        System.out.println(" ---Running testAbstractingInternalPart");
+    public void testAbstractingInternalPartIPv4() throws IOException {
+        System.out.println(" ---Running testAbstractingInternalPartIPv4");
 
-        TopologyConverter conv = createTopology2Converter();
+        TopologyConverter conv = createTopology2Converter(true);
         
         Stats stats = conv.abstractInternalPartOfTopology();
     
@@ -128,20 +129,20 @@ public class SdhTopologyConverterTest {
     }
     
     @Test(expected=NullPointerException.class)
-    public void testPassingNullAsExternalSource() throws IOException {
-        System.out.println(" ---Running testPassingNullAsExternalSource");
+    public void testPassingNullAsExternalSourceIPv4() throws IOException {
+        System.out.println(" ---Running testPassingNullAsExternalSourceIPv4");
     
-        TopologyConverter conv = createTopology2Converter();
+        TopologyConverter conv = createTopology2Converter(true);
         
         Stats stats = conv.abstractInternalPartOfTopology();
         conv.abstractExternalPartOfTopology(null);
     }
     
     @Test
-    public void testAbstractingSampleTopology() throws IOException {
-        System.out.println(" ---Running testAbstractingSampleTopology");
+    public void testAbstractingSampleTopologyIPv4() throws IOException {
+        System.out.println(" ---Running testAbstractingSampleTopologyIPv4");
 
-        TopologyConverter conv = createTopology2Converter();
+        TopologyConverter conv = createTopology2Converter(true);
         
         Stats stats = conv.abstractInternalPartOfTopology();
     
@@ -172,10 +173,12 @@ public class SdhTopologyConverterTest {
         TestCase.assertNull(glink);
     }
     
-    private TopologyConverter createTopology2Converter() throws IOException {
+    @Test
+    public void testSingleDomainWith2ClientsURN() throws IOException {
+        System.out.println(" ---Running testSingleDomainWith2ClientsURN");
         IntraTopologyBuilder builder = new IntraTopologyBuilder(false);
-        TestTopology2 topo = new TestTopology2();
-        topo.domain2(builder);
+        TestTopology1 topo = new TestTopology1();
+        topo.domain1(builder);
         
         IntradomainPathfinder pf = IntradomainPathfinderFactory.getIntradomainPathfinder(
                 builder.getIntradomainTopology());
@@ -184,8 +187,143 @@ public class SdhTopologyConverterTest {
         String prange = "10.11.32.0/19";
         String lrange = "10.11.64.0/19";
         
-        InternalIdentifiersSource internal = new InternalIdentifiersSourceIPv4(
-                nrange, prange, lrange);
+        InternalIdentifiersSource internal = new InternalIdentifiersSourceURN("MyDomain");
+        
+        // It's OK as this topology has no neighbors
+        PublicIdentifiersMapping mapping = null;
+
+        TopologyConverter conv = new SdhTopologyConverter(builder
+                .getIntradomainTopology(), pf, internal, mapping, null);
+    
+        Stats stats = conv.abstractInternalPartOfTopology();
+        
+        TestCase.assertEquals(7, stats.numNodes);
+        TestCase.assertEquals(4, stats.numEdgeNodes);
+        TestCase.assertEquals(3, stats.numPaths);
+    
+        // It's OK as this topology has no neighbors
+        conv.abstractExternalPartOfTopology(null);
+        
+        List<Link> links = conv.getAbstractLinks();
+        
+        TestCase.assertEquals(3, links.size());
+    }
+    
+    @Test
+    public void testTopologyWithoutExternalConnectionsURN() {
+        System.out.println(" ---Running testTopologyWithoutExternalConnectionsURN");
+        IntraTopologyBuilder builder = new IntraTopologyBuilder(false);
+        TestTopology3 topo = new TestTopology3();
+        topo.domain1(builder);
+        
+        IntradomainPathfinder pf = IntradomainPathfinderFactory.getIntradomainPathfinder(
+                builder.getIntradomainTopology());
+        
+        InternalIdentifiersSource internal = new InternalIdentifiersSourceURN("MyDomain");
+        
+        // It's OK as this topology has no neighbors
+        PublicIdentifiersMapping mapping = null;
+        
+        TopologyConverter conv = new SdhTopologyConverter(builder
+                .getIntradomainTopology(), pf, internal, mapping, null);
+
+        Stats stats = conv.abstractInternalPartOfTopology();
+        
+        // TestTopology3 contains 5 nodes, but zero edge nodes
+        // Therefore no virtual links are created and no paths are returned
+        TestCase.assertEquals(5, stats.numNodes);
+        TestCase.assertEquals(0, stats.numEdgeNodes);
+        TestCase.assertEquals(0, stats.numPaths);
+
+        // It's OK as this topology has no neighbors
+        conv.abstractExternalPartOfTopology(null);
+        
+        List<Link> links = conv.getAbstractLinks();
+        
+        // No virtual or edge links in TestTopology3, so no abstract links
+        TestCase.assertEquals(0, links.size());
+    }
+    
+    @Test
+    public void testAbstractingInternalPartURN() throws IOException {
+        System.out.println(" ---Running testAbstractingInternalPartURN");
+
+        TopologyConverter conv = createTopology2Converter(false);
+        
+        Stats stats = conv.abstractInternalPartOfTopology();
+    
+        TestCase.assertEquals(7, stats.numNodes);
+        TestCase.assertEquals(7, stats.numEdgeNodes);
+        TestCase.assertEquals(7, stats.numLinks);
+        TestCase.assertEquals(6, stats.numPaths);
+        
+        System.out.println(conv);
+    }
+    
+    @Test(expected=NullPointerException.class)
+    public void testPassingNullAsExternalSourceURN() throws IOException {
+        System.out.println(" ---Running testPassingNullAsExternalSourceURN");
+    
+        TopologyConverter conv = createTopology2Converter(false);
+        
+        Stats stats = conv.abstractInternalPartOfTopology();
+        conv.abstractExternalPartOfTopology(null);
+    }
+    
+    @Test
+    public void testAbstractingSampleTopologyURN() throws IOException {
+        System.out.println(" ---Running testAbstractingSampleTopologyURN");
+
+        TopologyConverter conv = createTopology2Converter(false);
+        
+        Stats stats = conv.abstractInternalPartOfTopology();
+    
+        TestCase.assertEquals(7, stats.numNodes);
+        TestCase.assertEquals(7, stats.numEdgeNodes);
+        TestCase.assertEquals(7, stats.numLinks);
+        TestCase.assertEquals(6, stats.numPaths);
+    
+        ExternalIdentifiersSource source = new FileIdentifiersSource(
+                "./src/test/resources/test_etc/topology2-external-ids.properties");
+        List<Link> links = conv.abstractExternalPartOfTopology(source);
+        
+        TestCase.assertEquals(7, links.size());
+        
+        for(Link l : links)
+            System.out.println(l);
+    
+        // Check the client link
+        GenericLink glink = conv.getEdgeLink(links.get(2));
+        TestCase.assertEquals("p2.4-cli-port2", glink.toString());
+    
+        // Check the external link
+        glink = conv.getEdgeLink(links.get(0));
+        TestCase.assertEquals("p2.1-dom1-port1", glink.toString());
+        
+        // Check the virtual link
+        glink = conv.getEdgeLink(links.get(5));
+        TestCase.assertNull(glink);
+    }
+    
+    private TopologyConverter createTopology2Converter(boolean ipv4) throws IOException {
+        IntraTopologyBuilder builder = new IntraTopologyBuilder(false);
+        TestTopology2 topo = new TestTopology2();
+        topo.domain2(builder);
+        
+        IntradomainPathfinder pf = IntradomainPathfinderFactory.getIntradomainPathfinder(
+                builder.getIntradomainTopology());
+        
+        InternalIdentifiersSource internal;
+        if (ipv4) {
+            String nrange = "10.11.0.0/19";
+            String prange = "10.11.32.0/19";
+            String lrange = "10.11.64.0/19";
+            
+            internal = new InternalIdentifiersSourceIPv4(nrange, prange, lrange);
+        } else {
+            internal = new InternalIdentifiersSourceURN("MyDomain");
+        }
+        
         PublicIdentifiersMapping mapping = new PublicIdentifiersMapping(
                 "./src/test/resources/test_etc/topology2-public-ids.properties");
 

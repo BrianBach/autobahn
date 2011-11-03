@@ -294,17 +294,9 @@ public final class AccessPoint implements TopologyAbstraction {
         
         // Check properties
         
-        String id_nodes = properties.getProperty("id.nodes");
-        if (id_nodes == null || id_nodes.equalsIgnoreCase("none") || id_nodes.equals("")) {
-            initChecks.append("id.nodes is empty, please check properties file.\n");
-        }
-        String id_ports = properties.getProperty("id.ports");
-        if (id_ports == null || id_ports.equalsIgnoreCase("none") || id_ports.equals("")) {
-            initChecks.append("id.ports is empty, please check properties file.\n");
-        }
-        String id_links = properties.getProperty("id.links");
-        if (id_links == null || id_links.equalsIgnoreCase("none") || id_links.equals("")) {
-            initChecks.append("id.links is empty, please check properties file\n");
+        String domainName = properties.getProperty("domainName");
+        if (domainName == null || domainName.equalsIgnoreCase("none") || domainName.equals("")) {
+            initChecks.append("domainName is empty, please check properties file.\n");
         }
         
         String lookuphost = properties.getProperty("lookuphost");

@@ -571,7 +571,7 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
 	}
 
 	/* (non-Javadoc)
-	 * @see net.geant.autobahn.intradomain.converter.IdentifiersSource#getIdentifiers(java.lang.String, java.lang.String)
+	 * @see net.geant.autobahn.converter#getIdentifiers(java.lang.String, java.lang.String)
 	 */
 	public LinkIdentifiers getIdentifiers(String portName, String linkBodId) {
 		
@@ -602,11 +602,10 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
 			return null;
 		}
 		
-		IpAddress myAddress = new IpAddress(l.getBodID());
-		IpAddress address2 = new IpAddress(linkBodId);
-		
-		if(address2.getValue() > myAddress.getValue()) {
-			l.setBodID(linkBodId);
+		// Compare the identifiers given to the interdomain link by the attached
+		// domains and use the lexicographically larger one
+		if (linkBodId.compareTo(l.getBodID()) > 0 ) {
+		    l.setBodID(linkBodId);
 		}
 
 		// Get waiting identifiers for the domain that asked
