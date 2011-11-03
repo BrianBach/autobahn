@@ -196,7 +196,8 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	 */
 	public InterDomainManager createIdm (String name){
 		InterDomainManager interdomain = new InterDomainManager(name, name);
-		return interdomain;
+		refreshPorts();
+        return interdomain;
 	}
 
 	
@@ -687,11 +688,22 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 			url = idmUrl;
 		}
 		InterDomainManager manager = new InterDomainManager(idmName, url);
+		refreshPorts();
 		if (manager != null) {
 			idms.put(idmName, manager);
 		}
 		return manager;
 	}
+	
+	private void refreshPorts() {
+        ports.clear();
+        try {
+            getAllPorts();
+        } catch (UserAccessPointException e) {
+            e.printStackTrace();
+        }
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.ManagerNotifier#reservationChanged(java.lang.String, java.lang.String, java.lang.String, net.geant.autobahn.gui.ReservationChangedType, java.lang.String)
