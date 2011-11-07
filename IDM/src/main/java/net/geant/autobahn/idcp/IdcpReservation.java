@@ -26,7 +26,7 @@ public class IdcpReservation implements ReservationStatusListener {
 	private boolean resCancelReceived;
 	private final String idcpResId;
 	private final Reservation res;
-	private final PathInfo pathInfo;
+	private PathInfo pathInfo;
 	private boolean scheduled, activated;
 	
 	public IdcpReservation(String idcpResId, Reservation res, PathInfo pathInfo) { 
@@ -49,11 +49,20 @@ public class IdcpReservation implements ReservationStatusListener {
 		
 	public void setMessage(String msg) {
 		
+		log.debug("IDCP Notification - " + msg);
 		if (msg.equals(Idcp.EVENT_RESERVATION_CREATE_CONFIRMED)) {
 			resConfirmedReceived = true;
 		} else if (msg.equals(Idcp.EVENT_RESERVATION_CANCEL_CONFIRMED)) {
 			resCancelReceived = true;
 		} 
+	}
+	
+	public void setPathInfo(PathInfo pi) { 
+		
+		this.pathInfo = pi;
+		int vlanNumber = res.getGlobalConstraints().getDomainConstraints().get(0).getFirstPathConstraints().getRangeConstraints().get(0).getFirstValue();
+		String domain = IdcpManager.getDomainName();
+		Idcp.setVlans(pi, domain, vlanNumber);
 	}
 	
 	private void sendNotification(String resId, String eventType, String status, String errorMessage) {
@@ -63,13 +72,16 @@ public class IdcpReservation implements ReservationStatusListener {
 		final long end = res.getEndTime().getTimeInMillis();
 		final int bandwidth = (int)res.getCapacity();
 		
+		if (IdcpManager.getSubscribers().size() == 0)
+			log.info("Idcp sendNotification - no subscribers");
+		
 		for (SubscriptionInfo si : IdcpManager.getSubscribers()) {
 
 			try {
 				
 				IdcpNotifyClient notify = new IdcpNotifyClient(si.getConsumerUrl());
 				notify.notification(idcpResId, desc, start, end, bandwidth, pathInfo, eventType, status, errorMessage, si.getSubscriptionId());
-				log.info("sent notification to " + si.getConsumerUrl() + ", event " + eventType);
+				log.info("notify sent to " + si.getConsumerUrl() + ", event " + eventType);
 			} catch (IdcpException e) { 
 				log.info("error sending notification to " + si.getConsumerUrl());
 			}
@@ -78,21 +90,21 @@ public class IdcpReservation implements ReservationStatusListener {
 
 	@Override
 	public void reservationScheduled(String reservationId) {
-		
 		scheduled = true;
 		
 		// send if conf received
 		if (resConfirmedReceived) {
 			sendNotification(idcpResId, Idcp.EVENT_RESERVATION_CREATE_COMPLETED, "SCHEDULED", null);
 		} else {
-			
 			(new Thread() {
 				@Override
 				public void run() {
 					try {
 						// wait for res confirmed
 						Thread.sleep(1000 * 60); 
-					} catch (Exception e) { }
+					} catch (Exception e) { 
+						
+					}
 					
 					if (resConfirmedReceived)
 						sendNotification(idcpResId, Idcp.EVENT_RESERVATION_CREATE_COMPLETED, "SCHEDULED", null);

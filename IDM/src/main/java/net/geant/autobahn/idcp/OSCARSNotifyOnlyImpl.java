@@ -54,8 +54,11 @@ public class OSCARSNotifyOnlyImpl implements OSCARSNotifyOnly {
         	if (res == null) {
         		log.info("notification - reservation " + resId + " not found");
         	} else {
-        		log.info("notification - setting message " + message + " for reservation " + resId);
+        		log.info("notification received - " + message + " for reservation " + resId);
         		res.setMessage(message);
+        		if (message.equals(Idcp.EVENT_RESERVATION_CREATE_CONFIRMED)) {
+        			res.setPathInfo(event.getResDetails().getPathInfo());
+        		}
         	}
         } catch (Exception e) {
         	log.info("notification error - " + e.getMessage());

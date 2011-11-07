@@ -3,6 +3,7 @@
  */
 package net.geant.autobahn.idcp;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
@@ -94,6 +95,8 @@ public class OscarsConverter {
 		
 		if (domains == null)
 			return links;
+		
+		HashSet<String> whitelist = IdcpManager.getEndpointsWhiteList();
 
 		for (CtrlPlaneDomainContent domain : domains) {
 			if (domain.getNode() == null)  
@@ -105,12 +108,33 @@ public class OscarsConverter {
 					if (port.getLink() == null)
 						continue;
 					for (CtrlPlaneLinkContent link : port.getLink()) {
-												
+
+						// filter links
+						if (whitelist != null) {
+							if (!whitelist.contains(link.getId())) {
+								log.debug("IDCP link disarded - " + link.getId());
+								continue;
+							} else 
+								log.debug("IDCP link allowed - " + link.getId());
+						}
+						
 						String[] split = link.getRemoteLinkId().split(":");
 						if (split.length != LINK_NUM_SPLITS)
 							continue;
-
-						CtrlPlaneFindResults find = findRemote(split[3], split[4], split[5], split[6], domains);
+						
+						// handle special * case (edge link)
+						CtrlPlaneFindResults find;
+						final String edgeLink = "urn:ogf:network:domain=*:node=*:port=*:link=*";
+						if (link.getRemoteLinkId().equals(edgeLink)) {
+							// make same as start port
+							find = new CtrlPlaneFindResults();
+							find.domain = domain;
+							find.node = node;
+							find.port = port;
+							find.link = link;
+						} else {
+							find = findRemote(split[3], split[4], split[5], split[6], domains);
+						}
 						if (find != null) {
 
 							split = link.getId().split(":");
@@ -122,7 +146,7 @@ public class OscarsConverter {
 							String fullLinkID = "urn:ogf:network:" + domainID + ":" + nodeID + ":" + portID + ":" + linkID;
 							// override port id with full identifier
 							portID = domainID + ":" + nodeID + ":" + portID + ":" + linkID;
-
+							
 							// set start port
 							AdminDomain aDomain = ads.get(domainID);
 							if(aDomain == null) {

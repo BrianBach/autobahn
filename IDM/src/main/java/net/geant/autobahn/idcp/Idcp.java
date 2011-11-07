@@ -8,6 +8,7 @@ import java.util.UUID;
 import net.geant.autobahn.idm.AccessPoint;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.Port;
+import net.geant.autobahn.reservation.AutobahnReservation;
 
 import org.apache.log4j.Logger;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneHopContent;
@@ -141,7 +142,7 @@ public class Idcp {
 	}
 
 	/**
-	 * Prints all hops included in PathInfo
+	 * Prints all hops included in PathInfo, used for debugging
 	 * @param pathInfo
 	 */
 	public static void printPathInfo(PathInfo pathInfo) { 
@@ -150,5 +151,32 @@ public class Idcp {
 		for (CtrlPlaneHopContent hop : pathInfo.getPath().getHop()) {
 			log.info("linkId: " + hop.getLink().getId() + ", remoteLinkId: " + hop.getLink().getRemoteLinkId());
 		}
+	}
+	
+	/**
+	 * Sets agreeded vlans as returned in pathInfo from idcp domains
+	 * @param pathInfo
+	 * @param domain
+	 * @param vlan
+	 */
+	public static void setVlans(PathInfo pathInfo, String domain, int vlan) {
+		
+		for (CtrlPlaneHopContent hop : pathInfo.getPath().getHop()) {
+			String link = hop.getLink().getId();
+			//System.out.println("checking link: " + link);
+			if (link.contains(domain)) {
+				
+				hop.getLink().getSwitchingCapabilityDescriptors().getSwitchingCapabilitySpecificInfo().setVlanRangeAvailability(String.valueOf(vlan));
+			}
+		}
+	}
+	
+	public static void printReservation(String method, AutobahnReservation res) { 
+		
+		System.out.println("IDCP - " + method + ", isHomeDomain: " + res.isHomeDomain() + ", isLastDomain: " + res.isLastDomain());
+		System.out.println("IDCP - isIdcp: " + res.isIdcpReservation() + ", isAb2Idcp: " + 
+					res.isAb2IdcpReservation() + ", isIdcp2Ab: " + res.isIdcp2AbReservation());
+		System.out.println("nextDomainAddress: " + res.getNextDomainAddress() + ", idcpServer: " + res.getIdcpServer());
+		
 	}
 }

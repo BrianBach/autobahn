@@ -12,14 +12,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Scanner;
 import javax.xml.bind.JAXBContext;
@@ -28,7 +27,6 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.Source;
 
 import net.geant.autobahn.network.Link;
-import net.geant.autobahn.network.Port;
 
 import org.apache.log4j.Logger;
 import org.jdom.Document;
@@ -64,7 +62,7 @@ public final class IdcpManager {
 	public static final String PROPERTY_IDCP_URL = "oscars.url";
 	public static final String PROPERTY_IDCPNOTIFY_URL = "oscarsnotify.url";
 	public static final String PROPERTY_IDCPNOTIFYONLY_URL = "oscarsnotifyonly.url";
-
+	public static final String PROPERTY_ENDPOINTS_WHITELIST = "endpoints.whitelist";
 	
 	public static final String IDCP_SUBSCRIBERS_FILE = "etc/subscribers.txt";
 	public static final int DEFAULT_SUBSCRIPTION_TIME = 50; // in minutes
@@ -75,7 +73,9 @@ public final class IdcpManager {
 	private static final Map<String, IdcpDomain> idcpDomains = new HashMap<String, IdcpDomain>(); // domainName, IdcpDomain
 	
 	private static boolean debugging, initialized;
-	private static Map<String, Properties> idcps = new HashMap<String, Properties>(); // url, properties 
+	private static Map<String, Properties> idcps = new HashMap<String, Properties>(); // url, properties
+	private static String idcpEndpointsFile;
+	private static HashSet<String> idcpEndpoints;
 	
 	private static List<SubscriptionInfo> subscribers = new ArrayList<SubscriptionInfo>();
 	private static List<SubscriptionInfo> subscriptions = new ArrayList<SubscriptionInfo>();
@@ -110,6 +110,7 @@ public final class IdcpManager {
 				
 			psTopologyUrl = properties.getProperty(PROPERTY_PSTOPOLOGY_URL, IDCP_NONE);
 			psTopologyFile = properties.getProperty(PROPERTY_PSTOPOLOGY_FILE, IDCP_NONE);
+			idcpEndpointsFile = properties.getProperty(PROPERTY_ENDPOINTS_WHITELIST, IDCP_NONE);
 			
 			boolean enabled = Boolean.parseBoolean(properties.getProperty(PROPERTY_INTEROPERABILITY_ENABLED, "false"));
 			if (!enabled) {
@@ -149,11 +150,12 @@ public final class IdcpManager {
 			
 			// export autobahn topology to defined ps topology service
 			if (psTopologyUrl.equals(IDCP_NONE) || psTopologyFile.equals(IDCP_NONE)) {
-				log.info("autobahn topology file configured to be not exported");
+				//log.info("autobahn topology file configured to be not exported");
 			} else {
 				try {
 					String TopologyXml = loadTopology(psTopologyFile);
 					exportTopology(psTopologyUrl, TopologyXml);
+					log.info("autobahn topology file exported to " + psTopologyUrl);
 				} catch (Exception e) { 
 					log.info(psTopologyFile + " not exported to " + psTopologyUrl + ", " + e.getMessage());
 					return false;
@@ -250,7 +252,48 @@ public final class IdcpManager {
 		return domainName;
 	}
 	
-	private static void exportTopology(String psTopologyServiceUrl, String topologyXml) { 
+	/**
+	 * Returns valid idcp endpoints read from a csv file
+	 * @return
+	 */
+	public static HashSet<String> getEndpointsWhiteList() {
+		
+		if (idcpEndpoints != null)
+			return idcpEndpoints;
+		
+		if (idcpEndpointsFile.equals(IDCP_NONE))
+			return null;
+		
+		File file = new File(idcpEndpointsFile);
+		if (!file.exists()) {
+			log.info(idcpEndpointsFile + " not found");
+			return null;
+		}
+		
+		idcpEndpoints = new HashSet<String>();
+		try {
+            BufferedReader in = new BufferedReader(new FileReader(idcpEndpointsFile));
+            String line = in.readLine(); // skip first line
+		    while ((line = in.readLine()) != null) { 
+		    	String[] tokens = line.split(",");
+		        if (tokens != null) {
+		        	idcpEndpoints.add(tokens[1]);
+		        }
+		    }
+		    in.close();
+		    log.info(idcpEndpointsFile + " loaded with " + idcpEndpoints.size() + " endpoints");
+		    return idcpEndpoints;
+		} catch (IOException e) { 
+			return null;
+		}
+	}
+	
+	/**
+	 * Sends topology xml file (starting with domain tag) to perfsonar topology service
+	 * @param psTopologyServiceUrl
+	 * @param topologyXml
+	 */
+	public static void exportTopology(String psTopologyServiceUrl, String topologyXml) { 
 		
 		if (psTopologyServiceUrl == null || psTopologyServiceUrl.equals("none")) {
 			log.info("exporting topology to perfsonar service not defined");
@@ -291,8 +334,8 @@ public final class IdcpManager {
 		final String namespace = "http://ogf.org/schema/network/topology/ctrlPlane/20080828/";
 		final String domainName = "urn:ogf:network:domain=" + domain;
 		
-		TSLookupClient psClient = new TSLookupClient();
-		psClient.setTSList(new String[] { psTopologyUrl });
+		TSLookupClient psClient = new TSLookupClient(null, null, new String[] { psTopologyUrl }); 
+		//psClient.setTSList(new String[] { psTopologyUrl });
 		Element domainElement = psClient.getDomain(domainName, namespace);
 		Namespace ns = Namespace.getNamespace(namespace);
 		Element topo = domainElement.getChild("domain", ns);
@@ -381,7 +424,7 @@ public final class IdcpManager {
 						
 						try {
 							IdcpNotifyClient notify = new IdcpNotifyClient(si.getNotifierUrl());
-							notify.renew(si.getNotifierUrl(), si.getSubscriptionId(), null, termTime);
+							notify.renew(si.getConsumerUrl(), si.getSubscriptionId(), null, termTime);
 						} catch (Exception e) { 
 							log.info("failed to renew subscription " + si.getSubscriptionId() + " at " + si.getNotifierUrl());
 						}

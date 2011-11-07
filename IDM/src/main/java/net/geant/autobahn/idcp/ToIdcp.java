@@ -3,8 +3,6 @@
  */
 package net.geant.autobahn.idcp;
 
-import java.util.List;
-import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneHopContent;
@@ -13,16 +11,8 @@ import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlanePathContent;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneSwcapContent;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneSwitchingCapabilitySpecificInfo;
 
-import net.geant.autobahn.constraints.ConstraintsNames;
-import net.geant.autobahn.constraints.DomainConstraints;
-import net.geant.autobahn.constraints.GlobalConstraints;
-import net.geant.autobahn.constraints.PathConstraints;
-import net.geant.autobahn.constraints.Range;
 import net.geant.autobahn.network.Link;
-import net.geant.autobahn.network.Path;
-import net.geant.autobahn.network.Port;
 import net.geant.autobahn.reservation.AutobahnReservation;
-import net.geant.autobahn.reservation.Reservation;
 import net.geant.autobahn.reservation.ReservationErrors;
 
 /**
@@ -42,7 +32,16 @@ public final class ToIdcp {
 		
 		this.domainName = domainName;
 		this.domain = IdcpManager.getIdcpDomain(domainName);
-		this.idcp = new IdcpClient(domain.getIdcpUrl());
+		String url = null;
+		if (domain.isPeered()) {
+			url = domain.getIdcpUrl();
+		} else {
+			IdcpDomain peered = IdcpManager.getIdcpDomain(domain.getStaticRoute());
+			url = peered.getIdcpUrl();
+		}
+		
+		System.out.println("ToIdcp created with " + url);
+		this.idcp = new IdcpClient(url);
 	}
 	
 	private static CtrlPlaneHopContent createHop(String hopId, String linkId, String remoteId, String vlan) { 
@@ -87,10 +86,6 @@ public final class ToIdcp {
 	    if (reservation.isIdcp2AbReservation() && !reservation.isAb2IdcpReservation()) 
 	    	return ReservationErrors.RESERVATION_NOTSUPPORTED;
 	    
-	    if (domain.getIdcpNotifyUrl().equals(IdcpManager.IDCP_NONE)) {
-	    	log.info("cannot send idcp reservation without subscription set");
-	    	return ReservationErrors.RESERVATION_NOTSUPPORTED;
-	    }
 
 	    final String startPort = reservation.getStartPort().getBodID();
         final String idcpStartPort = Idcp.portToIdcpLink(startPort);
@@ -105,7 +100,8 @@ public final class ToIdcp {
 	    String idcpAutobahnEgress, idcpIngress;
 	    if (!domain.isPeered()) {
 	    	
-	    	IdcpDomain peered = IdcpManager.getIdcpDomain(domain.getStaticRoute());
+			String domName = domain.getStaticRoute();
+			IdcpDomain peered = IdcpManager.getIdcpDomain(domName);
 	    	String[] linkMapping = peered.getLinkMapping();
 	    	if (linkMapping == null) {
 	    		log.info("link maping not found for domain " + peered.getDomainName());
@@ -168,13 +164,14 @@ public final class ToIdcp {
 	    dst = ToIdcp.restorePortId(dst);
 	    System.out.println("src: " + src + ", dst: " + dst);
 	    */
+	    /*
 	    GlobalConstraints globalCons = reservation.getGlobalConstraints();
 	    DomainConstraints domainCons = globalCons.getDomainConstraints().get(globalCons.getDomainConstraints().size() - 1);
 	    
 	    PathConstraints pathCons = domainCons.getPathConstraints().get(domainCons.getPathConstraints().size() - 1);
 	    List<Range> ranges = pathCons.getRangeConstraint(ConstraintsNames.VLANS).getRanges();
 	    Range vlans = ranges.get(ranges.size() - 1);
-	    	    
+	    */    
 	    int vlanNumber = reservation.getGlobalConstraints().getDomainConstraints().get(0).getFirstPathConstraints().getRangeConstraints().get(0).getFirstValue();
 	    final String vlan = vlanNumber == 0 ? "any" : String.valueOf(vlanNumber);
 	    final String resId = Idcp.toIdcpReservationId(reservation.getBodID());

@@ -226,8 +226,6 @@ public class OSCARSImpl implements OSCARS {
              if (IdcpManager.isDebugging())
             	 Idcp.printPathInfo(pathInfo);
              
-             
-             
       		 final String domain = IdcpManager.getDomainName();
       		 
       		 
@@ -239,7 +237,7 @@ public class OSCARSImpl implements OSCARS {
       		 }
       		 
       		 CtrlPlaneHopContent dstHop = pathInfo.getPath().getHop().get(pathSize - 1);
-      		 String dstPort = srcHop.getLink().getId();
+      		 String dstPort = dstHop.getLink().getId();
      		 if (!dstPort.contains(domain)) {
      			 log.info("dst port " + dstPort + " does not contain " + domain);
      			 throw new BSSFaultMessage("dst hop " + dstPort + " does not contain " + domain);

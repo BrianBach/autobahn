@@ -196,7 +196,7 @@ public final class IdcpNotifyClient {
 		
 		Renew request = new Renew();
 		request.setSubscriptionReference(createEndpoint(producerUrl, subscriptionId, publisherId));
-
+		
 		request.setTerminationTime(null); // axis2 issues
 				
 		try {
@@ -215,11 +215,25 @@ public final class IdcpNotifyClient {
 			
 			return null;
 		} catch (Exception e) { 
-			log.info("IDCP renew failed - " + e.getMessage());
+			log.debug("IDCP renew failed - " + e.getMessage());
 			throw new IdcpException(e.getMessage());
 		}
 	}
 	
+	/**
+	 * Used by reservations to send async notification to subscribers
+	 * @param resId
+	 * @param desc
+	 * @param start
+	 * @param end
+	 * @param bandwidth
+	 * @param pathInfo
+	 * @param eventType
+	 * @param status
+	 * @param errorMessage
+	 * @param subId
+	 * @throws IdcpException
+	 */
 	public void notification(String resId, String desc, long start, long end, int bandwidth, PathInfo pathInfo, 
 				String eventType, String status, String errorMessage, String subId) throws IdcpException { 
 		
