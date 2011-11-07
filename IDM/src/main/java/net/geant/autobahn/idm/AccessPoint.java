@@ -668,25 +668,27 @@ public final class AccessPoint implements UserAccessPoint,
     			return l;
     	}
     	return null;
-    } 
+    }
     
     /**
-     * Returns all client ports presented in idcp format
+     * Returns links in idcp format (skipping those with _dummyLink).
+     * It is taking into account linkId, endPort and endNode - domain is geant.net
      * @return
      */
-    public String[] getIdcpClientPorts() {
-
+    public List<String> getIdcpLinks() {
+    	
     	List<Link> links = daos.getLinkDAO().getAll();
-    	List<String> idcpPorts = new ArrayList<String>();
+    	List<String> idcpLinks = new ArrayList<String>();
     	for (Link l : links) {
-
-    		Port port = l.getEndPort();
-    		if (port.isClientPort() && port.isIdcpPort()) {
-   				idcpPorts.add(port.getBodID());
+    		
+    		if (!l.getBodID().contains("_dummyLink")) {
+    			String idcpLink = "urn:ogf:network:domain=geant.net:node=" + l.getEndPort().getNode().getBodID() + 
+    				":port=" + l.getEndPort().getBodID() + ":link=" + l.getBodID() + " - " + l.getEndPort().getDescription();
+    			idcpLinks.add(idcpLink);
     		}
     	}
-    	return (String[])idcpPorts.toArray(new String[idcpPorts.size()]);
-    }  
+    	return idcpLinks;
+    } 
     
     /* (non-Javadoc)
      * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getAllIdcpPorts()
