@@ -1,0 +1,181 @@
+name,id,institution,longitude,latitude,keywords
+hecn-s400-10.gsfc.nasa.gov,urn:ogf:network:domain=dragon.maxgigapop.net:node=GSFC:port=19:link=*,NASA,,,
+wash-pc1-eth1.hopi.internet2.edu,urn:ogf:network:domain=dragon.maxgigapop.net:node=HOPI-WASH:port=0-2-0:link=*,MAX,,,
+ncsa-vlsr-eth1.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=NCSA:port=17:link=*,NCSA,,,
+mcln-e300.gsfc.nasa.gov,urn:ogf:network:domain=dragon.maxgigapop.net:node=MCLN:port=1-2-3:link=*,NASA,,,
+uslhcnet.es.net,urn:ogf:network:domain=es.net:node=star-sdn1:port=xe-0/1/0:link=*,ESnet,,,
+perfsonar.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=MAX:port=1-1-12:link=*,MAX,,,
+cern-dcn.uslhcnet.org,urn:ogf:network:domain=uslhcnet.org:node=vlsr:port=10.8.2.1-10:link=10.8.2.1,USLHCnet,,,
+learn-sw-gi1-0-1.tx-learn.org,urn:ogf:network:domain=tx-learn.org:node=learn-sw:port=1-0-1:link=*,LEARN,,,
+clpk-es1-eth1.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=CLPK:port=1-0-1:link=*,MAX,,,
+ncsa-es1.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=NCSA:port=17:link=*,NCSA,,,
+star-pt1.es.net,urn:ogf:network:domain=es.net:node=star-sdn1:port=xe-1/3/0:link=* ,ESnet,,,
+pssc6-eth2.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=MAX:port=1-2-3:link=*,MAX,,,
+clpk-6509.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=CLPK:port=1-1-8:link=*,MAX,,,
+mcln-es1-eth2.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=MCLN:port=1-1-4:link=*,MAX,,,
+max-vlsr2-eth1.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=MAX2:port=1-0-9:link=*,MAX,,,
+lucille-untagged.dcn.nysernet.org,urn:ogf:network:domain=nysernet.org:node=syr-vlsr1:port=E7:link=1,NYSERNet,,,
+anna-lab3.internet2.edu,urn:ogf:network:domain=anna.internet2.edu:node=anna-vlsr2:port=1-1-1:link=1,Internet2,,,
+dataserver-untagged.dcn.nysernet.org,urn:ogf:network:domain=nysernet.org:node=syr-vlsr1:port=E22:link=1,NYSERNet,,,
+vela-eth1.gsfc.nasa.gov,urn:ogf:network:domain=dragon.maxgigapop.net:node=GSFC:port=5:link=*,NASA,,,
+hydra-eth1.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=MAX3:port=0-4-10:link=*,MAX,,,
+learn-pc.tx-learn.org,urn:ogf:network:domain=tx-learn.org:node=208.117.132.8:port=1:link=1,LEARN,,,
+pssc4-eth2.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=MAX:port=1-1-8:link=*,MAX,,,
+arlg-es1-eth2.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=ARLG:port=1-1-4:link=*,MAX,,,
+carina-eth1.gsfc.nasa.gov,urn:ogf:network:domain=dragon.maxgigapop.net:node=GSFC:port=6:link=*,NASA,,,
+hecn-s400-9.gsfc.nasa.gov,urn:ogf:network:domain=dragon.maxgigapop.net:node=GSFC:port=18:link=*,NASA,,,
+6509-vlsr-eth1.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=CLPK6509:port=0-4-37:link=*,MAX,,,
+pssc6-eth1.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=MAX:port=1-0-2,MAX,,,
+hecn-s400-11.gsfc.nasa.gov,urn:ogf:network:domain=dragon.maxgigapop.net:node=GSFC:port=20:link=*,NASA,,,
+lab4-vlsr-eth0.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=LAB4:port=1-0-1:link=*,MAX,,,
+blackie.dcn.nysernet.org,urn:ogf:network:domain=nysernet.org:node=syr-vlsr1:port=5:link=1,NYSERNet,,,
+wash-pc1-eth2.hopi.internet2.edu,urn:ogf:network:domain=dragon.maxgigapop.net:node=HOPI-WASH:port=0-0-0:link=*,MAX,,,
+nlm.nih.gov,urn:ogf:network:domain=dragon.maxgigapop.net:node=CLPK:port=1-3-3:link=*,NIH,,,
+wash-pc2-eth1.hopi.internet2.edu,urn:ogf:network:domain=dragon.maxgigapop.net:node=HOPI-WASH:port=0-2-1:link=*,MAX,,,
+mcln-es1-eth1.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=MCLN:port=1-0-4:link=*,MAX,,,
+s50v.gsfc.nasa.gov,urn:ogf:network:domain=dragon.maxgigapop.net:node=CLPK:port=1-0-2:link=*,NASA,,,
+max-es1.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=CLPK6509:port=0-4-37:link=*,MAX,,,
+max-es2-eth1.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=MAX:port=1-0-1:link=*,MAX,,,
+phoebus.chic.es.net,urn:ogf:network:domain=es.net:node=star-sdn1:port=xe-8/3/0:link=*,ESnet,,,
+pssc1-eth2.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=MAX:port=1-1-4:link=*,MAX,,,
+pssc2-eth2.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=LAB4:port=1-1-1:link=*,MAX,,,
+nyc-f10-newy.dcn.nysernet.org,urn:ogf:network:domain=nysernet.org:node=nyc-vlsr1:port=0-2-4:link=1,NYSERNet,,,
+dcne-vlsr-eth0.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=DCNE:port=1-0-1:link=*,MAX,,,
+lab4-es1-eth1.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=LAB4:port=1-0-3:link=*,MAX,,,
+wash-pc3-eth1.hopi.internet2.edu,urn:ogf:network:domain=dragon.maxgigapop.net:node=HOPI-WASH:port=0-2-2:link=*,MAX,,,
+dataserver.dcn.nysernet.org,urn:ogf:network:domain=nysernet.org:node=syr-vlsr1:port=22:link=1,NYSERnet,,,
+cuny.dcn.nysernet.org,urn:ogf:network:domain=nysernet.org:node=nyc-vlsr1:port=0-2-3:link=1,City University of New York,,,
+lambdastation.sdn.fnal.gov,urn:ogf:network:domain=es.net:node=fnal-mr2:port=xe-8/0/0:link=*,FermiLab,,,
+fermi.sdn.fnal.gov,urn:ogf:network:domain=es.net:node=fnal-mr2:port=xe-8/0/0:link=*,FermiLab,,,
+planetlab3.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=CLPK:port=1-0-4:link=*,MAX,,,
+planetlab4.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=ARLG:port=1-0-6:link=*,MAX,,,
+terapaths.sdn.bnl.gov,urn:ogf:network:domain=es.net:node=bnl-mr3:port=xe-1/2/0:link=*,Brookhaven National Lab,,,
+bnl.sdn.es.net,urn:ogf:network:domain=es.net:node=bnl-mr3:port=xe-1/2/0:link=*,Brookhaven National Lab,,,
+pssc7-eth2.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=MAXMMLAB:port=0-0-26:link=*,MAX,,,
+utest.anna.internet2.edu,urn:ogf:network:domain=anna.internet2.edu:node=raptor1:port=UTEST:link=*,Internet2,,,
+test1.anna.internet2.edu,urn:ogf:network:domain=anna.internet2.edu:node=raptor1:port=1-1-1:link=*,Internet2,,,
+test2.anna.internet2.edu,urn:ogf:network:domain=anna.internet2.edu:node=raptor2:port=1-1-1:link=*,Internet2,,,
+deter.east.isi.edu,urn:ogf:network:domain=dragon.maxgigapop.net:node=ARLG:port=1-0-5:link=*,USC/ISI East,,,
+ligo.dcn.caltech.edu,urn:ogf:network:domain=caltech.edu:node=vlsr1:port=0-7-4:link=11.1.1.1,CalTech,,,
+bwctl10g2-mgmt.sc09.org,urn:ogf:network:domain=sc09.org:node=core-sw-1:port=xe-11/2/0:link=*,SC09,,,sc09,  bwctl
+island.east.isi.edu,urn:ogf:network:domain=dragon.maxgigapop.net:node=ARLG:port=1-2-2:link=*,USC ISI East,,,
+es2.east.isi.edu,urn:ogf:network:domain=dragon.maxgigapop.net:node=ARLG:port=1-1-12:link=*,USC ISI East,,,
+ngc.mcln.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=MCLN:port=1-3-2:link=*,,,,
+alpha.east.isi.edu,urn:ogf:network:domain=dragon.maxgigapop.net:node=ARLG:port=1-3-1:link=*,USC ISI East,,,
+sands232.east.isi.edu,urn:ogf:network:domain=dragon.maxgigapop.net:node=ARLG:port=1-1-11:link=*,USC ISI East,,,
+protogeni.mcln.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=MCLN:port=1-2-2:link=*,,,,
+dcn.bato.loni.org,urn:ogf:network:domain=loni.org:node=lsu-dcn:port=0-2-1:link=*,LONI,,,
+planetlab2.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=MAX:port=1-0-9:link=*,MAX,,,
+planetlab5.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=MAX:port=1-0-5:link=*,MAX,,,
+tokyo.dcn.jgn2plus.jp,urn:ogf:network:domain=dcn.jgn2plus.jp:node=kote-dc-2:port=0-0-5:link=kote-pc,JGN2,,,
+fukuoka.dcn.jgn2plus.jp,urn:ogf:network:domain=dcn.jgn2plus.jp:node=kfukuoka-dc-1:port=0-0-10:link=kfukuoka-pc-1,JGN2,,,
+geni-planetlab-1.unl.gpeni.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=MCLN:port=1-2-2:link=*,GpENI,,,
+ion.mcln.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=MCLN:port=1-3-1:link=*,MAX,,,
+sands230.east.isi.edu,urn:ogf:network:domain=dragon.maxgigapop.net:node=ARLG:port=1-1-12:link=*,USC ISI East,,,
+lambdastation.sdn.unl.edu,urn:ogf:network:domain=es.net:node=kans-sdn1:port=xe-8/1/0:link=*,University of Nebraska - Lincoln,,,
+s1p3.uvalight.net,urn:ogf:network:domain=uvalight.net:node=SURFnet-OME4T_VIOLA:port=s1p3:link=10.9.2.1,,,,
+ac10-m7i-1.testlab.grnoc.iu.edu,urn:ogf:network:domain=testlab.grnoc.iu.edu:node=ac10-m71-1:port=ge-0/3/0:link=*,Internet2,39.17418,-86.5006,
+PNWGP.seat.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.seat:port=xe-0/3/0:link=*,Internet2,,,
+LONI.hous.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.hous:port=xe-0/3/0:link=*,Internet2,,,
+cron.loni.org,urn:ogf:network:domain=loni.org:node=lsu-dcn:port=0-2-3:link=*,LONI,,,
+core.loni.org,urn:ogf:network:domain=loni.org:node=lsu-dcn:port=0-2-4:link=10.100.5.1,LONI,,,
+test2.btr.loni.org,urn:ogf:network:domain=loni.org:node=lsu-dcn:port=0-4-1:link=*,LONI,,,
+lsu-btr.loni.org,urn:ogf:network:domain=loni.org:node=loni-dcn-e1:port=0-2-4:link=10.100.5.2,LONI,,,
+ion.btr.loni.org,urn:ogf:network:domain=loni.org:node=loni-dcn-e1:port=0-1-4:link=*,LONI,,,
+loni-e1.loni.org,urn:ogf:network:domain=loni.org:node=loni-dcn-e1:port=0-9-3:link=*,LONI,,,
+planetlab1.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=MAX:port=1-0-7:link=*,MAX,,,
+ion.newy.esnet.net,urn:ogf:network:domain=es.net:node=aofa-sdn1:port=xe-7/1/0:link=*,ESnet,,,
+Internet2.dcn.jgn2plus.jp,urn:ogf:network:domain=dcn.jgn2plus.jp:node=kote-dc-2:port=0-0-3:link=ion,JGN2,,,JGN2 Internet2
+Internet2.caltech.edu,urn:ogf:network:domain=caltech.edu:node=vlsr2:port=0-4-1:link=11.1.1.2,Caltech,,,caltech internet2
+ion.clpk.dragon.maxgigapop.net,urn:ogf:network:domain=dragon.maxgigapop.net:node=CLPK:port=1-2-3:link=*,MAX,,,
+obs-hous.net.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.hous:port=xe-3/0/0:link=obs,Internet2,,,
+obs-seat.net.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.seat:port=xe-9/2/0:link=obs,Internet2,,,
+pacwave.seat.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.seat:port=xe-1/2/0:link=*,Internet2,,,pacwave pacific wave Internet2
+scinet.hous.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.hous:port=xe-4/1/0:link=scinet,Internet2,,,Internet2, SCinet
+GPN.kans.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.kans:port=xe-0/0/2:link=*,Internet2,,,
+ProtoGENI.kans.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.kans:port=ge-7/1/3:link=*,Internet2,,,
+Shadownet.kans.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.kans:port=ge-7/1/3:link=*,Internet2,,,internet2 protogeni
+obs-kans.net.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.kans:port=xe-1/0/3:link=obs,Internet2,,,
+openflow.hous.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.hous:port=ge-9/0/4:link=openflow,Internet2,,,Internet2 Openflow
+pwave.seat.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.seat:port=xe-2/2/0:link=*,,,,
+phoebus01.hous.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.hous:port=ge-9/0/8:link=phoebus,Internet2,,,Internet2 Phoebus
+phoebus00.hous.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.hous:port=ge-9/0/7:link=phoebus,Internet2,,,Internet2 Phoebus
+phoebus01.kans.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.kans:port=ge-7/0/4:link=phoebus,Internet2,,,Internet2 Phoebus
+phoebus00.kans.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.kans:port=ge-7/0/3:link=phoebus,Internet2,,,Internet2 Phoebus
+MERIT.wash.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.wash:port=xe-0/0/2:link=*,Internet2,,,
+MAX.wash.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.wash:port=xe-0/1/0:link=*,Internet2,,,
+MAGPI.wash.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.wash:port=xe-1/0/3:link=*,Internet2,,,
+obs-wash.net.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.wash:port=xe-1/1/2:link=obs,Internet2,,,
+ProtoGENI.wash.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.wash:port=ge-7/1/3:link=*,Internet2,,,
+Shadownet.wash.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.wash:port=ge-7/1/3:link=*,internet2,,,internet2 protogeni
+mcnc.wash.ion.internet.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.wash:port=xe-1/1/0:link=*,Internet2,,,Internet2,  MCNC
+openflow.wash.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.wash:port=ge-7/0/3:link=openflow,Internet2,,,Internet2 Openflow
+phoebus01.wash.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.wash:port=ge-7/0/7:link=phoebus,Internet2,,,Internet2 Phoebus
+phoebus00.wash.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.wash:port=ge-7/0/6:link=phoebus,Internet2,,,Internet2 Phoebus
+ion-chic.es.net,urn:ogf:network:domain=es.net:node=chic-sdn2:port=xe-8/1/0:link=ion,ESnet,,,
+UEN.salt.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.salt:port=xe-0/1/2:link=*,Internet2,,,
+obs-salt.net.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.salt:port=xe-0/0/0:link=obs,Internet2,,,
+ProtoGENI.salt.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.salt:port=ge-7/1/2:link=*,Internet2,,,
+Shadownet.salt.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.salt:port=ge-7/1/2:link=*,Internet2,,,internet2 ion protogeni
+glif.salt.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.salt:port=ge-7/0/4:link=*,Internet2,,,Internet2 GLIF
+phoebus01.salt.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.salt:port=ge-7/0/4:link=phoebus,Internet2,,,Internet2 Phoebus
+phoebus00.salt.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.salt:port=ge-7/0/3:link=phoebus,Internet2,,,Internet2 Phoebus
+CalREN.losa.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.losa:port=xe-0/1/1:link=*,Internet2,,,
+Oregon.losa.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.losa:port=xe-0/0/2:link=*,Internet2,,,
+obs-losa.net.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.losa:port=xe-1/0/3:link=obs,Internet2,,,
+jgn2.losa.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.losa:port=xe-1/0/0:link=jgn2,Internet2,,,
+caltech.losa.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.losa:port=xe-0/1/1:link=caltech,Internet2,,,
+PACWAVE.losa.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.losa:port=xe-1/0/1:link=*,Internet2,,,Internet2,  pacwave,  JGN2
+phoebus00.losa.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.losa:port=ge-7/0/6:link=phoebus,Internet2,,,Internet2 Phoebus
+phoebus01.losa.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.losa:port=ge-7/0/7:link=phoebus,Internet2,,,Internet2 Phoebus
+openflow.losa.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.losa:port=ge-7/0/3:link=openflow,Internet2,,,Internet2 Openflow
+cerngole.uslhcnet.org,urn:ogf:network:domain=uslhcnet.org:node=vlsr4:port=0-0-0:link=cern,USLHCnet,,,
+nlgole.uslhcnet.org,urn:ogf:network:domain=uslhcnet.org:node=vlsr10:port=0-1-0:link=sara,USLHCnet,,,
+fdt.dynes.caltech.edu,urn:ogf:network:domain=caltech.edu:node=vlsr7:port=1-1-2:link=fdtdynes,USLHCnet,,,
+perfsonar.autogole.caltech.edu,urn:ogf:network:domain=caltech.edu:node=vlsr1:port=0-9-7:link=pfsgole,USLHCnet,,,
+KyRON.atla.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.atla:port=xe-0/1/1:link=*,Internet2,,,
+Indiana.atla.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.atla:port=xe-0/0/1:link=*,Internet2,,,
+MCNC.atla.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.atla:port=xe-0/1/2:link=*,Internet2,,,
+obs-atla.net.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.atla:port=xe-1/0/2:link=obs,Internet2,,,
+openflow.atla.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.atla:port=ge-7/0/4:link=openflow,Internet2,,,Internet2 Openflow
+phoebus01.atla.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.atla:port=ge-7/1/2:link=phoebus,Internet2,,,Internet2 Phoebus
+phoebus00.atla.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.atla:port=ge-7/1/1:link=phoebus,Internet2,,,Internet2 Phoebus
+NYSERNET.newy.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.newy:port=xe-0/1/2:link=*,Internet2,,,
+ESNET.newy.net.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.newy:port=xe-1/0/1:link=*,Internet2,,,
+MAX.newy.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.newy:port=xe-0/0/3:link=*,Internet2,,,
+netherlight.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.newy:port=ge-7/1/2:link=*,,,,
+jstor.newy.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.newy:port=ge-7/1/1:link=*,Internet2,,,JSTOR,  GEANT
+openflow.newy.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.newy:port=ge-7/0/4:link=openflow,Internet2,,,Internet2 Openflow
+phoebus00.newy.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.newy:port=ge-7/0/3:link=phoebus,Internet2,,,Internet2 Phoebus
+phoebus01.newy.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.newy:port=ge-7/0/7:link=phoebus,Internet2,,,Internet2 Phoebus
+NOX-new.newy.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.newy:port=ae0:link=nox,Internet2,,,Internet2 nox
+bbn-new.newy.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.newy:port=ae0:link=bbn,Internet2,,,bbn internet2
+NOX.newy.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.newy:port=ae0:link=nox,Internet2,,,Internet2 NOX
+bbn.newy.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.newy:port=ae0:link=bbn,Internet2,,,Internet2 BBN
+starlight.uslhcnet.org,urn:ogf:network:domain=uslhcnet.org:node=vlsr7:port=0-4-2:link=starlight,USLHCnet,,,
+3ROX.wash.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.wash:port=xe-1/0/2:link=*,Internet2,,,
+idc.ampath.net,urn:ogf:network:domain=ion.internet2.edu:node=rtr.atla:port=xe-0/0/2:link=ampath,AMPATH,,,
+obs-newy.net.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.newy:port=xe-1/1/0:link=obs,Internet2,,,
+MAGPI.newy.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.newy:port=xe-0/0/3:link=*,Internet2,,,
+MERIT.chic.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.chic:port=xe-2/1/0:link=*,Internet2,,,
+GPN.chic.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.chic:port=xe-1/0/3:link=*,Internet2,,,
+MREN.chic.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.chic:port=xe-2/0/0:link=*,Internet2,,,
+NYSERNET.chic.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.chic:port=xe-2/0/1:link=*,Internet2,,,
+terapaths.ion.umich.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.chic:port=xe-2/1/0:link=*,,,,
+nox.chic.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.chic:port=xe-2/1/1:link=nox,Internet2,,,Internet2 NOX
+phoebus00.chic.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.chic:port=xe-0/1/0:link=phoebus,Internet2,,,Internet2 Phoebus
+STARLIGHT.chic.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.chic:port=xe-0/0/1:link=*,Internet2,,,
+esnet-chic.net.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.chic:port=xe-0/1/2:link=es.net,Internet2,,,
+uslchnet.chic.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.chic:port=xe-0/0/1:link=uslhcnet,Internet2,,,Internet2 USLHCNet
+SOX.chic.ion.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.chic:port=xe-2/0/3:link=*,Internet2,,,
+dcn.umnet.umich.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.chic:port=xe-2/1/0:link=umich,University of Michigan,,,
+chic.i2.sox.net,urn:ogf:network:domain=ion.internet2.edu:node=rtr.chic:port=xe-2/0/3:link=sox,Southern Crossroads (SoX),,,
+obs-fast-newy.net.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.newy:port=xe-1/1/0:link=obs_fast,Internet2,,,
+obs-fast-wash.net.internet2.edu,urn:ogf:network:domain=ion.internet2.edu:node=rtr.wash:port=xe-1/1/2:link=obs_fast,Internet2,,,
+ad10-m7i-1.testlab.grnoc.iu.edu,urn:ogf:network:domain=testlab.grnoc.iu.edu:node=ad10-m71-1:port=ge-0/3/0:link=*,,,,
+af10-m7i-1.testlab.grnoc.iu.edu,urn:ogf:network:domain=testlab.grnoc.iu.edu:node=af10-m71-1:port=ge-0/3/0:link=*,,,,
+port4.testlab.grnoc.iu.edu,urn:ogf:network:domain=testlab.grnoc.iu.edu:node=ad10-m71-1:port=ge-0/3/0:link=*,,,,
+port2.testlab.grnoc.iu.edu,urn:ogf:network:domain=testlab.grnoc.iu.edu:node=ad10-m71-1:port=ge-0/1/0:link=*,,,,
+port5.testlab.grnoc.iu.edu,urn:ogf:network:domain=testlab.grnoc.iu.edu:node=af10-m71-1:port=ge-0/3/0:link=*,,,,
+port1.testlab.grnoc.iu.edu,urn:ogf:network:domain=testlab.grnoc.iu.edu:node=af10-m71-1:port=ge-0/1/0:link=*,,,,
+port3.testlab.grnoc.iu.edu,urn:ogf:network:domain=testlab.grnoc.iu.edu:node=ac10-m71-1:port=ge-0/3/0:link=*,,,,
