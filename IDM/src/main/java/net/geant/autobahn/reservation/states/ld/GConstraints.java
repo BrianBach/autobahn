@@ -5,6 +5,7 @@
  */
 package net.geant.autobahn.reservation.states.ld;
 
+
 import net.geant.autobahn.constraints.GlobalConstraints;
 import net.geant.autobahn.idcp.ToIdcp;
 import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
@@ -54,15 +55,14 @@ public class GConstraints extends LastDomainState {
             return;
         }
         
-        // IDCP reservation, send to suitable IDCP server
-        if(res.isAb2IdcpReservation() && (res.getIdcpServer()!=null)) {
-            ToIdcp client = new ToIdcp(res.getIdcpServer());
-            int res_code = client.forwardCreate(res);
-            if (res_code != 0) {
-                res.fail(res_code, domainID);
-                return;
-            }
-        }
+    	if (res.isAb2IdcpReservation() && res.getNextDomainAddress().equals(res.getIdcpServer())) {
+			ToIdcp idcp = new ToIdcp(res.getIdcpServer());
+			int res_code = idcp.forwardCreate(res);
+			if (res_code != 0) {
+				res.fail(res_code, domainID);
+				return;
+			}
+    	}
         
         try {
             res.reserveResources();

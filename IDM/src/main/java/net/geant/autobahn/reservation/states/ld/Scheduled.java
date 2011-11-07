@@ -5,6 +5,7 @@
  */
 package net.geant.autobahn.reservation.states.ld;
 
+
 import java.util.Calendar;
 
 import net.geant.autobahn.idcp.ToIdcp;
@@ -24,10 +25,11 @@ public class Scheduled extends LastDomainState {
     @Override
     public void cancel(LastDomainReservation res) {
     	
-        if (res.isIdcpReservation() && res.getNextDomainAddress().contains(res.getIdcpServer())) {
-        	ToIdcp client = new ToIdcp(res.getIdcpServer());
-        	client.forwardCancel(res.getBodID());
-        }
+    	if (res.isAb2IdcpReservation() && res.getNextDomainAddress().equals(res.getIdcpServer())) {
+			
+			ToIdcp idcp = new ToIdcp(res.getIdcpServer());
+			idcp.forwardCancel(res.getBodID());
+		}
     	
         res.releaseResources();
         res.reportCancel("Cancel OK", true);
@@ -40,10 +42,11 @@ public class Scheduled extends LastDomainState {
 	@Override
 	public void withdraw(LastDomainReservation res) {
 		
-        if (res.isIdcpReservation() && res.getNextDomainAddress().contains(res.getIdcpServer())) {
-        	ToIdcp client = new ToIdcp(res.getIdcpServer());
-        	client.forwardCancel(res.getBodID());
-        }
+		if (res.isAb2IdcpReservation() && res.getNextDomainAddress().equals(res.getIdcpServer())) {
+			
+			ToIdcp idcp = new ToIdcp(res.getIdcpServer());
+			idcp.forwardCancel(res.getBodID());
+		}
 		
 		res.releaseResources();
         log.info(this + " FAILURE: WITHDRAW");

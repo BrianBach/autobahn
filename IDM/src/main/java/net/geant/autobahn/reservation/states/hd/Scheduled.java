@@ -6,6 +6,7 @@
 package net.geant.autobahn.reservation.states.hd;
 
 
+
 import java.util.Calendar;
 
 import net.geant.autobahn.idcp.ToIdcp;
@@ -38,12 +39,13 @@ public class Scheduled extends HomeDomainState {
 	public void withdraw(HomeDomainReservation res) {
 		
 		if(res.isLastDomain()) {
-
-			if (res.isIdcpReservation() && res.getNextDomainAddress().contains(res.getIdcpServer())) {
-	        	ToIdcp client = new ToIdcp(res.getIdcpServer());
-	        	client.forwardCancel(res.getBodID());
-	        }
 			
+			if (res.isAb2IdcpReservation() && res.getNextDomainAddress().equals(res.getIdcpServer())) {
+				
+				ToIdcp idcp = new ToIdcp(res.getIdcpServer());
+				idcp.forwardCancel(res.getBodID());
+			}
+
 	        res.releaseResources();
 	        res.fail("Activation failed");
 	        return;
@@ -67,13 +69,14 @@ public class Scheduled extends HomeDomainState {
 
 	@Override
     public void cancel(HomeDomainReservation res) {
-
-		if(res.isLastDomain()) {
+		
+		if (res.isLastDomain()) {
 			
-			if (res.isIdcpReservation() && res.getNextDomainAddress().contains(res.getIdcpServer())) {
-	        	ToIdcp client = new ToIdcp(res.getIdcpServer());
-	        	client.forwardCancel(res.getBodID());
-	        }
+			if (res.isAb2IdcpReservation() && res.getNextDomainAddress().equals(res.getIdcpServer())) {
+				
+				ToIdcp idcp = new ToIdcp(res.getIdcpServer());
+				idcp.forwardCancel(res.getBodID());
+			}
 			
 	        res.releaseResources();
 

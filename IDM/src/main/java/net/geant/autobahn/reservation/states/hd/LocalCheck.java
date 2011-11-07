@@ -5,6 +5,7 @@
  */
 package net.geant.autobahn.reservation.states.hd;
 
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -84,23 +85,9 @@ public class LocalCheck extends HomeDomainState {
         final String domainID = res.getLocalDomainID();
         
         if(path.getCapacity() < res.getCapacity()) {
+        	System.out.println("PATH FAILED");
         	pathFailed(res, ReservationErrors.PATH_CAPACITY_NOT_ENOUGH, path.toString());
         	return;
-        }
-                
-        if (!path.isHomeDomain(domainID)) {
-        	
-        	 // if this is idcp reservation only, send now
-        	 if (res.isIdcp2AbReservation() && res.isAb2IdcpReservation() && res.getIdcpServer() != null) {
-        		 ToIdcp client = new ToIdcp(res.getIdcpServer());
-   	     	   	 int code = client.forwardCreate(res);
-       	     	 if (code != 0) 
-       	     		 res.fail(ReservationErrors.getInfo(code, res.getIdcpServer()));
-   	     	   	 else 
-   	     	   		res.success("OK");
-        	 } else
-        		 pathFailed(res, ReservationErrors.WRONG_DOMAIN, domainID);
-             return; 
         }
         
         // Create empty constraints
@@ -113,6 +100,7 @@ public class LocalCheck extends HomeDomainState {
         try {
             dcons = res.checkResources();
         } catch (OversubscribedException e) {
+        	System.out.println("OVERSUBSCRIBED");
         	Link failedLink = res.getPath().getLink(e.getFailedLink());
         	
             res.excludeLink(failedLink);
@@ -131,9 +119,15 @@ public class LocalCheck extends HomeDomainState {
         
         globalConstraints.addDomainConstraints(domainID + "-ingress", dcons[0]);
         globalConstraints.addDomainConstraints(domainID + "-egress", dcons[1]);
-
-        // Check if the homedomain is the only domain
-        if(res.isLastDomain()) {
+        
+        if (res.isLastDomain()) {
+        	
+        	// since idcp does not respond with reportSchedule, forward create if needed
+        	if (res.isAb2IdcpReservation() && res.getNextDomainAddress().equals(res.getIdcpServer())) {
+   				ToIdcp idcp = new ToIdcp(res.getIdcpServer());
+   				idcp.forwardCreate(res);
+        	}
+        	
             log.debug("The HomeDomain is also the only domain in the path, so will self-schedule");
         	selfSchedule(res);
         	return;
@@ -148,17 +142,6 @@ public class LocalCheck extends HomeDomainState {
         globalConstraints.addDomainConstraints("user-egress", tmp);
         
         res.switchState(HomeDomainState.SCHEDULING);
-        
-        // check if this res should be send to an idcp domain
-        if (res.isIdcpReservation()) {
-    		 ToIdcp client = new ToIdcp(res.getIdcpServer());
-     	   	 int code = client.forwardCreate(res);
-   	     	 if (code != 0) 
-   	     		 res.fail(ReservationErrors.getInfo(code, res.getIdcpServer()));
-     	   	 else 
-     	   		res.success("OK");
-             return; 
-        }
         
         // send reservation request to another IDM from the chain
         try {
@@ -199,7 +182,7 @@ public class LocalCheck extends HomeDomainState {
     
     private void selfSchedule(HomeDomainReservation res) {
     	final String domainID = res.getLocalDomainID();
-    	
+
         // compute global constraints
     	GlobalConstraints constraints = res.getGlobalConstraints();
     	
@@ -221,15 +204,6 @@ public class LocalCheck extends HomeDomainState {
             return;
         }
         
-        if (res.isIdcpReservation() && res.getNextDomainAddress().equalsIgnoreCase(res.getIdcpServer())) {
-        	ToIdcp client = new ToIdcp(res.getIdcpServer());
-     	   	int code = client.forwardCreate(res);
-     	   	if (code != 0) {
-     	   		res.fail(ReservationErrors.getInfo(code, res.getNextDomainAddress()));
-     	   		return;
-     	   	}
-        } 
-
         try {
             res.reserveResources();
         } catch (ConstraintsAlreadyUsedException e1) {
