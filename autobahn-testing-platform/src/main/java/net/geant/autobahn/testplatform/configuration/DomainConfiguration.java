@@ -134,6 +134,8 @@ public class DomainConfiguration {
 				copy(new File(src, "log4j.properties"), 
 						new File(dest, "log4j.properties"));
 
+				new File(new File(dest, "etc"), "autobahn.properties").delete();
+				
 				writeTimestamp(new File(dest, "stamp.tmp"), timestamp);
 				
 				System.out.println("Autobahn instance is located in: " + dest);
@@ -387,6 +389,7 @@ public class DomainConfiguration {
 		props.setProperty("id.ports", incremental.getPortsRange());
 		props.setProperty("id.links", incremental.getLinksRange());
 		props.setProperty("lookuphost", defaultConf.getProperty("lookupservice.address"));
+		props.setProperty("domainName", incremental.getDomainName());
 		
 		return props;
 	}
