@@ -63,7 +63,7 @@ public final class IdcpCommand implements AutobahnCommand {
 				return sb.toString();
 			} else if (args[1].equalsIgnoreCase("clientports")) {
 				StringBuffer sb = new StringBuffer();
-				String[] ports = autobahn.getIdm().getIdcpClientPorts();
+				List<String> ports = autobahn.getIdm().getIdcpLinks();
 				for (String p : ports)
 					sb.append(p + NL);
 				return sb.toString();
