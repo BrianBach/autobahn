@@ -60,7 +60,7 @@ public class StartingStoppingTests {
         UserAccessPoint uap = domain1.getUserAccessPoint();
 
         ServiceRequest req = RequestParser.createServiceRequest(
-        		"10.10.32.5", "10.11.32.10", 1000000000, "20sec", "40sec", "StartStop1", false);
+        		"domain1.Port.10", "domain2.Port.19", 1000000000, "20sec", "40sec", "StartStop1", false);
         
         String sid = uap.submitServiceAndRegister(req, callback);
         observer.registerService(sid);
@@ -80,7 +80,7 @@ public class StartingStoppingTests {
         UserAccessPoint uap = domain1.getUserAccessPoint();
 
         ServiceRequest req = RequestParser.createServiceRequest(
-        		"10.10.32.5", "10.11.32.10", 1000000000, "30sec", "3min", "StartStop2", false);
+        		"domain1.Port.10", "domain2.Port.19", 1000000000, "30sec", "3min", "StartStop2", false);
         
         String sid = uap.submitServiceAndRegister(req, callback);
         observer.registerService(sid);
@@ -104,7 +104,7 @@ public class StartingStoppingTests {
         UserAccessPoint uap = domain1.getUserAccessPoint(); 
 
         ServiceRequest req = RequestParser.createServiceRequest(
-        		"10.10.32.5", "10.11.32.10", 1000000000, "30sec", "3min", "StartStop3", false);
+        		"domain1.Port.10", "domain2.Port.19", 1000000000, "30sec", "3min", "StartStop3", false);
         
         String sid = uap.submitServiceAndRegister(req, callback);
         observer.registerService(sid);
@@ -128,7 +128,7 @@ public class StartingStoppingTests {
         UserAccessPoint uap = domain1.getUserAccessPoint(); 
 
         ServiceRequest req = RequestParser.createServiceRequest(
-        		"10.10.32.5", "10.11.32.10", 1000000000, "20sec", "40sec", "StartStop4", false);
+        		"domain1.Port.10", "domain2.Port.19", 1000000000, "20sec", "40sec", "StartStop4", false);
         
         String sid = uap.submitServiceAndRegister(req, callback);
         observer.registerService(sid);
@@ -152,7 +152,7 @@ public class StartingStoppingTests {
 		UserAccessPoint uap = domain1.getUserAccessPoint();
 
         ServiceRequest req = RequestParser.createServiceRequest(
-        		"10.10.32.5", "10.11.32.10", 1000000000, "30sec", "3min", "StartStop5", false);
+        		"domain1.Port.10", "domain2.Port.19", 1000000000, "30sec", "3min", "StartStop5", false);
         
         domain2.stopInstance();
         domain3.stopInstance();

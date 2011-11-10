@@ -1,6 +1,6 @@
 res1 {
-  sport=10.10.32.5
-  dport=10.11.32.10
+  sport=domain1.Port.10
+  dport=domain2.Port.19
   stime=2min
   etime=5min
   processnow=false

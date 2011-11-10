@@ -66,9 +66,7 @@ public class ResourcesReservationVlanTranslationTest2 {
         props.setProperty("resourcesreservationcalendar.address", "http://localhost:8090/autobahn/resourcesreservationcalendar");
 
         taProps = new Properties();
-        taProps.setProperty("id.nodes", "10.10.0.0/24");
-        taProps.setProperty("id.ports", "10.10.32.0/24");
-        taProps.setProperty("id.links", "10.10.64.0/24");
+        taProps.setProperty("domainName", "pionier");
         taProps.setProperty("public.ids.file", "src/test/resources/etc/public_ids.properties");
         taProps.setProperty("lookuphost","http://localhost:21080/perfsonar-java-xml-ls/services/LookupService");
 
@@ -135,9 +133,9 @@ public class ResourcesReservationVlanTranslationTest2 {
 		System.out.println(" -- 1 --");
 		
         Link[] links = new Link[] {
-        		all_links.get("10.10.64.1"),
-                all_links.get("10.10.64.0"), 
-        		all_links.get("10.10.64.2")};
+        		all_links.get("pionier.Link.11"),
+                all_links.get("pionier.Link.7"), 
+        		all_links.get("pionier.Link.13")};
      
         try {
 	        DomainConstraints[] dcons = check(dm, links, _1Mb, "01-07-2020 13:30:00",
@@ -155,9 +153,9 @@ public class ResourcesReservationVlanTranslationTest2 {
 		tbuilder.switchVlanTranslationSupport(true, "all");
 		
         Link[] links = new Link[] {
-        		all_links.get("10.10.64.1"),
-                all_links.get("10.10.64.0"), 
-        		all_links.get("10.10.64.2")};
+        		all_links.get("pionier.Link.11"),
+                all_links.get("pionier.Link.7"), 
+        		all_links.get("pionier.Link.13")};
         
         DomainConstraints[] dcons = check(dm, links, _1Mb, "01-07-2020 13:30:00",
                 "03-07-2020 13:30:00");
@@ -173,9 +171,9 @@ public class ResourcesReservationVlanTranslationTest2 {
 		tbuilder.switchVlanTranslationSupport(true, "Node1.1", "Node1.3");
 		
         Link[] links = new Link[] {
-        		all_links.get("10.10.64.1"),
-                all_links.get("10.10.64.0"), 
-        		all_links.get("10.10.64.2")};
+        		all_links.get("pionier.Link.11"),
+                all_links.get("pionier.Link.7"), 
+        		all_links.get("pionier.Link.13")};
         
         DomainConstraints[] dcons = check(dm, links, _1Mb, "01-07-2020 13:30:00",
                 "03-07-2020 13:30:00");
@@ -194,9 +192,9 @@ public class ResourcesReservationVlanTranslationTest2 {
 		tbuilder.switchVlanTranslationSupport(true, "Node1.3");
 		
         Link[] links = new Link[] {
-        		all_links.get("10.10.64.1"),
-                all_links.get("10.10.64.0"), 
-        		all_links.get("10.10.64.2")};
+        		all_links.get("pionier.Link.11"),
+                all_links.get("pionier.Link.7"), 
+        		all_links.get("pionier.Link.13")};
         
         DomainConstraints[] dcons = check(dm, links, _1Mb, "01-07-2020 13:30:00",
                 "03-07-2020 13:30:00");

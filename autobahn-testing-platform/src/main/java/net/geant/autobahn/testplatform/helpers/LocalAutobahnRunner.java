@@ -13,12 +13,14 @@ import java.util.List;
 public abstract class LocalAutobahnRunner {
 
 	class StreamGobbler extends Thread {
-		InputStream is;
-		String type;
-
-		StreamGobbler(InputStream is, String type) {
+		private InputStream is;
+		private String type;
+		private String domainId;
+		
+		StreamGobbler(InputStream is, String type, String domainId) {
 			this.is = is;
 			this.type = type;
+			this.domainId = domainId;
 		}
 
 		public void run() {
@@ -27,7 +29,7 @@ public abstract class LocalAutobahnRunner {
 				BufferedReader br = new BufferedReader(isr);
 				String line = null;
 				while ((line = br.readLine()) != null) {
-					//System.out.println(type + ">" + line);
+					System.out.println(domainId + ">" + line);
 				}
 
 			} catch (IOException ioe) {
@@ -38,18 +40,18 @@ public abstract class LocalAutobahnRunner {
 
 	
 	public void start(String prefix) {
-		autobahnCmd(prefix, "start");
+		autobahnCmd(prefix, "", "start");
 	}
 
 	public void stop(String prefix) {
-		autobahnCmd(prefix, "stop");
+		autobahnCmd(prefix, "", "stop");
 	}
 	
-	public void start(String prefix, String observerAddress) {
-		autobahnCmd(prefix, "start", "--startup-notifier", observerAddress);
+	public void start(String prefix, String observerAddress, String domainId) {
+		autobahnCmd(prefix, domainId, "start", "--startup-notifier", observerAddress);
 	}
 	
-	private void autobahnCmd(String prefix, String... cmds) {
+	private void autobahnCmd(String prefix, String domainId, String... cmds) {
 		Runtime rt = Runtime.getRuntime();
 
 		String[] command = {
@@ -69,11 +71,11 @@ public abstract class LocalAutobahnRunner {
 			
             // any error message?
             StreamGobbler errorGobbler = new 
-                StreamGobbler(proc.getErrorStream(), "ERROR");            
+                StreamGobbler(proc.getErrorStream(), "ERROR", domainId);            
             
             // any output?
             StreamGobbler outputGobbler = new 
-                StreamGobbler(proc.getInputStream(), "OUTPUT");
+                StreamGobbler(proc.getInputStream(), "OUTPUT", domainId);
                 
             // kick them off
             errorGobbler.start();

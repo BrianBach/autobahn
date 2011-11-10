@@ -46,12 +46,8 @@ public class AutobahnManagement {
 		this.conf.cleanOldReservations();
 	}
 	
-	public void startInstance(String statusObserverAddress) {
-		runner.start(path, statusObserverAddress);
-	}
-
 	public void startInstance(StatusObserver statusObserver) {
-		runner.start(path, statusObserver.getUrl());
+		runner.start(path, statusObserver.getUrl(), conf.getDomainId());
 	}
 
 	public void setConfiguration(DomainConfiguration conf) {

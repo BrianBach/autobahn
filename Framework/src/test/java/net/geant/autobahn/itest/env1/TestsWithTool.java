@@ -80,7 +80,7 @@ public class TestsWithTool {
 		UserAccessPoint uap = domain1.getUserAccessPoint();
 		
         ServiceRequest req = RequestParser.createServiceRequest(
-        		"10.10.32.5", "10.11.32.10", 1000000000, "20sec", "40sec", "Tool1", false);
+        		"domain1.Port.10", "domain2.Port.19", 1000000000, "20sec", "40sec", "Tool1", false);
         
         String sid = uap.submitServiceAndRegister(req, callback);
         observer.registerService(sid);
@@ -106,7 +106,7 @@ public class TestsWithTool {
         UserAccessPoint uap = domain1.getUserAccessPoint();  
 
         ServiceRequest req = RequestParser.createServiceRequest(
-        		"10.10.32.5", "10.11.32.10", 1000000000, "20sec", "40sec", "Tool2", false);
+        		"domain1.Port.10", "domain2.Port.19", 1000000000, "20sec", "40sec", "Tool2", false);
         
         String sid = uap.submitServiceAndRegister(req, callback);
         observer.registerService(sid);
@@ -137,7 +137,7 @@ public class TestsWithTool {
         UserAccessPoint uap = domain1.getUserAccessPoint();  
 
         ServiceRequest req = RequestParser.createServiceRequest(
-        		"10.10.32.5", "10.11.32.10", 1000000000, "20sec", "40sec", "Tool3", false);
+        		"domain1.Port.10", "domain2.Port.19", 1000000000, "20sec", "40sec", "Tool3", false);
         
         String sid = uap.submitServiceAndRegister(req, callback);
         observer.registerService(sid);

@@ -79,9 +79,7 @@ public class ResourcesReservationTest extends TestCase {
         props.setProperty("resourcesreservationcalendar.address", "http://localhost:8090/autobahn/resourcesreservationcalendar");
 
         taProps = new Properties();
-        taProps.setProperty("id.nodes", "10.10.0.0/24");
-        taProps.setProperty("id.ports", "10.10.32.0/24");
-        taProps.setProperty("id.links", "10.10.64.0/24");
+        taProps.setProperty("domainName", "pionier");
         taProps.setProperty("public.ids.file", "src/test/resources/etc/public_ids.properties");
         taProps.setProperty("lookuphost","http://localhost:21080/perfsonar-java-xml-ls/services/LookupService");
 
@@ -148,9 +146,9 @@ public class ResourcesReservationTest extends TestCase {
     public void testCheckingEmpty() throws OversubscribedException, AAIException {
         System.out.println("---testCheckingEmpty");
         Link[] links = new Link[] {
-                all_links.get("10.13.64.3"), 
-                all_links.get("10.10.64.0"), 
-                all_links.get("10.10.64.1")};
+                all_links.get("pionier.Link.11"), 
+                all_links.get("pionier.Link.6"), 
+                all_links.get("pionier.Link.10")};
         
         DomainConstraints[] dcons = check(dm, links, _1Gb, "01-07-2020 13:30:00",
                 "03-07-2020 13:30:00");
@@ -162,9 +160,9 @@ public class ResourcesReservationTest extends TestCase {
             ConstraintsAlreadyUsedException, AAIException {
         System.out.println("---testReservingAll");
         Link[] links = new Link[] {
-                all_links.get("10.13.64.3"), 
-                all_links.get("10.10.64.0"), 
-                all_links.get("10.10.64.1")};
+                all_links.get("pionier.Link.11"), 
+                all_links.get("pionier.Link.6"), 
+                all_links.get("pionier.Link.10")};
         
         DomainConstraints[] dcons = check(dm, links, _1Gb, "01-07-2020 13:30:00",
                 "03-07-2020 13:30:00");
@@ -187,9 +185,9 @@ public class ResourcesReservationTest extends TestCase {
     public void testReservingPartOfCapacity() throws ConstraintsAlreadyUsedException, OversubscribedException, AAIException {
         System.out.println("---testReservingPartOfCapacity");
         Link[] links = new Link[] {
-                all_links.get("10.13.64.3"), 
-                all_links.get("10.10.64.0"), 
-                all_links.get("10.10.64.1")};
+                all_links.get("pionier.Link.11"), 
+                all_links.get("pionier.Link.6"), 
+                all_links.get("pionier.Link.10")};
 
         check(dm, links, 500 * _1Mb, "01-07-2020 13:30:00", "03-07-2020 13:30:00");
         
@@ -213,9 +211,9 @@ public class ResourcesReservationTest extends TestCase {
             OversubscribedException, AAIException {
         System.out.println("---testNotOverlapping");
         Link[] links = new Link[] {
-                all_links.get("10.13.64.3"), 
-                all_links.get("10.10.64.0"), 
-                all_links.get("10.10.64.1")};
+                all_links.get("pionier.Link.11"), 
+                all_links.get("pionier.Link.6"), 
+                all_links.get("pionier.Link.10")};
         
         reserve(dm, "res1", links, _1Gb, 150, "01-07-2020 13:30:00",
                 "03-07-2020 13:30:00");
@@ -241,9 +239,9 @@ public class ResourcesReservationTest extends TestCase {
             ConstraintsAlreadyUsedException, AAIException {
         System.out.println("---testReservingSameConstraints");
         Link[] links = new Link[] {
-                all_links.get("10.13.64.3"), 
-                all_links.get("10.10.64.0"), 
-                all_links.get("10.10.64.1")};
+                all_links.get("pionier.Link.11"), 
+                all_links.get("pionier.Link.6"), 
+                all_links.get("pionier.Link.10")};
         
         reserve(dm, "res1", links, 500 * _1Mb, 150, "01-07-2020 13:30:00",
                 "03-07-2020 13:30:00");
@@ -267,9 +265,9 @@ public class ResourcesReservationTest extends TestCase {
             ConstraintsAlreadyUsedException, AAIException {
         System.out.println("---testReservingOverlapping");
         Link[] links = new Link[] { 
-                all_links.get("10.13.64.3"),
-                all_links.get("10.10.64.0"), 
-                all_links.get("10.10.64.1") };
+                all_links.get("pionier.Link.11"), 
+                all_links.get("pionier.Link.6"), 
+                all_links.get("pionier.Link.10")};
 
         reserve(dm, "res1", links, _1Gb, 150, "01-07-2020 13:30:00",
                 "03-07-2020 13:30:00");
@@ -293,9 +291,9 @@ public class ResourcesReservationTest extends TestCase {
         dm = new ResourcesReservation(pathfinder, prman, props);
         
         Link[] links = new Link[] { 
-                all_links.get("10.13.64.3"),
-                all_links.get("10.10.64.0"), 
-                all_links.get("10.10.64.1") };
+                all_links.get("pionier.Link.11"), 
+                all_links.get("pionier.Link.6"), 
+                all_links.get("pionier.Link.10")};
         
         reserve(dm, "res1", links, _1Gb, 150, "01-07-2020 13:30:00",
                 "03-07-2020 13:30:00");
@@ -317,9 +315,9 @@ public class ResourcesReservationTest extends TestCase {
             throws ConstraintsAlreadyUsedException, OversubscribedException, AAIException {
         System.out.println("---testReservingAndRemoving");
         Link[] links = new Link[] { 
-                all_links.get("10.13.64.3"),
-                all_links.get("10.10.64.0"), 
-                all_links.get("10.10.64.1") };
+                all_links.get("pionier.Link.11"), 
+                all_links.get("pionier.Link.6"), 
+                all_links.get("pionier.Link.10")};
         
         reserve(dm, "res1", links, _1Gb, 150, "01-07-2020 13:30:00",
                 "03-07-2020 13:30:00");
@@ -347,9 +345,9 @@ public class ResourcesReservationTest extends TestCase {
         System.out.println("---testReservingAndFinishing");
         
         Link[] links = new Link[] { 
-                all_links.get("10.13.64.3"),
-                all_links.get("10.10.64.0"), 
-                all_links.get("10.10.64.1") };
+                all_links.get("pionier.Link.11"), 
+                all_links.get("pionier.Link.6"), 
+                all_links.get("pionier.Link.10")};
         
         Calendar now = Calendar.getInstance();
         now.add(Calendar.SECOND, 5);
@@ -379,9 +377,9 @@ public class ResourcesReservationTest extends TestCase {
             throws ConstraintsAlreadyUsedException, OversubscribedException, AAIException {
         System.out.println("---testSuccessfullModifying");
         Link[] links = new Link[] { 
-                all_links.get("10.13.64.3"),
-                all_links.get("10.10.64.0"), 
-                all_links.get("10.10.64.1") };
+                all_links.get("pionier.Link.11"), 
+                all_links.get("pionier.Link.6"), 
+                all_links.get("pionier.Link.10")};
         
         reserve(dm, "res1", links, _1Gb, 150, "01-07-2020 13:30:00",
                 "03-07-2020 13:30:00");
@@ -408,9 +406,9 @@ public class ResourcesReservationTest extends TestCase {
     public void testModifyingConfilictingReservation() throws ConstraintsAlreadyUsedException, OversubscribedException, AAIException {
         System.out.println("---testModifyingConfilictingReservation");
         Link[] links = new Link[] { 
-                all_links.get("10.13.64.3"),
-                all_links.get("10.10.64.0"), 
-                all_links.get("10.10.64.1") };
+                all_links.get("pionier.Link.11"), 
+                all_links.get("pionier.Link.6"), 
+                all_links.get("pionier.Link.10")};
         
         reserve(dm, "res1", links, _1Gb, 150, "01-07-2020 13:30:00",
                 "03-07-2020 13:30:00");
@@ -438,9 +436,9 @@ public class ResourcesReservationTest extends TestCase {
             OversubscribedException, AAIException {
         System.out.println("---testModifyingActiveReservation");
         Link[] links = new Link[] { 
-                all_links.get("10.13.64.3"),
-                all_links.get("10.10.64.0"), 
-                all_links.get("10.10.64.1") };
+                all_links.get("pionier.Link.11"), 
+                all_links.get("pionier.Link.6"), 
+                all_links.get("pionier.Link.10")};
         
         Calendar now = Calendar.getInstance();
         now.add(Calendar.SECOND, 5);

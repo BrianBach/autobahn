@@ -72,7 +72,11 @@ public class AutobahnTest {
 		
 		System.out.println("1");
 		
-        UserAccessPoint uap = domain1.getUserAccessPoint();  
+        UserAccessPoint uap = domain1.getUserAccessPoint();
+        
+        for(String p : uap.getAllClientPorts())
+        	System.out.println(p);
+        
 		ServiceRequest req = parser.readServiceRequest("/requests/request1.txt");
 		req.setJustification("ATest1");
 		

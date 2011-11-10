@@ -432,6 +432,10 @@ public class DomainConfiguration {
 		return incremental.getHome();
 	}
 	
+	public String getDomainId() {
+		return incremental.getDomainName();
+	}
+	
 	public IntradomainTopology getTopology() {
 		return builder.getIntradomainTopology();
 	}
