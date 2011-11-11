@@ -508,10 +508,6 @@ function get_autobahn_defaults {
     framework_port=5000 
     framework_pass=abahn
     
-    id_nodes=10.10.0.0/24
-    id_ports=10.10.32.0/24
-    id_links=10.10.64.0/24
-    
 	log "The properties file is $1"
 	if [ -e "$1" ]; then
 		propfile=`grep "^[ ]*[#\!]" -v $1`
@@ -586,20 +582,14 @@ function get_autobahn_defaults {
               ;;
               framework.password ) framework_pass=$curval
               ;;
-              id.nodes ) id_nodes=$curval
-                  ;;
-              id.ports ) id_ports=$curval
-                  ;;
-              id.links ) id_links=$curval
-                  ;;
 			esac
 		done
 	fi
 		
     framework_password="xxxx"
     
-	log "domainName $domainName db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} lookuphost ${lookuphost} cnis.address ${cnis_address} authorization.enabled ${authorization_enabled} latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf_opaqueType ospf.opaqueId $ospf_opaqueId gui.address $gui_address mail.use $mail_use mail.smtp.host $mail_smtp_host mail.smtp.port $mail_smtp_port mail.address.from $mail_address_from mail.user $mail_user mail.pass $mail_pass mail.address.admin $mail_address_admin framework.commandLine $framework_commandLine framework.port $framework_port framework.password $framework_password id.nodes $id_nodes id.ports $id_ports id.links $id_links"| tr -d '\r' 
-	echo -n "domainName $domainName db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} lookuphost ${lookuphost} cnis.address ${cnis_address} authorization.enabled ${authorization_enabled} latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf_opaqueType ospf.opaqueId $ospf_opaqueId gui.address $gui_address  mail.use $mail_use mail.smtp.host $mail_smtp_host mail.smtp.port $mail_smtp_port mail.address.from $mail_address_from mail.user $mail_user mail.pass $mail_pass mail.address.admin $mail_address_admin framework.commandLine $framework_commandLine framework.port $framework_port framework.password $framework_password id.nodes $id_nodes id.ports $id_ports id.links $id_links"| tr -d '\r' > $path_only/autobahn_defaults
+	log "domainName $domainName db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} lookuphost ${lookuphost} cnis.address ${cnis_address} authorization.enabled ${authorization_enabled} latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf_opaqueType ospf.opaqueId $ospf_opaqueId gui.address $gui_address mail.use $mail_use mail.smtp.host $mail_smtp_host mail.smtp.port $mail_smtp_port mail.address.from $mail_address_from mail.user $mail_user mail.pass $mail_pass mail.address.admin $mail_address_admin framework.commandLine $framework_commandLine framework.port $framework_port framework.password $framework_password"| tr -d '\r' 
+	echo -n "domainName $domainName db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} lookuphost ${lookuphost} cnis.address ${cnis_address} authorization.enabled ${authorization_enabled} latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf_opaqueType ospf.opaqueId $ospf_opaqueId gui.address $gui_address  mail.use $mail_use mail.smtp.host $mail_smtp_host mail.smtp.port $mail_smtp_port mail.address.from $mail_address_from mail.user $mail_user mail.pass $mail_pass mail.address.admin $mail_address_admin framework.commandLine $framework_commandLine framework.port $framework_port framework.password $framework_password"| tr -d '\r' > $path_only/autobahn_defaults
 	poplocalinfo
 }
 
