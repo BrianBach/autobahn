@@ -100,6 +100,15 @@ public class PathConstraints implements Serializable {
     	rangeConstraints.add(con);
     }
 
+    public void removeRangeConstraint(ConstraintsNames name) {
+
+        int index = rangeNames.indexOf(name);
+        if (index > -1) {
+            rangeNames.remove(index);
+            rangeConstraints.remove(index);
+        }
+    }
+
     public void addMinValueConstraint(ConstraintsNames name, MinValueConstraint con) {
     	
     	int index = minValNames.indexOf(name); 
