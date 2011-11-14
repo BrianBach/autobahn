@@ -8,14 +8,14 @@
 	<modelVersion>4.0.0</modelVersion>
     <groupId>net.geant.autobahn</groupId>
     <artifactId>autobahn</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.0.2</version>
     <name>Autobahn: Automated Bandwith Allocation across Heterogeneous Networks</name>
     <url>https://forge.geant.net/forge/display/autobahn/Home</url>
     <packaging>pom</packaging>
  
 	<scm>
-		<connection>scm:svn:svn+ssh://svn@svn.geant.net/GEANT/SA2/AutoBAHN/AutoBAHN-base/tags/autobahn-0.5.1</connection>
-        <developerConnection>scm:svn:svn+ssh://svn@svn.geant.net/GEANT/SA2/AutoBAHN/AutoBAHN-base/tags/autobahn-0.5.1</developerConnection>
+		<connection>scm:svn:svn+ssh://svn@svn.geant.net/GEANT/SA2/AutoBAHN/AutoBAHN-base/tags/autobahn-1.0.2</connection>
+        <developerConnection>scm:svn:svn+ssh://svn@svn.geant.net/GEANT/SA2/AutoBAHN/AutoBAHN-base/tags/autobahn-1.0.2</developerConnection>
     </scm>
 	
 	<repositories>
