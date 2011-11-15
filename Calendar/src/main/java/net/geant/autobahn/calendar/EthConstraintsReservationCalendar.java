@@ -68,9 +68,13 @@ public class EthConstraintsReservationCalendar implements
     	for(GenericLink gl : path.getLinks()) {
     		PathConstraints pcon = path.getConstraints(gl);
     		RangeConstraint vlansToBeReserved = pcon.getRangeConstraint(ConstraintsNames.VLANS);
-    		
-    		// vlan number to reserve
-    		int vlanNumber = vlansToBeReserved.getFirstValue();
+
+    		int vlanNumber = 0;
+    		if (vlansToBeReserved == null) {
+    		    log.debug("No VLAN information in released resources, calendar assumes VLAN 0");
+    		} else {
+        		vlanNumber = vlansToBeReserved.getFirstValue();
+    		}
 
     		// Check it in calendar
     		CalendarEntry entry = new CalendarEntry(start, end, vlanNumber);
@@ -151,12 +155,14 @@ public class EthConstraintsReservationCalendar implements
 			return null;
 		
 		RangeConstraint vlansToBeReserved = pcon.getRangeConstraint(ConstraintsNames.VLANS);
-		
-		if(vlansToBeReserved == null)
-			return null;
-		
-		// vlan number to reserve
-		int vlanNumber = vlansToBeReserved.getFirstValue();
+
+		int vlanNumber = 0;
+		if (vlansToBeReserved == null) {
+            log.debug("No VLAN information in reserved resources, calendar assumes VLAN 0");
+		} else {
+    		// vlan number to reserve
+    		vlanNumber = vlansToBeReserved.getFirstValue();
+		}
 
 		return new CalendarEntry(start, end, vlanNumber);
     }

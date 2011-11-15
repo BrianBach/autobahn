@@ -366,7 +366,29 @@ public class ResourcesReservation {
 		}
 		
 		if(valid) {
-	        // Try to reserve vlan
+
+            // Special case for some domains (e.g. Geant) where the TP can not handle
+            // a VLAN tag for 1GE ports. If that is the case, remove the VLAN Constraint
+            if (!canHandleVlanTagAt1GE) {
+                log.debug("Stripping VLAN contraint tags from request " + resID);
+                try {
+                    // Check if one of the edge links is 1GE
+                    if ((path.getFirstLink().getStartInterface().getBandwidth() <= 1000000000)
+                            || (path.getFirstLink().getEndInterface().getBandwidth() <= 1000000000)
+                            || (path.getLastLink().getStartInterface().getBandwidth() <= 1000000000)
+                            || (path.getLastLink().getEndInterface().getBandwidth() <= 1000000000)) {
+                        Map<GenericLink, PathConstraints> pconMap = path.getPathConstraints();
+                        for (GenericLink gl : pconMap.keySet()) {
+                            PathConstraints pcon = pconMap.get(gl);
+                            pcon.removeRangeConstraint(ConstraintsNames.VLANS);
+                        }
+                    }
+                } catch (Exception e) {
+                    log.error(e.getMessage() + " Could not strip VLAN tags from reservation " + resID);
+                }
+            }
+		    
+		    // Try to reserve vlan
 			calendar.addReservation(path, par.getCapacity(), sTime, eTime);
 
 			log.info("Reserving: " + par.getCapacity() + " bps on: \n" + path + "\n" +
@@ -661,30 +683,7 @@ public class ResourcesReservation {
    			prManager.save(reservation);
    			
    			long beforeTime = System.currentTimeMillis();
-   			
-   			// Special case for some domains (e.g. Geant) where the TP can not handle
-   			// a VLAN tag for 1GE ports. If that is the case, remove the VLAN Constraint
-   			if (!canHandleVlanTagAt1GE) {
-   			    log.debug("Stripping VLAN contraint tags from request " + resID);
-   			    try {
-       			    IntradomainPath p = reservation.getReservedPath();
-       			    
-       			    // Check if one of the edge links is 1GE
-                    if ((p.getFirstLink().getStartInterface().getBandwidth() <= 1000000000)
-                            || (p.getFirstLink().getEndInterface().getBandwidth() <= 1000000000)
-                            || (p.getLastLink().getStartInterface().getBandwidth() <= 1000000000)
-                            || (p.getLastLink().getEndInterface().getBandwidth() <= 1000000000)) {
-                        Map<GenericLink, PathConstraints> pconMap = p.getPathConstraints();
-                        for (GenericLink gl : pconMap.keySet()) {
-                            PathConstraints pcon = pconMap.get(gl);
-                            pcon.removeRangeConstraint(ConstraintsNames.VLANS);
-                        }
-       			    }
-   			    } catch (Exception e) {
-   			        log.error(e.getMessage() + " Could not strip VLAN tags from reservation " + resID);
-   			    }
-   			}
-   			
+
             try {
     	        tool.addReservation(resID, reservation.getReservedPath(), par);
     		} catch (Exception e) {
