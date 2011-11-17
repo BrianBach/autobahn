@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="net.geant.autobahn.intradomain.sdh">
-    <class name="HoVcGroup" table="ho_vc_group" schema="public">
+    <class name="HoVcGroup" table="HO_VC_GROUP" schema="public">
         <composite-id>
         	<key-many-to-one name="hoVcGroup" column="ho_vc_group_id" class="net.geant.autobahn.intradomain.common.GenericConnection">
             </key-many-to-one>
@@ -11,7 +11,7 @@
             <column name="vlan_tag_id" /> 
         </many-to-one>
         <property name="name" type="string">
-            <column name="name" />
+            <column name="group_name" />
         </property>
     </class>
 </hibernate-mapping>

@@ -7,10 +7,10 @@
 	<class name="ProvisioningDomain" table="PROVISIONING_DOMAIN" lazy="false">
 		<id name="bodID" column="provdomain_id" type="string" />
 		
-		<property name="provType" type="string" />
+		<property name="provType" type="string" column="prov_type" />
 		
 		<many-to-one name="adminDomain" class="AdminDomain" not-null="true" 
-			cascade="save-update" />
+			cascade="save-update" column="admin_domain"/>
 	</class>
 	
 </hibernate-mapping>

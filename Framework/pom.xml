@@ -245,16 +245,9 @@
     	<dependency>
     		<groupId>postgresql</groupId>
     		<artifactId>postgresql</artifactId>
-    		<version>8.4-701.jdbc4</version>
+    		<version>9.0-801.jdbc4</version>
     		<!--  type>jar</type>
     		<scope>runtime</scope -->
-    	</dependency>
-    	<dependency>
-    		<groupId>c3p0</groupId>
-    		<artifactId>c3p0</artifactId>
-    		<version>0.9.1.2</version>
-    		<type>jar</type>
-    		<scope>runtime</scope>
     	</dependency>
     	<dependency>
     		<groupId>org.apache.cxf</groupId>

@@ -202,7 +202,7 @@ public class EnvironmentSetup {
 	
 	public void createDatabasesSchema() {
 		for(DomainConfiguration conf : configurations) {
-			conf.createDatabaseSchema();
+			conf.createDatabase();
 		}
 	}
 	

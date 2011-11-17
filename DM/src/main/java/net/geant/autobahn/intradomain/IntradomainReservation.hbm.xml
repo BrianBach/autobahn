@@ -6,9 +6,9 @@
 	
 	<class name="IntradomainReservation" table="INTRADOMAIN_RESERVATION">
 
-		<id name="reservationId" type="string" />
+		<id name="reservationId" type="string" column="res_id" />
 		
-		<property name="pathCreated" type="boolean" />
+		<property name="pathCreated" type="boolean" column="created" />
 		
 		<property name="active" type="boolean" />
 		

@@ -4,13 +4,13 @@
 
 <hibernate-mapping package="net.geant.autobahn.network">
 	
-	<class name="Role" table="hasRole" lazy="false">
+	<class name="Role" table="HAS_ROLE" lazy="false">
 		<composite-id>
-			<key-many-to-one name="node" column="nodeID" class="Node" />
-			<key-many-to-one name="link" column="linkID" class="Link" />
+			<key-many-to-one name="node" column="node_id" class="Node" />
+			<key-many-to-one name="link" column="link_id" class="Link" />
 		</composite-id>
 		
-		<property name="demarc" column="isDemarc" type="boolean" />
+		<property name="demarc" type="boolean" />
 	</class>
 	
 </hibernate-mapping>

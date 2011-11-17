@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="net.geant.autobahn.intradomain.ethernet">
-    <class name="SpanningTree" table="spanning_tree" schema="public">
+    <class name="SpanningTree" table="SPANNING_TREE" schema="public">
         <composite-id>
             <key-many-to-one name="ethLink" column="link_id" class="EthLink">
             </key-many-to-one>

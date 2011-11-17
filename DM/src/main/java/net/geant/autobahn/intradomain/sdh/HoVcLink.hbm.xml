@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="net.geant.autobahn.intradomain.sdh">
-    <class name="HoVcLink" table="ho_vc_link" schema="public">
+    <class name="HoVcLink" table="HO_VC_LINK" schema="public">
         <id name="hoVcLinkId" type="long">
             <column name="ho_vc_link_id" />
             <generator class="increment" />

@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="net.geant.autobahn.intradomain.ethernet">
-    <class name="VlanPort" table="vlan_port" schema="public">
+    <class name="VlanPort" table="VLAN_PORT" schema="public">
         <composite-id>
             <key-many-to-one name="genericInterface" column="interface_id" class="net.geant.autobahn.intradomain.common.GenericInterface">
             </key-many-to-one>

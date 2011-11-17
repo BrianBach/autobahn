@@ -4,8 +4,10 @@
 
 <hibernate-mapping package="net.geant.autobahn.network">
 	
-	<class name="LinkType" table="Link_type" lazy="false">
-		<id name="type" column="Link_type_enum" type="int" />
+	<class name="LinkType" table="LINK_TYPE" lazy="false">
+		<id name="id" column="id" type="int" />
+		
+		<property name="description" column="description" type="string" />
 	</class>
 	
 </hibernate-mapping>

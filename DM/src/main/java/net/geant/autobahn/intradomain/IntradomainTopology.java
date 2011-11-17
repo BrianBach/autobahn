@@ -172,7 +172,6 @@ public class IntradomainTopology {
 			nodes = new ArrayList<Node>();
 			sdhDevices = daos.getSdhDeviceDAO().getAll();
 			for(SdhDevice device : sdhDevices) {
-				device.getNode().setVlanTranslationSupport(true);
 				nodes.add(device.getNode());
 			}
 		} else if (isEthernet()){
@@ -318,6 +317,7 @@ public class IntradomainTopology {
 				node.setNodeId(0);
 				
 				node.setName(unescHtml(n.getName()));
+				// We assume that all the nodes in SDh have the vlan translation support enabled
 				node.setVlanTranslationSupport(true);
 				
 				for(PhyInterface p : n.getPhyInterfaces().getInterface()) {
@@ -472,6 +472,7 @@ public class IntradomainTopology {
 				node.setNodeId(0);
 				node.setName(unescHtml(n.getName()));
 				node.setIpAddress(n.getIpAddress());
+				node.setVlanTranslationSupport(n.isVlanTranslation());
 				n_to_vlans.put(node.getName(), n.getVlanRanges().getRange());
 				
 				for(PhysicalPort p : n.getPhysicalPorts().getPort()) {

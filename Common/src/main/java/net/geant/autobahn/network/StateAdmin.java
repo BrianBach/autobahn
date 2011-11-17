@@ -14,39 +14,49 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="StateAdmin", namespace="network.autobahn.geant.net", propOrder={
-		"state"
+		"id", "desc"
 })
 public class StateAdmin implements Serializable {
 	
-	private int state = 0;
-
-	public static final StateAdmin UNKNOWN = new StateAdmin(0);
-	public static final StateAdmin NORMAL_OPERATION = new StateAdmin(1);
-	public static final StateAdmin MAINTENANCE = new StateAdmin(2);
-	public static final StateAdmin TROUBLESHOOTING = new StateAdmin(3);
-	public static final StateAdmin UNDER_REPAIR = new StateAdmin(4);
+	private int id = 0;
+	private String desc = null;
 	
-	private static StateAdmin[] states = { UNKNOWN, NORMAL_OPERATION,
+	public static final StateAdmin UNKNOWN = new StateAdmin(1, "UNKNOWN");
+	public static final StateAdmin NORMAL_OPERATION = new StateAdmin(2, "NORMAL_OPERATION");
+	public static final StateAdmin MAINTENANCE = new StateAdmin(3, "MAINTENANCE");
+	public static final StateAdmin TROUBLESHOOTING = new StateAdmin(4, "TROUBLESHOOTING");
+	public static final StateAdmin UNDER_REPAIR = new StateAdmin(5, "UNDER_REPAIR");
+	
+	public static StateAdmin[] states = { UNKNOWN, NORMAL_OPERATION,
 			MAINTENANCE, TROUBLESHOOTING, UNDER_REPAIR };
 	
 	public StateAdmin() {
 	}
 	
-	public StateAdmin(int state) {
-		this.state = state;
+	public StateAdmin(int id, String desc) {
+		this.id = id;
+		this.desc = desc;
 	}
 
-	public int getState() {
-		return state;
+	public int getId() {
+		return id;
 	}
 
-	public void setState(int state) {
-		this.state = state;
+	public void setId(int id) {
+		this.id = id;
 	}
 
+	public String getDescription() {
+		return desc;
+	}
+
+	public void setDescription(String desc) {
+		this.desc = desc;
+	}
+	
 	public static StateAdmin getState(int i) {
 		for(StateAdmin state : states) {
-			if(state.getState() == i)
+			if(state.getId() == i)
 				return state;
 		}
 		
@@ -57,7 +67,7 @@ public class StateAdmin implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + state;
+		result = prime * result + this.getId();
 		return result;
 	}
 
@@ -70,7 +80,7 @@ public class StateAdmin implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		final StateAdmin other = (StateAdmin) obj;
-		if (getState() != other.getState())
+		if (getId() != other.getId())
 			return false;
 		return true;
 	}

@@ -9,7 +9,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -25,7 +24,7 @@ public class DomainConfiguration {
 	private String host;
 	
 	private MyProperties defaultConf;
-	private MyProperties dmProps;
+	private MyProperties abProps;
 	private IncrementalProperties incremental;
 	private IntraTopologyBuilder2 builder = null;
 	
@@ -39,10 +38,10 @@ public class DomainConfiguration {
 		this.incremental = incremental;
 		this.builder = builder;
 		
-		InputStream is = this.getClass().getResourceAsStream("/default/dm.properties");
+		InputStream is = this.getClass().getResourceAsStream("/default/autobahn.properties");
 		
-		dmProps = new MyProperties(is);
-		dmProps = updateDmProperties(dmProps);
+		abProps = new MyProperties(is);
+		abProps = updateProperties(abProps);
 	}
 	
 	public void writeConfigurationFiles() throws IOException {
@@ -62,24 +61,12 @@ public class DomainConfiguration {
 		MyProperties.savePropertiesFile(builder.getPublicIds(), new File(dir,
 				"public_ids.properties"));
 
-		// IDM properties
+		// AutoBAHN properties
 		InputStream is = this.getClass().getResourceAsStream(
-				"/default/idm.properties");
+				"/default/autobahn.properties");
 		MyProperties idm = new MyProperties(is);
-		updateIdmProperties(idm);
-		idm.save(new File(dir, "idm.properties"));
-
-		// DM properties
-		is = this.getClass().getResourceAsStream("/default/dm.properties");
-		MyProperties dm = new MyProperties(is);
-		updateDmProperties(dm);
-		dm.save(new File(dir, "dm.properties"));
-
-		// Calendar properties
-		is = this.getClass()
-				.getResourceAsStream("/default/calendar.properties");
-		MyProperties cal = new MyProperties(is);
-		cal.save(new File(dir, "calendar.properties"));
+		updateProperties(idm);
+		idm.save(new File(dir, "autobahn.properties"));
 
 		// Services properties
 		is = this.getClass()
@@ -88,20 +75,6 @@ public class DomainConfiguration {
 		services.setProperty("server.port", Integer.toString(port));
 		services.setProperty("server.securePort", Integer.toString(securePort));
 		services.save(new File(dir, "services.properties"));
-
-		// Framework properties
-		is = this.getClass().getResourceAsStream(
-				"/default/framework.properties");
-		MyProperties frame = new MyProperties(is);
-		frame.setProperty("framework.port", incremental.getFrameworkPort());
-		frame.setProperty("framework.password", "pass");
-		frame.save(new File(dir, "framework.properties"));
-
-		// TA properties
-		is = this.getClass().getResourceAsStream("/default/ta.properties");
-		MyProperties ta = new MyProperties(is);
-		updateTaProperties(ta);
-		ta.save(new File(dir, "ta.properties"));
 	}
 	
 	public void copyDistribution(File src, Long timestamp) throws IOException {
@@ -134,8 +107,6 @@ public class DomainConfiguration {
 				copy(new File(src, "log4j.properties"), 
 						new File(dest, "log4j.properties"));
 
-				new File(new File(dest, "etc"), "autobahn.properties").delete();
-				
 				writeTimestamp(new File(dest, "stamp.tmp"), timestamp);
 				
 				System.out.println("Autobahn instance is located in: " + dest);
@@ -154,7 +125,7 @@ public class DomainConfiguration {
 	}
 	
 	public void dropDatabase() {
-		String dbName = dmProps.getProperty("db.name");
+		String dbName = abProps.getProperty("db.name");
 		
 		boolean found = true;
 		
@@ -171,7 +142,8 @@ public class DomainConfiguration {
 		
 		try {
 			Connection connection = connectToDatabase("postgres");
-
+			connection.setAutoCommit(true);
+			
 			if (connection != null) {
 				Statement stmt = connection.createStatement();
 
@@ -179,7 +151,6 @@ public class DomainConfiguration {
 
 				stmt.executeUpdate(sql);
 				stmt.close();
-				connection.commit();
 				connection.close();
 			}
 
@@ -190,11 +161,11 @@ public class DomainConfiguration {
 	}
 	
 	public void cleanOldReservations() {
-		String dbName = dmProps.getProperty("db.name");
+		String dbName = abProps.getProperty("db.name");
 		
 		try {
 			Connection connection = connectToDatabase(dbName);
-
+			
 			if(connection != null) {
 				Statement stmt = connection.createStatement();
 			    
@@ -232,8 +203,8 @@ public class DomainConfiguration {
 		}
 	}
 	
-	public void createDatabaseSchema() {
-		String dbName = dmProps.getProperty("db.name");
+	public void createDatabase() {
+		String dbName = abProps.getProperty("db.name");
 		
 		Connection connection = null;
 		try {
@@ -246,6 +217,7 @@ public class DomainConfiguration {
 			if(connection == null) {
 				System.out.println("Database " + dbName + " not found. Creating...");
 				Connection conn = connectToDatabase("postgres");
+				conn.setAutoCommit(true);
 				Statement stmt = conn.createStatement();
 			    
 		        // Create table
@@ -253,41 +225,13 @@ public class DomainConfiguration {
 		    
 		        stmt.executeUpdate(sql);
 		        stmt.close();
-		        conn.commit();
 		        conn.close();
-		        
-		        connection = connectToDatabase(dbName);
 			}
-			
-			Statement stmt = connection.createStatement();
-			InputStream is = this.getClass().getResourceAsStream("/sql/create_db.sql");
-			stmt.executeUpdate(getContents(is));
-			
-			connection.commit();
-			connection.close();
 			
 		} catch (SQLException e1) {
 			System.out.println("Problem with creating database: " + dbName
 					+ " " + e1.getMessage());
 		}
-	}
-	
-	private String getContents(InputStream is) {
-		StringBuffer sb = new StringBuffer();
-		
-		try {
-	        BufferedReader in = new BufferedReader(new InputStreamReader(is));
-	        String str;
-	        while ((str = in.readLine()) != null) {
-	        	if(str.startsWith("--"))
-	        		continue;
-	            sb.append(str + "\n");
-	        }
-	        in.close();
-	    } catch (IOException e) {
-	    }
-		
-		return sb.toString();
 	}
 	
 	private Connection connectToDatabase(String dbName) throws SQLException {
@@ -299,15 +243,15 @@ public class DomainConfiguration {
 	        String driverName = "org.postgresql.Driver";
 	        Class.forName(driverName);
 	        // Create a connection to the database
-	        String serverName = dmProps.getProperty("db.host");
+	        String serverName = abProps.getProperty("db.host");
 	        
-	        String dbPort = dmProps.getProperty("db.port");
+	        String dbPort = abProps.getProperty("db.port");
 	        String url = "jdbc:postgresql://" + serverName + ":" + dbPort + "/" + dbName;
-	        String username = dmProps.getProperty("db.user");
-	        String password = dmProps.getProperty("db.pass");
+	        String username = abProps.getProperty("db.user");
+	        String password = abProps.getProperty("db.pass");
 	        
 	        connection = DriverManager.getConnection(url, username, password);
-	        
+	        connection.setAutoCommit(false);
 	    } catch (ClassNotFoundException e) {
 	        // Could not find the database driver
 	    }
@@ -359,52 +303,31 @@ public class DomainConfiguration {
             out.write(buf, 0, len);
         }
     }
-    
-	private MyProperties updateDmProperties(MyProperties props) {
-		props.setProperty("idm.address", buildAutobahnUrl("/dm2idm"));
-		props.setProperty("domainName", incremental.getDomainName());
-		props.setProperty("topologyabstraction.address", buildAutobahnUrl("/topologyabstraction"));
-		props.setProperty("resourcesreservationcalendar.address", buildAutobahnUrl("/resourcesreservationcalendar"));
-		props.setProperty("lookuphost", defaultConf.getProperty("lookupservice.address"));
-		props = updateDbProperties(props);
-		
-		return props;
-	}
-
-	private MyProperties updateIdmProperties(MyProperties props) {
-		props.setProperty("domain", buildAutobahnUrl("/interdomain"));
-		props.setProperty("domainName", incremental.getDomainName());
-		props.setProperty("dm.address", buildAutobahnUrl("/idm2dm"));
-		props.setProperty("lookuphost", defaultConf.getProperty("lookupservice.address"));
-		props.setProperty("longitude", Double.toString(builder.getDomain().getLongitude()));
-		props.setProperty("latitude", Double.toString(builder.getDomain().getLatitude()));
-		props = updateDbProperties(props);
-		
-		return props;
-	}
-
-	private MyProperties updateTaProperties(MyProperties props) {
-		props.setProperty("idm.address", buildAutobahnUrl("/dm2idm"));
-		props.setProperty("id.nodes", incremental.getNodesRange());
-		props.setProperty("id.ports", incremental.getPortsRange());
-		props.setProperty("id.links", incremental.getLinksRange());
-		props.setProperty("lookuphost", defaultConf.getProperty("lookupservice.address"));
-		props.setProperty("domainName", incremental.getDomainName());
-		
-		return props;
-	}
 	
-	private MyProperties updateDbProperties(MyProperties props) {
+	private MyProperties updateProperties(MyProperties props) {
 		if(props == null)
 			return null;
 		
+		props.setProperty("framework.port", incremental.getFrameworkPort());
+		props.setProperty("framework.password", "pass");
+		props.setProperty("idm.address", buildAutobahnUrl("/dm2idm"));
+		props.setProperty("domainName", incremental.getDomainName());
+		props.setProperty("lookuphost", defaultConf.getProperty("lookupservice.address"));
+		props.setProperty("domain", buildAutobahnUrl("/interdomain"));
+		props.setProperty("dm.address", buildAutobahnUrl("/idm2dm"));
+		props.setProperty("topologyabstraction.address", buildAutobahnUrl("/topologyabstraction"));
+		props.setProperty("resourcesreservationcalendar.address", buildAutobahnUrl("/resourcesreservationcalendar"));
+		props.setProperty("idm.address", buildAutobahnUrl("/dm2idm"));
+		
+		props.setProperty("lookuphost", defaultConf.getProperty("lookupservice.address"));
+		props.setProperty("longitude", Double.toString(builder.getDomain().getLongitude()));
+		props.setProperty("latitude", Double.toString(builder.getDomain().getLatitude()));
 		props.setProperty("db.host", defaultConf.getProperty("default.db-host"));
 		props.setProperty("db.port", defaultConf.getProperty("default.db-port"));
 		props.setProperty("db.user", defaultConf.getProperty("default.db-user"));
 		props.setProperty("db.pass", defaultConf.getProperty("default.db-pass"));
-		
 		props.setProperty("db.name", incremental.getDbName());
-
+		
 		return props;
 	}
 	

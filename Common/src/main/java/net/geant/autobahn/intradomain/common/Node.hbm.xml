@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="net.geant.autobahn.intradomain.common">
-    <class name="Node" table="node" schema="public" lazy="false">
+    <class name="Node" table="NODE" schema="public" lazy="false">
         <id name="nodeId" type="long">
             <column name="node_id" />
             <generator class="increment" />
@@ -37,5 +37,8 @@
         <property name="ipAddress" type="string">
             <column name="ip_address" />
         </property>
+        <property name="vlanTranslationSupport" type="boolean">
+            <column name="vlan_translation" />
+        </property>        
     </class>
 </hibernate-mapping>

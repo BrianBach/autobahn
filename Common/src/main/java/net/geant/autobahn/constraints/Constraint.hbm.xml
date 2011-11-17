@@ -12,20 +12,20 @@
 		<joined-subclass name="AdditiveConstraint" table="ADDITIVE_CONSTRAINT">
 			<key column="con_id" />
 		
-			<property name="value" type="double" />
+			<property name="value" type="double" column="con_value" />
 		</joined-subclass>
 	
 		<joined-subclass name="BooleanConstraint" table="BOOLEAN_CONSTRAINT">
 			<key column="con_id" />
 			
-			<property name="value" type="boolean" />
+			<property name="value" type="boolean" column="con_value" />
 			<property name="logic" type="string" />
 		</joined-subclass>
 
 		<joined-subclass name="MinValueConstraint" table="MINVAL_CONSTRAINT">
 			<key column="con_id" />
 			
-			<property name="value" type="double" />
+			<property name="value" type="double" column="con_value" />
 		</joined-subclass>
 	
 		<joined-subclass name="RangeConstraint" table="RANGE_CONSTRAINT">

@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="net.geant.autobahn.intradomain.ethernet">
-    <class name="Vlan" table="vlan" schema="public">
+    <class name="Vlan" table="VLAN" schema="public">
         <id name="vlanId" type="long">
             <column name="vlan_id" />
             <generator class="increment" />

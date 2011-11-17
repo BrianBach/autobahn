@@ -4,8 +4,10 @@
 
 <hibernate-mapping package="net.geant.autobahn.network">
 	
-	<class name="StateOper" table="State_oper" lazy="false">
-		<id name="state" column="State_oper_enum" type="int" />
+	<class name="StateOper" table="STATE_OPER" lazy="false">
+		<id name="id" column="id" type="int" />
+		
+		<property name="description" column="description" type="string" />
 	</class>
 	
 </hibernate-mapping>

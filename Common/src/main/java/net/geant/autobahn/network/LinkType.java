@@ -13,37 +13,55 @@ import javax.xml.bind.annotation.XmlAccessorType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="LinkType", namespace="network.autobahn.geant.net", propOrder={
-		"type"
+		"type", "desc"
 })
 public class LinkType implements Serializable {
 
 	private int type = 0;
-
-	public static final LinkType NREN_LINK = new LinkType(1);
-	public static final LinkType ID_LINK = new LinkType(2);
-	public static final LinkType ID_LINK_PARTIAL_INFO = new LinkType(3);
+	private String desc = null;
+	
+	public static final LinkType NREN_LINK = new LinkType(1, "NREN_LINK");
+	public static final LinkType ID_LINK = new LinkType(2, "ID_LINK");
+	public static final LinkType ID_LINK_PARTIAL_INFO = new LinkType(3, "ID_LINK_PARTIAL_INFO");
+	
+	public static LinkType[] types = new LinkType[] {NREN_LINK, ID_LINK, ID_LINK_PARTIAL_INFO};
 	
 	public LinkType() {
 		
 	}
 	
-	public LinkType(int type) {
+	public LinkType(int type, String desc) {
 		this.type = type;
+		this.desc = desc;
 	}
 	
-	public int getType() {
+	public int getId() {
 		return type;
 	}
 
-	public void setType(int type) {
+	public void setId(int type) {
 		this.type = type;
+	}
+
+	/**
+	 * @return the desc
+	 */
+	public String getDescription() {
+		return desc;
+	}
+
+	/**
+	 * @param desc the desc to set
+	 */
+	public void setDescription(String desc) {
+		this.desc = desc;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + type;
+		result = prime * result + this.getId();
 		return result;
 	}
 
@@ -56,7 +74,7 @@ public class LinkType implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		final LinkType other = (LinkType) obj;
-		if (type != other.type)
+		if (this.getId() != other.getId())
 			return false;
 		return true;
 	}

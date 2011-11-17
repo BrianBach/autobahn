@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="net.geant.autobahn.intradomain.sdh">
-    <class name="SdhPort" table="sdh_port" schema="public">
+    <class name="SdhPort" table="SDH_PORT" schema="public">
         <composite-id>
         	<key-many-to-one name="genericInterface" column="port_id" class="net.geant.autobahn.intradomain.common.GenericInterface">
             </key-many-to-one>

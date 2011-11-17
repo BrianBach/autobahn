@@ -362,25 +362,7 @@ public class EthMonitoring implements Runnable {
      */		
 	private boolean saveLinkStatusDB(Link link, int st)
 	{
-        
-		Transaction t = session.beginTransaction();
-		DmDAOFactory daos = HibernateDmDAOFactory.getInstance();
-		List<Link> tmplinks = daos.getLinkDAO().getAll();
-		for(Link ln:tmplinks)
-		{
-			//Link found in the db
-			if(ln.equals(link)) {
-				ln.setOperationalState(new StateOper(st));
-                ln.setTimestamp(new Date()); // needed for monitoring GUI
-                session.update(ln);
-				t.commit();
-				return true;
-			}	
-		}
-        link.setOperationalState(new StateOper(st));
-        link.setTimestamp(new Date()); // needed for monitoring GUI
-        session.save(link);
-        t.commit();
+        //TODO: Will be implemented when monitoring is ready
 		return true;
 	}
    

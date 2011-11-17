@@ -28,9 +28,7 @@ import net.geant.autobahn.dao.hibernate.IdmHibernateUtil;
 import net.geant.autobahn.dm2idm.Dm2Idm;
 import net.geant.autobahn.gui.GuiNotifier;
 import net.geant.autobahn.idcp.IdcpDomain;
-import net.geant.autobahn.idcp.IdcpException;
 import net.geant.autobahn.idcp.IdcpManager;
-import net.geant.autobahn.idcp.ToIdcp;
 import net.geant.autobahn.idm2dm.Idm2Dm;
 import net.geant.autobahn.idm2dm.Idm2DmClient;
 import net.geant.autobahn.interdomain.Interdomain;
@@ -44,9 +42,11 @@ import net.geant.autobahn.lookup.LookupServiceException;
 import net.geant.autobahn.network.AdminDomain;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.LinkIdentifiers;
+import net.geant.autobahn.network.LinkType;
 import net.geant.autobahn.network.Node;
 import net.geant.autobahn.network.Port;
 import net.geant.autobahn.network.ProvisioningDomain;
+import net.geant.autobahn.network.StateAdmin;
 import net.geant.autobahn.network.StateOper;
 import net.geant.autobahn.network.StatisticsEntry;
 import net.geant.autobahn.network.dao.StatisticsEntryDAO;
@@ -69,7 +69,6 @@ import net.geant.autobahn.useraccesspoint.callback.UapCallback;
 import net.geant.autobahn.useraccesspoint.callback.UapCallbackClient;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.exception.ExceptionUtils;
 
@@ -192,7 +191,7 @@ public final class AccessPoint implements UserAccessPoint,
 	    			properties.getProperty("db.port"), properties.getProperty("db.name"), 
 	    			properties.getProperty("db.user"), properties.getProperty("db.pass"));
 	        daos = HibernateIdmDAOFactory.getInstance();
-	
+	        
 	        // init resources manager
 	        domainManager = new Idm2DmClient(properties.getProperty("dm.address"));
 	        
@@ -204,6 +203,7 @@ public final class AccessPoint implements UserAccessPoint,
 	        
 	        // init neighbors
 	        AdminDomain admin = daos.getAdminDomainDAO().getByBodID(domainName);
+	        fillInEnumsTables();
 	        
 	        //Register to Lookup
 	        String host = properties.getProperty("lookuphost");
@@ -1176,21 +1176,7 @@ public final class AccessPoint implements UserAccessPoint,
 	}
 
 	public boolean saveReservationStatusDB(String res, int st) {
-        Session session = IdmHibernateUtil.getInstance().currentSession();
-        Transaction t = session.beginTransaction();
-        IdmDAOFactory daos = HibernateIdmDAOFactory.getInstance();
-        List<Reservation> tmpres = daos.getReservationDAO().getAll();
-        for(Reservation rs:tmpres)
-        {
-            // Reservation found in the db
-            if(rs.getBodID().equals(res)) {
-                rs.setOperationalStatus(new StateOper(st));
-                session.update(rs);
-                t.commit();
-                return true;
-            }   
-        }
-        // Reservation not found in db
+        //TODO: Will be implemented when monitoring is ready
         return false;
     }
     
@@ -1547,6 +1533,31 @@ public final class AccessPoint implements UserAccessPoint,
         }
         return true;
     }
+    
+    private void fillInEnumsTables() {
+    	HibernateUtil hbm = IdmHibernateUtil.getInstance();
+    	
+    	hbm.closeSession();
+    	
+		LinkType lt = (LinkType) hbm.currentSession().get(LinkType.class, 1);
+		
+		if(lt == null) {
+			Transaction t = hbm.beginTransaction();
+
+			for(LinkType ltype : LinkType.types)
+				hbm.currentSession().save(ltype);
+			for(StateOper sto : StateOper.states)
+				hbm.currentSession().save(sto);
+			for(StateAdmin sta : StateAdmin.states)
+				hbm.currentSession().save(sta);
+			
+			t.commit();
+		}
+		
+        hbm.closeSession();
+	}
+	
+
 
     /**
      * Checks the Lookup Service for the friendly names of a list of ports.

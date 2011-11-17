@@ -4,7 +4,7 @@
 
 <hibernate-mapping package="net.geant.autobahn.network" auto-import="false">
 	
-	<class name="Path" table="interdomain_path" lazy="false">
+	<class name="Path" table="INTERDOMAIN_PATH" lazy="false">
 		<id name="pathID" column="path_id" type="long">
 			<generator class="native" />
 		</id>

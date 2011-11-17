@@ -7,23 +7,23 @@
 	<class name="Reservation" table="RESERVATION">
 		<id name="bodID" column="res_id" type="string" />
 		
-		<discriminator column="RES_TYPE" type="string" />
+		<discriminator column="res_type" type="string" />
 		
 		<property name="state" type="integer"/>
 
 		<many-to-one name="startPort" 
 			class="net.geant.autobahn.network.Port" 
 			cascade="save-update"
-			not-null="true" />		
+			not-null="true" column="start_port"/>		
 		
 		<many-to-one name="endPort" 
 			class="net.geant.autobahn.network.Port" 
 			cascade="save-update"
-			not-null="true" />
+			not-null="true" column="end_port" />
 		
-		<property name="startTime" type="calendar" />
+		<property name="startTime" type="calendar" column="start_time" />
 		
-		<property name="endTime" type="calendar" />
+		<property name="endTime" type="calendar" column="end_time" />
 		
 		<property name="priority" type="integer" />
 		
@@ -31,7 +31,7 @@
 		
 		<property name="description" type="string" />
 		
-		<property name="maxDelay" type="integer" />
+		<property name="maxDelay" type="integer" column="max_delay" />
 		
 		<property name="resiliency" type="string"/>
 		
@@ -39,12 +39,12 @@
 		
 		<property name="mtu" type="int" />
 		
-		<many-to-one name="operationalStatus" column="State_oper_enum" 
+		<many-to-one name="operationalStatus" column="state_oper" 
 			class="net.geant.autobahn.network.StateOper" />	
 		
 		<many-to-one name="globalConstraints" 
 			class="net.geant.autobahn.constraints.GlobalConstraints" 
-			cascade="all" lazy="false" />
+			cascade="all" lazy="false" column="global_constraints"/>
 		
 		<many-to-one name="path" 
 			class="net.geant.autobahn.network.Path" 

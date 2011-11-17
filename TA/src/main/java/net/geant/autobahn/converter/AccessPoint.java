@@ -336,6 +336,7 @@ public final class AccessPoint implements TopologyAbstraction {
         // Check whether the public.ids in the file correspond to ports in the topology
         List<GenericLink> glinks = topology.getGenericLinks();
         boolean found = false;
+        
         for (Enumeration e = public_ids.propertyNames() ; e.hasMoreElements() ;) {
             String portName_key = (String) e.nextElement();
             String portName_value = public_ids.getProperty(portName_key);

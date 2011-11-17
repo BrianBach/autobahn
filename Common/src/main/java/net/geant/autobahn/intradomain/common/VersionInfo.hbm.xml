@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="net.geant.autobahn.intradomain.common">
-    <class name="VersionInfo" table="version_info" schema="public">
+    <class name="VersionInfo" table="VERSION_INFO" schema="public">
         <id name="versionId" type="long">
             <column name="version_id" />
             <generator class="increment" />

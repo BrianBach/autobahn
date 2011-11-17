@@ -11,23 +11,23 @@
 
 		<property name="capacity" type="long" />
 		
-		<property name="maxDelay" type="int" />
+		<property name="maxDelay" type="int" column="max_delay" />
 		
 		<property name="resiliency" type="string" />
 		
 		<property name="bidirectional" type="boolean" />
 		
-		<property name="startTime" type="calendar" />
+		<property name="startTime" type="calendar" column="start_time" />
 		
-		<property name="endTime" type="calendar" />
+		<property name="endTime" type="calendar" column="end_time" />
 		
 		<property name="mtu" type="int" />
 		
 		<many-to-one name="pathConstraintsIngress" class="net.geant.autobahn.constraints.PathConstraints" 
-			not-null="true" cascade="save-update" lazy="false" />
+			not-null="true" cascade="save-update" lazy="false" column="ingress_constraints" />
 			
 		<many-to-one name="pathConstraintsEgress" class="net.geant.autobahn.constraints.PathConstraints" 
-			not-null="true" cascade="save-update" lazy="false" />
+			not-null="true" cascade="save-update" lazy="false" column="egress_constraints" />
 	</class>
 	
 </hibernate-mapping>

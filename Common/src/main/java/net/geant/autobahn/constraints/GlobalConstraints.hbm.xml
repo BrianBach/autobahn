@@ -15,7 +15,7 @@
 			<one-to-many class="DomainConstraints" />
 		</list>
 
-		<list name="domainsIds" cascade="all,delete-orphan">
+		<list name="domainsIds" cascade="all,delete-orphan" table="DOMAIN_IDS">
 			<key column="gcon_id" />
 			<list-index column="domain_order" />
 			<element type="string" column="domain_id" />

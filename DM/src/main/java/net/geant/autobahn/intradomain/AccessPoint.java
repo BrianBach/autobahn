@@ -207,9 +207,8 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
                         "\nPlease check whether the URL of the rest of the services" +
                         " (IDM, TA, Calendar) have been properly defined in" +
                         " properties file.");                
-            }
-            else {
-                log.error("Error while DM init: " + ((thr == null)?"":thr.getMessage()));
+            } else {
+                log.error("Error while DM init: " + ((thr == null)?"":thr.getMessage()), thr);
             }
             log.debug("Error info: ", e);
         }

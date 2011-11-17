@@ -13,16 +13,16 @@
         <property name="connection.username">jra3</property>
         <property name="connection.password">geant</property>
 
-        <!-- JDBC connection pool (use the built-in)
-        <property name="connection.pool_size">5</property> -->
-
-		<!-- configuration pool via c3p0 --> 
-		<property name="c3p0.acquire_increment">1</property> 
-		<property name="c3p0.idle_test_period">60</property>
-		<property name="c3p0.max_statements">0</property> 
-		<property name="c3p0.min_size">3</property>
-		<property name="c3p0.max_size">20</property> 
-		<property name="c3p0.timeout">60</property>
+		<!-- configuration pool via boneCP  -->
+		<property name="connection.provider_class">com.jolbox.bonecp.provider.BoneCPConnectionProvider</property>
+		<property name="bonecp.idleMaxAge">240</property>
+		<property name="bonecp.idleConnectionTestPeriod">60</property>
+		<property name="bonecp.partitionCount">1</property>
+		<property name="bonecp.acquireIncrement">10</property>
+		<property name="bonecp.maxConnectionsPerPartition">10</property>
+ 		<property name="bonecp.minConnectionsPerPartition">2</property>
+ 		<property name="bonecp.statementsCacheSize">50</property>
+ 		<property name="bonecp.releaseHelperThreads">0</property>
 
 		<!-- JDBC connection pool (use the built-in)  
         <property name="connection.pool_size">5</property> -->
@@ -43,8 +43,8 @@
         <!-- Echo all executed SQL to stdout -->
         <property name="show_sql">false</property>
 
-        <!-- Drop and re-create the database schema on startup
-        <property name="hbm2ddl.auto">update</property>  -->
+        <!-- Drop and re-create the database schema on startup  -->
+        <property name="hbm2ddl.auto">update</property>
 
         <mapping resource="net/geant/autobahn/network/AdminDomain.hbm.xml" />
         <mapping resource="net/geant/autobahn/network/ProvisioningDomain.hbm.xml" />

@@ -2,16 +2,16 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="net.geant.autobahn.intradomain.sdh">
-    <class name="SdhDomain" table="sdh_domain" schema="public">
+    <class name="SdhDomain" table="SDH_DOMAIN" schema="public">
         <id name="sdhDomainId" type="long">
             <column name="sdh_domain_id" />
             <generator class="increment" />
         </id>
         <property name="name" type="string">
-            <column name="name" />
+            <column name="domain_name" />
         </property>
         <property name="provMethod" type="string">
-            <column name="provMethod" />
+            <column name="prov_method" />
         </property>
         <property name="equipmentProvider" type="string">
             <column name="equipment_provider" />
