@@ -266,6 +266,22 @@ public class Node implements Serializable {
 		final Node other = (Node) obj;
 		if (getNodeId() != other.getNodeId())
 			return false;
+		if (!getName().equals(other.getName()))
+		    return false;
 		return true;
 	}
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "Node [nodeId=" + nodeId + ", version=" + version
+                + ", location=" + location + ", name=" + name
+                + ", description=" + description + ", status=" + status
+                + ", vendor=" + vendor + ", model=" + model + ", osName="
+                + osName + ", osVersion=" + osVersion + ", ipAddress="
+                + ipAddress + ", vlanTranslationSupport="
+                + vlanTranslationSupport + "]";
+    }
 }

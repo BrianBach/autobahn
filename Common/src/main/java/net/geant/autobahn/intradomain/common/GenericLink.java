@@ -203,6 +203,10 @@ public class GenericLink implements Serializable {
 		final GenericLink other = (GenericLink) obj;
 		if (getLinkId() != other.getLinkId())
 			return false;
+		if (!getStartInterface().equals(other.getStartInterface()))
+		    return false;
+		if (!getEndInterface().equals(other.getEndInterface()))
+		    return false;
 		return true;
 	}
 }

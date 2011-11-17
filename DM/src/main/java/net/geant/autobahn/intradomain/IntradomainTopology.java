@@ -2,11 +2,12 @@ package net.geant.autobahn.intradomain;
 
 import java.io.File;
 import java.io.InputStream;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -199,14 +200,18 @@ public class IntradomainTopology {
 		}
 	}
 
-    /**
-     * Mainly used for debugging purposes
-     * author: Kostas
-     * 
-     * @return String contains topology 1-level deep
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
      */
-    public String TopologyString() {
-        StringBuffer sb = new StringBuffer("\n----Intradomain Topology: "+this.toString());
+    @Override
+    public String toString() {
+        StringBuffer sb = new StringBuffer("\n----Intradomain Topology [log="
+                + log + ", genericLinks=" + genericLinks + ", nodes=" + nodes
+                + ", sptrees=" + sptrees + ", ethpp=" + ethpp + ", vlaps="
+                + vlaps + ", stmLinks=" + stmLinks + ", sdhDevices="
+                + sdhDevices + ", mplsLinks=" + mplsLinks + ", type=" + type
+                + ", domainName=" + domainName + "]");
+
         try {
             sb.append("\n|-domainaddress:"+domainName);
             sb.append("\n|-genericLinks:");
@@ -327,7 +332,8 @@ public class IntradomainTopology {
 					port.setNode(node);
 					port.setDomainId(domainName);
 					port.setClientPort(false);
-					String unescapedPortName = unescHtml(p.getName());
+                    String unescapedPortName = unescHtml(n.getName())
+                            + INTERFACE_DELIM + unescHtml(p.getName());
 					port.setName(unescapedPortName);
 					
 					String pub = unescHtml(getPublicName(p));
@@ -355,12 +361,16 @@ public class IntradomainTopology {
 			for(PhyLink l : resp.getSdhTopology().getIntradomainLinks().getLink()) {
 				GenericLink glink = new GenericLink();
 				
-                GenericInterface sport = ports.get(StringEscapeUtils
-                        .unescapeHtml(l.getStartInterface().getName()));
+                String sname = unescHtml(l.getStartNode().getName())
+                        + INTERFACE_DELIM
+                        + unescHtml(l.getStartInterface().getName());
+                GenericInterface sport = ports.get(sname);
 				glink.setStartInterface(sport);
 				
-                GenericInterface dport = ports.get(StringEscapeUtils
-                        .unescapeHtml(l.getEndInterface().getName()));
+                String ename = unescHtml(l.getEndNode().getName())
+                        + INTERFACE_DELIM
+                        + unescHtml(l.getEndInterface().getName());
+                GenericInterface dport = ports.get(ename);
 				glink.setEndInterface(dport);
 
 				sport.setBandwidth(l.getBandwidth().longValue());
@@ -373,14 +383,13 @@ public class IntradomainTopology {
 			for(net.geant2.cnis.autobahn.xml.sdh.IDLink l : resp.getSdhTopology().getInterdomainLinks().getLink()) {
 				GenericLink glink = new GenericLink();
 				
-                GenericInterface sport = ports.get(StringEscapeUtils
-                        .unescapeHtml(l.getStartPort().getName()));
+                String sname = unescHtml(l.getStartNode().getName())
+                        + INTERFACE_DELIM
+                        + unescHtml(l.getStartPort().getName());
+                GenericInterface sport = ports.get(sname);
 				sport.setBandwidth(l.getBandwidth().longValue());
 				glink.setStartInterface(sport);
 
-				//String publicName = getPublicName(l.getExternalDomain());
-				//System.out.println(publicName);
-				
 				Node dnode = new Node();
 				dnode.setNodeId(0);
 				dnode.setName("external-node-" + ++id);
@@ -394,8 +403,8 @@ public class IntradomainTopology {
                 String domainId = unescHtml(l.getExternalDomain().getId());
 				dport.setDomainId(domainId);
 				dport.setClientPort(isClientDomain(l.getExternalDomain()));
-                dport.setDescription(StringEscapeUtils
-                        .unescapeHtml(getExternalDomainDescription(l.getExternalDomain())));
+                dport.setDescription(unescHtml(getExternalDomainDescription(
+                        l.getExternalDomain())));
 
 				glink.setEndInterface(dport);
 				
@@ -426,6 +435,20 @@ public class IntradomainTopology {
 				}
 			}
 
+			// Create a list with all generic links to test for duplicates
+			List <GenericLink> glinkList = new ArrayList<GenericLink>(genericLinks);
+			for (SpanningTree st : sptrees) {
+			    glinkList.add(st.getEthLink().getGenericLink());
+			}
+            GenericInterface duplicateIf = getDuplicateInterfaces(glinkList);
+            if (duplicateIf != null) {
+                nodes.clear();
+                genericLinks.clear();
+                sptrees.clear();
+                throw new Exception("cNIS sdh topology is not valid, interface "
+                        + duplicateIf + " is associated with more than 1 link");
+            }
+            
 			// SDH specific
 			sdhDevices = new ArrayList<SdhDevice>();
 
@@ -574,8 +597,8 @@ public class IntradomainTopology {
 				String domainId = unescHtml(l.getExternalDomain().getId());
 				dport.setDomainId(domainId);
 				dport.setClientPort(isClientDomain(l.getExternalDomain()));						
-                dport.setDescription(StringEscapeUtils
-                        .unescapeHtml(getExternalDomainDescription(l.getExternalDomain())));
+                dport.setDescription(unescHtml(getExternalDomainDescription(
+                        l.getExternalDomain())));
 				
 				glink.setEndInterface(dport);
 				
@@ -600,6 +623,15 @@ public class IntradomainTopology {
 				genericLinks.add(st.getEthLink().getGenericLink());
 			}
 
+            GenericInterface duplicateIf = getDuplicateInterfaces(genericLinks);
+            if (duplicateIf != null) {
+                nodes.clear();
+                genericLinks.clear();
+                sptrees.clear();
+                throw new Exception("cNIS ethernet topology is not valid, interface "
+                        + duplicateIf + " is associated with more than 1 link");
+            }
+            
 	    	Transaction t = DmHibernateUtil.getInstance().beginTransaction();
 	    	
 	    	clearIntradomainTopologyDatabase();
@@ -694,8 +726,8 @@ public class IntradomainTopology {
 				String domainId = unescHtml(interLink.getExternalDomain().getId());
 				endPort.setDomainId(domainId);
 				endPort.setClientPort(isClientDomain(interLink.getExternalDomain()));
-                endPort.setDescription(StringEscapeUtils
-                        .unescapeHtml(getExternalDomainDescription(interLink.getExternalDomain())));
+                endPort.setDescription(unescHtml(getExternalDomainDescription(
+                        interLink.getExternalDomain())));
 				link.setEndInterface(endPort);
 				
 				String idcpLink = getIdcpLink(interLink.getExternalDomain());
@@ -720,6 +752,38 @@ public class IntradomainTopology {
     
     private String unescHtml(String str) {
         return StringEscapeUtils.unescapeHtml(str);
+    }
+
+    /**
+     * Checks if the list of generic links contains interfaces that are used
+     * in multiple links
+     * 
+     * @param glinkList
+     * @return the first duplicate interface found, or null if none found
+     */
+    private GenericInterface getDuplicateInterfaces(List<GenericLink> glinkList) {
+        if (glinkList == null) {
+            return null;
+        }
+        // Use a Set to avoid duplicate GenericLink entries
+        Set<GenericLink> glinkSet = new HashSet<GenericLink>(glinkList);
+
+        List<GenericInterface> gifList = new ArrayList<GenericInterface>();
+        
+        for (GenericLink gl : glinkSet) {
+            GenericInterface startIf = gl.getStartInterface();
+            GenericInterface endIf = gl.getEndInterface();
+            if (gifList.contains(startIf)) {
+                return startIf;
+            }
+            if (gifList.contains(endIf)) {
+                return endIf;
+            }
+            gifList.add(startIf);
+            gifList.add(endIf);
+        }
+        
+        return null;
     }
 
     private void mergeTheNodes(List<SpanningTree> sptrees) {

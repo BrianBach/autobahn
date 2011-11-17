@@ -273,8 +273,26 @@ public class GenericInterface implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		final GenericInterface other = (GenericInterface) obj;
-		if (interfaceId != other.interfaceId)
+		if (interfaceId != other.getInterfaceId())
 			return false;
+		if (!name.equals(other.getName()))
+		    return false;
+		if (!node.equals(other.getNode()))
+		    return false;
 		return true;
 	}
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "GenericInterface [interfaceId=" + interfaceId + ", version="
+                + version + ", interfaceType=" + interfaceType
+                + ", parentInterface=" + parentInterface + ", node=" + node
+                + ", name=" + name + ", description=" + description
+                + ", bandwidth=" + bandwidth + ", status=" + status + ", mtu="
+                + mtu + ", domainId=" + domainId + ", clientPort=" + clientPort
+                + "]";
+    }
 }
