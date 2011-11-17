@@ -170,7 +170,7 @@ public class DomainConfiguration {
 				Statement stmt = connection.createStatement();
 			    
 		        // Create table called my_table
-				String sql = "DELETE FROM domainsids;\n";
+				String sql = "DELETE FROM domain_ids;\n";
 				sql += "DELETE FROM pcon_range_constraints;\n";
 				sql += "DELETE FROM pcon_range_names;\n";
 				sql += "DELETE FROM pcon_bool_constraints;\n";
@@ -186,7 +186,6 @@ public class DomainConfiguration {
 
 				sql += "DELETE FROM path_constraint;\n";
 				sql += "DELETE FROM domain_constraints;\n";
-				sql += "DELETE FROM domainsids;\n";
 				sql += "DELETE FROM global_constraints;\n";
 
 		        sql += "DELETE FROM intradomain_path;";
