@@ -42,7 +42,7 @@ public class GuiClient implements Gui {
 		try {
 			gui.reservationChanged(idm, serviceId, resID, state, message);
 		} catch (Exception e) {
-			log.debug("cannot update gui(reservation) - " + endPoint);
+			log.debug("cannot update gui(reservation) - " + endPoint + ": " + e.getMessage());
 		}
 	}
 
@@ -54,7 +54,7 @@ public class GuiClient implements Gui {
 		try {
 			gui.statusUpdated(idmName, idmUrl, status);
 		} catch (Exception e) {
-			log.debug("cannot update gui(status) - " + endPoint);
+			log.debug("cannot update gui(status) - " + endPoint + ": " + e.getMessage());
 		}
 	}
 
@@ -66,7 +66,7 @@ public class GuiClient implements Gui {
 		try {
 			gui.update(idm, event, properties);
 		} catch (Exception e) {
-			log.debug("cannot update gui(event) - " + endPoint);
+			log.debug("cannot update gui(event) - " + endPoint + ": " + e.getMessage());
 		}
 	}
 }
