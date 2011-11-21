@@ -303,7 +303,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 				List<Neighbor> neighbors = status.getNeighbors();
 				
 				if (neighbors==null || neighbors.isEmpty()){
-					System.out.println("Neighbor is null");
+					logger.info(idmsNames.get(i) + " has no neighbors");
 					continue;	
 				}
 				
@@ -358,7 +358,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 							line.setOblique(0);
 							topology.addLine(line);
 							if(list == null){
-							    System.out.println("Domain hasn't got end-point");
+							    logger.info("Domain " + idmsNames.get(i) + " hasn't got end-point");
 							    continue;
 							}
 							ic = new InterfaceComponent(status.getDomain(), status.getLatitude(), status.getLongitude(), 
@@ -635,7 +635,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
                 buffer.append ("<center><strong>").append(str).append("</strong></center>");
             }
         } catch (UserAccessPointException e) {
-            System.out.println("for "+name+" no friendlyName port !");
+            logger.info("for " + name + " no friendlyName port!");
         }
 		
 		buffer.append("<br/><hr/>");

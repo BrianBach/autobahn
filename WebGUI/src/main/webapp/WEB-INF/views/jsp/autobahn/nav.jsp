@@ -3,8 +3,6 @@
 
 
 <h1><span style="margin-left:50px;">&nbsp;</span></h1>
-<fmt:message key="lnk.home" var="lnk"/>
-<a href="<c:url value="/${lnk}"/>"><fmt:message key="nav.home"/></a>
 
 <sec:authorize ifAllGranted="ROLE_ANONYMOUS">
 <fmt:message key="lnk.request" var="lnk"/>
@@ -60,6 +58,9 @@
   <fmt:message key="lnk.user_administration" var="lnk"/>
   <a href="<c:url value="/${lnk}"/>"><fmt:message key="nav.user_administration"/></a>      
 </sec:authorize>
+
+<fmt:message key="lnk.home" var="lnk"/>
+<a href="<c:url value="/${lnk}"/>"><fmt:message key="nav.home"/></a>
 
 <%@ include file="../common/endnav.jsp" %>
 

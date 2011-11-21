@@ -2,49 +2,32 @@
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/jquery/tabs.css"/>"/>
 <h2><spring:message code="home.title" text="About AutoBAHN"/></h2>
 
-<div style="text-align: left;" class="home_image">
+<div style="text-align: center;" class="home_image">
 <p>
-AutoBAHN is about the investigation and development of an end-to-end (and therefore multi-domain) 
-"Bandwidth Allocation and Reservation Service" in other words a "Bandwidth on Demand" (BoD) service. 
-Sometimes the term "circuit-based" 
-has been used in order to highlight the fact that the bandwidth should be reserved,
-not contended, exhibit some form of deterministic performance and be logically separated
-from other traffic sharing the network. A number of end-to-end services fulfill these criteria including:
+AutoBAHN is developed by the <a href="http://www.geant.net">GEANT project</a>.
 </p>
 
-<div align="left">
-<ul>
-<li>Point-to-point Ethernet ("Ethernet private lines")</li>
-<li>Point-to-point SONET/SDH (the equivalent of carrier IPLCs)</li>
-<li>Point-to-point "wavelengths" (for example, based on G.709 ODUk switching or all-optical switching of regenerated wavelengths)</li>
-<li>Point-to-point fibre links (for example, space switched passive optical paths for shorter distances or even, some time in the future, space switched 1 or 2R regenerated optical paths for longer reach applications)
-</li>
-</ul>
-</div>
-<hr>
-
-<div style="text-align:center"><b>Architecture overview</b></div>
-<br>
-<p>SingleAutoBAHN instance deployed in a domain consist of three main software components:</p>
-<div align="left"><ul>
-<li>InterDomainManager (IDM) </li>
-
-<li>Domain Manager (DM)</li>
-
-<li>Technology Proxy (TP)</li>
-</ul></div>
-<p>The following components need to be deployed once for the whole AutoBAHN environment:</p>
-<div align="left"><ul>
-<li>
-perfSONAR Lookup Service </li>
-<li>
-Web GUI - graphical user interface
-</li>
-</ul>
-</div>
-<img width="780px" src="/autobahn-gui/themes/style/deploy2.png">
+<a href="http://www.geant.net"><img src="/autobahn-gui/themes/style/geant.jpg"></a>
 <br />
 <br />
 <br />
+<a href="http://www.dante.net"><img src="/autobahn-gui/themes/style/DANTE.gif"></a>
+<br />
+<br />
+<br />
+<a href="http://ec.europa.eu/"><img src="/autobahn-gui/themes/style/EU.gif"></a>
+<br />
+<a href="http://ec.europa.eu/">European Commission Information Society and Media</a>
+<br />
+<br />
+<br />
+<br />
+
+<p>
+If you want to learn more, please visit <a href="http://autobahn.geant.net">autobahn.geant.net</a>.
+<br />
+<br />
+How to contact us: <a href="mailto:autobahn-support@geant.net">autobahn-support@geant.net</a>
+</p>
 
 </div>

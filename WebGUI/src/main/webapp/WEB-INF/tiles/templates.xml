@@ -21,10 +21,6 @@
         <put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/services-map.jsp"/>
     </definition>
 
-  	<definition name="secure/tools" extends="template.main">
-        <put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/tools.jsp"/>
-    </definition>
-
     <definition name="secure/settings_out" extends="template.main">
         <put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/settings_select.jsp"/>
     </definition>

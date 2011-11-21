@@ -84,11 +84,6 @@ public class AutobahnController {
         Logger.getLogger("autoBAHN controler").info("In login");
     }
 
-    @RequestMapping("/secure/tools.htm")
-    public void homeTools(){
-        Logger.getLogger("autoBAHN controler").info("In homeTools");
-    }
-
     @RequestMapping("/secure/noIDMRegistered.htm")
     public void noIdms(){
         Logger.getLogger("autoBAHN controler").info("In noIdms");

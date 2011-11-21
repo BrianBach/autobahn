@@ -21,7 +21,7 @@
             access="ROLE_ADMINISTRATOR" />      
 		<form-login login-page='/portal/login.htm'
 			default-target-url="/portal/home.htm" />
-		<logout logout-success-url="/portal/home.htm" />
+		<logout logout-success-url="/portal/login.htm" />
 		<logout invalidate-session="true" />
 	</http>
 
