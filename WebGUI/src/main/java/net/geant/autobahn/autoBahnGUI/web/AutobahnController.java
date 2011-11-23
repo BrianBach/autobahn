@@ -1,5 +1,5 @@
 package net.geant.autobahn.autoBahnGUI.web;
-import java.util.Arrays;
+
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Main  controller for Authobahn client portal 
+ * Main  controller for Autobahn client portal 
  *
  * @author Lucas Dolata <ldolata@man.poznan.pl>
  */
@@ -45,11 +45,13 @@ public class AutobahnController {
      */
     @Autowired
     Manager  manager;
+
     /**
      * Identies topology finder module
      */
     @Autowired
     TopologyFinder topologyFinder;
+
     /**
      * Logs information
      */
@@ -75,13 +77,24 @@ public class AutobahnController {
     }
 
     /**
-     * Custom handler for home.
+     * Custom handler for login.
      *
      * @param model model for response params
      */
     @RequestMapping("/login.htm")
-    public void homeLogin(){
+    public void homeLogin() {
         Logger.getLogger("autoBAHN controler").info("In login");
+    }
+
+    /**
+     * Custom handler for login error.
+     *
+     * @param model model for response params
+     */
+    @RequestMapping("/login_error.htm")
+    public void homeLoginError(Map<String, Object> model) {
+        Logger.getLogger("autoBAHN controler").info("In login error");
+        model.put("login_error", 1);
     }
 
     @RequestMapping("/secure/noIDMRegistered.htm")
@@ -110,17 +123,7 @@ public class AutobahnController {
             model.put("reservationStates",manager.getReservationStates());
         }
     }
-    /*
-     @RequestMapping("/secure/services-map.htm")
-     public void mapHandler ( Map<String, Object> model){
-         logger.info("Requesting map without params");
-         String[] linkStatusColor = {Line.DEFAULT_COLOR_ACTIVE,Line.DEFAULT_COLOR_DEACTIVE};
-         String[] linkStatusName = {"Up","Down"};
-         model.put("linkColors",linkStatusColor);
-         model.put("linkStates",linkStatusName);
-         List<Service> services = manager.getServicesForAllInterDomainManagers();
-         model.put ("services", services);
-     }*/
+
     @RequestMapping("/secure/services-list.htm")
     public void mapServicesListHandler ( Map<String, Object> model){
         Map<String, String> services = manager.getServicesForAllInterDomainManagers();
@@ -158,14 +161,6 @@ public class AutobahnController {
          model.put("topology", topology);
      }*/
 
-    /*
-     @RequestMapping("/secure/topology.xml")
-     public void handleTopologyXML(Map<String, Object> model){
-         Logger.getLogger("handle topology xml");
-         Topology topology=null;
-         topology=topologyFinder.getGoogleTopology();
-         model.put("topology", topology);
-     }*/
     @RequestMapping("/secure/topology.xml")
     public void handleTopologyXML(@RequestParam String service,@RequestParam String domain, Map<String, Object> model){
         logger.debug("handle topology xml");
@@ -180,7 +175,6 @@ public class AutobahnController {
 
 
     @RequestMapping("/secure/servicesforidm.htm")
-    //@RequestParam String link,
     public void handleServicesForIdm(@RequestParam String currentIdm,Map<String, Object> model){
         logger.debug("getting services for idm");
         ServicesFormModel services=null;
@@ -213,8 +207,6 @@ public class AutobahnController {
         model.put("friendly_ports", friendly_ports);
     }
 
-
-    //KMPASLIS
     @RequestMapping("/secure/settings.htm")
     public void handleSettingsChange(@RequestParam String currentIdm, Map<String, Object> model){
 
@@ -248,7 +240,6 @@ public class AutobahnController {
 
             JSONObject jsonObject = (JSONObject) JSONSerializer.toJSON(data);
             LinkedHashSet propkeys=new LinkedHashSet(jsonObject.keySet());
-
 
             //Logger.getLogger("autoBAHN controler").info(data);
             //parse
@@ -309,7 +300,7 @@ public class AutobahnController {
             }
              jsonRes.write(response.getWriter());
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
 
     }
@@ -362,19 +353,17 @@ public class AutobahnController {
             if (currentIDm!=null)
             {
                 String log=manager.getLogsInterDomainManager(currentIDm,true,true);
-                jsonRes = new JSONObject()
-                              .element( "result", log );
+                jsonRes = new JSONObject().element("result", log);
                 //response.getWriter().write("{success:true}");
                 Logger.getLogger("autoBAHN controler").info("success");
             }else {
-                jsonRes = new JSONObject()
-                              .element( "result", "error" );
+                jsonRes = new JSONObject().element("result", "error");
                 //response.getWriter().write("{error:true}");
                 Logger.getLogger("autoBAHN controler").info("error");
             }
              jsonRes.write(response.getWriter());
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
 
      //commenting
@@ -398,49 +387,20 @@ public class AutobahnController {
 
     }
 
-    /*
-     public ModelAndView handleIdmsTopology(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-         ModelAndView modelAndView = new ModelAndView(idmsTopologyView);
-         return modelAndView;
-     }
-
-     public ModelAndView handleLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-         ModelAndView modelAndView = new ModelAndView(loginView);
-         return modelAndView;
-     }
-     public ModelAndView handleUser (HttpServletRequest request, HttpServletResponse response) throws ServletException {
-         ModelAndView view = new ModelAndView (userView);
-         return view;
-     }
-     public ModelAndView handleServices (HttpServletRequest request, HttpServletResponse response) throws ServletException {
-         ModelAndView view = new ModelAndView (servicesView);
-         List<Service> services = manager.getServicesForAllInterDomainManagers();
-         view.addObject("services",services);
-         return view;
-     }
-     public ModelAndView handleTools (HttpServletRequest request, HttpServletResponse response) throws ServletException {
-         ModelAndView view = new ModelAndView (toolsView);
-         return view;
-     }*/
-
     public Manager getManager() {
         return manager;
     }
-
 
     public void setManager(Manager manager) {
         this.manager = manager;
     }
 
-
     public TopologyFinder getTopologyFinder() {
         return topologyFinder;
     }
 
-
     public void setTopologyFinder(TopologyFinder topologyFinder) {
         this.topologyFinder = topologyFinder;
     }
-
 
 }

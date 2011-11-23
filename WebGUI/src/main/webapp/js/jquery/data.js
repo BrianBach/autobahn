@@ -22,9 +22,7 @@ $.fn.serializeObject = function()
 };
 
 var form_init = function() {
-
-
-
+/*
  //$("#logform").ajaxForm(options);
  $("#logform").submit(function(){
 
@@ -57,7 +55,7 @@ var form_init = function() {
    return false; 
 
 });
-  
+*/
  
 // select the overlay element - and "make it an overlay"
 $("#facebox").overlay({

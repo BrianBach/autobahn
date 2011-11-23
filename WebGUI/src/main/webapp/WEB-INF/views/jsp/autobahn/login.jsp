@@ -109,12 +109,12 @@
 /* error message */
 .error {
 	height:15px;
-	background-color:#FFFE36;
+//	background-color:#FFFE36;
 	font-size:11px;
-	border:1px solid #E1E16D;
+//	border:1px solid #E1E16D;
 	padding:4px 10px;
 	color:#000;
-	display:none;	
+/*	display:none;	
 	
 	-moz-border-radius:4px;
 	-webkit-border-radius:4px; 
@@ -124,7 +124,7 @@
 	-webkit-border-top-left-radius:0;
 	
 	-moz-box-shadow:0 0 6px #ddd;
-	-webkit-box-shadow:0 0 6px #ddd;	
+	-webkit-box-shadow:0 0 6px #ddd;	*/
 }
 
 .error p {
@@ -158,10 +158,13 @@ label {
 
 		<h2>Private area login</h2>
 
-		<form  id="logform">
+		<form  id="logform" action="/autobahn-gui/j_spring_security_check">
 		
       <table>
       <tr>&nbsp;</tr>
+      <c:if test="${!empty login_error}">
+      <tr><td class="error" colspan="2">Login attempt was unsuccessful</td></tr>
+      </c:if>
         <tr><td class="label" style="text-align:left">Username:</td><td class="value_box"><input type='text' name='j_username' maxlength="30" /></td></tr>
         <tr><td class="label" style="text-align:left">Password:</td><td  class="value_box"><input type='password' name='j_password'></td></tr>
         <tr><td  colspan="2" style="text-align:right">Remember me:<input type="checkbox" style="max-width: 20px" name="_spring_security_remember_me" /></td></tr>
@@ -189,6 +192,3 @@ label {
 // What is $(document).ready ? See: http://flowplayer.org/tools/documentation/basics.html#document_ready
 jQuery(document).ready(form_init);
 </script>
-
-
-

@@ -20,7 +20,8 @@
         <intercept-url pattern="/portal/secure/statistics_select.htm"
             access="ROLE_ADMINISTRATOR" />      
 		<form-login login-page='/portal/login.htm'
-			default-target-url="/portal/home.htm" />
+            default-target-url="/portal/secure/request-service.htm" 
+            authentication-failure-url="/portal/login_error.htm"/>
 		<logout logout-success-url="/portal/login.htm" />
 		<logout invalidate-session="true" />
 	</http>

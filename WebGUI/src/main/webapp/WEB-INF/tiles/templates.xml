@@ -16,6 +16,10 @@
     	<put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/login.jsp"/>
     </definition>
 
+    <definition name="login_error" extends="template.main">
+        <put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/login.jsp"/>
+    </definition>
+
   	<definition name="secure/services-map" template="/WEB-INF/views/jsp/autobahn/modelMap.jsp">
         <put-attribute name="nav" value="/WEB-INF/views/jsp/autobahn/nav.jsp"/>
         <put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/services-map.jsp"/>
