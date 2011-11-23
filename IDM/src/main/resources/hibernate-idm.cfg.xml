@@ -46,6 +46,8 @@
         <!-- Drop and re-create the database schema on startup  -->
         <property name="hbm2ddl.auto">update</property>
 
+        <mapping resource="net/geant/autobahn/aai/UserAuthParameters.hbm.xml" />
+
         <mapping resource="net/geant/autobahn/network/AdminDomain.hbm.xml" />
         <mapping resource="net/geant/autobahn/network/ProvisioningDomain.hbm.xml" />
         <mapping resource="net/geant/autobahn/network/Node.hbm.xml" />

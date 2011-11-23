@@ -1,60 +1,33 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-	"hibernate-mapping-3.0.dtd">
-
+                                   "hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="net.geant.autobahn.reservation">
-	
-	<class name="Reservation" table="RESERVATION">
-		<id name="bodID" column="res_id" type="string" />
-		
-		<discriminator column="res_type" type="string" />
-		
-		<property name="state" type="integer"/>
-
-		<many-to-one name="startPort" 
-			class="net.geant.autobahn.network.Port" 
-			cascade="save-update"
-			not-null="true" column="start_port"/>		
-		
-		<many-to-one name="endPort" 
-			class="net.geant.autobahn.network.Port" 
-			cascade="save-update"
-			not-null="true" column="end_port" />
-		
-		<property name="startTime" type="calendar" column="start_time" />
-		
-		<property name="endTime" type="calendar" column="end_time" />
-		
-		<property name="priority" type="integer" />
-		
-		<property name="capacity" type="long" />
-		
-		<property name="description" type="string" />
-		
-		<property name="maxDelay" type="integer" column="max_delay" />
-		
-		<property name="resiliency" type="string"/>
-		
-		<property name="bidirectional" type="boolean"/>
-		
-		<property name="mtu" type="int" />
-		
-		<many-to-one name="operationalStatus" column="state_oper" 
-			class="net.geant.autobahn.network.StateOper" />	
-		
-		<many-to-one name="globalConstraints" 
-			class="net.geant.autobahn.constraints.GlobalConstraints" 
-			cascade="all" lazy="false" column="global_constraints"/>
-		
-		<many-to-one name="path" 
-			class="net.geant.autobahn.network.Path" 
-			cascade="all" />
-		
-		<subclass name="HomeDomainReservation" discriminator-value="HD" />
-		
-		<subclass name="ExternalReservation" discriminator-value="ED" />
-		
-		<subclass name="LastDomainReservation" discriminator-value="LD" />
-	</class>
-	
+ <class name="Reservation" table="RESERVATION">
+  <id column="res_id" name="bodID" type="string"/>
+  <discriminator column="RES_TYPE" force="false" insert="true" not-null="true"/>
+  <property generated="never" lazy="false" name="state" type="integer"/>
+  <many-to-one cascade="save-update"
+   class="net.geant.autobahn.network.Port" name="startPort" not-null="true"/>
+  <many-to-one cascade="save-update"
+   class="net.geant.autobahn.network.Port" name="endPort" not-null="true"/>
+  <property generated="never" lazy="false" name="startTime" type="calendar"/>
+  <property generated="never" lazy="false" name="endTime" type="calendar"/>
+  <property generated="never" lazy="false" name="priority" type="integer"/>
+  <property generated="never" lazy="false" name="capacity" type="long"/>
+  <property generated="never" lazy="false" name="description" type="string"/>
+  <property generated="never" lazy="false" name="maxDelay" type="integer"/>
+  <property generated="never" lazy="false" name="resiliency" type="string"/>
+  <property generated="never" lazy="false" name="bidirectional" type="boolean"/>
+  <property generated="never" lazy="false" name="mtu" type="int"/>
+  <many-to-one class="net.geant.autobahn.network.StateOper"
+   column="State_oper_enum" name="operationalStatus"/>
+  <many-to-one cascade="all"
+   class="net.geant.autobahn.constraints.GlobalConstraints" lazy="false" name="globalConstraints"/>
+  <many-to-one cascade="all" class="net.geant.autobahn.network.Path" name="path"/>
+  <many-to-one cascade="all"
+   class="net.geant.autobahn.aai.UserAuthParameters" name="authParameters"/>
+  <subclass discriminator-value="HD" name="HomeDomainReservation" select-before-update="false"/>
+  <subclass discriminator-value="ED" name="ExternalReservation" select-before-update="false"/>
+  <subclass discriminator-value="LD" name="LastDomainReservation" select-before-update="false"/>
+ </class>
 </hibernate-mapping>

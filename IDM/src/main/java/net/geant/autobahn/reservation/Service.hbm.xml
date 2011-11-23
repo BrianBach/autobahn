@@ -1,24 +1,16 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-	"hibernate-mapping-3.0.dtd">
-
+                                   "hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="net.geant.autobahn.reservation">
-	
-	<class name="Service" table="SERVICE">
-		<id name="bodID" column="srv_id" type="string" />
-		
-		<property name="justification" type="string"/>
-
-		<property name="priority" type="integer" />
-		
-		<many-to-one name="user" column="bod_user" class="User" not-null="true" 
-			cascade="all" />
-		
-		<list name="reservations" cascade="all" inverse="false">
-	      <key column="srv_id" />
-    	  <list-index column="res_index" />
-	      <one-to-many class="Reservation" />
-	   </list>
-	</class>
-	
+ <class name="Service" table="SERVICE">
+  <id column="srv_id" name="bodID" type="string"/>
+  <property generated="never" lazy="false" name="justification" type="string"/>
+  <property generated="never" lazy="false" name="priority" type="integer"/>
+  <many-to-one cascade="all" class="User" column="bod_user" name="user" not-null="true"/>
+  <list cascade="all" name="reservations">
+   <key column="srv_id"/>
+   <list-index base="0" column="res_index"/>
+   <one-to-many class="Reservation"/>
+  </list>
+ </class>
 </hibernate-mapping>

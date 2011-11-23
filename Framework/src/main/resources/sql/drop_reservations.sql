@@ -18,3 +18,4 @@ DELETE FROM domainsids;
 DELETE FROM global_constraints;
 
 DELETE FROM intradomain_path;
+DELETE FROM user_auth_params;

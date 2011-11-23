@@ -1,16 +1,11 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-	"hibernate-mapping-3.0.dtd">
-
+                                   "hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="net.geant.autobahn.reservation">
-	
-	<class name="User" table="BOD_USER">
-		<id name="name" column="user_name" type="string" />
-		
-		<property name="email" type="string" />
-		
-		<many-to-one name="homeDomain" class="net.geant.autobahn.network.AdminDomain" not-null="true" 
-			cascade="save-update" />
-	</class>
-	
+ <class lazy="false" name="User" table="BOD_USER">
+  <id column="name" name="name" type="string"/>
+  <property generated="never" lazy="false" name="email" type="string"/>
+  <many-to-one cascade="save-update"
+   class="net.geant.autobahn.network.AdminDomain" name="homeDomain" not-null="true"/>
+ </class>
 </hibernate-mapping>

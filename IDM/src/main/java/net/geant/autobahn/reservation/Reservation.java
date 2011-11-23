@@ -29,12 +29,11 @@ import net.geant.autobahn.network.StateOper;
 @XmlType(name="Reservation", namespace="reservation.autobahn.geant.net", propOrder={
 		"bodID", "startPort", "endPort", "startTime", "endTime",
 		"priority", "description", "capacity", "mtu", "maxDelay",
-		"resiliency", "bidirectional", "globalConstraints", "path", "intState", "fake",
-		"authParameters"})
+		"resiliency", "bidirectional", "globalConstraints", "path", "intState", "fake", "authParameters"})		
 public class Reservation implements Serializable {
 
-	private static final long serialVersionUID = -98008799451486690L;
-
+	private static final long serialVersionUID = -98008799451486690L;	
+	
 	protected String bodID;
 	
     protected Port startPort;
@@ -57,10 +56,11 @@ public class Reservation implements Serializable {
     
     protected boolean fake;
 
-    private UserAuthParameters authParameters = new UserAuthParameters();
-    
     @XmlTransient
     protected StateOper operationalStatus;
+    
+    private UserAuthParameters authParameters = new UserAuthParameters();
+    
     
     /**
      * Default constructor
@@ -245,7 +245,7 @@ public class Reservation implements Serializable {
 		this.operationalStatus = operationalStatus;
 	}
 
-	/**
+    /**
      * @return Returns the endPort.
      */
     public Port getEndPort() {
@@ -418,7 +418,6 @@ public class Reservation implements Serializable {
         
         //requested VLAN for the domain
         par.setMtu(mtu);
-        
         par.setAuthParameters(authParameters);
         
         return par;
@@ -454,7 +453,6 @@ public class Reservation implements Serializable {
     public String toString() {
         return bodID;
     }
-
 
     public UserAuthParameters getAuthParameters() {
         return authParameters;

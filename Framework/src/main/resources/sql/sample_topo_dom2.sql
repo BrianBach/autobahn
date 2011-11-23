@@ -1,8 +1,8 @@
-INSERT INTO node VALUES (1, NULL, NULL, 'Node2.1', NULL, NULL, NULL, NULL, NULL, NULL, 'Node2.1');
-INSERT INTO node VALUES (2, NULL, NULL, 'Node2.2', NULL, NULL, NULL, NULL, NULL, NULL, 'Node2.2');
-INSERT INTO node VALUES (3, NULL, NULL, 'DOM1-node-1', NULL, NULL, NULL, NULL, NULL, NULL, 'DOM1-node-1');
-INSERT INTO node VALUES (4, NULL, NULL, 'DOM1-node-2', NULL, NULL, NULL, NULL, NULL, NULL, 'DOM1-node-2');
-INSERT INTO node VALUES (5, NULL, NULL, 'host-node', NULL, NULL, NULL, NULL, NULL, NULL, 'host-node');
+INSERT INTO node VALUES (1, NULL, NULL, 'Node2.1', NULL, NULL, NULL, NULL, NULL, NULL, 'Node2.1', false);
+INSERT INTO node VALUES (2, NULL, NULL, 'Node2.2', NULL, NULL, NULL, NULL, NULL, NULL, 'Node2.2', false);
+INSERT INTO node VALUES (3, NULL, NULL, 'DOM1-node-1', NULL, NULL, NULL, NULL, NULL, NULL, 'DOM1-node-1', false);
+INSERT INTO node VALUES (4, NULL, NULL, 'DOM1-node-2', NULL, NULL, NULL, NULL, NULL, NULL, 'DOM1-node-2', false);
+INSERT INTO node VALUES (5, NULL, NULL, 'host-node', NULL, NULL, NULL, NULL, NULL, NULL, 'host-node', false);
 
 
 INSERT INTO generic_interface VALUES (1, NULL, NULL, NULL, 1, 'p2.1', NULL, 1000000000, NULL, 0, 'http://150.254.160.216:8081/autobahn/interdomain', false);

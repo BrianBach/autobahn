@@ -1,33 +1,25 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-	"hibernate-mapping-3.0.dtd">
-
+                                   "hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="net.geant.autobahn.reservation">
-	
-	<class name="ReservationParams" table="RESERVATION_PARAMS">
-		<id name="id" type="long">
-			<generator class="native" />
-		</id>
-
-		<property name="capacity" type="long" />
-		
-		<property name="maxDelay" type="int" column="max_delay" />
-		
-		<property name="resiliency" type="string" />
-		
-		<property name="bidirectional" type="boolean" />
-		
-		<property name="startTime" type="calendar" column="start_time" />
-		
-		<property name="endTime" type="calendar" column="end_time" />
-		
-		<property name="mtu" type="int" />
-		
-		<many-to-one name="pathConstraintsIngress" class="net.geant.autobahn.constraints.PathConstraints" 
-			not-null="true" cascade="save-update" lazy="false" column="ingress_constraints" />
-			
-		<many-to-one name="pathConstraintsEgress" class="net.geant.autobahn.constraints.PathConstraints" 
-			not-null="true" cascade="save-update" lazy="false" column="egress_constraints" />
-	</class>
-	
+ <class name="ReservationParams" table="RESERVATION_PARAMS">
+  <id name="id" type="long">
+   <generator class="native"/>
+  </id>
+  <property generated="never" lazy="false" name="capacity" type="long"/>
+  <property generated="never" lazy="false" name="maxDelay" type="int"/>
+  <property generated="never" lazy="false" name="resiliency" type="string"/>
+  <property generated="never" lazy="false" name="bidirectional" type="boolean"/>
+  <property generated="never" lazy="false" name="startTime" type="calendar"/>
+  <property generated="never" lazy="false" name="endTime" type="calendar"/>
+  <property generated="never" lazy="false" name="mtu" type="int"/>
+  <many-to-one cascade="save-update"
+   class="net.geant.autobahn.constraints.PathConstraints" lazy="false"
+   name="pathConstraintsIngress" not-null="true"/>
+  <many-to-one cascade="save-update"
+   class="net.geant.autobahn.constraints.PathConstraints" lazy="false"
+   name="pathConstraintsEgress" not-null="true"/>
+  <many-to-one cascade="all"
+   class="net.geant.autobahn.aai.UserAuthParameters" name="authParameters"/>
+ </class>
 </hibernate-mapping>

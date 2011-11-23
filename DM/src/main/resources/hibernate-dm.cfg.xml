@@ -47,6 +47,7 @@
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">update</property>
 
+		<mapping resource="net/geant/autobahn/aai/UserAuthParameters.hbm.xml" />
 
         <mapping resource="net/geant/autobahn/network/AdminDomain.hbm.xml" />
         <mapping resource="net/geant/autobahn/network/ProvisioningDomain.hbm.xml" />
@@ -71,14 +72,20 @@
 		<mapping resource="net/geant/autobahn/intradomain/common/Node.hbm.xml" />
 		<mapping resource="net/geant/autobahn/intradomain/common/InterfaceType.hbm.xml" />
 		<mapping resource="net/geant/autobahn/intradomain/common/GenericInterface.hbm.xml" />
-		<mapping resource="net/geant/autobahn/intradomain/ethernet/EthPhysicalPort.hbm.xml" />
 		<mapping resource="net/geant/autobahn/intradomain/common/GenericLink.hbm.xml" />
+		<mapping resource="net/geant/autobahn/intradomain/common/GenericConnection.hbm.xml" />
+		<mapping resource="net/geant/autobahn/intradomain/common/Path.hbm.xml" />
+		<mapping resource="net/geant/autobahn/intradomain/ethernet/EthPhysicalPort.hbm.xml" />
 		<mapping resource="net/geant/autobahn/intradomain/ethernet/EthLink.hbm.xml" />
 		<mapping resource="net/geant/autobahn/intradomain/ethernet/EthLogicalPort.hbm.xml" />
 		<mapping resource="net/geant/autobahn/intradomain/ethernet/VtpDomain.hbm.xml" />
 		<mapping resource="net/geant/autobahn/intradomain/ethernet/Vlan.hbm.xml" />
 		<mapping resource="net/geant/autobahn/intradomain/ethernet/VlanPort.hbm.xml" />
 		<mapping resource="net/geant/autobahn/intradomain/ethernet/SpanningTree.hbm.xml" /> 
+		<mapping resource="net/geant/autobahn/intradomain/mpls/MplsLink.hbm.xml" />
+		
+		<mapping resource="net/geant/autobahn/intradomain/IntradomainPath.hbm.xml" />
+		<mapping resource="net/geant/autobahn/intradomain/IntradomainReservation.hbm.xml" />
 		
 		<mapping resource="net/geant/autobahn/intradomain/sdh/SdhDomain.hbm.xml" />
 		<mapping resource="net/geant/autobahn/intradomain/sdh/SdhPort.hbm.xml" />
@@ -89,22 +96,16 @@
 		<mapping resource="net/geant/autobahn/intradomain/sdh/OpsLink.hbm.xml" />
 		<mapping resource="net/geant/autobahn/intradomain/sdh/OchLink.hbm.xml" />
 		<mapping resource="net/geant/autobahn/intradomain/sdh/VlanTag.hbm.xml" />
-		<mapping resource="net/geant/autobahn/intradomain/common/Path.hbm.xml" />
-		<mapping resource="net/geant/autobahn/intradomain/common/GenericConnection.hbm.xml" />
 		<mapping resource="net/geant/autobahn/intradomain/sdh/HoVcGroup.hbm.xml" />
 		<mapping resource="net/geant/autobahn/intradomain/sdh/HoVcType.hbm.xml" />
 		<mapping resource="net/geant/autobahn/intradomain/sdh/HoVcLink.hbm.xml" />
 		
-		<mapping resource="net/geant/autobahn/intradomain/mpls/MplsLink.hbm.xml" />
-
 		<mapping resource="net/geant/autobahn/reservation/Reservation.hbm.xml" />
 		<mapping resource="net/geant/autobahn/reservation/User.hbm.xml" />
 		<mapping resource="net/geant/autobahn/reservation/Service.hbm.xml" />
-
 		<mapping resource="net/geant/autobahn/reservation/ReservationParams.hbm.xml" />
 
-		<mapping resource="net/geant/autobahn/intradomain/IntradomainPath.hbm.xml" />
-		<mapping resource="net/geant/autobahn/intradomain/IntradomainReservation.hbm.xml" />
+
     </session-factory>
 
 </hibernate-configuration>

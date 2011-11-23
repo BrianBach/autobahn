@@ -1,10 +1,10 @@
 
 -- simple topology consisting of two client nodes and two idcp client nodes
 
-INSERT INTO node VALUES (1, NULL, NULL, 'test-node', NULL, NULL, NULL, NULL, NULL, NULL, 'test-node');
-INSERT INTO node VALUES (2, NULL, NULL, 'client-node1', NULL, NULL, NULL, NULL, NULL, NULL, 'client-node1');
-INSERT INTO node VALUES (3, NULL, NULL, 'client-node2', NULL, NULL, NULL, NULL, NULL, NULL, 'client-node2');
-INSERT INTO node VALUES (4, NULL, NULL, 'idcp-node', NULL, NULL, NULL, NULL, NULL, NULL, 'idcp-node');
+INSERT INTO node VALUES (1, NULL, NULL, 'test-node', NULL, NULL, NULL, NULL, NULL, NULL, 'test-node', false);
+INSERT INTO node VALUES (2, NULL, NULL, 'client-node1', NULL, NULL, NULL, NULL, NULL, NULL, 'client-node1', false);
+INSERT INTO node VALUES (3, NULL, NULL, 'client-node2', NULL, NULL, NULL, NULL, NULL, NULL, 'client-node2', false);
+INSERT INTO node VALUES (4, NULL, NULL, 'idcp-node', NULL, NULL, NULL, NULL, NULL, NULL, 'idcp-node', false);
 
 INSERT INTO generic_interface VALUES (1, NULL, NULL, NULL, 1, 'p1', NULL, 1000000000, NULL, 0, 'http://localhost:8080/autobahn/interdomain', false);
 INSERT INTO generic_interface VALUES (2, NULL, NULL, NULL, 2, 'host-port1', 'A host port 1', 1000000000, NULL, 0, 'http://client-domain1.com', true);

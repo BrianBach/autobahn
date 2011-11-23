@@ -69,3 +69,7 @@ DROP TABLE intradomain_reservation CASCADE;
 DROP TABLE reservation_params CASCADE;
 DROP TABLE pcons_to_intrapath CASCADE;
 DROP TABLE statistics CASCADE;
+
+DROP TABLE user_auth_params CASCADE;
+DROP TABLE domain_ids CASCADE;
+DROP TABLE has_role CASCADE;
