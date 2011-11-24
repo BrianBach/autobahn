@@ -29,14 +29,20 @@ if(now.getDate()<10){
 }
 var year = now.getFullYear();
 var hour = now.getHours();
+if(hour<10){
+	hour = "0" + hour;
+}
 var minutes = parseInt(now.getMinutes()) + 10;
 if(minutes>49){
 	minutes=59;
 }
 //alert(year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":00");
 document.getElementById('startTime').value=year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":00";
-document.getElementById('endTime').value=year + "-" + month + "-" + day + " " + (parseInt(hour)+1) + ":" + minutes + ":00";
-
+if(hour<10){
+	document.getElementById('endTime').value=year + "-" + month + "-" + day + " " + "0" + (parseInt(hour)+1) + ":" + minutes + ":00";
+} else {
+	document.getElementById('endTime').value=year + "-" + month + "-" + day + " " + (parseInt(hour)+1) + ":" + minutes + ":00";	
+}
 
 
 //setEndFriendlyName(document.getElementById('request.endPort').value)
