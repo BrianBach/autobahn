@@ -36,12 +36,17 @@ public class RequestConverter {
 		} else {
 			req.setStartTime(now);
 		}
-
+		
 		// check if start < end
         if (req.getStartTime().compareTo(req.getEndTime()) >= 0) {
             String message = "wrong reservation time - startTime: " + req.getStartTime().getTime() + " >= endTime: " + req.getEndTime().getTime();
             log.error(message);
             throw new UserAccessPointException(message);
+        }
+        
+        //check if start port equals end port
+        if (req.getStartPort().getAddress().equals(req.getEndPort().getAddress())) {
+        	throw new UserAccessPointException("reservation start port " + req.getStartPort().getAddress() + " and end port " + req.getEndPort().getAddress() + " are the same.");
         }
 		
         PortDAO pdao = daos.getPortDAO();

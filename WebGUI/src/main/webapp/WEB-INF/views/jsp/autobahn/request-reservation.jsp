@@ -73,15 +73,37 @@ function alerta(){
 }
 
 function setStartFriendlyName(path){
-	//alert(path);
-	document.getElementById('request.startPortFriendlyName').value=path;
-//alert(document.getElementById('endPortFriendlyName').value);
+
+    document.getElementById('request.startPortFriendlyName').value=path;
+    startPortValue = $(document.getElementById('request.startPort.address')).val();
+    var endPortSelect = document.getElementById('request.endPort.address');
+    
+    for (var i=0; i<endPortSelect.length; i++) 
+    {
+        $(endPortSelect.options[i]).show();
+
+        if (endPortSelect.options[i].value == startPortValue)
+        {
+            $(endPortSelect.options[i]).hide();
+        }
+    }
 }
 
 function setEndFriendlyName(path){
-//alert(path);
-	document.getElementById('request.endPortFriendlyName').value=path;
-//alert(document.getElementById('endPortFriendlyName').value);
+
+    document.getElementById('request.endPortFriendlyName').value=path;
+    endPortValue = $(document.getElementById('request.endPort.address')).val();
+    var startPortSelect = document.getElementById('request.startPort.address');
+    
+    for (var i=0; i<startPortSelect.length; i++) 
+    {
+        $(startPortSelect.options[i]).show();
+
+        if (startPortSelect.options[i].value == endPortValue)
+        {
+            $(startPortSelect.options[i]).hide();
+        }
+    }
 }
 
 function checkMinus(field,id){
@@ -209,7 +231,7 @@ function blockInputStartTime(checked) {
 <div>
     <table>
        <tr>
-		<td class="label"><spring:message code="reservation.startPort"/></td>
+		<td class="label"><spring:message code="reservation.startPort"/><br /><span class="error"><form:errors path="request.startPort.address"/></span></td>
 		<td class="value">
 			<form:select path="request.startPort.address" onchange="setStartFriendlyName(this.options[this.options.selectedIndex].text)">
 				<form:options items="${friendlyports_domain}" itemValue="identifier" itemLabel="friendlyName"/>	
