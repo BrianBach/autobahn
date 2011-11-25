@@ -75,4 +75,8 @@
         <put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/xmlusers-admin.jsp"/>
     </definition>
 
+    <definition name="secure/restartAll" extends="template.main">
+        <put-attribute name="content" value="/WEB-INF/views/jsp/autobahn/home.jsp"/>
+    </definition>
+
 </tiles-definitions> 

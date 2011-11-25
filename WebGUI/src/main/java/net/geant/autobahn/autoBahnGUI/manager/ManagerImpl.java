@@ -28,8 +28,8 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
 import net.geant.autobahn.aai.UserAuthParameters;
+import net.geant.autobahn.administration.AdministrationException;
 import net.geant.autobahn.administration.KeyValue;
-import net.geant.autobahn.administration.Neighbor;
 import net.geant.autobahn.administration.ReservationType;
 import net.geant.autobahn.administration.ServiceType;
 import net.geant.autobahn.administration.Status;
@@ -72,14 +72,17 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	 * Default time zone for WEB GUI
 	 */
 	private  String timezone ="UTC";
+
 	/**
 	 * List of all timezones for WEB GUI
 	 */
 	private List<String> timezones = Arrays.asList(TimeZone.getAvailableIDs());
+
 	/**
 	 * Topology notifier 
 	 */
 	private TopologyFinderNotifier notifier;
+
 	/**
 	 * Service states name
 	 */
@@ -130,6 +133,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	 * Identifies period of time when IDM register in WEB GUI is mark as down
 	 */
 	private long tearDownTime = 60000;
+
 	/**
 	 * Logs information
 	 */
@@ -152,7 +156,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	
 	private String[] comparedDomains;
 	
-	public ManagerImpl(){
+	public ManagerImpl() {
 		Properties properties = new Properties();
         try {
             InputStream is = getClass().getClassLoader().getResourceAsStream(
@@ -186,9 +190,11 @@ public class ManagerImpl implements Manager, ManagerNotifier {
         Collections.sort(timezones);
 	}
 	
+    @Override
 	public LookupService getLookupServiceObject(){
 		return lookupService;
 	}
+
 	/**
 	 * Creates the InterDomainManager
 	 * @param name name of new InterDomainManagert
@@ -200,7 +206,6 @@ public class ManagerImpl implements Manager, ManagerNotifier {
         return interdomain;
 	}
 
-	
 	/**
 	 * Registers InterDomainManager
 	 * 
@@ -222,6 +227,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 		InterDomainManager manager = idms.remove(identifier);
 		return manager;
 	}
+
 	/**
 	 * Removes registered InterDomainManager 
 	 * 
@@ -233,6 +239,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 			return null;
 		return idms.remove(idm);
 	}
+
 	/**
 	 * Removes all registered InterDomainManager 
 	 */
@@ -249,6 +256,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getInterDomainManagers()
 	 */
+    @Override
 	public List<InterDomainManager> getInterDomainManagers() {
 		List<InterDomainManager> managers = new ArrayList<InterDomainManager>();
 		Iterator<String> keyIterator = idms.keySet().iterator();
@@ -266,6 +274,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      * (non-Javadoc)
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllIdcpPorts(java.lang.String)
      */
+    @Override
     public List<String> getAllIdcpPorts (String idmIdentifier) {
         if (idmIdentifier != null) {
             InterDomainManager manager = idms.get(idmIdentifier);
@@ -300,6 +309,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      * (non-Javadoc)
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllIdcpPorts()
      */
+    @Override
     public List<String> getAllIdcpPorts (){
         // Parse through IDMs and get the first non-null result
         for(String idm : idms.keySet()) {
@@ -328,6 +338,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      * 
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllPorts(java.lang.String)
      */
+    @Override
     public List<String> getAllPorts(String idmIdentifier) throws UserAccessPointException {
         if (idmIdentifier != null) {
             InterDomainManager manager = idms.get(idmIdentifier);
@@ -362,6 +373,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      * (non-Javadoc)
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllPorts()
      */
+    @Override
     public List<String> getAllPorts () throws UserAccessPointException {
         // Parse through IDMs and get the first non-null result
         for (String idm : idms.keySet()) {
@@ -389,6 +401,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      * (non-Javadoc)
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllFriendlyPorts(java.lang.String)
      */
+    @Override
     public List<PortMap> getAllFriendlyPorts (String idm) throws UserAccessPointException {
         List<String> ports = getAllPorts(idm);
         List<PortMap> friendlyPorts = new ArrayList<PortMap>();
@@ -409,6 +422,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      * (non-Javadoc)
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllFriendlyAndIdcpPorts(java.lang.String)
      */
+    @Override
     public List<PortMap> getAllFriendlyAndIdcpPorts (String idm) throws UserAccessPointException {
         List<PortMap> friendlyPorts = getAllFriendlyPorts(idm);
         List<String> idcpPorts = this.getAllIdcpPorts(idm);
@@ -433,6 +447,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      * @param The port identifier to look for.
      * @return The friendly name if operation was successful, null otherwise
      */
+    @Override
     public String getFriendlyNamefromLS(String identifier) {
         if (lookupService == null) {
             return null;
@@ -452,6 +467,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      * (non-Javadoc)
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllDomains()
      */
+    @Override
     public List<String> getAllDomains(){
         // Parse through IDMs and get the first non-null result
         for(String idm : idms.keySet()) {
@@ -476,6 +492,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      * (non-Javadoc)
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllDomains_NonClient()
      */
+    @Override
     public List<String> getAllDomains_NonClient(){
         // Parse through IDMs and get the first non-null result
         Iterator<String> iterator = idms.keySet().iterator();
@@ -504,6 +521,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      * (non-Javadoc)
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllLinks()
      */
+    @Override
     public List<String> getAllLinks(){
         // Parse through IDMs and get the first non-null result
     	for(String idm : idms.keySet()) {
@@ -529,6 +547,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      * (non-Javadoc)
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllLinks_NonClient()
      */
+    @Override
     public List<String> getAllLinks_NonClient(){
         // Parse through IDMs and get the first non-null result
         Iterator<String> iterator = idms.keySet().iterator();
@@ -556,6 +575,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getInterDomainManagerPorts(java.lang.String)
 	 */
+    @Override
 	public List<String> getInterDomainManagerPorts (String idmIdentifier){
 	    InterDomainManager manager = idms.get(idmIdentifier);
 	    if (manager == null) {
@@ -581,6 +601,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      * (non-Javadoc)
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getFriendlyInterDomainManagerPorts()
      */
+    @Override
     public List<PortMap> getFriendlyInterDomainManagerPorts(String idmIdentifier) {
         List<String> ports = getInterDomainManagerPorts(idmIdentifier);
         List<PortMap> friendlyPorts = new ArrayList<PortMap>();
@@ -610,6 +631,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 		return manager.getService(identifier);		
 	}*/
 	
+    @Override
 	public Map<String,String> getServicesForAllInterDomainManagers(){
 		
 		List<ServiceType> list = new ArrayList<ServiceType>(); 
@@ -644,9 +666,8 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 			return sortMapByKey(map);
 		
 	}
-	
-	
-public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map){
+
+	public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map){
 		
 		TreeSet<String> treeset= new TreeSet<String>(new MapKeySetComparator());
 		treeset.addAll(map.keySet());
@@ -664,6 +685,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllInterdomainManagers()
 	 */
+    @Override
 	public List<String> getAllInterdomainManagers (){
 		List<String>names = new ArrayList<String> ();
 		for (String name:idms.keySet())
@@ -708,6 +730,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.ManagerNotifier#reservationChanged(java.lang.String, java.lang.String, java.lang.String, net.geant.autobahn.gui.ReservationChangedType, java.lang.String)
 	 */
+    @Override
 	public void reservationChanged(String idm, String serviceId, String resID,
 			ReservationChangedType state, String message) {
 		if (serviceId == null)
@@ -735,6 +758,8 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 			}
 		}
 	}
+
+	@Override
 	public void checkIDMavailability(){
 		if (!idms.isEmpty()) {
 			Iterator<String> iterator = idmsTime.keySet().iterator();
@@ -758,6 +783,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.ManagerNotifier#statusUpdated(java.lang.String, java.lang.String, net.geant.autobahn.administration.Status)
 	 */
+    @Override
 	public void statusUpdated(String idm, String idmUrl, Status status) {
 		
 		InterDomainManager manager = idms.get(idm);
@@ -790,6 +816,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getLogsInterDomainManager(java.lang.String, boolean, boolean)
 	 */
+    @Override
 	public String getLogsInterDomainManager(String idm, boolean refresh, boolean all) {
 		InterDomainManager manager = idms.get(idm);
 		if (manager == null)
@@ -801,23 +828,28 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getReservationStates()
 	 */
+    @Override
 	public String[] getReservationStates (){
 		return reservationStates;
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#checkUserAccessPointConnection(java.lang.String)
 	 */
+    @Override
 	public boolean checkUserAccessPointConnection(String idm) {
 		InterDomainManager manager = idms.get(idm);
 		if (manager == null)
 			return false;
 		return manager.isUserAccessPointConnected();
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#checkAdminstrationConnection(java.lang.String)
 	 */
+    @Override
 	public boolean checkAdminstrationConnection(String idm) {
 		InterDomainManager manager = idms.get(idm);
 		if (manager == null)
@@ -842,10 +874,12 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		}
 		//logger.info(buffer.toString());
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#submitServiceAtInterDomainManager(java.lang.String, net.geant.autobahn.useraccesspoint.ServiceRequest)
 	 */
+    @Override
 	public String submitServiceAtInterDomainManager(String idm, ServiceRequest request) throws UserAccessPointException, ManagerException {
 		logger.info("Submitting service");
 		if (request == null){
@@ -875,10 +909,12 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 			return id;	
 		}
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#checkReservationPossibility(java.lang.String, net.geant.autobahn.useraccesspoint.ReservationRequest)
 	 */
+    @Override
 	public ReservationTest checkReservationPossibility(String idm,
 			ReservationRequest request) throws UserAccessPointException {
 		InterDomainManager manager = idms.get(idm);
@@ -902,33 +938,40 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getPropertiesForInterDomainManager(java.lang.String)
 	 */
+    @Override
 	public List<KeyValue> getPropertiesForInterDomainManager(String idm) {
 		InterDomainManager manager = idms.get(idm);
 		if (manager != null)
 			return manager.getProperties();
 		return null;
 	}
-	/*
+
+    /*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#setPropertiesForInterDomainManager(java.lang.String, java.util.List)
 	 */
+    @Override
 	public void setPropertiesForInterDomainManager(String idm, List<KeyValue> properties) {
 		InterDomainManager manager = idms.get(idm);
 		if (manager != null)
 			manager.setProperties(properties);
 			
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getServiceStates()
 	 */
+    @Override
 	public String[] getServiceStates() {
 		return serviceStates;
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getServicesFromInterDomainManager(java.lang.String)
 	 */
+    @Override
 	public List<ServiceType> getServicesFromInterDomainManager(String idm) {
 		InterDomainManager manager= idms.get(idm);
 		if (manager != null){
@@ -936,10 +979,12 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		}
 		return null;
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#cancelServiceInInterDomainManager(java.lang.String, java.lang.String)
 	 */
+    @Override
 	public void cancelServiceInInterDomainManager(String idm,
 			String serviceID) throws UserAccessPointException {
 				
@@ -955,22 +1000,27 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		else
 			logger.info("Service can not be canceled: "+idm+":"+serviceID);
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.ManagerNotifier#update(java.lang.String, net.geant.autobahn.gui.EventType, java.util.List)
 	 */
+    @Override
 	public void update(String idm, EventType event,
 			List<KeyValue> properties) {
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getInterDomainManager(java.lang.String)
 	 */
+    @Override
 	public InterDomainManager getInterDomainManager(String idm) {
 		return idms.get(idm);
 	}
+
 	/**
-	 * Sets the topolofy notifier
+	 * Sets the topology notifier
 	 * @return topology notifier
 	 */
 	public TopologyFinderNotifier getNotifier() {
@@ -980,12 +1030,13 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 	public void setNotifier(TopologyFinderNotifier notifier) {
 		this.notifier = notifier;
 	}
+
 	/**
 	 * Converts the reservation state known by WEB GUI
 	 * @param state reservation state
 	 * @return return state known by WEB GUI
 	 */
-	public int  convertReservationTypes (ReservationChangedType state){
+	public int convertReservationTypes (ReservationChangedType state){
 		if (state==ReservationChangedType.ACTIVE)
 			return ACTIVE;
 		else
@@ -1002,10 +1053,12 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 			return SCHEDULED;
 		return 0;
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getServiceFromInterDomainManager(java.lang.String, java.lang.String)
 	 */
+    @Override
 	public ServiceType getServiceFromInterDomainManager(String idm,String serviceId) {
 		InterDomainManager manager = idms.get(idm);
 		if (manager == null)
@@ -1013,31 +1066,38 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		else
 			return manager.getService(serviceId);
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#mapPort(java.lang.String)
 	 */
+    @Override
 	public String mapPort(String port) {		
 		if (portsMapper!= null)
 			return portsMapper.mapPort(port);
 		return port;
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#demapPort(java.lang.String)
 	 */
+    @Override
 	public String demapPort (String mapping){
 		if (portsMapper != null)
 			portsMapper.demapPort(mapping);
 		return mapping;
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getTearDownTime()
 	 */
+    @Override
 	public long getTearDownTime() {
 		return tearDownTime;
 	}
+
 	/** 
 	 * Sets period of time after it the registered IDM is mark as not accessible
 	 * @param tearDownTime period in mili seconds
@@ -1058,6 +1118,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#demapPortsForReservationRequest(net.geant.autobahn.useraccesspoint.ReservationRequest)
 	 */
+    @Override
 	public void demapPortsForReservationRequest(ReservationRequest reservation) {
 		
 		reservation.getStartPort().setAddress(demapPort(reservation.getStartPort().getAddress()));
@@ -1071,6 +1132,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#demapPortsForsServiceRequest(net.geant.autobahn.useraccesspoint.ServiceRequest)
 	 */
+    @Override
 	public void demapPortsForsServiceRequest(ServiceRequest service) {
 		for(ReservationRequest reservation : service.getReservations()){
 			
@@ -1111,6 +1173,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getReservationRequestTemplate()
 	 */
+    @Override
 	public ReservatiomDepandentOnTimezone getReservationRequestTemplate() {
 		ReservatiomDepandentOnTimezone res = new ReservatiomDepandentOnTimezone();
 		ReservationRequest reservation = new ReservationRequest();
@@ -1133,6 +1196,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getServiceRequestTemplate()
 	 */
+    @Override
 	public ServiceRequest getServiceRequestTemplate() {
 		ServiceRequest service= new ServiceRequest();
 		Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -1155,6 +1219,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#mapPortsForReservationRequest(net.geant.autobahn.useraccesspoint.ReservationRequest)
 	 */
+    @Override
 	public void mapPortsForReservationRequest(ReservationRequest reservation) {
 		if (reservation.getStartPort()!= null)
 			reservation.getStartPort().setAddress(mapPort(reservation.getStartPort().getAddress()));
@@ -1168,6 +1233,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#mapPortsForServiceRequest(net.geant.autobahn.useraccesspoint.ServiceRequest)
 	 */
+    @Override
 	public void mapPortsForServiceRequest(ServiceRequest service) {
 		for(ReservationRequest reservation:service.getReservations()){
 			mapPortsForReservationRequest(reservation);
@@ -1178,6 +1244,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getMappedAllPorts()
 	 */
+    @Override
 	public List<String> getMappedAllPorts() throws UserAccessPointException {
 		List<String> allPorts = getAllPorts();
 		if (allPorts==null)
@@ -1193,6 +1260,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getMappedInterDomainManagerPorts(java.lang.String)
 	 */
+    @Override
 	public List<String> getMappedInterDomainManagerPorts(String idm) {
 		List<String> domainPorts = getInterDomainManagerPorts(idm);
 		if (domainPorts==null)
@@ -1205,20 +1273,24 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		}
 		return mappedDomainPorts;
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getReservationPriorities()
 	 */
+    @Override
 	public List<String> getReservationPriorities (){
 		List<String> list = new ArrayList<String>();
 		for (Priority req: Priority.values())
 			list.add(req.toString());
 		return list;
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getReservationResiliencies()
 	 */
+    @Override
 	public List<String> getReservationResiliencies (){
 		List<String> list = new ArrayList<String>();
 		for (Resiliency req: Resiliency.values())
@@ -1226,6 +1298,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		return list;
 	}
 	
+    @Override
 	public List<String> getReservationModes() {
 		List<String> list = new ArrayList<String>();
 		for (Mode req : Mode.values())
@@ -1237,7 +1310,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		return timezones;
 	}
 
-
+    @Override
 	public String getTimezone() {
 		return timezone;
 	}
@@ -1256,6 +1329,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
      * (non-Javadoc)
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#convertTimeToApplicationTimezone(java.lang.String, net.geant.autobahn.useraccesspoint.ReservationRequest)
      */
+    @Override
 	public void convertTimeToApplicationTimezone(String userZoneStr, ReservationRequest request){
 		
 		logger.info ("Converting times for request " + request + 
@@ -1295,6 +1369,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		}
 	}
 	
+    @Override
 	public ServicesFormModel getSubmitedServicesInIDM(String idm) {		
 		ServicesFormModel serv = new ServicesFormModel();
 		List<String> managers = getAllInterdomainManagers();
@@ -1348,6 +1423,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		return serv;
 	}
 
+    @Override
 	public LogsFormModel getLogsForInterDomainManager(String idm) {
 		LogsFormModel serv =  new LogsFormModel();
 		List<String > managers = 	getAllInterdomainManagers();
@@ -1368,6 +1444,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		return serv;
 	}
 
+    @Override
     public StatisticsFormModel getStatisticsForInterDomainManager(String idm) {
         StatisticsFormModel serv = new StatisticsFormModel();
         List<String> managers = getAllInterdomainManagers();
@@ -1390,6 +1467,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
         return serv;
     }
 
+    @Override
 	public SettingsFormModel getSettingsForInterDomainManager(String idm) {
 		SettingsFormModel serv =  new SettingsFormModel();
 		List<String > managers = 	getAllInterdomainManagers();
@@ -1412,11 +1490,13 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		return serv;
 	}
 
-
+    @Override
 	public ServicesFormModel getSubmitedServicesInInterDomainManager(String idm) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
 	public List<ServiceType> sortServicesByBodyID(List<ServiceType> list){
 						
 		Comparator<ServiceType> comparator = new ServicesComparator();
@@ -1425,16 +1505,19 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		return list;
 	}
 	
+    @Override
 	public String setParameter(String param){	
 		return param;
 	}
 
+    @Override
 	public void convertCapacity(ReservationRequest request){
 		
 		long capacity = request.getCapacity();
 		request.setCapacity(capacity * 1000000 );
 	}
 	
+    @Override
 	public Map<String,String> getAllAvailablePorts(String idm) throws UserAccessPointException{
 		
 		if(ports.size() == 0){
@@ -1452,6 +1535,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		return ports;
 	}
 	
+    @Override
 	public String getFriendlyNamePort(String port) throws UserAccessPointException{
 		
 		if(port == null & port.length() == 0)
@@ -1463,6 +1547,7 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
 		return ports.get(port);
 	}
 	
+    @Override
 	public List<LinkMap> getAllDomainLinks(){
 		
 		List<String> str = getAllLinks_NonClient();
@@ -1506,8 +1591,8 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
         }
         return true;
     }
-    
-    
+
+    @Override
     public boolean checkTopology(String idm){
     	
     	if(idms != null && idms.size() > 0){
@@ -1532,4 +1617,39 @@ public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map)
     	return false;
     }
     
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#handleTopologyChange(java.lang.String, boolean)
+     */
+    @Override
+    public void handleTopologyChange(String idmParam, boolean deleteReservations) {
+
+        InterDomainManager manager = idms.get(idmParam);
+        if (manager != null){
+            logger.info("Restarting IDM that caused topology change: " + idmParam);
+            try {
+                manager.handleTopologyChange(deleteReservations);
+            } catch (AdministrationException e) {
+                // Log the problem and continue to the other IDMs
+                logger.info(e.getMessage());
+            }
+        }
+        
+        // Parse through IDMs and get the first non-null result
+        for (String idm : idms.keySet()) {
+            manager = idms.get(idm);
+            
+            if(idm != null && !idm.equals(idmParam)) {
+                logger.info("Restarting IDM " + idm);
+                try {
+                    manager.handleTopologyChange(deleteReservations);
+                } catch (AdministrationException e) {
+                    // Log the problem and continue to next IDM
+                    logger.info(e.getMessage());
+                }
+            }
+        }
+        
+    }
+
 }

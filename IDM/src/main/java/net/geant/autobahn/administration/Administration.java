@@ -49,4 +49,7 @@ public interface Administration {
 	
 	@WebMethod
 	void restart();
+
+    @WebMethod
+    void handleTopologyChange(boolean deleteReservations) throws AdministrationException;
 }

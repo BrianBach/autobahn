@@ -1,11 +1,10 @@
 package net.geant.autobahn.autoBahnGUI.manager;
+
 import java.util.List;
 import java.util.Map;
 
 import net.geant.autobahn.administration.KeyValue;
-import net.geant.autobahn.administration.Neighbor;
 import net.geant.autobahn.administration.ServiceType;
-import net.geant.autobahn.administration.StatisticsType;
 import net.geant.autobahn.autoBahnGUI.model.LogsFormModel;
 import net.geant.autobahn.autoBahnGUI.model.ReservatiomDepandentOnTimezone;
 import net.geant.autobahn.autoBahnGUI.model.ReservationTest;
@@ -13,7 +12,6 @@ import net.geant.autobahn.autoBahnGUI.model.ServicesFormModel;
 import net.geant.autobahn.autoBahnGUI.model.SettingsFormModel;
 import net.geant.autobahn.autoBahnGUI.model.StatisticsFormModel;
 import net.geant.autobahn.lookup.LookupService;
-import net.geant.autobahn.network.Link;
 import net.geant.autobahn.useraccesspoint.ReservationRequest;
 import net.geant.autobahn.useraccesspoint.ServiceRequest;
 import net.geant.autobahn.useraccesspoint.UserAccessPointException;
@@ -397,5 +395,16 @@ public interface Manager {
 	public List<LinkMap> getAllDomainLinks();
 	
 	public boolean checkTopology(String idm);
+
+    /**
+     * Handles a topology update event by restarting all IDMs connected to the
+     * Portal, starting with the one that caused the topology update event
+     * 
+     * @param idmParam - the IDM that caused the topology update event
+     * @param deleteReservations - whether to forcefully delete any existing 
+     *          reservations in the restarted IDMs. If set to false and reservations
+     *          are found, the restart at the respective IDM will not happen.
+     */
+    public void handleTopologyChange(String idmParam, boolean deleteReservations);
 }
 

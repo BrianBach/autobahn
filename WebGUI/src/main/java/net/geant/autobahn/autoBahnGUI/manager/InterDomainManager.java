@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.geant.autobahn.administration.Administration;
+import net.geant.autobahn.administration.AdministrationException;
 import net.geant.autobahn.administration.AdministrationService;
 import net.geant.autobahn.administration.KeyValue;
 import net.geant.autobahn.administration.ReservationType;
@@ -31,24 +32,29 @@ import org.apache.log4j.Logger;
  *
  */
 public class InterDomainManager implements UserAccessPoint, Administration {
-	/**
+
+    /**
 	 * Identifier
 	 */
 	private String identifier;
+
 	/**
 	 * Web services address prefix
 	 */
 	private String url;
+
 	/**
 	 * UserAccessPoint web service interface  
 	 */
 	private UserAccessPoint userAccessPoint;
+
 	/**
 	 * Administration web service interface
 	 */
 	private Administration administration;
+
 	/**
-	 * Services submited in IDM
+	 * Services submitted in IDM
 	 */
 	public Map<String, ServiceType> services = Collections.synchronizedMap(new HashMap <String, ServiceType>());
 	
@@ -93,6 +99,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 		this.url= url;
 		connect (url);
 	}
+
 	/**
 	 * Establish connections with IDM UserAccessPoint and Administration web service interface  
 	 * 
@@ -102,6 +109,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 		userAccessPoint = connectUserAccessPoint(url);
 		administration = connectAdministration(url);
 	}
+
 	/**
 	 * Establish connection with IDM  Administration web service interface
 	 * 
@@ -114,6 +122,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
     	Administration admin = service.getAdministrationPort();
 	    return admin; 
 	}
+
 	/**
 	 * Establish connection with IDM  UserAccessPoint web service interface
 	 * 
@@ -126,30 +135,36 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 	    UserAccessPoint admin = service.getUserAccessPointPort();
 	    return admin; 
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#cancelService(java.lang.String)
 	 */
+    @Override
 	public void cancelService(String serviceID)
 			throws UserAccessPointException {
 		if (isUserAccessPointConnected())
 			userAccessPoint.cancelService(serviceID);
 		
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#queryService(java.lang.String)
 	 */
+    @Override
 	public ServiceResponse queryService(String serviceID)
 			throws UserAccessPointException {
 		if (isUserAccessPointConnected())
 			return userAccessPoint.queryService(serviceID);
 		return null;
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#submitService(net.geant.autobahn.useraccesspoint.ServiceRequest)
 	 */
+    @Override
 	public String submitService(ServiceRequest request) {
 		if (isUserAccessPointConnected()){
 			try {
@@ -160,10 +175,12 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 		}
 		return null;
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.administration.Administration#getLog(boolean)
 	 */
+    @Override
 	public String getLog(boolean all) {
 		if (isAdmnistrationConnected()){
 			try{
@@ -174,10 +191,12 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 		}
 		return null;
 	}
+
     /*
      * (non-Javadoc)
      * @see net.geant.autobahn.administration.Administration#getStatistics(boolean)
      */
+    @Override
     public StatisticsType getStatistics(boolean all) {
         if (isAdmnistrationConnected()) {
             try {
@@ -188,10 +207,12 @@ public class InterDomainManager implements UserAccessPoint, Administration {
         }
         return null;
     }
-	/*
+
+    /*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.administration.Administration#getProperties()
 	 */
+    @Override
 	public List<KeyValue> getProperties() {
 		if (isAdmnistrationConnected()){
 			try{
@@ -202,10 +223,12 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 		}
 		return null;
 	}
-	/*
+
+    /*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.administration.Administration#getReservation(java.lang.String)
 	 */
+    @Override
 	public ReservationType getReservation(String resID) {
 		if (isAdmnistrationConnected()){
 			try{
@@ -216,10 +239,12 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 		}
 		return null;
 	}
-	/*
+
+    /*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.administration.Administration#getTopology()
 	 */
+    @Override
 	public List<Link> getTopology() {
 		
 		if (isAdmnistrationConnected()){
@@ -231,10 +256,12 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 		}
 		return null;
 	}
-	/*
+
+    /*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.administration.Administration#setProperties(java.util.List)
 	 */
+    @Override
 	public void setProperties(List<KeyValue> properties) {
 		if (isAdmnistrationConnected())
 			try{
@@ -243,12 +270,14 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 				logger.error ("Cannot set properties for idm:"+e.getClass().getName()+":"+e.getMessage());
 			}
 	}
-	/** 
+
+    /** 
 	 * Gets identifier
 	 */
 	public String getIdentifier() {
 		return identifier;
 	}
+
 	/**
 	 * Sets identifier
 	 * @param identifier identifier
@@ -256,6 +285,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
 	}
+
 	/**
 	 * Gets web service address prefix
 	 * 
@@ -264,6 +294,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 	public String getUrl() {
 		return url;
 	}
+
 	/**
 	 * Sets web service address prefix
 	 * 
@@ -272,6 +303,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 	public void setUrl(String url) {
 		this.url = url;
 	}
+
 	/**
 	 * Sets IDM status
 	 * 
@@ -289,6 +321,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.administration.Administration#getService(java.lang.String)
 	 */
+    @Override
 	public ServiceType getService(String name) {
 		ServiceType service = services.get(name);
 		if (service != null)
@@ -306,7 +339,8 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 		}
 		return null;
 	}
-	/**
+
+    /**
 	 * Get service submitted in IDM 
 	 * @param clearOld identifies if cached list should be clear before get new list
 	 * @return Service object lists
@@ -339,10 +373,12 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 		
 		return serv;
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.administration.Administration#getServices()
 	 */
+    @Override
 	public List<ServiceType>  getServices(){
 		if (!isAdmnistrationConnected())
 				return null;
@@ -354,6 +390,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 		}
 		return servicesIdm;
 	}
+
 	/**
 	 * Gets logs from IDM
 	 * 
@@ -374,7 +411,8 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 		}
 		return logs;
 	}
-    /**
+
+	/**
      * Gets statistics from IDM
      * 
      * @param refresh
@@ -398,7 +436,8 @@ public class InterDomainManager implements UserAccessPoint, Administration {
         }
         return statistics;
     }
-	/**
+
+    /**
 	 * Check if UserAccessPoint web service interface is connected IDM
 	 * 
 	 * @return true if yes, if no tries to establish connection 
@@ -409,6 +448,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 		}
 		return userAccessPoint!=null;
 	}
+
 	/**
 	 * Check if Administration web service interface is connected IDM
 	 * 
@@ -420,13 +460,16 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 		}
 		return administration!=null;
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.administration.Administration#getStatus()
 	 */
+    @Override
 	public Status getStatus() {
 		return status;
 	}
+
 	/**
 	 * Gets the time in mili second when last update was received
 	 * 
@@ -435,7 +478,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 	public long getLastStatusUpdateInMillis() {
 		return lastStatusUpdateInMillis;
 	}
-	
+
 	/**
 	 * Sets the time in mili seconds
 	 * 
@@ -444,6 +487,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 	public void setLastStatusUpdateInMillis(long lastStatusUpdateInMillis) {
 		this.lastStatusUpdateInMillis = lastStatusUpdateInMillis;
 	}
+
 	/**
 	 * Gets logs from IDM
 	 * @return logs  form IDM
@@ -451,6 +495,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 	public String getLogs() {
 		return logs;
 	}
+
 	/**
 	 * Sets logs from IDM
 	 * @param logs  form IDM
@@ -458,13 +503,15 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 	public void setLogs(String logs) {
 		this.logs = logs;
 	}
-    /**
+
+	/**
      * Gets statistics from IDM
      * @return statistics  from IDM
      */
     public StatisticsType getStatistics() {
         return statistics;
     }
+
     /**
      * Sets statistics from IDM
      * @param statistics  from IDM
@@ -472,7 +519,8 @@ public class InterDomainManager implements UserAccessPoint, Administration {
     public void setStatistics(StatisticsType statistics) {
         this.statistics = statistics;
     }
-	/** 
+
+    /** 
 	 * Sets ports managed by IDM
 	 * @ports 
 	 */
@@ -484,6 +532,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
      * (non-Javadoc)
      * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getAllDomains()
      */
+    @Override
     public String[] getAllDomains() {
         try {
             if (isUserAccessPointConnected())
@@ -499,6 +548,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
      * (non-Javadoc)
      * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getAllDomains_NonClient()
      */
+    @Override
     public String[] getAllDomains_NonClient() {
         try {
             if (isUserAccessPointConnected())
@@ -514,6 +564,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
      * (non-Javadoc)
      * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getAllLinks()
      */
+    @Override
     public String[] getAllLinks() {
         try {
             if (isUserAccessPointConnected())
@@ -529,6 +580,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
      * (non-Javadoc)
      * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getAllLinks_NonClient()
      */
+    @Override
     public String[] getAllLinks_NonClient() {
         try {
             if (isUserAccessPointConnected())
@@ -544,6 +596,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getAllClientPorts()
 	 */
+    @Override
 	public String[] getAllClientPorts() throws UserAccessPointException {
 		try{
     		if (isUserAccessPointConnected()) {
@@ -561,6 +614,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
      * (non-Javadoc)
      * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getIdcpPorts()
      */
+    @Override
     public String[] getIdcpPorts() {
         try{
         if (isUserAccessPointConnected())
@@ -575,6 +629,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getDomainClientPorts()
 	 */
+    @Override
 	public String[] getDomainClientPorts() {
 		//logger.info("Getting ports from idm:"+identifier+":"+ports);
 		if (ports != null)
@@ -594,6 +649,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 		}
 		return null;
 	}
+
 	/**
 	 * In normal way service is cached  in InterDomainManager services collection
 	 * This method force to download service state from IDM manager directly 
@@ -618,10 +674,12 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 			services.put(serviceID, service);
 		}
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#modifyReservation(net.geant.autobahn.useraccesspoint.ModifyRequest)
 	 */
+    @Override
 	public void modifyReservation(ModifyRequest request) {
 		try{
 			if (isUserAccessPointConnected())
@@ -631,32 +689,47 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 		}
 		
 	}
+
+	@Override
 	public boolean checkReservationPossibility(ReservationRequest request)
 			throws UserAccessPointException {
 		if (isUserAccessPointConnected())
 			return userAccessPoint.checkReservationPossibility(request);
 		return false;
 	}
+
+    @Override
 	public void registerCallback(String serviceID, String url) {
 		// TODO Auto-generated method stub
-		
 	}
+
+    @Override
 	public String submitServiceAndRegister(ServiceRequest request, String url)
 			throws UserAccessPointException {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+    @Override
 	public void cancelAllServices() {
 		// TODO Auto-generated method stub
 		
 	}
-	
+
+    @Override
 	public void setTopology(List<Link> links) {
 		// TODO Auto-generated method stub
 		
 	}
-    @Override
+
+	@Override
     public void restart() {
         administration.restart();
+    }
+
+    @Override
+    public void handleTopologyChange(boolean deleteReservations)
+            throws AdministrationException {
+        administration.handleTopologyChange(deleteReservations);
     }
 }

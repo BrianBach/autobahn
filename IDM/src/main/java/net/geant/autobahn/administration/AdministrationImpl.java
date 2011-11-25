@@ -108,4 +108,10 @@ public class AdministrationImpl implements Administration {
 
         AccessPoint.getInstance().restart();
     }
+
+    @Override
+    public void handleTopologyChange(boolean deleteReservations)
+            throws AdministrationException {
+        AccessPoint.getInstance().handleTopologyChange(deleteReservations);
+    }
 }

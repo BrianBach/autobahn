@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Properties;
 
 import net.geant.autobahn.administration.Administration;
+import net.geant.autobahn.administration.AdministrationException;
 import net.geant.autobahn.administration.KeyValue;
 import net.geant.autobahn.administration.Neighbor;
 import net.geant.autobahn.administration.ReservationType;
@@ -111,6 +112,8 @@ public final class AccessPoint implements UserAccessPoint,
     private UapCallback startupNotifier = null;
     private RequestConverter reqConverter = null;
     
+    private Object idmReady = new Object();
+
     private IdmDAOFactory daos = null;
     
     private StringBuffer initChecks;
@@ -467,7 +470,6 @@ public final class AccessPoint implements UserAccessPoint,
         IdcpManager.stopSubscriptions();
 	    log.info("===== Disposed =====");
 	}
-		
 
 	private void recoverReservations() {
 		// Services
@@ -1161,11 +1163,12 @@ public final class AccessPoint implements UserAccessPoint,
         	int update = Integer.parseInt(properties.getProperty("gui.update"));
         	try {
 				guiNotifier = new GuiNotifier(guiAddress, update);
+				
 			} catch (MalformedURLException e) {
 				log.error("Error when setting up gui notifier", e);
 			}
 			
-			// attach it to the axisting reservations
+			// attach it to the existing reservations
 			if (guiNotifier != null) {
 				reservationProcessor.addStatusListenerToAllReservations(guiNotifier);
 			}
@@ -1173,6 +1176,10 @@ public final class AccessPoint implements UserAccessPoint,
         
         log.info("AutoBAHN Initialization completed.");
         log.info("Waiting for the requests...");
+
+        synchronized (idmReady) {
+            idmReady.notifyAll();
+        }
 	}
 
 	public boolean saveReservationStatusDB(String res, int st) {
@@ -1623,6 +1630,42 @@ public final class AccessPoint implements UserAccessPoint,
         domainManager.restart();
         init(this.properties);
         
+    }
+
+    public void handleTopologyChange(boolean deleteReservations)
+            throws AdministrationException {
+
+        String dbname = properties.getProperty("db.name");
+        String dbuser = properties.getProperty("db.user");
+        List<Reservation> reservations = daos.getReservationDAO().getAll();
+        if ((reservations.size() > 0) && (deleteReservations == false)) {
+            throw new AdministrationException(
+                    "Reservations are present, cannot delete abstract topology.");
+        }
+        try {
+            Runtime.getRuntime().exec(
+                    "sudo -u postgres psql " + dbuser + " -d " + dbname
+                            + " -f sql/drop_reservations.sql");
+            Runtime.getRuntime().exec(
+                    "sudo -u postgres psql " + dbuser + " -d " + dbname
+                            + " -f sql/drop_abstractTopology.sql");
+        } catch (IOException e) {
+            throw new AdministrationException(
+                    "Error executing sql scripts: " + e.getMessage(), e);
+        }
+        log.info("Reservations and Abstract Topology cleared.");
+
+        restart();
+
+        // Return only when the server notifies that it has properly restarted
+        synchronized (idmReady) {
+            try {
+                idmReady.wait();
+            } catch (InterruptedException e) {
+                log.debug("handleTopologyChange returned before IDM was fully restarted: "
+                        + e.getMessage());
+            }
+        }
     }
 
 }

@@ -172,7 +172,11 @@ public class AutobahnController {
         model.put("topology", topology);
     }
 
-
+    @RequestMapping("/secure/restartAll.htm")
+    public void handleTopologyChange(@RequestParam String domain) {
+        logger.info("All IDMs will be restarted due to topology change at " + domain);
+        manager.handleTopologyChange(domain, true);
+    }
 
     @RequestMapping("/secure/servicesforidm.htm")
     public void handleServicesForIdm(@RequestParam String currentIdm,Map<String, Object> model){
