@@ -1,0 +1,18 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+<soapenv:Body>
+
+	<nmwg:message type="EchoRequest"
+	              id="msg1"
+	              xmlns:nmwg="http://ggf.org/ns/nmwg/base/2.0/">
+	
+	  <nmwg:metadata id="meta">
+	    <nmwg:eventType>http://schemas.perfsonar.net/tools/admin/echo/2.0</nmwg:eventType>
+	  </nmwg:metadata>
+	
+	  <nmwg:data id="data" metadataIdRef="meta"/>
+	
+	</nmwg:message>
+
+
+</soapenv:Body>
+</soapenv:Envelope>

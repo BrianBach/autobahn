@@ -171,10 +171,10 @@ public final class AccessPoint implements UserAccessPoint,
 	 * @param props Properties object containing settings
 	 */
 	public State init(Properties props) {
-		this.properties = props;
+	    this.properties = props;
 		
         state = State.RESTARTING;
-		
+        		
         runBeforeInitChecks();
         
         log.info("===== IDM module Initialization =====");
@@ -210,10 +210,10 @@ public final class AccessPoint implements UserAccessPoint,
 	        
 	        //Register to Lookup
 	        String host = properties.getProperty("lookuphost");
-	        if (isLSavailable(host)) {
+	        if (LookupService.isLSavailable(host)) {
     	        LookupService lookup = new LookupService(host);
     	        try {
-                    lookup.RegisterIdm(domainName, domainURL);
+                    lookup.registerIdm(domainName, domainURL);
                 } catch (LookupServiceException lse) {
                     log.info("IDM could not register itself to the LS");
                     lse.printStackTrace();
@@ -430,8 +430,8 @@ public final class AccessPoint implements UserAccessPoint,
         for (Link l : links) {
         	
         	if (l.getBodID().contains("dummyLink") || (l.isIdcpLink() && l.isDummyIdcpLink())) {
-       			this.topology.removeLink(l);
-      			daos.getLinkDAO().delete(l);
+        	    daos.getLinkDAO().delete(l);
+        	    this.topology.removeLink(l);      			
 			}
 		}
 		t.commit();
@@ -447,10 +447,10 @@ public final class AccessPoint implements UserAccessPoint,
 		
 		// Remove idm from LS
 		String host = properties.getProperty("lookuphost");
-		if (isLSavailable(host)) {
+		if (LookupService.isLSavailable(host)) {
             LookupService lookup = new LookupService(host);
             try {
-    			lookup.RemoveIdm(domainName);
+    			lookup.removeIdm(domainName);
     		} catch (LookupServiceException e) {
     			e.printStackTrace();
     			log.info("IDM could not remove itself from LS");
@@ -467,7 +467,7 @@ public final class AccessPoint implements UserAccessPoint,
         	guiNotifier.stop();
         	guiNotifier = null;
         }
-        IdcpManager.stopSubscriptions();
+        IdcpManager.stopSubscriptions();        
 	    log.info("===== Disposed =====");
 	}
 
@@ -1132,12 +1132,16 @@ public final class AccessPoint implements UserAccessPoint,
 						e.printStackTrace();
 					}
 	            }
+	        } else {
+	            log.info("Sending abstract topology to lookup service");
+	            String lookuphost = properties.getProperty("lookuphost");	            
+	            topology.init(lookuphost);
 	        }
 	        
 	        try {
 		        // Insert link into the topology
 		        for (Link l : links) {
-		        	log.info("Link: " + l + " acquired");
+		            log.info("Link: " + l + " acquired");
 		        	topology.insertLink(l);
 		        }
 		        // Also insert IDCP topology information
@@ -1526,20 +1530,6 @@ public final class AccessPoint implements UserAccessPoint,
         
         hbm.closeSession();
     }
-
-    private boolean isLSavailable(String ls) {
-        if ((ls == null) || ls.equalsIgnoreCase("none") || ls.equals("")) {
-            return false;
-        }
-        // Check if it is a proper URL
-        try {
-            new URL(ls);
-        } catch (MalformedURLException e) {
-            log.debug(ls + " is not a proper URL for LS");
-            return false;
-        }
-        return true;
-    }
     
     private void fillInEnumsTables() {
     	HibernateUtil hbm = IdmHibernateUtil.getInstance();
@@ -1575,7 +1565,7 @@ public final class AccessPoint implements UserAccessPoint,
      */
     public String[] getFriendlyNamesfromLS(String[] cp) {
         String host = properties.getProperty("lookuphost");
-        if (!isLSavailable(host)) {
+        if (!LookupService.isLSavailable(host)) {
             // Just return the initially provided ids
             return cp;
         }
@@ -1586,7 +1576,7 @@ public final class AccessPoint implements UserAccessPoint,
         for (int i=0; i < cp.length; i++) {
             String friendlyName = null;
             try {
-                friendlyName = lookup.QueryFriendlyName(cp[i]);
+                friendlyName = lookup.queryFriendlyName(cp[i]);
             } catch (LookupServiceException e) {
                 log.info("Friendly name for end port " + cp[i] + " could not be acquired from LS");
                 log.debug(e.getMessage());
@@ -1636,7 +1626,6 @@ public final class AccessPoint implements UserAccessPoint,
             throws AdministrationException {
 
         String dbname = properties.getProperty("db.name");
-        String dbuser = properties.getProperty("db.user");
         List<Reservation> reservations = daos.getReservationDAO().getAll();
         if ((reservations.size() > 0) && (deleteReservations == false)) {
             throw new AdministrationException(
@@ -1644,11 +1633,11 @@ public final class AccessPoint implements UserAccessPoint,
         }
         try {
             Runtime.getRuntime().exec(
-                    "sudo -u postgres psql " + dbuser + " -d " + dbname
+                    "sudo -u postgres psql -d " + dbname
                             + " -f sql/drop_reservations.sql");
             Runtime.getRuntime().exec(
-                    "sudo -u postgres psql " + dbuser + " -d " + dbname
-                            + " -f sql/drop_abstractTopology.sql");
+                    "sudo -u postgres psql -d " + dbname
+                            + " -f sql/drop_abstractTopology.sql");            
         } catch (IOException e) {
             throw new AdministrationException(
                     "Error executing sql scripts: " + e.getMessage(), e);

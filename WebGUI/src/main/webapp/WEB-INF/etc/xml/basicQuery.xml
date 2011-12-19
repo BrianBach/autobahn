@@ -1,0 +1,36 @@
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <soapenv:Header />
+    <soapenv:Body>
+        <nmwg:message type="LSQueryRequest" id="msg1"
+            xmlns:nmwg="http://ggf.org/ns/nmwg/base/2.0/"
+            xmlns:xquery="http://ggf.org/ns/nmwg/tools/org/perfsonar/service/lookup/xquery/1.0/">
+            <nmwg:metadata id="meta1">
+                <xquery:subject id="sub1">
+
+
+
+                    declare namespace nmwg="http://ggf.org/ns/nmwg/base/2.0/"; 
+                    declare namespace perfsonar="http://ggf.org/ns/nmwg/tools/org/perfsonar/1.0/";
+                    declare namespace psservice="http://ggf.org/ns/nmwg/tools/org/perfsonar/service/1.0/";
+                    declare namespace xquery="http://ggf.org/ns/nmwg/tools/org/perfsonar/service/lookup/xquery/1.0/";
+                    declare namespace nmwgt="http://ggf.org/ns/nmwg/topology/2.0/";
+                    declare namespace lookup="ru6.cti.gr";
+                    
+                    for $m in /nmwg:store/nmwg:data/nmwg:metadata/perfsonar:subject/nmwgt:interface
+                    let $accessPoint := $m/<!-- value --> where $m/lookup:<!-- value --> =
+
+                    "<!-- value -->"
+                    return $accessPoint
+                    
+                    
+                </xquery:subject>
+                <nmwg:eventType>service.lookup.xquery</nmwg:eventType>
+            </nmwg:metadata>
+            <nmwg:data id="data1" metadataIdRef="meta1" />
+        </nmwg:message>
+    </soapenv:Body>
+</soapenv:Envelope>
+
+  

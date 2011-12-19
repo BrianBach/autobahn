@@ -168,7 +168,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
             logger.info("Could not load lookuphost properties: " + e.getMessage());
         }
         String host = properties.getProperty("lookuphost");
-        if (isLSavailable(host)) {
+        if (LookupService.isLSavailable(host)) {
             lookupService = new LookupService(host);
         } else {
             lookupService = null;
@@ -455,7 +455,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 
         String friendlyName = null;
         try {
-            friendlyName = lookupService.QueryFriendlyName(identifier);
+            friendlyName = lookupService.queryFriendlyName(identifier);
         } catch (LookupServiceException e) {
             logger.info("End port friendly name could not be acquired from LS");
             logger.info(e.getMessage());
@@ -1577,20 +1577,6 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 			
 		return domainLinks;
 	}
-
-    private boolean isLSavailable(String ls) {
-        if ((ls == null) || ls.equalsIgnoreCase("none") || ls.equals("")) {
-            return false;
-        }
-        // Check if it is a proper URL
-        try {
-            new URL(ls);
-        } catch (MalformedURLException e) {
-            logger.debug(ls + " is not a proper URL for LS");
-            return false;
-        }
-        return true;
-    }
 
     @Override
     public boolean checkTopology(String idm){

@@ -1,0 +1,42 @@
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:ns="http://ggf.org/ns/nmwg/base/2.0/">
+	<soapenv:Header />
+	<soapenv:Body>
+		<nmwg:message type="LSRegisterRequest" id="msg1"
+			xmlns:lookup="ru6.cti.gr" xmlns:perfsonar="http://ggf.org/ns/nmwg/tools/org/perfsonar/1.0/"
+			xmlns:nmwg="http://ggf.org/ns/nmwg/base/2.0/" xmlns:psservice="http://ggf.org/ns/nmwg/tools/org/perfsonar/service/1.0/"
+			xmlns:nmwgt="http://ggf.org/ns/nmwg/topology/2.0/" xmlns:netutil="http://ggf.org/ns/nmwg/characteristic/utilisation/2.0/">
+			<nmwg:metadata id="serviceLookupInfo">
+				<perfsonar:subject id="commonParameters"
+					xmlns:perfsonar="http://ggf.org/ns/nmwg/tools/org/perfsonar/1.0/">
+					<psservice:service id="serviceParameters"
+						xmlns:psservice="http://ggf.org/ns/nmwg/tools/org/perfsonar/service/1.0/">
+						<psservice:serviceName>
+						</psservice:serviceName>
+						<psservice:accessPoint>
+
+
+
+						</psservice:accessPoint>
+						<psservice:serviceType>
+						</psservice:serviceType>
+						<psservice:serviceDescription>
+						</psservice:serviceDescription>
+					</psservice:service>
+				</perfsonar:subject>
+				<nmwg:eventType>http://ogf.org/ns/nmwg/tools/org/perfsonar/service/lookup/registration/service/2.0
+				</nmwg:eventType>
+			</nmwg:metadata>
+			<nmwg:data id="data0" metadataIdRef="serviceLookupInfo">
+				<nmwg:metadata id="meta1">
+					<perfsonar:subject id="subj1"
+						xmlns:perfsonar="http://ggf.org/ns/nmwg/tools/org/perfsonar/1.0/">
+						<nmwgt:interface xmlns:nmwgt="http://ggf.org/ns/nmwg/topology/2.0/">
+						</nmwgt:interface>
+					</perfsonar:subject>
+				</nmwg:metadata>
+			</nmwg:data>
+		</nmwg:message>
+	</soapenv:Body>
+</soapenv:Envelope> 

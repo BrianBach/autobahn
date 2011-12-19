@@ -41,13 +41,13 @@ public class Dm2IdmClient implements Dm2Idm {
         String host = AccessPoint.getInstance().getProperty("lookuphost");
 		String idmLocation = null;
 		
-		if (isLSavailable(host)) {
+		if (LookupService.isLSavailable(host)) {
 	        LookupService lookup = new LookupService(host);
 	        try {
 	            // The IDM endpoint is the /interdomain interface. Here we have
 	            // the /dm2idm interface, so we have to modify the connection URL
 	            String interdomainEndpoint = endPoint.replaceFirst("/autobahn/dm2idm", "/autobahn/interdomain");
-	        	idmLocation = lookup.QueryIdmLocation(interdomainEndpoint);
+	        	idmLocation = lookup.queryIdmLocation(interdomainEndpoint);
 	        } catch (LookupServiceException e) {
 	        	log.info("No query to the Lookup Service could be performed in order to locate IDM.");
 	        	log.info(e.getMessage());
@@ -133,19 +133,5 @@ public class Dm2IdmClient implements Dm2Idm {
             return dm2idm.saveReservationStatusDB(res, st);
         
         return false;
-    }
-
-    private boolean isLSavailable(String ls) {
-        if ((ls == null) || ls.equalsIgnoreCase("none") || ls.equals("")) {
-            return false;
-        }
-        // Check if it is a proper URL
-        try {
-            new URL(ls);
-        } catch (MalformedURLException e) {
-            log.debug(ls + " is not a proper URL for LS");
-            return false;
-        }
-        return true;
     }
 }

@@ -32,10 +32,10 @@ public class InterdomainClient implements Interdomain {
 		String host = AccessPoint.getInstance().getProperty("lookuphost");
         String idmLocation = "";
         
-        if (isLSavailable(host)) {
+        if (LookupService.isLSavailable(host)) {
             LookupService lookup = new LookupService(host);
             try {
-            	idmLocation = lookup.QueryIdmLocation(endPoint);
+            	idmLocation = lookup.queryIdmLocation(endPoint);
                 log.debug("IDM endpoint retrieved from LS: " + idmLocation);
             } catch (LookupServiceException e) {
                 log.info("No query to the Lookup Service could be performed in order to locate IDM.");
@@ -143,18 +143,4 @@ public class InterdomainClient implements Interdomain {
 	public LinkIdentifiers getIdentifiers(String portName, String bodId) {
 		return interdomain.getIdentifiers(portName, bodId);
 	}
-
-    private boolean isLSavailable(String ls) {
-        if ((ls == null) || ls.equalsIgnoreCase("none") || ls.equals("")) {
-            return false;
-        }
-        // Check if it is a proper URL
-        try {
-            new URL(ls);
-        } catch (MalformedURLException e) {
-            log.debug(ls + " is not a proper URL for LS");
-            return false;
-        }
-        return true;
-    }
 }

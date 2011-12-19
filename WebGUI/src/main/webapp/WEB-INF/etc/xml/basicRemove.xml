@@ -1,0 +1,22 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:ns="http://ggf.org/ns/nmwg/base/2.0/">
+	<soapenv:Header />
+	<soapenv:Body>
+		<nmwg:message id="blah1" messageIdRef="blah2"
+			type="LSDeregisterRequest" xmlns:perfsonar="http://ggf.org/ns/nmwg/tools/org/perfsonar/1.0/"
+			xmlns:nmwg="http://ggf.org/ns/nmwg/base/2.0/" xmlns:psservice="http://ggf.org/ns/nmwg/tools/org/perfsonar/service/1.0/"
+			xmlns:nmwgt="http://ggf.org/ns/nmwg/topology/2.0/"><!--xmlns:netutil="http://ggf.org/ns/nmwg/characteristic/utilisation/2.0/" -->
+			<nmwg:metadata id="meta1">
+				<nmwg:key id="localhost.localdomain.-6236687d:116c5a2ab6a:-7fc4">
+					<nmwg:parameters
+						id="localhost.localdomain.-6236687d:116c5a2ab6a:-7fc3">
+						<nmwg:parameter name="lsKey">
+
+						</nmwg:parameter>
+					</nmwg:parameters>
+				</nmwg:key>
+			</nmwg:metadata>
+			<nmwg:data id="data1" metadataIdRef="meta1" />
+		</nmwg:message>
+	</soapenv:Body>
+</soapenv:Envelope> 

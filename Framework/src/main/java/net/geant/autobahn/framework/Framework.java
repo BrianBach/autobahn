@@ -35,6 +35,7 @@ import net.geant.autobahn.framework.commands.ShutdownCommand;
 import net.geant.autobahn.framework.commands.StatisticsCommand;
 import net.geant.autobahn.framework.commands.TopologyCommand;
 import net.geant.autobahn.framework.commands.UptimeCommand;
+import net.geant.autobahn.resources.ResourcePath;
 
 import org.apache.log4j.Logger;
 import org.apache.commons.codec.binary.Hex;
@@ -372,7 +373,8 @@ public class Framework {
 	public static boolean running = true;
 
 	public static void main(String[] args) throws Exception {
-        String prop_file = "etc/autobahn.properties";
+        ResourcePath resource = new ResourcePath(false);
+	    String prop_file = "etc/autobahn.properties";
         if (!new File(prop_file).exists()) {
             prop_file = "etc/framework.properties";
         }

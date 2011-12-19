@@ -15,7 +15,11 @@ import net.geant.autobahn.dao.IdmDAOFactory;
 import net.geant.autobahn.dao.hibernate.HibernateIdmDAOFactory;
 import net.geant.autobahn.dao.hibernate.HibernateUtil;
 import net.geant.autobahn.dao.hibernate.IdmHibernateUtil;
+import net.geant.autobahn.idm.AccessPoint.State;
+import net.geant.autobahn.idm.AccessPoint;
 import net.geant.autobahn.idm.TopologyMerge;
+import net.geant.autobahn.lookup.LookupService;
+import net.geant.autobahn.lookup.LookupServiceException;
 import net.geant.autobahn.network.AdminDomain;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.Node;
@@ -30,6 +34,7 @@ import net.geant.autobahn.ospf.lsa.OspfLsa;
 import net.geant.autobahn.ospf.lsa.OspfLsaOpaque;
 
 import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
 
 /**
@@ -46,6 +51,7 @@ public final class TopologyImpl implements Topology, OspfAsync, Closeable {
     private LinkDAO ldao = daos.getLinkDAO();
     private TopologyMerge topoMerge = new TopologyMerge();
     private Ospf ospf;
+    private LookupService lookup;
     private int lsaType;
     private String ifAddr, areaId;
     private int opaqueType, opaqueId;
@@ -73,7 +79,14 @@ public final class TopologyImpl implements Topology, OspfAsync, Closeable {
     		Thread.sleep(3000);
     	} catch (InterruptedException e) { }
     	log.debug("ospf connected to " + ospfApiEndpoint + ":" + port);
-    }    	
+    }    
+    
+
+    public void init(String lookuphost) {
+        if (LookupService.isLSavailable(lookuphost)) {
+            this.lookup = new LookupService(lookuphost);
+        }                
+    }
     
     public boolean isOspfUsed() {
     	
@@ -102,7 +115,7 @@ public final class TopologyImpl implements Topology, OspfAsync, Closeable {
      * @see net.geant.autobahn.pathfinder.interdomain.Quagga#getDomains()
      */
     public List<AdminDomain> getDomains() {
-        
+        updateAbstractTopology();
         List<Link> links = ldao.getValidLinks();
         Set<AdminDomain> adomains = new HashSet<AdminDomain>();
         
@@ -117,7 +130,7 @@ public final class TopologyImpl implements Topology, OspfAsync, Closeable {
      * @see net.geant.autobahn.pathfinder.interdomain.Quagga#getDomains()
      */
     public List<ProvisioningDomain> getProvDomains() {
-        
+        updateAbstractTopology();
         List<Link> links = ldao.getValidLinks();
         Set<ProvisioningDomain> pdomains = new HashSet<ProvisioningDomain>();
         
@@ -132,7 +145,7 @@ public final class TopologyImpl implements Topology, OspfAsync, Closeable {
      * @see net.geant.autobahn.pathfinder.interdomain.Quagga#getLinks()
      */
     public List<Link> getLinks() {
-        
+        updateAbstractTopology();
         return ldao.getValidLinks();
     }
 
@@ -140,7 +153,7 @@ public final class TopologyImpl implements Topology, OspfAsync, Closeable {
      * @see net.geant.autobahn.pathfinder.interdomain.Quagga#getNodes()
      */
     public List<Node> getNodes() {
-        
+        updateAbstractTopology();
         List<Link> links = ldao.getValidLinks();
         Set<Node> nodes = new HashSet<Node>();
         
@@ -181,6 +194,12 @@ public final class TopologyImpl implements Topology, OspfAsync, Closeable {
     			log.debug("originateLink - " + e.getMessage());
     			return false;
     		}
+    	} else {
+    	    try {
+                lookup.registerAbstractLinks(getLinks());
+            } catch (LookupServiceException e) {
+                log.debug("Problem registering abstract link to Lookup Service: " + e.getMessage());                
+            }
     	}
         return true;
     }
@@ -197,6 +216,13 @@ public final class TopologyImpl implements Topology, OspfAsync, Closeable {
     			log.debug("deleteLsa - " + e.getMessage());
     			return false;
     		}
+    	} else {
+    	    try {
+                lookup.registerAbstractLinks(getLinks());                
+            } catch (LookupServiceException e) {
+                log.error("Error removing link from LS: " + e.getMessage());
+                return false;
+            }
     	}
         return true;
     }
@@ -301,5 +327,35 @@ public final class TopologyImpl implements Topology, OspfAsync, Closeable {
 				hbm.closeSession();
 			}
 		}
+	}
+	
+	public void updateAbstractTopology() {	
+	    if(lookup != null && lookup.topoIsUptodate() == false) {
+	        try {
+	            List<Link> dbLinks = ldao.getValidLinks();
+                for (Link link : lookup.getAbstractLink()) {
+                    for (Link dbLink : dbLinks) {
+                        if (!dbLink.equals(link)) {
+                            //Save into db
+                            HibernateUtil hbm = IdmHibernateUtil.getInstance();
+                            hbm.closeSession();
+                            Transaction t = hbm.beginTransaction();
+                            Link l = topoMerge.merge(link);
+                            ldao.update(l);
+                            t.commit();
+                            hbm.closeSession();
+                        }
+                    }
+                }
+            } catch (HibernateException e) {
+                log.error("Error with hibernate: " + e.getMessage());
+            } catch (LookupServiceException e) {
+                log.error("Error with Lookup Service: " + e.getMessage());
+            }
+        }
+	    
+	    if(lookup != null && LookupService.timestamp == 0) {
+            lookup.removeAbstractLinks();            
+        }
 	}
 }
