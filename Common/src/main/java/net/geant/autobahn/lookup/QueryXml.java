@@ -1,16 +1,11 @@
 package net.geant.autobahn.lookup;
 
 import java.io.File;
-import java.io.IOException;
-
-import javax.xml.parsers.ParserConfigurationException;
-
 import net.geant.autobahn.resources.ResourcePath;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 public class QueryXml extends XmlHandler {
     static public String xmlFileName = "etc/xml/basicQuery.xml";
@@ -34,23 +29,23 @@ public class QueryXml extends XmlHandler {
 
     static private Logger log = Logger.getLogger(QueryXml.class);
 
-    public QueryXml() throws SAXException, IOException, ParserConfigurationException {
+    public QueryXml() throws LookupServiceException {
         super(new File(new ResourcePath().getFullPath(xmlFileName)));
     }
 
-    public QueryXml(String interf) throws Exception {
+    public QueryXml(String interf) throws LookupServiceException {
         this();
         setReturnType(interf);
     }
 
-    public QueryXml(String interf, String field, String value) throws Exception {
+    public QueryXml(String interf, String field, String value) throws LookupServiceException {
         this(interf);
         setWhere(field, value);
     }
 
-    public void setReturnType(String s) throws Exception {
+    public void setReturnType(String s) throws LookupServiceException {
         if (searchForKeys) {
-            throw new Exception("can not set custom return type whene searching for keys");
+            throw new LookupServiceException("Can not set custom return type when searching for keys");
         }
         returnString = "return " + prefix + s;
     }
@@ -59,7 +54,7 @@ public class QueryXml extends XmlHandler {
         queryString += "where " + query(field, value);
     }
 
-    public void connectAnd(String field, String value) throws Exception {
+    public void connectAnd(String field, String value) throws LookupServiceException {
         if (!queryString.startsWith("where")) {
             log.error("Ask 'and connection' without previous query");
             throw new LookupServiceException("Ask 'and connection' without previous query");
@@ -67,7 +62,7 @@ public class QueryXml extends XmlHandler {
         queryString += " and " + query(field, value);
     }
 
-    public String getXml() throws Exception {
+    public String getXml() throws LookupServiceException {
         NodeList l = doc.getElementsByTagName("xquery:subject");
 
         // should exist exactly 1 node

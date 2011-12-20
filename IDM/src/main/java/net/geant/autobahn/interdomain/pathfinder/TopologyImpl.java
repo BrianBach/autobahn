@@ -348,14 +348,18 @@ public final class TopologyImpl implements Topology, OspfAsync, Closeable {
                     }
                 }
             } catch (HibernateException e) {
-                log.error("Error with hibernate: " + e.getMessage());
+                log.error("Error with hibernate: ", e);
             } catch (LookupServiceException e) {
-                log.error("Error with Lookup Service: " + e.getMessage());
+                log.error("Error with Lookup Service: ", e);
             }
         }
 	    
 	    if(lookup != null && LookupService.timestamp == 0) {
-            lookup.removeAbstractLinks();            
+            try {
+                lookup.removeAbstractLinks();
+            } catch (LookupServiceException e) {
+                log.error("Error with Lookup Service: ", e);
+            }            
         }
 	}
 }

@@ -9,7 +9,6 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import net.geant.autobahn.reservation.LastDomainReservation;
 import net.geant.autobahn.reservation.ReservationStatusListener;
 
 import org.apache.log4j.Logger;

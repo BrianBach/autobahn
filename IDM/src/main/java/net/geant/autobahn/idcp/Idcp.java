@@ -12,10 +12,6 @@ import net.geant.autobahn.reservation.AutobahnReservation;
 
 import org.apache.log4j.Logger;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneHopContent;
-import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneLinkContent;
-import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlanePathContent;
-import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneSwcapContent;
-import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneSwitchingCapabilitySpecificInfo;
 
 /**
  * Contains constant values for idcp protocol and utility functions used during the conversion process.

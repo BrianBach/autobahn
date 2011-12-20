@@ -4,7 +4,6 @@ import javax.jws.WebService;
 
 import net.geant.autobahn.constraints.GlobalConstraints;
 import net.geant.autobahn.idm.AccessPoint;
-import net.geant.autobahn.idm2dm.ConstraintsAlreadyUsedException;
 import net.geant.autobahn.network.LinkIdentifiers;
 import net.geant.autobahn.reservation.Reservation;
 import net.geant.autobahn.reservation.TimeRange;

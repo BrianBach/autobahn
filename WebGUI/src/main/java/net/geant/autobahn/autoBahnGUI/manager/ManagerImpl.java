@@ -2,8 +2,6 @@ package net.geant.autobahn.autoBahnGUI.manager;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1609,7 +1607,16 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      */
     @Override
     public void handleTopologyChange(String idmParam, boolean deleteReservations) {
-
+        // Cleanup LS first
+        try {
+            if (lookupService != null) {
+                lookupService.removeAbstractLinks();
+            }
+        } catch (LookupServiceException e1) {
+            // Log the error but continue with IDMs restart
+            logger.info("Could not clean up LS ", e1);
+        }
+        
         InterDomainManager manager = idms.get(idmParam);
         if (manager != null){
             logger.info("Restarting IDM that caused topology change: " + idmParam);

@@ -11,7 +11,6 @@ import javax.xml.ws.Holder;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneDomainContent;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneLinkContent;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlaneNodeContent;
-import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlanePathContent;
 import org.ogf.schema.network.topology.ctrlplane._20080828.CtrlPlanePortContent;
 
 import net.geant.autobahn.network.Link;

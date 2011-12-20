@@ -83,11 +83,11 @@ public class LookupService {
             responseContent = httpclient.execute(httpPost, responseHandler);
             responseContent = responseContent.replace(">", ">\n");
         } catch (ClientProtocolException e) {
-            log.debug("There was an error sending the request to Lookup Service: "
-                    + e.getMessage());
+            log.error("LS exception: ", e);
+            throw new LookupServiceException(e.getMessage());
         } catch (IOException e) {
-            log.debug("There was an error sending the request to Lookup Service: "
-                    + e.getMessage());
+            log.error("LS exception: ", e);
+            throw new LookupServiceException(e.getMessage());
         }
 
         httpclient.getConnectionManager().shutdown();
@@ -129,8 +129,15 @@ public class LookupService {
                 }
             }
 
-        } catch (Exception e) {
-            log.debug("Error in finding matching key (LS) - " + e.getMessage());
+        } catch (ParserConfigurationException e) {
+            log.error("LS exception: ", e);
+            throw new LookupServiceException(e.getMessage());
+        } catch (SAXException e) {
+            log.error("LS exception: ", e);
+            throw new LookupServiceException(e.getMessage());
+        } catch (IOException e) {
+            log.error("LS exception: ", e);
+            throw new LookupServiceException(e.getMessage());
         }
 
         return null;
@@ -177,14 +184,14 @@ public class LookupService {
             }
 
         } catch (ParserConfigurationException e) {
-            log.debug("Error in finding matching keys from LS - "
-                    + e.getMessage());
+            log.error("LS exception: ", e);
+            throw new LookupServiceException(e.getMessage());
         } catch (SAXException e) {
-            log.debug("Error in finding matching keys from LS - "
-                    + e.getMessage());
+            log.error("LS exception: ", e);
+            throw new LookupServiceException(e.getMessage());
         } catch (IOException e) {
-            log.debug("Error in finding matching keys from LS - "
-                    + e.getMessage());
+            log.error("LS exception: ", e);
+            throw new LookupServiceException(e.getMessage());
         }
 
         return null;
@@ -222,18 +229,14 @@ public class LookupService {
         // Generate key with timestamp
         String seckey = generateKey(firstkey);
         RegisterXml xml;
-        try {
-            xml = new RegisterXml(seckey, "TYPE 2", "IDM");
-            xml.addDescription("Domain name, IDM instance URL, Unix time timestamp, IDM");
-            xml.addField("domain", domain);
-            xml.addField("url", URL);
-            xml.addField("eventType", String.valueOf(TYPE2));
-            xml.addTimestamp();
-            xml.addField("module", "IDM");
-            invokeLS(xml.getXml());
-        } catch (Exception e) {
-            log.debug("Error registering IDM to LS: " + e.getMessage());
-        }
+        xml = new RegisterXml(seckey, "TYPE 2", "IDM");
+        xml.addDescription("Domain name, IDM instance URL, Unix time timestamp, IDM");
+        xml.addField("domain", domain);
+        xml.addField("url", URL);
+        xml.addField("eventType", String.valueOf(TYPE2));
+        xml.addTimestamp();
+        xml.addField("module", "IDM");
+        invokeLS(xml.getXml());
     }
 
     /**
@@ -265,27 +268,19 @@ public class LookupService {
         String seckey = generateKey(firstkey);
 
         RegisterXml xml;
-        try {
-            xml = new RegisterXml(seckey, "TYPE 1", "PORT");
-            xml.addDescription("End port identifier, User-friendly name, domain name");
-            xml.addField("identifier", portIdentifier);
-            xml.addField("friendlyName", friendlyName);
-            xml.addEventType(TYPE1);
-            xml.addField("domain", domain);
-            invokeLS(xml.getXml());
-        } catch (Exception e) {
-            log.debug("Error registering end port to LS: " + e.getMessage());
-        }
+        xml = new RegisterXml(seckey, "TYPE 1", "PORT");
+        xml.addDescription("End port identifier, User-friendly name, domain name");
+        xml.addField("identifier", portIdentifier);
+        xml.addField("friendlyName", friendlyName);
+        xml.addEventType(TYPE1);
+        xml.addField("domain", domain);
+        invokeLS(xml.getXml());
     }
 
-    public void removeAbstractLinks() {
+    public void removeAbstractLinks() throws LookupServiceException {
         //first remove the existing links
-        try {
-            RemoveXml rem = new RemoveXml("AbstractLinkKey");
-            invokeLS(rem.getXml());            
-        } catch (Exception e) {
-            log.error("Error deleting abstract links from LS: " + e.getMessage());
-        }
+        RemoveXml rem = new RemoveXml("AbstractLinkKey");
+        invokeLS(rem.getXml());            
     }
     
     public void registerAbstractLinks(List<Link> links)
@@ -297,32 +292,16 @@ public class LookupService {
         XStream xstream = new XStream();
         xstream.alias("AbstractLink", Link.class);
         RegisterXml xml = null;
-        try {
-            xml = new RegisterXml("AbstractLinkKey", "TYPE 5",
-                    "abstract topology");
-            timestamp = xml.addTimestamp();
-            xml.addEventType(TYPE5);
-        } catch (Exception e) {
-            log.debug("Error registering abstract links to LS: "
-                    + e.getMessage());
-        }
+        xml = new RegisterXml("AbstractLinkKey", "TYPE 5", "abstract topology");
+        timestamp = xml.addTimestamp();
+        xml.addEventType(TYPE5);
 
         for (Link link : links) {
             String xmlString = xstream.toXML(link);
-            try {
-                xml.addXml("AbstractLink", xmlString);
-            } catch (Exception e) {
-                log.debug("Error marshalling abstract topology: "
-                        + e.getMessage());
-            }
+            xml.addXml("AbstractLink", xmlString);
         }
 
-        try {
-            invokeLS(xml.getXml());
-        } catch (Exception e) {
-            log.debug("Error sending abstarcact topology to LS: "
-                    + e.getMessage());
-        }
+        invokeLS(xml.getXml());
     }
 
     /**
@@ -351,17 +330,13 @@ public class LookupService {
         String seckey = generateKey(firstkey);
 
         RegisterXml xml;
-        try {
-            xml = new RegisterXml(seckey, "TYPE 3", "PORT");
-            xml.addDescription("Start domain, end domain, public edge port identifier");
-            xml.addField("startDomain", startDomain);
-            xml.addField("endDomain", endDomain);
-            xml.addEventType(TYPE3);
-            xml.addField("port", edgeport);
-            invokeLS(xml.getXml());
-        } catch (Exception e) {
-            log.debug("Error registering edge port LS: " + e.getMessage());
-        }
+        xml = new RegisterXml(seckey, "TYPE 3", "PORT");
+        xml.addDescription("Start domain, end domain, public edge port identifier");
+        xml.addField("startDomain", startDomain);
+        xml.addField("endDomain", endDomain);
+        xml.addEventType(TYPE3);
+        xml.addField("port", edgeport);
+        invokeLS(xml.getXml());
     }
 
     /**
@@ -380,14 +355,10 @@ public class LookupService {
         String seckey = generateKey(firstkey);
 
         RegisterXml xml;
-        try {
-            xml = new RegisterXml(seckey, "TYPE 4", "LS");
-            xml.addField("newLS", URL);
-            xml.addEventType(TYPE4);
-            invokeLS(xml.getXml());
-        } catch (Exception e) {
-            log.debug("Error creating new LS instance : " + e.getMessage());
-        }
+        xml = new RegisterXml(seckey, "TYPE 4", "LS");
+        xml.addField("newLS", URL);
+        xml.addEventType(TYPE4);
+        invokeLS(xml.getXml());
 
     }
 
@@ -410,13 +381,8 @@ public class LookupService {
         }
 
         // XML query to sent to the lookup service
-        try {
-            RemoveXml rem = new RemoveXml(key);
-            invokeLS(rem.getXml());
-        } catch (Exception e) {
-            log.debug("Error removing IDM " + domain + " from LS: "
-                    + e.getMessage());
-        }
+        RemoveXml rem = new RemoveXml(key);
+        invokeLS(rem.getXml());
     }
 
     /**
@@ -455,13 +421,8 @@ public class LookupService {
         }
 
         // XML query to sent to the lookup service
-        try {
-            RemoveXml rem = new RemoveXml(key);
-            invokeLS(rem.getXml());
-        } catch (Exception e) {
-            log.debug("Error removing edge port " + edgeport + " from LS: "
-                    + e.getMessage());
-        }
+        RemoveXml rem = new RemoveXml(key);
+        invokeLS(rem.getXml());
     }
 
     /**
@@ -491,13 +452,8 @@ public class LookupService {
             log.info("There is no end port " + portIdentifier + " to delete");
         }
 
-        try {
-            RemoveXml rem = new RemoveXml(key);
-            invokeLS(rem.getXml());
-        } catch (Exception e) {
-            log.debug("Error removing end port " + portIdentifier
-                    + " from LS: " + e.getMessage());
-        }
+        RemoveXml rem = new RemoveXml(key);
+        invokeLS(rem.getXml());
     }
 
     /**
@@ -511,39 +467,28 @@ public class LookupService {
      */
     public String queryIdmLocation(String domain) throws LookupServiceException {
         QueryXml xml;
-        String responce = "";
-        try {
-            xml = new QueryXml("url", "domain", domain);
-            String s = xml.getXml();
-            responce = invokeLS(s);
-        } catch (Exception e) {
-            log.debug("Error querying IDM " + domain + " from LS: "
-                    + e.getMessage());
-        }
+        String response = "";
+        xml = new QueryXml("url", "domain", domain);
+        String s = xml.getXml();
+        response = invokeLS(s);
 
-        return getFirstMatch(responce, "lookup:url");
+        return getFirstMatch(response, "lookup:url");
     }
 
     public Long getTimeStamp() throws LookupServiceException {
         QueryXml xml;
-        String responceString = "";
+        String responseString = "";
         String newline = System.getProperty("line.separator");
-        ResponseXml responce = null;
-        try {
-            xml = new QueryXml();
-            xml.setWhere("eventType", String.valueOf(TYPE5));
-            xml.setReturnType("timestamp");
-            responceString = invokeLS(xml.getXml());
-            responce = new ResponseXml(responceString);
-            responceString = responce.getText("timestamp", 0);
-            responceString = responceString.replace(newline, "");
-        } catch (Exception e) {
-            log.debug("Error getting abstract topology timestamp from LS: "
-                    + e.getMessage());
-            return (long) 0;
-        }
+        ResponseXml response = null;
+        xml = new QueryXml();
+        xml.setWhere("eventType", String.valueOf(TYPE5));
+        xml.setReturnType("timestamp");
+        responseString = invokeLS(xml.getXml());
+        response = new ResponseXml(responseString);
+        responseString = response.getText("timestamp", 0);
+        responseString = responseString.replace(newline, "");
         
-        return new Long(responceString);        
+        return new Long(responseString);        
     }
 
     
@@ -568,26 +513,22 @@ public class LookupService {
         XStream xstream = new XStream();
         xstream.alias("AbstractLink", Link.class);
         String newline = System.getProperty("line.separator");
-        String responceString = "";
+        String responseString = "";
 
-        try {
-            xml = new QueryXml("AbstractLink");
-            xml.setReturnType("AbstractLink");
-            responceString = invokeLS(xml.getXml());
+        xml = new QueryXml("AbstractLink");
+        xml.setReturnType("AbstractLink");
+        responseString = invokeLS(xml.getXml());
 
-            ResponseXml responce = new ResponseXml(responceString);
+        ResponseXml response = new ResponseXml(responseString);
 
-            String xmlString = responce.getElement("AbstractLink", 0);
-            int i = 0;
-            while (xmlString != null) {
-                xmlString = xmlString.replaceAll(newline, "");
-                Link l = (Link) xstream.fromXML(xmlString);
-                list.add(l);
-                i++;
-                xmlString = responce.getElement("AbstractLink", i);
-            }
-        } catch (Exception e) {
-            log.debug("Error getting abstract links from LS: " + e.getMessage());
+        String xmlString = response.getElement("AbstractLink", 0);
+        int i = 0;
+        while (xmlString != null) {
+            xmlString = xmlString.replaceAll(newline, "");
+            Link l = (Link) xstream.fromXML(xmlString);
+            list.add(l);
+            i++;
+            xmlString = response.getElement("AbstractLink", i);
         }
 
         return list;
@@ -604,16 +545,12 @@ public class LookupService {
     public String queryFriendlyName(String endPoint)
             throws LookupServiceException {
         QueryXml xml;
-        String responce = "";
-        try {
-            xml = new QueryXml("friendlyName", "identifier", endPoint);
-            String s = xml.getXml();
-            responce = invokeLS(s);
-        } catch (Exception e) {
-            log.debug("Error querying friendly name from LS: " + e.getMessage());
-        }
+        String response = "";
+        xml = new QueryXml("friendlyName", "identifier", endPoint);
+        String s = xml.getXml();
+        response = invokeLS(s);
 
-        return getFirstMatch(responce, "lookup:friendlyName");
+        return getFirstMatch(response, "lookup:friendlyName");
     }
 
     /**
@@ -625,17 +562,12 @@ public class LookupService {
     public ArrayList<String> queryAllFriendlyName()
             throws LookupServiceException {
         QueryXml xml;
-        String responce = "";
-        try {
-            xml = new QueryXml("friendlyName");
-            String s = xml.getXml();
-            responce = invokeLS(s);
-        } catch (Exception e) {
-            log.debug("Error qyerying all friendly names from LS: "
-                    + e.getMessage());
-        }
+        String response = "";
+        xml = new QueryXml("friendlyName");
+        String s = xml.getXml();
+        response = invokeLS(s);
 
-        return getMatches(responce, "lookup:friendlyName");
+        return getMatches(response, "lookup:friendlyName");
     }
 
     /**
@@ -651,35 +583,26 @@ public class LookupService {
     public ArrayList<String> queryEdgePort(String startDomain, String endDomain)
             throws LookupServiceException {
         QueryXml xml;
-        String responce = "";
-        try {
-            xml = new QueryXml("port", "startDomain", startDomain);
-            xml.connectAnd("endDomain", endDomain);
-            String s = xml.getXml();
-            responce = invokeLS(s);
-        } catch (Exception e) {
-            log.debug("Error querying edge port from LS: " + e.getMessage());
-        }
+        String response = "";
+        xml = new QueryXml("port", "startDomain", startDomain);
+        xml.connectAnd("endDomain", endDomain);
+        String s = xml.getXml();
+        response = invokeLS(s);
 
-        return getMatches(responce, "lookup:port");
+        return getMatches(response, "lookup:port");
     }
 
     private String queryEdgePortForDuplication(String startDomain,
             String endDomain, String edgeport) throws LookupServiceException {
         QueryXml xml;
-        String responce = "";
-        try {
-            xml = new QueryXml("port", "startDomain", startDomain);
-            xml.connectAnd("endDomain", endDomain);
-            xml.connectAnd("port", edgeport);
-            String s = xml.getXml();
-            responce = invokeLS(s);
-        } catch (Exception e) {
-            log.debug("Error querying edge port for duplication from LS: "
-                    + e.getMessage());
-        }
+        String response = "";
+        xml = new QueryXml("port", "startDomain", startDomain);
+        xml.connectAnd("endDomain", endDomain);
+        xml.connectAnd("port", edgeport);
+        String s = xml.getXml();
+        response = invokeLS(s);
 
-        return getFirstMatch(responce, "lookup:port");
+        return getFirstMatch(response, "lookup:port");
     }
 
     /**
@@ -693,17 +616,12 @@ public class LookupService {
     public ArrayList<String> queryAllEdgePort(String startDomain)
             throws LookupServiceException {
         QueryXml xml;
-        String responce = "";
-        try {
-            xml = new QueryXml("port", "startDomain", startDomain);
-            String s = xml.getXml();
-            responce = invokeLS(s);
-        } catch (Exception e) {
-            log.debug("Error querying all edge ports from LS: "
-                    + e.getMessage());
-        }
+        String response = "";
+        xml = new QueryXml("port", "startDomain", startDomain);
+        String s = xml.getXml();
+        response = invokeLS(s);
 
-        return getMatches(responce, "lookup:port");
+        return getMatches(response, "lookup:port");
     }
 
     /**
@@ -757,18 +675,14 @@ public class LookupService {
      */
     private String findDomainkey(String domain) throws LookupServiceException {
         QueryXml xml;
-        String responce = "";
-        try {
-            xml = new QueryXml();
-            xml.setWhere("domain", domain);
-            xml.searchKeys();
-            String s = xml.getXml();
-            responce = invokeLS(s);
-        } catch (Exception e) {
-            log.debug("Error in finding domain key from LS: " + e.getMessage());
-        }
+        String response = "";
+        xml = new QueryXml();
+        xml.setWhere("domain", domain);
+        xml.searchKeys();
+        String s = xml.getXml();
+        response = invokeLS(s);
 
-        return getFirstMatch(responce, "psservice:accessPoint");
+        return getFirstMatch(response, "psservice:accessPoint");
     }
 
     /**
@@ -780,18 +694,13 @@ public class LookupService {
     private String findEndPortkey(String portIdentifier)
             throws LookupServiceException {
         QueryXml xml;
-        String responce = "";
-        try {
-            xml = new QueryXml();
-            xml.setWhere("identifier", portIdentifier);
-            xml.searchKeys();
-            String s = xml.getXml();
-            responce = invokeLS(s);
-        } catch (Exception e) {
-            log.debug("Error in finding end port key from LS: "
-                    + e.getMessage());
-        }
-        return getFirstMatch(responce, "psservice:accessPoint");
+        String response = "";
+        xml = new QueryXml();
+        xml.setWhere("identifier", portIdentifier);
+        xml.searchKeys();
+        String s = xml.getXml();
+        response = invokeLS(s);
+        return getFirstMatch(response, "psservice:accessPoint");
     }
 
     /**
@@ -803,18 +712,14 @@ public class LookupService {
      */
     private String findPortKey(String edgeport) throws LookupServiceException {
         QueryXml xml;
-        String responce = "";
-        try {
-            xml = new QueryXml();
-            xml.setWhere("port", edgeport);
-            xml.searchKeys();
-            String s = xml.getXml();
-            responce = invokeLS(s);
-        } catch (Exception e) {
-            log.debug("Error in finding port key from LS: " + e.getMessage());
-        }
+        String response = "";
+        xml = new QueryXml();
+        xml.setWhere("port", edgeport);
+        xml.searchKeys();
+        String s = xml.getXml();
+        response = invokeLS(s);
 
-        return getFirstMatch(responce, "psservice:accessPoint");
+        return getFirstMatch(response, "psservice:accessPoint");
     }
 
     /**
@@ -828,19 +733,14 @@ public class LookupService {
     private List<String> findAllEdgePortKeys(String startDomain)
             throws LookupServiceException {
         QueryXml xml;
-        String responce = "";
-        try {
-            xml = new QueryXml();
-            xml.setWhere("startDomain", startDomain);
-            xml.searchKeys();
-            String s = xml.getXml();
-            responce = invokeLS(s);
-        } catch (Exception e) {
-            log.debug("Error in finding all keys for edge ports: "
-                    + e.getMessage());
-        }
+        String response = "";
+        xml = new QueryXml();
+        xml.setWhere("startDomain", startDomain);
+        xml.searchKeys();
+        String s = xml.getXml();
+        response = invokeLS(s);
 
-        return getMatches(responce, "psservice:accessPoint");
+        return getMatches(response, "psservice:accessPoint");
 
     }
     

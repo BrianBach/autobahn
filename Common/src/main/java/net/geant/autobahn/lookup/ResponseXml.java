@@ -1,17 +1,11 @@
 package net.geant.autobahn.lookup;
 
-import java.io.IOException;
-
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 public class ResponseXml extends XmlHandler {
     
-    public ResponseXml(String xml) throws ParserConfigurationException,
-            SAXException, IOException {
+    public ResponseXml(String xml) throws LookupServiceException {
         super(xml);
     }
 
@@ -26,7 +20,7 @@ public class ResponseXml extends XmlHandler {
         return false;
     }
 
-    public String getElement(String name, int item) throws Exception {
+    public String getElement(String name, int item) throws LookupServiceException {
         if (item < 0) {
             return null;
         }

@@ -3,7 +3,6 @@
  */
 package net.geant.autobahn.idcp;
 
-import java.util.Map.Entry;
 import java.util.Enumeration;
 import java.util.Properties;
 
