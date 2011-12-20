@@ -16,7 +16,7 @@ import net.geant.autobahn.network.Link;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.ResponseHandler; 
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
@@ -486,23 +486,21 @@ public class LookupService {
         responseString = invokeLS(xml.getXml());
         response = new ResponseXml(responseString);
         responseString = response.getText("timestamp", 0);
+        if (responseString == null) {
+            return 0L;
+        }
         responseString = responseString.replace(newline, "");
         
         return new Long(responseString);        
     }
 
     
-    public boolean topoIsUptodate() {      
-        try {
-            Long remoteTimestamp = getTimeStamp();
-            if (remoteTimestamp > timestamp) {
-                timestamp = remoteTimestamp;
-                return false;
-            }
-        } catch (LookupServiceException e) {
-            log.debug("Error checking if abstract topology is up to date: "
-                    + e.getMessage());
-        }
+    public boolean topoIsUptodate() throws LookupServiceException {      
+        Long remoteTimestamp = getTimeStamp();
+        if (remoteTimestamp > timestamp) {
+            timestamp = remoteTimestamp;
+            return false;
+        }    
 
         return true;
     }

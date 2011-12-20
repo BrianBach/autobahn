@@ -330,8 +330,8 @@ public final class TopologyImpl implements Topology, OspfAsync, Closeable {
 	}
 	
 	public void updateAbstractTopology() {	
-	    if(lookup != null && lookup.topoIsUptodate() == false) {
-	        try {
+	    try{
+	        if(lookup != null && lookup.topoIsUptodate() == false) {
 	            List<Link> dbLinks = ldao.getValidLinks();
                 for (Link link : lookup.getAbstractLink()) {
                     for (Link dbLink : dbLinks) {
@@ -346,20 +346,16 @@ public final class TopologyImpl implements Topology, OspfAsync, Closeable {
                             hbm.closeSession();
                         }
                     }
-                }
-            } catch (HibernateException e) {
-                log.error("Error with hibernate: ", e);
-            } catch (LookupServiceException e) {
-                log.error("Error with Lookup Service: ", e);
+                }           
             }
-        }
-	    
-	    if(lookup != null && LookupService.timestamp == 0) {
-            try {
-                lookup.removeAbstractLinks();
-            } catch (LookupServiceException e) {
-                log.error("Error with Lookup Service: ", e);
-            }            
-        }
+	        
+	        if(lookup != null && LookupService.timestamp == 0) {
+	            lookup.removeAbstractLinks();
+	        }
+	    } catch (HibernateException e) {
+            log.error("Error with hibernate: ", e);
+        } catch (LookupServiceException e) {
+            log.error("Error with Lookup Service: ", e);
+        }	    
 	}
 }
