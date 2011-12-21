@@ -85,7 +85,7 @@ public abstract class InterdomainPathfinderAbstractImpl implements InterdomainPa
         }
         
         // Node could not be found, throw exception
-        throw new Exception("PF exception: The domain could not be found in the domains list");
+        throw new Exception("PF exception: Domain " + id + " could not be found in the domains list");
     }
 
 }
