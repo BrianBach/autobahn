@@ -311,6 +311,8 @@ public class IntradomainTopology {
     		publicIds = new MyProperties(is);
     	}
 		
+        List<GenericInterface> duplicateExceptions = new ArrayList<GenericInterface>();
+        
 		if(isSDH()) {
 			nodes = new ArrayList<Node>();
 			
@@ -342,10 +344,17 @@ public class IntradomainTopology {
 						publicIds.setProperty(unescapedPortName, pub);
 					}
 					
-	                //mtu info added
                     for (net.geant2.cnis.autobahn.xml.common.Tag tag: p.getTags().getTag()) {
+                        //mtu info added
                         if (tag.getKey().equalsIgnoreCase("mtu")) {
                             port.setMtu(Integer.parseInt(tag.getValue()));
+                        }
+                        
+                        // Check for ports to be excepted from "multiple links
+                        // on same port not allowed" rule
+                        if ((tag.getKey().equalsIgnoreCase("multiple-links-allowed"))
+                                && (tag.getValue().equalsIgnoreCase("true"))) {
+                                duplicateExceptions.add(port);
                         }
                     }
 
@@ -440,7 +449,7 @@ public class IntradomainTopology {
 			for (SpanningTree st : sptrees) {
 			    glinkList.add(st.getEthLink().getGenericLink());
 			}
-            GenericInterface duplicateIf = getDuplicateInterfaces(glinkList);
+            GenericInterface duplicateIf = getDuplicateInterfaces(glinkList, duplicateExceptions);
             if (duplicateIf != null) {
                 nodes.clear();
                 genericLinks.clear();
@@ -526,6 +535,13 @@ public class IntradomainTopology {
 					for (net.geant2.cnis.autobahn.xml.common.Tag tag: p.getTags().getTag()) {
                         if (tag.getKey().equalsIgnoreCase("mtu")) {
                             port.setMtu(Integer.parseInt(tag.getValue()));
+                        }
+                        
+                        // Check for ports to be excepted from "multiple links
+                        // on same port not allowed" rule
+                        if ((tag.getKey().equalsIgnoreCase("multiple-links-allowed"))
+                                && (tag.getValue().equalsIgnoreCase("true"))) {
+                                duplicateExceptions.add(port);
                         }
                     }
 
@@ -623,7 +639,7 @@ public class IntradomainTopology {
 				genericLinks.add(st.getEthLink().getGenericLink());
 			}
 
-            GenericInterface duplicateIf = getDuplicateInterfaces(genericLinks);
+            GenericInterface duplicateIf = getDuplicateInterfaces(genericLinks, duplicateExceptions);
             if (duplicateIf != null) {
                 nodes.clear();
                 genericLinks.clear();
@@ -755,13 +771,18 @@ public class IntradomainTopology {
     }
 
     /**
-     * Checks if the list of generic links contains interfaces that are used
-     * in multiple links
+     * Checks if the list of generic links contains interfaces that are used in
+     * multiple links
      * 
      * @param glinkList
+     *            - the list of links to be checked for duplicate ports
+     * @param exceptions
+     *            - the ports that are allowed to be attached to multiple links.
+     *            If one of these ports is found, it will not be returned
      * @return the first duplicate interface found, or null if none found
      */
-    private GenericInterface getDuplicateInterfaces(List<GenericLink> glinkList) {
+    private GenericInterface getDuplicateInterfaces(
+            List<GenericLink> glinkList, List<GenericInterface> exceptions) {
         if (glinkList == null) {
             return null;
         }
@@ -774,10 +795,14 @@ public class IntradomainTopology {
             GenericInterface startIf = gl.getStartInterface();
             GenericInterface endIf = gl.getEndInterface();
             if (gifList.contains(startIf)) {
-                return startIf;
+                if (exceptions != null && !exceptions.contains(startIf)) {
+                    return startIf;
+                }
             }
             if (gifList.contains(endIf)) {
-                return endIf;
+                if (exceptions != null && !exceptions.contains(endIf)) {
+                    return endIf;
+                }
             }
             gifList.add(startIf);
             gifList.add(endIf);
