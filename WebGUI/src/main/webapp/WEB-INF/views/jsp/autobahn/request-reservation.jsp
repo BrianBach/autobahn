@@ -80,11 +80,11 @@ function setStartFriendlyName(path){
     
     for (var i=0; i<endPortSelect.length; i++) 
     {
-        $(endPortSelect.options[i]).show();
+        $(endPortSelect.options[i]).removeAttr("disabled");
 
         if (endPortSelect.options[i].value == startPortValue)
         {
-            $(endPortSelect.options[i]).hide();
+            $(endPortSelect.options[i]).attr("disabled", "true");
         }
     }
 }
@@ -97,11 +97,11 @@ function setEndFriendlyName(path){
     
     for (var i=0; i<startPortSelect.length; i++) 
     {
-        $(startPortSelect.options[i]).show();
+        $(startPortSelect.options[i]).removeAttr("disabled");
 
         if (startPortSelect.options[i].value == endPortValue)
         {
-            $(startPortSelect.options[i]).hide();
+            $(startPortSelect.options[i]).attr("disabled", "true");
         }
     }
 }
