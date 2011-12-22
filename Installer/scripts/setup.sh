@@ -440,17 +440,48 @@ declare -t property_editor
 
 #Shows the main menu
 function show_menu {
-  $DIALOG --clear --cancel-label "Exit" --backtitle "AutoBAHN Command Line Installer" --menu "AutoBAHN Installer Options" 20 80 9 "Add Tunnel" "Adds new tunnel to routing.conf" "Install Tunnels" "Installs tunnels detailed in routing.conf" "View Tunnels" "Shows existing tunnels"  "Tunnel Editor" "Edit Existing Tunnels" "Delete All Tunnels" "Deletes all existing tunnels" "Setup database" "Sets up a database from a PostgresSQL dump" "Property Editor" "Go back to change properties" "Help"  "Shows Help for the installer" "Exit" "Exits the Installer"  2>ans
-  return $?
+    if [ "$ospf_use" == true ]; then
+        $DIALOG --clear --cancel-label "Exit" \
+                  --backtitle "AutoBAHN Command Line Installer" \
+                  --menu "AutoBAHN Installer Options" 20 80 10 \
+                         "Ospf" "chose if you want to use ospf for routing" \
+                         "Add Tunnel" "Adds new tunnel to routing.conf" \
+                         "Install Tunnels" "Installs tunnels detailed in routing.conf" \
+                         "View Tunnels" "Shows existing tunnels" \
+                         "Tunnel Editor" "Edit Existing Tunnels" \
+                         "Delete All Tunnels" "Deletes all existing tunnels" \
+                         "Property Editor" "Go back to change properties" \
+                         "Help"  "Shows Help for the installer" \
+                         "Exit" "Exits the Installer"  2>ans 
+    else
+        $DIALOG --clear --cancel-label "Exit" \
+                  --backtitle "AutoBAHN Command Line Installer" \
+                  --menu "AutoBAHN Installer Options" 20 80 5 \
+                         "Ospf" "chose if you want to use ospf for routing" \
+                         "Property Editor" "Go back to change properties" \
+                         "Help"  "Shows Help for the installer" \
+                         "Exit" "Exits the Installer"  2>ans
+    fi
+    return $?
 }
 #Useful functions
 readonly -f show_menu
 declare -t show_menu
 
+function change_ospf {
+    if [ "$graphics" == "no" ]; then
+        source $path_only/self-check.sh -o
+    else
+        source $path_only/self-check.sh -O
+    fi    
+}
 
 #Binds menu choices with bash functions
 function decide {
 	case $1 in
+        "Ospf")
+          change_ospf  
+        ;;
 		"Add") 
 			add_tunnel
 		;;
@@ -631,39 +662,39 @@ function install_tunnels_c {
 function simple_ui {
 #	echo "In simple_ui ENTER_IP = $ENTER_IP"
 	clear
-	printf "Do you want to select sql file to setup database[y/n]:"
-	read answer
-	while true; do
-		case "$answer" in
-	          y|Y) #echo "do it";
-		       setup_database_c
-		       break;;
-		  n|N) #echo "drop it";
-		       break;;
-		    *) echo "Please enter y or n"
-                       read answer;;
-		 esac
-        done
-	print_step "1" "Adding tunnels"
-	ENTER_IP=enter_ip_c
+# 	printf "Do you want to select sql file to setup database[y/n]:"
+# 	read answer
+# 	while true; do
+# 		case "$answer" in
+# 	          y|Y) #echo "do it";
+# 		       setup_database_c
+# 		       break;;
+# 		  n|N) #echo "drop it";
+# 		       break;;
+# 		    *) echo "Please enter y or n"
+#                        read answer;;
+# 		 esac
+#     done
+    if [ "$ospf_use" == true ];then        
+        print_step "1" "Adding tunnels"
+        ENTER_IP=enter_ip_c
         ENTER_IP_NO_CHECK=enter_ip_c_john
-	while true; do
-		printf "Do you want to enter a new tunnel[y/n]?"
-		read answer
-		case "$answer" in
-	          y|Y) add_tunnel
-		       ;;
-		  n|N) echo "Tunnel addition terminated.";
-		       break;;
-		    *) echo "Please enter y or n"
-                       read answer;;
-		 esac
-        done
+        while true; do
+            printf "Do you want to enter a new tunnel[y/n]?"
+            read answer
+            case "$answer" in
+                y|Y) add_tunnel
+                ;;
+            n|N) echo "Tunnel addition terminated.";
+                break;;
+                *) echo "Please enter y or n"
+                        read answer;;
+            esac
+            done
 
-	print_step "2" "Installing Tunnels"
-	install_tunnels_c
-#	sleep 3
-#	clear	
+        print_step "2" "Installing Tunnels"
+        install_tunnels_c
+    fi
 }
 
 
@@ -735,7 +766,6 @@ while getopts "ncbxCialLhfDpted:A:" flag; do
 		fi
 		;;
 		c ) graphics=no
-#  echo "GRAPHICS = NO!"
 		;;
 		C ) graphics=no
 		;;

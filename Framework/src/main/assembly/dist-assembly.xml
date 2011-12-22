@@ -27,6 +27,13 @@
 				<include>*</include>
 			</includes>
 		</fileSet>
+        <fileSet>
+            <directory>src/main/resources/etc</directory>
+            <outputDirectory>/installer</outputDirectory>
+            <includes>
+                <include>autobahn.properties</include>
+            </includes>
+        </fileSet>
 	</fileSets>
  
     <dependencySets>

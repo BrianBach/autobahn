@@ -36,6 +36,7 @@ declare -x DBTYPE
 declare -x TOPOLOGYFILE
 declare -x GRAPHICAL
 declare -x AUTOBAHN_FOLDER
+#declare -x ospf_use
 
 function md5 {
  	echo -n $1 |md5sum |awk '{print $1}'
@@ -88,9 +89,9 @@ function perform_checks {
 	#echo "Java Version detected: ${ver:0:3}"	
 		l_d=${ver:2:1}
 		if [ $l_d -ge 5 ]; then
-	   	 pushlog "Java installation test passed! Java version: ${ver:0:3}"
+            pushlog "Java installation test passed! Java version: ${ver:0:3}"
 		fi
-  	rm -f javaver.txt  
+        rm -f javaver.txt  
 	fi
 
 	if test ! -x "$psql"; then
@@ -100,20 +101,21 @@ function perform_checks {
 		exit 192
 	fi
 
-
-	if test ! -x "$quagga_zebra" -a ! -x "$debian_quagga"; then
-   		pushlog "$SCRIPT:$LINENO: Quagga routing package is not available. Please install Quagga 0.99.6 and retry!\n" >&2
-		popecholog
-		finalize
-	        exit 192
-	elif test -x "$quagga_zebra"; then
-	   	quagga=`dirname "$quagga_zebra"`
-	   	pushlog "Quagga installation detected."
-	elif test -x "$debian_quagga"; then
-		 quagga=$debian_quagga
-   		let "using_debian=1"
-  		 pushlog "Debian quagga installation detected."
-	fi
+    if [ "$ospf_use" == true ]; then
+        if test ! -x "$quagga_zebra" -a ! -x "$debian_quagga"; then
+            pushlog "$SCRIPT:$LINENO: Quagga routing package is not available. Please install Quagga 0.99.6 and retry!\n" >&2
+            popecholog
+            finalize
+            exit 192
+        elif test -x "$quagga_zebra"; then
+            quagga=`dirname "$quagga_zebra"`
+            pushlog "Quagga installation detected."
+        elif test -x "$debian_quagga"; then
+            quagga=$debian_quagga
+            let "using_debian=1"
+            pushlog "Debian quagga installation detected."
+        fi
+    fi
 	pushlog	""
 	pushlog "*PRELIMINARY PREREQUISITES OK*"
 	pushlog ""	
@@ -210,77 +212,79 @@ function configure_file_autobahn_c {
 #file_editor presents an ncurses form which shows the basic attributes of a file and permits editing them
 #Usage: file_editor file property1 value1 property2 value2 .. propertyn valuen
 function file_editor {
-	pushlocalinfo
-	newlogparagraph "function file_editor"
-	conf_file="$1"
-	shift
-	c=0
-	y1=2
-	x1=4
-	
-	y2=2
-	x2=22
-	flen=20 
-	ilen=100
-	num_of_prop=0
-	until [ $# -eq 0 ]; do
-		cur_property="$1";shift		
-		cur_propval="$1";shift
-		echo "$cur_property " >> $path_only/cur_properties
-		echo -n "$cur_property $y1 $x1 $cur_propval $y2 $x2 $flen $ilen " >> $path_only/temp_editor
-		((y1+=2))
-		((y2+=2))
-		((num_of_prop+=1))
+    pushlocalinfo
+    newlogparagraph "function file_editor"
+    conf_file="$1"
+    shift
+    c=0
+    y1=2
+    x1=4
+    
+    y2=2
+    x2=22
+    flen=20 
+    ilen=100
+    num_of_prop=0
+    until [ $# -eq 0 ]; do
+        cur_property="$1";shift     
+        cur_propval="$1";shift
+        echo "$cur_property " >> $path_only/cur_properties
+        echo "$cur_property $y1 $x1 $cur_propval $y2 $x2 $flen $ilen " >> $path_only/temp_editor2
+        echo -n "$cur_property $y1 $x1 $cur_propval $y2 $x2 $flen $ilen " >> $path_only/temp_editor
+        ((y1+=2))
+        ((y2+=2))
+        ((num_of_prop+=1))
       done
       properties=`cat $path_only/temp_editor`
+
+      echo $properties
 
       exec 3>&1
      cmd=$($DIALOG --backtitle "Editing $conf_file" --title "Edit most important attributes"  --form "Use [up] [down] arrows to select input field" 31 80 24  $properties 2>&1 1>&3) 
      if [ $? -ne 0 ]; then
-     	log "Unable to render property editor form"
-	    rm -f cur_properties temp_editor
+        log "Unable to render property editor form"
+        rm -f cur_properties temp_editor
         return 1
      fi
      exec 3>&-
 
 #If user pressed Cancel    
      if [ -z "$cmd" ]; then
-	log "User pressed Cancel while editing $conf_file"
-	rm -f cur_properties temp_editor
-	return 1
+        log "User pressed Cancel while editing $conf_file"
+        rm -f cur_properties temp_editor
+        return 1
      fi
      log "CMD = $cmd num_of_properties = $num_of_prop"
 
     echo "$cmd" >> $path_only/cur_properties 
     i=0
     reqval=0
-    echo ""
-    echo "$cmd"
-    echo ""
-    cat $path_only/cur_properties
+#    echo ""
+#    echo "$cmd"
+#    echo ""
+    #cat $path_only/cur_properties
     log "to cur_prop `cat $path_only/cur_properties`"
     cat $path_only/cur_properties | while read line; do 
-    	((i++))	
-	[[ $i -gt $num_of_prop ]] && break
-	((reqval=$i+$num_of_prop))
-	valnum=$reqval"p"
-	val=$(sed -n "$valnum" $path_only/cur_properties)
+        ((i++)) 
+        [[ $i -gt $num_of_prop ]] && break
+        ((reqval=$i+$num_of_prop))
+        valnum=$reqval"p"
+        val=$(sed -n "$valnum" $path_only/cur_properties)
 
-  	if [ $line == "framework.password" ]
-  	then
- 		if [ $val != "xxxx" ]
- 		then
- 			val=`md5 $val`
- 		else
- 			val=$framework_pass
- 		fi
-  	fi
-	add_attribute "$line=$val" "$conf_file"
+        if [ $line == "framework.password" ]
+        then
+            if [ $val != "xxxx" ]
+            then
+                val=`md5 $val`
+            else
+                val=$framework_pass
+            fi
+        fi
+        add_attribute "$line=$val" "$conf_file"
     done
     rm -f cur_properties temp_editor
     poplocalinfo
 }
-
 
 #Configuring a Quagga file in an ncurses env
 function configure_file_quagga {
@@ -491,10 +495,10 @@ function get_autobahn_defaults {
 
     latitude="0.000000"
     longitude="0.000000"
-    ospf_use=true
-    ospf_opaqueType=135
-    ospf_opaqueId=1001
-    gui_address="http://gui-host:8080/autobahn-gui/service/gui"
+    #ospf_use=false
+#     ospf_opaqueType=135
+#     ospf_opaqueId=1001
+#     gui_address="http://gui-host:8080/autobahn-gui/service/gui"
 	
     mail_use=false
     mail_smtp_host="smtp.geant.net"
@@ -519,9 +523,9 @@ function get_autobahn_defaults {
 			curprop=`echo $line | awk -F "=" '{print $1}'`
 			curval=`echo $line | tr -s '' | cut -d '=' -f 2 `
 			if [[ "$curval" == '' ]]; then
-			curval="none"
+                curval="none"
 			else
-			echo &>/dev/null
+                echo &>/dev/null
 			fi
 
 #echo "Curprop=$curprop Curval=$curval";sleep 5
@@ -554,12 +558,12 @@ function get_autobahn_defaults {
               ;;
               longitude ) longitude=$curval
               ;;
-              ospf.use ) ospf_use=$curval
-              ;;
-              ospf.opaqueType ) ospf_opaqueType=$curval
-              ;;
-              ospf.opaqueId ) ospf_opaqueId=$curval
-              ;;
+#               ospf.use ) ospf_use=$curval
+#               ;;
+#               ospf.opaqueType ) ospf_opaqueType=$curval
+#               ;;
+#               ospf.opaqueId ) ospf_opaqueId=$curval
+#               ;;
               gui.address ) gui_address=$curval
               ;;
               mail.use ) mail_use=$curval
@@ -588,8 +592,8 @@ function get_autobahn_defaults {
 		
     framework_password="xxxx"
     
-	log "domainName $domainName db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} lookuphost ${lookuphost} cnis.address ${cnis_address} authorization.enabled ${authorization_enabled} latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf_opaqueType ospf.opaqueId $ospf_opaqueId gui.address $gui_address mail.use $mail_use mail.smtp.host $mail_smtp_host mail.smtp.port $mail_smtp_port mail.address.from $mail_address_from mail.user $mail_user mail.pass $mail_pass mail.address.admin $mail_address_admin framework.commandLine $framework_commandLine framework.port $framework_port framework.password $framework_password"| tr -d '\r' 
-	echo -n "domainName $domainName db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} lookuphost ${lookuphost} cnis.address ${cnis_address} authorization.enabled ${authorization_enabled} latitude $latitude longitude $longitude ospf.use $ospf_use ospf.opaqueType $ospf_opaqueType ospf.opaqueId $ospf_opaqueId gui.address $gui_address  mail.use $mail_use mail.smtp.host $mail_smtp_host mail.smtp.port $mail_smtp_port mail.address.from $mail_address_from mail.user $mail_user mail.pass $mail_pass mail.address.admin $mail_address_admin framework.commandLine $framework_commandLine framework.port $framework_port framework.password $framework_password"| tr -d '\r' > $path_only/autobahn_defaults
+	log "domainName $domainName db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} lookuphost ${lookuphost} cnis.address ${cnis_address} authorization.enabled ${authorization_enabled} latitude $latitude longitude $longitude gui.address $gui_address mail.use $mail_use mail.smtp.host $mail_smtp_host mail.smtp.port $mail_smtp_port mail.address.from $mail_address_from mail.user $mail_user mail.pass $mail_pass mail.address.admin $mail_address_admin framework.commandLine $framework_commandLine framework.port $framework_port framework.password $framework_password"| tr -d '\r' 
+	echo -n "domainName $domainName db.host ${db_host} db.port ${db_port} db.name ${db_name} db.user ${db_user} db.pass ${db_pass} db.type ${db_type} tool.address ${tool_address} lookuphost ${lookuphost} cnis.address ${cnis_address} authorization.enabled ${authorization_enabled} latitude $latitude longitude $longitude gui.address $gui_address  mail.use $mail_use mail.smtp.host $mail_smtp_host mail.smtp.port $mail_smtp_port mail.address.from $mail_address_from mail.user $mail_user mail.pass $mail_pass mail.address.admin $mail_address_admin framework.commandLine $framework_commandLine framework.port $framework_port framework.password $framework_password"| tr -d '\r' > $path_only/autobahn_defaults
 	poplocalinfo
 }
 
@@ -707,13 +711,13 @@ function get_default_autobahn_folder {
 	if [ ! -d "$autobahn_folder" ]; then
 		log "didn't find auto fold and will recreate"
 		autobahn_folder=$(cd ${path_only} && cd .. && echo $PWD/${0##*/})
-	        autobahn_folder=`dirname "$autobahn_folder"`
+	    autobahn_folder=`dirname "$autobahn_folder"`
 		AUTOBAHN_FOLDER=$autobahn_folder
 #$CONFIGURE_FILE_AUTOBAHN "autobahn folder" $autobahn_folder "autobahn_folder"
 	else
 #echo "FOUND autofolder=$autobahn_folder"
 		autobahn_folder=$(cd ${autobahn_folder%/*} && echo $PWD/${0##*/})
-	        autobahn_folder=`dirname "$autobahn_folder"`
+	    autobahn_folder=`dirname "$autobahn_folder"`
 		AUTOBAHN_FOLDER=$autobahn_folder
 		log "AUTOBAHN_FOLDER=$AUTOBAHN_FOLDER"
 	fi
@@ -747,11 +751,11 @@ function check_configuration_files {
 	echo 
 	if [ ! -d "$autobahn_folder" ]; then
 		autobahn_folder=$(cd ${path_only} && cd .. && echo $PWD/${0##*/})
-	        autobahn_folder=`dirname "$autobahn_folder"`
+	    autobahn_folder=`dirname "$autobahn_folder"`
 		$CONFIGURE_FILE_AUTOBAHN "autobahn folder" $autobahn_folder "autobahn_folder"
 	else
 		autobahn_folder=$(cd ${autobahn_folder%/*} && echo $PWD/${0##*/})
-	        autobahn_folder=`dirname "$autobahn_folder"`
+	    autobahn_folder=`dirname "$autobahn_folder"`
 	fi
 
 	CREATE_CONF=create_autobahn_properties
@@ -771,6 +775,58 @@ function check_ui {
 	return 0
 }
 
+function check_use_ospf {
+    
+    check_ui
+    if [ $? -eq 0 ] && [ "$graphics" == yes  ]; then
+        $DIALOG --title "Use Ospf" --keep-window --yesno \
+            "Do you want to use ospf (if unsure chose No)." 10 80
+        if [ $? -eq 0 ]; then
+            ospf_use=true
+            ask_for_parameter "ospf.opaqueType" none
+            ospf_opaqueType=`cat retval`
+            ask_for_parameter "ospf.opaqueId" none
+            ospf_opaqueId=`cat retval`
+        else
+            ospf_use=false
+            ospf_opaqueType=none
+            ospf_opaqueId=none
+        fi
+    else               
+        while true ; do
+            echo -n "Do you want to use ospf [Y/n](default: no): "   
+            read -e answer 
+            if [ "$answer" == y ] || [ "$answer" == Y ]; then
+                ospf_use=true
+                ask_for_parameter_c "ospf.opaqueType" none
+                ospf_opaqueType=`cat retval`
+                ask_for_parameter_c "ospf.opaqueId" none
+                ospf_opaqueId=`cat retval`
+                break;
+            elif [ "$answer" == n ] || [ "$answer" == N ] || [ -z "$answer" ] ; then
+                ospf_use=false
+                ospf_opaqueType=none
+                ospf_opaqueId=none
+                break;
+            else
+                echo "Pleae anser y or n"   
+            fi
+            
+        done
+    fi
+    
+    export ospf_use
+    export ospf_opaqueType
+    export ospf_opaqueId
+    save_ospf
+}
+
+function save_ospf {
+    add_attribute "ospf.use=$ospf_use" "$autobahn_folder/etc/autobahn.properties"
+    add_attribute "ospf.opaqueType=$ospf_opaqueType" "$autobahn_folder/etc/autobahn.properties"
+    add_attribute "ospf.opaqueId=$ospf_opaqueId" "$autobahn_folder/etc/autobahn.properties" 
+}
+
 #Initializes the ncurses interface
 function main_loop_with_gui {
 	pushlocalinfo
@@ -780,8 +836,10 @@ function main_loop_with_gui {
 	CONFIGURE_FILE_QUAGGA="configure_file_quagga"
 	CONFIGURE_FILE_AUTOBAHN="configure_file_autobahn"
 	ASK_FOR_PARAMETER="ask_for_parameter"
-		
-	$CONFIGURE_FILE_QUAGGA "ospfd.conf" "tmp_ospfd_dir" "ospfd_conf"
+
+    if [ "$ospf_use" == true ]; then
+        $CONFIGURE_FILE_QUAGGA "ospfd.conf" "tmp_ospfd_dir" "ospfd_conf"
+    fi
 		
 	$DIALOG --title "AutoBAHN Installer" --keep-window --yesno "Do you want to edit configuration properties one by one now? (If you choose No you will be able to select the ones to edit from a list)." 10 80
 	
@@ -790,7 +848,7 @@ function main_loop_with_gui {
 	else
 		get_default_autobahn_folder
 		autobahn_folder=$AUTOBAHN_FOLDER
-		config_editor 
+		config_editor "Continue"
 		clear
 	fi
 	poplocalinfo
@@ -805,7 +863,9 @@ function simple_ui {
 	CONFIGURE_FILE_QUAGGA="configure_file_quagga_c"
 	CONFIGURE_FILE_AUTOBAHN="configure_file_autobahn_c"
 	ASK_FOR_PARAMETER="ask_for_parameter_c"
-	$CONFIGURE_FILE_QUAGGA "ospfd.conf" "tmp_ospfd_dir" "ospfd_conf"
+    if [ "$ospf_use" == true ]; then
+        $CONFIGURE_FILE_QUAGGA "ospfd.conf" "tmp_ospfd_dir" "ospfd_conf"
+    fi
 	check_configuration_files 
 	poplocalinfo
 }
@@ -818,6 +878,7 @@ function finalize {
 		clear
 	fi
 	rm -f retval key value $path_only/services_defaults temp_editor temp_prop ans $path_only/cur_properties $path_only/autobahn_defaults $path_only/templocalinfostack
+    #export ospf_use
 }
 
 #init_db
@@ -882,14 +943,14 @@ function init_ospfd {
 function config_editor {
 	pushlocalinfo
 	newlogparagraph "function config_editor"
-        get_default_autobahn_folder
-        autobahn_folder=$AUTOBAHN_FOLDER
+    get_default_autobahn_folder
+    autobahn_folder=$AUTOBAHN_FOLDER
 	should_exit=0
 	while [ $should_exit -ne 1 ]; do
-		$DIALOG --clear --backtitle "AutoBAHN configuration files editor" --menu "AutoBAHN configuration files" 15 80 8 \
-		"autobahn.properties" "Configure the AutoBAHN system" \
-		"services.properties" "Configure IP address and ports for the AutoBAHN services" \
-		"Back" "Return to previous menu" 2>ans
+		$DIALOG --clear --backtitle "AutoBAHN configuration files editor" --cancel-label $1 --menu "AutoBAHN configuration files" 15 80 8 \
+            "autobahn.properties" "Configure the AutoBAHN system" \
+            "services.properties" "Configure IP address and ports for the AutoBAHN services" \
+            "Back" "Return to previous menu" 2>ans
 		
 		case $? in 
 		    255 ) return 1
@@ -910,7 +971,7 @@ function config_editor {
 			   log "Will call file_editor $autobahn_folder/etc/services.properties `cat $path_only/services_defaults`"
 			   file_editor "$autobahn_folder/etc/services.properties" `cat $path_only/services_defaults`
 			   deploy_services_modifications
-		;;
+            ;;
 			"Back" )
 		    	return 1
 		 	;;
@@ -937,9 +998,17 @@ function print_help {
 
 #reset arguments for getopts
 OPTIND=1
-	    
+
+get_default_autobahn_folder
+autobahn_folder=$AUTOBAHN_FOLDER
+if [ ! -e $autobahn_folder/etc/autobahn.properties ]; then
+    cp $path_only/autobahn.properties $autobahn_folder/etc/autobahn.properties
+else
+    echo $autobahn_folder/etc/autobahn.properties
+fi
+
 #Manage command line arguments
-while getopts "cChpf" flag; do
+while getopts "cChpfOo" flag; do
 	case $flag in
 		c )graphics=no
 		;;
@@ -948,20 +1017,29 @@ while getopts "cChpf" flag; do
 		p )enterui=no;graphics=no
 		   perform_checks
 		;;
-		f )enterui=no; graphics=no
+		f )enterui=no;
 		   get_default_autobahn_folder
 		   autobahn_folder=$AUTOBAHN_FOLDER
-		   config_editor 
+		   config_editor "Cancel"
 		   clear
 		;;
 		h ) enterui=no;graphics=no
 		    print_help
 		;;
+        O )
+            enterui=no;graphics=yes
+            check_use_ospf
+        ;;
+        o )
+            enterui=no;graphics=no
+            check_use_ospf
+        ;;
 	esac
 done
 
 if [ "$enterui" == yes ]; then
 	newlog
+    check_use_ospf
 	perform_checks
 	echo
 	check_ui
@@ -974,9 +1052,11 @@ if [ "$enterui" == yes ]; then
 	init_db $DBNAME $DBPASS $DBUSER
 	
 	#TODO: not use tmp for resiliency reasons
-        echo $DBNAME > tempdbname.tmp
-        echo $DBUSER > tempdbuser.tmp
-	init_ospfd
+    echo $DBNAME > tempdbname.tmp
+    echo $DBUSER > tempdbuser.tmp
+    if [ "$ospf_use" == true ]; then
+        init_ospfd
+    fi
 fi
 
 finalize
