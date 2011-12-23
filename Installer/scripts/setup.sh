@@ -444,7 +444,7 @@ function show_menu {
         $DIALOG --clear --cancel-label "Exit" \
                   --backtitle "AutoBAHN Command Line Installer" \
                   --menu "AutoBAHN Installer Options" 20 80 10 \
-                         "Ospf" "chose if you want to use ospf for routing" \
+                         "Ospf" "choose if you want to use ospf for routing" \
                          "Add Tunnel" "Adds new tunnel to routing.conf" \
                          "Install Tunnels" "Installs tunnels detailed in routing.conf" \
                          "View Tunnels" "Shows existing tunnels" \
@@ -457,7 +457,7 @@ function show_menu {
         $DIALOG --clear --cancel-label "Exit" \
                   --backtitle "AutoBAHN Command Line Installer" \
                   --menu "AutoBAHN Installer Options" 20 80 5 \
-                         "Ospf" "chose if you want to use ospf for routing" \
+                         "Ospf" "choose if you want to use ospf for routing" \
                          "Property Editor" "Go back to change properties" \
                          "Help"  "Shows Help for the installer" \
                          "Exit" "Exits the Installer"  2>ans

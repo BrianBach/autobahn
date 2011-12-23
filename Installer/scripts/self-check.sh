@@ -75,7 +75,7 @@ function perform_checks {
 	#Module checking
 	log "IP_GRE:$ip_gre_loaded"
 	if test -z "$ip_gre_loaded"; then
-		pushlog "Must load ip_gre module, please enter root pass or run script with root permissions(you must be a sudoer or else run the installer as root):"
+		pushlog "ip_gre module was not loaded (needed only for OSPF topology exchange)"
 		sudo modprobe ip_gre
 	fi
 
@@ -780,7 +780,7 @@ function check_use_ospf {
     check_ui
     if [ $? -eq 0 ] && [ "$graphics" == yes  ]; then
         $DIALOG --title "Use Ospf" --keep-window --yesno \
-            "Do you want to use ospf (if unsure chose No)." 10 80
+            "Do you want to use ospf (if unsure choose No)." 10 80
         if [ $? -eq 0 ]; then
             ospf_use=true
             ask_for_parameter "ospf.opaqueType" none
