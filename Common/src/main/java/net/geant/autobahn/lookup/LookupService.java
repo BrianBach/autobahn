@@ -3,8 +3,11 @@ package net.geant.autobahn.lookup;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +16,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import net.geant.autobahn.network.Link;
+import net.geant.autobahn.resources.ResourcePath;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -40,7 +44,8 @@ public class LookupService {
     private static int TYPE4 = 4;
     private static int TYPE5 = 5;
 
-    private final String host;
+    private String host;
+    public static List<String> lookupHosts = new ArrayList();
     private Logger log = Logger.getLogger(this.getClass());
     public static Long timestamp = new Long(0);
 
@@ -50,9 +55,114 @@ public class LookupService {
      *            - address of LS
      */
     public LookupService(String host) {
-        this.host = host;
+    	try{
+    	if(lookupHosts.size()==0){
+    			this.host = host;
+    			lookupHosts = getLS();
+    			for(int i=0; i<lookupHosts.size(); i++) {
+    				if (lookupHosts.get(i).equalsIgnoreCase(host)) {
+    					return;
+    				}
+    			}
+    			lookupHosts.add(host);
+    		}
+    		else {
+    			if(checkLookupHostStatus(host)){
+    		    	this.host = host;
+    				return;
+    			} else{
+    				for(int i=0; i<lookupHosts.size(); i++){
+    					if(checkLookupHostStatus(lookupHosts.get(i))){
+    						this.host = host;
+    						return;
+    					}
+    				}
+    			}
+    			this.host = host;
+    		}
+    	} catch (LookupServiceException ex){
+    		System.out.println(ex.getMessage());
+    	}
     }
 
+    /**
+     * checks the state of the given Lookup Host
+     * 
+     * @param host
+     * @return true if the Lookup Host is active, false if its not responding
+     */
+    private boolean checkLookupHostStatus(String host) {
+    	try{
+    		URL u = new URL(host);
+    		HttpURLConnection huc =  (HttpURLConnection)  u.openConnection(); 
+    		huc.setRequestMethod("HEAD"); 
+    		huc.connect(); 
+    		huc.getResponseCode();
+    		
+    		EchoXml echo = new EchoXml();
+    		String echoXml = echo.getXml();
+    		String response = invokeLS(echoXml, host);
+    		//TODO: check the echo response actual value and not the whole xml response by using contains function
+    		if (response.contains("success")) {
+    			return true;
+    		} else {
+    			return false;
+    		}	
+    	} catch (MalformedURLException e) {
+    		log.error("Host:"+host+" is not a valid Lookup Service URL.");
+    		return false;
+		} catch (IOException e) {
+			log.error("Host:"+host+" does not respond.");
+			return false;
+		} catch (LookupServiceException e) {
+			log.error("Lookup Service "+host+" is down.");
+			return false;
+		} catch (Exception e) {
+			log.error("Lookup Service "+host+" is unreachable");
+			return false;
+		} 
+    }
+    
+    /**
+     * calls invokeLS for every Lookup Host in order to replicate the information
+     * @param xmlToSent
+     * @return information returned from query
+     * @throws LookupServiceException
+     */
+    private String invokeWriteLS(String xmlToSent)
+    		throws LookupServiceException {
+    	List<String> responseContent = new ArrayList();
+    	if(checkLookupHostStatus(host)){
+    		responseContent.add(invokeLS(xmlToSent, this.host));
+    	}
+    	for(int i=0; i<lookupHosts.size(); i++) {
+    		if(checkLookupHostStatus(lookupHosts.get(i)) && (!this.host.equalsIgnoreCase(lookupHosts.get(i)))) {
+    			responseContent.add(invokeLS(xmlToSent, lookupHosts.get(i)));
+    		}
+    	}
+    	return responseContent.get(0);
+    }
+    
+    /**
+     * calls invokeLS to read from the first Lookup Host that is active
+     * 
+     * @param xmlToSent
+     * @return information returned from query
+     * @throws LookupServiceException
+     */
+    private String invokeReadLS(String xmlToSent)
+		throws LookupServiceException {
+    	if(checkLookupHostStatus(this.host)){
+    		return invokeLS(xmlToSent, this.host);
+    	}
+    	for(int i=0; i<lookupHosts.size(); i++) {
+    		if((!this.host.equals(lookupHosts.get(i)))&& checkLookupHostStatus(lookupHosts.get(i))) {
+    			return invokeLS(xmlToSent, lookupHosts.get(i));
+    		}
+    	}
+    	return invokeLS(xmlToSent, this.host);
+    }
+    
     /**
      * 
      * sends request to LookupService and returns the response from the service
@@ -62,10 +172,9 @@ public class LookupService {
      * @return responseContent - information returned by queries
      * @throws LookupServiceException
      */
-    private String invokeLS(String xmlToSent) throws LookupServiceException {
+    private String invokeLS(String xmlToSent, String host) throws LookupServiceException {
         HttpClient httpclient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(host);
-
         // define required HTTP headers
         httpPost.setHeader("Content-type", "text/xml; charset=UTF-8;");
         httpPost.setHeader("SOAPAction", "");
@@ -73,7 +182,6 @@ public class LookupService {
         // read request content for Http(POST) request from file
         String xmlContent = xmlToSent;
         String responseContent = null;
-
         try {
             StringEntity entity = new StringEntity(xmlContent);
             httpPost.setEntity(entity);
@@ -88,8 +196,7 @@ public class LookupService {
         } catch (IOException e) {
             log.error("LS exception: ", e);
             throw new LookupServiceException(e.getMessage());
-        }
-
+        } 
         httpclient.getConnectionManager().shutdown();
         return responseContent;
     }
@@ -236,7 +343,7 @@ public class LookupService {
         xml.addField("eventType", String.valueOf(TYPE2));
         xml.addTimestamp();
         xml.addField("module", "IDM");
-        invokeLS(xml.getXml());
+        invokeWriteLS(xml.getXml());
     }
 
     /**
@@ -274,13 +381,13 @@ public class LookupService {
         xml.addField("friendlyName", friendlyName);
         xml.addEventType(TYPE1);
         xml.addField("domain", domain);
-        invokeLS(xml.getXml());
+        invokeWriteLS(xml.getXml());
     }
 
     public void removeAbstractLinks() throws LookupServiceException {
         //first remove the existing links
         RemoveXml rem = new RemoveXml("AbstractLinkKey");
-        invokeLS(rem.getXml());            
+        invokeWriteLS(rem.getXml());            
     }
     
     public void registerAbstractLinks(List<Link> links)
@@ -301,9 +408,9 @@ public class LookupService {
             xml.addXml("AbstractLink", xmlString);
         }
 
-        invokeLS(xml.getXml());
+        invokeWriteLS(xml.getXml());
     }
-
+    
     /**
      * 
      * Registration of edge port identifier of interdomain link
@@ -336,9 +443,38 @@ public class LookupService {
         xml.addField("endDomain", endDomain);
         xml.addEventType(TYPE3);
         xml.addField("port", edgeport);
-        invokeLS(xml.getXml());
+        invokeWriteLS(xml.getXml());
     }
 
+    /**
+     * 
+     * @param URL
+     * @throws LookupServiceException
+     */
+    public void updateLookupServices(String URL) throws LookupServiceException {
+    	for(int i=0; i<lookupHosts.size(); i++) {
+    		if (lookupHosts.get(i).equalsIgnoreCase(URL)){
+    			log.info("Lookuphost:"+URL+" is already present");
+    			return;
+    		}
+    	}
+    	for(int i=0; i<lookupHosts.size(); i++) {
+    		System.out.println("checking:"+lookupHosts.get(i)+" and "+URL);
+    		if(checkLookupHostStatus(lookupHosts.get(i))&&(!lookupHosts.get(i).equalsIgnoreCase(URL))) {
+    			System.out.println("Calling NewLS");
+    			newLS(URL,lookupHosts.get(i));
+    		}
+    	}
+    	if(checkLookupHostStatus(URL)) {
+    		for(int i=0; i<lookupHosts.size(); i++) {
+    			if(!lookupHosts.get(i).equalsIgnoreCase(URL))
+    			newLS(lookupHosts.get(i),URL);
+    		}
+    	}
+    	lookupHosts.add(URL);
+    }
+    
+    
     /**
      * 
      * New LS instance initialization
@@ -347,21 +483,53 @@ public class LookupService {
      *            - file which contains content of HTTP Post
      * @throws LookupServiceException
      */
-    public void newLS(String URL) throws LookupServiceException {
+    public void newLS(String URL, String host) throws LookupServiceException {
 
         // This is an auto generated primary key for the LS
         String firstkey = "http://reed.man.poznan.pl:8085/axis/services/LS ";
         // Generate key with timestamp
         String seckey = generateKey(firstkey);
-
         RegisterXml xml;
         xml = new RegisterXml(seckey, "TYPE 4", "LS");
         xml.addField("newLS", URL);
         xml.addEventType(TYPE4);
-        invokeLS(xml.getXml());
-
+        invokeLS(xml.getXml(), host);
     }
 
+    public List<String> getLS() throws LookupServiceException {
+        List<String> list=new ArrayList<String>();
+        ResponseXml responce;
+        String responceString;
+        try {
+            QueryXml xml=new QueryXml("LS");
+            xml.setReturnType("newLS");
+            responceString=invokeReadLS(xml.getXml());
+            responce = new ResponseXml(responceString);
+            String s=responce.getText("newLS",0);
+            
+            for(int i=1;s!=null;i++)
+            {                
+                list.add(s.trim());
+                s=responce.getText("newLS",i);                
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new LookupServiceException(e.getMessage());
+        }
+        
+        return list;        
+    }
+
+    public void removeLS(String url,String host) throws LookupServiceException 
+    {
+        try {
+            RemoveXml rem = new RemoveXml(url);
+            invokeLS(rem.getXml(), host);
+        } catch (Exception e) {
+            throw new LookupServiceException(e.getMessage());
+        }
+    }
+    
     /**
      * 
      * Removal of IDM location to domain name association
@@ -382,7 +550,7 @@ public class LookupService {
 
         // XML query to sent to the lookup service
         RemoveXml rem = new RemoveXml(key);
-        invokeLS(rem.getXml());
+        invokeWriteLS(rem.getXml());
     }
 
     /**
@@ -402,7 +570,7 @@ public class LookupService {
         removeEdgePort(edgeport);
     }
 
-    /**
+   /**
      * 
      * Removal of edge port
      * 
@@ -422,7 +590,7 @@ public class LookupService {
 
         // XML query to sent to the lookup service
         RemoveXml rem = new RemoveXml(key);
-        invokeLS(rem.getXml());
+        invokeWriteLS(rem.getXml());
     }
 
     /**
@@ -453,7 +621,7 @@ public class LookupService {
         }
 
         RemoveXml rem = new RemoveXml(key);
-        invokeLS(rem.getXml());
+        invokeWriteLS(rem.getXml());
     }
 
     /**
@@ -470,7 +638,7 @@ public class LookupService {
         String response = "";
         xml = new QueryXml("url", "domain", domain);
         String s = xml.getXml();
-        response = invokeLS(s);
+        response = invokeReadLS(s);
 
         return getFirstMatch(response, "lookup:url");
     }
@@ -483,7 +651,7 @@ public class LookupService {
         xml = new QueryXml();
         xml.setWhere("eventType", String.valueOf(TYPE5));
         xml.setReturnType("timestamp");
-        responseString = invokeLS(xml.getXml());
+        responseString = invokeReadLS(xml.getXml());
         response = new ResponseXml(responseString);
         responseString = response.getText("timestamp", 0);
         if (responseString == null) {
@@ -493,7 +661,6 @@ public class LookupService {
         
         return new Long(responseString);        
     }
-
     
     public boolean topoIsUptodate() throws LookupServiceException {      
         Long remoteTimestamp = getTimeStamp();
@@ -515,7 +682,7 @@ public class LookupService {
 
         xml = new QueryXml("AbstractLink");
         xml.setReturnType("AbstractLink");
-        responseString = invokeLS(xml.getXml());
+        responseString = invokeReadLS(xml.getXml());
 
         ResponseXml response = new ResponseXml(responseString);
 
@@ -546,7 +713,7 @@ public class LookupService {
         String response = "";
         xml = new QueryXml("friendlyName", "identifier", endPoint);
         String s = xml.getXml();
-        response = invokeLS(s);
+        response = invokeReadLS(s);
 
         return getFirstMatch(response, "lookup:friendlyName");
     }
@@ -563,7 +730,7 @@ public class LookupService {
         String response = "";
         xml = new QueryXml("friendlyName");
         String s = xml.getXml();
-        response = invokeLS(s);
+        response = invokeReadLS(s);
 
         return getMatches(response, "lookup:friendlyName");
     }
@@ -585,7 +752,7 @@ public class LookupService {
         xml = new QueryXml("port", "startDomain", startDomain);
         xml.connectAnd("endDomain", endDomain);
         String s = xml.getXml();
-        response = invokeLS(s);
+        response = invokeReadLS(s);
 
         return getMatches(response, "lookup:port");
     }
@@ -598,7 +765,7 @@ public class LookupService {
         xml.connectAnd("endDomain", endDomain);
         xml.connectAnd("port", edgeport);
         String s = xml.getXml();
-        response = invokeLS(s);
+        response = invokeReadLS(s);
 
         return getFirstMatch(response, "lookup:port");
     }
@@ -617,7 +784,7 @@ public class LookupService {
         String response = "";
         xml = new QueryXml("port", "startDomain", startDomain);
         String s = xml.getXml();
-        response = invokeLS(s);
+        response = invokeReadLS(s);
 
         return getMatches(response, "lookup:port");
     }
@@ -678,7 +845,7 @@ public class LookupService {
         xml.setWhere("domain", domain);
         xml.searchKeys();
         String s = xml.getXml();
-        response = invokeLS(s);
+        response = invokeReadLS(s);
 
         return getFirstMatch(response, "psservice:accessPoint");
     }
@@ -697,7 +864,7 @@ public class LookupService {
         xml.setWhere("identifier", portIdentifier);
         xml.searchKeys();
         String s = xml.getXml();
-        response = invokeLS(s);
+        response = invokeReadLS(s);
         return getFirstMatch(response, "psservice:accessPoint");
     }
 
@@ -715,7 +882,7 @@ public class LookupService {
         xml.setWhere("port", edgeport);
         xml.searchKeys();
         String s = xml.getXml();
-        response = invokeLS(s);
+        response = invokeReadLS(s);
 
         return getFirstMatch(response, "psservice:accessPoint");
     }
@@ -736,7 +903,7 @@ public class LookupService {
         xml.setWhere("startDomain", startDomain);
         xml.searchKeys();
         String s = xml.getXml();
-        response = invokeLS(s);
+        response = invokeReadLS(s);
 
         return getMatches(response, "psservice:accessPoint");
 

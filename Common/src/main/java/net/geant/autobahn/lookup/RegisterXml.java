@@ -18,7 +18,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 public class RegisterXml extends XmlHandler {
-    private final static String xmlFileName = "etc/xml/basicRegister.xml";
+    public static String xmlFileName = "etc/xml/basicRegister.xml";
     static private Logger log = Logger.getLogger(RegisterXml.class);
 
     public RegisterXml(String key, String name, String servType)

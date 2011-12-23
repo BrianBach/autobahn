@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.NodeList;
 
 public class RemoveXml extends XmlHandler {
-    static final String xmlFileName = "etc/xml/basicRemove.xml";
+    public static String xmlFileName = "etc/xml/basicRemove.xml";
     static private Logger log = Logger.getLogger(RemoveXml.class);
 
     public RemoveXml(String key) throws LookupServiceException {

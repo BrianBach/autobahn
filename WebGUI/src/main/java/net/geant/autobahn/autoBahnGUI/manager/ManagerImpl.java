@@ -154,6 +154,8 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	
 	private String[] comparedDomains;
 	
+	private String lookupHost;
+	
 	public ManagerImpl() {
 		Properties properties = new Properties();
         try {
@@ -165,12 +167,8 @@ public class ManagerImpl implements Manager, ManagerNotifier {
         } catch (IOException e) {
             logger.info("Could not load lookuphost properties: " + e.getMessage());
         }
-        String host = properties.getProperty("lookuphost");
-        if (LookupService.isLSavailable(host)) {
-            lookupService = new LookupService(host);
-        } else {
-            lookupService = null;
-        }
+        lookupHost = properties.getProperty("lookuphost");
+        
         
         // Build user-friendly list of timezones
         for (int i =0; i<timezones.size(); i++) {
@@ -189,8 +187,15 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	}
 	
     @Override
-	public LookupService getLookupServiceObject(){
-		return lookupService;
+	public LookupService getLookupService(){
+    	if(lookupService == null ){
+    		if (LookupService.isLSavailable(lookupHost)) {
+                lookupService = new LookupService(lookupHost);
+            } else {
+                lookupService = null;
+            }
+    	} 
+    	return lookupService;
 	}
 
 	/**
@@ -447,13 +452,13 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      */
     @Override
     public String getFriendlyNamefromLS(String identifier) {
-        if (lookupService == null) {
+        if (getLookupService() == null) {
             return null;
         }
 
         String friendlyName = null;
         try {
-            friendlyName = lookupService.queryFriendlyName(identifier);
+            friendlyName = getLookupService().queryFriendlyName(identifier);
         } catch (LookupServiceException e) {
             logger.info("End port friendly name could not be acquired from LS");
             logger.info(e.getMessage());
@@ -1609,8 +1614,8 @@ public class ManagerImpl implements Manager, ManagerNotifier {
     public void handleTopologyChange(String idmParam, boolean deleteReservations) {
         // Cleanup LS first
         try {
-            if (lookupService != null) {
-                lookupService.removeAbstractLinks();
+            if (getLookupService() != null) {
+                getLookupService().removeAbstractLinks();
             }
         } catch (LookupServiceException e1) {
             // Log the error but continue with IDMs restart

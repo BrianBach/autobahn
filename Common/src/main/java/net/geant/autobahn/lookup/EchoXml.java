@@ -6,7 +6,7 @@ import java.io.File;
 
 public class EchoXml extends XmlHandler  
 {
-    private final static String xmlFileName = "etc/xml/EchoRequest.xml";
+    public static String xmlFileName = "etc/xml/EchoRequest.xml";
 
     public EchoXml() throws LookupServiceException 
     {

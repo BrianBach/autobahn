@@ -358,7 +358,7 @@ public interface Manager {
      */
     public StatisticsFormModel getStatisticsForInterDomainManager (String idm);
 	
-	public LookupService getLookupServiceObject();
+	public LookupService getLookupService();
 	
 	public String getFriendlyNamefromLS(String identifier);
 	
