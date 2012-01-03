@@ -450,6 +450,7 @@ function show_menu {
                          "View Tunnels" "Shows existing tunnels" \
                          "Tunnel Editor" "Edit Existing Tunnels" \
                          "Delete All Tunnels" "Deletes all existing tunnels" \
+			 "Setup database" "Sets up a database from a PostgresSQL dump" \
                          "Property Editor" "Go back to change properties" \
                          "Help"  "Shows Help for the installer" \
                          "Exit" "Exits the Installer"  2>ans 
@@ -458,6 +459,7 @@ function show_menu {
                   --backtitle "AutoBAHN Command Line Installer" \
                   --menu "AutoBAHN Installer Options" 20 80 5 \
                          "Ospf" "choose if you want to use ospf for routing" \
+			 "Setup database" "Sets up a database from a PostgresSQL dump" \
                          "Property Editor" "Go back to change properties" \
                          "Help"  "Shows Help for the installer" \
                          "Exit" "Exits the Installer"  2>ans
@@ -526,24 +528,41 @@ function setup_database_c {
 		#read dbname
 		printf "Please enter the path of a PSQL dump:"
 		read FILE
-		case $? in
-			0)filename=${FILE##*/}
-			  extension=${filename##*.}
-			if [ $extension = "sql" ]; then
-				#dbname=`cat $path_only/tempdbname.tmp`
-				echolog "dbname:$dbname path_only:$path_only"
-                                #rm -f tempdbname.tmp
-                                #dbuser=`cat $path_only/tempdbuser.tmp`
-                                #rm -f tempdbuser.tmp
-
-				val_sql=1
-		sudo -u postgres psql $dbname < $path_only/../sql/drop_all.sql
-		sudo -u postgres psql $dbname < $path_only/../sql/create_db.sql
-                sudo -u postgres psql $dbname < $FILE
-				log "I ran sudo -u postgres psql $dbname < $FILE, if unsuccessful either psql doesn't exist or the user doesn't have the appropriate permissions"
-			fi
-				  ;;
-		esac	
+		if [ $? -eq 0 ]; then
+			 val_sql=1
+			 filename=${FILE##*/}
+			 extension=${filename##*.}
+			 if [ $extension != "sql" ]; then
+			      val_sql=0
+			      printf "This is not a valid SQL file\n"
+			 elif [ ! -e $FILE ]; then
+			      val_sql=0
+			      printf "File does not exist\n"		      
+			 fi
+			 
+			 if [ $val_sql -eq 1 ]; then
+			      echolog "dbname:$dbname path_only:$path_only"
+			      sudo -u postgres psql $dbname < $path_only/../sql/drop_all.sql
+			      sudo -u postgres psql $dbname < $path_only/../sql/create_db.sql
+			      sudo -u postgres psql $dbname < $FILE
+			      log "I ran sudo -u postgres psql $dbname < $FILE, if unsuccessful either psql doesn't exist or the user doesn't have the appropriate permissions"
+			 else
+			      printf "Do you want to select another sql file [y/n]:"
+			      read answer
+			      while true; do
+					case "$answer" in
+					y|Y)
+					     break;;
+					n|N)
+					     val_sql=1
+					     break;;
+					*) 
+					     printf "Please enter y or n: "
+					     read answer;;
+					esac
+			      done			      
+			 fi
+		fi
 	done
 	rm -f ipans
 }
@@ -662,19 +681,19 @@ function install_tunnels_c {
 function simple_ui {
 #	echo "In simple_ui ENTER_IP = $ENTER_IP"
 	clear
-# 	printf "Do you want to select sql file to setup database[y/n]:"
-# 	read answer
-# 	while true; do
-# 		case "$answer" in
-# 	          y|Y) #echo "do it";
-# 		       setup_database_c
-# 		       break;;
-# 		  n|N) #echo "drop it";
-# 		       break;;
-# 		    *) echo "Please enter y or n"
-#                        read answer;;
-# 		 esac
-#     done
+ 	printf "Do you want to select sql file to setup database[y/n]:"
+ 	read answer
+ 	while true; do
+ 		case "$answer" in
+ 	          y|Y) #echo "do it";
+ 		       setup_database_c
+ 		       break;;
+ 		  n|N) #echo "drop it";
+ 		       break;;
+ 		    *) echo "Please enter y or n"
+                        read answer;;
+ 		 esac
+     done
     if [ "$ospf_use" == true ];then        
         print_step "1" "Adding tunnels"
         ENTER_IP=enter_ip_c
