@@ -57,9 +57,23 @@ cursor:pointer;
 	<tr>
 		<td class="label" ><spring:message code="service.userHomeDomain"/><br /><span class="error"><form:errors path="userHomeDomain"/></span></td>
 		<td class="value">
-			<form:select path="userHomeDomain">
-				<form:options items="${idms}"/>
-			</form:select>
+            <c:if test="${home!=null}">
+                <c:if test="${fn:length(service.reservations) != 0}">
+                    <form:select path="userHomeDomain">
+                        <form:option value="${home}"/>
+                    </form:select>
+                </c:if>
+                <c:if test="${fn:length(service.reservations) == 0}">
+                    <form:select path="userHomeDomain">
+                        <form:options items="${idms}"/>
+                    </form:select>
+                </c:if>
+            </c:if>
+            <c:if test="${home==null}">
+                <form:select path="userHomeDomain">
+                    <form:options items="${idms}"/>
+                </form:select>
+            </c:if>
 		</td>
 		<!--td class="error"><form:errors path="userHomeDomain"/></td-->
 	</tr>
