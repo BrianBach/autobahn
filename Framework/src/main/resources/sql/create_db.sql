@@ -2,13 +2,26 @@
 -- PostgreSQL database dump
 --
 
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = off;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET escape_string_warning = off;
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
 --
--- Name: additive_constraint; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: additive_constraint; Type: TABLE; Schema: public; Owner: abahn; Tablespace: 
 --
 
 CREATE TABLE additive_constraint (
     con_id bigint NOT NULL,
-    value double precision
+    con_value double precision
 );
 
 
@@ -19,9 +32,9 @@ CREATE TABLE additive_constraint (
 CREATE TABLE admin_domain (
     domain_id character varying(255) NOT NULL,
     asid character varying(255),
-    name character varying(255),
-    clientdomain boolean,
-    idcpserver character varying(255)
+    ad_name character varying(255),
+    client_domain boolean,
+    idcp_server character varying(255)
 );
 
 
@@ -42,7 +55,7 @@ CREATE TABLE bod_user (
 
 CREATE TABLE boolean_constraint (
     con_id bigint NOT NULL,
-    value boolean,
+    con_value boolean,
     logic character varying(255)
 );
 
@@ -59,10 +72,10 @@ CREATE TABLE domain_constraints (
 
 
 --
--- Name: domainsids; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: domain_ids; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE TABLE domainsids (
+CREATE TABLE domain_ids (
     gcon_id bigint NOT NULL,
     domain_id character varying(255),
     domain_order integer NOT NULL
@@ -160,7 +173,7 @@ CREATE TABLE generic_link (
 --
 
 CREATE TABLE glink_to_intrapath (
-    pathid bigint NOT NULL,
+    path_id bigint NOT NULL,
     glink_id bigint NOT NULL,
     link_order integer NOT NULL
 );
@@ -176,13 +189,13 @@ CREATE TABLE global_constraints (
 
 
 --
--- Name: hasrole; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: has_role; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE TABLE hasrole (
-    nodeid character varying(255) NOT NULL,
-    linkid character varying(255) NOT NULL,
-    isdemarc boolean
+CREATE TABLE has_role (
+    node_id character varying(255) NOT NULL,
+    link_id character varying(255) NOT NULL,
+    demarc boolean
 );
 
 
@@ -205,7 +218,7 @@ CREATE SEQUENCE hibernate_sequence
 CREATE TABLE ho_vc_group (
     ho_vc_group_id bigint NOT NULL,
     vlan_tag_id bigint,
-    name character varying(255)
+    group_name character varying(255)
 );
 
 
@@ -231,7 +244,7 @@ CREATE TABLE ho_vc_link (
 
 CREATE TABLE ho_vc_type (
     ho_vc_type_id bigint NOT NULL,
-    name character varying(255),
+    type_name character varying(255),
     bandwidth bigint,
     payload bigint
 );
@@ -251,7 +264,7 @@ CREATE TABLE interdomain_node (
     institution character varying(255),
     longitude character varying(255),
     latitude character varying(255),
-    provisioningdomain character varying(255) NOT NULL
+    prov_domain character varying(255) NOT NULL
 );
 
 
@@ -282,7 +295,7 @@ CREATE TABLE interface_type (
 --
 
 CREATE TABLE intradomain_path (
-    pathid bigint NOT NULL,
+    path_id bigint NOT NULL,
     capacity bigint
 );
 
@@ -292,8 +305,8 @@ CREATE TABLE intradomain_path (
 --
 
 CREATE TABLE intradomain_reservation (
-    reservationid character varying(255) NOT NULL,
-    pathcreated boolean,
+    res_id character varying(255) NOT NULL,
+    created boolean,
     active boolean,
     path_id bigint,
     params_id bigint
@@ -307,22 +320,22 @@ CREATE TABLE intradomain_reservation (
 CREATE TABLE link (
     link_id character varying(255) NOT NULL,
     kind integer,
-    startport character varying(255) NOT NULL,
-    endport character varying(255) NOT NULL,
+    start_port character varying(255) NOT NULL,
+    end_port character varying(255) NOT NULL,
     bidirectional boolean,
     delay integer,
-    manualcost double precision,
-    monetarycost double precision,
+    manual_cost double precision,
+    monetary_cost double precision,
     granularity bigint,
-    minrescapacity bigint,
-    maxrescapacity bigint,
+    min_res_capacity bigint,
+    max_res_capacity bigint,
     capacity bigint,
     resilience character varying(255),
-    state_oper_enum integer,
-    state_admin_enum integer,
-    link_type_enum integer,
-    localname character varying(255),
-    "timestamp" timestamp without time zone
+    state_oper integer,
+    state_admin integer,
+    link_type integer,
+    local_name character varying(255),
+    l_time timestamp without time zone
 );
 
 
@@ -342,7 +355,8 @@ CREATE TABLE link_to_path (
 --
 
 CREATE TABLE link_type (
-    link_type_enum integer NOT NULL
+    id integer NOT NULL,
+    description character varying(255)
 );
 
 
@@ -378,7 +392,7 @@ CREATE TABLE location (
 
 CREATE TABLE minval_constraint (
     con_id bigint NOT NULL,
-    value double precision
+    con_value double precision
 );
 
 
@@ -415,7 +429,8 @@ CREATE TABLE node (
     model character varying(255),
     os_name character varying(255),
     os_version character varying(255),
-    ip_address character varying(255)
+    ip_address character varying(255),
+    vlan_translation boolean
 );
 
 
@@ -571,7 +586,7 @@ CREATE TABLE pcon_range_names (
 --
 
 CREATE TABLE pcons_to_intrapath (
-    pathid bigint NOT NULL,
+    path_id bigint NOT NULL,
     pcon_id bigint NOT NULL,
     glink_map_id bigint NOT NULL
 );
@@ -596,9 +611,10 @@ CREATE TABLE port (
 
 CREATE TABLE provisioning_domain (
     provdomain_id character varying(255) NOT NULL,
-    provtype character varying(255),
-    admindomain character varying(255) NOT NULL
+    prov_type character varying(255),
+    admin_domain character varying(255) NOT NULL
 );
+
 
 
 --
@@ -614,6 +630,7 @@ CREATE TABLE range (
 );
 
 
+
 --
 -- Name: range_constraint; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
@@ -621,6 +638,7 @@ CREATE TABLE range (
 CREATE TABLE range_constraint (
     con_id bigint NOT NULL
 );
+
 
 
 --
@@ -641,14 +659,15 @@ CREATE TABLE reservation (
     maxdelay integer,
     resiliency character varying(255),
     bidirectional boolean,
-    uservlanid integer,
     mtu integer,
     state_oper_enum integer,
     globalconstraints bigint,
     path bigint,
+    authparameters bigint,
     srv_id character varying(255),
     res_index integer
 );
+
 
 
 --
@@ -661,12 +680,14 @@ CREATE TABLE reservation_params (
     maxdelay integer,
     resiliency character varying(255),
     bidirectional boolean,
-    mtu integer,
     starttime timestamp without time zone,
     endtime timestamp without time zone,
+    mtu integer,
     pathconstraintsingress bigint NOT NULL,
-    pathconstraintsegress bigint NOT NULL
+    pathconstraintsegress bigint NOT NULL,
+    authparameters bigint
 );
+
 
 
 --
@@ -681,17 +702,19 @@ CREATE TABLE sdh_device (
 );
 
 
+
 --
 -- Name: sdh_domain; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE sdh_domain (
     sdh_domain_id bigint NOT NULL,
-    name character varying(255),
-    provmethod character varying(255),
+    domain_name character varying(255),
+    prov_method character varying(255),
     equipment_provider character varying(255),
     date_modified date
 );
+
 
 
 --
@@ -703,6 +726,7 @@ CREATE TABLE sdh_port (
     address character varying(255),
     phy_port_type character varying(255)
 );
+
 
 
 --
@@ -717,6 +741,7 @@ CREATE TABLE service (
 );
 
 
+
 --
 -- Name: spanning_tree; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
@@ -729,13 +754,16 @@ CREATE TABLE spanning_tree (
 );
 
 
+
 --
 -- Name: state_admin; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE state_admin (
-    state_admin_enum integer NOT NULL
+    id integer NOT NULL,
+    description character varying(255)
 );
+
 
 
 --
@@ -743,8 +771,10 @@ CREATE TABLE state_admin (
 --
 
 CREATE TABLE state_oper (
-    state_oper_enum integer NOT NULL
+    id integer NOT NULL,
+    description character varying(255)
 );
+
 
 
 --
@@ -752,11 +782,25 @@ CREATE TABLE state_oper (
 --
 
 CREATE TABLE statistics (
-    id serial PRIMARY KEY,
+    id integer NOT NULL,
     reservation_id character varying(255),
     intradomain boolean,
     setup_time bigint
 );
+
+
+
+--
+-- Name: statistics_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE statistics_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
 
 
 --
@@ -771,15 +815,32 @@ CREATE TABLE stm_link (
 );
 
 
+
 --
 -- Name: stm_type; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE stm_type (
     stm_type_id bigint NOT NULL,
-    name character varying(255),
+    type_name character varying(255),
     bandwidth bigint
 );
+
+
+
+--
+-- Name: user_auth_params; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE user_auth_params (
+    id bigint NOT NULL,
+    organization character varying(255),
+    projectmembership character varying(255),
+    projectrole character varying(255),
+    email character varying(255),
+    identifier character varying(255)
+);
+
 
 
 --
@@ -797,6 +858,7 @@ CREATE TABLE version_info (
 );
 
 
+
 --
 -- Name: vlan; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
@@ -810,6 +872,7 @@ CREATE TABLE vlan (
 );
 
 
+
 --
 -- Name: vlan_port; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
@@ -818,6 +881,7 @@ CREATE TABLE vlan_port (
     interface_id bigint NOT NULL,
     vlan_id bigint
 );
+
 
 
 --
@@ -831,6 +895,7 @@ CREATE TABLE vlan_tag (
 );
 
 
+
 --
 -- Name: vtp_domain; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
@@ -842,31 +907,6 @@ CREATE TABLE vtp_domain (
 );
 
 
---
--- Data for Name: link_type; Type: TABLE DATA; Schema: public; Owner: -
---
-
-INSERT INTO link_type VALUES (1);
-INSERT INTO link_type VALUES (2);
-INSERT INTO link_type VALUES (3);
-
-
---
--- Data for Name: state_admin; Type: TABLE DATA; Schema: public; Owner: -
---
-
-INSERT INTO state_admin VALUES (0);
-INSERT INTO state_admin VALUES (1);
-INSERT INTO state_admin VALUES (2);
-
-
---
--- Data for Name: state_oper; Type: TABLE DATA; Schema: public; Owner: -
---
-
-INSERT INTO state_oper VALUES (0);
-INSERT INTO state_oper VALUES (1);
-INSERT INTO state_oper VALUES (3);
 
 --
 -- Name: additive_constraint_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
@@ -909,11 +949,11 @@ ALTER TABLE ONLY domain_constraints
 
 
 --
--- Name: domainsids_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: domain_ids_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
-ALTER TABLE ONLY domainsids
-    ADD CONSTRAINT domainsids_pkey PRIMARY KEY (gcon_id, domain_order);
+ALTER TABLE ONLY domain_ids
+    ADD CONSTRAINT domain_ids_pkey PRIMARY KEY (gcon_id, domain_order);
 
 
 --
@@ -969,7 +1009,7 @@ ALTER TABLE ONLY generic_link
 --
 
 ALTER TABLE ONLY glink_to_intrapath
-    ADD CONSTRAINT glink_to_intrapath_pkey PRIMARY KEY (pathid, link_order);
+    ADD CONSTRAINT glink_to_intrapath_pkey PRIMARY KEY (path_id, link_order);
 
 
 --
@@ -981,11 +1021,11 @@ ALTER TABLE ONLY global_constraints
 
 
 --
--- Name: hasrole_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: has_role_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
-ALTER TABLE ONLY hasrole
-    ADD CONSTRAINT hasrole_pkey PRIMARY KEY (nodeid, linkid);
+ALTER TABLE ONLY has_role
+    ADD CONSTRAINT has_role_pkey PRIMARY KEY (node_id, link_id);
 
 
 --
@@ -1041,7 +1081,7 @@ ALTER TABLE ONLY interface_type
 --
 
 ALTER TABLE ONLY intradomain_path
-    ADD CONSTRAINT intradomain_path_pkey PRIMARY KEY (pathid);
+    ADD CONSTRAINT intradomain_path_pkey PRIMARY KEY (path_id);
 
 
 --
@@ -1049,7 +1089,7 @@ ALTER TABLE ONLY intradomain_path
 --
 
 ALTER TABLE ONLY intradomain_reservation
-    ADD CONSTRAINT intradomain_reservation_pkey PRIMARY KEY (reservationid);
+    ADD CONSTRAINT intradomain_reservation_pkey PRIMARY KEY (res_id);
 
 
 --
@@ -1073,7 +1113,7 @@ ALTER TABLE ONLY link_to_path
 --
 
 ALTER TABLE ONLY link_type
-    ADD CONSTRAINT link_type_pkey PRIMARY KEY (link_type_enum);
+    ADD CONSTRAINT link_type_pkey PRIMARY KEY (id);
 
 
 --
@@ -1225,7 +1265,7 @@ ALTER TABLE ONLY pcon_range_names
 --
 
 ALTER TABLE ONLY pcons_to_intrapath
-    ADD CONSTRAINT pcons_to_intrapath_pkey PRIMARY KEY (pathid, glink_map_id);
+    ADD CONSTRAINT pcons_to_intrapath_pkey PRIMARY KEY (path_id, glink_map_id);
 
 
 --
@@ -1321,7 +1361,7 @@ ALTER TABLE ONLY spanning_tree
 --
 
 ALTER TABLE ONLY state_admin
-    ADD CONSTRAINT state_admin_pkey PRIMARY KEY (state_admin_enum);
+    ADD CONSTRAINT state_admin_pkey PRIMARY KEY (id);
 
 
 --
@@ -1329,7 +1369,15 @@ ALTER TABLE ONLY state_admin
 --
 
 ALTER TABLE ONLY state_oper
-    ADD CONSTRAINT state_oper_pkey PRIMARY KEY (state_oper_enum);
+    ADD CONSTRAINT state_oper_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: statistics_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY statistics
+    ADD CONSTRAINT statistics_pkey PRIMARY KEY (id);
 
 
 --
@@ -1346,6 +1394,14 @@ ALTER TABLE ONLY stm_link
 
 ALTER TABLE ONLY stm_type
     ADD CONSTRAINT stm_type_pkey PRIMARY KEY (stm_type_id);
+
+
+--
+-- Name: user_auth_params_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY user_auth_params
+    ADD CONSTRAINT user_auth_params_pkey PRIMARY KEY (id);
 
 
 --
@@ -1397,27 +1453,11 @@ ALTER TABLE ONLY link_to_path
 
 
 --
--- Name: fk10ab1424ba6ddf3a; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY link_to_path
-    ADD CONSTRAINT fk10ab1424ba6ddf3a FOREIGN KEY (path_id) REFERENCES interdomain_path(path_id);
-
-
---
 -- Name: fk10ab1424d14d52be; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY link_to_path
     ADD CONSTRAINT fk10ab1424d14d52be FOREIGN KEY (path_id) REFERENCES interdomain_path(path_id);
-
-
---
--- Name: fk10ab1424f426d31a; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY link_to_path
-    ADD CONSTRAINT fk10ab1424f426d31a FOREIGN KEY (link_id) REFERENCES link(link_id);
 
 
 --
@@ -1429,187 +1469,131 @@ ALTER TABLE ONLY minval_constraint
 
 
 --
--- Name: fk17d3c8d8b30e16d; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk18bbf6611367648f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY minval_constraint
-    ADD CONSTRAINT fk17d3c8d8b30e16d FOREIGN KEY (con_id) REFERENCES network_constraint(con_id);
-
-
---
--- Name: fk2328d7ac6abd1004; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY reservation
-    ADD CONSTRAINT fk2328d7ac6abd1004 FOREIGN KEY (startport) REFERENCES port(port_id);
+ALTER TABLE ONLY interdomain_node
+    ADD CONSTRAINT fk18bbf6611367648f FOREIGN KEY (prov_domain) REFERENCES provisioning_domain(provdomain_id);
 
 
 --
--- Name: fk2328d7ac88bbd03; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk2328d7ac819c8388; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY reservation
-    ADD CONSTRAINT fk2328d7ac88bbd03 FOREIGN KEY (state_oper_enum) REFERENCES state_oper(state_oper_enum);
+    ADD CONSTRAINT fk2328d7ac819c8388 FOREIGN KEY (startport) REFERENCES port(port_id);
 
 
 --
--- Name: fk2328d7ac89daeffd; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY reservation
-    ADD CONSTRAINT fk2328d7ac89daeffd FOREIGN KEY (endport) REFERENCES port(port_id);
-
-
---
--- Name: fk2328d7ac8adeaf16; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk2328d7ac8262ff12; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY reservation
-    ADD CONSTRAINT fk2328d7ac8adeaf16 FOREIGN KEY (srv_id) REFERENCES service(srv_id);
+    ADD CONSTRAINT fk2328d7ac8262ff12 FOREIGN KEY (srv_id) REFERENCES service(srv_id);
 
 
 --
--- Name: fk2328d7ac93dc7ae; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY reservation
-    ADD CONSTRAINT fk2328d7ac93dc7ae FOREIGN KEY (globalconstraints) REFERENCES global_constraints(gcon_id);
-
-
---
--- Name: fk2328d7ace9cee3ea; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk2328d7ac839bdbff; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY reservation
-    ADD CONSTRAINT fk2328d7ace9cee3ea FOREIGN KEY (path) REFERENCES interdomain_path(path_id);
+    ADD CONSTRAINT fk2328d7ac839bdbff FOREIGN KEY (state_oper_enum) REFERENCES state_oper(id);
 
 
 --
--- Name: fk23a7fa1c0ce5c1; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk2328d7ac900b4caa; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY link
-    ADD CONSTRAINT fk23a7fa1c0ce5c1 FOREIGN KEY (state_admin_enum) REFERENCES state_admin(state_admin_enum);
-
-
---
--- Name: fk23a7fa3519253d; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY link
-    ADD CONSTRAINT fk23a7fa3519253d FOREIGN KEY (state_admin_enum) REFERENCES state_admin(state_admin_enum);
+ALTER TABLE ONLY reservation
+    ADD CONSTRAINT fk2328d7ac900b4caa FOREIGN KEY (globalconstraints) REFERENCES global_constraints(gcon_id);
 
 
 --
--- Name: fk23a7fa471ed5; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk2328d7aca0ba6381; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY link
-    ADD CONSTRAINT fk23a7fa471ed5 FOREIGN KEY (link_type_enum) REFERENCES link_type(link_type_enum);
-
-
---
--- Name: fk23a7fa6abd1004; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY link
-    ADD CONSTRAINT fk23a7fa6abd1004 FOREIGN KEY (startport) REFERENCES port(port_id);
+ALTER TABLE ONLY reservation
+    ADD CONSTRAINT fk2328d7aca0ba6381 FOREIGN KEY (endport) REFERENCES port(port_id);
 
 
 --
--- Name: fk23a7fa819c8388; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk2328d7acae576e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY link
-    ADD CONSTRAINT fk23a7fa819c8388 FOREIGN KEY (startport) REFERENCES port(port_id);
+ALTER TABLE ONLY reservation
+    ADD CONSTRAINT fk2328d7acae576e FOREIGN KEY (path) REFERENCES interdomain_path(path_id);
 
 
 --
--- Name: fk23a7fa839bdbff; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk2328d7acfa2cb018; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY reservation
+    ADD CONSTRAINT fk2328d7acfa2cb018 FOREIGN KEY (authparameters) REFERENCES user_auth_params(id);
+
+
+--
+-- Name: fk23a7fa1b614317; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY link
-    ADD CONSTRAINT fk23a7fa839bdbff FOREIGN KEY (state_oper_enum) REFERENCES state_oper(state_oper_enum);
+    ADD CONSTRAINT fk23a7fa1b614317 FOREIGN KEY (state_oper) REFERENCES state_oper(id);
 
 
 --
--- Name: fk23a7fa88bbd03; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY link
-    ADD CONSTRAINT fk23a7fa88bbd03 FOREIGN KEY (state_oper_enum) REFERENCES state_oper(state_oper_enum);
-
-
---
--- Name: fk23a7fa89daeffd; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk23a7fa1d3f07d7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY link
-    ADD CONSTRAINT fk23a7fa89daeffd FOREIGN KEY (endport) REFERENCES port(port_id);
+    ADD CONSTRAINT fk23a7fa1d3f07d7 FOREIGN KEY (link_type) REFERENCES link_type(id);
 
 
 --
--- Name: fk23a7faa0ba6381; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY link
-    ADD CONSTRAINT fk23a7faa0ba6381 FOREIGN KEY (endport) REFERENCES port(port_id);
-
-
---
--- Name: fk23a7faeb793059; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk23a7fa4f31df83; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY link
-    ADD CONSTRAINT fk23a7faeb793059 FOREIGN KEY (link_type_enum) REFERENCES link_type(link_type_enum);
+    ADD CONSTRAINT fk23a7fa4f31df83 FOREIGN KEY (state_admin) REFERENCES state_admin(id);
 
 
 --
--- Name: fk248e3b143af08f99; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk23a7fa6752410a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY ho_vc_link
-    ADD CONSTRAINT fk248e3b143af08f99 FOREIGN KEY (ho_vc_group_id) REFERENCES ho_vc_group(ho_vc_group_id);
-
-
---
--- Name: fk248e3b1462bf895b; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY ho_vc_link
-    ADD CONSTRAINT fk248e3b1462bf895b FOREIGN KEY (ho_vc_type_id) REFERENCES ho_vc_type(ho_vc_type_id);
+ALTER TABLE ONLY link
+    ADD CONSTRAINT fk23a7fa6752410a FOREIGN KEY (end_port) REFERENCES port(port_id);
 
 
 --
--- Name: fk248e3b14a93a78cc; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk23a7faa2b421e3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY ho_vc_link
-    ADD CONSTRAINT fk248e3b14a93a78cc FOREIGN KEY (stm_link_id) REFERENCES stm_link(stm_link_id);
-
-
---
--- Name: fk248e3b14ac9686d0; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY ho_vc_link
-    ADD CONSTRAINT fk248e3b14ac9686d0 FOREIGN KEY (stm_link_id) REFERENCES stm_link(stm_link_id);
+ALTER TABLE ONLY link
+    ADD CONSTRAINT fk23a7faa2b421e3 FOREIGN KEY (start_port) REFERENCES port(port_id);
 
 
 --
--- Name: fk248e3b14cae53bd7; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk24a6028835554d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY ho_vc_link
-    ADD CONSTRAINT fk248e3b14cae53bd7 FOREIGN KEY (ho_vc_type_id) REFERENCES ho_vc_type(ho_vc_type_id);
+ALTER TABLE ONLY node
+    ADD CONSTRAINT fk24a6028835554d FOREIGN KEY (location_id) REFERENCES location(location_id);
 
 
 --
--- Name: fk248e3b14d7812c9d; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk24a6028ee852f5; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY ho_vc_link
-    ADD CONSTRAINT fk248e3b14d7812c9d FOREIGN KEY (ho_vc_group_id) REFERENCES ho_vc_group(ho_vc_group_id);
+ALTER TABLE ONLY node
+    ADD CONSTRAINT fk24a6028ee852f5 FOREIGN KEY (version_id) REFERENCES version_info(version_id);
+
+
+--
+-- Name: fk255c258ee852f5; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY path
+    ADD CONSTRAINT fk255c258ee852f5 FOREIGN KEY (version_id) REFERENCES version_info(version_id);
 
 
 --
@@ -1621,75 +1605,19 @@ ALTER TABLE ONLY port
 
 
 --
--- Name: fk259081e9cd77a4; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk283d6398f12658; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY port
-    ADD CONSTRAINT fk259081e9cd77a4 FOREIGN KEY (node) REFERENCES interdomain_node(node_id);
-
-
---
--- Name: fk2989aa30a7df722f; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY hasrole
-    ADD CONSTRAINT fk2989aa30a7df722f FOREIGN KEY (linkid) REFERENCES link(link_id);
+ALTER TABLE ONLY vlan
+    ADD CONSTRAINT fk283d6398f12658 FOREIGN KEY (vtp_domain_id) REFERENCES vtp_domain(vtp_domain_id);
 
 
 --
--- Name: fk2989aa30ab9a0c3f; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk296ff987707e78d1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY hasrole
-    ADD CONSTRAINT fk2989aa30ab9a0c3f FOREIGN KEY (nodeid) REFERENCES interdomain_node(node_id);
-
-
---
--- Name: fk2989aa30bebee5b3; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY hasrole
-    ADD CONSTRAINT fk2989aa30bebee5b3 FOREIGN KEY (linkid) REFERENCES link(link_id);
-
-
---
--- Name: fk2989aa30c2797fc3; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY hasrole
-    ADD CONSTRAINT fk2989aa30c2797fc3 FOREIGN KEY (nodeid) REFERENCES interdomain_node(node_id);
-
-
---
--- Name: fk2d0e835e3d1567ad; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY sdh_device
-    ADD CONSTRAINT fk2d0e835e3d1567ad FOREIGN KEY (node_id) REFERENCES node(node_id);
-
-
---
--- Name: fk2d0e835e407175b1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY sdh_device
-    ADD CONSTRAINT fk2d0e835e407175b1 FOREIGN KEY (node_id) REFERENCES node(node_id);
-
-
---
--- Name: fk2d0e835e71559326; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY sdh_device
-    ADD CONSTRAINT fk2d0e835e71559326 FOREIGN KEY (sdh_domain_id) REFERENCES sdh_domain(sdh_domain_id);
-
-
---
--- Name: fk2d0e835ed4c4f622; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY sdh_device
-    ADD CONSTRAINT fk2d0e835ed4c4f622 FOREIGN KEY (sdh_domain_id) REFERENCES sdh_domain(sdh_domain_id);
+ALTER TABLE ONLY ops_link
+    ADD CONSTRAINT fk296ff987707e78d1 FOREIGN KEY (ops_link_id) REFERENCES generic_link(link_id);
 
 
 --
@@ -1701,115 +1629,19 @@ ALTER TABLE ONLY path_constraint
 
 
 --
--- Name: fk2d456237b94c2796; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk38cd171b7e81299e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY path_constraint
-    ADD CONSTRAINT fk2d456237b94c2796 FOREIGN KEY (dcon_id) REFERENCES domain_constraints(dcon_id);
-
-
---
--- Name: fk33ae023c053871; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY node
-    ADD CONSTRAINT fk33ae023c053871 FOREIGN KEY (version_id) REFERENCES version_info(version_id);
+ALTER TABLE ONLY has_role
+    ADD CONSTRAINT fk38cd171b7e81299e FOREIGN KEY (node_id) REFERENCES interdomain_node(node_id);
 
 
 --
--- Name: fk33ae024312c151; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk38cd171bb06469e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY node
-    ADD CONSTRAINT fk33ae024312c151 FOREIGN KEY (location_id) REFERENCES location(location_id);
-
-
---
--- Name: fk33ae028835554d; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY node
-    ADD CONSTRAINT fk33ae028835554d FOREIGN KEY (location_id) REFERENCES location(location_id);
-
-
---
--- Name: fk33ae028ee852f5; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY node
-    ADD CONSTRAINT fk33ae028ee852f5 FOREIGN KEY (version_id) REFERENCES version_info(version_id);
-
-
---
--- Name: fk3464253c053871; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY path
-    ADD CONSTRAINT fk3464253c053871 FOREIGN KEY (version_id) REFERENCES version_info(version_id);
-
-
---
--- Name: fk3464258ee852f5; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY path
-    ADD CONSTRAINT fk3464258ee852f5 FOREIGN KEY (version_id) REFERENCES version_info(version_id);
-
-
---
--- Name: fk3690c845239669d3; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY och_link
-    ADD CONSTRAINT fk3690c845239669d3 FOREIGN KEY (och_id) REFERENCES och(och_id);
-
-
---
--- Name: fk3690c8452404c0d8; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY och_link
-    ADD CONSTRAINT fk3690c8452404c0d8 FOREIGN KEY (ops_link_id) REFERENCES ops_link(ops_link_id);
-
-
---
--- Name: fk3690c8452760cedc; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY och_link
-    ADD CONSTRAINT fk3690c8452760cedc FOREIGN KEY (ops_link_id) REFERENCES ops_link(ops_link_id);
-
-
---
--- Name: fk3690c8452c1219d7; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY och_link
-    ADD CONSTRAINT fk3690c8452c1219d7 FOREIGN KEY (och_id) REFERENCES och(och_id);
-
-
---
--- Name: fk374563460e0bd4; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY vlan
-    ADD CONSTRAINT fk374563460e0bd4 FOREIGN KEY (vtp_domain_id) REFERENCES vtp_domain(vtp_domain_id);
-
-
---
--- Name: fk37456398f12658; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY vlan
-    ADD CONSTRAINT fk37456398f12658 FOREIGN KEY (vtp_domain_id) REFERENCES vtp_domain(vtp_domain_id);
-
-
---
--- Name: fk3a5c01ce457422a1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pcon_bool_constraints
-    ADD CONSTRAINT fk3a5c01ce457422a1 FOREIGN KEY (pcon_id) REFERENCES path_constraint(pcon_id);
+ALTER TABLE ONLY has_role
+    ADD CONSTRAINT fk38cd171bb06469e FOREIGN KEY (link_id) REFERENCES link(link_id);
 
 
 --
@@ -1829,19 +1661,19 @@ ALTER TABLE ONLY pcon_bool_constraints
 
 
 --
--- Name: fk3a5c01ceeafa014a; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk3b667fa9833fbb6e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY pcon_bool_constraints
-    ADD CONSTRAINT fk3a5c01ceeafa014a FOREIGN KEY (constraint_id) REFERENCES boolean_constraint(con_id);
+ALTER TABLE ONLY sdh_port
+    ADD CONSTRAINT fk3b667fa9833fbb6e FOREIGN KEY (port_id) REFERENCES generic_interface(interface_id);
 
 
 --
--- Name: fk3de1469d562fbeb7; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk3de1469d6257222c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pcons_to_intrapath
-    ADD CONSTRAINT fk3de1469d562fbeb7 FOREIGN KEY (pathid) REFERENCES intradomain_path(pathid);
+    ADD CONSTRAINT fk3de1469d6257222c FOREIGN KEY (path_id) REFERENCES intradomain_path(path_id);
 
 
 --
@@ -1861,27 +1693,35 @@ ALTER TABLE ONLY pcons_to_intrapath
 
 
 --
--- Name: fk41f1565644aa8e22; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk3f60b3143af08f99; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY ho_vc_link
+    ADD CONSTRAINT fk3f60b3143af08f99 FOREIGN KEY (ho_vc_group_id) REFERENCES ho_vc_group(ho_vc_group_id);
+
+
+--
+-- Name: fk3f60b31462bf895b; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY ho_vc_link
+    ADD CONSTRAINT fk3f60b31462bf895b FOREIGN KEY (ho_vc_type_id) REFERENCES ho_vc_type(ho_vc_type_id);
+
+
+--
+-- Name: fk3f60b314a93a78cc; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY ho_vc_link
+    ADD CONSTRAINT fk3f60b314a93a78cc FOREIGN KEY (stm_link_id) REFERENCES stm_link(stm_link_id);
+
+
+--
+-- Name: fk41f156562113f503; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY provisioning_domain
-    ADD CONSTRAINT fk41f1565644aa8e22 FOREIGN KEY (admindomain) REFERENCES admin_domain(domain_id);
-
-
---
--- Name: fk41f156564d263e26; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY provisioning_domain
-    ADD CONSTRAINT fk41f156564d263e26 FOREIGN KEY (admindomain) REFERENCES admin_domain(domain_id);
-
-
---
--- Name: fk4a2411d5bbb685a; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY range
-    ADD CONSTRAINT fk4a2411d5bbb685a FOREIGN KEY (con_id) REFERENCES range_constraint(con_id);
+    ADD CONSTRAINT fk41f156562113f503 FOREIGN KEY (admin_domain) REFERENCES admin_domain(domain_id);
 
 
 --
@@ -1893,27 +1733,11 @@ ALTER TABLE ONLY range
 
 
 --
--- Name: fk4dfb302b457422a1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pcon_add_constraints
-    ADD CONSTRAINT fk4dfb302b457422a1 FOREIGN KEY (pcon_id) REFERENCES path_constraint(pcon_id);
-
-
---
 -- Name: fk4dfb302b8a96b69d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pcon_add_constraints
     ADD CONSTRAINT fk4dfb302b8a96b69d FOREIGN KEY (pcon_id) REFERENCES path_constraint(pcon_id);
-
-
---
--- Name: fk4dfb302b8fc25c1e; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pcon_add_constraints
-    ADD CONSTRAINT fk4dfb302b8fc25c1e FOREIGN KEY (constraint_id) REFERENCES additive_constraint(con_id);
 
 
 --
@@ -1925,11 +1749,11 @@ ALTER TABLE ONLY pcon_add_constraints
 
 
 --
--- Name: fk573948fd457422a1; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk564d9cafd9e5f55e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY pcon_add_names
-    ADD CONSTRAINT fk573948fd457422a1 FOREIGN KEY (pcon_id) REFERENCES path_constraint(pcon_id);
+ALTER TABLE ONLY mpls_link
+    ADD CONSTRAINT fk564d9cafd9e5f55e FOREIGN KEY (link_id) REFERENCES generic_link(link_id);
 
 
 --
@@ -1938,22 +1762,6 @@ ALTER TABLE ONLY pcon_add_names
 
 ALTER TABLE ONLY pcon_add_names
     ADD CONSTRAINT fk573948fd8a96b69d FOREIGN KEY (pcon_id) REFERENCES path_constraint(pcon_id);
-
-
---
--- Name: fk5b676bb3457422a1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pcon_minval_constraints
-    ADD CONSTRAINT fk5b676bb3457422a1 FOREIGN KEY (pcon_id) REFERENCES path_constraint(pcon_id);
-
-
---
--- Name: fk5b676bb37eb58ad1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pcon_minval_constraints
-    ADD CONSTRAINT fk5b676bb37eb58ad1 FOREIGN KEY (constraint_id) REFERENCES minval_constraint(con_id);
 
 
 --
@@ -1973,99 +1781,67 @@ ALTER TABLE ONLY pcon_minval_constraints
 
 
 --
--- Name: fk61e7a62d1b9c6e4b; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk6130883f21cdd1a1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY stm_link
-    ADD CONSTRAINT fk61e7a62d1b9c6e4b FOREIGN KEY (stm_link_id) REFERENCES generic_link(link_id);
-
-
---
--- Name: fk61e7a62d239669d3; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY stm_link
-    ADD CONSTRAINT fk61e7a62d239669d3 FOREIGN KEY (och_id) REFERENCES och(och_id);
+ALTER TABLE ONLY spanning_tree
+    ADD CONSTRAINT fk6130883f21cdd1a1 FOREIGN KEY (vlan_id) REFERENCES vlan(vlan_id);
 
 
 --
--- Name: fk61e7a62d2c1219d7; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk6130883f7d93788c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY stm_link
-    ADD CONSTRAINT fk61e7a62d2c1219d7 FOREIGN KEY (och_id) REFERENCES och(och_id);
-
-
---
--- Name: fk61e7a62d6bd730cc; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY stm_link
-    ADD CONSTRAINT fk61e7a62d6bd730cc FOREIGN KEY (stm_type_id) REFERENCES stm_type(stm_type_id);
+ALTER TABLE ONLY spanning_tree
+    ADD CONSTRAINT fk6130883f7d93788c FOREIGN KEY (link_id) REFERENCES eth_link(link_id);
 
 
 --
--- Name: fk61e7a62d6f333ed0; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk66f9a865239669d3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY stm_link
-    ADD CONSTRAINT fk61e7a62d6f333ed0 FOREIGN KEY (stm_type_id) REFERENCES stm_type(stm_type_id);
-
-
---
--- Name: fk61e7a62dc8b953c7; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY stm_link
-    ADD CONSTRAINT fk61e7a62dc8b953c7 FOREIGN KEY (stm_link_id) REFERENCES generic_link(link_id);
+ALTER TABLE ONLY och_link
+    ADD CONSTRAINT fk66f9a865239669d3 FOREIGN KEY (och_id) REFERENCES och(och_id);
 
 
 --
--- Name: fk69d2641a6f833a2; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk66f9a8652404c0d8; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY interdomain_node
-    ADD CONSTRAINT fk69d2641a6f833a2 FOREIGN KEY (provisioningdomain) REFERENCES provisioning_domain(provdomain_id);
-
-
---
--- Name: fk69d2641b1753026; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY interdomain_node
-    ADD CONSTRAINT fk69d2641b1753026 FOREIGN KEY (provisioningdomain) REFERENCES provisioning_domain(provdomain_id);
+ALTER TABLE ONLY och_link
+    ADD CONSTRAINT fk66f9a8652404c0d8 FOREIGN KEY (ops_link_id) REFERENCES ops_link(ops_link_id);
 
 
 --
--- Name: fk6cf6cea52a317f33; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk67d894913d1567ad; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY ho_vc_group
-    ADD CONSTRAINT fk6cf6cea52a317f33 FOREIGN KEY (ho_vc_group_id) REFERENCES generic_connection(generic_connection_id);
-
-
---
--- Name: fk6cf6cea52f8fa6b7; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY ho_vc_group
-    ADD CONSTRAINT fk6cf6cea52f8fa6b7 FOREIGN KEY (ho_vc_group_id) REFERENCES generic_connection(generic_connection_id);
+ALTER TABLE ONLY generic_interface
+    ADD CONSTRAINT fk67d894913d1567ad FOREIGN KEY (node_id) REFERENCES node(node_id);
 
 
 --
--- Name: fk6cf6cea5db66b58c; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk67d89491576c337a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY ho_vc_group
-    ADD CONSTRAINT fk6cf6cea5db66b58c FOREIGN KEY (vlan_tag_id) REFERENCES vlan_tag(vlan_tag_id);
+ALTER TABLE ONLY generic_interface
+    ADD CONSTRAINT fk67d89491576c337a FOREIGN KEY (interface_type_id) REFERENCES interface_type(interface_type_id);
 
 
 --
--- Name: fk6cf6cea5dec2c390; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk67d894918ee852f5; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY ho_vc_group
-    ADD CONSTRAINT fk6cf6cea5dec2c390 FOREIGN KEY (vlan_tag_id) REFERENCES vlan_tag(vlan_tag_id);
+ALTER TABLE ONLY generic_interface
+    ADD CONSTRAINT fk67d894918ee852f5 FOREIGN KEY (version_id) REFERENCES version_info(version_id);
+
+
+--
+-- Name: fk67d89491c59b512b; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY generic_interface
+    ADD CONSTRAINT fk67d89491c59b512b FOREIGN KEY (parent_interface_id) REFERENCES generic_interface(interface_id);
 
 
 --
@@ -2077,19 +1853,27 @@ ALTER TABLE ONLY range_constraint
 
 
 --
--- Name: fk6eaa323f8b30e16d; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk7c35c5821fcc6073; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY range_constraint
-    ADD CONSTRAINT fk6eaa323f8b30e16d FOREIGN KEY (con_id) REFERENCES network_constraint(con_id);
+ALTER TABLE ONLY generic_link
+    ADD CONSTRAINT fk7c35c5821fcc6073 FOREIGN KEY (start_interface_id) REFERENCES generic_interface(interface_id);
 
 
 --
--- Name: fk882e936f1d348e30; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk7c35c5824648689a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY intradomain_reservation
-    ADD CONSTRAINT fk882e936f1d348e30 FOREIGN KEY (path_id) REFERENCES intradomain_path(pathid);
+ALTER TABLE ONLY generic_link
+    ADD CONSTRAINT fk7c35c5824648689a FOREIGN KEY (end_interface_id) REFERENCES generic_interface(interface_id);
+
+
+--
+-- Name: fk7c35c5828ee852f5; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY generic_link
+    ADD CONSTRAINT fk7c35c5828ee852f5 FOREIGN KEY (version_id) REFERENCES version_info(version_id);
 
 
 --
@@ -2105,23 +1889,7 @@ ALTER TABLE ONLY intradomain_reservation
 --
 
 ALTER TABLE ONLY intradomain_reservation
-    ADD CONSTRAINT fk882e936f6257222c FOREIGN KEY (path_id) REFERENCES intradomain_path(pathid);
-
-
---
--- Name: fk882e936fdb1a8964; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY intradomain_reservation
-    ADD CONSTRAINT fk882e936fdb1a8964 FOREIGN KEY (params_id) REFERENCES reservation_params(id);
-
-
---
--- Name: fk8a74d0e0457422a1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pcon_bool_names
-    ADD CONSTRAINT fk8a74d0e0457422a1 FOREIGN KEY (pcon_id) REFERENCES path_constraint(pcon_id);
+    ADD CONSTRAINT fk882e936f6257222c FOREIGN KEY (path_id) REFERENCES intradomain_path(path_id);
 
 
 --
@@ -2133,27 +1901,35 @@ ALTER TABLE ONLY pcon_bool_names
 
 
 --
--- Name: fk948601739f99c3b6; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk9250864d1b9c6e4b; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY stm_link
+    ADD CONSTRAINT fk9250864d1b9c6e4b FOREIGN KEY (stm_link_id) REFERENCES generic_link(link_id);
+
+
+--
+-- Name: fk9250864d239669d3; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY stm_link
+    ADD CONSTRAINT fk9250864d239669d3 FOREIGN KEY (och_id) REFERENCES och(och_id);
+
+
+--
+-- Name: fk9250864d6bd730cc; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY stm_link
+    ADD CONSTRAINT fk9250864d6bd730cc FOREIGN KEY (stm_type_id) REFERENCES stm_type(stm_type_id);
+
+
+--
+-- Name: fk94860173971e13b2; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY bod_user
-    ADD CONSTRAINT fk948601739f99c3b6 FOREIGN KEY (homedomain) REFERENCES admin_domain(domain_id);
-
-
---
--- Name: fk957f59792a48762a; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY reservation_params
-    ADD CONSTRAINT fk957f59792a48762a FOREIGN KEY (pathconstraintsingress) REFERENCES path_constraint(pcon_id);
-
-
---
--- Name: fk957f59792a48762b; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY reservation_params
-    ADD CONSTRAINT fk957f59792a48762b FOREIGN KEY (pathconstraintsegress) REFERENCES path_constraint(pcon_id);
+    ADD CONSTRAINT fk94860173971e13b2 FOREIGN KEY (homedomain) REFERENCES admin_domain(domain_id);
 
 
 --
@@ -2173,6 +1949,14 @@ ALTER TABLE ONLY reservation_params
 
 
 --
+-- Name: fk957f5979fa2cb018; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY reservation_params
+    ADD CONSTRAINT fk957f5979fa2cb018 FOREIGN KEY (authparameters) REFERENCES user_auth_params(id);
+
+
+--
 -- Name: fk984c94305988bff1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2181,99 +1965,43 @@ ALTER TABLE ONLY additive_constraint
 
 
 --
--- Name: fk984c94308b30e16d; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk9ec5f1dd21cdd1a1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY additive_constraint
-    ADD CONSTRAINT fk984c94308b30e16d FOREIGN KEY (con_id) REFERENCES network_constraint(con_id);
+ALTER TABLE ONLY vlan_port
+    ADD CONSTRAINT fk9ec5f1dd21cdd1a1 FOREIGN KEY (vlan_id) REFERENCES vlan(vlan_id);
 
 
 --
--- Name: fka10f52953f39b1e0; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk9ec5f1ddee320bb6; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY vlan_port
+    ADD CONSTRAINT fk9ec5f1ddee320bb6 FOREIGN KEY (interface_id) REFERENCES generic_interface(interface_id);
+
+
+--
+-- Name: fka10f52952a6bc364; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY service
-    ADD CONSTRAINT fka10f52953f39b1e0 FOREIGN KEY (bod_user) REFERENCES bod_user(name);
+    ADD CONSTRAINT fka10f52952a6bc364 FOREIGN KEY (bod_user) REFERENCES bod_user(name);
 
 
 --
--- Name: fka5af803f1e638d08; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkac7356852f8fa6b7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY spanning_tree
-    ADD CONSTRAINT fka5af803f1e638d08 FOREIGN KEY (link_id) REFERENCES eth_link(link_id);
-
-
---
--- Name: fka5af803f21cdd1a1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY spanning_tree
-    ADD CONSTRAINT fka5af803f21cdd1a1 FOREIGN KEY (vlan_id) REFERENCES vlan(vlan_id);
+ALTER TABLE ONLY ho_vc_group
+    ADD CONSTRAINT fkac7356852f8fa6b7 FOREIGN KEY (ho_vc_group_id) REFERENCES generic_connection(generic_connection_id);
 
 
 --
--- Name: fka5af803f7d93788c; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkac735685db66b58c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY spanning_tree
-    ADD CONSTRAINT fka5af803f7d93788c FOREIGN KEY (link_id) REFERENCES eth_link(link_id);
-
-
---
--- Name: fka5af803fbe5e6ea5; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY spanning_tree
-    ADD CONSTRAINT fka5af803fbe5e6ea5 FOREIGN KEY (vlan_id) REFERENCES vlan(vlan_id);
-
-
---
--- Name: fkab0ef6e08702dada; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY eth_link
-    ADD CONSTRAINT fkab0ef6e08702dada FOREIGN KEY (link_id) REFERENCES generic_link(link_id);
-
-
---
--- Name: fkab0ef6e0d9e5f55e; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY eth_link
-    ADD CONSTRAINT fkab0ef6e0d9e5f55e FOREIGN KEY (link_id) REFERENCES generic_link(link_id);
-
-
---
--- Name: fkae729cafd9e5f55e; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY mpls_link
-    ADD CONSTRAINT fkae729cafd9e5f55e FOREIGN KEY (link_id) REFERENCES generic_link(link_id);
-
-
---
--- Name: fkafd9f894102e372; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY sdh_port
-    ADD CONSTRAINT fkafd9f894102e372 FOREIGN KEY (port_id) REFERENCES generic_interface(interface_id);
-
-
---
--- Name: fkafd9f89833fbb6e; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY sdh_port
-    ADD CONSTRAINT fkafd9f89833fbb6e FOREIGN KEY (port_id) REFERENCES generic_interface(interface_id);
-
-
---
--- Name: fkb3aca85457422a1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pcon_minval_names
-    ADD CONSTRAINT fkb3aca85457422a1 FOREIGN KEY (pcon_id) REFERENCES path_constraint(pcon_id);
+ALTER TABLE ONLY ho_vc_group
+    ADD CONSTRAINT fkac735685db66b58c FOREIGN KEY (vlan_tag_id) REFERENCES vlan_tag(vlan_tag_id);
 
 
 --
@@ -2285,107 +2013,43 @@ ALTER TABLE ONLY pcon_minval_names
 
 
 --
--- Name: fkb5e938093e2d7e16; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkb9f6741dee320bb6; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY domainsids
-    ADD CONSTRAINT fkb5e938093e2d7e16 FOREIGN KEY (gcon_id) REFERENCES global_constraints(gcon_id);
-
-
---
--- Name: fkb5e93809b75ff91a; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY domainsids
-    ADD CONSTRAINT fkb5e93809b75ff91a FOREIGN KEY (gcon_id) REFERENCES global_constraints(gcon_id);
+ALTER TABLE ONLY eth_logical_port
+    ADD CONSTRAINT fkb9f6741dee320bb6 FOREIGN KEY (interface_id) REFERENCES generic_interface(interface_id);
 
 
 --
--- Name: fkb73f7ac3abf533ba; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY eth_physical_port
-    ADD CONSTRAINT fkb73f7ac3abf533ba FOREIGN KEY (interface_id) REFERENCES generic_interface(interface_id);
-
-
---
--- Name: fkb73f7ac3ee320bb6; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY eth_physical_port
-    ADD CONSTRAINT fkb73f7ac3ee320bb6 FOREIGN KEY (interface_id) REFERENCES generic_interface(interface_id);
-
-
---
--- Name: fkbecc0e463c053871; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkc44642668ee852f5; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY generic_connection
-    ADD CONSTRAINT fkbecc0e463c053871 FOREIGN KEY (version_id) REFERENCES version_info(version_id);
+    ADD CONSTRAINT fkc44642668ee852f5 FOREIGN KEY (version_id) REFERENCES version_info(version_id);
 
 
 --
--- Name: fkbecc0e468702dada; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY generic_connection
-    ADD CONSTRAINT fkbecc0e468702dada FOREIGN KEY (link_id) REFERENCES generic_link(link_id);
-
-
---
--- Name: fkbecc0e468ee852f5; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkc44642668fe190cd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY generic_connection
-    ADD CONSTRAINT fkbecc0e468ee852f5 FOREIGN KEY (version_id) REFERENCES version_info(version_id);
+    ADD CONSTRAINT fkc44642668fe190cd FOREIGN KEY (path_id) REFERENCES path(path_id);
 
 
 --
--- Name: fkbecc0e468fe190cd; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY generic_connection
-    ADD CONSTRAINT fkbecc0e468fe190cd FOREIGN KEY (path_id) REFERENCES path(path_id);
-
-
---
--- Name: fkbecc0e46933d9ed1; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkc4464266d9e5f55e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY generic_connection
-    ADD CONSTRAINT fkbecc0e46933d9ed1 FOREIGN KEY (path_id) REFERENCES path(path_id);
+    ADD CONSTRAINT fkc4464266d9e5f55e FOREIGN KEY (link_id) REFERENCES generic_link(link_id);
 
 
 --
--- Name: fkbecc0e46d9e5f55e; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY generic_connection
-    ADD CONSTRAINT fkbecc0e46d9e5f55e FOREIGN KEY (link_id) REFERENCES generic_link(link_id);
-
-
---
--- Name: fkd25fa15d110d2abb; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkd25fa15d6257222c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY glink_to_intrapath
-    ADD CONSTRAINT fkd25fa15d110d2abb FOREIGN KEY (pathid) REFERENCES intradomain_path(pathid);
-
-
---
--- Name: fkd25fa15d529be893; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY glink_to_intrapath
-    ADD CONSTRAINT fkd25fa15d529be893 FOREIGN KEY (glink_id) REFERENCES generic_link(link_id);
-
-
---
--- Name: fkd25fa15d562fbeb7; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY glink_to_intrapath
-    ADD CONSTRAINT fkd25fa15d562fbeb7 FOREIGN KEY (pathid) REFERENCES intradomain_path(pathid);
+    ADD CONSTRAINT fkd25fa15d6257222c FOREIGN KEY (path_id) REFERENCES intradomain_path(path_id);
 
 
 --
@@ -2397,19 +2061,11 @@ ALTER TABLE ONLY glink_to_intrapath
 
 
 --
--- Name: fkd36c82072c66b21f; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkd2d9109d3e2d7e16; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY pcon_range_constraints
-    ADD CONSTRAINT fkd36c82072c66b21f FOREIGN KEY (constraint_id) REFERENCES range_constraint(con_id);
-
-
---
--- Name: fkd36c8207457422a1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pcon_range_constraints
-    ADD CONSTRAINT fkd36c8207457422a1 FOREIGN KEY (pcon_id) REFERENCES path_constraint(pcon_id);
+ALTER TABLE ONLY domain_ids
+    ADD CONSTRAINT fkd2d9109d3e2d7e16 FOREIGN KEY (gcon_id) REFERENCES global_constraints(gcon_id);
 
 
 --
@@ -2437,38 +2093,6 @@ ALTER TABLE ONLY domain_constraints
 
 
 --
--- Name: fkd4675b1bb75ff91a; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY domain_constraints
-    ADD CONSTRAINT fkd4675b1bb75ff91a FOREIGN KEY (gcon_id) REFERENCES global_constraints(gcon_id);
-
-
---
--- Name: fkd776d3ddabf533ba; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY eth_logical_port
-    ADD CONSTRAINT fkd776d3ddabf533ba FOREIGN KEY (interface_id) REFERENCES generic_interface(interface_id);
-
-
---
--- Name: fkd776d3ddee320bb6; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY eth_logical_port
-    ADD CONSTRAINT fkd776d3ddee320bb6 FOREIGN KEY (interface_id) REFERENCES generic_interface(interface_id);
-
-
---
--- Name: fkd9142fd9457422a1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pcon_range_names
-    ADD CONSTRAINT fkd9142fd9457422a1 FOREIGN KEY (pcon_id) REFERENCES path_constraint(pcon_id);
-
-
---
 -- Name: fkd9142fd98a96b69d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2477,115 +2101,35 @@ ALTER TABLE ONLY pcon_range_names
 
 
 --
--- Name: fke38a50d130e5a9f6; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkdb77d700d9e5f55e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY generic_interface
-    ADD CONSTRAINT fke38a50d130e5a9f6 FOREIGN KEY (interface_type_id) REFERENCES interface_type(interface_type_id);
-
-
---
--- Name: fke38a50d13c053871; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY generic_interface
-    ADD CONSTRAINT fke38a50d13c053871 FOREIGN KEY (version_id) REFERENCES version_info(version_id);
+ALTER TABLE ONLY eth_link
+    ADD CONSTRAINT fkdb77d700d9e5f55e FOREIGN KEY (link_id) REFERENCES generic_link(link_id);
 
 
 --
--- Name: fke38a50d13d1567ad; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fke6bfd77e3d1567ad; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY generic_interface
-    ADD CONSTRAINT fke38a50d13d1567ad FOREIGN KEY (node_id) REFERENCES node(node_id);
-
-
---
--- Name: fke38a50d1407175b1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY generic_interface
-    ADD CONSTRAINT fke38a50d1407175b1 FOREIGN KEY (node_id) REFERENCES node(node_id);
+ALTER TABLE ONLY sdh_device
+    ADD CONSTRAINT fke6bfd77e3d1567ad FOREIGN KEY (node_id) REFERENCES node(node_id);
 
 
 --
--- Name: fke38a50d1576c337a; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fke6bfd77ed4c4f622; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY generic_interface
-    ADD CONSTRAINT fke38a50d1576c337a FOREIGN KEY (interface_type_id) REFERENCES interface_type(interface_type_id);
-
-
---
--- Name: fke38a50d1835e792f; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY generic_interface
-    ADD CONSTRAINT fke38a50d1835e792f FOREIGN KEY (parent_interface_id) REFERENCES generic_interface(interface_id);
+ALTER TABLE ONLY sdh_device
+    ADD CONSTRAINT fke6bfd77ed4c4f622 FOREIGN KEY (sdh_domain_id) REFERENCES sdh_domain(sdh_domain_id);
 
 
 --
--- Name: fke38a50d18ee852f5; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fkefdbbea3ee320bb6; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY generic_interface
-    ADD CONSTRAINT fke38a50d18ee852f5 FOREIGN KEY (version_id) REFERENCES version_info(version_id);
-
-
---
--- Name: fke38a50d1c59b512b; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY generic_interface
-    ADD CONSTRAINT fke38a50d1c59b512b FOREIGN KEY (parent_interface_id) REFERENCES generic_interface(interface_id);
-
-
---
--- Name: fkf053ed621fcc6073; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY generic_link
-    ADD CONSTRAINT fkf053ed621fcc6073 FOREIGN KEY (start_interface_id) REFERENCES generic_interface(interface_id);
-
-
---
--- Name: fkf053ed623c053871; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY generic_link
-    ADD CONSTRAINT fkf053ed623c053871 FOREIGN KEY (version_id) REFERENCES version_info(version_id);
-
-
---
--- Name: fkf053ed6240b909e; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY generic_link
-    ADD CONSTRAINT fkf053ed6240b909e FOREIGN KEY (end_interface_id) REFERENCES generic_interface(interface_id);
-
-
---
--- Name: fkf053ed624648689a; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY generic_link
-    ADD CONSTRAINT fkf053ed624648689a FOREIGN KEY (end_interface_id) REFERENCES generic_interface(interface_id);
-
-
---
--- Name: fkf053ed628ee852f5; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY generic_link
-    ADD CONSTRAINT fkf053ed628ee852f5 FOREIGN KEY (version_id) REFERENCES version_info(version_id);
-
-
---
--- Name: fkf053ed62dd8f8877; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY generic_link
-    ADD CONSTRAINT fkf053ed62dd8f8877 FOREIGN KEY (start_interface_id) REFERENCES generic_interface(interface_id);
+ALTER TABLE ONLY eth_physical_port
+    ADD CONSTRAINT fkefdbbea3ee320bb6 FOREIGN KEY (interface_id) REFERENCES generic_interface(interface_id);
 
 
 --
@@ -2597,57 +2141,16 @@ ALTER TABLE ONLY boolean_constraint
 
 
 --
--- Name: fkf5ca8a748b30e16d; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
 --
 
-ALTER TABLE ONLY boolean_constraint
-    ADD CONSTRAINT fkf5ca8a748b30e16d FOREIGN KEY (con_id) REFERENCES network_constraint(con_id);
-
-
---
--- Name: fkf6eaf1dd21cdd1a1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY vlan_port
-    ADD CONSTRAINT fkf6eaf1dd21cdd1a1 FOREIGN KEY (vlan_id) REFERENCES vlan(vlan_id);
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
 --
--- Name: fkf6eaf1ddabf533ba; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- PostgreSQL database dump complete
 --
-
-ALTER TABLE ONLY vlan_port
-    ADD CONSTRAINT fkf6eaf1ddabf533ba FOREIGN KEY (interface_id) REFERENCES generic_interface(interface_id);
-
-
---
--- Name: fkf6eaf1ddbe5e6ea5; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY vlan_port
-    ADD CONSTRAINT fkf6eaf1ddbe5e6ea5 FOREIGN KEY (vlan_id) REFERENCES vlan(vlan_id);
-
-
---
--- Name: fkf6eaf1ddee320bb6; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY vlan_port
-    ADD CONSTRAINT fkf6eaf1ddee320bb6 FOREIGN KEY (interface_id) REFERENCES generic_interface(interface_id);
-
-
---
--- Name: fkf90719671d9b5e4d; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY ops_link
-    ADD CONSTRAINT fkf90719671d9b5e4d FOREIGN KEY (ops_link_id) REFERENCES generic_link(link_id);
-
-
---
--- Name: fkf9071967707e78d1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY ops_link
-    ADD CONSTRAINT fkf9071967707e78d1 FOREIGN KEY (ops_link_id) REFERENCES generic_link(link_id);
 
