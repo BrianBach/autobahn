@@ -5,10 +5,6 @@ import javax.xml.ws.Service;
 import javax.xml.ws.soap.SOAPBinding;
 import net.geant.autobahn.administration.Administration;
 
-import net.geant.autobahn.network.Link;
-
-import java.util.List;
-
 public class AdministrationSampleClient {
 
     private static final QName SERVICE_NAME = new QName("http://administration.autobahn.geant.net/", "AdministrationService");
