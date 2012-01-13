@@ -173,6 +173,7 @@ label {
         	<td></td>
         	<td style="text-align:left"><input id="logbutton" name="Login" value="Log in" type="submit" class="btnsize"/><input id="cancel" name="Cancel" value="Cancel" type="submit" class="btnsize" onclick="window.location='../portal/home.htm'" /></td>
         </tr>
+        <!--tr><td class="error" colspan="2"><b>Please note that the pilot is currently under debugging / testing so functionalities may not be working</b></td></tr-->
       </table>
      
  </form>
