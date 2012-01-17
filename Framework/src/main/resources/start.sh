@@ -1,4 +1,5 @@
 #!/bin/bash
+PID_FILE=lock/pid
 OLD_PATH=`pwd`
 
 #this loads the path where the script file is located
@@ -15,6 +16,8 @@ fi
 CONFIG=etc/cxf/cxf.xml
 
 cd $FILE_PATH
+mkdir -p lock
+
 CP=.
 for i in `ls lib/*.jar`; do CP=$CP:$i; done
 rm -f ./nohup.out;
@@ -38,6 +41,8 @@ else
     echo "Starting autobahn daemon"
     touch ./nohup.out
     nohup $AUTOBAHN &
+    pid=$!
+    echo $pid >$PID_FILE
     cd $OLD_PATH
     tail -f $FILE_PATH/nohup.out
 fi
