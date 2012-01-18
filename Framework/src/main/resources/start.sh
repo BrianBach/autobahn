@@ -30,6 +30,19 @@ AUTOBAHN="java -Dcxf.config.file=$CONFIG -Dorg.apache.cxf.Logger=org.apache.cxf.
 line=`sed 's/[#!].*$//g' $FILE |grep "framework.commandLine"`
 framework_commandLine=`echo $line |sed 's/framework.commandLine//g'| tr -d '' | tr -d '=' | tr -d ':'`
 
+if [ -e $PID_FILE ] ; then
+  pid=`cat $PID_FILE`  
+  name=`ps -p $pid -o comm= 2>/dev/null`
+  
+  if [ $name ] && [ $name == "java" ] ; then    
+    echo "seems that Autobahn is already running"
+    exit
+  else
+    rm $PID_FILE
+  fi
+fi
+
+
 #if the framework_commandLine property has been set to interactive
 #we do not start the autobahn as daemon
 if [ "$framework_commandLine" == "interactive" ]
