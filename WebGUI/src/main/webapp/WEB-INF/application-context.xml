@@ -7,8 +7,6 @@
 		                   http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
 						   http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.xsd">
 						
-	<import resource="ports-mapping.xml"/>
-	
 	<bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basename" value="messages" />
@@ -17,7 +15,6 @@
 	<bean id="manager" class="net.geant.autobahn.autoBahnGUI.manager.ManagerImpl">
 		<property name="notifier" ref="topologyFinder"/>
 		<property name="tearDownTime" value="60000"/>
-		<property name="portsMapper" ref="portsMapper"/>
 	</bean>
 	
 	<bean id="topologyFinder" class="net.geant.autobahn.autoBahnGUI.topology.TopologyFinder">

@@ -16,6 +16,7 @@ import net.geant.autobahn.administration.StatisticsType;
 import net.geant.autobahn.administration.Status;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.useraccesspoint.ModifyRequest;
+import net.geant.autobahn.useraccesspoint.PortType;
 import net.geant.autobahn.useraccesspoint.ReservationRequest;
 import net.geant.autobahn.useraccesspoint.ServiceRequest;
 import net.geant.autobahn.useraccesspoint.ServiceResponse;
@@ -69,10 +70,10 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 	private long lastStatusUpdateInMillis;
 	
 	/**
-	 * IDM managed ports
+	 * IDM managed port types
 	 */
-	private String[] ports;
-
+	private List<PortType> ports;
+	
 	/**
 	 * IDM logs 
 	 */
@@ -117,7 +118,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 	 * @return connected Administration web service interface
 	 */
 	public static Administration connectAdministration (String url){
-		String address = url+"/administration";
+		String address = url + "/administration";
 		AdministrationService service = new AdministrationService(address);
     	Administration admin = service.getAdministrationPort();
 	    return admin; 
@@ -130,7 +131,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 	 * @return connected UserAccessPoint web service interface
 	 */
 	public static UserAccessPoint connectUserAccessPoint (String url){
-		String address = url+"/uap";	
+		String address = url + "/uap";	
 	    UserAccessPointService service = new UserAccessPointService(address);
 	    UserAccessPoint admin = service.getUserAccessPointPort();
 	    return admin; 
@@ -186,7 +187,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 			try{
 				return administration.getLog(all);
 			}catch (Exception e){
-				logger.error ("Cannot reservation from idm:"+e.getClass().getName()+":"+e.getMessage());
+				logger.error ("Cannot reservation from idm:" + e.getClass().getName() + ":" + e.getMessage());
 			}
 		}
 		return null;
@@ -202,7 +203,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
             try {
                 return administration.getStatistics(all);
             } catch (Exception e) {
-                logger.error("Cannot retrieve statistics from idm:"+e.getClass().getName()+":"+e.getMessage());
+                logger.error("Cannot retrieve statistics from idm:" + e.getClass().getName() + ":" + e.getMessage());
             }
         }
         return null;
@@ -218,7 +219,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 			try{
 			    return administration.getProperties();
 			} catch (Exception e){
-				logger.error ("Cannot reservation from idm:"+e.getClass().getName()+":"+e.getMessage());
+				logger.error ("Cannot reservation from idm:" + e.getClass().getName() + ":" + e.getMessage());
 			}
 		}
 		return null;
@@ -234,7 +235,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 			try{
 				return administration.getReservation(resID);
 			}catch (Exception e){
-				logger.error ("Cannot reservation from idm:"+e.getClass().getName()+":"+e.getMessage());
+				logger.error ("Cannot reservation from idm:" + e.getClass().getName() + ":" + e.getMessage());
 			}
 		}
 		return null;
@@ -251,7 +252,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 			try{
 				return administration.getTopology();
 			}catch (Exception e){
-				logger.error ("Cannot get topology from idm:"+e.getClass().getName()+":"+e.getMessage());
+				logger.error ("Cannot get topology from idm:" + e.getClass().getName() + ":" + e.getMessage());
 			}
 		}
 		return null;
@@ -267,7 +268,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 			try{
 				administration.setProperties(properties);
 			}catch (Exception e){
-				logger.error ("Cannot set properties for idm:"+e.getClass().getName()+":"+e.getMessage());
+				logger.error ("Cannot set properties for idm:" + e.getClass().getName() + ":" + e.getMessage());
 			}
 	}
 
@@ -335,7 +336,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 			}
 		}
 		}catch (Exception e){
-			logger.error ("Cannot get service from idm:"+e.getClass().getName()+":"+e.getMessage());
+			logger.error ("Cannot get service from idm:" + e.getClass().getName() + ":" + e.getMessage());
 		}
 		return null;
 	}
@@ -386,7 +387,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 		try{
 			servicesIdm = administration.getServices();
 		}catch (Exception e){
-			logger.error("Cannot get services from:"+identifier+":"+e.getClass().getName()+":"+e.getMessage());
+			logger.error("Cannot get services from:" + identifier + ":"+e.getClass().getName() + ":" + e.getMessage());
 		}
 		return servicesIdm;
 	}
@@ -524,7 +525,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 	 * Sets ports managed by IDM
 	 * @ports 
 	 */
-	public void setPorts(String[] ports) {
+	public void setPorts(List<PortType> ports) {
 		this.ports = ports;
 	}
 	
@@ -538,7 +539,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
             if (isUserAccessPointConnected())
                 return userAccessPoint.getAllDomains();
         } catch (Exception e ){
-            logger.error ("Problem with getting domains:"+e.getClass().getName()+":"+e.getMessage());
+            logger.error ("Problem with getting domains:" + e.getClass().getName() + ":" + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -554,7 +555,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
             if (isUserAccessPointConnected())
                 return userAccessPoint.getAllDomains_NonClient();
         } catch (Exception e ){
-            logger.error ("Problem with getting non-client domains:"+e.getClass().getName()+":"+e.getMessage());
+            logger.error ("Problem with getting non-client domains:" + e.getClass().getName() + ":" + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -570,7 +571,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
             if (isUserAccessPointConnected())
                 return userAccessPoint.getAllLinks();
         } catch (Exception e ){
-            logger.error ("Problem with getting links:"+e.getClass().getName()+":"+e.getMessage());
+            logger.error ("Problem with getting links:" + e.getClass().getName() + ":" + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -586,7 +587,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
             if (isUserAccessPointConnected())
                 return userAccessPoint.getAllLinks_NonClient();
         } catch (Exception e ){
-            logger.error ("Problem with getting non-client links:"+e.getClass().getName()+":"+e.getMessage());
+            logger.error ("Problem with getting non-client links:" + e.getClass().getName() + ":" + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -597,7 +598,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 	 * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getAllClientPorts()
 	 */
     @Override
-	public String[] getAllClientPorts() throws UserAccessPointException {
+	public List<PortType> getAllClientPorts() throws UserAccessPointException {
 		try{
     		if (isUserAccessPointConnected()) {
     			return userAccessPoint.getAllClientPorts();
@@ -615,7 +616,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
      * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getIdcpPorts()
      */
     @Override
-    public String[] getIdcpPorts() {
+    public List<PortType> getIdcpPorts() {
         try{
         if (isUserAccessPointConnected())
             return userAccessPoint.getIdcpPorts();
@@ -630,7 +631,7 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 	 * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getDomainClientPorts()
 	 */
     @Override
-	public String[] getDomainClientPorts() {
+	public List<PortType> getDomainClientPorts() {
 		//logger.info("Getting ports from idm:"+identifier+":"+ports);
 		if (ports != null)
 			return ports;
@@ -638,18 +639,18 @@ public class InterDomainManager implements UserAccessPoint, Administration {
 			if (isUserAccessPointConnected()) {
 				ports = userAccessPoint.getDomainClientPorts();
 				if(ports == null) {
-				    ports = new String[0];
+					ports = new ArrayList<PortType>();
 				}
 				
 				logger.info(ports);
 				return ports;
 			}
 		}catch (Exception e){
-			logger.error ("Problem with getting domain ports:"+e.getClass().getName()+":"+e.getMessage());
+			logger.error ("Problem with getting domain ports:" + e.getClass().getName() + ":" + e.getMessage());
 		}
 		return null;
 	}
-
+    
 	/**
 	 * In normal way service is cached  in InterDomainManager services collection
 	 * This method force to download service state from IDM manager directly 

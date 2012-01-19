@@ -22,7 +22,6 @@
 		<transition on="cancel" to="services" bind="false" />
 		
 		<transition on="submit" to="request-service-success" bind="true">
-			<evaluate expression="manager.demapPortsForsServiceRequest(service)"/>
 			<evaluate expression="manager.submitServiceAtInterDomainManager(service.userHomeDomain, service)" result="flowScope.serviceId"/>
 			<evaluate expression="manager.getServiceRequestTemplate()"></evaluate>		
 		</transition>

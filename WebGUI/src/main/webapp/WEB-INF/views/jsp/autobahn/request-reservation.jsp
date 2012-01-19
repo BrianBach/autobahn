@@ -223,7 +223,7 @@ function blockInputStartTime(checked) {
             <td class="label"><spring:message code="reservation.startPort"/><br /><span class="error"><form:errors path="request.startPort.address"/></span></td>
             <td class="value">
                 <form:select path="request.startPort.address" onchange="setStartFriendlyName(this.options[this.options.selectedIndex].text)">
-                    <form:options items="${friendlyports_domain}" itemValue="identifier" itemLabel="friendlyName"/>	
+                    <form:options items="${friendlyports_domain}" itemValue="address" itemLabel="friendlyName"/>	
                 </form:select>
             </td>
             <form:hidden path="request.startPortFriendlyName" />
@@ -254,7 +254,7 @@ function blockInputStartTime(checked) {
             <td class="label"><spring:message code="reservation.endPort"/></td>
             <td class="value">
                 <form:select path="request.endPort.address" onchange="setEndFriendlyName(this.options[this.options.selectedIndex].text)">
-                    <form:options items="${friendlyports_all}" itemValue="identifier" itemLabel="friendlyName"/>
+                    <form:options items="${friendlyports_all}" itemValue="address" itemLabel="friendlyName"/>
                     <option disabled="true" value="IDCP">IDCP</option>
                     <form:options items="${idcpPorts_all}" />
                 </form:select>

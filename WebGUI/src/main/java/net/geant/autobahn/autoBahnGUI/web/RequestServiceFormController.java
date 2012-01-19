@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import net.geant.autobahn.autoBahnGUI.manager.Manager;
+import net.geant.autobahn.useraccesspoint.PortType;
 import net.geant.autobahn.useraccesspoint.ReservationRequest;
 import net.geant.autobahn.useraccesspoint.ServiceRequest;
 import net.geant.autobahn.useraccesspoint.UserAccessPointException;
@@ -101,23 +102,16 @@ public class RequestServiceFormController extends SimpleFormController {
 				logger.error (e1.getClass().getName()+":"+e1.getMessage());
 			}
 			if (action.equals("add")){
-				List<String> domainPorts = manager.getInterDomainManagerPorts(service.getUserHomeDomain());
-				if (domainPorts==null)
+				List<PortType> domainPorts = manager.getInterDomainManagerPorts(service.getUserHomeDomain());
+				if (domainPorts == null)
 					try {
 						errors.rejectValue("service.userHomeDomain", "service.userHomeDomain.error", null, "There is no way to contact with IDM, or client port list is empty.");
 						return showForm(request, errors, "requestView");
 					} catch (Exception e) {
 						logger.error (e.getClass().getName()+":"+e.getMessage());
 					}	
-				List<String> mappedDomainPorts = new ArrayList <String>();
-				String mappedPort = null;
-				for (String port:domainPorts){
-					mappedPort = manager.mapPort(port);
-					if (mappedPort== null)
-						mappedDomainPorts.add(mappedPort);
-				}
 				
-				List<String> allPorts=null;
+				List<PortType> allPorts=null;
 				
 				try {
                     allPorts = manager.getAllPorts();
@@ -127,9 +121,9 @@ public class RequestServiceFormController extends SimpleFormController {
                 }
 				
 				// Add to allPorts also IDCP ports
-                List<String> allIdcpPorts = manager.getAllIdcpPorts();
-                if (allIdcpPorts!=null) {
-                    if (allPorts!=null) {
+                List<PortType> allIdcpPorts = manager.getAllIdcpPorts();
+                if (allIdcpPorts != null) {
+                    if (allPorts != null) {
                         allPorts.addAll(allIdcpPorts);
                     }
                     else {
@@ -137,12 +131,8 @@ public class RequestServiceFormController extends SimpleFormController {
                     }
                 }
                 
-				if (allPorts==null)
-					allPorts= domainPorts;
-				List<String> mappedAllPorts = new ArrayList <String>();
-				for (String port:allPorts){
-					mappedAllPorts.add(manager.mapPort(port));
-				}	
+				if (allPorts == null)
+					allPorts = domainPorts;
 				
                 List<String> allDomains = manager.getAllDomains();
                 if (allDomains==null) {
@@ -167,10 +157,10 @@ public class RequestServiceFormController extends SimpleFormController {
 				model = new ModelAndView(new RedirectView("reservationForm.htm"));
 				HttpSession session = request.getSession();
 				session.setAttribute("idm", service.getUserHomeDomain());
-				session.setAttribute("ports_all", mappedAllPorts);
+				session.setAttribute("ports_all", allPorts);
                 session.setAttribute("domains_all", allDomains);
                 session.setAttribute("links_all", allLinks);
-				session.setAttribute("ports_domain", mappedDomainPorts);
+				session.setAttribute("ports_domain", domainPorts);
 				session.setAttribute("service", service);
 				return model;
 			}else
@@ -205,7 +195,6 @@ public class RequestServiceFormController extends SimpleFormController {
 								logger.error (e.getClass().getName()+":"+e.getMessage());
 							}
 						}
-						demapPorts(service);
 						
 						String serviceId=null;
 							try {
@@ -215,7 +204,6 @@ public class RequestServiceFormController extends SimpleFormController {
 							} catch (Exception e) {
 								logger.error (e.getClass().getName()+":"+e.getMessage());
 								try {
-									mapPorts(service);
 									return showForm(request, errors, "requestView");
 								} catch (Exception e1) {
 									logger.error (e1.getClass().getName()+":"+e1.getMessage());
@@ -233,24 +221,6 @@ public class RequestServiceFormController extends SimpleFormController {
 		return model;
 	}
 
-	public void demapPorts (ServiceRequest service){
-		for(ReservationRequest reservation:service.getReservations()){
-			
-			reservation.getStartPort().setAddress(manager.demapPort(reservation.getStartPort().getAddress()));
-			reservation.getEndPort().setAddress(manager.demapPort(reservation.getEndPort().getAddress()));
-	
-		}
-	}
-	
-	public void mapPorts (ServiceRequest service){
-		for(ReservationRequest reservation:service.getReservations()){
-			
-			reservation.getStartPort().setAddress(manager.mapPort(reservation.getStartPort().getAddress()));
-			reservation.getEndPort().setAddress(manager.mapPort(reservation.getEndPort().getAddress()));
-			
-		}
-	}
-	
 	public Manager getManager() {
 		return manager;
 	}

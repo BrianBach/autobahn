@@ -59,6 +59,7 @@ import net.geant.autobahn.reservation.TimeRange;
 import net.geant.autobahn.reservation.User;
 import net.geant.autobahn.useraccesspoint.CheckListener;
 import net.geant.autobahn.useraccesspoint.ModifyRequest;
+import net.geant.autobahn.useraccesspoint.PortType;
 import net.geant.autobahn.useraccesspoint.RequestConverter;
 import net.geant.autobahn.useraccesspoint.ReservationRequest;
 import net.geant.autobahn.useraccesspoint.ReservationResponse;
@@ -625,28 +626,20 @@ public final class AccessPoint implements UserAccessPoint,
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getAllClientPorts()
 	 */
-	public String[] getAllClientPorts() {
+	public List<PortType> getAllClientPorts() {
 		
 		List<Port> cports = daos.getPortDAO().getClientPorts();
-        List<Port> clientPorts = new ArrayList<Port>();
+        List<PortType> pTypes = new ArrayList<PortType>();
         
-		for (int i=0; i < cports.size(); i++) {
-		    Port p = cports.get(i);
-		    
-            // Ignore IDCP ports
-            if (p.isIdcpPort()) {
+        for (Port port : cports) {
+        	// Ignore IDCP ports
+            if (port.isIdcpPort()) {
                 continue;
             }
-            
-            clientPorts.add(p);
-		}
-		
-        String[] cp = new String[clientPorts.size()];
-        for (int i=0; i < cp.length; i++) {
-            cp[i] = clientPorts.get(i).getBodID();
+            pTypes.add(PortType.convert(port));
         }
 
-		return cp;
+        return pTypes;
 	}
 
 	/**
@@ -654,7 +647,12 @@ public final class AccessPoint implements UserAccessPoint,
 	 * @return An array containing all client ports with friendly names (if available)
 	 */
     public String[] getAllClientPorts_Friendly() {
-        return getFriendlyNamesfromLS(getAllClientPorts());
+    	List<PortType> pTypes = getAllClientPorts();
+    	String[] cports = new String[pTypes.size()];
+    	for(int i = 0; i < pTypes.size(); i++) {
+    		cports[i] = pTypes.get(i).getAddress();
+    	}
+        return getFriendlyNamesfromLS(cports);
     }
     
     /**
@@ -695,9 +693,9 @@ public final class AccessPoint implements UserAccessPoint,
     /* (non-Javadoc)
      * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getAllIdcpPorts()
      */
-    public String[] getIdcpPorts() {
+    public List<PortType> getIdcpPorts() {
         List<Port> cports = daos.getPortDAO().getAll();
-        List<Port> idcpPorts = new ArrayList<Port>();
+        List<PortType> idcpPorts = new ArrayList<PortType>();
 
         for (int i=0; i < cports.size(); i++) {
             Port p = cports.get(i);
@@ -712,24 +710,22 @@ public final class AccessPoint implements UserAccessPoint,
             if (p.getBodID().contains("_dummyPort")) {
                 continue;
             }
-            idcpPorts.add(p);
+            
+            idcpPorts.add(PortType.convert(p));
         }
         
-        String[] cp = new String[idcpPorts.size()];
-        for (int i=0; i < cp.length; i++) {
-            cp[i] = idcpPorts.get(i).getBodID();
-        }
-        return cp;
+        return idcpPorts;
     }
 
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getDomainClientPorts()
 	 */
-	public String[] getDomainClientPorts() {
+	public List<PortType> getDomainClientPorts() {
 		List<Port> cports = daos.getPortDAO().getDomainClientPorts(domainName);
-		String[] cp = new String[cports.size()];
-		for (int i=0; i < cp.length; i++) 
-			cp[i] = cports.get(i).getBodID();
+		List<PortType> cp = new ArrayList<PortType>();
+		for(Port port : cports) {
+			cp.add(PortType.convert(port));
+		}
 		
 		return cp;
 	}
@@ -739,7 +735,13 @@ public final class AccessPoint implements UserAccessPoint,
      * @return An array containing this domain's client ports with friendly names (if available)
      */
     public String[] getDomainClientPorts_Friendly() {
-        return getFriendlyNamesfromLS(getDomainClientPorts());
+    	List<PortType> pTypes = getDomainClientPorts();
+    	String[] cp = new String[pTypes.size()];
+    	for(int i = 0; i < pTypes.size(); i++) {
+    		cp[i] = pTypes.get(i).getAddress();
+    	}
+    	
+        return getFriendlyNamesfromLS(cp);
     }
 
 	/**

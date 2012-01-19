@@ -1,5 +1,7 @@
 package net.geant.autobahn.useraccesspoint;
 
+import java.util.List;
+
 import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
@@ -48,22 +50,22 @@ public interface UserAccessPoint {
      * @return client ports
 	 * @throws UserAccessPointException 
      */
-	@WebResult(name="Ports")
-	String[] getAllClientPorts() throws UserAccessPointException;
+	@WebResult(name="PortTypes")
+	List<PortType> getAllClientPorts() throws UserAccessPointException;
 	
 	/**
      * Returns client ports the are connected to the called domain
      * @return client ports
      */
-	@WebResult(name="Ports")
-	String[] getDomainClientPorts();
+	@WebResult(name="PortTypes")
+	List<PortType> getDomainClientPorts();
 	
     /**
      * Returns actual IDCP ports in the global topology
      * @return IDCP ports
      */
-    @WebResult(name="Ports")
-    String[] getIdcpPorts();
+    @WebResult(name="PortTypes")
+    List<PortType> getIdcpPorts();
     
 	/**
 	 * Submits service

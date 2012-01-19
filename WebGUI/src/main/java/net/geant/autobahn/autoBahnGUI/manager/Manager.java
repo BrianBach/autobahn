@@ -12,6 +12,7 @@ import net.geant.autobahn.autoBahnGUI.model.ServicesFormModel;
 import net.geant.autobahn.autoBahnGUI.model.SettingsFormModel;
 import net.geant.autobahn.autoBahnGUI.model.StatisticsFormModel;
 import net.geant.autobahn.lookup.LookupService;
+import net.geant.autobahn.useraccesspoint.PortType;
 import net.geant.autobahn.useraccesspoint.ReservationRequest;
 import net.geant.autobahn.useraccesspoint.ServiceRequest;
 import net.geant.autobahn.useraccesspoint.UserAccessPointException;
@@ -135,13 +136,13 @@ public interface Manager {
      * @param idm - preferred IDM to get ports from
      * @return list of  ports names
      */
-    public List<String> getAllIdcpPorts (String idmIdentifier);
+    public List<PortType> getAllIdcpPorts (String idmIdentifier);
     
     /**
      * Gets all IDCP port names in all IDM registered in WEB GUI
      * @return list of  ports names
      */
-    public List<String> getAllIdcpPorts ();
+    public List<PortType> getAllIdcpPorts ();
 
     /**
 	 * Gets all client port identifiers
@@ -152,7 +153,7 @@ public interface Manager {
 	 * @return list of port identifiers
 	 * @throws UserAccessPointException 
 	 */
-	public List<String> getAllPorts (String idmIdentifier) throws UserAccessPointException;
+	public List<PortType> getAllPorts (String idmIdentifier) throws UserAccessPointException;
 	
     /**
      * Gets all client port identifiers
@@ -162,7 +163,7 @@ public interface Manager {
      * @return list of port identifiers
      * @throws UserAccessPointException 
      */
-    public List<String> getAllPorts () throws UserAccessPointException;
+    public List<PortType> getAllPorts () throws UserAccessPointException;
     
     /**
      * Gets all port names (with associated friendly ones from LS)
@@ -174,7 +175,7 @@ public interface Manager {
      * @return list of ports names with associated friendly ones
      * @throws UserAccessPointException 
      */
-    public List<PortMap> getAllFriendlyPorts (String idm) throws UserAccessPointException;
+    public List<PortType> getAllFriendlyPorts (String idm) throws UserAccessPointException;
     
     /**
      * Gets all port names (with associated friendly ones from LS) in all IDM
@@ -185,7 +186,7 @@ public interface Manager {
      * @return list of ports names with associated friendly ones
      * @throws UserAccessPointException 
      */
-    public List<PortMap> getAllFriendlyAndIdcpPorts (String idm) throws UserAccessPointException;
+    public List<PortType> getAllFriendlyAndIdcpPorts (String idm) throws UserAccessPointException;
 
     /**
      * Gets all domain names
@@ -216,7 +217,7 @@ public interface Manager {
 	 * @param idm identifier of the IDM
 	 * @return list of  ports names
 	 */
-	public List<String> getInterDomainManagerPorts (String idm);
+	public List<PortType> getInterDomainManagerPorts (String idm);
 
 	/**
      * Gets names of ports (with associated friendly ones from LS) 
@@ -224,7 +225,7 @@ public interface Manager {
 	 * @param idm identifier of the IDM
 	 * @return list of ports names with associated friendly ones from LS 
 	 */
-    public List<PortMap> getFriendlyInterDomainManagerPorts(String idmIdentifier);
+    public List<PortType> getFriendlyInterDomainManagerPorts(String idmIdentifier);
 
 	/**
 	 * Gets time period after with the  registered earlier IDM is mark as not accessible
@@ -232,20 +233,6 @@ public interface Manager {
 	 */
 	public long getTearDownTime();
 
-	/**
-	 * Converts the real name of the port to virtual one
-	 * 
-	 * @param port real name	
-	 * @return  virtual name
-	 */
-	public String mapPort (String port);
-
-	/**
-	 * Converts the virtual name of the port to real one
-	 * @param mapping virtual name
-	 * @return real name
-	 */
-	public String demapPort (String mapping);
 
 	/**
 	 * Checks if request reservation is possible to schedule
@@ -266,44 +253,6 @@ public interface Manager {
 	 * @return ReservationRequest template
 	 */
 	public ReservatiomDepandentOnTimezone getReservationRequestTemplate();
-
-	/**
-	 * Demaps port in ReservationRequest
-	 * @param reservation ReservationRequest
-	 */
-	public void demapPortsForReservationRequest (ReservationRequest reservation);
-
-	/**
-	 * Maps port in ReservationRequest
-	 * @param reservation ReservationRequest
-	 */
-	public void mapPortsForReservationRequest (ReservationRequest reservation);
-
-	/**
-	 * Demaps port in ReservationRequest
-	 * @param reservation ReservationRequest
-	 */
-	public void demapPortsForsServiceRequest (ServiceRequest service);
-
-	/**
-	 * Maps port in ServiceRequest
-	 * @param reservation ServiceRequest
-	 */
-	public void mapPortsForServiceRequest (ServiceRequest service);
-
-	/**
-	 * Get mapped ports names manages by IDM
-	 * @param idm identifier of IDM
-	 * @return list of mapped ports names
-	 */
-	public List<String> getMappedInterDomainManagerPorts(String idm);
-
-	/**
-	 * Get mapped ports names manages by all IDMs
-	 * @return list of mapped ports names
-	 * @throws UserAccessPointException 
-	 */
-	public List<String> getMappedAllPorts() throws UserAccessPointException;
 
 	public List<String> getReservationPriorities();
 

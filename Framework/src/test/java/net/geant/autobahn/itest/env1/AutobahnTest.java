@@ -9,6 +9,7 @@ import net.geant.autobahn.tool.mock.MockTool;
 import net.geant.autobahn.tool.mock.MockToolServer;
 import net.geant.autobahn.tool.mock.Result;
 import net.geant.autobahn.tool.mock.ToolBehaviour;
+import net.geant.autobahn.useraccesspoint.PortType;
 import net.geant.autobahn.useraccesspoint.ServiceRequest;
 import net.geant.autobahn.useraccesspoint.UserAccessPoint;
 import net.geant.autobahn.useraccesspoint.textclient.RequestParser;
@@ -74,8 +75,8 @@ public class AutobahnTest {
 		
         UserAccessPoint uap = domain1.getUserAccessPoint();
         
-        for(String p : uap.getAllClientPorts())
-        	System.out.println(p);
+        for(PortType p : uap.getAllClientPorts())
+        	System.out.println(p.getAddress());
         
 		ServiceRequest req = parser.readServiceRequest("/requests/request1.txt");
 		req.setJustification("ATest1");

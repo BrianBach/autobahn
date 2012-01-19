@@ -46,6 +46,7 @@ import net.geant.autobahn.lookup.LookupService;
 import net.geant.autobahn.lookup.LookupServiceException;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.useraccesspoint.Mode;
+import net.geant.autobahn.useraccesspoint.PortType;
 import net.geant.autobahn.useraccesspoint.Priority;
 import net.geant.autobahn.useraccesspoint.ReservationRequest;
 import net.geant.autobahn.useraccesspoint.Resiliency;
@@ -142,11 +143,6 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	 */
  	private Map<String,String> ports = new HashMap<String,String>();
 	
-	
-	/**
- 	 * Maps the virtual port to real one and vice versa
- 	 */
-	private PortsMapper portsMapper;
 	
 	private LookupService lookupService;
 	
@@ -278,7 +274,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllIdcpPorts(java.lang.String)
      */
     @Override
-    public List<String> getAllIdcpPorts (String idmIdentifier) {
+    public List<PortType> getAllIdcpPorts (String idmIdentifier) {
         if (idmIdentifier != null) {
             InterDomainManager manager = idms.get(idmIdentifier);
             if (manager == null) {
@@ -287,24 +283,15 @@ public class ManagerImpl implements Manager, ManagerNotifier {
                 return getAllIdcpPorts();
             }
 
-            String[] temp = manager.getIdcpPorts();
+            List<PortType> ports = manager.getIdcpPorts();
 
-            List<String> ports = new ArrayList<String>();
-
-            if (temp != null) {
-                logger.info("--Got the following IDCP ports:");
-                for (String link : temp) {
-                    ports.add(link);
-                    logger.info(link);
-                }
-
+            if (ports != null) {
                 return ports;
             } else {
                 return getAllIdcpPorts();
             }
         }
 
-        // idmIndentifier is null
         return getAllIdcpPorts();
     }
     
@@ -313,23 +300,15 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllIdcpPorts()
      */
     @Override
-    public List<String> getAllIdcpPorts (){
+    public List<PortType> getAllIdcpPorts (){
         // Parse through IDMs and get the first non-null result
         for(String idm : idms.keySet()) {
             logger.info("Getting IDCP ports from " + idm);
             InterDomainManager manager = idms.get(idm);
-            String[] temp = manager.getIdcpPorts();
+            List<PortType> pTypes = manager.getIdcpPorts();
             
-            List<String> ports = new ArrayList<String>();
-            
-            if (temp != null) {
-                logger.info("--Got the following IDCP ports:");
-                for(String link : temp) {
-                    ports.add(link);
-                    logger.info(link);
-                }
-                
-                return ports; 
+            if (pTypes != null) {
+                return pTypes;
             }
         }
         
@@ -342,7 +321,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllPorts(java.lang.String)
      */
     @Override
-    public List<String> getAllPorts(String idmIdentifier) throws UserAccessPointException {
+    public List<PortType> getAllPorts(String idmIdentifier) throws UserAccessPointException {
         if (idmIdentifier != null) {
             InterDomainManager manager = idms.get(idmIdentifier);
             if (manager == null) {
@@ -351,18 +330,10 @@ public class ManagerImpl implements Manager, ManagerNotifier {
                 return getAllPorts();
             }
 
-            String[] temp = manager.getAllClientPorts();
+            List<PortType> pTypes = manager.getAllClientPorts();
 
-            List<String> ports = new ArrayList<String>();
-
-            if (temp != null) {
-                logger.info("--Got the following ports:");
-                for (String link : temp) {
-                    ports.add(link);
-                    logger.info(link);
-                }
-
-                return ports;
+            if (pTypes != null) {
+            	return pTypes;
             } else {
                 return getAllPorts();
             }
@@ -377,23 +348,15 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllPorts()
      */
     @Override
-    public List<String> getAllPorts () throws UserAccessPointException {
+    public List<PortType> getAllPorts () throws UserAccessPointException {
         // Parse through IDMs and get the first non-null result
         for (String idm : idms.keySet()) {
             logger.info("Getting client ports from " + idm);
             InterDomainManager manager = idms.get(idm);
-            String[] temp = manager.getAllClientPorts();
+            List<PortType> pTypes = manager.getAllClientPorts();
             
-            List<String> ports = new ArrayList<String>();
-            
-            if(temp != null) {
-                logger.info("--Got the following ports:");
-                for (String link : temp) {
-                    ports.add(link);
-                    logger.info(link);
-                }
-                
-                return ports; 
+            if(pTypes != null) {
+            	return pTypes;
             }
         }
         
@@ -405,20 +368,8 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllFriendlyPorts(java.lang.String)
      */
     @Override
-    public List<PortMap> getAllFriendlyPorts (String idm) throws UserAccessPointException {
-        List<String> ports = getAllPorts(idm);
-        List<PortMap> friendlyPorts = new ArrayList<PortMap>();
-        
-        for (String p_id : ports) {
-            String friendlyName = getFriendlyNamefromLS(p_id);
-            if (friendlyName == null || friendlyName.trim().equals("") 
-                    || friendlyName.trim().equalsIgnoreCase("null")) {
-                friendlyPorts.add(new PortMap(p_id, p_id));                
-            } else {
-                friendlyPorts.add(new PortMap(p_id, friendlyName.trim() + " (" + p_id + ")"));
-            }
-        }
-        return friendlyPorts;
+    public List<PortType> getAllFriendlyPorts (String idm) throws UserAccessPointException {
+    	return getAllPorts(idm);
     }
 
     /*
@@ -426,21 +377,22 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllFriendlyAndIdcpPorts(java.lang.String)
      */
     @Override
-    public List<PortMap> getAllFriendlyAndIdcpPorts (String idm) throws UserAccessPointException {
-        List<PortMap> friendlyPorts = getAllFriendlyPorts(idm);
-        List<String> idcpPorts = this.getAllIdcpPorts(idm);
+    public List<PortType> getAllFriendlyAndIdcpPorts (String idm) throws UserAccessPointException {
+    	List<PortType> friendlyPorts = getAllFriendlyPorts(idm);
+        List<PortType> idcpPorts = this.getAllIdcpPorts(idm);
         
         if (friendlyPorts == null) {
-            friendlyPorts = new ArrayList<PortMap>();
+            friendlyPorts = new ArrayList<PortType>();
         }
         
         if (idcpPorts == null) {
             return friendlyPorts;
         }
         
-        for (String idcpP : idcpPorts) {
-            friendlyPorts.add(new PortMap(idcpP, idcpP));                
+        for (PortType idcpP : idcpPorts) {
+            friendlyPorts.add(idcpP);                
         }
+
         return friendlyPorts;
     }
 
@@ -475,12 +427,12 @@ public class ManagerImpl implements Manager, ManagerNotifier {
         // Parse through IDMs and get the first non-null result
         for(String idm : idms.keySet()) {
         	InterDomainManager manager = idms.get(idm);
-        	String[] temp = manager.getAllDomains();
+        	String[] pTypes = manager.getAllDomains();
         	
         	List<String> domains = new ArrayList<String>();
         	
-        	if(temp != null) {
-        		for(String link : temp) {
+        	if(pTypes != null) {
+        		for(String link : pTypes) {
         			domains.add(link);
         		}
         		
@@ -506,9 +458,9 @@ public class ManagerImpl implements Manager, ManagerNotifier {
             if (manager != null) {
                 List<String> domains = new ArrayList<String>();
             	
-            	String[] temp = manager.getAllDomains_NonClient();
-            	if (temp!=null) {
-            		for(String domain : temp) {
+            	String[] pTypes = manager.getAllDomains_NonClient();
+            	if (pTypes!=null) {
+            		for(String domain : pTypes) {
             			domains.add(domain);
             		}
             	}
@@ -530,12 +482,12 @@ public class ManagerImpl implements Manager, ManagerNotifier {
     	for(String idm : idms.keySet()) {
         	InterDomainManager manager = idms.get(idm);
         	
-        	String[] temp = manager.getAllLinks();
+        	String[] pTypes = manager.getAllLinks();
         	
-        	if(temp != null) {
+        	if(pTypes != null) {
             	List<String> links = new ArrayList<String>();
             	
-        		for(String link : temp) {
+        		for(String link : pTypes) {
         			links.add(link);
         		}
         		
@@ -558,12 +510,12 @@ public class ManagerImpl implements Manager, ManagerNotifier {
         while (iterator.hasNext()) {
             manager = idms.get(iterator.next());
             if (manager != null) {
-                String[] temp = manager.getAllLinks_NonClient();
+                String[] pTypes = manager.getAllLinks_NonClient();
                 
-                if (temp != null) {
+                if (pTypes != null) {
                     List<String> links = new ArrayList<String>();
 
-            		for(String link : temp) {
+            		for(String link : pTypes) {
             			links.add(link);
             		}
             		
@@ -579,25 +531,21 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getInterDomainManagerPorts(java.lang.String)
 	 */
     @Override
-	public List<String> getInterDomainManagerPorts (String idmIdentifier){
+	public List<PortType> getInterDomainManagerPorts (String idmIdentifier){
 	    InterDomainManager manager = idms.get(idmIdentifier);
 	    if (manager == null) {
 	        System.out.println("idms.get manager is NULL");
 	    	return null;
 	    }
 	    
-    	String[] temp = manager.getDomainClientPorts();
-    	if (temp == null) {
+    	List<PortType> pTypes = manager.getDomainClientPorts();
+    	if (pTypes == null) {
     	    System.out.println("idms manager is" + manager.getIdentifier());
     	    System.out.println("idms.get client ports is NULL");
     	    return null;
     	}
-    	
-	    List<String> ports = new ArrayList<String>();
-	    for(String port : temp) {
-	    	ports.add(port);
-	    }
-	    return ports;
+
+    	return pTypes;
 	}
 	
     /*
@@ -605,26 +553,11 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getFriendlyInterDomainManagerPorts()
      */
     @Override
-    public List<PortMap> getFriendlyInterDomainManagerPorts(String idmIdentifier) {
-        List<String> ports = getInterDomainManagerPorts(idmIdentifier);
-        List<PortMap> friendlyPorts = new ArrayList<PortMap>();
-        if (ports == null){
-            return null;
-        }
-        for (String p_id : ports) {
-            String friendlyName = getFriendlyNamefromLS(p_id);
-            if (friendlyName == null || friendlyName.trim().equals("")
-                    || friendlyName.trim().equalsIgnoreCase("null")) {
-                friendlyPorts.add(new PortMap(p_id, p_id));                
-            } else {
-                friendlyPorts.add(new PortMap(p_id, friendlyName.trim() + " (" + p_id + ")"));
-            }
-        }
-        
-        return friendlyPorts;
+    public List<PortType> getFriendlyInterDomainManagerPorts(String idmIdentifier) {
+    	return getInterDomainManagerPorts(idmIdentifier);
     }
 	
-	/**
+	/*
 	public Service requestService (String idm, ServiceRequest service) throws UserAccessPointException_Exception{
 		InterDomainManager manager = idms.get(idm);
 		if (manager==null || service == null) 
@@ -770,7 +703,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 					String nextElement = iterator.next();
            	
 		            	if (System.currentTimeMillis() - idmsTime.get(nextElement) > tearDownTime) {
-			            	logger.info("IDM tear down "+nextElement);
+			            	logger.info("IDM tear down " + nextElement);
 			            	idms.remove(nextElement);
 			            	
 			            }
@@ -893,7 +826,8 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 		}
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    	Set<String> authorities = AuthorityUtils.authorityArrayToSet(auth.getAuthorities());
+    	@SuppressWarnings("unchecked")
+		Set<String> authorities = AuthorityUtils.authorityArrayToSet(auth.getAuthorities());
     	UserAuthParameters authParameters = new UserAuthParameters(auth.getName(), authorities);
         
         for (int i=0; i<request.getReservations().size(); i++) {
@@ -928,7 +862,8 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 		}
 		else {
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	    	Set<String> authorities = AuthorityUtils.authorityArrayToSet(auth.getAuthorities());
+	    	@SuppressWarnings("unchecked")
+			Set<String> authorities = AuthorityUtils.authorityArrayToSet(auth.getAuthorities());
 	    	UserAuthParameters authParameters = new UserAuthParameters(auth.getName(), authorities);
 	        request.setAuthParameters(authParameters);
 
@@ -1072,28 +1007,6 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 
 	/*
 	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#mapPort(java.lang.String)
-	 */
-    @Override
-	public String mapPort(String port) {		
-		if (portsMapper!= null)
-			return portsMapper.mapPort(port);
-		return port;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#demapPort(java.lang.String)
-	 */
-    @Override
-	public String demapPort (String mapping){
-		if (portsMapper != null)
-			portsMapper.demapPort(mapping);
-		return mapping;
-	}
-
-	/*
-	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getTearDownTime()
 	 */
     @Override
@@ -1108,45 +1021,8 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	public void setTearDownTime(long tearDownTime) {
 		this.tearDownTime = tearDownTime;
 	}
+
 	
-	public PortsMapper getPortsMapper() {
-		return portsMapper;
-	}
-
-	public void setPortsMapper(PortsMapper portsMapper) {
-		this.portsMapper = portsMapper;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#demapPortsForReservationRequest(net.geant.autobahn.useraccesspoint.ReservationRequest)
-	 */
-    @Override
-	public void demapPortsForReservationRequest(ReservationRequest reservation) {
-		
-		reservation.getStartPort().setAddress(demapPort(reservation.getStartPort().getAddress()));
-		reservation.getEndPort().setAddress(demapPort(reservation.getEndPort().getAddress()));
-		
-		//reservation.setStartPort(demapPort(reservation.getStartPort()));
-		//reservation.setEndPort(demapPort(reservation.getEndPort()));
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#demapPortsForsServiceRequest(net.geant.autobahn.useraccesspoint.ServiceRequest)
-	 */
-    @Override
-	public void demapPortsForsServiceRequest(ServiceRequest service) {
-		for(ReservationRequest reservation : service.getReservations()){
-			
-			reservation.getStartPort().setAddress(demapPort(reservation.getStartPort().getAddress()));			
-			
-			reservation.getEndPort().setAddress(demapPort(reservation.getEndPort().getAddress()));
-			
-		//	reservation.setStartPort(demapPort(reservation.getStartPort()));
-		//	reservation.setEndPort(demapPort(reservation.getEndPort()));
-		}
-	}
 	/**
 	 * Get default startTime and endTime strings
 	 * 
@@ -1216,65 +1092,6 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 		if (idms!= null && !idms.isEmpty())
 			service.setUserHomeDomain(idms.get(0));
 		return service;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#mapPortsForReservationRequest(net.geant.autobahn.useraccesspoint.ReservationRequest)
-	 */
-    @Override
-	public void mapPortsForReservationRequest(ReservationRequest reservation) {
-		if (reservation.getStartPort()!= null)
-			reservation.getStartPort().setAddress(mapPort(reservation.getStartPort().getAddress()));
-			//reservation.setStartPort(mapPort(reservation.getStartPort()));
-		if (reservation.getEndPort()!= null)
-			//reservation.setEndPort(mapPort(reservation.getEndPort()));
-		reservation.getEndPort().setAddress(mapPort(reservation.getStartPort().getAddress()));
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#mapPortsForServiceRequest(net.geant.autobahn.useraccesspoint.ServiceRequest)
-	 */
-    @Override
-	public void mapPortsForServiceRequest(ServiceRequest service) {
-		for(ReservationRequest reservation:service.getReservations()){
-			mapPortsForReservationRequest(reservation);
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getMappedAllPorts()
-	 */
-    @Override
-	public List<String> getMappedAllPorts() throws UserAccessPointException {
-		List<String> allPorts = getAllPorts();
-		if (allPorts==null)
-			return null;
-		List<String> mappedAllPorts = new ArrayList <String>();
-		for (String port:allPorts){
-			mappedAllPorts.add(mapPort(port));
-		}	
-		return mappedAllPorts;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getMappedInterDomainManagerPorts(java.lang.String)
-	 */
-    @Override
-	public List<String> getMappedInterDomainManagerPorts(String idm) {
-		List<String> domainPorts = getInterDomainManagerPorts(idm);
-		if (domainPorts==null)
-			return null;
-		List<String> mappedDomainPorts = new ArrayList <String>();
-		String mappedPort = null;
-		for (String port:domainPorts){
-			mappedPort = mapPort(port);
-			mappedDomainPorts.add(mappedPort);
-		}
-		return mappedDomainPorts;
 	}
 
 	/*
@@ -1525,12 +1342,12 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 		
 		if(ports.size() == 0){
 			
-			List<PortMap> ports_all = getAllFriendlyPorts(idm);
+			List<PortType> ports_all = getAllFriendlyPorts(idm);
 			if(ports_all == null & ports_all.size()==0)
 				return null;
 			
-			for (PortMap portMap : ports_all) {
-				ports.put(portMap.getIdentifier(), portMap.getFriendlyName());
+			for (PortType portMap : ports_all) {
+				ports.put(portMap.getAddress(), portMap.getFriendlyName());
 			}
 			if(ports.size() == 0)
 				return null;

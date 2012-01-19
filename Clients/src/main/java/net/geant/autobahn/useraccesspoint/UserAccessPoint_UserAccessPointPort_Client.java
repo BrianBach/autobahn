@@ -8,6 +8,7 @@ package net.geant.autobahn.useraccesspoint;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.namespace.QName;
@@ -266,17 +267,17 @@ public final class UserAccessPoint_UserAccessPointPort_Client {
     
     private void queryPorts(String domain) {
 
-        String[] cports = uap.getDomainClientPorts();
-        System.out.println("Domain client ports found: " + cports.length);
-        for(String cport : cports) {
-            System.out.println(cport);
+        List<PortType> cports = uap.getDomainClientPorts();
+        System.out.println("Domain client ports found: " + cports.size());
+        for(PortType cport : cports) {
+            System.out.println(cport.getAddress());
         }
         
         try {
             cports = uap.getAllClientPorts();
-            System.out.println("All client ports found: " + cports.length);
-            for(String cport : cports) {
-                System.out.println(cport);
+            System.out.println("All client ports found: " + cports.size());
+            for(PortType cport : cports) {
+                System.out.println(cport.getAddress());
             }
         } catch (UserAccessPointException e) {
             // TODO Auto-generated catch block

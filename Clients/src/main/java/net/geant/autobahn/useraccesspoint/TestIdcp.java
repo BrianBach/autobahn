@@ -5,6 +5,7 @@ package net.geant.autobahn.useraccesspoint;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 
 /**
@@ -57,15 +58,15 @@ public class TestIdcp {
     
     static void queryPorts() throws Exception {
 
-        String[] cports = uap.getDomainClientPorts();
-        System.out.println("Domain client ports found: " + cports.length);
-        for(String cport : cports) 
-        	System.out.println(cport);
+        List<PortType> cports = uap.getDomainClientPorts();
+        System.out.println("Domain client ports found: " + cports.size());
+        for(PortType cport : cports) 
+        	System.out.println(cport.getAddress());
         
         cports = uap.getAllClientPorts();
-        System.out.println("All client ports found: " + cports.length);
-        for(String cport : cports) 
-    	   System.out.println(cport);
+        System.out.println("All client ports found: " + cports.size());
+        for(PortType cport : cports) 
+    	   System.out.println(cport.getAddress());
     }
     
     public static void main(String args[]) throws Exception {

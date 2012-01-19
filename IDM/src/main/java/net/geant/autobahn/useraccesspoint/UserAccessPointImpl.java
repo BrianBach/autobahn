@@ -1,5 +1,7 @@
 package net.geant.autobahn.useraccesspoint;
 
+import java.util.List;
+
 import net.geant.autobahn.idm.AccessPoint;
 
 /**
@@ -51,21 +53,21 @@ public class UserAccessPointImpl implements UserAccessPoint {
     /* (non-Javadoc)
 	 * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getAllClientPorts()
 	 */
-	public String[] getAllClientPorts() {
+	public List<PortType> getAllClientPorts() {
 		return AccessPoint.getInstance().getAllClientPorts();
 	}
 
 	/* (non-Javadoc)
 	 * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getDomainClientPorts()
 	 */
-	public String[] getDomainClientPorts() {
+	public List<PortType> getDomainClientPorts() {
 		return AccessPoint.getInstance().getDomainClientPorts();
 	}
 
     /* (non-Javadoc)
      * @see net.geant.autobahn.useraccesspoint.UserAccessPoint#getIdcpPorts()
      */
-    public String[] getIdcpPorts() {
+    public List<PortType> getIdcpPorts() {
         return AccessPoint.getInstance().getIdcpPorts();
     }
 
@@ -83,7 +85,6 @@ public class UserAccessPointImpl implements UserAccessPoint {
 	 */
 	public String submitService(ServiceRequest request)
 			throws UserAccessPointException {
-		
 		return AccessPoint.getInstance().submitService(request);
 	}
 
@@ -97,7 +98,6 @@ public class UserAccessPointImpl implements UserAccessPoint {
 	}
 
 	public void modifyReservation(ModifyRequest request) {
-		
 		AccessPoint.getInstance().modifyReservation(request);
 	}
 

@@ -21,6 +21,7 @@ import net.geant.autobahn.autoBahnGUI.model.googlemaps.Marker;
 import net.geant.autobahn.autoBahnGUI.model.googlemaps.Topology;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.Path;
+import net.geant.autobahn.useraccesspoint.PortType;
 import net.geant.autobahn.useraccesspoint.UserAccessPointException;
 
 import org.apache.commons.logging.Log;
@@ -265,7 +266,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 		Marker marker = null;
 		Line line = null;
 		String name=null;
-		 List<String> list = null;
+		 List<String> list = new ArrayList<String>();
 		
 		 if (manager==null){
 			 logger.info("manager = null ");
@@ -321,7 +322,11 @@ public class TopologyFinder implements TopologyFinderNotifier{
 
 				statusNeighbor = neighbourIdm.getStatus();
 				
-				list = manager.getMappedInterDomainManagerPorts(idmsNames.get(i));
+				List<PortType> pTypes = manager.getInterDomainManagerPorts(idmsNames.get(i));
+				for(PortType pType : pTypes) {
+					list.add(pType.getAddress());
+				}
+				
 				isActive = currentTime-neighbourIdm.getLastStatusUpdateInMillis()<manager.getTearDownTime();
 					
 					if (statusNeighbor!= null){

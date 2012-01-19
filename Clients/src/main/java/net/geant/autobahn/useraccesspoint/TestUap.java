@@ -40,7 +40,8 @@ public final class TestUap {
         uap = ss.getUserAccessPointPort();  
     }
 
-    private void reservation() throws Exception {
+    @SuppressWarnings("unused")
+	private void reservation() throws Exception {
         ServiceRequest sreq = new ServiceRequest();
         sreq.setUserName("user1");
         
@@ -75,19 +76,20 @@ public final class TestUap {
         uap.cancelService(srvID);
     }
     
-    private void queryPorts() {
+    @SuppressWarnings("unused")
+	private void queryPorts() {
 
-        String[] cports = uap.getDomainClientPorts();
-        System.out.println("Domain client ports found: " + cports.length);
-        for(String cport : cports) {
-        	System.out.println(cport);
+        List<PortType> cports = uap.getDomainClientPorts();
+        System.out.println("Domain client ports found: " + cports.size());
+        for(PortType cport : cports) {
+        	System.out.println(cport.getAddress());
         }
         
         try {
             cports = uap.getAllClientPorts();
-            System.out.println("All client ports found: " + cports.length);
-            for(String cport : cports) {
-                System.out.println(cport);
+            System.out.println("All client ports found: " + cports.size());
+            for(PortType cport : cports) {
+                System.out.println(cport.getAddress());
             }
         } catch (UserAccessPointException e) {
             // TODO Auto-generated catch block
@@ -95,7 +97,8 @@ public final class TestUap {
         }
     }
     
-    private void queryService(String srvID) throws UserAccessPointException {
+    @SuppressWarnings("unused")
+	private void queryService(String srvID) throws UserAccessPointException {
     	ServiceResponse resp = uap.queryService(srvID);
     	
     	System.out.println("User: " + resp.getUserName());
@@ -123,13 +126,15 @@ public final class TestUap {
         System.exit(0);
     }
     
-    private static XMLGregorianCalendar cal(String sdate) throws ParseException, DatatypeConfigurationException {
+    @SuppressWarnings("unused")
+	private static XMLGregorianCalendar cal(String sdate) throws ParseException, DatatypeConfigurationException {
         XMLGregorianCalendar result = DatatypeFactory.newInstance().newXMLGregorianCalendar(sdate);
         
         return result;
     }
     
-    private static XMLGregorianCalendar cal(GregorianCalendar cal) throws DatatypeConfigurationException {
+    @SuppressWarnings("unused")
+	private static XMLGregorianCalendar cal(GregorianCalendar cal) throws DatatypeConfigurationException {
     	return DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
     }
 }

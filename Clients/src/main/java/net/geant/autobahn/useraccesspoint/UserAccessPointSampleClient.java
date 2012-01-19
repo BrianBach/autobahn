@@ -3,6 +3,7 @@ package net.geant.autobahn.useraccesspoint;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.namespace.QName;
@@ -29,7 +30,8 @@ public class UserAccessPointSampleClient {
         uap = service.getPort(UserAccessPointPort, UserAccessPoint.class);
     }
 
-    private void sampleReservation() throws DatatypeConfigurationException,
+    @SuppressWarnings("unused")
+	private void sampleReservation() throws DatatypeConfigurationException,
             UserAccessPointException, ParseException {
 
         ServiceRequest sreq = new ServiceRequest();
@@ -78,7 +80,7 @@ public class UserAccessPointSampleClient {
         String port = (new String(byteStr).trim());
         
         if (idm == null || idm.equals("")) {
-            idm = "109.105.111.62";
+            idm = "62.217.124.239";
         }
         if (port == null || port.equals("")) {
             port = "8080";
@@ -88,18 +90,18 @@ public class UserAccessPointSampleClient {
         System.out.println("Connecting to "+idm+":"+port);
         
         System.out.println("\n---getIdcpPorts():");
-        String[] idcpPorts = instance.uap.getIdcpPorts();
+        List<PortType> idcpPorts = instance.uap.getIdcpPorts();
         if (idcpPorts!=null) {
-            for (int i=0; i<idcpPorts.length; i++) {
-                System.out.println(i+": "+idcpPorts[i]);
+            for (int i=0; i<idcpPorts.size(); i++) {
+                System.out.println(i+": "+idcpPorts.get(i).getAddress());
             }
         }
         
         System.out.println("\n---getAllClientPorts():");
-        String[] clPorts = instance.uap.getAllClientPorts();
+        List<PortType> clPorts = instance.uap.getAllClientPorts();
         if (clPorts!=null) {
-            for (int i=0; i<clPorts.length; i++) {
-                System.out.println(i+": "+clPorts[i]);
+            for (int i=0; i<clPorts.size(); i++) {
+                System.out.println(i+": "+clPorts.get(i).getAddress());
             }
         }
         
@@ -136,10 +138,10 @@ public class UserAccessPointSampleClient {
         }
         
         System.out.println("\n---getDomainClientPorts():");
-        String[] domClPorts = instance.uap.getDomainClientPorts();
+        List<PortType> domClPorts = instance.uap.getDomainClientPorts();
         if (domClPorts!=null) {
-            for (int i=0; i<domClPorts.length; i++) {
-                System.out.println(i+": "+domClPorts[i]);
+            for (int i=0; i<domClPorts.size(); i++) {
+                System.out.println(i+": "+domClPorts.get(i).getAddress());
             }
         }
         System.out.println("---");
