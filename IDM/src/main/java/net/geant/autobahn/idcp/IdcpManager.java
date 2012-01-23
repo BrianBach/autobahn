@@ -380,24 +380,25 @@ public final class IdcpManager {
 		
 		for (IdcpDomain dom : idcpDomains.values()) {
 			
-			if (dom.getIdcpNotifyUrl().equals(IDCP_NONE))
+			final String idcpNotify = dom.getIdcpNotifyUrl();
+			if (idcpNotify.equals(IDCP_NONE))
 				continue;
 			
-			IdcpNotifyClient notify = new IdcpNotifyClient(dom.getIdcpNotifyUrl());
+			IdcpNotifyClient notify = new IdcpNotifyClient(idcpNotify);
 			// first send unsubscribe("ALL") to unsubscribe itself from the service
 			try {
-				notify.unsubscribe(dom.getIdcpNotifyUrl(), "ALL", null);
-				log.info("unsubscribed from " + idcpNotifyUrl);
+				notify.unsubscribe(idcpNotify, "ALL", null);
+				log.info("unsubscribed from " + idcpNotify);
 			} catch (Exception e) { 
-				log.info("failed to unsubscribe from " + dom.getIdcpNotifyUrl());
+				log.info("failed to unsubscribe from " + idcpNotify);
 			}
 			final String subId = Idcp.generateSubscriptionId();
 			final String topic = Idcp.TOPIC_IDC;
 			
 			try {
-				SubscriptionInfo subInfo = notify.subscribe(idcpUrl, idcpNotifyOnlyUrl, subId, null, topic, termTime);
+				SubscriptionInfo subInfo = notify.subscribe(dom.getIdcpUrl(), idcpNotifyOnlyUrl, subId, null, topic, termTime);
 				subscriptions.add(subInfo);
-				log.info("subscribed to " + idcpNotifyUrl + " with subId " + subId);
+				log.info("subscribed to " + idcpNotify + " with subId " + subId);
 			} catch (Exception e) {
 				log.info("failed to subscribe from " + dom.getIdcpNotifyUrl());
 			}
@@ -423,10 +424,11 @@ public final class IdcpManager {
 					for (SubscriptionInfo si : subscriptions) {
 						
 						try {
-							IdcpNotifyClient notify = new IdcpNotifyClient(si.getNotifierUrl());
-							notify.renew(si.getConsumerUrl(), si.getSubscriptionId(), null, termTime);
+							IdcpNotifyClient notify = new IdcpNotifyClient(si.getConsumerUrl());
+							notify.renew(si.getNotifierUrl(), si.getSubscriptionId(), null, termTime);
+							log.info("CL.renew - subscription " + si.getSubscriptionId() + " at " + si.getConsumerUrl() + " updated");
 						} catch (Exception e) { 
-							log.info("failed to renew subscription " + si.getSubscriptionId() + " at " + si.getNotifierUrl());
+							log.debug("failed to renew subscription " + si.getSubscriptionId() + " at " + si.getNotifierUrl());
 						}
 					}
 				}
@@ -466,6 +468,14 @@ public final class IdcpManager {
 		for (SubscriptionInfo si : subscribers) {
 			if (si.getSubscriptionId().equals(subInfo.getSubscriptionId()))
 				return false;
+			
+			if (si.getConsumerUrl().equals(subInfo.getConsumerUrl())) {
+				
+				log.info("addSubscriber: " + subInfo.getConsumerUrl() + " already exists, overwriting subId");
+				si.setSubscriptionId(subInfo.getSubscriptionId());
+				saveSubscribers();
+				return true;
+			}
 		}
 		subscribers.add(subInfo);
 		saveSubscribers();
@@ -503,6 +513,7 @@ public final class IdcpManager {
 			
 			if (si.getSubscriptionId().equals(subscriptionId)) {
 				si.setTermination(newTime);
+				log.info("renew - subscriptionId: " + subscriptionId + " updated");
 				return true;
 			}
 		}
@@ -520,7 +531,7 @@ public final class IdcpManager {
 	}
 	
 	private static synchronized void saveSubscribers() {
-		
+
 		try {
 			File file = new File(IDCP_SUBSCRIBERS_FILE);
 			file.delete();
@@ -562,6 +573,7 @@ public final class IdcpManager {
 				cal.setTimeInMillis(Long.parseLong(tokens[6]));
 				SubscriptionInfo si = new SubscriptionInfo(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4], tokens[5], cal);				
 				subscribers.add(si);
+				log.info("Idcp subscriber restored: " + si.getConsumerUrl());
 			}
 			scanner.close();
 		} catch (IOException e) { 

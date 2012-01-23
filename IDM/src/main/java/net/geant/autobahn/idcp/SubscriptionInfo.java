@@ -36,6 +36,14 @@ public class SubscriptionInfo {
 		this.topic = topic;
 		this.termination = termination;
 	}
+
+	/**
+	 * Sets the subscriptionId
+	 * @param subscriptionId
+	 */
+	public void setSubscriptionId(String subscriptionId) {
+		this.subscriptionId = subscriptionId;
+	}
 		
 	/**
 	 * @return the consumerUrl
@@ -96,6 +104,6 @@ public class SubscriptionInfo {
 	@Override
 	public String toString() {
 		
-		return "ConsumerUrl: " + consumerUrl + ", subscriptionId: " + subscriptionId; // + ", termination: " + termination.getTime().toString();	
+		return "ConsumerUrl: " + consumerUrl + ", subscriptionId: " + subscriptionId; 	
 	}
 }

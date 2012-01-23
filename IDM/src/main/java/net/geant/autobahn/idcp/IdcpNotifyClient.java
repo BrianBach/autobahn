@@ -121,7 +121,7 @@ public final class IdcpNotifyClient {
 		
 		QueryExpressionType query = new QueryExpressionType();
 		query.setDialect(Idcp.QUERY_DIALECT);
-		query.setValue("/wsa:Address='" + producerUrl + "'\"");
+		query.setValue("/wsa:Address='" + producerUrl + "'");
 		filter.getProducerProperties().add(query); 
 		request.setFilter(filter);
 		
@@ -149,9 +149,10 @@ public final class IdcpNotifyClient {
 				log.info("CL.subscribe - received new subscription id - " + subscriptionId);
 			}
 			
-			SubscriptionInfo subInfo = new SubscriptionInfo(consumerUrl, producerUrl, subscriptionId, null, 
+			final String notifierUrl = response.getSubscriptionReference().getAddress().getValue(); 
+			SubscriptionInfo subInfo = new SubscriptionInfo(this.url, notifierUrl, producerUrl, subscriptionId, null, 
 					topic, response.getTerminationTime().toGregorianCalendar());
-			
+
 			return subInfo;
 		} catch (Exception e) { 
 			log.info("IDCP subscribe failed - " + e.getMessage());
@@ -211,11 +212,11 @@ public final class IdcpNotifyClient {
 			String termTime = "not set";
 			if (response.getTerminationTime() != null)
 				termTime = response.getTerminationTime().toString();
-			log.info("CL.renew response - curTime: " + curTime + ", termTime: " + termTime);
+			//log.info("CL.renew response - curTime: " + curTime + ", termTime: " + termTime);
 			
 			return null;
 		} catch (Exception e) { 
-			log.debug("IDCP renew failed - " + e.getMessage());
+			log.info("Cl.renew subscription failed - " + e.getMessage() + ", " + this.url);
 			throw new IdcpException(e.getMessage());
 		}
 	}
