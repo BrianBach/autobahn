@@ -168,12 +168,12 @@ public class Framework {
 		dm = net.geant.autobahn.intradomain.AccessPoint.getInstance();
 		if (dm.init() == net.geant.autobahn.intradomain.AccessPoint.State.ERROR) {
 		    log.error("DM did not initialize successfully, shutting framework down");
-		    System.exit(0);
+		    System.exit(-1);
 		}
 
         if (startIdm() == net.geant.autobahn.idm.AccessPoint.State.ERROR) {
             log.error("IDM did not initialize successfully, shutting framework down");
-            System.exit(0);
+            System.exit(-1);
         }
 
 		// choose command liner
