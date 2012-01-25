@@ -1,15 +1,8 @@
 
 package net.geant.autobahn.tool;
 
-/**
- * Please modify this class to meet your needs
- * This class is not complete
- */
-
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.namespace.QName;
@@ -19,8 +12,6 @@ import net.geant.autobahn.constraints.ConstraintsNames;
 import net.geant.autobahn.constraints.PathConstraints;
 import net.geant.autobahn.constraints.Range;
 import net.geant.autobahn.constraints.RangeConstraint;
-import net.geant.autobahn.intradomain.common.GenericInterface;
-import net.geant.autobahn.intradomain.common.GenericLink;
 import net.geant.autobahn.tool.types.ReservationParamsType;
 
 import org.apache.cxf.common.logging.Log4jLogger;

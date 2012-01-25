@@ -31,6 +31,7 @@
                 <include>net.geant.autobahn:autobahn-idm</include>
                 <include>net.geant.autobahn:autobahn-common</include>
                 <include>net.geant.autobahn:autobahn-clients</include>
+                <include>net.geant.autobahn:autobahn-tool</include>
                 <include>commons-cli:commons-cli</include>
                 <include>org.apache.cxf:cxf-bundle</include>
                 <include>log4j:log4j</include>

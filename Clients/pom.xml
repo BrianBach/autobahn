@@ -1,21 +1,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<parent>
-		<artifactId>autobahn</artifactId>
-		<groupId>net.geant.autobahn</groupId>
-		<version>1.0.4-SNAPSHOT</version>
-	</parent>
-	
-	<modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>autobahn</artifactId>
+        <groupId>net.geant.autobahn</groupId>
+        <version>1.0.4-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
     <groupId>net.geant.autobahn</groupId>
     <artifactId>autobahn-clients</artifactId>
     <version>1.0.4-SNAPSHOT</version>
     <name>Clients</name>
     <packaging>jar</packaging>
-  
-	<build>
-		<sourceDirectory>src/main/java</sourceDirectory>
+
+    <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
         <testSourceDirectory>src/test/java</testSourceDirectory>
-		<finalName>autobahn-clients</finalName>
+        <finalName>autobahn-clients</finalName>
 		<!--resources>
 			<resource>
 				<directory>./src/main/java/</directory>
@@ -30,7 +30,7 @@
 				</includes>
 			</resource>
 		</resources-->
-		<plugins>
+        <plugins>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
@@ -50,101 +50,106 @@
                     </descriptors>
                 </configuration>
             </plugin>
-        
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>buildnumber-maven-plugin</artifactId>
-				<version>1.0-beta-4</version>
-				<executions>
-					<execution>
-						<phase>release</phase>
-						<goals>
-							<goal>create</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<doCheck>false</doCheck>
-					<doUpdate>false</doUpdate>
-				</configuration>
-			</plugin>		
-		</plugins>		
-	</build>
 
-	<profiles>
-		<profile>
-			<id>wsdl-gen</id>
-			<build>			
-				<plugins>
-					<plugin>
-						<groupId>org.apache.cxf</groupId>
-						<artifactId>cxf-java2ws-plugin</artifactId>
-						<version>2.2.9</version>
-						<dependencies>
-							<dependency>
-								<groupId>org.apache.cxf</groupId>
-								<artifactId>cxf-rt-frontend-jaxws</artifactId>
-								<version>2.2.9</version>
-							</dependency>
-							<dependency>
-								<groupId>org.apache.cxf</groupId>
-								<artifactId>cxf-rt-frontend-simple</artifactId>
-								<version>2.2.9</version>
-							</dependency>
-						</dependencies>
-						<executions>
-							<execution>
-								<id>wsdl-authorization</id>
-								<phase>compile</phase>
-								<configuration>
-									<className>net.geant.autobahn.aai.Authorization</className>
-									<outputFile>src/main/resources/wsdl/authorization.wsdl</outputFile>
-									<genWsdl>true</genWsdl>
-									<serviceName>AuthorizationService</serviceName>
-									<verbose>true</verbose>
-								</configuration>
-								<goals>
-									<goal>java2ws</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.0-beta-4</version>
+                <executions>
+                    <execution>
+                        <phase>release</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <doCheck>false</doCheck>
+                    <doUpdate>false</doUpdate>
+                </configuration>
+            </plugin>		
+        </plugins>		
+    </build>
+
+    <profiles>
+        <profile>
+            <id>wsdl-gen</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.cxf</groupId>
+                        <artifactId>cxf-java2ws-plugin</artifactId>
+                        <version>2.2.9</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.cxf</groupId>
+                                <artifactId>cxf-rt-frontend-jaxws</artifactId>
+                                <version>2.2.9</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.apache.cxf</groupId>
+                                <artifactId>cxf-rt-frontend-simple</artifactId>
+                                <version>2.2.9</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <id>wsdl-authorization</id>
+                                <phase>compile</phase>
+                                <configuration>
+                                    <className>net.geant.autobahn.aai.Authorization</className>
+                                    <outputFile>src/main/resources/wsdl/authorization.wsdl</outputFile>
+                                    <genWsdl>true</genWsdl>
+                                    <serviceName>AuthorizationService</serviceName>
+                                    <verbose>true</verbose>
+                                </configuration>
+                                <goals>
+                                    <goal>java2ws</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 	
-	<dependencies>
-    	<dependency>
-      		<groupId>net.geant.autobahn</groupId>
-      		<artifactId>autobahn-common</artifactId>
-      		<version>1.0.4-SNAPSHOT</version>
-    	</dependency>
-    	<dependency>
-      		<groupId>net.geant.autobahn</groupId>
-      		<artifactId>autobahn-calendar</artifactId>
-      		<version>1.0.4-SNAPSHOT</version>
-    	</dependency>
-    	<dependency>
-      		<groupId>net.geant.autobahn</groupId>
-		   	<artifactId>autobahn-dm</artifactId>
-      		<version>1.0.4-SNAPSHOT</version>
-    	</dependency>
-    	<dependency>
-      		<groupId>net.geant.autobahn</groupId>
-      		<artifactId>autobahn-idm</artifactId>
-      		<version>1.0.4-SNAPSHOT</version>
-    	</dependency>
-    	<dependency>
-      		<groupId>net.geant.autobahn</groupId>
-      		<artifactId>autobahn-ta</artifactId>
-      		<version>1.0.4-SNAPSHOT</version>
-    	</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>net.geant.autobahn</groupId>
+            <artifactId>autobahn-common</artifactId>
+            <version>1.0.4-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>net.geant.autobahn</groupId>
+            <artifactId>autobahn-calendar</artifactId>
+            <version>1.0.4-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>net.geant.autobahn</groupId>
+            <artifactId>autobahn-dm</artifactId>
+            <version>1.0.4-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>net.geant.autobahn</groupId>
+            <artifactId>autobahn-idm</artifactId>
+            <version>1.0.4-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>net.geant.autobahn</groupId>
+            <artifactId>autobahn-ta</artifactId>
+            <version>1.0.4-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>net.geant.autobahn</groupId>
+            <artifactId>autobahn-tool</artifactId>
+            <version>1.0.4-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>commons-cli</groupId>
             <artifactId>commons-cli</artifactId>
             <version>1.2</version>
         </dependency>
-	</dependencies>
+    </dependencies>
 
 </project>
