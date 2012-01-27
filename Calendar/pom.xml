@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-4.0.0.xsd">
-  
+
 	<parent>
 		<artifactId>autobahn</artifactId>
 		<groupId>net.geant.autobahn</groupId>
@@ -13,7 +13,7 @@
     <version>1.0.4-SNAPSHOT</version>
     <name>Calendar module</name>
     <packaging>jar</packaging>
-	
+
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<testSourceDirectory>src/test/java</testSourceDirectory>
@@ -23,20 +23,20 @@
 			</resource>
 		</resources>
 		<finalName>autobahn-calendar</finalName>
-		
+
 		<plugins>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>cobertura-maven-plugin</artifactId>
 				<version>2.4</version>
-			</plugin>			
+			</plugin>
 		</plugins>
 	</build>
 
-		
+
 	<profiles>
 		<profile>
-			<id>wsdl-gen</id>	
+			<id>wsdl-gen</id>
 				<build>
 					<plugins>
 						<plugin>
@@ -113,13 +113,13 @@
 										<goal>java2ws</goal>
 									</goals>
 								</execution>
-							</executions>						
+							</executions>
 						</plugin>
-						
+
 						<plugin>
 							<groupId>org.codehaus.mojo</groupId>
 							<artifactId>buildnumber-maven-plugin</artifactId>
-							<version>1.0-beta-4</version>
+							<version>1.0</version>
 							<executions>
 								<execution>
 									<phase>release</phase>
@@ -132,12 +132,12 @@
 								<doCheck>false</doCheck>
 								<doUpdate>false</doUpdate>
 							</configuration>
-						</plugin>										
+						</plugin>
 					</plugins>
 			</build>
 		</profile>
 	</profiles>
-  
+
 	<dependencies>
 		<dependency>
 			<groupId>net.geant.autobahn</groupId>
@@ -174,7 +174,7 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.5.6</version>
-		</dependency>	
+		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>log4j-over-slf4j</artifactId>
@@ -182,5 +182,5 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-	</dependencies>		
+	</dependencies>
 </project>

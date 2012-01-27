@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-		 
+
 	<parent>
 		<artifactId>autobahn</artifactId>
 		<groupId>net.geant.autobahn</groupId>
 		<version>1.0.4-SNAPSHOT</version>
 	</parent>
-	
+
 	<modelVersion>4.0.0</modelVersion>
     <groupId>net.geant.autobahn</groupId>
     <artifactId>autobahn-tool</artifactId>
@@ -36,7 +36,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>buildnumber-maven-plugin</artifactId>
-				<version>1.0-beta-4</version>
+				<version>1.0</version>
 				<executions>
 					<execution>
 						<phase>compile</phase>
@@ -49,14 +49,14 @@
 					<doCheck>false</doCheck>
 					<doUpdate>false</doUpdate>
 				</configuration>
-			</plugin>		
-		</plugins>		
+			</plugin>
+		</plugins>
 	</build>
 
 	<profiles>
 		<profile>
 			<id>wsdl-gen</id>
-			<build>			
+			<build>
 				<plugins>
 					<plugin>
 						<groupId>org.apache.cxf</groupId>
@@ -89,14 +89,14 @@
 								<goals>
 									<goal>java2ws</goal>
 								</goals>
-							</execution>							
+							</execution>
 						</executions>
 					</plugin>
 				</plugins>
 			</build>
 		</profile>
 	</profiles>
-  
+
 	<dependencies>
 		<dependency>
 			<groupId>net.geant.autobahn</groupId>

@@ -67,8 +67,8 @@
                     <doCheck>false</doCheck>
                     <doUpdate>false</doUpdate>
                 </configuration>
-            </plugin>		
-        </plugins>		
+            </plugin>
+        </plugins>
     </build>
 
     <profiles>
@@ -113,7 +113,7 @@
             </build>
         </profile>
     </profiles>
-	
+
     <dependencies>
         <dependency>
             <groupId>net.geant.autobahn</groupId>

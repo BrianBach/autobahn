@@ -4,7 +4,7 @@
 	<properties>
     	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   	</properties>
-	
+
 	<modelVersion>4.0.0</modelVersion>
     <groupId>net.geant.autobahn</groupId>
     <artifactId>autobahn</artifactId>
@@ -12,17 +12,17 @@
     <name>Autobahn: Automated Bandwith Allocation across Heterogeneous Networks</name>
     <url>https://forge.geant.net/forge/display/autobahn/Home</url>
     <packaging>pom</packaging>
- 
+
 	<scm>
 		<connection>scm:svn:svn+ssh://svn@svn.geant.net/GEANT/SA2/AutoBAHN/AutoBAHN-base/tags/autobahn-0.5.1</connection>
         <developerConnection>scm:svn:svn+ssh://svn@svn.geant.net/GEANT/SA2/AutoBAHN/AutoBAHN-base/tags/autobahn-0.5.1</developerConnection>
     </scm>
-	
+
 	<repositories>
 		<repository>
 			<id>geant-repository</id>
 			<url>http://maven.geant.net/repo</url>
-		</repository>	
+		</repository>
      	<repository>
             <id>Maven-repo</id>
             <url>http://repo1.maven.org/maven2/</url>
@@ -36,7 +36,7 @@
                 <checksumPolicy>warn</checksumPolicy>
             </snapshots>
             <layout>default</layout>
-        </repository> 
+        </repository>
 		<repository>
 			<id>Java</id>
 			<name>Java maven repository</name>
@@ -49,9 +49,9 @@
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
-		</repository>		
+		</repository>
 	</repositories>
-	
+
     <pluginRepositories>
 		<pluginRepository>
             <id>Maven-repo</id>
@@ -67,13 +67,13 @@
                 <checksumPolicy>warn</checksumPolicy>
             </snapshots>
             <layout>default</layout>
-        </pluginRepository>        
+        </pluginRepository>
 		<pluginRepository>
             <id>Codehaus repository</id>
             <url>http://repository.codehaus.org/</url>
-        </pluginRepository>        
+        </pluginRepository>
 	</pluginRepositories>
-		
+
     <build>
 		<extensions>
 			<extension>
@@ -90,14 +90,14 @@
                 <groupId>org.apache.maven.scm</groupId>
                 <artifactId>maven-scm-provider-svnexe</artifactId>
                 <version>1.2</version>
-            </extension>			
+            </extension>
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
 				<artifactId>wagon-ssh</artifactId>
 				<version>1.0-beta-4</version>
 			</extension>
         </extensions>
-		
+
 		<plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -131,19 +131,19 @@
 							</excludes>
 						</configuration>
 					</execution>
-				</executions>                
+				</executions>
             </plugin>
 			<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
-            </plugin> 
+            </plugin>
 			<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
                 <configuration>
                     <tagBase>svn+ssh://svn@svn.geant.net/GEANT/SA2/AutoBAHN/AutoBAHN-base/tags</tagBase>
                 </configuration>
-            </plugin>            
+            </plugin>
 			<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -158,7 +158,7 @@
                 </executions>
             </plugin>
         </plugins>
-		
+
         <pluginManagement>
 			<plugins>
                 <plugin>
@@ -170,7 +170,7 @@
                         <encoding>UTF-8</encoding>
                     </configuration>
                 </plugin>
-                
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-eclipse-plugin</artifactId>
@@ -206,7 +206,7 @@
 						  <goal>cobertura</goal>
 					     </goals>
 					</execution>
-				   </executions>					
+				   </executions>
 				   </plugin>
 				</plugins>
 			</build>
@@ -268,7 +268,7 @@
             	</pluginManagement>
         	</build>
 		</profile>
-	    
+
 		<profile>
             <id>CI</id>
             <build>
@@ -292,7 +292,7 @@
 					            <configuration>
 					              <skip>false</skip>
 					              <reportsDirectory>${project.build.directory}/surefire-reports/test</reportsDirectory>
-					              
+
 	                              <includes>
 		                              <!-- unit tests-->
 		                              <include>**/*Test.java</include>
@@ -306,10 +306,10 @@
 		                              <exclude>**/GetAdminDomainTest.java</exclude>
 		                              <exclude>**/topologies/*.java</exclude>
 	                              </excludes>
-	                              
+
 					            </configuration>
 				        	</execution>
-				        	
+
 							<execution>
 					            <id>surefire-itest</id>
 					            <phase>integration-test</phase>
@@ -320,17 +320,17 @@
 					              <skip>false</skip>
 								  <forkMode>always</forkMode>
 								  <reportsDirectory>${project.build.directory}/surefire-reports/integration-test</reportsDirectory>
-								  
+
 								  <systemPropertyVariables>
 								    <launchEnv>local</launchEnv>
 								  </systemPropertyVariables>
-        		   				  
+
 								  <test>itest/AllTests</test>
 					            </configuration>
-				        	</execution>				        	
+				        	</execution>
 			            </executions>
                     </plugin>
-                    
+
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>findbugs-maven-plugin</artifactId>
@@ -417,7 +417,7 @@
 	      </build>
 	    </profile>
     </profiles>
-   	
+
 	<modules>
 		<module>Common</module>
 		<module>DM</module>
@@ -430,7 +430,7 @@
 		<module>Clients</module>
 		<module>autobahn-testing-platform</module>
 	</modules>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
