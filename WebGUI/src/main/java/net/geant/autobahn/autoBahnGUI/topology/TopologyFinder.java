@@ -266,9 +266,9 @@ public class TopologyFinder implements TopologyFinderNotifier{
 		Marker marker = null;
 		Line line = null;
 		String name=null;
-		 List<String> list = new ArrayList<String>();
+		List<String> list = null;
 		
-		 if (manager==null){
+		if (manager==null){
 			 logger.info("manager = null ");
 			return;
 		}
@@ -305,17 +305,15 @@ public class TopologyFinder implements TopologyFinderNotifier{
 				
 				if (neighbors==null || neighbors.isEmpty()){
 					logger.info(idmsNames.get(i) + " has no neighbors");
-					continue;	
+					continue;
 				}
-				
-				
+
 				int lengthN = neighbors.size();
 				
 				Status statusNeighbor;
 				
-				for (int j=0;j<lengthN;j++){
-			      
-	             neighbourIdm = manager.getInterDomainManager(neighbors.get(j).getDomain());               
+				for (int j=0;j<lengthN;j++) {
+                    neighbourIdm = manager.getInterDomainManager(neighbors.get(j).getDomain());               
 			 
 				if (neighbourIdm==null)
 					continue;
@@ -323,6 +321,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 				statusNeighbor = neighbourIdm.getStatus();
 				
 				List<PortType> pTypes = manager.getInterDomainManagerPorts(idmsNames.get(i));
+				list = new ArrayList<String>();
 				for(PortType pType : pTypes) {
 					list.add(pType.getAddress());
 				}
