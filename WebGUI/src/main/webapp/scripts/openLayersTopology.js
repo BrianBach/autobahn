@@ -113,7 +113,7 @@ function addLines (map, linesXML, flag){
 }
 
 function addMarkers (map, markersXML){
-	 var markers = map.getLayersByName ('AutoBAHN IDMs')[0];
+	var markers = map.getLayersByName ('AutoBAHN IDMs')[0];
 	 var features = map.getLayersByName ('Popups')[0];
 	 if (markers != null){
 
@@ -154,7 +154,7 @@ function addMarkers (map, markersXML){
      	}	
         var feature = new OpenLayers.Feature(markers, point, {icon:new OpenLayers.Icon(image,size)}); 
         feature.closeBox = true;
-        feature.popupClass = OpenLayers.Class(OpenLayers.Popup.Anchored, {
+        feature.popupClass = OpenLayers.Class(OpenLayers.Popup.FramedCloud, {
             "autoSize": false, 
             "minSize": new OpenLayers.Size(300,300)
         });
@@ -171,7 +171,6 @@ function addMarkers (map, markersXML){
 }
 
 function refreashMap (map){
-		
     var request = GXmlHttp.create();
     var service = gup('service');
   
@@ -226,16 +225,14 @@ function onPopupClose(evt) {
 }
 function onFeatureSelect(evt) {
     var feature = this;
-    if (feature.popup == null )
-    {
-    	popup = feature.createPopup(true);
-    	feature.popup = popup;
-    	popup.feature = feature;
-    	map.addPopup(popup);
-    }else
-    {
-    	feature.popup.toggle();
-    }
+
+    removeAllMapPopup();
+
+    popup = feature.createPopup(true);
+    feature.popup = popup;
+    popup.feature = feature;
+    map.addPopup(popup);
+
 }
 function onFeatureUnselect(evt) {
     feature = evt.feature;
@@ -247,9 +244,15 @@ function onFeatureUnselect(evt) {
     }
 }
 
+function removeAllMapPopup(){
+	while( map.popups.length ) {
+		map.removePopup(map.popups[0]);
+	}
+}
+
 function make_all(map){
 if (GBrowserIsCompatible()) {
-    setInterval('refreashMap(map)',10000);
+    setInterval('refreashMap(map)',3000);
     refreashMap(map);
   }else {
     alert('Sorry, the Google Maps API is not compatible with this browser');
