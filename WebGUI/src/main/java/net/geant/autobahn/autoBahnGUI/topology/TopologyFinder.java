@@ -588,11 +588,6 @@ public class TopologyFinder implements TopologyFinderNotifier{
 		buffer.append ("<li><strong>Name:  </strong>").append(link.getBodID()).append("</li>");
 		buffer.append ("<li><strong>Capacity:  </strong>").append(link.getCapacity()).append("</li>");
 		buffer.append ("<li><strong>Delay:  </strong>").append(link.getDelay()).append("</li>");
-		buffer.append ("<li><strong>Granularity:  </strong>").append(link.getGranularity()).append("</li>");
-		buffer.append ("<li><strong>Manual cost:  </strong>").append(link.getManualCost()).append("</li>");
-		buffer.append ("<li><strong>Bidirectional:  </strong>").append(link.isBidirectional()).append("</li>");
-		buffer.append ("<li><strong>Min resource capacity:  </strong>").append(link.getMinResCapacity()).append("</li>");
-		buffer.append ("<li><strong>Max resource capacity:  </strong>").append(link.getMaxResCapacity()).append("</li>");
 		buffer.append ("<li><strong>Resilience:  </strong>").append(link.getResilience()).append("</li>");
 		buffer.append ("<li><strong>Start port:  </strong>").append(link.getStartPort().getBodID()).append("</li>");
 		buffer.append ("<li><strong>End port:  </strong>").append(link.getEndPort().getBodID()).append("</li>");
