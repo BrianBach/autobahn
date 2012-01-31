@@ -80,12 +80,26 @@ public class ReservatiomDepandentOnTimezone implements Serializable {
                 code("endTime.past").build());
 		}
 		
-		//validates if user selected different start and end ports	
-		if (this.getRequest().getStartPort().getAddress().equals(this.getRequest().getEndPort().getAddress())) {
+		//check if start port is null
+		if (this.getRequest().getStartPort() == null || this.getRequest().getStartPort().getAddress() == null) {
 			messages.addMessage(new MessageBuilder().error().source("request.startPort.address").
-				code("ports.equal").build());			
+				code("portCombo.null").build());
+			return;
 		}
 		
+		//check if end port is null
+		if (this.getRequest().getEndPort() == null || this.getRequest().getEndPort().getAddress() == null) {
+			messages.addMessage(new MessageBuilder().error().source("request.endPort.address").
+				code("portCombo.null").build());
+			return;
+		}
+		
+		//validates if user selected different start and end ports
+		if (this.getRequest().getStartPort().getAddress().equals(this.getRequest().getEndPort().getAddress())) {
+			messages.addMessage(new MessageBuilder().error().source("request.startPort.address").
+				code("ports.equal").build());
+			return;
+		}		
     }
 	
 }

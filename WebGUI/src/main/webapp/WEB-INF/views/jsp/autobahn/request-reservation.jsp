@@ -65,33 +65,52 @@ function alerta(){
 }
 
 function setStartFriendlyName(path){
-
-    document.getElementById('request.startPortFriendlyName').value=path;
+	document.getElementById('request.startPortFriendlyName').value = path;
     startPortValue = $(document.getElementById('request.startPort.address')).val();
     var endPortSelect = document.getElementById('request.endPort.address');
-    
-    for (var i=0; i<endPortSelect.length; i++) {
+
+    for (var i=0; i < endPortSelect.length; i++) {
         $(endPortSelect.options[i]).removeAttr("disabled");
 
         if (endPortSelect.options[i].value == startPortValue) {
             $(endPortSelect.options[i]).attr("disabled", "true");
         }
     }
+    
+    if ($(document.getElementById('request.startPort.address')).val() == $(document.getElementById('request.endPort.address')).val()) {
+		var index = $(document.getElementById('request.endPort.address')).attr("selectedIndex");
+		if (endPortSelect.options[index + 1].value != null) {
+			endPortSelect.options[index + 1].selected = true;
+		} else {
+			endPortSelect.options[index - 1].selected = true;
+		}
+	}
 }
 
 function setEndFriendlyName(path){
-
-    document.getElementById('request.endPortFriendlyName').value=path;
+	if ($(document.getElementById('request.startPort.address')).val() == $(document.getElementById('request.endPort.address')).val()) {
+		//alert('OOOO');
+	}
+    document.getElementById('request.endPortFriendlyName').value = path;
     endPortValue = $(document.getElementById('request.endPort.address')).val();
     var startPortSelect = document.getElementById('request.startPort.address');
-    
-    for (var i=0; i<startPortSelect.length; i++) {
+        
+    for (var i=0; i < startPortSelect.length; i++) {
         $(startPortSelect.options[i]).removeAttr("disabled");
 
         if (startPortSelect.options[i].value == endPortValue) {
             $(startPortSelect.options[i]).attr("disabled", "true");
         }
     }
+    /*
+    if ($(document.getElementById('request.startPort.address')).val() == $(document.getElementById('request.endPort.address')).val()) {
+		var index = $(document.getElementById('request.startPort.address')).attr("selectedIndex");
+		if (startPortSelect.options[index + 1].value != null) {
+			startPortSelect.options[index + 1].selected = true;
+		} else {
+			startPortSelect.options[index - 1].selected = true;
+		}
+	} */
 }
 
 function checkMinus(field,id){
@@ -251,7 +270,7 @@ function blockInputStartTime(checked) {
         <tr><td>&nbsp;</td></tr>
 
         <tr>
-            <td class="label"><spring:message code="reservation.endPort"/></td>
+            <td class="label"><spring:message code="reservation.endPort"/><br /><span class="error"><form:errors path="request.endPort.address"/></span></td>
             <td class="value">
                 <form:select path="request.endPort.address" onchange="setEndFriendlyName(this.options[this.options.selectedIndex].text)">
                     <form:options items="${friendlyports_all}" itemValue="address" itemLabel="friendlyName"/>
