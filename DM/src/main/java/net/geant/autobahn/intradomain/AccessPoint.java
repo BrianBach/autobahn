@@ -22,11 +22,8 @@ import net.geant.autobahn.idm2dm.OversubscribedException;
 import net.geant.autobahn.intradomain.administration.DmAdministration;
 import net.geant.autobahn.intradomain.administration.KeyValue;
 import net.geant.autobahn.intradomain.common.GenericInterface;
-import net.geant.autobahn.intradomain.ethernet.EthMonitoring;
 import net.geant.autobahn.intradomain.pathfinder.IntradomainPathfinder;
 import net.geant.autobahn.intradomain.pathfinder.IntradomainPathfinderFactory;
-import net.geant.autobahn.intradomain.sdh.SdhMonitoring;
-import net.geant.autobahn.intradomain.topology.TopologyFileReader;
 import net.geant.autobahn.network.Link;
 import net.geant.autobahn.network.LinkIdentifiers;
 import net.geant.autobahn.network.StatisticsEntry;
@@ -173,18 +170,6 @@ public final class AccessPoint implements Idm2Dm, DmAdministration {
             // Create Domain Manager
             intradomainManager = new ResourcesReservation(pathfinder, prman, properties);
             
-            if("true".equalsIgnoreCase(properties.getProperty("monitoring"))) {
-            	if("ethernet".equalsIgnoreCase(topologyType)) {
-            		EthMonitoring ethm = new EthMonitoring(this, topology);
-            		ethm.startMonitoring();
-            	}
-            	if("sdh".equalsIgnoreCase(topologyType)) {
-            		SdhMonitoring sthm = new SdhMonitoring(this);
-            		sthm.startMonitoring();
-            	}
-            	log.info("Start Monitoring Deamon");
-            }
-
             state = State.READY;
         } catch (org.hibernate.exception.GenericJDBCException e) {
             state = State.ERROR;
