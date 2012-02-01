@@ -321,30 +321,34 @@ public class TopologyFinder implements TopologyFinderNotifier{
 				statusNeighbor = neighbourIdm.getStatus();
 				
 				List<PortType> pTypes = manager.getInterDomainManagerPorts(idmsNames.get(i));
-				list = new ArrayList<String>();
-				for(PortType pType : pTypes) {
-					list.add(pType.getAddress());
+				if (pTypes != null) {
+    				list = new ArrayList<String>();
+    				for(PortType pType : pTypes) {
+    					list.add(pType.getAddress());
+    				}
+				} else {
+				    list = null;
 				}
-				
+
 				isActive = currentTime-neighbourIdm.getLastStatusUpdateInMillis()<manager.getTearDownTime();
-					
+
 					if (statusNeighbor!= null){
-							
+
 							Link link =neighbors.get(j).getLink();
 							
 							double lattitude_midle = (Math.abs(status.getLatitude()-statusNeighbor.getLatitude()))/2+Math.min(status.getLatitude(),statusNeighbor.getLatitude());
 							double longitude_midle = (Math.abs(status.getLongitude()-statusNeighbor.getLongitude()))/2+	Math.min(status.getLongitude(),statusNeighbor.getLongitude());		
-							
+
 							if (link == null)
 								continue;
-							
+
 							marker = createMarker(link.getBodID(), lattitude_midle, longitude_midle, Marker.DEFAULT_INFO, createHTMLLinkInfo(link));
 							topology.addMarker(marker);
-							
+
 							line = new Line();
 							line.setStartLattitude(""+status.getLatitude());
 							line.setStartLongitude(""+status.getLongitude());
-						
+
 							line.setEndLattitude(""+lattitude_midle);
 							line.setEndLongitude(""+longitude_midle);
 							line.setColor(Line.DEFAULT_COLOR_ACTIVE);
@@ -354,7 +358,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 							line = new Line();
 							line.setStartLattitude(""+lattitude_midle);
 							line.setStartLongitude(""+longitude_midle);
-						
+
 							line.setEndLattitude(""+statusNeighbor.getLatitude());
 							line.setEndLongitude(""+statusNeighbor.getLongitude());
 							line.setColor(isActive?Line.DEFAULT_COLOR_ACTIVE:Line.DEFAULT_COLOR_DEACTIVE);
