@@ -24,77 +24,77 @@ import net.geant.autobahn.useraccesspoint.UserAccessPointException;
  */
 public interface Manager {
 
-	/**
-	 * Gets array of all string representations of  Reservation states members
-	 * @return array with string Reservation types members 
-	 */
-	public String[] getReservationStates();
+    /**
+     * Gets array of all string representations of  Reservation states members
+     * @return array with string Reservation types members 
+     */
+    public String[] getReservationStates();
 
-	/**
-	 * Gets array of all string representations of  ReservationService states members
-	 * @return array with string ReservationService types members 
-	 */
-	public String[] getServiceStates();
+    /**
+     * Gets array of all string representations of  ReservationService states members
+     * @return array with string ReservationService types members 
+     */
+    public String[] getServiceStates();
 
-	/**
-	 * Gets list of all of IDMs names registered in WEB GUI
-	 * @return array with string ReservationService types members 
-	 */
-	public List<String> getAllInterdomainManagers ();
+    /**
+     * Gets list of all of IDMs names registered in WEB GUI
+     * @return array with string ReservationService types members 
+     */
+    public List<String> getAllInterdomainManagers ();
 
-	/**
-	 * Gets map of homeDomainID and reservationID from all IDMs registered in WEB GUI
-	 * @return map of reservationID and homeDomainID  
-	 */
-	public Map<String, String> getServicesForAllInterDomainManagers();
+    /**
+    * Gets map of homeDomainID and reservationID from all IDMs registered in WEB GUI
+    * @return map of reservationID and homeDomainID  
+    */
+    public Map<String, String> getServicesForAllInterDomainManagers();
 
-	/**
-	 * Gets list of all IDMs registered in WEB GUI
-	 * @return list of InterDomain  types members 
-	 */
-	public List<InterDomainManager> getInterDomainManagers();
+    /**
+     * Gets list of all IDMs registered in WEB GUI
+     * @return list of InterDomain  types members 
+     */
+    public List<InterDomainManager> getInterDomainManagers();
 
-	/**
-	 * Check if UserAccessPoint web service interface for IDM is accessible
-	 * @return true if interface is working 
-	 */
-	public boolean checkUserAccessPointConnection (String idm);
+    /**
+     * Check if UserAccessPoint web service interface for IDM is accessible
+     * @return true if interface is working 
+     */
+    public boolean checkUserAccessPointConnection (String idm);
 
-	/**
-	 * Check if Administration web service interface for IDM is accessible
-	 * @return true if interface is accessible 
-	 */
+    /**
+     * Check if Administration web service interface for IDM is accessible
+     * @return true if interface is accessible 
+     */
+    public boolean checkAdminstrationConnection (String idm);
 
-	public boolean checkAdminstrationConnection (String idm);
-	/**
-	 * Submits the ServiceRequest in IDM by the UserAccessPoint interface
-	 * @throws UserAccessPointException_Exception if some connection problem appears or user cannot request service
-	 * @throws ManagerException 
-	 */
-	public String submitServiceAtInterDomainManager (String idm, ServiceRequest request)throws UserAccessPointException, ManagerException;
+    /**
+     * Submits the ServiceRequest in IDM by the UserAccessPoint interface
+     * @throws UserAccessPointException_Exception if some connection problem appears or user cannot request service
+     * @throws ManagerException 
+     */
+    public String submitServiceAtInterDomainManager (String idm, ServiceRequest request)throws UserAccessPointException, ManagerException;
 
-	/**
-	 * Gets list of configuration properties for specified IDM 
-	 * 
-	 * @param idm identifier name of the IDM
-	 * @return	list of KeyValue
-	 */
-	public List<KeyValue> getPropertiesForInterDomainManager (String idm);
+    /**
+     * Gets list of configuration properties for specified IDM 
+     * 
+     * @param idm identifier name of the IDM
+     * @return	list of KeyValue
+     */
+    public List<KeyValue> getPropertiesForInterDomainManager (String idm);
 
-	/**
-	 * Sets list of configuration properties for specified IDM registerd in WEB GUI 
-	 * 
-	 * @param idm identifier of the IDM
-	 * @param list of KeyValue
-	 */
-	public void setPropertiesForInterDomainManager (String idm, List<KeyValue> properties);
+    /**
+     * Sets list of configuration properties for specified IDM registerd in WEB GUI 
+     * 
+     * @param idm identifier of the IDM
+     * @param list of KeyValue
+     */
+    public void setPropertiesForInterDomainManager (String idm, List<KeyValue> properties);
 
-	/**
-	 * Gets list of all services for specified IDM registered in WEB GUI
-	 * @param idm identifier of the IDM
-	 * @return list of Service objects  
-	 */
-	public List<ServiceType> getServicesFromInterDomainManager (String idm);
+    /**
+     * Gets list of all services for specified IDM registered in WEB GUI
+     * @param idm identifier of the IDM
+     * @return list of Service objects  
+     */
+    public List<ServiceType> getServicesFromInterDomainManager (String idm);
 
     /**
      * Gets submitted services from specified IDM
@@ -103,39 +103,39 @@ public interface Manager {
      *            identifier of the IDM - if null provides list of services from first IDM
      * @return ServicesFormModel
      */
-	public ServicesFormModel getSubmitedServicesInIDM(String idm);
+    public ServicesFormModel getSubmitedServicesInIDM(String idm);
 
-	/**
-	 * Gets specified service from specified IDM registered in WEB GUI
-	 * 
-	 * @param idm identifier of the IDM 
-	 * @param serviceId identifier of the search service
-	 * @return Service if exist, null if not
-	 */
-	public ServiceType getServiceFromInterDomainManager (String idm, String serviceId);
+    /**
+     * Gets specified service from specified IDM registered in WEB GUI
+     * 
+     * @param idm identifier of the IDM 
+     * @param serviceId identifier of the search service
+     * @return Service if exist, null if not
+     */
+    public ServiceType getServiceFromInterDomainManager (String idm, String serviceId);
 
-	/**
-	 * Cancel specified service in specified IDM registered in WEB GUI
-	 *  
-	 * @param idm identifier of the IDM 
-	 * @param serviceId identifier of the search service
-	 * @throws UserAccessPointException_Exception if some connection problem or cancelling error appear
-	 */
-	public void cancelServiceInInterDomainManager(String idm,String serviceId) throws UserAccessPointException;
+    /**
+     * Cancel specified service in specified IDM registered in WEB GUI
+     *  
+     * @param idm identifier of the IDM 
+     * @param serviceId identifier of the search service
+     * @throws UserAccessPointException_Exception if some connection problem or cancelling error appear
+     */
+    public void cancelServiceInInterDomainManager(String idm,String serviceId) throws UserAccessPointException;
 
-	/**
-	 * Gets specified IDM registered in WEB GUI
-	 * @param idm identifier of the IDM
-	 * @return InterDomainManager object if exist, if not null
-	 */
-	public InterDomainManager getInterDomainManager (String idm);
+    /**
+     * Gets specified IDM registered in WEB GUI
+     * @param idm identifier of the IDM
+     * @return InterDomainManager object if exist, if not null
+     */
+    public InterDomainManager getInterDomainManager (String idm);
 
-	/**
-	 * Gets logged information from specified IDM registered in WEB GUI
-	 * @param idm identifier of the IDM
-	 * @return String log information
-	 */
-	public String getLogsInterDomainManager(String idm, boolean b, boolean c);
+    /**
+     * Gets logged information from specified IDM registered in WEB GUI
+     * @param idm identifier of the IDM
+     * @return String log information
+     */
+    public String getLogsInterDomainManager(String idm, boolean b, boolean c);
 	
     /**
      * Gets all IDCP port names in all IDM registered in WEB GUI
@@ -144,7 +144,7 @@ public interface Manager {
      * @return list of  ports names
      */
     public List<PortType> getAllIdcpPorts (String idmIdentifier);
-    
+
     /**
      * Gets all IDCP port names in all IDM registered in WEB GUI
      * @return list of  ports names
@@ -152,17 +152,17 @@ public interface Manager {
     public List<PortType> getAllIdcpPorts ();
 
     /**
-	 * Gets all client ports
-	 * If the supplied parameter is not null, it tries with that IDM,
-	 * otherwise it searches for any registered IDM that can return a valid result
+     * Gets all client ports
+     * If the supplied parameter is not null, it tries with that IDM,
+     * otherwise it searches for any registered IDM that can return a valid result
      * Does not include any IDCP ports
      * 
      * @param idm - preferred IDM to get ports from
      * @return list of ports names with associated friendly ones
      * @throws UserAccessPointException 
-	 */
-	public List<PortType> getAllClientPorts (String idmIdentifier) throws UserAccessPointException;
-	
+     */
+    public List<PortType> getAllClientPorts (String idmIdentifier) throws UserAccessPointException;
+
     /**
      * Gets all client ports
      * It searches for any registered IDM that can return a valid result
@@ -189,19 +189,19 @@ public interface Manager {
      * @return list of domains names
      */
     public List<String> getAllDomains();
-    
+
     /**
      * Gets all non-client domain names
      * @return list of domains names
      */
     public List<String> getAllDomains_NonClient();
-    
+
     /**
      * Gets all link names
      * @return list of links names
      */
     public List<String> getAllLinks();
-    
+
     /**
      * Gets all link names that do not attach to a client domain
      * @return list of links names
@@ -217,47 +217,47 @@ public interface Manager {
      */
     public List<PortType> getInterDomainManagerPorts(String idm);
 
-	/**
-	 * Gets time period after with the  registered earlier IDM is mark as not accessible
-	 * @return
-	 */
-	public long getTearDownTime();
+    /**
+     * Gets time period after with the  registered earlier IDM is mark as not accessible
+     * @return
+     */
+    public long getTearDownTime();
 
-	/**
-	 * Checks if request reservation is possible to schedule
-	 * @param idm identifier of the IDM
-	 * @param request reservation request
-	 * @return true if reservation is possible to schedule
-	 */
-	public ReservationTest  checkReservationPossibility(String idm,ReservationRequest request)throws UserAccessPointException;
+    /**
+     * Checks if request reservation is possible to schedule
+     * @param idm identifier of the IDM
+     * @param request reservation request
+     * @return true if reservation is possible to schedule
+     */
+    public ReservationTest  checkReservationPossibility(String idm,ReservationRequest request)throws UserAccessPointException;
 
-	/**
-	 * Gets ServiceRequest template for service request form
-	 * @return ServiceRequest template
-	 */
-	public ServiceRequest getServiceRequestTemplate();
+    /**
+     * Gets ServiceRequest template for service request form
+     * @return ServiceRequest template
+     */
+    public ServiceRequest getServiceRequestTemplate();
 
-	/**
-	 * Gets ReservationRequest template for reservation request form 
-	 * @return ReservationRequest template
-	 */
-	public ReservatiomDepandentOnTimezone getReservationRequestTemplate();
+    /**
+     * Gets ReservationRequest template for reservation request form 
+     * @return ReservationRequest template
+     */
+    public ReservatiomDepandentOnTimezone getReservationRequestTemplate();
 
-	public List<String> getReservationPriorities();
+    public List<String> getReservationPriorities();
 
-	public List<String> getReservationResiliencies();
+    public List<String> getReservationResiliencies();
 
-	/**
-	 * Gets list of time zones
-	 * @return	list of time zones
-	 */
-	public List<String> getTimezones ();
+    /**
+     * Gets list of time zones
+     * @return	list of time zones
+     */
+    public List<String> getTimezones ();
 
-	/**
-	 * Gets default time zone for Web GUI
-	 * @return time zone name
-	 */
-	public String getTimezone ();
+    /**
+     * Gets default time zone for Web GUI
+     * @return time zone name
+     */
+    public String getTimezone ();
 
     /**
      * Shifts the request start/end times by as many hours as the difference
@@ -266,22 +266,22 @@ public interface Manager {
      * @param timezone
      * @param request
      */
-	public void convertTimeToApplicationTimezone(String timezone, ReservationRequest request);
+    public void convertTimeToApplicationTimezone(String timezone, ReservationRequest request);
 
-	/**
-	 * Gets SettingFormModel used in IDM setting view
-	 * @param idm identifier of IDM
-	 * @return	SettingsFormModel
-	 */
-	public SettingsFormModel getSettingsForInterDomainManager  (String idm);
+    /**
+     * Gets SettingFormModel used in IDM setting view
+     * @param idm identifier of IDM
+     * @return	SettingsFormModel
+     */
+    public SettingsFormModel getSettingsForInterDomainManager  (String idm);
 
-	/**
-	 * Gets LogsFormModel used in IDM logs view
-	 * @param idm identifier of IDM
-	 * @return LogsFormModel
-	 */
-	public LogsFormModel getLogsForInterDomainManager (String idm);
-	
+    /**
+     * Gets LogsFormModel used in IDM logs view
+     * @param idm identifier of IDM
+     * @return LogsFormModel
+     */
+    public LogsFormModel getLogsForInterDomainManager (String idm);
+
     /**
      * Gets StatisticsFormModel used in IDM setting view
      * @param idm identifier of IDM
@@ -330,4 +330,3 @@ public interface Manager {
      */
     public void handleTopologyChange(String idmParam, boolean deleteReservations);
 }
-

@@ -66,33 +66,33 @@ import org.springframework.security.util.AuthorityUtils;
  *
  */
 public class ManagerImpl implements Manager, ManagerNotifier {
-	
-	/**
-	 * Default time zone for WEB GUI
-	 */
-	private  String timezone ="UTC";
 
-	/**
-	 * List of all timezones for WEB GUI
-	 */
-	private List<String> timezones = Arrays.asList(TimeZone.getAvailableIDs());
+    /**
+     * Default time zone for WEB GUI
+     */
+    private  String timezone ="UTC";
 
-	/**
-	 * Topology notifier 
-	 */
-	private TopologyFinderNotifier notifier;
+    /**
+     * List of all timezones for WEB GUI
+     */
+    private List<String> timezones = Arrays.asList(TimeZone.getAvailableIDs());
 
-	/**
-	 * Service states name
-	 */
-	public static final String[] serviceStates = {"unknown","accepted", "in progress", "scheduled",
-	        "active", "finished", "failed", "cancelled" }; 
-	
-	/**
-	 * Reservation states
-	 */
-	public static final int UNKNOWN = 0;
-	public static final int ACCEPTED = 1;
+    /**
+     * Topology notifier
+     */
+    private TopologyFinderNotifier notifier;
+
+    /**
+     * Service states name
+     */
+    public static final String[] serviceStates = {"unknown","accepted", "in progress", "scheduled",
+        "active", "finished", "failed", "cancelled" }; 
+
+    /**
+     * Reservation states
+     */
+    public static final int UNKNOWN = 0;
+    public static final int ACCEPTED = 1;
     public static final int PATHFINDING = 2;
     public static final int LOCAL_CHECK = 3;
     public static final int SCHEDULING =4;
@@ -106,53 +106,53 @@ public class ManagerImpl implements Manager, ManagerNotifier {
     public static final int FINISHED = 21;
     public static final int CANCELLED = 22;
     public static final int FAILED = 23; 
-	
+
     /**
-	 * Reservations states names
-	 */
-	public static final String[] reservationStates = {"UNKNOWN", "ACCEPTED", "PATHFINDING", "LOCAL_CHECK",
+     * Reservations states names
+     */
+    public static final String[] reservationStates = {"UNKNOWN", "ACCEPTED", "PATHFINDING", "LOCAL_CHECK",
             "SCHEDULING", "SCHEDULED", "CANCELLING", "DEFERRED_CANCEL","WITHDRAWING","ACTIVATING",
             "ACTIVE", "FINISHING", 
             "UNKNOWN","UNKNOWN","UNKNOWN","UNKNOWN","UNKNOWN","UNKNOWN","UNKNOWN","UNKNOWN","UNKNOWN",
             "FINISHED","CANCELLED", "FAILED"};
-	
-	public static final String[] priorities ={};
-	
-	/**
-	 * Map with IDM registered in the system
-	 */
-	private  Map<String, InterDomainManager> idms = Collections.synchronizedMap(new HashMap<String, InterDomainManager>());
-	
-	/**
-	 * Map with IDM registration times
-	 */
-	private ConcurrentMap<String, Long> idmsTime = new ConcurrentHashMap<String, Long>();
-	
-	/**
-	 * Identifies period of time when IDM register in WEB GUI is mark as down
-	 */
-	private long tearDownTime = 60000;
 
-	/**
-	 * Logs information
-	 */
-	private static Logger logger = Logger.getLogger("ManagerImpl");
+    public static final String[] priorities = {};
+
+    /**
+     * Map with IDM registered in the system
+     */
+    private  Map<String, InterDomainManager> idms = Collections.synchronizedMap(new HashMap<String, InterDomainManager>());
+
+    /**
+     * Map with IDM registration times
+     */
+    private ConcurrentMap<String, Long> idmsTime = new ConcurrentHashMap<String, Long>();
+
+    /**
+     * Identifies period of time when IDM register in WEB GUI is mark as down
+     */
+    private long tearDownTime = 60000;
+
+    /**
+     * Logs information
+     */
+    private static Logger logger = Logger.getLogger("ManagerImpl");
 
     /**
      * List of all client ports
      */
     private List<PortType> ports = new ArrayList<PortType>();
 
-	private LookupService lookupService;
-	
-	private String[] comparedLinks;
-	
-	private String[] comparedDomains;
-	
-	private String lookupHost;
-	
-	public ManagerImpl() {
-		Properties properties = new Properties();
+    private LookupService lookupService;
+
+    private String[] comparedLinks;
+
+    private String[] comparedDomains;
+
+    private String lookupHost;
+
+    public ManagerImpl() {
+        Properties properties = new Properties();
         try {
             InputStream is = getClass().getClassLoader().getResourceAsStream(
                         "../etc/webgui.properties");
@@ -163,8 +163,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
             logger.info("Could not load lookuphost properties: " + e.getMessage());
         }
         lookupHost = properties.getProperty("lookuphost");
-        
-        
+
         // Build user-friendly list of timezones
         for (int i =0; i<timezones.size(); i++) {
             String tzStr = timezones.get(i);
@@ -179,95 +178,102 @@ public class ManagerImpl implements Manager, ManagerNotifier {
             }
         }
         Collections.sort(timezones);
-	}
-	
+    }
+
     @Override
-	public LookupService getLookupService(){
-    	if(lookupService == null ){
-    		if (LookupService.isLSavailable(lookupHost)) {
+    public LookupService getLookupService() {
+        if (lookupService == null) {
+            if (LookupService.isLSavailable(lookupHost)) {
                 lookupService = new LookupService(lookupHost);
             } else {
                 lookupService = null;
             }
-    	} 
-    	return lookupService;
-	}
+        }
+        return lookupService;
+    }
 
-	/**
-	 * Creates the InterDomainManager
-	 * @param name name of new InterDomainManagert
-	 * @return InterDomainManager
-	 */
-	public InterDomainManager createIdm (String name){
-		InterDomainManager interdomain = new InterDomainManager(name, name);
-		refreshPorts();
+    /**
+     * Creates the InterDomainManager
+     * 
+     * @param name
+     *            name of new InterDomainManagert
+     * @return InterDomainManager
+     */
+    public InterDomainManager createIdm(String name) {
+        InterDomainManager interdomain = new InterDomainManager(name, name);
+        refreshPorts();
         return interdomain;
-	}
+    }
 
-	/**
-	 * Registers InterDomainManager
-	 * 
-	 * @param idm InterDomainManager
-	 */
-	public void addIdm(InterDomainManager idm) {
-		if (idm ==null)
-			return;
-		idms.put(idm.getIdentifier(), idm);
-	}
-	
-	/**
-	 * Removes registered InterDomainManager
-	 * 
-	 * @param identifier	InterDomainManager identifier
-	 * @return	 removed InterDomainManager
-	 */
-	public InterDomainManager remove (String identifier){
-		InterDomainManager manager = idms.remove(identifier);
-		return manager;
-	}
+    /**
+     * Registers InterDomainManager
+     * 
+     * @param idm
+     *            InterDomainManager
+     */
+    public void addIdm(InterDomainManager idm) {
+        if (idm == null)
+            return;
+        idms.put(idm.getIdentifier(), idm);
+    }
 
-	/**
-	 * Removes registered InterDomainManager 
-	 * 
-	 * @param name	 InterDomain manager
-	 * @return	 removed InterDomainManager
-	 */
-	public InterDomainManager remove (InterDomainManager idm){
-		if (idm==null)
-			return null;
-		return idms.remove(idm);
-	}
+    /**
+     * Removes registered InterDomainManager
+     * 
+     * @param identifier
+     *            InterDomainManager identifier
+     * @return removed InterDomainManager
+     */
+    public InterDomainManager remove(String identifier) {
+        InterDomainManager manager = idms.remove(identifier);
+        return manager;
+    }
 
-	/**
-	 * Removes all registered InterDomainManager 
-	 */
-	public void removeAll() {
-		Iterator<String> iterator = idms.keySet().iterator();
-		InterDomainManager idm = null;
-		while (iterator.hasNext()) {
-			idm = (InterDomainManager)idms.get(iterator.next());
-			remove(idm);
-			idm = null;
-		}
-	}
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getInterDomainManagers()
-	 */
+    /**
+     * Removes registered InterDomainManager
+     * 
+     * @param name
+     *            InterDomain manager
+     * @return removed InterDomainManager
+     */
+    public InterDomainManager remove(InterDomainManager idm) {
+        if (idm == null)
+            return null;
+        return idms.remove(idm);
+    }
+
+    /**
+     * Removes all registered InterDomainManager
+     */
+    public void removeAll() {
+        Iterator<String> iterator = idms.keySet().iterator();
+        InterDomainManager idm = null;
+        while (iterator.hasNext()) {
+            idm = (InterDomainManager) idms.get(iterator.next());
+            remove(idm);
+            idm = null;
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * net.geant.autobahn.autoBahnGUI.manager.Manager#getInterDomainManagers()
+     */
     @Override
-	public List<InterDomainManager> getInterDomainManagers() {
-		List<InterDomainManager> managers = new ArrayList<InterDomainManager>();
-		Iterator<String> keyIterator = idms.keySet().iterator();
-		InterDomainManager manager;
-		while (keyIterator.hasNext()){
-			manager = idms.get(keyIterator.next());
-			if (manager!=null)
-				managers.add(manager);
-			
-		}
-		return managers;
-	}
-	
+    public List<InterDomainManager> getInterDomainManagers() {
+        List<InterDomainManager> managers = new ArrayList<InterDomainManager>();
+        Iterator<String> keyIterator = idms.keySet().iterator();
+        InterDomainManager manager;
+        while (keyIterator.hasNext()) {
+            manager = idms.get(keyIterator.next());
+            if (manager != null)
+                managers.add(manager);
+        }
+        return managers;
+    }
+
     /*
      * (non-Javadoc)
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllIdcpPorts(java.lang.String)
@@ -293,7 +299,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 
         return getAllIdcpPorts();
     }
-    
+
     /*
      * (non-Javadoc)
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllIdcpPorts()
@@ -313,7 +319,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
         
         return null;
     }
-    
+
     /*
      * (non-Javadoc)
      * 
@@ -332,7 +338,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
             List<PortType> pTypes = manager.getAllClientPorts();
 
             if (pTypes != null) {
-            	return pTypes;
+                return pTypes;
             } else {
                 return getAllClientPorts();
             }
@@ -368,7 +374,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      */
     @Override
     public List<PortType> getAllFriendlyAndIdcpPorts (String idm) throws UserAccessPointException {
-    	List<PortType> friendlyPorts = getAllClientPorts(idm);
+        List<PortType> friendlyPorts = getAllClientPorts(idm);
         List<PortType> idcpPorts = this.getAllIdcpPorts(idm);
         
         if (friendlyPorts == null) {
@@ -380,7 +386,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
         }
         
         for (PortType idcpP : idcpPorts) {
-            friendlyPorts.add(idcpP);                
+            friendlyPorts.add(idcpP);
         }
 
         return friendlyPorts;
@@ -394,21 +400,21 @@ public class ManagerImpl implements Manager, ManagerNotifier {
     public List<String> getAllDomains(){
         // Parse through IDMs and get the first non-null result
         for(String idm : idms.keySet()) {
-        	InterDomainManager manager = idms.get(idm);
-        	String[] pTypes = manager.getAllDomains();
-        	
-        	List<String> domains = new ArrayList<String>();
-        	
-        	if(pTypes != null) {
-        		for(String link : pTypes) {
-        			domains.add(link);
-        		}
-        		
-        		return domains; 
-        	}
+            InterDomainManager manager = idms.get(idm);
+            String[] pTypes = manager.getAllDomains();
+
+            List<String> domains = new ArrayList<String>();
+
+            if (pTypes != null) {
+                for (String link : pTypes) {
+                    domains.add(link);
+                }
+
+                return domains;
+            }
         }
-        
-		return null;
+
+        return null;
     }
 
     /*
@@ -420,23 +426,23 @@ public class ManagerImpl implements Manager, ManagerNotifier {
         // Parse through IDMs and get the first non-null result
         Iterator<String> iterator = idms.keySet().iterator();
         InterDomainManager manager = null;
-        
+
         while (iterator.hasNext()) {
             manager = idms.get(iterator.next());
             if (manager != null) {
                 List<String> domains = new ArrayList<String>();
-            	
-            	String[] pTypes = manager.getAllDomains_NonClient();
-            	if (pTypes!=null) {
-            		for(String domain : pTypes) {
-            			domains.add(domain);
-            		}
-            	}
 
-        		return domains;
+                String[] pTypes = manager.getAllDomains_NonClient();
+                if (pTypes != null) {
+                    for (String domain : pTypes) {
+                        domains.add(domain);
+                    }
+                }
+
+                return domains;
             }
         }
-        
+
         return null;
     }
 
@@ -447,22 +453,22 @@ public class ManagerImpl implements Manager, ManagerNotifier {
     @Override
     public List<String> getAllLinks(){
         // Parse through IDMs and get the first non-null result
-    	for(String idm : idms.keySet()) {
-        	InterDomainManager manager = idms.get(idm);
-        	
-        	String[] pTypes = manager.getAllLinks();
-        	
-        	if(pTypes != null) {
-            	List<String> links = new ArrayList<String>();
-            	
-        		for(String link : pTypes) {
-        			links.add(link);
-        		}
-        		
-        		return links; 
-        	}
+        for (String idm : idms.keySet()) {
+            InterDomainManager manager = idms.get(idm);
+
+            String[] pTypes = manager.getAllLinks();
+
+            if (pTypes != null) {
+                List<String> links = new ArrayList<String>();
+
+                for (String link : pTypes) {
+                    links.add(link);
+                }
+
+                return links;
+            }
         }
-        
+
         return null;
     }
 
@@ -479,139 +485,130 @@ public class ManagerImpl implements Manager, ManagerNotifier {
             manager = idms.get(iterator.next());
             if (manager != null) {
                 String[] pTypes = manager.getAllLinks_NonClient();
-                
+
                 if (pTypes != null) {
                     List<String> links = new ArrayList<String>();
 
-            		for(String link : pTypes) {
-            			links.add(link);
-            		}
-            		
-            		return links;
+                    for (String link : pTypes) {
+                        links.add(link);
+                    }
+
+                    return links;
                 }
             }
         }
         return null;
     }
 
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getInterDomainManagerPorts(java.lang.String)
-	 */
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getInterDomainManagerPorts(java.lang.String)
+     */
     @Override
-	public List<PortType> getInterDomainManagerPorts (String idmIdentifier){
-	    InterDomainManager manager = idms.get(idmIdentifier);
-	    if (manager == null) {
-	        System.out.println("idms.get manager is NULL");
-	    	return null;
-	    }
-	    
-    	List<PortType> pTypes = manager.getDomainClientPorts();
-    	if (pTypes == null) {
-    	    System.out.println("idms manager is" + manager.getIdentifier());
-    	    System.out.println("idms.get client ports is NULL");
-    	    return null;
-    	}
+    public List<PortType> getInterDomainManagerPorts(String idmIdentifier) {
+        InterDomainManager manager = idms.get(idmIdentifier);
+        if (manager == null) {
+            System.out.println("idms.get manager is NULL");
+            return null;
+        }
 
-    	return pTypes;
-	}
+        List<PortType> pTypes = manager.getDomainClientPorts();
+        if (pTypes == null) {
+            System.out.println("idms manager is" + manager.getIdentifier());
+            System.out.println("idms.get client ports is NULL");
+            return null;
+        }
 
-	/*
-	public Service requestService (String idm, ServiceRequest service) throws UserAccessPointException_Exception{
-		InterDomainManager manager = idms.get(idm);
-		if (manager==null || service == null) 
-			return null;
-		String identifier;
-		identifier = manager.submitService(service);
-		return manager.getService(identifier);		
-	}*/
-	
+        return pTypes;
+    }
+
     @Override
-	public Map<String,String> getServicesForAllInterDomainManagers(){
-		
-		List<ServiceType> list = new ArrayList<ServiceType>(); 
-		InterDomainManager manager = null;
-		List<ServiceType> managerServices =null;
-		
-		for (String idm:idms.keySet()){
-			manager = idms.get(idm);
-			if (manager == null)
-				continue;
-			managerServices = manager.getServices(false);
-			if (managerServices == null)
-				continue;
-			list.addAll(managerServices);
-		}	
-		Map<String,String> map = new HashMap<String, String>();		
-		
-		for (int i = 0; i < list.size(); i++) {
-						
-			List<ReservationType> res = list.get(i).getReservations();	
-			for (int j = 0; j < res.size(); j++) {
-				
-				if(res.get(j).getPath() == null)
-					continue;
-				String bodyID = res.get(j).getBodID();
-				String homeID = res.get(j).getPath().getHomeDomainID();
-				map.put(bodyID,homeID);
-			}
-		}
-		if (map.size() == 0) return null;
-		else 
-			return sortMapByKey(map);
-		
-	}
+    public Map<String, String> getServicesForAllInterDomainManagers() {
 
-	public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map){
-		
-		TreeSet<String> treeset= new TreeSet<String>(new MapKeySetComparator());
-		treeset.addAll(map.keySet());
-		
-		LinkedHashMap<String, String> result = new LinkedHashMap<String, String>();
-		 
-		for(String str : treeset) {
-			result.put(str, map.get(str));
-		}
-			
-			return result;
-	}
+        List<ServiceType> list = new ArrayList<ServiceType>();
+        InterDomainManager manager = null;
+        List<ServiceType> managerServices = null;
 
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllInterdomainManagers()
-	 */
+        for (String idm : idms.keySet()) {
+            manager = idms.get(idm);
+            if (manager == null)
+                continue;
+            managerServices = manager.getServices(false);
+            if (managerServices == null)
+                continue;
+            list.addAll(managerServices);
+        }
+        Map<String, String> map = new HashMap<String, String>();
+
+        for (int i = 0; i < list.size(); i++) {
+
+            List<ReservationType> res = list.get(i).getReservations();
+            for (int j = 0; j < res.size(); j++) {
+
+                if (res.get(j).getPath() == null) {
+                    continue;
+                }
+                String bodyID = res.get(j).getBodID();
+                String homeID = res.get(j).getPath().getHomeDomainID();
+                map.put(bodyID, homeID);
+            }
+        }
+        if (map.size() == 0) {
+            return null;
+        } else {
+            return sortMapByKey(map);
+        }
+    }
+
+    public LinkedHashMap<String, String> sortMapByKey(final Map<String, String> map) {
+
+        TreeSet<String> treeset = new TreeSet<String>(new MapKeySetComparator());
+        treeset.addAll(map.keySet());
+
+        LinkedHashMap<String, String> result = new LinkedHashMap<String, String>();
+
+        for (String str : treeset) {
+            result.put(str, map.get(str));
+        }
+
+        return result;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllInterdomainManagers()
+     */
     @Override
-	public List<String> getAllInterdomainManagers (){
-		List<String>names = new ArrayList<String> ();
-		for (String name:idms.keySet())
-			names.add(name);
-		return names;
-	}
-	
-	/**
-	 * Make actions needed when  new IDM appear for first time
-	 * 
+    public List<String> getAllInterdomainManagers() {
+        List<String> names = new ArrayList<String>();
+        for (String name : idms.keySet())
+            names.add(name);
+        return names;
+    }
+
+    /**
+     * Make actions needed when  new IDM appear for first time
+     * 
      * @param idmName - Unique Name of the IDM domain, e.g. Geant
-	 * @param idmUrl - URL where the IDM is listening
-	 * @return
-	 */
-	public InterDomainManager newInterDomainManagerConnected(String idmName, String idmUrl) {
-		int index = idmUrl.indexOf("/interdomain");
-		String url;
-		if (index > 0) {
-			url = idmUrl.substring(0, index);
-		}
-		else {
-			url = idmUrl;
-		}
-		InterDomainManager manager = new InterDomainManager(idmName, url);
-		refreshPorts();
-		if (manager != null) {
-			idms.put(idmName, manager);
-		}
-		return manager;
-	}
-	
+     * @param idmUrl - URL where the IDM is listening
+     * @return
+     */
+    public InterDomainManager newInterDomainManagerConnected(String idmName, String idmUrl) {
+        int index = idmUrl.indexOf("/interdomain");
+        String url;
+        if (index > 0) {
+            url = idmUrl.substring(0, index);
+        } else {
+            url = idmUrl;
+        }
+        InterDomainManager manager = new InterDomainManager(idmName, url);
+        refreshPorts();
+        if (manager != null) {
+            idms.put(idmName, manager);
+        }
+        return manager;
+    }
+
     private void refreshPorts() {
         ports.clear();
         try {
@@ -621,482 +618,493 @@ public class ManagerImpl implements Manager, ManagerNotifier {
         }
     }
 
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.ManagerNotifier#reservationChanged(java.lang.String, java.lang.String, java.lang.String, net.geant.autobahn.gui.ReservationChangedType, java.lang.String)
-	 */
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.ManagerNotifier#reservationChanged(java.lang.String, java.lang.String, java.lang.String, net.geant.autobahn.gui.ReservationChangedType, java.lang.String)
+     */
     @Override
-	public void reservationChanged(String idm, String serviceId, String resID,
-			ReservationChangedType state, String message) {
-		if (serviceId == null)
-			serviceId = resID.substring(0, resID.lastIndexOf("_res_"));
-		InterDomainManager manager = idms.get(idm);
-		if (manager == null){
-			return;
-		}
-		ServiceType service = manager.getService(serviceId);
-		if (service == null)
-			return;
-		List<ReservationType> list = new ArrayList<ReservationType>();
-		list.addAll(service.getReservations());
-		int stateOfReservation  = convertReservationTypes(state);
-		if (stateOfReservation==SCHEDULED){
-			manager.forceUpdateService(serviceId);
-		}
-		int length = list.size();
-		ReservationType reservation = null;
-		for (int i=0;i<length;i++){
-			reservation = list.get(i);
-			if (reservation.getBodID().equals(resID)){
-				reservation.setState(stateOfReservation);
-				break;
-			}
-		}
-	}
-
-	@Override
-	public void checkIDMavailability(){
-		if (!idms.isEmpty()) {
-			Iterator<String> iterator = idmsTime.keySet().iterator();
-			do 	{
-					String nextElement = iterator.next();
-           	
-		            	if (System.currentTimeMillis() - idmsTime.get(nextElement) > tearDownTime) {
-			            	logger.info("IDM tear down " + nextElement);
-			            	idms.remove(nextElement);
-			            	
-			            }
-					                		            
-	        } while (iterator.hasNext());
+    public void reservationChanged(String idm, String serviceId, String resID,
+            ReservationChangedType state, String message) {
+        if (serviceId == null) {
+            serviceId = resID.substring(0, resID.lastIndexOf("_res_"));
         }
-		else
-			logger.info("IDMs not available ");
+        InterDomainManager manager = idms.get(idm);
+        if (manager == null) {
+            return;
+        }
+        ServiceType service = manager.getService(serviceId);
+        if (service == null) {
+            return;
+        }
+        List<ReservationType> list = new ArrayList<ReservationType>();
+        list.addAll(service.getReservations());
+        int stateOfReservation = convertReservationTypes(state);
+        if (stateOfReservation == SCHEDULED) {
+            manager.forceUpdateService(serviceId);
+        }
+        int length = list.size();
+        ReservationType reservation = null;
+        for (int i = 0; i < length; i++) {
+            reservation = list.get(i);
+            if (reservation.getBodID().equals(resID)) {
+                reservation.setState(stateOfReservation);
+                break;
+            }
+        }
+    }
 
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.ManagerNotifier#statusUpdated(java.lang.String, java.lang.String, net.geant.autobahn.administration.Status)
-	 */
     @Override
-	public void statusUpdated(String idm, String idmUrl, Status status) {
-		
-		InterDomainManager manager = idms.get(idm);
-		if (manager == null) {
-			manager = newInterDomainManagerConnected(idm, idmUrl);
-		}
-		
-		manager.setStatus(status);
-		
-		if (!idmsTime.containsKey(idm)) {
-			idmsTime.put(idm, manager.getLastStatusUpdateInMillis());
-		} else {
-			idmsTime.replace(idm, manager.getLastStatusUpdateInMillis());			
-		}
-				
-		if (manager.getLastStatusUpdateInMillis() > tearDownTime) {
-			try{
-				manager.getServices(true);
-				manager.getProperties();
-				manager.getLog(true);
-			}catch (Exception e){
-				logger.info (e.getClass().getName()+":"+e.getMessage());
-			}
-		}
-		if (notifier != null)	
-				notifier.updateTopology(idm);
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getLogsInterDomainManager(java.lang.String, boolean, boolean)
-	 */
-    @Override
-	public String getLogsInterDomainManager(String idm, boolean refresh, boolean all) {
-		InterDomainManager manager = idms.get(idm);
-		if (manager == null)
-			return null;	
-		return manager.getLog(refresh, all);
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getReservationStates()
-	 */
-    @Override
-	public String[] getReservationStates (){
-		return reservationStates;
-	}
+    public void checkIDMavailability() {
+        if (!idms.isEmpty()) {
+            Iterator<String> iterator = idmsTime.keySet().iterator();
+            do {
+                String nextElement = iterator.next();
 
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#checkUserAccessPointConnection(java.lang.String)
-	 */
-    @Override
-	public boolean checkUserAccessPointConnection(String idm) {
-		InterDomainManager manager = idms.get(idm);
-		if (manager == null)
-			return false;
-		return manager.isUserAccessPointConnected();
-	}
+                if (System.currentTimeMillis() - idmsTime.get(nextElement) > tearDownTime) {
+                    logger.info("IDM tear down " + nextElement);
+                    idms.remove(nextElement);
+                }
 
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#checkAdminstrationConnection(java.lang.String)
-	 */
-    @Override
-	public boolean checkAdminstrationConnection(String idm) {
-		InterDomainManager manager = idms.get(idm);
-		if (manager == null)
-			return false;
-		return manager.isAdmnistrationConnected();
-	}
-	
-	private void logServiceRequest (ServiceRequest service ){
-		StringBuffer buffer =new StringBuffer ();
-		buffer.append ("Service:").append(service.getUserName()).append(",").append(service.getUserHomeDomain());
-		if (service.getReservations()==null)
-			logger.info( buffer.toString());
-		buffer.append("\n");
-		int length = service.getReservations().size();
-		ReservationRequest request = null;
-		for (int i=0;i<length;i++){
-			request =  service.getReservations().get(i);
-			if (request != null)
-			{
-				buffer.append("Reservation"+request.getStartTime()+":"+request.getEndPort());
-			}
-		}
-		//logger.info(buffer.toString());
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#submitServiceAtInterDomainManager(java.lang.String, net.geant.autobahn.useraccesspoint.ServiceRequest)
-	 */
-    @Override
-	public String submitServiceAtInterDomainManager(String idm, ServiceRequest request) throws UserAccessPointException, ManagerException {
-		logger.info("Submitting service");
-		if (request == null){
-			throw new ManagerException(ManagerException.NO_SERVICE, "Sumitting null service");
-		}
-		if (request.getReservations()== null || request.getReservations().isEmpty()){
-			throw new ManagerException(ManagerException.SERVICE_WITHOUT_RESERVATIONS, "Empty service submitted");
-		}
-		
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    	@SuppressWarnings("unchecked")
-		Set<String> authorities = AuthorityUtils.authorityArrayToSet(auth.getAuthorities());
-    	UserAuthParameters authParameters = new UserAuthParameters(auth.getName(), authorities);
-        
-        for (int i=0; i<request.getReservations().size(); i++) {
-        	request.getReservations().get(i).setAuthParameters(authParameters);
+            } while (iterator.hasNext());
+        } else {
+            logger.info("IDMs not available ");
         }
 
-		logger.info("Verified");
-		logServiceRequest(request);
-		InterDomainManager manager = idms.get(idm);
-		if (manager == null)
-			throw new ManagerException (ManagerException.UNKNOWN_MANAGER,"No manager with name:"+idm);
-		logger.info("Verified");
-		synchronized (manager) {
-			String  id = manager.submitService(request);
-			logger.info ("submitted");
-			return id;	
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#checkReservationPossibility(java.lang.String, net.geant.autobahn.useraccesspoint.ReservationRequest)
-	 */
-    @Override
-	public ReservationTest checkReservationPossibility(String idm,
-			ReservationRequest request) throws UserAccessPointException {
-		InterDomainManager manager = idms.get(idm);
-		logger.info ("check reservation possibility"+ manager== null);
-		ReservationTest test = new ReservationTest();
-		if (manager == null) {
-			test.setStatus(false);
-		}
-		else {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	    	@SuppressWarnings("unchecked")
-			Set<String> authorities = AuthorityUtils.authorityArrayToSet(auth.getAuthorities());
-	    	UserAuthParameters authParameters = new UserAuthParameters(auth.getName(), authorities);
-	        request.setAuthParameters(authParameters);
-
-			test.setStatus(manager.checkReservationPossibility(request));
-		}
-		return test;	
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getPropertiesForInterDomainManager(java.lang.String)
-	 */
-    @Override
-	public List<KeyValue> getPropertiesForInterDomainManager(String idm) {
-		InterDomainManager manager = idms.get(idm);
-		if (manager != null)
-			return manager.getProperties();
-		return null;
-	}
+    }
 
     /*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#setPropertiesForInterDomainManager(java.lang.String, java.util.List)
-	 */
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.ManagerNotifier#statusUpdated(java.lang.String, java.lang.String, net.geant.autobahn.administration.Status)
+     */
     @Override
-	public void setPropertiesForInterDomainManager(String idm, List<KeyValue> properties) {
-		InterDomainManager manager = idms.get(idm);
-		if (manager != null)
-			manager.setProperties(properties);
-			
-	}
+    public void statusUpdated(String idm, String idmUrl, Status status) {
 
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getServiceStates()
-	 */
+        InterDomainManager manager = idms.get(idm);
+        if (manager == null) {
+            manager = newInterDomainManagerConnected(idm, idmUrl);
+        }
+
+        manager.setStatus(status);
+
+        if (!idmsTime.containsKey(idm)) {
+            idmsTime.put(idm, manager.getLastStatusUpdateInMillis());
+        } else {
+            idmsTime.replace(idm, manager.getLastStatusUpdateInMillis());
+        }
+
+        if (manager.getLastStatusUpdateInMillis() > tearDownTime) {
+            try {
+                manager.getServices(true);
+                manager.getProperties();
+                manager.getLog(true);
+            } catch (Exception e) {
+                logger.info(e.getClass().getName() + ":" + e.getMessage());
+            }
+        }
+        if (notifier != null) {
+            notifier.updateTopology(idm);
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getLogsInterDomainManager(java.lang.String, boolean, boolean)
+     */
     @Override
-	public String[] getServiceStates() {
-		return serviceStates;
-	}
+    public String getLogsInterDomainManager(String idm, boolean refresh, boolean all) {
+        InterDomainManager manager = idms.get(idm);
+        if (manager == null)
+            return null;
+        return manager.getLog(refresh, all);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getServicesFromInterDomainManager(java.lang.String)
-	 */
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getReservationStates()
+     */
     @Override
-	public List<ServiceType> getServicesFromInterDomainManager(String idm) {
-		InterDomainManager manager= idms.get(idm);
-		if (manager != null){
-			return manager.getServices(false);
-		}
-		return null;
-	}
+    public String[] getReservationStates() {
+        return reservationStates;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#cancelServiceInInterDomainManager(java.lang.String, java.lang.String)
-	 */
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#checkUserAccessPointConnection(java.lang.String)
+     */
     @Override
-	public void cancelServiceInInterDomainManager(String idm,
-			String serviceID) throws UserAccessPointException {
-				
-		if (idm==null || serviceID == null)
-			return;
-		InterDomainManager manager= idms.get(idm);
-		
-		if ((manager != null) && ( manager.getService(serviceID) != null )){
-			
-			logger.info("Canceling service: "+idm+":"+serviceID);
-			manager.cancelService(serviceID);
-		}
-		else
-			logger.info("Service can not be canceled: "+idm+":"+serviceID);
-	}
+    public boolean checkUserAccessPointConnection(String idm) {
+        InterDomainManager manager = idms.get(idm);
+        if (manager == null) {
+            return false;
+        }
+        return manager.isUserAccessPointConnected();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.ManagerNotifier#update(java.lang.String, net.geant.autobahn.gui.EventType, java.util.List)
-	 */
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#checkAdminstrationConnection(java.lang.String)
+     */
     @Override
-	public void update(String idm, EventType event,
-			List<KeyValue> properties) {
-	}
+    public boolean checkAdminstrationConnection(String idm) {
+        InterDomainManager manager = idms.get(idm);
+        if (manager == null) {
+            return false;
+        }
+        return manager.isAdmnistrationConnected();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getInterDomainManager(java.lang.String)
-	 */
+    private void logServiceRequest (ServiceRequest service ) {
+        StringBuffer buffer =new StringBuffer ();
+        buffer.append ("Service:").append(service.getUserName()).append(",").append(service.getUserHomeDomain());
+        if (service.getReservations() == null) {
+            logger.info(buffer.toString());
+        }
+        buffer.append("\n");
+        int length = service.getReservations().size();
+        ReservationRequest request = null;
+        for (int i = 0; i < length; i++) {
+            request = service.getReservations().get(i);
+            if (request != null) {
+                buffer.append("Reservation" + request.getStartTime() + ":"
+                        + request.getEndPort());
+            }
+        }
+        // logger.info(buffer.toString());
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#submitServiceAtInterDomainManager(java.lang.String, net.geant.autobahn.useraccesspoint.ServiceRequest)
+     */
     @Override
-	public InterDomainManager getInterDomainManager(String idm) {
-		return idms.get(idm);
-	}
+    public String submitServiceAtInterDomainManager(String idm, ServiceRequest request) throws UserAccessPointException, ManagerException {
+        logger.info("Submitting service");
+        if (request == null) {
+            throw new ManagerException(ManagerException.NO_SERVICE, "Sumitting null service");
+        }
+        if (request.getReservations() == null || request.getReservations().isEmpty()) {
+            throw new ManagerException(ManagerException.SERVICE_WITHOUT_RESERVATIONS, "Empty service submitted");
+        }
 
-	/**
-	 * Sets the topology notifier
-	 * @return topology notifier
-	 */
-	public TopologyFinderNotifier getNotifier() {
-		return notifier;
-	}
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        @SuppressWarnings("unchecked")
+        Set<String> authorities = AuthorityUtils.authorityArrayToSet(auth.getAuthorities());
+        UserAuthParameters authParameters = new UserAuthParameters(auth.getName(), authorities);
 
-	public void setNotifier(TopologyFinderNotifier notifier) {
-		this.notifier = notifier;
-	}
+        for (int i=0; i<request.getReservations().size(); i++) {
+            request.getReservations().get(i).setAuthParameters(authParameters);
+        }
 
-	/**
-	 * Converts the reservation state known by WEB GUI
-	 * @param state reservation state
-	 * @return return state known by WEB GUI
-	 */
-	public int convertReservationTypes (ReservationChangedType state){
-		if (state==ReservationChangedType.ACTIVE)
-			return ACTIVE;
-		else
-		if (state==ReservationChangedType.CANCELLED)
-			return CANCELLED;
-		else
-		if (state==ReservationChangedType.FAILED)
-			return FAILED;
-		else
-		if (state==ReservationChangedType.FINISHED)
-			return FINISHED;
-		else
-		if (state==ReservationChangedType.SCHEDULED)
-			return SCHEDULED;
-		return 0;
-	}
+        logger.info("Verified");
+        logServiceRequest(request);
+        InterDomainManager manager = idms.get(idm);
+        if (manager == null) {
+            throw new ManagerException (ManagerException.UNKNOWN_MANAGER,"No manager with name:"+idm);
+        }
+        logger.info("Verified");
+        synchronized (manager) {
+            String id = manager.submitService(request);
+            logger.info("submitted");
+            return id;
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getServiceFromInterDomainManager(java.lang.String, java.lang.String)
-	 */
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#checkReservationPossibility(java.lang.String, net.geant.autobahn.useraccesspoint.ReservationRequest)
+     */
     @Override
-	public ServiceType getServiceFromInterDomainManager(String idm,String serviceId) {
-		InterDomainManager manager = idms.get(idm);
-		if (manager == null)
-			return null;
-		else
-			return manager.getService(serviceId);
-	}
+    public ReservationTest checkReservationPossibility(String idm,
+            ReservationRequest request) throws UserAccessPointException {
+        InterDomainManager manager = idms.get(idm);
+        logger.info("check reservation possibility" + manager == null);
+        ReservationTest test = new ReservationTest();
+        if (manager == null) {
+            test.setStatus(false);
+        } else {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            @SuppressWarnings("unchecked")
+            Set<String> authorities = AuthorityUtils.authorityArrayToSet(auth.getAuthorities());
+            UserAuthParameters authParameters = 
+                new UserAuthParameters(auth.getName(), authorities);
+            request.setAuthParameters(authParameters);
 
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getTearDownTime()
-	 */
+            test.setStatus(manager.checkReservationPossibility(request));
+        }
+        return test;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getPropertiesForInterDomainManager(java.lang.String)
+     */
     @Override
-	public long getTearDownTime() {
-		return tearDownTime;
-	}
+    public List<KeyValue> getPropertiesForInterDomainManager(String idm) {
+        InterDomainManager manager = idms.get(idm);
+        if (manager != null) {
+            return manager.getProperties();
+        }
+        return null;
+    }
 
-	/** 
-	 * Sets period of time after it the registered IDM is mark as not accessible
-	 * @param tearDownTime period in mili seconds
-	 */
-	public void setTearDownTime(long tearDownTime) {
-		this.tearDownTime = tearDownTime;
-	}
-
-	
-	/**
-	 * Get default startTime and endTime strings
-	 * 
-	 * @return array with startTime and endTime 
-	 */
-	public String[] getTimes (){
-		String[] times = new String[2];
-		TimeZone time = TimeZone.getTimeZone(timezone);
-		if (time== null)
-			time=TimeZone.getTimeZone("UTC");
-		GregorianCalendar calender = (GregorianCalendar) GregorianCalendar.getInstance(time);
-		Date dat = new Date ();
-		calender.setTime(dat);
-		calender.add(Calendar.MINUTE, 15);
-		dat = calender.getTime();
-		//SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-		SimpleDateFormat formatter = new SimpleDateFormat(
-			"yyyy-MM-dd'T'HH:mm:ss");
-		times[0]=formatter.format(dat);
-		calender.add(Calendar.HOUR, 1);
-		dat = calender.getTime();
-		times[1]= formatter.format(dat);
-		return times;
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getReservationRequestTemplate()
-	 */
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#setPropertiesForInterDomainManager(java.lang.String, java.util.List)
+     */
     @Override
-	public ReservatiomDepandentOnTimezone getReservationRequestTemplate() {
-		ReservatiomDepandentOnTimezone res = new ReservatiomDepandentOnTimezone();
-		ReservationRequest reservation = new ReservationRequest();
-		String[] times = getTimes();
-		reservation.setPriority(Priority.NORMAL);
-		reservation.setResiliency(Resiliency.NONE);
-		reservation.setCapacity(10);
-		try {
-			reservation.setStartTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(times[0]).toGregorianCalendar());
-			reservation.setEndTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(times[1]).toGregorianCalendar());
-		} catch (DatatypeConfigurationException e) {
-			e.printStackTrace();
-		}
-		res.setRequest(reservation);
-		res.setTimezone(timezone);
-		return res;
-	}
+    public void setPropertiesForInterDomainManager(String idm, List<KeyValue> properties) {
+        InterDomainManager manager = idms.get(idm);
+        if (manager != null) {
+            manager.setProperties(properties);
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getServiceRequestTemplate()
-	 */
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getServiceStates()
+     */
     @Override
-	public ServiceRequest getServiceRequestTemplate() {
-		ServiceRequest service= new ServiceRequest();
-		Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		String username=null;
-		if (obj instanceof UserDetails) {
-			username = ((UserDetails)obj).getUsername();
-		} else 
-			username = obj.toString();
-		if (username == null)
-			username= "test";
-		//service.setUserEmail("test.user@test.domain");
-		service.setUserName(username);
-		List<String> idms = getAllInterdomainManagers();
-		if (idms!= null && !idms.isEmpty())
-			service.setUserHomeDomain(idms.get(0));
-		return service;
-	}
+    public String[] getServiceStates() {
+        return serviceStates;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getReservationPriorities()
-	 */
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getServicesFromInterDomainManager(java.lang.String)
+     */
     @Override
-	public List<String> getReservationPriorities (){
-		List<String> list = new ArrayList<String>();
-		for (Priority req: Priority.values())
-			list.add(req.toString());
-		return list;
-	}
+    public List<ServiceType> getServicesFromInterDomainManager(String idm) {
+        InterDomainManager manager = idms.get(idm);
+        if (manager != null) {
+            return manager.getServices(false);
+        }
+        return null;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getReservationResiliencies()
-	 */
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#cancelServiceInInterDomainManager(java.lang.String, java.lang.String)
+     */
     @Override
-	public List<String> getReservationResiliencies (){
-		List<String> list = new ArrayList<String>();
-		for (Resiliency req: Resiliency.values())
-			list.add(req.toString());
-		return list;
-	}
-	
+    public void cancelServiceInInterDomainManager(String idm, String serviceID)
+            throws UserAccessPointException {
+
+        if (idm == null || serviceID == null) {
+            return;
+        }
+        InterDomainManager manager = idms.get(idm);
+
+        if ((manager != null) && (manager.getService(serviceID) != null)) {
+            logger.info("Canceling service: " + idm + ":" + serviceID);
+            manager.cancelService(serviceID);
+        } else {
+            logger.info("Service can not be canceled: " + idm + ":" + serviceID);
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.ManagerNotifier#update(java.lang.String, net.geant.autobahn.gui.EventType, java.util.List)
+     */
     @Override
-	public List<String> getReservationModes() {
-		List<String> list = new ArrayList<String>();
-		for (Mode req : Mode.values())
-			list.add(req.toString());
-		return list;
-	}
-	
-	public List<String> getTimezones() {
-		return timezones;
-	}
+    public void update(String idm, EventType event, List<KeyValue> properties) {
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getInterDomainManager(java.lang.String)
+     */
+    @Override
+    public InterDomainManager getInterDomainManager(String idm) {
+        return idms.get(idm);
+    }
+
+    /**
+     * Sets the topology notifier
+     * 
+     * @return topology notifier
+     */
+    public TopologyFinderNotifier getNotifier() {
+        return notifier;
+    }
+
+    public void setNotifier(TopologyFinderNotifier notifier) {
+        this.notifier = notifier;
+    }
+
+    /**
+     * Converts the reservation state known by WEB GUI
+     * 
+     * @param state
+     *            reservation state
+     * @return return state known by WEB GUI
+     */
+    public int convertReservationTypes(ReservationChangedType state) {
+        if (state == ReservationChangedType.ACTIVE)
+            return ACTIVE;
+        else if (state == ReservationChangedType.CANCELLED)
+            return CANCELLED;
+        else if (state == ReservationChangedType.FAILED)
+            return FAILED;
+        else if (state == ReservationChangedType.FINISHED)
+            return FINISHED;
+        else if (state == ReservationChangedType.SCHEDULED)
+            return SCHEDULED;
+        return 0;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getServiceFromInterDomainManager(java.lang.String, java.lang.String)
+     */
+    @Override
+    public ServiceType getServiceFromInterDomainManager(String idm, String serviceId) {
+        InterDomainManager manager = idms.get(idm);
+        if (manager == null)
+            return null;
+        else
+            return manager.getService(serviceId);
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getTearDownTime()
+     */
+    @Override
+    public long getTearDownTime() {
+        return tearDownTime;
+    }
+
+    /**
+     * Sets period of time after it the registered IDM is mark as not accessible
+     * 
+     * @param tearDownTime
+     *            period in mili seconds
+     */
+    public void setTearDownTime(long tearDownTime) {
+        this.tearDownTime = tearDownTime;
+    }
+
+    /**
+     * Get default startTime and endTime strings
+     * 
+     * @return array with startTime and endTime
+     */
+    public String[] getTimes() {
+        String[] times = new String[2];
+        TimeZone time = TimeZone.getTimeZone(timezone);
+        if (time == null)
+            time = TimeZone.getTimeZone("UTC");
+        GregorianCalendar calender = (GregorianCalendar) GregorianCalendar.getInstance(time);
+        Date dat = new Date();
+        calender.setTime(dat);
+        calender.add(Calendar.MINUTE, 15);
+        dat = calender.getTime();
+        // SimpleDateFormat format=new
+        // SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        times[0] = formatter.format(dat);
+        calender.add(Calendar.HOUR, 1);
+        dat = calender.getTime();
+        times[1] = formatter.format(dat);
+        return times;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getReservationRequestTemplate()
+     */
+    @Override
+    public ReservatiomDepandentOnTimezone getReservationRequestTemplate() {
+        ReservatiomDepandentOnTimezone res = new ReservatiomDepandentOnTimezone();
+        ReservationRequest reservation = new ReservationRequest();
+        String[] times = getTimes();
+        reservation.setPriority(Priority.NORMAL);
+        reservation.setResiliency(Resiliency.NONE);
+        reservation.setCapacity(10);
+        try {
+            reservation.setStartTime(DatatypeFactory.newInstance()
+                    .newXMLGregorianCalendar(times[0]).toGregorianCalendar());
+            reservation.setEndTime(DatatypeFactory.newInstance()
+                    .newXMLGregorianCalendar(times[1]).toGregorianCalendar());
+        } catch (DatatypeConfigurationException e) {
+            e.printStackTrace();
+        }
+        res.setRequest(reservation);
+        res.setTimezone(timezone);
+        return res;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getServiceRequestTemplate()
+     */
+    @Override
+    public ServiceRequest getServiceRequestTemplate() {
+        ServiceRequest service = new ServiceRequest();
+        Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = null;
+        if (obj instanceof UserDetails) {
+            username = ((UserDetails) obj).getUsername();
+        } else {
+            username = obj.toString();
+        }
+        if (username == null) {
+            username = "test";
+        }
+        // service.setUserEmail("test.user@test.domain");
+        service.setUserName(username);
+        List<String> idms = getAllInterdomainManagers();
+        if (idms != null && !idms.isEmpty()) {
+            service.setUserHomeDomain(idms.get(0));
+        }
+        return service;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getReservationPriorities()
+     */
+    @Override
+    public List<String> getReservationPriorities() {
+        List<String> list = new ArrayList<String>();
+        for (Priority req : Priority.values())
+            list.add(req.toString());
+        return list;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getReservationResiliencies()
+     */
+    @Override
+    public List<String> getReservationResiliencies() {
+        List<String> list = new ArrayList<String>();
+        for (Resiliency req : Resiliency.values())
+            list.add(req.toString());
+        return list;
+    }
 
     @Override
-	public String getTimezone() {
-		return timezone;
-	}
+    public List<String> getReservationModes() {
+        List<String> list = new ArrayList<String>();
+        for (Mode req : Mode.values())
+            list.add(req.toString());
+        return list;
+    }
 
-	public void setTimezone(String timezone) {
-		this.timezone = timezone;
-	}
+    public List<String> getTimezones() {
+        return timezones;
+    }
+
+    @Override
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
+    }
 
     // Change a date to GMT from a given timezone
     public static Date toGmtFromZone(Date date, String fromZone) {
@@ -1109,44 +1117,44 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#convertTimeToApplicationTimezone(java.lang.String, net.geant.autobahn.useraccesspoint.ReservationRequest)
      */
     @Override
-	public void convertTimeToApplicationTimezone(String userZoneStr, ReservationRequest request){
-		
-		logger.info ("Converting times for request " + request + 
-		        " according to timezone " + userZoneStr);
-		try {
-			if (userZoneStr == null) {
-				return;
-			}
-			
-	        // Cut user-friendly text from timezone String
-	        String[] split_tz = userZoneStr.split("\\) ");
-	        userZoneStr = split_tz[split_tz.length-1];
-			TimeZone userZone = TimeZone.getTimeZone(userZoneStr);
-			
-			Calendar startTime = request.getStartTime();
-	        GregorianCalendar startTimeShifted = (GregorianCalendar) Calendar.getInstance();
+    public void convertTimeToApplicationTimezone(String userZoneStr, ReservationRequest request) {
+
+        logger.info("Converting times for request " + request
+                + " according to timezone " + userZoneStr);
+        try {
+            if (userZoneStr == null) {
+                return;
+            }
+
+            // Cut user-friendly text from timezone String
+            String[] split_tz = userZoneStr.split("\\) ");
+            userZoneStr = split_tz[split_tz.length - 1];
+            TimeZone userZone = TimeZone.getTimeZone(userZoneStr);
+
+            Calendar startTime = request.getStartTime();
+            GregorianCalendar startTimeShifted = (GregorianCalendar) Calendar.getInstance();
             startTimeShifted.setTimeZone(userZone);
-	        startTimeShifted.setTimeInMillis(startTime.getTimeInMillis() - 
-	                userZone.getRawOffset() + startTime.getTimeZone().getRawOffset());
-            
+            startTimeShifted.setTimeInMillis(startTime.getTimeInMillis()
+                    - userZone.getRawOffset() + startTime.getTimeZone().getRawOffset());
+
             Calendar endTime = request.getEndTime();
-	        GregorianCalendar endTimeShifted = (GregorianCalendar) Calendar.getInstance();
-	        endTimeShifted.setTimeZone(userZone);
-	        endTimeShifted.setTimeInMillis(endTime.getTimeInMillis() - 
-	                userZone.getRawOffset() + endTime.getTimeZone().getRawOffset());
-	        
-	        try {
-				request.setStartTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(startTimeShifted).toGregorianCalendar());
-				request.setEndTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(endTimeShifted).toGregorianCalendar());
-				logger.info("Request was shifted to " + request);
-			} catch (DatatypeConfigurationException e) {
-				e.printStackTrace();
-			}
-	        
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+            GregorianCalendar endTimeShifted = (GregorianCalendar) Calendar.getInstance();
+            endTimeShifted.setTimeZone(userZone);
+            endTimeShifted.setTimeInMillis(endTime.getTimeInMillis() - 
+                    userZone.getRawOffset() + endTime.getTimeZone().getRawOffset());
+
+            try {
+                request.setStartTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(startTimeShifted).toGregorianCalendar());
+                request.setEndTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(endTimeShifted).toGregorianCalendar());
+                logger.info("Request was shifted to " + request);
+            } catch (DatatypeConfigurationException e) {
+                e.printStackTrace();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 	
     @Override
     public ServicesFormModel getSubmitedServicesInIDM(String idm) {
@@ -1202,25 +1210,25 @@ public class ManagerImpl implements Manager, ManagerNotifier {
     }
 
     @Override
-	public LogsFormModel getLogsForInterDomainManager(String idm) {
-		LogsFormModel serv = new LogsFormModel();
-		List<String > managers = getAllInterdomainManagers();
-		serv.setIdms(managers);
-		if (managers== null || managers.isEmpty()){
-			serv.setError("There is no log provided");
-			serv.setLogs("");
-			return serv;
-		}
-		if (idm ==null){
-			idm= managers.get(0);
-		}
-		serv.setLogs (getLogsInterDomainManager(idm, true, true));
-		serv.setCurrentIdm(idm);
-		if (serv.getLogs()== null)
-				serv.setLogs("");
-		
-		return serv;
-	}
+    public LogsFormModel getLogsForInterDomainManager(String idm) {
+        LogsFormModel serv = new LogsFormModel();
+        List<String> managers = getAllInterdomainManagers();
+        serv.setIdms(managers);
+        if (managers == null || managers.isEmpty()) {
+            serv.setError("There is no log provided");
+            serv.setLogs("");
+            return serv;
+        }
+        if (idm == null) {
+            idm = managers.get(0);
+        }
+        serv.setLogs(getLogsInterDomainManager(idm, true, true));
+        serv.setCurrentIdm(idm);
+        if (serv.getLogs() == null)
+            serv.setLogs("");
+
+        return serv;
+    }
 
     @Override
     public StatisticsFormModel getStatisticsForInterDomainManager(String idm) {
@@ -1246,48 +1254,45 @@ public class ManagerImpl implements Manager, ManagerNotifier {
     }
 
     @Override
-	public SettingsFormModel getSettingsForInterDomainManager(String idm) {
-		SettingsFormModel serv =  new SettingsFormModel();
-		List<String > managers = getAllInterdomainManagers();
-		serv.setIdms(managers);
-		if (managers== null || managers.isEmpty()) {
-			serv.setError("There is no settings provided");
-			return serv;
-		}
-		if (idm == null) {
-			idm = managers.get(0);
-		}
-		InterDomainManager manager = idms.get(idm);
-		try {
-		    serv.setProperties(manager.getProperties());
-		} catch (Exception e){
-		    logger.error("No settings");
-		    serv.setProperties(null);
-		}
-		serv.setCurrentIdm(idm);
-		return serv;
-	}
-
-	@Override
-	public List<ServiceType> sortServicesByBodyID(List<ServiceType> list){
-
-		Comparator<ServiceType> comparator = new ServicesComparator();
-		Collections.sort(list, comparator);
-
-		return list;
-	}
-	
-    @Override
-	public String setParameter(String param){	
-		return param;
-	}
+    public SettingsFormModel getSettingsForInterDomainManager(String idm) {
+        SettingsFormModel serv = new SettingsFormModel();
+        List<String> managers = getAllInterdomainManagers();
+        serv.setIdms(managers);
+        if (managers == null || managers.isEmpty()) {
+            serv.setError("There is no settings provided");
+            return serv;
+        }
+        if (idm == null) {
+            idm = managers.get(0);
+        }
+        InterDomainManager manager = idms.get(idm);
+        try {
+            serv.setProperties(manager.getProperties());
+        } catch (Exception e) {
+            logger.error("No settings");
+            serv.setProperties(null);
+        }
+        serv.setCurrentIdm(idm);
+        return serv;
+    }
 
     @Override
-	public void convertCapacity(ReservationRequest request){
-		
-		long capacity = request.getCapacity();
-		request.setCapacity(capacity * 1000000 );
-	}
+    public List<ServiceType> sortServicesByBodyID(List<ServiceType> list) {
+        Comparator<ServiceType> comparator = new ServicesComparator();
+        Collections.sort(list, comparator);
+        return list;
+    }
+
+    @Override
+    public String setParameter(String param) {
+        return param;
+    }
+
+    @Override
+    public void convertCapacity(ReservationRequest request) {
+        long capacity = request.getCapacity();
+        request.setCapacity(capacity * 1000000);
+    }
 
     @Override
     public String getFriendlyNamePort(String port) throws UserAccessPointException {
@@ -1340,29 +1345,31 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 
     @Override
     public boolean checkTopology(String idm){
-    	
-    	if(idms != null && idms.size() > 0){
-    		
-    		if(!idms.containsKey(idm))
-    			return false;
-    		
-    		InterDomainManager manager = idms.get(idm);
-    		if(manager == null)
-    			return false;
-    	
-    		String[] links = manager.getAllLinks();
-    		String[] domains = manager.getAllDomains();
-    	
-    		if(comparedLinks != links || comparedDomains != domains){
-    			comparedLinks = links;
-    			comparedDomains = domains;
-    			
-    			return true;
-    		}
-    	}
-    	return false;
+
+        if (idms != null && idms.size() > 0) {
+
+            if (!idms.containsKey(idm)) {
+                return false;
+            }
+
+            InterDomainManager manager = idms.get(idm);
+            if (manager == null) {
+                return false;
+            }
+
+            String[] links = manager.getAllLinks();
+            String[] domains = manager.getAllDomains();
+
+            if (comparedLinks != links || comparedDomains != domains) {
+                comparedLinks = links;
+                comparedDomains = domains;
+
+                return true;
+            }
+        }
+        return false;
     }
-    
+
     /*
      * (non-Javadoc)
      * @see net.geant.autobahn.autoBahnGUI.manager.Manager#handleTopologyChange(java.lang.String, boolean)
