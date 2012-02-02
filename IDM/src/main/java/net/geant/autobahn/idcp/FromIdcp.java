@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package net.geant.autobahn.idcp;
 
@@ -29,8 +29,8 @@ import net.geant.autobahn.reservation.User;
 import org.apache.log4j.Logger;
 
 /**
- * Called from OSCARSImpl 
- * 
+ * Called from OSCARSImpl
+ *
  * @author PCSS
  */
 public final class FromIdcp {
@@ -38,7 +38,7 @@ public final class FromIdcp {
 	private static final Logger log = Logger.getLogger(FromIdcp.class);
 
 	private static Map<Integer, String> states = new HashMap<Integer, String>();
-	
+
 	private static ResDetails toResDetails(Reservation res) {
 
 		ResDetails rd = new ResDetails();
@@ -66,17 +66,17 @@ public final class FromIdcp {
 		rd.setPathInfo(pinfo);
 		return rd;
 	}
-	
+
 	private static String toAutobahnPort(String idcpPort) {
-		
+
 		final String prefix = "urn:ogf:network";
 		if (!idcpPort.startsWith(prefix))
 			return null;
-		
+
 		String[] split = idcpPort.split("\\:");
 		if (split.length != 7)
 			return null;
-		
+
 		split = split[6].split("\\=");
 		return split[1];
 	}
@@ -87,11 +87,11 @@ public final class FromIdcp {
 		src = toAutobahnPort(src);
 		if (src == null)
 			throw new IdcpException("srcPort cannot be null");
-		
+
 		dst = toAutobahnPort(dst);
 		if (dst == null)
 			throw new IdcpException("dstPort cannot be null");
-		
+
 		IdmDAOFactory daos = HibernateIdmDAOFactory.getInstance();
 		User u = new User();
 		u.setName("idcp");
@@ -112,7 +112,7 @@ public final class FromIdcp {
 			log.info("end link " + dst + " not found");
 			throw new IdcpException("end link " + dst + " not found");
 		}
-		
+
 		String domainID = AccessPoint.getInstance().getLocalDomain();
 		Port sport = domainID.equals(startLink.getEndDomainID()) ? startLink.getStartPort() : startLink.getEndPort();
 		Port dport = endLink.getStartPort().isClientPort() ? endLink.getStartPort()	: endLink.getEndPort();
@@ -122,7 +122,7 @@ public final class FromIdcp {
 		start.setTimeInMillis(startTime * Idcp.TIME_SCALE);
 		Calendar end = Calendar.getInstance();
 		end.setTimeInMillis(endTime * Idcp.TIME_SCALE);
-		
+
 		HomeDomainReservation resv = new HomeDomainReservation(sport, dport, start, end, 0);
 		resv.setBodID(resId);
 		resv.setDescription(desc);
@@ -135,8 +135,8 @@ public final class FromIdcp {
 			resv.setUserIngressConstraints(pcon);
 			resv.setUserEgressConstraints(pcon);
 		}
-				
-		resv.addStatusListener(new IdcpReservationNotifier(resv, pathInfo));
+
+		resv.addStatusListener(new InboundIdcpReservation(resId, resv, pathInfo));
 		List<HomeDomainReservation> reservations = new ArrayList<HomeDomainReservation>();
 		reservations.add(resv);
 		Service srv = AccessPoint.getInstance().createService("idcp service with reservation " + resId, u, reservations);
@@ -155,9 +155,9 @@ public final class FromIdcp {
 	}
 
 	public static void modify(String resId, long start, long end) throws IdcpException {
-		
+
 		try {
-			
+
 			Calendar startTime = Calendar.getInstance();
 			startTime.setTimeInMillis(start * Idcp.TIME_SCALE);
 			Calendar endTime = Calendar.getInstance();
@@ -170,7 +170,7 @@ public final class FromIdcp {
 			throw new IdcpException(e.getMessage());
 		}
 	}
-	
+
 	public static ResDetails query(String resId) {
 
 		Reservation res = AccessPoint.getInstance().getAutobahnReservation(
@@ -203,7 +203,7 @@ public final class FromIdcp {
 
 		return list;
 	}
-	
+
 	public static List<Link> getTopology(boolean withIdcp) {
 
 		List<Link> links = AccessPoint.getInstance().getTopology();

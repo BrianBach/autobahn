@@ -1,176 +1,103 @@
-/**
- * 
- */
 package net.geant.autobahn.idcp;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.apache.log4j.Logger;
 
 import net.geant.autobahn.reservation.Reservation;
-import net.geant.autobahn.reservation.ReservationStatusListener;
 
 /**
- * Responsible for sending proper notification to idcp 
- * This class is used in ab->idcp cases
- * @author PCSS
+ * Base class for IDCP reservations. Wraps an Autobahn reservation.
  */
-public class IdcpReservation implements ReservationStatusListener {
-	
+public abstract class IdcpReservation
+{
 	private static final Logger log = Logger.getLogger(IdcpReservation.class);
-	
-	private static Map<String, IdcpReservation> reservations = new HashMap<String, IdcpReservation>();
-	
-	private boolean resConfirmedReceived;
-	private boolean resCancelReceived;
-	private final String idcpResId;
-	private final Reservation res;
-	private PathInfo pathInfo;
-	private boolean scheduled, activated;
-	
-	public IdcpReservation(String idcpResId, Reservation res, PathInfo pathInfo) { 
-		
-		this.idcpResId = idcpResId;
-		this.res = res;
-		this.pathInfo = pathInfo;
-		reservations.put(idcpResId, this);
-	}
-	
-	public synchronized static void addIdcpReservation(String resId, IdcpReservation res) { 
-		
-		reservations.put(resId, res);
-	}
-	
-	public synchronized static IdcpReservation getReservation(String resId) { 
-		
-		return reservations.get(resId);
-	}
-		
-	public void setMessage(String msg) {
-		
-		log.debug("IDCP Notification - " + msg);
-		if (msg.equals(Idcp.EVENT_RESERVATION_CREATE_CONFIRMED)) {
-			resConfirmedReceived = true;
-		} else if (msg.equals(Idcp.EVENT_RESERVATION_CANCEL_CONFIRMED)) {
-			resCancelReceived = true;
-		} 
-	}
-	
-	public void setPathInfo(PathInfo pi) { 
-		
-		this.pathInfo = pi;
-		int vlanNumber = res.getGlobalConstraints().getDomainConstraints().get(0).getFirstPathConstraints().getRangeConstraints().get(0).getFirstValue();
-		String domain = IdcpManager.getDomainName();
-		Idcp.setVlans(pi, domain, vlanNumber);
-	}
-	
-	private void sendNotification(String resId, String eventType, String status, String errorMessage) {
-		
-		final String desc = res.getDescription();
-		final long start = res.getStartTime().getTimeInMillis();
-		final long end = res.getEndTime().getTimeInMillis();
-		final int bandwidth = (int)res.getCapacity();
-		
-		if (IdcpManager.getSubscribers().size() == 0)
-			log.info("Idcp sendNotification - no subscribers");
-		
-		for (SubscriptionInfo si : IdcpManager.getSubscribers()) {
 
+	private static ConcurrentMap<String, IdcpReservation> reservations =
+		new ConcurrentHashMap<String, IdcpReservation>();
+
+	protected enum State { ACCEPTED, INCREATE, PENDING, INSETUP, ACTIVE,
+			INMODIFY, INTEARDOWN, CANCELLED, FINISHED, FAILED };
+
+	protected State state = State.ACCEPTED;
+	protected final String id;
+	protected final Reservation reservation;
+	protected final long createTime = System.currentTimeMillis();
+	protected PathInfo pathInfo;
+
+	public IdcpReservation(String id, Reservation reservation, PathInfo pathInfo)
+	{
+		this.id = id;
+		this.reservation = reservation;
+		this.pathInfo = pathInfo;
+		addReservation(id, this);
+	}
+
+	public static void addReservation(String id, IdcpReservation res)
+	{
+		reservations.put(id, res);
+	}
+
+	public static IdcpReservation getReservation(String id)
+	{
+		return reservations.get(id);
+	}
+
+	protected boolean isState(State state)
+	{
+		return this.state == state;
+	}
+
+	protected State getState()
+	{
+		return this.state;
+	}
+
+	protected void setState(State state)
+	{
+		log.debug("Reservation " + id + " changes state from " + this.state + " to " + state);
+		this.state = state;
+	}
+
+	public ResDetails getResDetails()
+	{
+		ResDetails resDetails = new ResDetails();
+		resDetails.setPathInfo(pathInfo);
+		resDetails.setDescription(reservation.getDescription());
+		resDetails.setLogin("autobahn");
+		resDetails.setStartTime(reservation.getStartTime().getTimeInMillis() / Idcp.TIME_SCALE);
+		resDetails.setEndTime(reservation.getEndTime().getTimeInMillis() / Idcp.TIME_SCALE);
+		resDetails.setCreateTime(createTime / Idcp.TIME_SCALE);
+		resDetails.setBandwidth((int) (reservation.getCapacity() / Idcp.BANDWIDTH_SCALE));
+		resDetails.setStatus(getState().toString());
+		resDetails.setGlobalReservationId(id);
+		return resDetails;
+	}
+
+	public void removeReservation()
+	{
+		reservations.remove(id, this);
+	}
+
+	public abstract void notify(EventContent event);
+
+	protected void sendNotification(String eventType, State status, String errorMessage)
+	{
+		final String desc = reservation.getDescription();
+		final long start = reservation.getStartTime().getTimeInMillis();
+		final long end = reservation.getEndTime().getTimeInMillis();
+		final int bandwidth = (int) reservation.getCapacity();
+
+		for (SubscriptionInfo si: IdcpManager.getSubscribers()) {
 			try {
-				
-				IdcpNotifyClient notify = new IdcpNotifyClient(si.getConsumerUrl());
-				notify.notification(idcpResId, desc, start, end, bandwidth, pathInfo, eventType, status, errorMessage, si.getSubscriptionId());
-				log.info("notify sent to " + si.getConsumerUrl() + ", event " + eventType);
-			} catch (IdcpException e) { 
+				IdcpNotifyClient client = new IdcpNotifyClient(si.getConsumerUrl());
+				client.notification(id, desc, start, end, createTime, bandwidth, pathInfo, eventType,
+									status.toString(), errorMessage, si.getSubscriptionId());
+				log.info("sent notification to " + si.getConsumerUrl() + ", event " + eventType);
+			} catch (IdcpException e) {
 				log.info("error sending notification to " + si.getConsumerUrl());
 			}
 		}
-	}
-
-	@Override
-	public void reservationScheduled(String reservationId) {
-		scheduled = true;
-		
-		// send if conf received
-		if (resConfirmedReceived) {
-			sendNotification(idcpResId, Idcp.EVENT_RESERVATION_CREATE_COMPLETED, "SCHEDULED", null);
-		} else {
-			(new Thread() {
-				@Override
-				public void run() {
-					try {
-						// wait for res confirmed
-						Thread.sleep(1000 * 60); 
-					} catch (Exception e) { 
-						
-					}
-					
-					if (resConfirmedReceived)
-						sendNotification(idcpResId, Idcp.EVENT_RESERVATION_CREATE_COMPLETED, "SCHEDULED", null);
-					else
-						sendNotification(idcpResId, Idcp.EVENT_RESERVATION_CREATE_FAILED, "FAILED", "did not receive " + Idcp.EVENT_RESERVATION_CREATE_CONFIRMED);
-				}
-			}).start();
-		}
-	}
-
-	@Override
-	public void reservationActive(String reservationId) {
-		
-		activated = true;
-		sendNotification(idcpResId, Idcp.EVENT_UPSTREAM_PATH_SETUP_CONFIRMED, "ACTIVATED", null);
-	}
-
-	@Override
-	public void reservationFinished(String reservationId) {
-
-		sendNotification(idcpResId, Idcp.EVENT_UPSTREAM_PATH_TEARDOWN_CONFIRMED, "FINISHED", null);
-	}
-
-	@Override
-	public void reservationProcessingFailed(String reservationId, String cause) {
-		
-		if (!scheduled) {
-			
-			sendNotification(idcpResId, Idcp.EVENT_RESERVATION_CREATE_FAILED, "FAILED", cause);
-		} else {
-			
-			// must be activation that failed
-			sendNotification(idcpResId, Idcp.EVENT_PATH_SETUP_FAILED, "FAILED", cause);
-		}
-	}
-
-	@Override
-	public void reservationCancelled(String reservationId) {
- 
-		if (resCancelReceived)
-			sendNotification(idcpResId, Idcp.EVENT_RESERVATION_CANCEL_COMPLETED, "CANCELLED", null);
-		else {
-			
-			(new Thread() {
-				@Override
-				public void run() {
-					try {
-						// wait for cancel confirmed
-						Thread.sleep(1000 * 60); 
-					} catch (Exception e) { }
-					
-					if (resConfirmedReceived)
-						sendNotification(idcpResId, Idcp.EVENT_RESERVATION_CANCEL_COMPLETED, "CANCELLED", null);
-					else
-						sendNotification(idcpResId, Idcp.EVENT_RESERVATION_CANCEL_FAILED, "FAILED", "did not receive " + Idcp.EVENT_RESERVATION_CANCEL_FAILED);
-				}
-			}).start();
-		}
-	}
-
-	@Override
-	public void reservationModified(String reservationId, boolean success) {
-		
-		if (success)
-			sendNotification(idcpResId, Idcp.EVENT_RESERVATION_MODIFY_COMPLETED, "MODIFIED", null);
-		else
-			sendNotification(idcpResId, Idcp.EVENT_RESERVATION_MODIFY_FAILED, "FAILED", null);
 	}
 }

@@ -234,38 +234,38 @@ public final class IdcpNotifyClient {
 	 * @param subId
 	 * @throws IdcpException
 	 */
-	public void notification(String resId, String desc, long start, long end, int bandwidth, PathInfo pathInfo, 
-				String eventType, String status, String errorMessage, String subId) throws IdcpException { 
-		
+	public void notification(String resId, String desc, long start, long end, long create, int bandwidth, PathInfo pathInfo,
+				String eventType, String status, String errorMessage, String subId) throws IdcpException {
+
 		Notify request = new Notify();
 		NotificationMessageHolderType notificationMessage = new NotificationMessageHolderType();
-				
+
 		EventContent event = new EventContent();
 		event.setType(eventType);
 		event.setId(UUID.randomUUID().toString());
-		
+
 		event.setErrorSource("autobahn");
 		event.setErrorCode("autobahn");
 		event.setErrorMessage(errorMessage);
 		event.setTimestamp(System.currentTimeMillis() / Idcp.TIME_SCALE);
 		event.setUserLogin("idcp");
-		
+
 		ResDetails res = new ResDetails();
 		res.setPathInfo(pathInfo);
 		res.setDescription(desc);
 		res.setLogin("autobahn");
 		res.setStartTime(start / Idcp.TIME_SCALE);
 		res.setEndTime(end / Idcp.TIME_SCALE);
-		res.setCreateTime(System.currentTimeMillis() / Idcp.TIME_SCALE);
+		res.setCreateTime(create / Idcp.TIME_SCALE);
 		res.setBandwidth(bandwidth / Idcp.BANDWIDTH_SCALE);
 		res.setStatus(status);
 		res.setGlobalReservationId(resId);
 		event.setResDetails(res);
-		
+
 		MessageType message = new MessageType();
 		message.getEvent().add(event);
 		notificationMessage.setMessage(message);
-		
+
 		TopicExpressionType topicExpression = new TopicExpressionType();
 		topicExpression.setDialect(Idcp.TOPIC_DIALECT);
 		topicExpression.setValue(Idcp.TOPIC_IDC);
