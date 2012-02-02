@@ -138,7 +138,7 @@ public class OSCARSNotifyImpl implements OSCARSNotify {
 		final String publisherId = null; // should be null for our purposes
 		ReferenceParametersType params = consumer.getReferenceParameters();
 					
-		if (params == null) {
+		if (params == null || params.getSubscriptionId() == null) {
 			subscriptionId = Idcp.generateSubscriptionId();
 			log.info("SRV.subscribe - consumer params not set, generating subId: " + subscriptionId);
 		} else {
