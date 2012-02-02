@@ -106,22 +106,10 @@
 					<td>${reservationStates[item.state]}(${item.state})</td>
 					<td>${item.startTime.time}</td>
 					<td>${item.endTime.time}</td>
-					<td>
-				<c:forEach items="${friendly_ports}" var="f">
-					<c:if test="${f.key == item.startPort.address}">
-						<c:out value="${f.value}"></c:out>
-					</c:if>
-				</c:forEach>
-				    </td>
+					<td>${item.startPort.friendlyName}</td>
 					<td> VLAN </td>
 					<td>${item.startPort.vlan} </td>
-					<td>
-				<c:forEach items="${friendly_ports}" var="f">
-					<c:if test="${f.key == item.endPort.address}">
-						<c:out value="${f.value}"></c:out>
-					</c:if>
-				</c:forEach>
-				    </td>
+					<td>${item.endPort.friendlyName}</td>
 					<td> VLAN </td>
 					<td>${item.endPort.vlan} </td>
 					<td>${item.capacity/1000000}</td>
@@ -197,22 +185,10 @@
 					<td>${reservationStates[item.state]}(${item.state})</td>
 					<td>${item.startTime.time}</td>
 					<td>${item.endTime.time}</td>
-					<td>
-				<c:forEach items="${friendly_ports}" var="f">
-					<c:if test="${f.key == item.startPort.address}">
-						<c:out value="${f.value}"></c:out>
-					</c:if>
-				</c:forEach>
-				    </td>
+					<td>${item.startPort.friendlyName}</td>
 					<td> VLAN </td>
 					<td>${item.startPort.vlan} </td>
-					<td>
-				<c:forEach items="${friendly_ports}" var="f">
-					<c:if test="${f.key == item.endPort.address}">
-						<c:out value="${f.value}"></c:out>
-					</c:if>
-				</c:forEach>
-				    </td>
+					<td>${item.endPort.friendlyName}</td>
 					<td> VLAN </td>
 					<td>${item.endPort.vlan} </td>
 					<td>${item.capacity/1000000}</td>
@@ -281,22 +257,10 @@
 					<td>${reservationStates[item.state]}(${item.state})</td>
 					<td>${item.startTime.time}</td>
 					<td>${item.endTime.time}</td>
-					<td>
-				<c:forEach items="${friendly_ports}" var="f">
-					<c:if test="${f.key == item.startPort.address}">
-						<c:out value="${f.value}"></c:out>
-					</c:if>
-				</c:forEach>
-				    </td>
+					<td>${item.startPort.friendlyName}</td>
 					<td> VLAN </td>
 					<td>${item.startPort.vlan} </td>
-					<td>
-				<c:forEach items="${friendly_ports}" var="f">
-					<c:if test="${f.key == item.endPort.address}">
-						<c:out value="${f.value}"></c:out>
-					</c:if>
-				</c:forEach>
-				    </td>
+					<td>${item.endPort.friendlyName}</td>
 					<td> VLAN </td>
 					<td>${item.endPort.vlan} </td>
 					<td>${item.capacity/1000000}</td>

@@ -4,7 +4,6 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/webflow
         http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
 
-         
 	<on-start>
 		<evaluate expression="manager.getAllInterdomainManagers()" result="flowScope.idms" />
 		<evaluate expression="manager.getTimezone()" result="flowScope.appTimezone" />
@@ -13,22 +12,22 @@
 	<decision-state id="moreAnswersNeeded">
     	<if test="flowScope.idms== null ||flowScope.idms.isEmpty()" then="no-idm-regitered" else="request-service" />
 	</decision-state>
-	
+
 	<view-state id="request-service" view="secure/request-service" model="service">
 		 <binder>
 		 	<binding property="userHomeDomain" required="true"/>
             <binding property="justification" required="true"/>    
     	</binder>
 		<transition on="cancel" to="services" bind="false" />
-		
+
 		<transition on="submit" to="request-service-success" bind="true">
 			<evaluate expression="manager.submitServiceAtInterDomainManager(service.userHomeDomain, service)" result="flowScope.serviceId"/>
 			<evaluate expression="manager.getServiceRequestTemplate()"></evaluate>		
 		</transition>
 		<transition on="add" to="addReservation" bind="true">
 			<set name="flowScope.home" value="service.userHomeDomain" type="string"/>
-			<evaluate expression="manager.getFriendlyInterDomainManagerPorts(service.userHomeDomain)" result="flowScope.friendlyports_domain"/>
-			<evaluate expression="manager.getAllFriendlyPorts(service.userHomeDomain)" result="flowScope.friendlyports_all"/>
+			<evaluate expression="manager.getInterDomainManagerPorts(service.userHomeDomain)" result="flowScope.friendlyports_domain"/>
+			<evaluate expression="manager.getAllClientPorts(service.userHomeDomain)" result="flowScope.friendlyports_all"/>
 			<evaluate expression="manager.getAllIdcpPorts(service.userHomeDomain)" result="flowScope.idcpPorts_all"/>
 			<evaluate expression="manager.getAllDomains_NonClient()" result="flowScope.domains_all"/>
 			<evaluate expression="manager.getAllDomainLinks()" result="flowScope.links_all"/>
@@ -44,10 +43,10 @@
 			<evaluate expression="service.getReservations().remove(id)"/>
 		</transition>
 	</view-state>
-	
+
 	<view-state id="request-service-success" view="secure/request-reservation">
 	</view-state>
-	
+
 	<view-state id="addReservation" view="secure/request-reservation" model="reservation">
 		<binder>
 			<binding property="timezone" required="true"/>
@@ -88,7 +87,7 @@
 			<evaluate expression="exceptionTranslator.translateException(flowRequestContext, flowExecutionException)"/>
 		</transition>
 	</view-state> 
-	
+
 	<end-state id="no-idm-regitered" view="secure/noIDMRegistered"/>
 	 <end-state id="services" 
          view="externalRedirect:contextRelative:/portal/secure/reservations_select.htm">

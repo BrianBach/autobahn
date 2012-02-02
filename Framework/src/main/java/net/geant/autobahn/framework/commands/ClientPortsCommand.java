@@ -3,7 +3,10 @@
  */
 package net.geant.autobahn.framework.commands;
 
+import java.util.List;
+
 import net.geant.autobahn.framework.Framework;
+import net.geant.autobahn.useraccesspoint.PortType;
 
 /**
  * @author jacek
@@ -16,19 +19,19 @@ public class ClientPortsCommand implements AutobahnCommand {
 	 */
 	public String execute(Framework autobahn, String[] args) {
 		
-		String[] ports = null;
+		List<PortType> ports = null;
 		
 		if(args.length > 1) {
 			if("all".equalsIgnoreCase(args[1]))
-				ports = autobahn.getIdm().getAllClientPorts_Friendly();
+				ports = autobahn.getIdm().getAllClientPorts();
 			else if("domain".equalsIgnoreCase(args[1]))
-				ports = autobahn.getIdm().getDomainClientPorts_Friendly();
+				ports = autobahn.getIdm().getDomainClientPorts();
 			else {
 			    return "Error in command";
 			}
 		} else {
 			// Default behaviour
-			ports = autobahn.getIdm().getDomainClientPorts_Friendly();
+			ports = autobahn.getIdm().getDomainClientPorts();
 		}
 
 		if (ports == null) {
@@ -36,9 +39,9 @@ public class ClientPortsCommand implements AutobahnCommand {
 		}
 		
 		StringBuffer sb = new StringBuffer();
-		sb.append("Client ports, found: " + ports.length + "\n");
-		for(String port : ports) {
-			sb.append("- " + port + "\n");
+		sb.append("Client ports, found: " + ports.size() + "\n");
+		for(PortType port : ports) {
+			sb.append("- " + port.getFriendlyName() + "\n");
 		}
 		
 		return sb.toString();

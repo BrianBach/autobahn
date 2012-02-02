@@ -642,19 +642,6 @@ public final class AccessPoint implements UserAccessPoint,
         return pTypes;
 	}
 
-	/**
-	 * 
-	 * @return An array containing all client ports with friendly names (if available)
-	 */
-    public String[] getAllClientPorts_Friendly() {
-    	List<PortType> pTypes = getAllClientPorts();
-    	String[] cports = new String[pTypes.size()];
-    	for(int i = 0; i < pTypes.size(); i++) {
-    		cports[i] = pTypes.get(i).getAddress();
-    	}
-        return getFriendlyNamesfromLS(cports);
-    }
-    
     /**
      * Returns first link that contains portId either as source or dest
      * @param portId
@@ -729,20 +716,6 @@ public final class AccessPoint implements UserAccessPoint,
 		
 		return cp;
 	}
-
-   /**
-     * 
-     * @return An array containing this domain's client ports with friendly names (if available)
-     */
-    public String[] getDomainClientPorts_Friendly() {
-    	List<PortType> pTypes = getDomainClientPorts();
-    	String[] cp = new String[pTypes.size()];
-    	for(int i = 0; i < pTypes.size(); i++) {
-    		cp[i] = pTypes.get(i).getAddress();
-    	}
-    	
-        return getFriendlyNamesfromLS(cp);
-    }
 
 	/**
 	 * Return the first provisioning domain that is contained in the admin domain
@@ -1555,44 +1528,7 @@ public final class AccessPoint implements UserAccessPoint,
 		
         hbm.closeSession();
 	}
-	
 
-
-    /**
-     * Checks the Lookup Service for the friendly names of a list of ports.
-     * 
-     * @param The list of port ids.
-     * @return The list with port ids that was provided as an argument with
-     * the ids substituted with friendly names (where available from LS)
-     */
-    public String[] getFriendlyNamesfromLS(String[] cp) {
-        String host = properties.getProperty("lookuphost");
-        if (!LookupService.isLSavailable(host)) {
-            // Just return the initially provided ids
-            return cp;
-        }
-
-        LookupService lookup = new LookupService(host);
-        String[] friendlyPorts = new String[cp.length];
-
-        for (int i=0; i < cp.length; i++) {
-            String friendlyName = null;
-            try {
-                friendlyName = lookup.queryFriendlyName(cp[i]);
-            } catch (LookupServiceException e) {
-                log.info("Friendly name for end port " + cp[i] + " could not be acquired from LS");
-                log.debug(e.getMessage());
-            }
-            if (friendlyName == null || friendlyName.trim().equals("") 
-                    || friendlyName.trim().equalsIgnoreCase("null")) {
-                friendlyPorts[i] = cp[i];
-            } else {
-                friendlyPorts[i] = friendlyName.trim() + " (" + cp[i] + ")";
-            }
-        }
-        return friendlyPorts;
-    }
-    
     /**
      * Reads the supplied timeout property from properties
      * 

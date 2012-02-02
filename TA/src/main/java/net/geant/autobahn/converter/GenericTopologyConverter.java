@@ -468,22 +468,8 @@ public abstract class GenericTopologyConverter implements TopologyConverter {
     			    ddesc = bodID;
     			}
             	Port eport = new Port(bodID, "Ethernet", false, absNodes.get(dnode), ddesc);
-            	
+
         		info.add("Mapping client port " + dname + "\t to " + bodID);
-    		    
-    		    // Register end port to LS
-    			if (LookupService.isLSavailable(lookuphost)) {
-	    		    String domain = glink.getEndInterface().getDomainId();
-	    		    String friendlyName = glink.getEndInterface().getDescription();
-	    		    LookupService lookup = new LookupService(lookuphost);
-	    		    try {
-	                    lookup.registerEndPort(friendlyName, bodID, domain);
-	                } catch (LookupServiceException lse) {
-	                    lse.printStackTrace();
-	                    log.info("End port " + bodID + " with friendly name " 
-	                            + friendlyName + " could not be registered to LS");
-	                }
-    			}
 
         		// Link
             	Link l = Link.createInterDomainLink(sport, eport, glink.getCapacity());

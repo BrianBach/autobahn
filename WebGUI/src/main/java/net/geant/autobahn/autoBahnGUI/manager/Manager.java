@@ -96,6 +96,13 @@ public interface Manager {
 	 */
 	public List<ServiceType> getServicesFromInterDomainManager (String idm);
 
+    /**
+     * Gets submitted services from specified IDM
+     * 
+     * @param idm
+     *            identifier of the IDM - if null provides list of services from first IDM
+     * @return ServicesFormModel
+     */
 	public ServicesFormModel getSubmitedServicesInIDM(String idm);
 
 	/**
@@ -145,38 +152,27 @@ public interface Manager {
     public List<PortType> getAllIdcpPorts ();
 
     /**
-	 * Gets all client port identifiers
+	 * Gets all client ports
 	 * If the supplied parameter is not null, it tries with that IDM,
 	 * otherwise it searches for any registered IDM that can return a valid result
-	 * 
-     * @param idmIdentifier
-	 * @return list of port identifiers
-	 * @throws UserAccessPointException 
+     * Does not include any IDCP ports
+     * 
+     * @param idm - preferred IDM to get ports from
+     * @return list of ports names with associated friendly ones
+     * @throws UserAccessPointException 
 	 */
-	public List<PortType> getAllPorts (String idmIdentifier) throws UserAccessPointException;
+	public List<PortType> getAllClientPorts (String idmIdentifier) throws UserAccessPointException;
 	
     /**
-     * Gets all client port identifiers
+     * Gets all client ports
      * It searches for any registered IDM that can return a valid result
      * 
      * @param idmIdentifier
      * @return list of port identifiers
      * @throws UserAccessPointException 
      */
-    public List<PortType> getAllPorts () throws UserAccessPointException;
-    
-    /**
-     * Gets all port names (with associated friendly ones from LS)
-     * If the supplied parameter is not null, it tries with that IDM,
-     * otherwise it searches for any registered IDM that can return a valid result
-     * Does not include any IDCP ports
-     * 
-     * @param idm - preferred IDM to get ports from
-     * @return list of ports names with associated friendly ones
-     * @throws UserAccessPointException 
-     */
-    public List<PortType> getAllFriendlyPorts (String idm) throws UserAccessPointException;
-    
+    public List<PortType> getAllClientPorts() throws UserAccessPointException;
+
     /**
      * Gets all port names (with associated friendly ones from LS) in all IDM
      * registered in WEB GUI
@@ -211,28 +207,21 @@ public interface Manager {
      * @return list of links names
      */
     public List<String> getAllLinks_NonClient();
-    
-	/**
-	 * Gets names of ports managed by specified IDM
-	 * @param idm identifier of the IDM
-	 * @return list of  ports names
-	 */
-	public List<PortType> getInterDomainManagerPorts (String idm);
 
-	/**
-     * Gets names of ports (with associated friendly ones from LS) 
-     * managed by specified IDM
-	 * @param idm identifier of the IDM
-	 * @return list of ports names with associated friendly ones from LS 
-	 */
-    public List<PortType> getFriendlyInterDomainManagerPorts(String idmIdentifier);
+    /**
+     * Gets list of client ports managed by specified IDM
+     * 
+     * @param idm
+     *            identifier of the IDM
+     * @return list of client ports
+     */
+    public List<PortType> getInterDomainManagerPorts(String idm);
 
 	/**
 	 * Gets time period after with the  registered earlier IDM is mark as not accessible
 	 * @return
 	 */
 	public long getTearDownTime();
-
 
 	/**
 	 * Checks if request reservation is possible to schedule
@@ -278,13 +267,6 @@ public interface Manager {
      * @param request
      */
 	public void convertTimeToApplicationTimezone(String timezone, ReservationRequest request);
-	
-	/**
-	 * Gets submitted services in IDM
-	 * @param idm identifier of the IDM if null provides list of all IDM services
-	 * @return ServicesFormModel
-	 */
-	public ServicesFormModel getSubmitedServicesInInterDomainManager(String idm);
 
 	/**
 	 * Gets SettingFormModel used in IDM setting view
@@ -306,44 +288,36 @@ public interface Manager {
      * @return  StatisticsFormModel
      */
     public StatisticsFormModel getStatisticsForInterDomainManager (String idm);
-	
-	public LookupService getLookupService();
-	
-	public String getFriendlyNamefromLS(String identifier);
-	
-	public void checkIDMavailability();
-	
-	public List<ServiceType> sortServicesByBodyID(List<ServiceType> list);
-	
-	public String setParameter(String param);
-	
-	public List<String> getReservationModes();
-	
-	public void convertCapacity(ReservationRequest request);
-	
-	/**
-	 * Gets map of FriendlyPorts
-	 * 
-	 * @param idm - the preferred idm to get ports from
-	 * @return map of Identifier() and FriendlyName 
-	 * @throws UserAccessPointException 
-	 */
-	public Map<String,String> getAllAvailablePorts(String idm) throws UserAccessPointException;
-	
-	/**
-	 * Get friendly name port
-	 * @param port name
-	 * @return friendly name port
-	 * @throws UserAccessPointException 
-	 */
-	public String getFriendlyNamePort(String port) throws UserAccessPointException;
-	/**
-	 * Gets list of domain links no clients
-	 * @return	list of links
-	 */
-	public List<LinkMap> getAllDomainLinks();
-	
-	public boolean checkTopology(String idm);
+
+    public LookupService getLookupService();
+
+    public void checkIDMavailability();
+
+    public List<ServiceType> sortServicesByBodyID(List<ServiceType> list);
+
+    public String setParameter(String param);
+
+    public List<String> getReservationModes();
+
+    public void convertCapacity(ReservationRequest request);
+
+    /**
+     * Get the friendly port name for the specified port
+     * 
+     * @param port identifier
+     * @return friendly port name, null if not found
+     * @throws UserAccessPointException
+     */
+    public String getFriendlyNamePort(String port) throws UserAccessPointException;
+
+    /**
+     * Gets list of domain links no clients
+     * 
+     * @return list of links
+     */
+    public List<LinkMap> getAllDomainLinks();
+
+    public boolean checkTopology(String idm);
 
     /**
      * Handles a topology update event by restarting all IDMs connected to the

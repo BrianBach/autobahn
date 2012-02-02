@@ -114,12 +114,12 @@ public class RequestServiceFormController extends SimpleFormController {
 				List<PortType> allPorts=null;
 				
 				try {
-                    allPorts = manager.getAllPorts();
+                    allPorts = manager.getAllClientPorts();
                 } catch (UserAccessPointException e1) {
                     // TODO Auto-generated catch block
                     logger.error (e1.getMessage());
                 }
-				
+
 				// Add to allPorts also IDCP ports
                 List<PortType> allIdcpPorts = manager.getAllIdcpPorts();
                 if (allIdcpPorts != null) {

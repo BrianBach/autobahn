@@ -137,13 +137,12 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	 * Logs information
 	 */
 	private static Logger logger = Logger.getLogger("ManagerImpl");
-	
-	/**
-	 * Map with all ports available in each domain
-	 */
- 	private Map<String,String> ports = new HashMap<String,String>();
-	
-	
+
+    /**
+     * List of all client ports
+     */
+    private List<PortType> ports = new ArrayList<PortType>();
+
 	private LookupService lookupService;
 	
 	private String[] comparedLinks;
@@ -318,16 +317,16 @@ public class ManagerImpl implements Manager, ManagerNotifier {
     /*
      * (non-Javadoc)
      * 
-     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllPorts(java.lang.String)
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllClientPorts(java.lang.String)
      */
     @Override
-    public List<PortType> getAllPorts(String idmIdentifier) throws UserAccessPointException {
+    public List<PortType> getAllClientPorts(String idmIdentifier) throws UserAccessPointException {
         if (idmIdentifier != null) {
             InterDomainManager manager = idms.get(idmIdentifier);
             if (manager == null) {
-                logger.info("getAllPorts() could not find idm manager for " + idmIdentifier
+                logger.info("getAllClientPorts() could not find idm manager for " + idmIdentifier
                         + ", will try with any other registered IDM");
-                return getAllPorts();
+                return getAllClientPorts();
             }
 
             List<PortType> pTypes = manager.getAllClientPorts();
@@ -335,41 +334,32 @@ public class ManagerImpl implements Manager, ManagerNotifier {
             if (pTypes != null) {
             	return pTypes;
             } else {
-                return getAllPorts();
+                return getAllClientPorts();
             }
         }
 
         // idmIndentifier is null
-        return getAllPorts();
+        return getAllClientPorts();
     }
-	
+
     /*
      * (non-Javadoc)
-     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllPorts()
+     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllClientPorts()
      */
     @Override
-    public List<PortType> getAllPorts () throws UserAccessPointException {
+    public List<PortType> getAllClientPorts() throws UserAccessPointException {
         // Parse through IDMs and get the first non-null result
         for (String idm : idms.keySet()) {
             logger.info("Getting client ports from " + idm);
             InterDomainManager manager = idms.get(idm);
-            List<PortType> pTypes = manager.getAllClientPorts();
-            
-            if(pTypes != null) {
-            	return pTypes;
+            ports = manager.getAllClientPorts();
+
+            if (ports != null) {
+                return ports;
             }
         }
-        
+
         return null;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getAllFriendlyPorts(java.lang.String)
-     */
-    @Override
-    public List<PortType> getAllFriendlyPorts (String idm) throws UserAccessPointException {
-    	return getAllPorts(idm);
     }
 
     /*
@@ -378,7 +368,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
      */
     @Override
     public List<PortType> getAllFriendlyAndIdcpPorts (String idm) throws UserAccessPointException {
-    	List<PortType> friendlyPorts = getAllFriendlyPorts(idm);
+    	List<PortType> friendlyPorts = getAllClientPorts(idm);
         List<PortType> idcpPorts = this.getAllIdcpPorts(idm);
         
         if (friendlyPorts == null) {
@@ -394,28 +384,6 @@ public class ManagerImpl implements Manager, ManagerNotifier {
         }
 
         return friendlyPorts;
-    }
-
-    /**
-     * Checks the Lookup Service for the friendly name of a port identifier.
-     * 
-     * @param The port identifier to look for.
-     * @return The friendly name if operation was successful, null otherwise
-     */
-    @Override
-    public String getFriendlyNamefromLS(String identifier) {
-        if (getLookupService() == null) {
-            return null;
-        }
-
-        String friendlyName = null;
-        try {
-            friendlyName = getLookupService().queryFriendlyName(identifier);
-        } catch (LookupServiceException e) {
-            logger.info("End port friendly name could not be acquired from LS");
-            logger.info(e.getMessage());
-        }
-        return friendlyName;
     }
 
     /*
@@ -547,16 +515,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 
     	return pTypes;
 	}
-	
-    /*
-     * (non-Javadoc)
-     * @see net.geant.autobahn.autoBahnGUI.manager.Manager#getFriendlyInterDomainManagerPorts()
-     */
-    @Override
-    public List<PortType> getFriendlyInterDomainManagerPorts(String idmIdentifier) {
-    	return getInterDomainManagerPorts(idmIdentifier);
-    }
-	
+
 	/*
 	public Service requestService (String idm, ServiceRequest service) throws UserAccessPointException_Exception{
 		InterDomainManager manager = idms.get(idm);
@@ -653,15 +612,15 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 		return manager;
 	}
 	
-	private void refreshPorts() {
+    private void refreshPorts() {
         ports.clear();
         try {
-            getAllPorts();
+            getAllClientPorts();
         } catch (UserAccessPointException e) {
             e.printStackTrace();
         }
-	}
-	
+    }
+
 	/*
 	 * (non-Javadoc)
 	 * @see net.geant.autobahn.autoBahnGUI.manager.ManagerNotifier#reservationChanged(java.lang.String, java.lang.String, java.lang.String, net.geant.autobahn.gui.ReservationChangedType, java.lang.String)
@@ -1190,63 +1149,62 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 	}
 	
     @Override
-	public ServicesFormModel getSubmitedServicesInIDM(String idm) {		
-		ServicesFormModel serv = new ServicesFormModel();
-		List<String> managers = getAllInterdomainManagers();
-		InterDomainManager manager = null;
-		logger.info("managers:"+managers);
-		if (managers== null || managers.size()==0)
-			return serv;
-		serv.setIdms(managers);
-		if (idm ==null){
-			serv.setCurrentIdm(managers.get(0));
-			manager = idms.get(managers.get(0));
-			serv.setComparator(new ServicesComparator());
-			serv.setServices(manager.getServices());
-			
-		} else { 
-			manager = idms.get(idm);
-			List<ServiceType> services = manager.getServices();
-			serv.setComparator(new ServicesComparator());
-			serv.setServices(services);
-			serv.setCurrentIdm(idm);
-		}
-	
-		
-		//Filtering submitted services		
-		boolean isAdmin=AuthorityUtils.userHasAuthority("ROLE_ADMINISTRATOR");
-		
-		if(!isAdmin && serv.getServices()!=null) {
-			//Filtering by username
-			List<ServiceType> filteredServices=new ArrayList<ServiceType>();
-			
-			//TODO: consider using the same way that getServiceRequestTemplate gets the username
-			String contextUsername=SecurityContextHolder.getContext().getAuthentication().getName();
-			
-			for (ServiceType servType: serv.getServices()) {
-				
-				String serviceID = servType.getBodID();
-				if(manager.getService(serviceID) == null)
-					continue;
-				//Get the username of the first reservation as username
-				String servUsername=servType.getUser().getName();
-				if(servUsername==null) continue;
-			
-				if(servUsername.equals(contextUsername)) {
-					filteredServices.add(servType);
-				}
-			}
-			
-			serv.setServices(filteredServices);
-		}
-		
-		return serv;
-	}
+    public ServicesFormModel getSubmitedServicesInIDM(String idm) {
+        ServicesFormModel serv = new ServicesFormModel();
+        List<String> managers = getAllInterdomainManagers();
+        InterDomainManager manager = null;
+        logger.info("managers:" + managers);
+        if (managers == null || managers.size() == 0) {
+            return serv;
+        }
+        serv.setIdms(managers);
+        if (idm == null) {
+            serv.setCurrentIdm(managers.get(0));
+            manager = idms.get(managers.get(0));
+            serv.setComparator(new ServicesComparator());
+            serv.setServices(manager.getServices());
+        } else {
+            manager = idms.get(idm);
+            List<ServiceType> services = manager.getServices();
+            serv.setComparator(new ServicesComparator());
+            serv.setServices(services);
+            serv.setCurrentIdm(idm);
+        }
+
+        // Filtering submitted services
+        boolean isAdmin = AuthorityUtils.userHasAuthority("ROLE_ADMINISTRATOR");
+
+        if (!isAdmin && serv.getServices() != null) {
+            // Filtering by username
+            List<ServiceType> filteredServices = new ArrayList<ServiceType>();
+
+            //TODO: consider using the same way that getServiceRequestTemplate gets the username
+            String contextUsername=SecurityContextHolder.getContext().getAuthentication().getName();
+
+            for (ServiceType servType : serv.getServices()) {
+                String serviceID = servType.getBodID();
+                if (manager.getService(serviceID) == null) {
+                    continue;
+                }
+                // Get the username of the first reservation as username
+                String servUsername = servType.getUser().getName();
+                if (servUsername == null) {
+                    continue;
+                }
+                if (servUsername.equals(contextUsername)) {
+                    filteredServices.add(servType);
+                }
+            }
+
+            serv.setServices(filteredServices);
+        }
+        return serv;
+    }
 
     @Override
 	public LogsFormModel getLogsForInterDomainManager(String idm) {
-		LogsFormModel serv =  new LogsFormModel();
-		List<String > managers = 	getAllInterdomainManagers();
+		LogsFormModel serv = new LogsFormModel();
+		List<String > managers = getAllInterdomainManagers();
 		serv.setIdms(managers);
 		if (managers== null || managers.isEmpty()){
 			serv.setError("There is no log provided");
@@ -1290,13 +1248,13 @@ public class ManagerImpl implements Manager, ManagerNotifier {
     @Override
 	public SettingsFormModel getSettingsForInterDomainManager(String idm) {
 		SettingsFormModel serv =  new SettingsFormModel();
-		List<String > managers = 	getAllInterdomainManagers();
+		List<String > managers = getAllInterdomainManagers();
 		serv.setIdms(managers);
-		if (managers== null || managers.isEmpty()){
+		if (managers== null || managers.isEmpty()) {
 			serv.setError("There is no settings provided");
 			return serv;
 		}
-		if (idm ==null){
+		if (idm == null) {
 			idm = managers.get(0);
 		}
 		InterDomainManager manager = idms.get(idm);
@@ -1310,15 +1268,9 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 		return serv;
 	}
 
-    @Override
-	public ServicesFormModel getSubmitedServicesInInterDomainManager(String idm) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	@Override
 	public List<ServiceType> sortServicesByBodyID(List<ServiceType> list){
-						
+
 		Comparator<ServiceType> comparator = new ServicesComparator();
 		Collections.sort(list, comparator);
 
@@ -1336,67 +1288,55 @@ public class ManagerImpl implements Manager, ManagerNotifier {
 		long capacity = request.getCapacity();
 		request.setCapacity(capacity * 1000000 );
 	}
-	
+
     @Override
-	public Map<String,String> getAllAvailablePorts(String idm) throws UserAccessPointException{
-		
-		if(ports.size() == 0){
-			
-			List<PortType> ports_all = getAllFriendlyPorts(idm);
-			if(ports_all == null & ports_all.size()==0)
-				return null;
-			
-			for (PortType portMap : ports_all) {
-				ports.put(portMap.getAddress(), portMap.getFriendlyName());
-			}
-			if(ports.size() == 0)
-				return null;
-		}
-		return ports;
-	}
-	
+    public String getFriendlyNamePort(String port) throws UserAccessPointException {
+
+        if (port == null || port.length() == 0) {
+            return null;
+        }
+
+        if (ports.size() == 0) {
+            getAllClientPorts();
+        }
+
+        for (PortType p : ports) {
+            if (port.equals(p.getAddress())) {
+                return p.getFriendlyName();
+            }
+        }
+        return null;
+    }
+
     @Override
-	public String getFriendlyNamePort(String port) throws UserAccessPointException{
-		
-		if(port == null & port.length() == 0)
-			return null;
-		
-		if(ports.size() == 0)
-			getAllAvailablePorts(null);
-		
-		return ports.get(port);
-	}
-	
-    @Override
-	public List<LinkMap> getAllDomainLinks(){
-		
-		List<String> str = getAllLinks_NonClient();
-		//List<String> domainLinks = new ArrayList<String>();
-		List<LinkMap> domainLinks = new ArrayList<LinkMap>();
-			
-		for(String idm : idms.keySet()) {	
-	        InterDomainManager manager = idms.get(idm);
-	        List<Link> links = manager.getTopology();
-	        	for (Link link : links) {
-	        		if(str.contains(link.getBodID())){
-	        			String path = new String();
-        				if(link.getStartDomainID().equalsIgnoreCase(link.getEndDomainID()))
-        					path = " ["+link.getBodID() +"] Internal Link "+link.getStartDomainID();
-        				else
-        					path = " ["+link.getBodID() +"] from "+link.getStartDomainID()+" to "+link.getEndDomainID();
-	        			
-	        			//domainLinks.add(path);
-	        			domainLinks.add(new LinkMap(link.getBodID(), path));
-	        		}	
-				}
-	        	break;
-	    }
-			
-		if(domainLinks.size() == 0)
-			return null;
-			
-		return domainLinks;
-	}
+    public List<LinkMap> getAllDomainLinks(){
+
+        List<String> str = getAllLinks_NonClient();
+        List<LinkMap> domainLinks = new ArrayList<LinkMap>();
+
+        for (String idm : idms.keySet()) {	
+            InterDomainManager manager = idms.get(idm);
+            List<Link> links = manager.getTopology();
+            for (Link link : links) {
+                if (str.contains(link.getBodID())) {
+                    String path = new String();
+                    if (link.getStartDomainID().equalsIgnoreCase(link.getEndDomainID())) {
+                        path = " ["+link.getBodID() +"] Internal Link "+link.getStartDomainID();
+                    } else {
+                        path = " ["+link.getBodID() +"] from "+link.getStartDomainID()+" to "+link.getEndDomainID();
+                    }
+                    domainLinks.add(new LinkMap(link.getBodID(), path));
+                }
+            }
+            break;
+        }
+
+        if (domainLinks.size() == 0) {
+            return null;
+        }
+
+        return domainLinks;
+    }
 
     @Override
     public boolean checkTopology(String idm){
