@@ -570,7 +570,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
     public List<Double> getDestinationPoint(double lat1, double lon1, double biring, double d) {
 
         List<Double> list = new ArrayList<Double>();
-        double R = 6371;
+        double R = 16371;
         double angle = d / R;
         double Latitude1 = Math.toRadians(lat1);
         double Longitude1 = Math.toRadians(lon1);
