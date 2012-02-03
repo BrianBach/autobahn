@@ -81,7 +81,6 @@
 		<transition on="test" to="addReservation" bind="true" validate="true" >
 			<evaluate expression="manager.convertTimeToApplicationTimezone(reservation.timezone,reservation.request)"/>
 			<evaluate expression="manager.checkReservationPossibility(flowScope.home,reservation.request)" result="flashScope.test"/>		
-			<evaluate expression="manager.mapPortsForReservationRequest(reservation.request)"/>
 		</transition>
 		<transition on-exception="java.lang.Exception" to="addReservation"> 
 			<evaluate expression="exceptionTranslator.translateException(flowRequestContext, flowExecutionException)"/>

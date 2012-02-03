@@ -16,7 +16,6 @@ import net.geant.autobahn.autoBahnGUI.model.ServicesFormModel;
 import net.geant.autobahn.autoBahnGUI.model.SettingsFormModel;
 import net.geant.autobahn.autoBahnGUI.model.StatisticsFormModel;
 import net.geant.autobahn.autoBahnGUI.topology.TopologyFinder;
-import net.geant.autobahn.useraccesspoint.UserAccessPointException;
 import net.sf.json.JSONSerializer;
 import net.sf.json.JSONObject;
 
@@ -47,7 +46,7 @@ public class AutobahnController {
     Manager  manager;
 
     /**
-     * Identies topology finder module
+     * Identities topology finder module
      */
     @Autowired
     TopologyFinder topologyFinder;
@@ -180,18 +179,17 @@ public class AutobahnController {
 
     @RequestMapping("/secure/servicesforidm.htm")
     public void handleServicesForIdm(@RequestParam String currentIdm,Map<String, Object> model){
-        logger.debug("getting services for idm");
-        ServicesFormModel services=null;
-        String[] reservationStates=null;
-    
-        logger.debug("getting services for idm, currentIdm:"+currentIdm);
-        if (currentIdm  !=null){
-            services = manager.getSubmitedServicesInIDM(currentIdm);   
-            reservationStates=manager.getReservationStates();
+        ServicesFormModel services = null;
+        String[] reservationStates = null;
+
+        logger.debug("getting services for idm, currentIdm:" + currentIdm);
+        if (currentIdm != null) {
+            services = manager.getSubmitedServicesInIDM(currentIdm);
+            reservationStates = manager.getReservationStates();
         }
-        logger.debug("services:"+services);
-        logger.debug("reservationStates:"+reservationStates);
-        logger.debug("services.getServices():"+services.getServices());
+        //logger.debug("services:"+services);
+        //logger.debug("reservationStates:"+reservationStates);
+        //logger.debug("services.getServices():"+services.getServices());
         model.put("services", services);
         model.put("reservationStates", reservationStates);
     }
