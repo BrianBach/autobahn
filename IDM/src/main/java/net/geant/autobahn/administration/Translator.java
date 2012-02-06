@@ -48,12 +48,10 @@ public class Translator {
 		GlobalConstraints gcon = r.getGlobalConstraints();
 		
 		// Start port
-		PortType sport = new PortType();
-		sport.setAddress(r.getStartPort().getBodID());
+		PortType sport = PortType.convert(r.getStartPort());
 
 		// End port
-		PortType eport = new PortType();
-		eport.setAddress(r.getEndPort().getBodID());
+		PortType eport = PortType.convert(r.getEndPort());
 		
 		if(r.getPath() != null && gcon != null) {
 			int sVlan = getVlanNumber(gcon, r.getPath().getHomeDomainID() + "-ingress");
