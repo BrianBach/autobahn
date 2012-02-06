@@ -100,7 +100,8 @@
 			<th><spring:message code="reservation.endVlan" text="End vlan"/></th>
 			<th><spring:message code="reservation.capacity" text="Capacity"/></th>
 			<th><spring:message code="reservation.mtu" text="Mtu"/></th>
-		</tr>  
+		</tr>
+        <c:set var="hideCancel" value="true"/>
 		<c:forEach items="${element.reservations}" var="item" varStatus="loopStatus">
 				<tr>
 					<td>${reservationStates[item.state]}(${item.state})</td>
@@ -115,19 +116,23 @@
 					<td>${item.capacity/1000000}</td>
 					<td>${item.mtu}</td>
 				</tr>
+                <c:if test="${item.state != 21 && item.state != 22 && item.state != 23}">
+                    <c:set var="hideCancel" value="false"/>
+                </c:if>
 		</c:forEach>
 	</table>
 <!--div style="position:relative;float:left;padding-top:20px"><a style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;" href="${flowExecutionUrl}&_eventId=cancel&id=${element.bodID}"><input id="cancel" name="Cancel" value="Cancel" type="submit" style="width:100px;" onclick="window.top.location='${flowExecutionUrl}&_eventId=cancel&id=${element.bodID}'" /></a-->
 <script>
 //alert($("#currentIdm").val());
 </script>
+    <c:if test="${hideCancel != true}">
 <!--div style="position:relative;float:left;padding-top:20px"><a style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;" href="#" onclick="window.top.location=location.href + '&_eventId=cancel&id=${element.bodID}&currentIdm2=' + $('#currentIdm').val()"><input id="cancel" name="Cancel" value="Cancel" type="submit" style="width:100px;" onclick="window.top.location=location.href + '&_eventId=cancel&id=${element.bodID}&currentIdm2=' + $('#currentIdm').val()" /></a-->
 <div class="cancelButton" style="position:relative;float:left;padding-top:20px"><span style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"><input id="cancel" name="Cancel" value="Cancel" type="submit" style="width:100px;" onclick="jQuery.post(location.href + '&_eventId=cancel&id=${element.bodID}&currentIdm2=' + $('#currentIdm').val() )" /></span>
 
 <!--				<a style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"  href="<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}">-->
 <!--<input id="view" name="view" value="View map" type="submit" style="width:100px" onclick="window.top.location='<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}'" /></a>-->
-				
 	</div>
+    </c:if>
 	<br><br><br>
  	</div>
    								
@@ -179,7 +184,8 @@
 			<th><spring:message code="reservation.endVlan" text="End vlan"/></th>
 			<th><spring:message code="reservation.capacity" text="Capacity"/></th>
 			<th><spring:message code="reservation.mtu" text="Mtu"/></th>
-		</tr>  
+		</tr>
+        <c:set var="hideCancel" value="true"/>
 		<c:forEach items="${element.reservations}" var="item" varStatus="loopStatus">
 				<tr>
 					<td>${reservationStates[item.state]}(${item.state})</td>
@@ -194,16 +200,20 @@
 					<td>${item.capacity/1000000}</td>
 					<td>${item.mtu}</td>
 				</tr>
+                <c:if test="${item.state != 21 && item.state != 22  && item.state != 23}">
+                    <c:set var="hideCancel" value="false"/>
+                </c:if>
 		</c:forEach>
 	</table>
 
+    <c:if test="${hideCancel != true}">
 <!--div style="position:relative;float:left;padding-top:20px"><a style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;" href="${flowExecutionUrl}&_eventId=cancel&id=${element.bodID}"><input id="cancel" name="Cancel" value="Cancel" type="submit" style="width:100px;" onclick="window.top.location='${flowExecutionUrl}&_eventId=cancel&id=${element.bodID}'" /></a-->
 <div class="cancelButton" style="position:relative;float:left;padding-top:20px"><span style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"><input id="cancel" name="Cancel" value="Cancel" type="submit" style="width:100px;" onclick="jQuery.post(location.href + '&_eventId=cancel&id=${element.bodID}&currentIdm2=' + $('#currentIdm').val() )" /></span>
 
 <!--				<a style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"  href="<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}">-->
 <!--<input id="view" name="view" value="View map" type="submit" style="width:100px" onclick="window.top.location='<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}'" /></a>-->
-				
 	</div>
+    </c:if>
 	<br><br><br>
  	</div>				
    								
@@ -251,7 +261,8 @@
 			<th><spring:message code="reservation.endVlan" text="End vlan"/></th>
 			<th><spring:message code="reservation.capacity" text="Capacity"/></th>
 			<th><spring:message code="reservation.mtu" text="Mtu"/></th>
-		</tr>  
+		</tr>
+        <c:set var="hideCancel" value="true"/>
 		<c:forEach items="${element.reservations}" var="item" varStatus="loopStatus">
 				<tr>
 					<td>${reservationStates[item.state]}(${item.state})</td>
@@ -266,15 +277,18 @@
 					<td>${item.capacity/1000000}</td>
 					<td>${item.mtu}</td>
 				</tr>
+                <c:if test="${item.state != 21 && item.state != 22 && item.state != 23}">
+                    <c:set var="hideCancel" value="false"/>
+                </c:if>
 		</c:forEach>
 	</table>
 
-<div class="cancelButton" style="position:relative;float:left;padding-top:20px"><span style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"><input id="cancel" name="Cancel" value="Cancel" type="submit" style="width:100px;" onclick="jQuery.post(location.href + '&_eventId=cancel&id=${element.bodID}&currentIdm2=' + $('#currentIdm').val() )" /></span>
-
+    <c:if test="${hideCancel != true}">
+    <div class="cancelButton" style="position:relative;float:left;padding-top:20px"><span style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"><input id="cancel" name="Cancel" value="Cancel" type="submit" style="width:100px;" onclick="jQuery.post(location.href + '&_eventId=cancel&id=${element.bodID}&currentIdm2=' + $('#currentIdm').val() )" /></span>
 <!--	<a style="text-decoration:none;padding:0px;color:#000000;background:#ffffff;border:none;"  href="<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}">-->
 <!--<input id="view" name="view" value="View map" type="submit" style="width:100px" onclick="window.top.location='<c:url value="/portal/secure/services-map.htm"/>?service=${element.bodID}&domain=${element.user.homeDomain.bodID}'" /></a>-->
-				
-	</div>
+    </div>
+    </c:if>
 	<br><br><br>
  	</div>			
    			</c:forEach>
