@@ -116,7 +116,7 @@
 					<td>${item.capacity/1000000}</td>
 					<td>${item.mtu}</td>
 				</tr>
-                <c:if test="${item.state != 21 && item.state != 22 && item.state != 23}">
+                <c:if test="${item.state == 9 || item.state == 10 || item.state == 4 || item.state == 5}">
                     <c:set var="hideCancel" value="false"/>
                 </c:if>
 		</c:forEach>
@@ -200,7 +200,7 @@
 					<td>${item.capacity/1000000}</td>
 					<td>${item.mtu}</td>
 				</tr>
-                <c:if test="${item.state != 21 && item.state != 22  && item.state != 23}">
+                <c:if test="${item.state == 9 || item.state == 10 || item.state == 4 || item.state == 5}">
                     <c:set var="hideCancel" value="false"/>
                 </c:if>
 		</c:forEach>
@@ -277,7 +277,7 @@
 					<td>${item.capacity/1000000}</td>
 					<td>${item.mtu}</td>
 				</tr>
-                <c:if test="${item.state != 21 && item.state != 22 && item.state != 23}">
+                <c:if test="${item.state == 9 || item.state == 10 || item.state == 4 || item.state == 5}">
                     <c:set var="hideCancel" value="false"/>
                 </c:if>
 		</c:forEach>
