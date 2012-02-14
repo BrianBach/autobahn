@@ -1385,8 +1385,12 @@ public class ManagerImpl implements Manager, ManagerNotifier {
             // Log the error but continue with IDMs restart
             logger.info("Could not clean up LS ", e1);
         }
-        
-        InterDomainManager manager = idms.get(idmParam);
+
+        // Work on a copy of idms Map as it will change while IDMs are restarted
+        Map<String, InterDomainManager> idms_copy = new HashMap<String, InterDomainManager>();
+        idms_copy.putAll(idms);
+
+        InterDomainManager manager = idms_copy.get(idmParam);
         if (manager != null){
             logger.info("Restarting IDM that caused topology change: " + idmParam);
             try {
@@ -1398,8 +1402,8 @@ public class ManagerImpl implements Manager, ManagerNotifier {
         }
         
         // Parse through IDMs and get the first non-null result
-        for (String idm : idms.keySet()) {
-            manager = idms.get(idm);
+        for (String idm : idms_copy.keySet()) {
+            manager = idms_copy.get(idm);
             
             if(idm != null && !idm.equals(idmParam)) {
                 logger.info("Restarting IDM " + idm);
