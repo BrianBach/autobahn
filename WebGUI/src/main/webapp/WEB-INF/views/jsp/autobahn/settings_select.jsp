@@ -56,3 +56,13 @@ var options = {
  <div id="settingsform" style="text-align:center" class="emptydiv">
  </div>
  </div>
+
+<script type="text/javascript">
+    var myselect=document.getElementById("currentIdm")
+    for (var i=0; i<myselect.options.length; i++){
+        if (myselect.options[i].value=="${authParameters.organization}") {
+            myselect.options[i].selected=true
+            break
+            }
+        }
+</script>

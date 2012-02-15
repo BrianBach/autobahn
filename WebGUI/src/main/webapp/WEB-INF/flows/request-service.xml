@@ -8,6 +8,7 @@
 		<evaluate expression="manager.getAllInterdomainManagers()" result="flowScope.idms" />
 		<evaluate expression="manager.getTimezone()" result="flowScope.appTimezone" />
 		<evaluate expression="manager.getServiceRequestTemplate()" result="flowScope.service" />
+        <evaluate expression="manager.getUserAuthParameters()" result="flowScope.authParameters" />
 	</on-start>
 	<decision-state id="moreAnswersNeeded">
     	<if test="flowScope.idms== null ||flowScope.idms.isEmpty()" then="no-idm-regitered" else="request-service" />

@@ -2,7 +2,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <h2><spring:message code="service.htitle" text="Request Reservation Service" /></h2>
 
-
 <style>
 .images {
 	/*background:#fff url(h300.png) repeat-x;*/
@@ -47,8 +46,6 @@ cursor:pointer;
 	<!--p style="margin:20px"><spring:message code="service.submitted.view"/><a href="<c:url value="/portal/secure/reservations.htm?idm=${service.userHomeDomain}#${serviceId}"/>"><spring:message code="service.submitted.goto"/></a></p-->
 	<p style="margin:20px"><spring:message code="service.submitted.view"/><a href="<c:url value="/portal/secure/reservations_select.htm?idm=${service.userHomeDomain}"/>"><spring:message code="service.submitted.goto"/></a></p>
 </c:if>
-
-
 
 <c:if test="${serviceId==null}">
 <form:form commandName="service">
@@ -171,5 +168,13 @@ cursor:pointer;
 	</form:form>
 </c:if>
 	</div>
-	
 
+<script type="text/javascript">
+    var myselect=document.getElementById("userHomeDomain")
+    for (var i=0; i<myselect.options.length; i++){
+        if (myselect.options[i].value=="${authParameters.organization}") {
+            myselect.options[i].selected=true
+            break
+            }
+        }
+</script>

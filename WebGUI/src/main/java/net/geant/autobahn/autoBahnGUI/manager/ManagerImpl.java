@@ -786,10 +786,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
             throw new ManagerException(ManagerException.SERVICE_WITHOUT_RESERVATIONS, "Empty service submitted");
         }
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        @SuppressWarnings("unchecked")
-        Set<String> authorities = AuthorityUtils.authorityArrayToSet(auth.getAuthorities());
-        UserAuthParameters authParameters = new UserAuthParameters(auth.getName(), authorities);
+        UserAuthParameters authParameters = getUserAuthParameters();
 
         for (int i=0; i<request.getReservations().size(); i++) {
             request.getReservations().get(i).setAuthParameters(authParameters);
@@ -822,11 +819,7 @@ public class ManagerImpl implements Manager, ManagerNotifier {
         if (manager == null) {
             test.setStatus(false);
         } else {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            @SuppressWarnings("unchecked")
-            Set<String> authorities = AuthorityUtils.authorityArrayToSet(auth.getAuthorities());
-            UserAuthParameters authParameters = 
-                new UserAuthParameters(auth.getName(), authorities);
+            UserAuthParameters authParameters = getUserAuthParameters();
             request.setAuthParameters(authParameters);
 
             test.setStatus(manager.checkReservationPossibility(request));
@@ -1033,6 +1026,14 @@ public class ManagerImpl implements Manager, ManagerNotifier {
         res.setRequest(reservation);
         res.setTimezone(timezone);
         return res;
+    }
+
+    public UserAuthParameters getUserAuthParameters() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        @SuppressWarnings("unchecked")
+        Set<String> authorities = AuthorityUtils.authorityArrayToSet(auth.getAuthorities());
+        UserAuthParameters authParameters = new UserAuthParameters(auth.getName(), authorities);
+        return authParameters;
     }
 
     /*

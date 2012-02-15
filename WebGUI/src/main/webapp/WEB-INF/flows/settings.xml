@@ -5,6 +5,7 @@
         http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
 	<on-start>
 		<evaluate expression="manager.getSettingsForInterDomainManager(null)" result="flowScope.settings" />	
+        <evaluate expression="manager.getUserAuthParameters()" result="flowScope.authParameters" />
 	</on-start>
 	<decision-state id="check-idm">
     	<if test="flowScope.settings.idms== null ||flowScope.settings.idms.size()==0" then="no-idm-regitered" else="settings"/>		

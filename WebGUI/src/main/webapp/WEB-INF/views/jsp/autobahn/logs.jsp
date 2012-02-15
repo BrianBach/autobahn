@@ -106,3 +106,13 @@ jQuery(document).ready(function()
    </form:form>
 </div>
 </div>
+
+<script type="text/javascript">
+    var myselect=document.getElementById("currentIdm")
+    for (var i=0; i<myselect.options.length; i++){
+        if (myselect.options[i].value=="${authParameters.organization}") {
+            myselect.options[i].selected=true
+            break
+            }
+        }
+</script>

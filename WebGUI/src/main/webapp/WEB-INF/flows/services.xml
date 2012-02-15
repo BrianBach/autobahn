@@ -7,10 +7,12 @@
 	
 	<on-start>
 		<set name="requestScope.currentIdm" value="requestParameters.idm"></set>
+        <evaluate expression="requestParameters.idm" result="flowScope.currentIdm"/>
 		<evaluate expression="manager.getSubmitedServicesInIDM(requestScope.currentIdm)" result="flowScope.services"/>
 		<evaluate expression="manager.reservationStates" result="flowScope.reservationStates"/>
 		<set name="requestScope.valueParam" value="0" type="string"/>
 		<evaluate expression="manager.setParameter(requestScope.valueParam)" result="flowScope.result"></evaluate>
+        <evaluate expression="manager.getUserAuthParameters()" result="flowScope.authParameters" />
 	</on-start>
 
 	<decision-state id="check-idm">
