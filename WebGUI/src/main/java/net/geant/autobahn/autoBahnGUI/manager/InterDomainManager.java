@@ -629,7 +629,9 @@ public class InterDomainManager implements UserAccessPoint, Administration {
     public List<PortType> getAllClientPorts() throws UserAccessPointException {
         try {
             if (isUserAccessPointConnected()) {
-                return userAccessPoint.getAllClientPorts();
+                List<PortType> ptypes = userAccessPoint.getAllClientPorts();
+                Collections.sort(ptypes);
+                return ptypes;
             }
         } catch (Exception e) {
             // TODO: convert to spring strings

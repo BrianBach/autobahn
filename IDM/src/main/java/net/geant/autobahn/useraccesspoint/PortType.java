@@ -13,7 +13,7 @@ import net.geant.autobahn.network.Port;
 @XmlType(name = "PortType", namespace = "useraccesspoint.autobahn.geant.net", propOrder = {
     "address", "mode", "vlan", "description", "isIdcp", "isClient"
 })
-public class PortType implements Serializable{
+public class PortType implements Serializable, Comparable<PortType> {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -109,4 +109,15 @@ public class PortType implements Serializable{
 		
 		return pType;
 	}
+
+    @Override
+    public int compareTo(PortType p2) {
+        if (p2 == null) {
+            return 1;
+        }
+        if (this.getAddress() == null) {
+            return -1;
+        }
+        return this.getAddress().compareTo(p2.getAddress());
+    }
 }

@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name="Port", namespace="network.autobahn.geant.net", propOrder={
 		"bodID", "description", "technology", "bundled", "node"
 })
-public class Port implements Serializable {
+public class Port implements Serializable, Comparable<Port> {
 
     private static final long serialVersionUID = 572057231833651705L;
 
@@ -259,5 +259,23 @@ public class Port implements Serializable {
     @Override
     public String toString() {
         return bodID;
+    }
+
+    @Override
+    public int compareTo(Port p2) {
+        if (p2 == null) {
+            return 1;
+        }
+        if (this.getAdminDomainID() == null) {
+            return -1;
+        }
+        if (this.getAdminDomainID().compareTo(p2.getAdminDomainID()) != 0) {
+            return this.getAdminDomainID().compareTo(p2.getAdminDomainID());
+        } else {
+            if (this.getBodID() == null) {
+                return -1;
+            }
+            return this.getBodID().compareTo(p2.getBodID());
+        }
     }
 }
