@@ -48,4 +48,9 @@ public class Finishing extends HomeDomainState {
 		}
 	}
 
+    @Override
+    public void cancel(HomeDomainReservation res) {
+        // Ignore this event
+        log.debug("Reservation: " + res.getBodID() + " is already finishing...");
+    }
 }

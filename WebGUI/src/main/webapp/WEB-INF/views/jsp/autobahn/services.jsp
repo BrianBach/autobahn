@@ -116,6 +116,9 @@
 					<td>${item.capacity/1000000}</td>
 					<td>${item.mtu}</td>
 				</tr>
+				<c:if test="${item.state == 23}">
+				    <tr><td colspan="11">Failure reason: ${item.failureCause}</td></tr>
+				</c:if>
                 <c:if test="${item.state == 9 || item.state == 10 || item.state == 4 || item.state == 5}">
                     <c:set var="hideCancel" value="false"/>
                 </c:if>
@@ -200,6 +203,9 @@
 					<td>${item.capacity/1000000}</td>
 					<td>${item.mtu}</td>
 				</tr>
+                <c:if test="${item.state == 23}">
+                    <tr><td colspan="11">Failure reason: ${item.failureCause}</td></tr>
+                </c:if>
                 <c:if test="${item.state == 9 || item.state == 10 || item.state == 4 || item.state == 5}">
                     <c:set var="hideCancel" value="false"/>
                 </c:if>
@@ -277,6 +283,9 @@
 					<td>${item.capacity/1000000}</td>
 					<td>${item.mtu}</td>
 				</tr>
+                <c:if test="${item.state == 23}">
+                    <tr><td colspan="11">Failure reason: ${item.failureCause}</td></tr>
+                </c:if>
                 <c:if test="${item.state == 9 || item.state == 10 || item.state == 4 || item.state == 5}">
                     <c:set var="hideCancel" value="false"/>
                 </c:if>

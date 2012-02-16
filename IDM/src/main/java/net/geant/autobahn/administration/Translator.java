@@ -8,6 +8,7 @@ import net.geant.autobahn.constraints.GlobalConstraints;
 import net.geant.autobahn.constraints.PathConstraints;
 import net.geant.autobahn.constraints.RangeConstraint;
 import net.geant.autobahn.reservation.AutobahnReservation;
+import net.geant.autobahn.reservation.HomeDomainReservation;
 import net.geant.autobahn.reservation.Service;
 import net.geant.autobahn.useraccesspoint.PortType;
 
@@ -44,6 +45,9 @@ public class Translator {
 		res.setResiliency(r.getResiliency());
 		res.setPath(r.getPath());
 		res.setState(r.getState());
+        if (r instanceof HomeDomainReservation) {
+            res.setFailureCause(((HomeDomainReservation) r).getFailureCause());
+        }
 
 		GlobalConstraints gcon = r.getGlobalConstraints();
 		
@@ -65,7 +69,7 @@ public class Translator {
 		
 		res.setStartPort(sport);
 		res.setEndPort(eport);
-		
+
 		return res;
 	}
 	

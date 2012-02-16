@@ -49,6 +49,16 @@ public class LocalCheck extends ExternalDomainState {
 		}
         
         // Add domain constraint to global
+		if (res.getGlobalConstraints() == null) {
+            log.error("Unexpected null global constraints!");
+		    res.fail(ReservationErrors.UNEXPECTED_ERROR, domainID);
+		    return;
+		}
+        if (dcons == null) {
+            log.error("Unexpected null domain constraints!");
+            res.fail(ReservationErrors.UNEXPECTED_ERROR, domainID);
+            return;
+        }
         res.getGlobalConstraints().addDomainConstraints(domainID + "-ingress", dcons[0]);
         res.getGlobalConstraints().addDomainConstraints(domainID + "-egress", dcons[1]);
         

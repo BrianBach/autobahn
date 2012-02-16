@@ -21,7 +21,7 @@ import net.geant.autobahn.useraccesspoint.PortType;
 @XmlType(name="ReservationType", namespace="administration.autobahn.geant.net", propOrder={
 		"bodID", "startPort", "endPort", "startTime", "endTime",
 		"priority", "description", "capacity", "mtu", "maxDelay",
-		"resiliency", "bidirectional", "path", "state"
+		"resiliency", "bidirectional", "path", "state", "failureCause"
 })
 public class ReservationType implements Serializable {
 
@@ -45,6 +45,8 @@ public class ReservationType implements Serializable {
 
 	protected Path path;
 	protected int state;
+	
+	protected String failureCause;
 	
 	/**
 	 * @return the bodID
@@ -214,7 +216,19 @@ public class ReservationType implements Serializable {
 	public void setState(int intState) {
 		this.state = intState;
 	}
-	
+    /**
+     * @return the failureCause
+     */
+    public String getFailureCause() {
+        return failureCause;
+    }
+    /**
+     * @param failureCause the failureCause to set
+     */
+    public void setFailureCause(String failureCause) {
+        this.failureCause = failureCause;
+    }
+
 	public String getInfo() {
 		return getBodID() + " [" + getStartPort() + " - " + getEndPort() + "] "
 		+ "(" + getStartTime().getTime() + " - " + getEndTime().getTime() + ") " 

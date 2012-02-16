@@ -39,23 +39,32 @@ public class ReservationErrors {
     // link errors
     public static final int NOT_ENOUGH_CAPACITY = 21;
 
+    // unexpected errors
+    public static final int UNEXPECTED_ERROR = 30;
+
     private static Map<Integer, String> infos;
 
     static {
         infos = new TreeMap<Integer, String>();
 
         infos.put(OK, "<--OK-->");
+
         infos.put(WRONG_DOMAIN, "Wrong domain, path can not be established from domain");
-        infos.put(DOMAIN_RESERVATION_ERROR, "Problem with reserving resources");
         infos.put(COMMUNICATION_ERROR, "Domain not responding");
         infos.put(LOCAL_COMMUNICATION_ERROR, "DM not responding in domain");
         infos.put(NEGATIVE_DELAY, "Attempt to make a reservation in the past");
+        infos.put(DOMAIN_RESERVATION_ERROR, "Problem with reserving resources");
+        infos.put(RESERVATION_NOTSUPPORTED, "Reservations idcp->autobahn are not supported");
+
         infos.put(CONSTRAINTS_NOT_CORRECT, "Constraints not correct on path");
-        infos.put(NOT_ENOUGH_CAPACITY, "Not enough resources in the specified time period on link");
-        infos.put(PATH_CAPACITY_NOT_ENOUGH, "Path can't guarantee enough capacity");
         infos.put(CONSTRAINTS_NOT_AGREED, "Global constraints not fulfilled on path");
         infos.put(CONSTRAINTS_ALREADY_IN_USE, "Calculated constraints are already in use");
-        infos.put(RESERVATION_NOTSUPPORTED, "Reservations idcp->autobahn are not supported");
+
+        infos.put(PATH_CAPACITY_NOT_ENOUGH, "Path can't guarantee enough capacity");
+
+        infos.put(NOT_ENOUGH_CAPACITY, "Not enough resources in the specified time period on link");
+
+        infos.put(UNEXPECTED_ERROR, "Unexpected error, request can not be processed");
     }
 
     /**

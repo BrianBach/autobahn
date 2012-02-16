@@ -648,6 +648,9 @@ public class ManagerImpl implements Manager, ManagerNotifier {
             reservation = list.get(i);
             if (reservation.getBodID().equals(resID)) {
                 reservation.setState(stateOfReservation);
+                if (stateOfReservation == FAILED) {
+                    reservation.setFailureCause(message);
+                }
                 break;
             }
         }
