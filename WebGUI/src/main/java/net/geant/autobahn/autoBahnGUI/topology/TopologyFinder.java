@@ -1,5 +1,6 @@
 package net.geant.autobahn.autoBahnGUI.topology;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -60,7 +61,10 @@ public class TopologyFinder implements TopologyFinderNotifier{
     private Timer timer = new Timer();
 
     private Object timerLock = new Object();
+    
+    private SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 
+    
     public TopologyFinder() {
         timer.schedule(new NoIDMAvailableTimeout(), DEFAULT_DOWN_TIME);
     }
@@ -114,7 +118,6 @@ public class TopologyFinder implements TopologyFinderNotifier{
      * @return topology data
      */
     public Topology getGoogleTopology(String domain, String serviceId) {
-
         Topology top = new Topology();
         top.addTopology(topology);
         top.getLines().removeAll();
@@ -211,7 +214,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
 
                 marker = createMarker(link.getBodID(), lattitude_midle,
                         longitude_midle, Marker.DEFAULT_INFO,
-                        createHTMLLinkInfo(link));
+                        createHTMLReservationLinkInfo(domain,serviceId));
 
                 top.addMarker(marker);
 
@@ -246,7 +249,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
         return top;
     }
 
-    public Topology setInterfaceTopology(List<String> strings, int state) {
+	public Topology setInterfaceTopology(List<String> strings, int state) {
 
         Line line = null;
         Topology top = new Topology();
@@ -278,7 +281,7 @@ public class TopologyFinder implements TopologyFinderNotifier{
      * Creates topology based on manager data
      */
     private void createTopology() {
-        topology.removeAll();
+    	topology.removeAll();
         map.clear();
 
         Marker marker = null;
@@ -347,10 +350,12 @@ public class TopologyFinder implements TopologyFinderNotifier{
                         for (PortType pType : pTypes) {
                             list.add(pType.getAddress());
                         }
+                        
                     } else {
                         list = null;
                     }
-
+                    
+                    
                     isActive = currentTime - neighbourIdm.getLastStatusUpdateInMillis() < 
                         manager.getTearDownTime();
 
@@ -416,34 +421,37 @@ public class TopologyFinder implements TopologyFinderNotifier{
         }
     }
 
-    @SuppressWarnings("rawtypes")
     public void setInterfaceInMainTopology(Map<String, List<InterfaceComponent>> interfaces) {
-
+    	
         Line line = null;
         Marker marker = null;
         if (interfaces.size() > 0) {
+        	
+        	for(Map.Entry<String, List<InterfaceComponent>> e :interfaces.entrySet()){
 
-            Set set = interfaces.entrySet();
-            Iterator it = set.iterator();
-            while (it.hasNext()) {
-                Map.Entry me = (Map.Entry) it.next();
-                List<InterfaceComponent> list = interfaces.get(me.getKey());
-
+                List<InterfaceComponent> list = interfaces.get(e.getKey());
+                
                 if (list != null) {
-                    List<InterfaceComponent> components = setInterface(list);
-                    for (int i = 0; i < components.size(); i++) {
-                        marker = createMarker(components.get(i).getName(),
-                                components.get(i).getEndLatitude(),
-                                components.get(i).getEndLongitude(),
+                	
+                	List<InterfaceComponent> components = setInterface(list);
+                	
+
+                	for(InterfaceComponent ic : components){
+
+                        marker = createMarker(ic.getName(),
+                                ic.getEndLatitude(),
+                                ic.getEndLongitude(),
                                 Marker.DEFAULT_ICON_INTERFACE,
-                                createHTMLPortInfo(components.get(i).getInterf(), components.get(i).getName()));
+                                createHTMLPortInfo(ic.getInterf(), ic.getName()));
+                         
                         topology.addMarker(marker);
+                        
 
                         line = new Line();
                         line.setStartLattitude("" + list.get(0).getStartLatitude());
                         line.setStartLongitude("" + list.get(0).getStartLongitude());
-                        line.setEndLattitude("" + components.get(i).getEndLatitude());
-                        line.setEndLongitude("" + components.get(i).getEndLongitude());
+                        line.setEndLattitude("" + ic.getEndLatitude());
+                        line.setEndLongitude("" + ic.getEndLongitude());
                         line.setColor(Line.getReservationLineColor(list.get(0).getState()));
                         line.setTickness("3");
                         line.setOblique(0);
@@ -458,18 +466,21 @@ public class TopologyFinder implements TopologyFinderNotifier{
         List<InterfaceComponent> components = new ArrayList<InterfaceComponent>();
         InterfaceComponent interfaceComponent = null;
         List<Double> doblist = new ArrayList<Double>();
-
-        for (int i = 0; i < list.size(); i++) {
-
-            doblist.add(getBearingBetween2Points(list.get(i).getStartLatitude(), 
-                    list.get(i).getStartLongitude(), list.get(i).getEndLatitude(),
-                    list.get(i).getEndLongitude()));
+        
+        
+        //wyznaczam konty polaczen z poszczegolnymi domenami
+        for (InterfaceComponent ic : list) {
+            doblist.add(getBearingBetween2Points(ic.getStartLatitude(), 
+                    ic.getStartLongitude(), ic.getEndLatitude(),
+                    ic.getEndLongitude()));
         }
+    
+        
         if (doblist.size() > 0) {
 
             List<Double> result = findBestAngle(doblist);
 
-            double number = list.get(0).getNumberOfInterfaces();
+            double number = list.get(0).getNumberOfInterfaces();            
             double start = result.get(0);
             double end = result.get(1);
             double range = result.get(2);
@@ -478,26 +489,32 @@ public class TopologyFinder implements TopologyFinderNotifier{
             end = end - 5;
 
             if (range == 0.0) {
-                biring = 180 + start;
+            	if(number == 1)
+            		biring = 180 + start;
+            	else {
+            		range = 360 / (number + 1);
+                    biring = start + range;
+            	}
+            		
             } else {
                 range = range / (number + 1);
                 biring = start + range;
             }
 
             InterfaceComponent ic = list.get(0);
-
+            
             for (int i = 0; i < number; i++) {
 
                 List<Double> ld = getDestinationPoint(ic.getStartLatitude(),
                         ic.getStartLongitude(), biring, 300);
-
+                               
                 double lat = ld.get(0);
                 double lon = ld.get(1);
 
                 interfaceComponent = new InterfaceComponent(ic.getName(),
                         ic.getStartLatitude(), ic.getStartLongitude(),
                         new Float(lat), new Float(lon), ic.getList().get(i));
-
+                
                 map.put(ic.getList().get(i), interfaceComponent);
 
                 components.add(interfaceComponent);
@@ -641,6 +658,36 @@ public class TopologyFinder implements TopologyFinderNotifier{
         return buffer.toString();
     }
 
+    private String createHTMLReservationLinkInfo(String domain, String serviceId) {
+       
+        InterDomainManager  idm = manager.getInterDomainManager(domain);
+        ReservationType reservations = idm.getReservation(serviceId);
+    	        
+    	StringBuffer buffer = new StringBuffer();
+        buffer.append("<center><H3> Reservation information </H3></center>");
+        buffer.append("<center>");
+        buffer.append("<table>");
+        buffer.append("<tr>");
+        buffer.append("<td style=\"width:15px;background-color:").append(Line.getReservationLineColor(reservations.getState())).append(";\">").append("</td>");
+        buffer.append("<td>").append(manager.getReservationStates()[reservations.getState()]).append("</td>");
+        buffer.append("</tr>");
+        buffer.append("</table>");
+        buffer.append("</center>");
+
+        buffer.append("<br/><hr/>");
+        buffer.append("<ul>");
+        buffer.append("<div id=\"form\">");
+   //     buffer.append("<li><strong>id:  </strong>").append(reservations.getBodID()).append("</li>");
+        buffer.append("<li><strong>Start port:  </strong>").append(reservations.getStartPort().getAddress()).append("</li>");
+        buffer.append("<li><strong>End port:  </strong>").append(reservations.getEndPort().getAddress()).append("</li>");
+        buffer.append("<li><strong>Capacity:  </strong>").append(reservations.getCapacity()).append("</li>");
+        buffer.append("<li><strong>Start time:  </strong>").append(formatter.format(reservations.getStartTime().getTime()).toString()).append("</li>");
+        buffer.append("<li><strong>End time:  </strong>").append(formatter.format(reservations.getEndTime().getTime()).toString()).append("</li>");
+        buffer.append("</div>");
+        buffer.append("</ul>");
+        return buffer.toString();
+	}
+    
     /**
      * Creates the HTML info for IDM Node
      * 

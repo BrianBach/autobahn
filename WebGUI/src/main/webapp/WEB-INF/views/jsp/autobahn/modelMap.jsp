@@ -48,72 +48,7 @@
     <div id="inContent">
     <div id="nav">
     	<tiles:insertAttribute name="nav"/>
-		<%
-		int length = 0;
-		int statesLength = 0;
-		String[] colors;
-		String[] states;
-			if (request.getAttribute("reservationLinkColors")!=null &&request.getAttribute("reservationStates")!=null ){
-			%>
-				<security:authorize ifAllGranted="ROLE_USER">
-					<% out.println ("<br /><br /><br /><br /><br /><br />"); %>
-				</security:authorize>
-				<%
-			out.println ("<h2>Reservation states</h2>");
-			out.println ("<table>");
-			colors =(String[])request.getAttribute("reservationLinkColors");
-			states =(String[])request.getAttribute("reservationStates");
-			length = colors.length;
-			statesLength = states.length;
-			for (int i=0;i<length;i++)
-			{
-				if (colors==null || i >= statesLength|| states[i]==null)
-					break;
-				if ((i>=0 && i<=1)||(i>=4 && i<=6)|| (i>=9 && i<=11) || (i>20 && i<=23))
-				{
-				out.println ("<tr>");
-				out.println ("<td style=\"width:15;background-color:"+colors[i]+";\">");
-				out.println ("&nbsp;&nbsp;");
-				out.println ("</td>");
-				out.println ("<td>");
-				out.println (states[i]);
-				out.println ("</td>");
-				out.println ("</tr>");
-				}
-			}
-			}else
-			{
-				length = 0;
-				statesLength = 0;
-				colors =(String[])request.getAttribute("linkColors");
-				states =(String[])request.getAttribute("linkStates");
-				if (colors!= null && states !=null){
-				%>
-				<security:authorize ifAllGranted="ROLE_USER">
-					<% out.println ("<br /><br /><br /><br /><br /><br />"); %>
-				</security:authorize>
-				<%
-				out.println ("<h2>Link states</h2>");
-				out.println ("<table>");
-				length = colors.length;
-				statesLength = states.length;
-				for (int i=0;i<length;i++)
-				{
-					if (colors==null || i >= statesLength|| states[i]==null)
-						break;
-					out.println ("<tr>");
-					out.println ("<td style=\"width:15px;background-color:"+colors[i]+";\">");
-					out.println ("&nbsp;&nbsp;");
-					out.println ("</td>");
-					out.println ("<td>");
-					out.println (states[i]);
-					out.println ("</td>");					
-					out.println ("</tr>");
-				}
-				}
-			}
-			out.println ("</table>");
-		%>
+		<!--    	Here was info about Reservation states - but is removed and info is on the path -->
     </div>
     <div id="top"><c:import url="top.jsp"/></div>
     <div id="content">

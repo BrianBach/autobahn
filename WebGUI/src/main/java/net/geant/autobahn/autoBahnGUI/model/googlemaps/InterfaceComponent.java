@@ -1,5 +1,6 @@
 package net.geant.autobahn.autoBahnGUI.model.googlemaps;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class InterfaceComponent {
@@ -11,7 +12,7 @@ public class InterfaceComponent {
 	private float endLongitude;
 	private int numberOfInterfaces;
 	private int state;
-	private List<String> list;
+	private List<String> list = new ArrayList<String>();
 	private String interf;
 
 	public InterfaceComponent(String name, float startLatitude,
