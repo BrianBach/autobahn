@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package net.geant.autobahn.idcp;
 
@@ -32,24 +32,24 @@ import org.oasis_open.docs.wsn.b_2.UnsubscribeResponse;
 
 /**
  * Allows for sending (un)subscribe, renew and notify messages
- * 
+ *
  * @author PCSS
  */
 public final class IdcpNotifyClient {
-	
-	private Logger log = Logger.getLogger(this.getClass()); 
-	
+
+	private Logger log = Logger.getLogger(this.getClass());
+
 	private final String url;
 	private final OSCARSNotify idcpNotify;
-	
+
 	public IdcpNotifyClient(String url) {
-		
+
 		this.url = url;
 		this.idcpNotify = new OSCARSNotify_Service(url).getOSCARSNotify();
 	}
-	
+
 	private EndpointReferenceType createEndpoint(String consumerUrl, String subscriptionId, String publisherId) {
-		
+
 		EndpointReferenceType endpoint = new EndpointReferenceType();
 		endpoint.setMetadata(null);
 		AttributedURIType address = new AttributedURIType();
@@ -59,16 +59,10 @@ public final class IdcpNotifyClient {
 		ref.setSubscriptionId(subscriptionId);
 		ref.setPublisherRegistrationId(publisherId);
 		endpoint.setReferenceParameters(ref);
-		
+
 		return endpoint;
 	}
-	
-	private void printEndpoint(EndpointReferenceType endpoint) {
-		
-		log.info("consumerUrl: " + endpoint.getAddress().getValue() + ", subId: " + endpoint.getReferenceParameters().getSubscriptionId() + 
-						", pubId: " + endpoint.getReferenceParameters().getPublisherRegistrationId()); 
-	}
-	
+
 	private XMLGregorianCalendar toXmlCalendar(Date time) {
 
 		try {
@@ -76,22 +70,22 @@ public final class IdcpNotifyClient {
 			cal.setTime(time);
 			return DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
 		} catch (Exception e) {
-			log.info("could not create xml calendar from Date - " + time.toString());
+			log.error("could not create xml calendar from Date - " + time.toString());
 			return null;
 		}
 	}
 
-	private XMLGregorianCalendar toXMLCalendar(Calendar cal) { 
-		
+	private XMLGregorianCalendar toXMLCalendar(Calendar cal) {
+
 		if (cal == null)
 			return null;
-		
+
 		try {
 			GregorianCalendar gc = new GregorianCalendar();
 			gc.setTimeInMillis(cal.getTimeInMillis());
 			return DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
-		} catch (DatatypeConfigurationException e) { 
-			log.info("Error when converting from Calendar to XMLGreogorianCalendar");
+		} catch (DatatypeConfigurationException e) {
+			log.error("Error when converting from Calendar to XMLGreogorianCalendar");
 			return null;
 		}
 	}
@@ -101,125 +95,130 @@ public final class IdcpNotifyClient {
 	 * Sends subscribe message
 	 * @param producerUrl - IDC generating events
 	 * @param consumerUrl - where notifications should be sent
-	 * @param subscriptionId - identities subscriptions, can be null  
+	 * @param subscriptionId - identities subscriptions, can be null
 	 * @param publisherId - identifies publisher, can be null
 	 * @param topic - defines scope of notifications
 	 * @param termination - defines for how long notifications should be sent by producers
-	 * @return 
+	 * @return
 	 * @throws IdcpException
 	 */
-	public SubscriptionInfo subscribe(String producerUrl, String consumerUrl, String subscriptionId, String publisherId, String topic, Calendar termination) throws IdcpException {
-		
+	public void subscribe(SubscriptionInfo subscription) throws IdcpException
+	{
+		final String consumerUrl = subscription.getConsumerUrl();
+		final String producerUrl = subscription.getProducerUrl();
+		final String subscriptionId = subscription.getSubscriptionId();
+		final String publisherId = subscription.getPublisherId();
+		final String topic = subscription.getTopic();
+
 		Subscribe request = new Subscribe();
-		
+
 		request.setConsumerReference(createEndpoint(consumerUrl, subscriptionId, publisherId));
 		FilterType filter = new FilterType();
 		TopicExpressionType topicExpression = new TopicExpressionType();
 		topicExpression.setDialect(Idcp.TOPIC_DIALECT);
 		topicExpression.setValue(topic);
 		filter.getTopicExpression().add(topicExpression);
-		
+
 		QueryExpressionType query = new QueryExpressionType();
 		query.setDialect(Idcp.QUERY_DIALECT);
 		query.setValue("/wsa:Address='" + producerUrl + "'");
-		filter.getProducerProperties().add(query); 
+		filter.getProducerProperties().add(query);
 		request.setFilter(filter);
-		
+
 		// null as axis2 has problems with it
 		request.setInitialTerminationTime(null);
 		request.setSubscriptionPolicy(null);
-		
+
 		try {
-			
-			log.info("CL.subscribe - consumer: " + consumerUrl + ", producer: " + producerUrl + ", subId: " + subscriptionId);
 			SubscribeResponse response = idcpNotify.subscribe(request);
-			printEndpoint(response.getSubscriptionReference());
-			
-			String curTime = "not set";
-			if (response.getCurrentTime() != null)
-				curTime = response.getCurrentTime().toString();
-			String termTime = "not set";
-			if (response.getTerminationTime() != null)
-				termTime = response.getTerminationTime().toString();
-			
-			log.info("CL.subscribe response - curTime: " + curTime + ", termTime: " + termTime);
-			
-			if (response.getSubscriptionReference().getReferenceParameters().getSubscriptionId() != null) {
-				subscriptionId = response.getSubscriptionReference().getReferenceParameters().getSubscriptionId();
-				log.info("CL.subscribe - received new subscription id - " + subscriptionId);
+
+			subscription.setTermination(response.getTerminationTime().toGregorianCalendar());
+			subscription.setSubscriptionReference(response.getSubscriptionReference());
+
+			if (response.getCurrentTime() != null) {
+				log.info("Subscribed to " + subscription + " at " +
+						 response.getCurrentTime() + " remote time");
+			} else {
+				log.info("Subscribed to " + subscription);
 			}
-			
-			SubscriptionInfo subInfo = new SubscriptionInfo(consumerUrl, producerUrl, subscriptionId, null, 
-					topic, response.getTerminationTime().toGregorianCalendar());
-			
-			return subInfo;
-		} catch (Exception e) { 
-			log.info("IDCP subscribe failed - " + e.getMessage());
-			e.printStackTrace();
-			throw new IdcpException(e.getMessage());
+		} catch (Exception e) {
+			log.warn("IDCP subscribe failed - " + e.getMessage(), e);
+			throw new IdcpException(e.getMessage(), e);
 		}
 	}
-	
-	/**
-	 * Sends unsubscribe message
-	 * @param notifierUrl
-	 * @param subscriptionId
-	 * @param publisherId
-	 * @throws IdcpException
-	 */
-	public void unsubscribe(String notifierUrl, String subscriptionId, String publisherId) throws IdcpException {
-		
-		Unsubscribe request = new Unsubscribe();
-		request.setSubscriptionReference(createEndpoint(notifierUrl, subscriptionId, publisherId));
-		
+
+	public void unsubscribe(SubscriptionInfo subscription)
+		throws IdcpException
+	{
+		unsubscribe(subscription.getSubscriptionReference());
+	}
+
+	public void unsubscribeAll(String notifierUrl)
+		throws IdcpException
+	{
+		unsubscribe(notifierUrl, "ALL", null);
+	}
+
+	public void unsubscribe(String notifierUrl, String subscriptionId,
+							String publisherId)
+		throws IdcpException
+	{
+		unsubscribe(createEndpoint(notifierUrl, subscriptionId, publisherId));
+	}
+
+	private void unsubscribe(EndpointReferenceType reference)
+		throws IdcpException
+	{
 		try {
-			
-			log.info("CL.unsubscribe - subId: " + subscriptionId);
+			Unsubscribe request = new Unsubscribe();
+			request.setSubscriptionReference(reference);
 			UnsubscribeResponse response = idcpNotify.unsubscribe(request);
-			//printEndpoint(response.getSubscriptionReference());
-		} catch (Exception e) { 
-			log.info("IDCP unsubscribe failed - " + e.getMessage());
-			throw new IdcpException(e.getMessage());
+			log.info("Unsubscribed [notifier=" +
+					 reference.getAddress().getValue() + ",id=" +
+					 reference.getReferenceParameters().getSubscriptionId() +
+					 "]");
+		} catch (Exception e) {
+			log.warn("IDCP unsubscribe failed - " + e.getMessage());
+			throw new IdcpException(e.getMessage(), e);
 		}
 	}
-	
+
 	/**
 	 * Sends renewal message
-	 * @param producerUrl
-	 * @param subscriptionId
-	 * @param publisherId
+	 * @param subscriptionReference
 	 * @param termination
 	 * @return
 	 * @throws IdcpException
 	 */
-	public SubscriptionInfo renew(String producerUrl, String subscriptionId, String publisherId, Calendar termination) throws IdcpException {
-		
-		Renew request = new Renew();
-		request.setSubscriptionReference(createEndpoint(producerUrl, subscriptionId, publisherId));
-		
-		request.setTerminationTime(null); // axis2 issues
-				
+	public void renew(SubscriptionInfo subscription)
+		throws IdcpException
+	{
 		try {
-			
-			log.info("CL.renew - subId: " + subscriptionId);
+			final EndpointReferenceType reference =
+				subscription.getSubscriptionReference();
+			final Calendar termination =
+				subscription.getTermination();
+			Renew request = new Renew();
+			request.setSubscriptionReference(reference);
+			request.setTerminationTime(null); // FIXME
+
+			String subscriptionId = subscription.getSubscriptionId();
 			RenewResponse response = idcpNotify.renew(request);
-			//printEndpoint(response.getSubscriptionReference());
-			
-			String curTime = "not set";
-			if (response.getCurrentTime() != null)
-				curTime = response.getCurrentTime().toString();
-			String termTime = "not set";
-			if (response.getTerminationTime() != null)
-				termTime = response.getTerminationTime().toString();
-			log.info("CL.renew response - curTime: " + curTime + ", termTime: " + termTime);
-			
-			return null;
-		} catch (Exception e) { 
+
+			subscription.setTermination(response.getTerminationTime().toGregorianCalendar());
+
+			if (response.getCurrentTime() != null) {
+				log.info("Renewed " + subscription + " at " +
+						 response.getCurrentTime() + " remote time");
+			} else {
+				log.info("Renewed " + subscription);
+			}
+		} catch (Exception e) {
 			log.debug("IDCP renew failed - " + e.getMessage());
-			throw new IdcpException(e.getMessage());
+			throw new IdcpException(e.getMessage(), e);
 		}
 	}
-	
+
 	/**
 	 * Used by reservations to send async notification to subscribers
 	 * @param resId
@@ -275,13 +274,13 @@ public final class IdcpNotifyClient {
 		final String notifierUrl = IdcpManager.getIdcpNotifyUrl();
 		notificationMessage.setProducerReference(createEndpoint(oscarsUrl, subId, null));
 		notificationMessage.setSubscriptionReference(createEndpoint(notifierUrl, subId, null));
-		
+
 		request.getNotificationMessage().add(notificationMessage);
-		
+
 		try {
 			idcpNotify.notify(request);
 		} catch (Exception e) {
-			log.info("IDCP notify failed - " + e.getMessage());
+			log.warn("IDCP notify failed - " + e.getMessage());
 			throw new IdcpException(e.getMessage());
 		}
 	}

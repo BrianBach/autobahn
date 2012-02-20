@@ -1,40 +1,36 @@
 /**
- * 
+ *
  */
 package net.geant.autobahn.idcp;
 
 import java.util.Calendar;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import org.apache.cxf.ws.addressing.EndpointReferenceType;
 
 /**
- * Holds information related to subscription. Used to keep subscribers info as well as subscription that has been sent. 
- * 
+ * Holds information related to subscription. Used to keep subscribers info as well as subscription that has been sent.
+ *
  * @author PCSS
  */
 public class SubscriptionInfo {
-	
-	private String consumerUrl;
-	private String notifierUrl;
-	private String producerUrl;
-	private String subscriptionId;
-	private String publisherId;
-	private String topic;
+
+	private final String consumerUrl;
+	private final String notifierUrl;
+	private final String producerUrl;
+	private final String publisherId;
+	private final String topic;
 	private Calendar termination;
-	
-	public SubscriptionInfo(String consumerUrl, String notifierUrl, String subscriptionId, String publisherId,	String topic, Calendar termination) {
-		
-		this(consumerUrl, notifierUrl, notifierUrl, subscriptionId, publisherId, topic, termination);
-	}
-	
-	public SubscriptionInfo(String consumerUrl, String notifierUrl, String producerUrl, String subscriptionId, String publisherId,
-			String topic, Calendar termination) {
-		
-		this.consumerUrl = consumerUrl; 
+	private String subscriptionId;
+	private EndpointReferenceType subscriptionReference;
+
+	public SubscriptionInfo(String consumerUrl, String notifierUrl, String producerUrl, String subscriptionId, String publisherId, String topic)
+	{
+		this.consumerUrl = consumerUrl;
 		this.notifierUrl = notifierUrl;
 		this.producerUrl = producerUrl;
 		this.subscriptionId = subscriptionId;
 		this.publisherId = publisherId;
 		this.topic = topic;
-		this.termination = termination;
 	}
 
 	/**
@@ -44,7 +40,20 @@ public class SubscriptionInfo {
 	public void setSubscriptionId(String subscriptionId) {
 		this.subscriptionId = subscriptionId;
 	}
-		
+
+	public void setSubscriptionReference(EndpointReferenceType reference) {
+		subscriptionReference = reference;
+
+		String id = reference.getReferenceParameters().getSubscriptionId();
+		if (id != null && !id.equals(getSubscriptionId())) {
+			setSubscriptionId(id);
+		}
+	}
+
+	public EndpointReferenceType getSubscriptionReference() {
+		return subscriptionReference;
+	}
+
 	/**
 	 * @return the consumerUrl
 	 */
@@ -93,7 +102,7 @@ public class SubscriptionInfo {
 	public Calendar getTermination() {
 		return termination;
 	}
-	
+
 	/**
 	 * Sets the termination
 	 */
@@ -101,9 +110,22 @@ public class SubscriptionInfo {
 		this.termination = termination;
 	}
 
+	public void setTerminationTimeIn(long millis)
+	{
+		termination = timeInFuture(millis);
+	}
+
+	private Calendar timeInFuture(long millis)
+	{
+		Calendar time = Calendar.getInstance();
+		time.add(Calendar.SECOND, (int) MILLISECONDS.toSeconds(millis));
+		return time;
+	}
+
 	@Override
-	public String toString() {
-		
-		return "ConsumerUrl: " + consumerUrl + ", subscriptionId: " + subscriptionId; 	
+	public String toString()
+	{
+		return String.format("Subscription[broker=%s,producer=%s,consumer=%s,id=%s,termination=%tc]",
+							 notifierUrl, producerUrl, consumerUrl, subscriptionId, termination);
 	}
 }
