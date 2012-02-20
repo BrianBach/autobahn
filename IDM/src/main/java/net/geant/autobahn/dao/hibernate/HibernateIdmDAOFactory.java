@@ -21,10 +21,14 @@ import net.geant.autobahn.network.dao.hibernate.HibernatePortDAO;
 import net.geant.autobahn.network.dao.hibernate.HibernateProvisioningDomainDAO;
 import net.geant.autobahn.network.dao.hibernate.HibernateStatisticsEntryDAO;
 import net.geant.autobahn.reservation.dao.ReservationDAO;
+import net.geant.autobahn.reservation.dao.ReservationHistoryDAO;
 import net.geant.autobahn.reservation.dao.ServiceDAO;
+import net.geant.autobahn.reservation.dao.ServiceHistoryDAO;
 import net.geant.autobahn.reservation.dao.UserDAO;
 import net.geant.autobahn.reservation.dao.hibernate.HibernateReservationDAO;
+import net.geant.autobahn.reservation.dao.hibernate.HibernateReservationHistoryDAO;
 import net.geant.autobahn.reservation.dao.hibernate.HibernateServiceDAO;
+import net.geant.autobahn.reservation.dao.hibernate.HibernateServiceHistoryDAO;
 import net.geant.autobahn.reservation.dao.hibernate.HibernateUserDAO;
 
 /**
@@ -45,7 +49,9 @@ public class HibernateIdmDAOFactory implements IdmDAOFactory {
     private StatisticsEntryDAO sedao = new HibernateStatisticsEntryDAO(hbm);
     
     private ReservationDAO rdao = new HibernateReservationDAO(hbm);
+    private ReservationHistoryDAO hdao = new HibernateReservationHistoryDAO(hbm);
     private ServiceDAO sdao = new HibernateServiceDAO(hbm);
+    private ServiceHistoryDAO shdao = new HibernateServiceHistoryDAO(hbm);
     private UserDAO udao = new HibernateUserDAO(hbm);
 
     
@@ -67,12 +73,26 @@ public class HibernateIdmDAOFactory implements IdmDAOFactory {
     public ReservationDAO getReservationDAO() {
         return rdao;
     }
+    
+    /* (non-Javadoc)
+     * @see net.geant.autobahn.dao.DAOFactory#getReservationHistoryDAO()
+     */
+    public ReservationHistoryDAO getReservationHistoryDAO() {
+        return hdao;
+    }
 
     /* (non-Javadoc)
      * @see net.geant.autobahn.dao.DAOFactory#getServiceDAO()
      */
     public ServiceDAO getServiceDAO() {
         return sdao;
+    }
+    
+    /* (non-Javadoc)
+     * @see net.geant.autobahn.dao.DAOFactory#getServiceHistoryDAO()
+     */
+    public ServiceHistoryDAO getServiceHistoryDAO() {
+        return shdao;
     }
 
     /* (non-Javadoc)

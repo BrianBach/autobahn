@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="net.geant.autobahn.reservation.ReservationHistory" table="RESERVATION_HISTORY" lazy="false">
+        <id name="bodID" type="java.lang.String">
+            <column name="BODID" />
+        </id>
+        <property name="startPort" type="java.lang.String">
+            <column name="STARTPORT" />
+        </property>
+        <property name="endPort" type="java.lang.String">
+            <column name="ENDPORT" />
+        </property>
+        <property name="startPortDescription" type="java.lang.String">
+            <column name="START_PORT_DESC" />
+        </property>
+        <property name="endPortDescription" type="java.lang.String">
+            <column name="END_PORT_DESC" />
+        </property>
+        <property name="startTime" type="java.util.Calendar">
+            <column name="STARTTIME" />
+        </property>
+        <property name="endTime" type="java.util.Calendar">
+            <column name="ENDTIME" />
+        </property>
+        <property name="priority" type="int">
+            <column name="PRIORITY" />
+        </property>
+        <property name="description" type="java.lang.String">
+            <column name="DESCRIPTION" />
+        </property>
+        <property name="capacity" type="long">
+            <column name="CAPACITY" />
+        </property>
+        <property name="mtu" type="int">
+            <column name="MTU" />
+        </property>
+        <property name="maxDelay" type="int">
+            <column name="MAXDELAY" />
+        </property>
+        <property name="resiliency" type="java.lang.String">
+            <column name="RESILIENCY" />
+        </property>
+        <property name="bidirectional" type="boolean">
+            <column name="BIDIRECTIONAL" />
+        </property>
+        <property name="intState" type="int">
+            <column name="INTSTATE" />
+        </property>
+        <property name="startVlan" type="int">
+            <column name="START_VLAN" />
+        </property>
+        <property name="endVlan" type="int">
+            <column name="END_VLAN" />
+        </property>
+        <property name="authParameters" type="java.lang.String">
+            <column name="AUTH_PARAMS" />
+        </property>
+    </class>
+</hibernate-mapping>

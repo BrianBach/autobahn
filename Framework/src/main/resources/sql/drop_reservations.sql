@@ -14,7 +14,7 @@ DELETE FROM reservation_params;
 
 DELETE FROM path_constraint;
 DELETE FROM domain_constraints;
-DELETE FROM domainsids;
+DELETE FROM domains_ids;
 DELETE FROM global_constraints;
 
 DELETE FROM intradomain_path;

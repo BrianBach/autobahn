@@ -101,8 +101,10 @@
 		<mapping resource="net/geant/autobahn/intradomain/sdh/HoVcLink.hbm.xml" />
 		
 		<mapping resource="net/geant/autobahn/reservation/Reservation.hbm.xml" />
+		<mapping resource="net/geant/autobahn/reservation/ReservationHistory.hbm.xml" />
 		<mapping resource="net/geant/autobahn/reservation/User.hbm.xml" />
 		<mapping resource="net/geant/autobahn/reservation/Service.hbm.xml" />
+		<mapping resource="net/geant/autobahn/reservation/ServiceHistory.hbm.xml" />
 		<mapping resource="net/geant/autobahn/reservation/ReservationParams.hbm.xml" />
 
 

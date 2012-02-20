@@ -109,6 +109,15 @@ public class PortType implements Serializable, Comparable<PortType> {
 		
 		return pType;
 	}
+	
+	public static PortType convert(String port, int vlan, String description) {
+		PortType pType = new PortType();
+		pType.setAddress(port);
+		pType.setVlan(vlan);
+		pType.setDescription(description);
+		
+		return pType;
+	}
 
     @Override
     public int compareTo(PortType p2) {

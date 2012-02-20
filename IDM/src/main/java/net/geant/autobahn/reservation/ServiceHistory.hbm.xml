@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="net.geant.autobahn.reservation.ServiceHistory" table="SERVICE_HISTORY" lazy="false">
+        <id name="bodID" type="java.lang.String">
+            <column name="BODID" />
+        </id>
+        <property name="justification" type="java.lang.String">
+            <column name="JUSTIFICATION" />
+        </property>
+        <property name="priority" type="integer">
+            <column name="PRIORITY" />
+        </property>
+        <property name="userAuth" type="java.lang.String">
+            <column name="USER_AUTH" />
+        </property>
+        <property name="adminDomain" type="java.lang.String">
+            <column name="ADMIN_DOMAIN" />
+        </property>
+        <list cascade="all" name="reservations">
+   			<key column="SRVID"/>
+   			<list-index base="0" column="res_index"/>
+   			<one-to-many class="net.geant.autobahn.reservation.ReservationHistory"/>
+  		</list>
+    </class>
+</hibernate-mapping>

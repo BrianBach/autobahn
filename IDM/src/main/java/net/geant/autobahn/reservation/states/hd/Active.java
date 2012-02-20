@@ -7,8 +7,9 @@ package net.geant.autobahn.reservation.states.hd;
 
 import java.util.Calendar;
 
-import net.geant.autobahn.idm.AccessPoint;
+import net.geant.autobahn.dao.hibernate.HibernateIdmDAOFactory;
 import net.geant.autobahn.network.StatisticsEntry;
+import net.geant.autobahn.network.dao.StatisticsEntryDAO;
 import net.geant.autobahn.reservation.HomeDomainReservation;
 import net.geant.autobahn.reservation.ReservationStatusListener;
 
@@ -25,7 +26,8 @@ public class Active extends HomeDomainState {
     @Override
 	public void run(HomeDomainReservation res) {
     	super.run(res);
-        
+    	
+    	StatisticsEntryDAO dao = HibernateIdmDAOFactory.getInstance().getStatisticsEntryDAO();
     	Calendar now = Calendar.getInstance();
         Calendar endTime = res.getEndTime();
         
@@ -35,7 +37,7 @@ public class Active extends HomeDomainState {
         
         // Calculate time from submission to activation and save in DB statistics
         long setuptime = now.getTimeInMillis() - res.getStartTime().getTimeInMillis();
-        AccessPoint.saveStatisticsEntry(new StatisticsEntry(res.getBodID(), false, setuptime));
+        dao.update(new StatisticsEntry(res.getBodID(), false, setuptime));
         
 		for(ReservationStatusListener listener : res.getStatusListeners()) {
 			listener.reservationActive(res.getBodID());

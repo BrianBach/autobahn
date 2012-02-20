@@ -24,8 +24,7 @@
   <many-to-one cascade="all"
    class="net.geant.autobahn.constraints.GlobalConstraints" lazy="false" name="globalConstraints"/>
   <many-to-one cascade="all" class="net.geant.autobahn.network.Path" name="path"/>
-  <many-to-one cascade="all"
-   class="net.geant.autobahn.aai.UserAuthParameters" name="authParameters"/>
+  <many-to-one cascade="all" class="net.geant.autobahn.aai.UserAuthParameters" name="authParameters"/>
   <subclass discriminator-value="HD" name="HomeDomainReservation" select-before-update="false"/>
   <subclass discriminator-value="ED" name="ExternalReservation" select-before-update="false"/>
   <subclass discriminator-value="LD" name="LastDomainReservation" select-before-update="false"/>

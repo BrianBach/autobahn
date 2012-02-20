@@ -55,6 +55,8 @@ import net.geant.autobahn.reservation.AutobahnReservation;
 import net.geant.autobahn.reservation.HomeDomainReservation;
 import net.geant.autobahn.reservation.Reservation;
 import net.geant.autobahn.reservation.Service;
+import net.geant.autobahn.reservation.ServiceHistory;
+import net.geant.autobahn.reservation.ServiceWrapper;
 import net.geant.autobahn.reservation.TimeRange;
 import net.geant.autobahn.reservation.User;
 import net.geant.autobahn.useraccesspoint.CheckListener;
@@ -908,13 +910,11 @@ public final class AccessPoint implements UserAccessPoint,
     public Service createService(String description, User user,
 			List<HomeDomainReservation> reservations) {
     	
-    	
         // Service
-        Service service = new Service(daos.getServiceDAO().generateNextId(),
-				reservationProcessor);
+    	String id = daos.getServiceDAO().generateNextId();
+        Service service = new Service(id, reservationProcessor);
         service.setJustification(description);
         service.setUser(user);
-        
         for(HomeDomainReservation res : reservations) {
             
         	if(res.getBodID() != null) {
@@ -927,16 +927,9 @@ public final class AccessPoint implements UserAccessPoint,
             
             service.addReservation(res);
         }
-
-        HibernateUtil hbm = IdmHibernateUtil.getInstance();
-		Transaction t = hbm.beginTransaction();
-		
-		log.debug("Reservation port (starting):"+service.getReservations().get(0).getStartPort());
-		log.debug("Reservation port (ending):"+service.getReservations().get(0).getEndPort());
-        daos.getServiceDAO().create(service);
         
-        t.commit();
-        hbm.closeSession();
+        //Service history
+        ServiceWrapper.create(service, daos);
         
         return service;
     }
@@ -1337,13 +1330,15 @@ public final class AccessPoint implements UserAccessPoint,
 	 * @see net.geant.autobahn.administration.Administration#getServices()
 	 */
 	public List<ServiceType> getServices() {
-		List<Service> services = serviceScheduler.getServices();
-		
+		List<ServiceHistory> srvs = daos.getServiceHistoryDAO().getAll();
 		List<ServiceType> result = new ArrayList<ServiceType>();
-		for(Service serv : services) {
-			ServiceType stype = Translator.convert(serv);
+		
+		for(ServiceHistory srv : srvs) {
+			ServiceType stype = Translator.convert(srv);
 			result.add(stype);
 		}
+		
+		IdmHibernateUtil.getInstance().closeSession();
 		
 		return result;
 	}
@@ -1487,8 +1482,10 @@ public final class AccessPoint implements UserAccessPoint,
     /**
      * Saves a statistics entry in the database.
      * 
+     * @deprecated This procedure is moved to <code>net.geant.autobahn.reservation.states.hd.Active</code> class  
      * @param se
      */
+    @Deprecated
     public static synchronized void saveStatisticsEntry(StatisticsEntry se) {
         HibernateUtil hbm = IdmHibernateUtil.getInstance();
         if(hbm == null) {
@@ -1496,7 +1493,7 @@ public final class AccessPoint implements UserAccessPoint,
         }
         
         StatisticsEntryDAO dao = HibernateIdmDAOFactory.getInstance().getStatisticsEntryDAO();
-        
+       
         Transaction t = hbm.beginTransaction();
         dao.update(se);
         if (!t.wasCommitted()) {

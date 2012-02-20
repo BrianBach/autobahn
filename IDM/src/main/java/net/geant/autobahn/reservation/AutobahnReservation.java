@@ -42,6 +42,11 @@ import org.apache.log4j.Logger;
 public abstract class AutobahnReservation extends Reservation implements Runnable,
 		ReservationEvents, ReservationReportEvents {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6746885116605659731L;
+
 	@XmlTransient
     protected static final Logger log = Logger.getLogger(AutobahnReservation.class);
     

@@ -1,11 +1,6 @@
 package net.geant.autobahn.dao.hibernate;
 
-import org.hibernate.Transaction;
-
 import net.geant.autobahn.dao.hibernate.HibernateUtil;
-import net.geant.autobahn.network.LinkType;
-import net.geant.autobahn.network.StateAdmin;
-import net.geant.autobahn.network.StateOper;
 
 public class IdmHibernateUtil extends HibernateUtil {
 

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import net.geant.autobahn.administration.Translator;
 import net.geant.autobahn.constraints.GlobalConstraints;
 import net.geant.autobahn.dao.hibernate.HibernateIdmDAOFactory;
 import net.geant.autobahn.dao.hibernate.HibernateUtil;
@@ -20,6 +21,7 @@ import net.geant.autobahn.reservation.LastDomainReservation;
 import net.geant.autobahn.reservation.Reservation;
 import net.geant.autobahn.reservation.ReservationStatusListener;
 import net.geant.autobahn.reservation.dao.ReservationDAO;
+import net.geant.autobahn.reservation.dao.ReservationHistoryDAO;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Transaction;
@@ -33,22 +35,24 @@ public class ReservationProcessor {
 	private Map<String, String> previousDomains = new HashMap<String, String>();
 	
 	private ReservationDAO rdao = null;
+	private ReservationHistoryDAO hdao = null;
 	private TopologyMerge topologyMerge = new TopologyMerge();
 	
 	private Idm2Dm domainManager = null;
 	private String domainID;
     private boolean restorationMode = false;
-
+    
 	public ReservationProcessor(String domainID, Idm2Dm domainManager) {
 		this.domainManager = domainManager;
 		this.domainID = domainID;
 		this.rdao = HibernateIdmDAOFactory.getInstance().getReservationDAO();
+		this.hdao = HibernateIdmDAOFactory.getInstance().getReservationHistoryDAO();
 	}
 	
 	public void scheduleReservation(Reservation src) {
 		final String resID = src.getBodID();
 
-		AutobahnReservation res = reservations.get(resID); 
+		AutobahnReservation res = reservations.get(resID);
 		if(res == null) {
 			// When first time in an external domain
 			res = AutobahnReservation.createReservation(src, domainID);
@@ -73,8 +77,9 @@ public class ReservationProcessor {
         AutobahnCommand command = new AutobahnCommand () {
             public void run() {
                 rdao.update(res);
-                
                 res.run();
+
+                hdao.update(Translator.convertHistory(res));
                 
                 // Delete fake reservation after processing
                 if(res instanceof LastDomainReservation && res.isFake()) {
@@ -118,8 +123,9 @@ public class ReservationProcessor {
 		AutobahnCommand command = new AutobahnCommand() {
             public void run() {
                 rdao.update(res);
-                
                 res.recover();
+
+                hdao.update(Translator.convertHistory(res));
             }
 
 			@Override
@@ -139,8 +145,9 @@ public class ReservationProcessor {
 		AutobahnCommand command = new AutobahnCommand() {
             public void run() {
                 rdao.update(res);
-                
                 res.reservationScheduled(msgCode, arguments, success, global);
+
+                hdao.update(Translator.convertHistory(res));
                 
                 // Delete if it's fake
                 if(res.isFake())
@@ -166,8 +173,9 @@ public class ReservationProcessor {
 		AutobahnCommand command = new AutobahnCommand() {
             public void run() {
                 rdao.update(res);
-                
                 res.cancel();
+
+                hdao.update(Translator.convertHistory(res));
             }
 
 			@Override
@@ -187,8 +195,9 @@ public class ReservationProcessor {
 		AutobahnCommand command = new AutobahnCommand() {
             public void run() {
                 rdao.update(res);
-                
                 res.reservationCancelled(message, success);
+
+                hdao.update(Translator.convertHistory(res));
             }
 
 			@Override
@@ -208,8 +217,9 @@ public class ReservationProcessor {
 		AutobahnCommand command = new AutobahnCommand() {
             public void run() {
             	rdao.update(res);
-                
                 res.modify(startTime, endTime);
+
+                hdao.update(Translator.convertHistory(res));
             }
 
 			@Override
@@ -231,8 +241,9 @@ public class ReservationProcessor {
 		AutobahnCommand command = new AutobahnCommand() {
             public void run() {
             	rdao.update(res);
-                
                 res.withdraw();
+            
+                hdao.update(Translator.convertHistory(res));
             }
 
 			@Override
@@ -253,8 +264,9 @@ public class ReservationProcessor {
 		AutobahnCommand command = new AutobahnCommand() {
 			public void run() {
 				rdao.update(res);
-
 				res.reservationWithdrawn(message, success);
+
+				hdao.update(Translator.convertHistory(res));
 			}
 
 			@Override
@@ -275,8 +287,9 @@ public class ReservationProcessor {
 		AutobahnCommand command = new AutobahnCommand() {
             public void run() {
                 rdao.update(res);
-                
                 res.reservationModified(startTime, endTime, message, success);
+
+                hdao.update(Translator.convertHistory(res));
             }
 
 			@Override
@@ -300,8 +313,9 @@ public class ReservationProcessor {
 		AutobahnCommand command = new AutobahnCommand() {
             public void run() {
                 rdao.update(res);
-                
                 res.reservationActivated(message, success);
+
+                hdao.update(Translator.convertHistory(res));
             }
 
 			@Override
@@ -336,8 +350,9 @@ public class ReservationProcessor {
 			AutobahnCommand command = new AutobahnCommand() {
 	            public void run() {
 	                rdao.update(res);
-	                
 	                res.reservationFinished(message, success);
+
+	                hdao.update(Translator.convertHistory(res));
 	            }
 
 				@Override
@@ -377,8 +392,9 @@ public class ReservationProcessor {
 		AutobahnCommand command = new AutobahnCommand() {
             public void run() {
                 rdao.update(res);
-	                
         		res.activate(success);
+
+        		hdao.update(Translator.convertHistory(res));
             }
 
 			@Override
@@ -407,8 +423,9 @@ public class ReservationProcessor {
 		AutobahnCommand command = new AutobahnCommand() {
             public void run() {
             	rdao.update(res);
-                
         		res.finish(success);
+        		
+        		hdao.update(Translator.convertHistory(res));
             }
 
 			@Override
